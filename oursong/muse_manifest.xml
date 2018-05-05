@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525525755796">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525526441515">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4053683724" ref="index"/>
     <file name="story.css" crc="4214248357" ref="story"/>
-    <file name="comments.css" crc="3787159983" ref="comments"/>
+    <file name="comments.css" crc="258712249" ref="comments"/>
   </folder>
   <folder name="assets">
     <file name="20180504-for-muse-for-ipad.mp4" crc="4251336909" seo="true" mt="1525442276000"/>
@@ -248,10 +248,10 @@
       <caption webpage="story" alt=""/>
     </file>
     <file name="comments-favicon.ico" crc="4066440140" ref="comments"/>
-    <file name="button-x.png" crc="227482396" seo="true" ref="comments">
+    <file name="button-x.png" crc="3854901120" seo="true" ref="comments">
       <caption webpage="comments" alt=""/>
     </file>
-    <file name="button-x_2x.png" crc="154464306" seo="true" ref="comments">
+    <file name="button-x_2x.png" crc="435688446" seo="true" ref="comments">
       <caption webpage="comments" alt=""/>
     </file>
     <file name="fan_0035_layer 18.jpg" crc="3838977289" seo="true" ref="comments">
@@ -545,5 +545,5 @@
   </folder>
   <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
   <file name="story.html" crc="369968704" seo="true" mt="1525524592296" redirect="true"/>
-  <file name="comments.html" crc="4093035978" seo="true" mt="1525525740176" redirect="true"/>
+  <file name="comments.html" crc="131607905" seo="true" mt="1525526435694" redirect="true"/>
 </manifest>
