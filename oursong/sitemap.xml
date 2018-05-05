@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://mrjoshuachao.github.io/story.html</loc>
-    <lastmod>2018-05-05</lastmod>
+    <lastmod>2018-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -154,6 +154,12 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/logo_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/button-search.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/button-search_2x.png</image:loc>
     </image:image>
   </url>
   <url>
