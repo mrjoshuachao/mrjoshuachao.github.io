@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://mrjoshuachao.github.io/Qr8/index.html</loc>
+    <lastmod>2017-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/Qr8/images/index-01.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/Qr8/images/index-01_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/Qr8/images/index-top.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/Qr8/images/index-top_2x.gif</image:loc>
+    </image:image>
+  </url>
+</urlset>
