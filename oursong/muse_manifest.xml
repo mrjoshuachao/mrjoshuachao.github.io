@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525547493839">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525551177664">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4053683724" ref="index"/>
-    <file name="story.css" crc="200162136" ref="story"/>
+    <file name="story.css" crc="29027390" ref="story"/>
     <file name="comments.css" crc="3772935913" ref="comments"/>
   </folder>
   <folder name="assets">
@@ -138,28 +138,28 @@
       <caption webpage="story" alt=""/>
     </file>
     <file name="avatar-chris.png" crc="4236193699" seo="true" ref="story:comments">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
       <caption webpage="comments" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
     </file>
     <file name="avatar-chris_2x.png" crc="3878443417" seo="true" ref="story:comments">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
       <caption webpage="comments" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
     </file>
     <file name="avatar-julia.png" crc="3832037454" seo="true" ref="story">
       <caption webpage="story" alt=""/>
@@ -235,10 +235,10 @@
     <file name="coverart-underthestars_2x.png" crc="425262460" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="badge.png" crc="485386793" seo="true" ref="story">
+    <file name="badge.png" crc="88496843" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="badge_2x.png" crc="4002724304" seo="true" ref="story">
+    <file name="badge_2x.png" crc="3780005544" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
     <file name="logo.png" crc="17234643" seo="true" ref="story">
@@ -550,6 +550,6 @@
     </file>
   </folder>
   <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
-  <file name="story.html" crc="4226164653" seo="true" mt="1525547485580" redirect="true"/>
+  <file name="story.html" crc="512382371" seo="true" mt="1525551167218" redirect="true"/>
   <file name="comments.html" crc="3912607593" seo="true" mt="1525546476048" redirect="true"/>
 </manifest>
