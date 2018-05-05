@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525524617855">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525525616964">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4053683724" ref="index"/>
     <file name="story.css" crc="4214248357" ref="story"/>
-    <file name="comments.css" crc="3814711764" ref="comments"/>
+    <file name="comments.css" crc="3813634023" ref="comments"/>
   </folder>
   <folder name="assets">
     <file name="20180504-for-muse-for-ipad.mp4" crc="4251336909" seo="true" mt="1525442276000"/>
@@ -545,5 +545,5 @@
   </folder>
   <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
   <file name="story.html" crc="369968704" seo="true" mt="1525524592296" redirect="true"/>
-  <file name="comments.html" crc="4246363679" seo="true" mt="1525524352952" redirect="true"/>
+  <file name="comments.html" crc="473187602" seo="true" mt="1525525594935" redirect="true"/>
 </manifest>
