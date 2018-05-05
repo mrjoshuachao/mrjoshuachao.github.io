@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)https://zonble.github.io/mrjoshuachao/oursong/ -->
-<html class="js html css_verticalspacer" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html class="nojs html css_verticalspacer" lang="en-US">
+ <head>
 
-  
-  <meta name="generator" content="2018.1.0.386">
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
+  <meta name="generator" content="2018.1.0.386"/>
   
   <script type="text/javascript">
    // Update the 'nojs'/'js' class on the html node
@@ -13,18 +13,18 @@ document.documentElement.className = document.documentElement.className.replace(
 if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.watch.js", "require.js", "index.css"], "outOfDate":[]};
 </script>
   
-  <link rel="shortcut icon" href="https://zonble.github.io/mrjoshuachao/oursong/images/home-favicon.ico?crc=4066440140">
+  <link rel="shortcut icon" href="images/home-favicon.ico?crc=4066440140"/>
   <title>DSD - OurSong</title>
   <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="./DSD - OurSong_files/site_global.css">
-  <link rel="stylesheet" type="text/css" href="./DSD - OurSong_files/index.css" id="pagesheet">
+  <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=3779915718"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=4053683724" id="pagesheet"/>
     <!--HTML Widget code-->
   
  <style>
 #video_background {
 				position: fixed;
-				top: 0px;
-				left: 0px;
+				bottom: 0px;
+				right: 0px;
 				min-width: 100%;
 				min-height: 100%;
 				width: auto;
@@ -35,9 +35,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
 
  </style>
 
- <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="scripts/museconfig.js?crc=310584261" src="./DSD - OurSong_files/museconfig.js.download"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="./DSD - OurSong_files/jquery-1.8.3.min.js.download"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="museutils" src="./DSD - OurSong_files/museutils.js.download"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="whatinput" src="./DSD - OurSong_files/whatinput.js.download"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery.watch" src="./DSD - OurSong_files/jquery.watch.js.download"></script></head>
- <body class="initialized" data-whatinput="keyboard">
-  <audio id="bgmusic" controls="" autoplay="" preload="" loop="" src="30s.mp3">
+ </head>
+<body>
+  <audio id="bgmusic" controls autoplay preload loop>
   <source src="30s.mp3" type="audio/mpeg">
   </audio>
   <script>
@@ -47,21 +47,10 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
             // alert(info);
         }
         function forceSafariPlayAudio() {
-            audioEl.load(); // iOS 9   还需要额外的 load 一下, 否则直接 play 无效
-            audioEl.play(); // iOS 7/8 仅需要 play 一下
+            audioEl.load(); 
+            audioEl.play(); 
         }
         var audioEl = document.getElementById('bgmusic');
-        // 可以自动播放时正确的事件顺序是
-        // loadstart
-        // loadedmetadata
-        // loadeddata
-        // canplay
-        // play
-        // playing
-        // 
-        // 不能自动播放时触发的事件是
-        // iPhone5  iOS 7.0.6 loadstart
-        // iPhone6s iOS 9.1   loadstart -> loadedmetadata -> loadeddata -> canplay
         audioEl.addEventListener('loadstart', function() {
             log('loadstart');
         }, false);
@@ -76,7 +65,6 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         }, false);
         audioEl.addEventListener('play', function() {
             log('play');
-            // 当 audio 能够播放后, 移除这个事件
             window.removeEventListener('onload', forceSafariPlayAudio, false);
             window.removeEventListener('touchstart', forceSafariPlayAudio, false);
         }, false);
@@ -86,19 +74,18 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         audioEl.addEventListener('pause', function() {
             log('pause');
         }, false);
-        // 由于 iOS Safari 限制不允许 audio autoplay, 必须用户主动交互(例如 click)后才能播放 audio,
-        // 因此我们通过一个用户交互事件来主动 play 一下 audio.
         window.addEventListener('touchstart', forceSafariPlayAudio, false);
         window.addEventListener('onload', forceSafariPlayAudio, false);
         audioEl.src = '30s.mp3';
     })();
     </script>
 
-  <div class="clearfix" id="page"><!-- column -->
+<div class="clearfix" id="page"><!-- column -->
    <div class="position_content" id="page_position_content">
     <div class="size_fixed colelem" id="u51116"><!-- custom html -->
+     
 
-<video id="video_background" muted="" loop="" autoplay="" playsinline="">
+<video id="video_background"   muted loop  autoplay>
     <source src="assets/20180504-for-muse-for-ipad.mp4" type="video/mp4">
     <source src="assets/20180504-for-muse-for-ipad.ogg" type="video/ogg">
     <source src="assets/20180504-for-muse-for-ipad.webm" type="video/webm">
@@ -107,10 +94,10 @@ Your browser does not support the video tag.
 
 
     </div>
-    <div class="browser_width colelem" id="u55683-bw" style="height: 1024px;">
-     <a class="nonblock nontext" id="u55683" href="https://zonble.github.io/mrjoshuachao/oursong/story.html"><!-- simple frame --></a>
+    <div class="browser_width colelem" id="u55683-bw">
+     <a class="nonblock nontext" id="u55683" href="story.html"><!-- simple frame --></a>
     </div>
-    <div class="verticalspacer" data-offset-top="1024" data-content-above-spacer="1024" data-content-below-spacer="0" style="height: calc((100vh - 1024px) - 36px);"></div>
+    <div class="verticalspacer" data-offset-top="700" data-content-above-spacer="700" data-content-below-spacer="0"></div>
    </div>
   </div>
   <!-- Other scripts -->
@@ -139,7 +126,6 @@ Muse.Utils.transformMarkupToFixBrowserProblems();/* body */
 
 </script>
   <!-- RequireJS script -->
-  <script src="./DSD - OurSong_files/require.js.download" type="text/javascript" async="" data-main="scripts/museconfig.js?crc=310584261" onload="if (requirejs) requirejs.onError = function(requireType, requireModule) { if (requireType &amp;&amp; requireType.toString &amp;&amp; requireType.toString().indexOf &amp;&amp; 0 &lt;= requireType.toString().indexOf(&#39;#scripterror&#39;)) window.Muse.assets.check(); }" onerror="window.Muse.assets.check();"></script>
-   
-
-</body></html>
+  <script src="scripts/require.js?crc=7928878" type="text/javascript" async data-main="scripts/museconfig.js?crc=310584261" onload="if (requirejs) requirejs.onError = function(requireType, requireModule) { if (requireType && requireType.toString && requireType.toString().indexOf && 0 <= requireType.toString().indexOf('#scripterror')) window.Muse.assets.check(); }" onerror="window.Muse.assets.check();"></script>
+   </body>
+</html>
