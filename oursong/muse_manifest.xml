@@ -1,0 +1,549 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525524617855">
+  <folder name="css">
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="4053683724" ref="index"/>
+    <file name="story.css" crc="4214248357" ref="story"/>
+    <file name="comments.css" crc="3814711764" ref="comments"/>
+  </folder>
+  <folder name="assets">
+    <file name="20180504-for-muse-for-ipad.mp4" crc="4251336909" seo="true" mt="1525442276000"/>
+    <file name="20180504-for-muse-for-ipad.ogg" crc="4119334733" seo="true" mt="1525445184000"/>
+    <file name="20180504-for-muse-for-ipad.webm" crc="4017159280" seo="true" mt="1525445059000"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:story:comments"/>
+    <file name="museutils.js" crc="340535759" ref="index:story:comments"/>
+    <file name="whatinput.js" crc="86476730" ref="index:story:comments"/>
+    <file name="museconfig.js" crc="310584261" ref="index:story:comments"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:story:comments"/>
+    <file name="require.js" crc="7928878" ref="index:story:comments"/>
+    <file name="webpro.js" crc="4059564322" ref="story"/>
+    <file name="musewpslideshow.js" crc="3862962738" ref="story"/>
+    <file name="jquery.museoverlay.js" crc="4147669564" ref="story"/>
+    <file name="touchswipe.js" crc="4075097462" ref="story"/>
+  </folder>
+  <folder name="images">
+    <file name="home-favicon.ico" crc="4066440140" ref="index"/>
+    <file name="story-favicon.ico" crc="4066440140" ref="story"/>
+    <file name="button-add.png" crc="356303051" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-add_2x.png" crc="4267673238" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-v.png" crc="13045642" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-v_2x.png" crc="532586710" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry40x40.png" crc="4245352535" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry40x40_2x.png" crc="3863323578" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-1.jpg" crc="505489437" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-1_2x.jpg" crc="444324822" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="story"/>
+    <file name="story-v4-2.jpg" crc="349509611" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-2_2x.jpg" crc="4211485087" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-3.jpg" crc="4186350124" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-3_2x.jpg" crc="240132994" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-4.jpg" crc="3765503985" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v4-4_2x.jpg" crc="117853485" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="loading.gif" crc="3815509949" ref="story"/>
+    <file name="button-like.png" crc="3843670451" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-like_2x.png" crc="4116601034" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-share.png" crc="4072089455" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-share_2x.png" crc="389220305" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-comment.png" crc="311692285" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-comment_2x.png" crc="4188035692" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-chris.png" crc="4236193699" seo="true" ref="story:comments">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="avatar-chris_2x.png" crc="3878443417" seo="true" ref="story:comments">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="avatar-julia.png" crc="3832037454" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-julia_2x.png" crc="4272034567" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-1.jpg" crc="4074807171" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-1_2x.jpg" crc="172349573" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-2.jpg" crc="123195807" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-2_2x.jpg" crc="4041436068" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-3.jpg" crc="4185500980" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v3-3_2x.jpg" crc="4165773400" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-james.png" crc="194947357" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-james_2x.png" crc="368747646" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v2-1.jpg" crc="3981345451" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v2-1_2x.jpg" crc="4015647106" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v2-2.jpg" crc="426291278" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v2-2_2x.jpg" crc="480642158" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v1-1.jpg" crc="3971698006" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v1-1_2x.jpg" crc="505669855" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v1-2.jpg" crc="138814600" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="story-v1-2_2x.jpg" crc="3857391509" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry.png" crc="4200313962" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry_2x.png" crc="308134692" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="coverart-underthestars.png" crc="58251844" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="coverart-underthestars_2x.png" crc="425262460" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="badge.png" crc="4070237708" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="badge_2x.png" crc="4220316188" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="logo.png" crc="17234643" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="logo_2x.png" crc="3790980589" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="comments-favicon.ico" crc="4066440140" ref="comments"/>
+    <file name="button-x.png" crc="227482396" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="button-x_2x.png" crc="154464306" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0035_layer 18.jpg" crc="3838977289" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0035_layer 18_2x.jpg" crc="262179972" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0004_layer 49.jpg" crc="4030526473" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0004_layer 49_2x.jpg" crc="55826006" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0038_layer 15.jpg" crc="287739567" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0038_layer 15_2x.jpg" crc="45654165" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0002_layer 51.jpg" crc="312626883" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0002_layer 51_2x.jpg" crc="3886720563" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0013_layer 40.jpg" crc="3810834026" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0013_layer 40_2x.jpg" crc="3826455388" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0024_layer 29.jpg" crc="493865974" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0024_layer 29_2x.jpg" crc="4117931170" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0029_layer 24.jpg" crc="3886033753" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0029_layer 24_2x.jpg" crc="153845200" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0000_layer 53.jpg" crc="4043856912" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0000_layer 53_2x.jpg" crc="464721047" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0042_layer 11.jpg" crc="13503834" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0042_layer 11_2x.jpg" crc="387636306" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0039_layer 14.jpg" crc="234237884" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0039_layer 14_2x.jpg" crc="387559904" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0031_layer 22.jpg" crc="190680504" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0031_layer 22_2x.jpg" crc="4081213074" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0041_layer 12.jpg" crc="298647120" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0041_layer 12_2x.jpg" crc="33163734" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0011_layer 42.jpg" crc="506471637" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0011_layer 42_2x.jpg" crc="181902734" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0030_layer 23.jpg" crc="4013502670" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0030_layer 23_2x.jpg" crc="4039381092" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0008_layer 45.jpg" crc="4258387423" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0008_layer 45_2x.jpg" crc="136296921" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0051_layer 2.jpg" crc="4082308257" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0051_layer 2_2x.jpg" crc="3878768964" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0025_layer 28.jpg" crc="347150126" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0025_layer 28_2x.jpg" crc="4146878544" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0014_layer 39.jpg" crc="269276033" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0014_layer 39_2x.jpg" crc="478663563" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0032_layer 21.jpg" crc="435129139" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0032_layer 21_2x.jpg" crc="532119299" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0022_layer 31.jpg" crc="532485114" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0022_layer 31_2x.jpg" crc="491936127" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0007_layer 46.jpg" crc="330334347" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0007_layer 46_2x.jpg" crc="239885224" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0049_layer 4.jpg" crc="268281340" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0049_layer 4_2x.jpg" crc="3816095756" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0005_layer 48.jpg" crc="4039289037" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0005_layer 48_2x.jpg" crc="482452299" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0001_layer 52.jpg" crc="494108673" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0001_layer 52_2x.jpg" crc="3998081004" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0017_layer 36.jpg" crc="335244535" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0017_layer 36_2x.jpg" crc="4083056075" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0019_layer 34.jpg" crc="4234846408" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0019_layer 34_2x.jpg" crc="150974995" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0046_layer 7.jpg" crc="362663955" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0046_layer 7_2x.jpg" crc="3923080497" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0026_layer 27.jpg" crc="473075842" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0026_layer 27_2x.jpg" crc="180745970" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0050_layer 3.jpg" crc="205978860" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0050_layer 3_2x.jpg" crc="3905734797" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0009_layer 44.jpg" crc="3945979346" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0009_layer 44_2x.jpg" crc="4242668135" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0040_layer 13.jpg" crc="3914182265" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0040_layer 13_2x.jpg" crc="468431296" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0010_layer 43.jpg" crc="408363696" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0010_layer 43_2x.jpg" crc="3778355618" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0012_layer 41.jpg" crc="3856726249" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0012_layer 41_2x.jpg" crc="480627614" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0043_layer 10.jpg" crc="253215132" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0043_layer 10_2x.jpg" crc="4170335905" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0006_layer 47.jpg" crc="3816346704" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0006_layer 47_2x.jpg" crc="3904662504" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0033_layer 20.jpg" crc="3996816044" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0033_layer 20_2x.jpg" crc="4028896212" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0037_layer 16.jpg" crc="487651372" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0037_layer 16_2x.jpg" crc="3831183060" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0020_layer 33.jpg" crc="69812483" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0020_layer 33_2x.jpg" crc="3945279147" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0047_layer 6.jpg" crc="383025525" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0047_layer 6_2x.jpg" crc="4166250237" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0028_layer 25.jpg" crc="3999054609" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0028_layer 25_2x.jpg" crc="4271013793" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0021_layer 32.jpg" crc="4215581091" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0021_layer 32_2x.jpg" crc="431382053" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0015_layer 38.jpg" crc="3838725212" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0015_layer 38_2x.jpg" crc="378115244" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0034_layer 19.jpg" crc="4089092238" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0034_layer 19_2x.jpg" crc="385932900" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0045_layer 8.jpg" crc="438787989" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0045_layer 8_2x.jpg" crc="85982375" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0044_layer 9.jpg" crc="3854864349" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0044_layer 9_2x.jpg" crc="4284674" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0016_layer 37.jpg" crc="272533339" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0016_layer 37_2x.jpg" crc="3888031309" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0027_layer 26.jpg" crc="4159986268" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0027_layer 26_2x.jpg" crc="4035455980" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0023_layer 30.jpg" crc="156049145" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+    <file name="fan_0023_layer 30_2x.jpg" crc="256038839" seo="true" ref="comments">
+      <caption webpage="comments" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
+  <file name="story.html" crc="369968704" seo="true" mt="1525524592296" redirect="true"/>
+  <file name="comments.html" crc="4246363679" seo="true" mt="1525524352952" redirect="true"/>
+</manifest>
