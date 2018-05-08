@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://mrjoshuachao.github.io/story.html</loc>
-    <lastmod>2018-05-06</lastmod>
+    <lastmod>2018-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -144,12 +144,6 @@
       <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/badge.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/badge_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/logo.png</image:loc>
     </image:image>
     <image:image>
@@ -160,6 +154,12 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/button-search_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/badge-v.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/badge-v_2x.png</image:loc>
     </image:image>
   </url>
   <url>
