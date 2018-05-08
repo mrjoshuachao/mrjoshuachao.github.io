@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525784738397">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1525784898315">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4053683724" ref="index"/>
@@ -550,6 +550,6 @@
     </file>
   </folder>
   <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
-  <file name="story.html" crc="4173312566" seo="true" mt="1525784729435" redirect="true"/>
+  <file name="story.html" crc="297551201" seo="true" mt="1525784890076" redirect="true"/>
   <file name="comments.html" crc="3912607593" seo="true" mt="1525546476048" redirect="true"/>
 </manifest>
