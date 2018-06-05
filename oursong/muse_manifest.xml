@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1528215409519">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1528215821254">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="comments.css" crc="4251225592" ref="comments"/>
+    <file name="comments.css" crc="4183336985" ref="comments"/>
     <file name="index.css" crc="4053683724" ref="index"/>
-    <file name="story.css" crc="350851165" ref="story"/>
+    <file name="story.css" crc="4142938855" ref="story"/>
   </folder>
   <folder name="assets">
     <file name="20180504-for-muse-for-ipad.mp4" crc="4251336909" seo="true" mt="1525442276000"/>
@@ -23,8 +23,8 @@
     <file name="touchswipe.js" crc="4075097462" ref="story"/>
   </folder>
   <folder name="images">
-    <file name="home-favicon.ico" crc="4066440140" ref="index"/>
-    <file name="story-favicon.ico" crc="4066440140" ref="story"/>
+    <file name="home-favicon.ico" crc="353239792" ref="index"/>
+    <file name="story-favicon.ico" crc="353239792" ref="story"/>
     <file name="coverart-underthestars.png" crc="58251844" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
@@ -253,7 +253,7 @@
     <file name="avatar-terry_2x.png" crc="308134692" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="comments-favicon.ico" crc="4066440140" ref="comments"/>
+    <file name="comments-favicon.ico" crc="353239792" ref="comments"/>
     <file name="fan_0035_layer 18.jpg" crc="3838977289" seo="true" ref="comments">
       <caption webpage="comments" alt=""/>
     </file>
@@ -549,7 +549,7 @@
       <caption webpage="comments" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="57402166" seo="true" mt="1525521518348" redirect="true"/>
-  <file name="story.html" crc="45328603" seo="true" mt="1528214239089" redirect="true"/>
-  <file name="comments.html" crc="3939896385" seo="true" mt="1528215212208" redirect="true"/>
+  <file name="index.html" crc="3801800673" seo="true" mt="1525521518348" redirect="true"/>
+  <file name="story.html" crc="3937832089" seo="true" mt="1528215811401" redirect="true"/>
+  <file name="comments.html" crc="164804008" seo="true" mt="1528215737554" redirect="true"/>
 </manifest>
