@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1528266069152">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1528293379493">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
+    <file name="story.css" crc="3942385975" ref="story"/>
     <file name="index.css" crc="4053683724" ref="index"/>
-    <file name="story.css" crc="231695344" ref="story"/>
     <file name="comments.css" crc="4183336985" ref="comments"/>
   </folder>
   <folder name="assets">
@@ -25,88 +25,6 @@
   <folder name="images">
     <file name="home-favicon.ico" crc="353239792" ref="index"/>
     <file name="story-favicon.ico" crc="353239792" ref="story"/>
-    <file name="progress-bar.png" crc="230055156" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="progress-bar_2x.png" crc="3761228786" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="coverart-underthestars.png" crc="58251844" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="coverart-underthestars_2x.png" crc="425262460" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-terry40x40.png" crc="4245352535" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-terry40x40_2x.png" crc="3863323578" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-julia.png" crc="3832037454" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-julia_2x.png" crc="4272034567" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-james.png" crc="194947357" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-james_2x.png" crc="368747646" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="logo.png" crc="225429954" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="logo_2x.png" crc="4010882869" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="avatar-chris.png" crc="4236193699" seo="true" ref="story:comments">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="comments" alt=""/>
-    </file>
-    <file name="avatar-chris_2x.png" crc="3878443417" seo="true" ref="story:comments">
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="story" alt=""/>
-      <caption webpage="comments" alt=""/>
-    </file>
-    <file name="button-search.png" crc="3896951533" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
-    <file name="button-search_2x.png" crc="271857054" seo="true" ref="story">
-      <caption webpage="story" alt=""/>
-    </file>
     <file name="badge-v.png" crc="3775055785" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
@@ -125,88 +43,102 @@
     <file name="button-v_2x.png" crc="3922221248" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-d68x24.png" crc="4067712133" seo="true" ref="story">
+    <file name="tag-a.png" crc="154247239" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-d68x24_2x.png" crc="3862758135" seo="true" ref="story">
+    <file name="tag-a_2x.png" crc="3979971493" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-f74x25.png" crc="524943715" seo="true" ref="story">
+    <file name="tag-e74x24.png" crc="4135036170" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-f74x25_2x.png" crc="4157277939" seo="true" ref="story">
+    <file name="tag-e74x24_2x.png" crc="518753151" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-a68x24.png" crc="454284380" seo="true" ref="story">
+    <file name="tag-f.png" crc="89222438" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-a68x24_2x.png" crc="3763753299" seo="true" ref="story">
+    <file name="tag-f_2x.png" crc="288528973" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-a.png" crc="4222929801" seo="true" ref="story">
+    <file name="tag-g73x24.png" crc="3850375387" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-a_2x.png" crc="3913872361" seo="true" ref="story">
+    <file name="tag-g73x24_2x.png" crc="4087994591" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-b.png" crc="428928127" seo="true" ref="story">
+    <file name="tag-h.png" crc="121226222" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-b_2x.png" crc="418093656" seo="true" ref="story">
+    <file name="tag-h_2x.png" crc="310491990" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-c.png" crc="3759387818" seo="true" ref="story">
+    <file name="tag-i.png" crc="288937084" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-c_2x.png" crc="471385508" seo="true" ref="story">
+    <file name="tag-i_2x.png" crc="172089234" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-d.png" crc="47558090" seo="true" ref="story">
+    <file name="tag-j.png" crc="128693969" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-d_2x.png" crc="3862758135" seo="true" ref="story">
+    <file name="tag-j_2x.png" crc="3973823260" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-e.png" crc="100977837" seo="true" ref="story">
+    <file name="tag-k.png" crc="98934604" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-e_2x.png" crc="4130312499" seo="true" ref="story">
+    <file name="tag-k_2x.png" crc="4037955736" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-f.png" crc="4120845693" seo="true" ref="story">
+    <file name="tag-b.png" crc="425076660" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-f_2x.png" crc="292526656" seo="true" ref="story">
+    <file name="tag-b_2x.png" crc="3997714346" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-g.png" crc="480416572" seo="true" ref="story">
+    <file name="tag-c.png" crc="244924070" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-g_2x.png" crc="4195446" seo="true" ref="story">
+    <file name="tag-c_2x.png" crc="514489705" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-h.png" crc="3863004927" seo="true" ref="story">
+    <file name="tag-d.png" crc="4279909084" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-h_2x.png" crc="4248020218" seo="true" ref="story">
+    <file name="tag-d_2x.png" crc="4044272873" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-i.png" crc="4280785447" seo="true" ref="story">
+    <file name="tag-e.png" crc="4110176729" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-i_2x.png" crc="3890783624" seo="true" ref="story">
+    <file name="tag-e_2x.png" crc="3863129516" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-j.png" crc="3829590076" seo="true" ref="story">
+    <file name="tag-f68x24.png" crc="232974947" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-j_2x.png" crc="3900309773" seo="true" ref="story">
+    <file name="tag-f68x24_2x.png" crc="4070126392" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-k.png" crc="258252862" seo="true" ref="story">
+    <file name="tag-g.png" crc="4207312313" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
-    <file name="tag-k_2x.png" crc="4088160962" seo="true" ref="story">
+    <file name="tag-g_2x.png" crc="34641645" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry40x40.png" crc="4245352535" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-terry40x40_2x.png" crc="3863323578" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
       <caption webpage="story" alt=""/>
     </file>
     <file name="story-v4-1.jpg" crc="505489437" seo="true" ref="story">
@@ -295,6 +227,42 @@
       <caption webpage="story" alt=""/>
       <caption webpage="story" alt=""/>
     </file>
+    <file name="avatar-chris.png" crc="4236193699" seo="true" ref="story:comments">
+      <caption webpage="comments" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-chris_2x.png" crc="3878443417" seo="true" ref="story:comments">
+      <caption webpage="comments" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-julia.png" crc="3832037454" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-julia_2x.png" crc="4272034567" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
     <file name="story-v3-1.jpg" crc="4074807171" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
@@ -311,6 +279,14 @@
       <caption webpage="story" alt=""/>
     </file>
     <file name="story-v3-3_2x.jpg" crc="4165773400" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-james.png" crc="194947357" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="avatar-james_2x.png" crc="368747646" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
       <caption webpage="story" alt=""/>
     </file>
     <file name="story-v2-1.jpg" crc="3981345451" seo="true" ref="story">
@@ -341,6 +317,30 @@
       <caption webpage="story" alt=""/>
     </file>
     <file name="avatar-terry_2x.png" crc="308134692" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="progress-bar.png" crc="4272682398" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="progress-bar_2x.png" crc="3797564242" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="coverart-underthestars.png" crc="58251844" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="coverart-underthestars_2x.png" crc="425262460" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="logo.png" crc="225429954" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="logo_2x.png" crc="4010882869" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-search.png" crc="3896951533" seo="true" ref="story">
+      <caption webpage="story" alt=""/>
+    </file>
+    <file name="button-search_2x.png" crc="271857054" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
     <file name="comments-favicon.ico" crc="353239792" ref="comments"/>
@@ -640,6 +640,6 @@
     </file>
   </folder>
   <file name="index.html" crc="3801800673" seo="true" mt="1525521518348" redirect="true"/>
-  <file name="story.html" crc="468030549" seo="true" mt="1528266059365" redirect="true"/>
-  <file name="comments.html" crc="4150690908" seo="true" mt="1528215737554" redirect="true"/>
+  <file name="story.html" crc="4217613167" seo="true" mt="1528293328793" redirect="true"/>
+  <file name="comments.html" crc="500741344" seo="true" mt="1528215737554" redirect="true"/>
 </manifest>

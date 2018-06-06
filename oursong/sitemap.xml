@@ -12,54 +12,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/progress-bar.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/progress-bar_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-terry40x40.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-terry40x40_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-julia.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-julia_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-james.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-james_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/logo.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/logo_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-chris.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/avatar-chris_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/button-search.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/button-search_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/badge-v.png</image:loc>
     </image:image>
     <image:image>
@@ -78,28 +30,52 @@
       <image:loc>https://mrjoshuachao.github.io/images/button-v_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-a68x24.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-a68x24_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-a.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-a_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-e74x24.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-e74x24_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-g73x24.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-g73x24_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-h.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-h_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-i.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-i_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-j.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-j_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-k.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-k_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-b.png</image:loc>
@@ -126,10 +102,10 @@
       <image:loc>https://mrjoshuachao.github.io/images/tag-e_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f.png</image:loc>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f68x24.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f_2x.png</image:loc>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f68x24_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-g.png</image:loc>
@@ -138,28 +114,10 @@
       <image:loc>https://mrjoshuachao.github.io/images/tag-g_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-h.png</image:loc>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-terry40x40.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-h_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-i.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-i_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-j.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-j_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-k.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-k_2x.png</image:loc>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-terry40x40_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/story-v4-1.jpg</image:loc>
@@ -204,6 +162,18 @@
       <image:loc>https://mrjoshuachao.github.io/images/button-comment_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-chris.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-chris_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-julia.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-julia_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/story-v3-1.jpg</image:loc>
     </image:image>
     <image:image>
@@ -220,6 +190,12 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/story-v3-3_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-james.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/avatar-james_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/story-v2-1.jpg</image:loc>
@@ -250,6 +226,30 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/avatar-terry_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/progress-bar.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/progress-bar_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/logo.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/logo_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/button-search.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/button-search_2x.png</image:loc>
     </image:image>
   </url>
   <url>
