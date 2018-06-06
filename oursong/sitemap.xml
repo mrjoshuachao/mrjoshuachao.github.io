@@ -12,6 +12,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/progress-bar.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/progress-bar_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/coverart-underthestars.png</image:loc>
     </image:image>
     <image:image>
@@ -70,6 +76,18 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/button-v_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-a68x24.png</image:loc>
@@ -142,24 +160,6 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/tag-k_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/progress-bar.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/progress-bar_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-d68x24_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/images/tag-f74x25_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/story-v4-1.jpg</image:loc>
