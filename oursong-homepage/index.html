@@ -17,9 +17,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
   <title>OurSong</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=444006867"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=493719423" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=261548978" id="pagesheet"/>
   <!-- JS includes -->
-  <script src="https://use.typekit.net/ik/t8P9XFfYDsr-ZN-k2Aha7HR3fWpxf0oiXBOLhMACq5GfeTvgfO2jx39PHQIkFQSa52b3WhF8FQ93FQZqwAIuFhF8FRSawc9352BKFAJDZQgKw24ceqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6RRr3IbMg6IJM4HgIuuShAbMjRjNFqB.js" type="text/javascript"></script>
+  <script src="https://use.typekit.net/ik/CwplMSJZ4ukuyG7zunsQW_E_TXCD_fHGwCQSblwd7XMfeTvgfO2jx39PHQIkFQSa52b3WhF8FQ93FQZqwAIuFhF8FRSawc9352BKFAJDZQgKw24ceqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6RRr3IbMg6IJM4HgIuuShAbMjdZNFqB.js" type="text/javascript"></script>
   <!-- Other scripts -->
   <script type="text/javascript">
    try {Typekit.load();} catch(e) {}
@@ -34,6 +34,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
     <div class="browser_width" id="u194-bw">
      <div id="u194"><!-- simple frame --></div>
     </div>
+    <div class="browser_width" id="u348-bw">
+     <div class="gradient" id="u348"><!-- simple frame --></div>
+    </div>
     <div class="clearfix" id="u197-16"><!-- content -->
      <p>VISION<span id="u197-2"> </span>FEATURES<span id="u197-4"> </span>TEAM<span id="u197-6"> </span>ROADMAP<span id="u197-8"> </span>FAQ<span id="u197-10"> </span>NEWSROOM<span id="u197-12"> </span>CONTACT</p>
     </div>
@@ -44,12 +47,10 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
      <img class="block" id="u203_img" src="images/whitepaper.png?crc=320975663" data-hidpi-src="images/whitepaper_2x.png?crc=368962699" alt="" width="33" height="45"/>
     </div>
    </div>
-   <div class="browser_width grpelem" id="u213-bw">
-    <div class="size_browser_width" id="u213"><!-- custom html -->
-     
+   <div class="size_fixed grpelem" id="u213"><!-- custom html -->
+    
 <iframe class="actAsDiv" style="width:100%;height:100%;" src="//www.youtube.com/embed/hGIZAgWJt3c?autoplay=0&loop=0&showinfo=0&theme=light&color=white&controls=1&modestbranding=1&start=0&fs=1&iv_load_policy=3&wmode=transparent&rel=0" frameborder="0" allowfullscreen></iframe>
 
-    </div>
    </div>
    <div class="verticalspacer" data-offset-top="656" data-content-above-spacer="656" data-content-below-spacer="9344"></div>
   </div>
@@ -69,8 +70,6 @@ window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
 Muse.Utils.prepHyperlinks(true);/* body */
-Muse.Utils.resizeHeight('.browser_width');/* resize height */
-Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized'); });/* mark body as initialized */
 Muse.Utils.makeButtonsVisibleAfterSettingMinWidth();/* body */
 Muse.Utils.fullPage('#page');/* 100% height page */
 Muse.Utils.showWidgetsWhenReady();/* body */
