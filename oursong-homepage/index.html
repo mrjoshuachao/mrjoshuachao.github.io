@@ -17,9 +17,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
   <title>OurSong</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=444006867"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=290513457" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=3872931574" id="pagesheet"/>
   <!-- JS includes -->
-  <script src="https://use.typekit.net/ik/7jQ9MxcVnBJqePSNIeWRog4ZLlNg3SwnIl7UzbfSRRXfe7CgfO2jx39PHQIkFQSa52b3WhF8FQ93FQZqwAIuFhF8FRSawc9352BKFAJDZQgKw24ceqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6R1r3IbMg6YJMJ7f6RRr3IbMg6IJM4HgIuuShAbMLxdNFqB.js" type="text/javascript"></script>
+  <script src="https://use.typekit.net/ik/xPJ0Uj5jr_0-A4xBp_OhinjKsoXlzNNJUONrPZTaL2Jfe7CgfO2jx39PHQIkFQSa52b3WhF8FQ93FQZqwAIuFhF8FRSawc9352BKFAJDZQgKw24ceqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6RRr3IbMg6IJMJ7f6R1r3IbMg6YJM4HgIuuShAbMZRpNFqB.js" type="text/javascript"></script>
   <!-- Other scripts -->
   <script type="text/javascript">
    try {Typekit.load();} catch(e) {}
@@ -30,15 +30,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
  <body>
 
   <div class="clearfix" id="page"><!-- group -->
-   <div class="clearfix grpelem" id="pu357-4"><!-- group -->
-    <div class="browser_width" id="u357-4-bw">
-     <div class="clearfix" id="u357-4"><!-- content -->
-      <p>VISION</p>
-     </div>
-    </div>
-    <div class="clearfix" id="u382-4"><!-- content -->
-     <p>Technology is literally “rewriting” music. With collaboration at an all time high, there is an acceleration of hybrid crossovers, covers, remixing and originality driving a mashup of genres, cultures and trends. We are living in a collaborative renaissance. OurSong presents a once in a generation opportunity to create a new dimension for innovation and collaboration void of legacy restrictive practices from the music businesses. It allows for new creative opportunity to be discovered while simultaneously updating a copyright architecture inherited from the Industrial Age. By rewriting the rules of musicnomics for the Digital Age, future generations stand to benefit most from this democratization of creativity and collaboration.</p>
-    </div>
+   <div class="clearfix grpelem" id="pu194"><!-- group -->
     <div class="browser_width" id="u194-bw">
      <div id="u194"><!-- simple frame --></div>
     </div>
@@ -55,12 +47,33 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
      <img class="block" id="u203_img" src="images/whitepaper.png?crc=320975663" data-hidpi-src="images/whitepaper_2x.png?crc=368962699" alt="" width="33" height="45"/>
     </div>
    </div>
-   <div class="size_fixed grpelem" id="u213"><!-- custom html -->
-    
+   <div class="clearfix grpelem" id="pu213"><!-- column -->
+    <div class="size_fixed colelem" id="u213"><!-- custom html -->
+     
 <iframe class="actAsDiv" style="width:100%;height:100%;" src="//www.youtube.com/embed/hGIZAgWJt3c?autoplay=0&loop=0&showinfo=0&theme=light&color=white&controls=1&modestbranding=1&start=0&fs=1&iv_load_policy=3&wmode=transparent&rel=0" frameborder="0" allowfullscreen></iframe>
 
+    </div>
+    <div class="browser_width colelem" id="u357-4-bw">
+     <div class="clearfix" id="u357-4"><!-- content -->
+      <p>VISION</p>
+     </div>
+    </div>
+    <div class="browser_width colelem" id="u382-22-bw">
+     <div class="clearfix" id="u382-22"><!-- content -->
+      <p>Technology is literally “rewriting” music. With collaboration at an all time</p>
+      <p>high, there is an acceleration of hybrid crossovers, covers, remixing and</p>
+      <p>originality driving a mashup of genres, cultures and trends. We are living</p>
+      <p>in a collaborative renaissance. OurSong presents a once in a generation</p>
+      <p>opportunity to create a new dimension for innovation and collaboration void</p>
+      <p>of legacy restrictive practices from the music businesses. It allows for new</p>
+      <p>creative opportunity to be discovered while simultaneously updating a</p>
+      <p>copyright architecture inherited from the Industrial Age. By rewriting the</p>
+      <p>rules of musicnomics for the Digital Age, future generations stand to</p>
+      <p>benefit most from this democratization of creativity and collaboration.</p>
+     </div>
+    </div>
    </div>
-   <div class="verticalspacer" data-offset-top="656" data-content-above-spacer="1000" data-content-below-spacer="9344"></div>
+   <div class="verticalspacer" data-offset-top="1056" data-content-above-spacer="1055" data-content-below-spacer="8944"></div>
   </div>
   <!-- Other scripts -->
   <script type="text/javascript">
@@ -78,6 +91,8 @@ window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
 Muse.Utils.prepHyperlinks(true);/* body */
+Muse.Utils.resizeHeight('.browser_width');/* resize height */
+Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized'); });/* mark body as initialized */
 Muse.Utils.makeButtonsVisibleAfterSettingMinWidth();/* body */
 Muse.Utils.fullPage('#page');/* 100% height page */
 Muse.Utils.showWidgetsWhenReady();/* body */
