@@ -1,0 +1,30 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530726181379">
+  <folder name="css">
+    <file name="site_global.css" crc="444006867"/>
+    <file name="index.css" crc="228147415" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="340535759" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="310584261" ref="index"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index"/>
+    <file name="require.js" crc="7928878" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="a-master-favicon.ico" crc="257507845" ref="index"/>
+    <file name="logotype.png" crc="97151469" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype_2x.png" crc="4253489861" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="whitepaper.png" crc="188504462" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="whitepaper_2x.png" crc="4057699563" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="462079057" seo="true" mt="1530726176634" redirect="true"/>
+</manifest>
