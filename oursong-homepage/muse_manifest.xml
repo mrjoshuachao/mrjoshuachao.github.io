@@ -1,30 +1,73 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530741437592">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530799253240">
   <folder name="css">
-    <file name="site_global.css" crc="4092735846"/>
-    <file name="index.css" crc="3887411331" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="166472256" ref="index"/>
+    <file name="oursong-intro.css" crc="498401448" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
-    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
-    <file name="museutils.js" crc="340535759" ref="index"/>
-    <file name="whatinput.js" crc="86476730" ref="index"/>
-    <file name="museconfig.js" crc="310584261" ref="index"/>
-    <file name="jquery.watch.js" crc="51536988" ref="index"/>
-    <file name="require.js" crc="7928878" ref="index"/>
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro"/>
+    <file name="museutils.js" crc="340535759" ref="index:oursong-intro"/>
+    <file name="whatinput.js" crc="86476730" ref="index:oursong-intro"/>
+    <file name="museconfig.js" crc="310584261" ref="index:oursong-intro"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro"/>
+    <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="257507845" ref="index"/>
-    <file name="logotype.png" crc="97151469" seo="true" ref="index">
+    <file name="logotype-red.png" crc="4109891293" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype_2x.png" crc="4253489861" seo="true" ref="index">
+    <file name="logotype-red_2x.png" crc="3938244906" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="whitepaper.png" crc="320975663" seo="true" ref="index">
+    <file name="whitepaper-gray.png" crc="4025938694" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="whitepaper_2x.png" crc="368962699" seo="true" ref="index">
+    <file name="whitepaper-gray_2x.png" crc="4017527380" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-bg.jpg" crc="4077221262" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-white.png" crc="3888269013" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-white_2x.png" crc="4081119380" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play_2x.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="whitepaper-white.png" crc="349191543" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="whitepaper-white_2x.png" crc="447736390" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="x.gif" crc="469265948" seo="true" ref="oursong-intro">
+      <caption webpage="oursong-intro" alt=""/>
+    </file>
+    <file name="x_2x.gif" crc="469265948" seo="true" ref="oursong-intro">
+      <caption webpage="oursong-intro" alt=""/>
+    </file>
+    <file name="color-bg-1.jpg" crc="4211750810" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-2.jpg" crc="435067773" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-3.jpg" crc="4203822312" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-4.jpg" crc="530657961" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3800431561" seo="true" mt="1530741428253" redirect="true"/>
+  <file name="index.html" crc="4280635441" seo="true" mt="1530799247037" redirect="true"/>
+  <file name="oursong-intro.html" crc="336062109" seo="true" mt="1530796616174" redirect="true"/>
 </manifest>

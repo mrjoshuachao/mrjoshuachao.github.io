@@ -6,16 +6,46 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-red.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-red_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/whitepaper.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/whitepaper-gray.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/whitepaper_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/whitepaper-gray_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/whitepaper-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/whitepaper-white_2x.png</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/oursong-intro.html</loc>
+    <lastmod>2018-07-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/x_2x.gif</image:loc>
     </image:image>
   </url>
 </urlset>
