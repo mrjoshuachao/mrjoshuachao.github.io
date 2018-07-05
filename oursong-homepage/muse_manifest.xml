@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530800708907">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530800756489">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="166472256" ref="index"/>
@@ -12,7 +12,6 @@
     <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro"/>
     <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
     <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
-    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="257507845" ref="index:oursong-intro"/>
@@ -68,6 +67,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4047362635" seo="true" mt="1530800696490" redirect="true"/>
+  <file name="index.html" crc="3922464760" seo="true" mt="1530800751361" redirect="true"/>
   <file name="oursong-intro.html" crc="4161463247" seo="true" mt="1530800022843" redirect="true"/>
 </manifest>
