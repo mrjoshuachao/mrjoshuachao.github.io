@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530869551974">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530886927421">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4281981565" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="3758982869" ref="index"/>
     <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -27,7 +27,7 @@
     <file name="whitepaper-gray_2x.png" crc="4017527380" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-bg.jpg" crc="265093331" ref="index">
+    <file name="video-bg.jpg" crc="4215596138" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="logotype-white.png" crc="3888269013" seo="true" ref="index">
@@ -66,16 +66,16 @@
     <file name="color-bg-6.jpg" crc="143401170" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play-2.png" crc="4127610004" seo="true" ref="index">
+    <file name="video-play-2.png" crc="276358487" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play-2_2x.png" crc="3803034323" seo="true" ref="index">
+    <file name="video-play-2_2x.png" crc="4127610004" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play-1.png" crc="15825946" seo="true" ref="index">
+    <file name="video-play-1.png" crc="361684426" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play-1_2x.png" crc="140682482" seo="true" ref="index">
+    <file name="video-play-1_2x.png" crc="15825946" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="oursong-logomark-color.png" crc="463054003" seo="true" ref="index">
@@ -85,6 +85,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="316213744" seo="true" mt="1530869537629" redirect="true"/>
+  <file name="index.html" crc="333059516" seo="true" mt="1530886911460" redirect="true"/>
   <file name="oursong-intro.html" crc="240959443" seo="true" mt="1530867321368" redirect="true"/>
 </manifest>
