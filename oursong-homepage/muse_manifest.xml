@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530865396870">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530869551974">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="3961480937" ref="index"/>
-    <file name="oursong-intro.css" crc="452076433" ref="oursong-intro"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="4281981565" ref="index"/>
+    <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro"/>
@@ -14,7 +14,7 @@
     <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="257507845" ref="index:oursong-intro"/>
+    <file name="a-master-favicon.ico" crc="257507845" ref="index"/>
     <file name="logotype-red.png" crc="4109891293" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -78,7 +78,13 @@
     <file name="video-play-1_2x.png" crc="140682482" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="oursong-logomark-color.png" crc="463054003" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logomark-color_2x.png" crc="315214395" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="233605404" seo="true" mt="1530865391629" redirect="true"/>
-  <file name="oursong-intro.html" crc="4161463247" seo="true" mt="1530800022843" redirect="true"/>
+  <file name="index.html" crc="316213744" seo="true" mt="1530869537629" redirect="true"/>
+  <file name="oursong-intro.html" crc="240959443" seo="true" mt="1530867321368" redirect="true"/>
 </manifest>
