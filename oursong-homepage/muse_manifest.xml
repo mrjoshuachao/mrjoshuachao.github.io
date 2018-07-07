@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1530928987416">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531001380058">
   <folder name="css">
     <file name="site_global.css" crc="454925506"/>
-    <file name="index.css" crc="4229199958" ref="index"/>
+    <file name="index.css" crc="100544742" ref="index"/>
     <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -27,7 +27,7 @@
     <file name="whitepaper-gray_2x.png" crc="4017527380" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-bg.jpg" crc="4215596138" ref="index">
+    <file name="video-bg.jpg" crc="352305445" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="logotype-white.png" crc="3888269013" seo="true" ref="index">
@@ -51,7 +51,7 @@
     <file name="color-bg-1.jpg" crc="4244005041" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="color-bg-2.jpg" crc="4013698466" ref="index">
+    <file name="color-bg-2.jpg" crc="143935096" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="color-bg-3.jpg" crc="4102606241" ref="index">
@@ -63,7 +63,7 @@
     <file name="color-bg-5.jpg" crc="29582056" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="color-bg-6.jpg" crc="143401170" ref="index">
+    <file name="color-bg-6.jpg" crc="107639183" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="video-play-2.png" crc="276358487" seo="true" ref="index">
@@ -78,13 +78,24 @@
     <file name="video-play-1_2x.png" crc="15825946" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="oursong-logomark-color.png" crc="463054003" seo="true" ref="index">
+    <file name="color-bg-5-u1504-fr.jpg" crc="369068114" ref="index"/>
+    <file name="color-bg-5-u1504-fr_2x.jpg" crc="32096930" ref="index"/>
+    <file name="wavy-thing-lines-bg-virtical-white-i.png" crc="4041695498" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="oursong-logomark-color_2x.png" crc="315214395" seo="true" ref="index">
+    <file name="wavy-thing-lines-bg-virtical-white-i_2x.png" crc="3826622633" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="color-bg-4-u1530-fr.jpg" crc="28580299" ref="index"/>
+    <file name="color-bg-4-u1530-fr_2x.jpg" crc="406730715" ref="index"/>
+    <file name="color-bg-3-u1516-fr.jpg" crc="3937876502" ref="index"/>
+    <file name="color-bg-3-u1516-fr_2x.jpg" crc="115331851" ref="index"/>
+    <file name="color-bg-2_2x.jpg" crc="454449720" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-1-u1572-fr.jpg" crc="307574678" ref="index"/>
+    <file name="color-bg-1-u1572-fr_2x.jpg" crc="4201540152" ref="index"/>
   </folder>
-  <file name="index.html" crc="438490326" seo="true" mt="1530928976454" redirect="true"/>
+  <file name="index.html" crc="525357104" seo="true" mt="1531001374455" redirect="true"/>
   <file name="oursong-intro.html" crc="4239015258" seo="true" mt="1530928949454" redirect="true"/>
 </manifest>
