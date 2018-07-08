@@ -10,16 +10,16 @@
 document.documentElement.className = document.documentElement.className.replace(/\bnojs\b/g, 'js');
 
 // Check that all required assets are uploaded and up-to-date
-if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.watch.js", "jquery.musepolyfill.bgsize.js", "require.js", "index.css"], "outOfDate":[]};
+if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.musepolyfill.bgsize.js", "jquery.watch.js", "require.js", "index.css"], "outOfDate":[]};
 </script>
   
   <link rel="shortcut icon" href="images/a-master-favicon.ico?crc=257507845"/>
   <title>OurSong</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=4160570849"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=4149904481" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=247149943" id="pagesheet"/>
   <!-- JS includes -->
-  <script src="https://use.typekit.net/ik/2402TxoErX-EHzi6Mxfg12TTR_VYlLzeR1tPrVYUddJfenSgfO2jx39PHQIkFQSa52b3WhIXZQyqZQgyw2ZcjhbhZeZcjRM3jRFKZRByjDgcjDBKeqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6RRr3IbMg6IJMJ7f6R1r3IbMg6YJMJ7f6Rqr3IbMg6eJM4HgIuuShAbMZcvKFGB.js" type="text/javascript"></script>
+  <script src="https://use.typekit.net/ik/hygJpfCDfgroYcZePyqA2KM4401MbrQ8NamWdqFhOU9fenSgfO2jx39PHQIkFQSa52b3WhIXZQyqZQgyw2ZcjhbhZeZcjRM3jRFKZRByjDgcjDBKeqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJZe80OQJ3wQb7f6RRr3IbMg6IJMJ7f6R1r3IbMg6YJMJ7f6Rqr3IbMg6eJM4HgIuuShAbMdkNKFGB.js" type="text/javascript"></script>
   <!-- Other scripts -->
   <script type="text/javascript">
    try {Typekit.load();} catch(e) {}
@@ -30,10 +30,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
  <body>
 
   <div class="clearfix" id="page"><!-- group -->
-   <div class="clearfix grpelem" id="pu855"><!-- column -->
-    <div class="browser_width colelem" id="u855-bw">
-     <div id="u855"><!-- simple frame --></div>
-    </div>
+   <div class="clearfix grpelem" id="ppu464"><!-- column -->
     <div class="clearfix colelem" id="pu464"><!-- group -->
      <div class="browser_width grpelem" id="u464-bw">
       <div class="pointer_cursor museBGSize" id="u464"><!-- group -->
@@ -534,6 +531,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
     <div class="clip_frame" id="u203"><!-- image -->
      <img class="block" id="u203_img" src="images/whitepaper-gray.png?crc=4025938694" data-hidpi-src="images/whitepaper-gray_2x.png?crc=4017527380" alt="" width="33" height="45"/>
     </div>
+    <div class="browser_width" id="u855-bw">
+     <div id="u855"><!-- simple frame --></div>
+    </div>
    </div>
    <div class="verticalspacer" data-offset-top="7688" data-content-above-spacer="7688" data-content-below-spacer="2311"></div>
   </div>
@@ -548,7 +548,7 @@ var suppressMissingFileError = false
 k[1]:null,k=k&&k[2]?k[2]:null;switch(k.toLowerCase()){case "css":i=i.replace(/\W/gi,"_").replace(/^([^a-z])/gi,"_$1");g.className+=" "+i;i=a(d(g,"color"));k=a(d(g,"backgroundColor"));i!=0||k!=0?(Muse.assets.required.splice(j,1),"undefined"!=typeof b[l]&&(i!=b[l]>>>24||k!=(b[l]&16777215))&&Muse.assets.outOfDate.push(l)):j++;g.className="version";break;case "js":j++;break;default:throw Error("Unsupported file type: "+k);}}c?c().jquery!="1.8.3"&&Muse.assets.outOfDate.push("jquery-1.8.3.min.js"):Muse.assets.required.push("jquery-1.8.3.min.js");
 g.parentNode.removeChild(g);if(Muse.assets.outOfDate.length||Muse.assets.required.length)g="Some files on the server may be missing or incorrect. Clear browser cache and try again. If the problem persists please contact website author.",f&&Muse.assets.outOfDate.length&&(g+="\nOut of date: "+Muse.assets.outOfDate.join(",")),f&&Muse.assets.required.length&&(g+="\nMissing: "+Muse.assets.required.join(",")),suppressMissingFileError?(g+="\nUse SuppressMissingFileError key in AppPrefs.xml to show missing file error pop up.",console.log(g)):alert(g)};location&&location.search&&location.search.match&&location.search.match(/muse_debug/gi)?
 setTimeout(function(){f(!0)},5E3):f()}};
-var muse_init=function(){require.config({baseUrl:""});require(["jquery","museutils","whatinput","jquery.watch","jquery.musepolyfill.bgsize"],function(c){var $ = c;$(document).ready(function(){try{
+var muse_init=function(){require.config({baseUrl:""});require(["jquery","museutils","whatinput","jquery.musepolyfill.bgsize","jquery.watch"],function(c){var $ = c;$(document).ready(function(){try{
 window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
