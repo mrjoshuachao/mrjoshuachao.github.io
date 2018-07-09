@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531169585798">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531170564724">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4013246144" ref="index"/>
+    <file name="index.css" crc="4151384002" ref="index"/>
     <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -57,7 +57,7 @@
     <file name="video-play-1_2x.png" crc="15825946" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="color-bg-long.jpg" crc="4187142827" ref="index">
+    <file name="color-bg-long.jpg" crc="4237003314" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="wavy-thing-lines-bg-virtical-white.png" crc="319564981" ref="index">
@@ -123,20 +123,14 @@
     <file name="x_2x.gif" crc="469265948" seo="true" ref="oursong-intro">
       <caption webpage="oursong-intro" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i.png" crc="4044626895" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="162614919" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="color-bg-5.jpg" crc="29582056" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="color-bg-4.jpg" crc="341560225" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="color-bg-6.jpg" crc="143401170" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="396450019" seo="true" mt="1531169577539" redirect="true"/>
+  <file name="index.html" crc="33667741" seo="true" mt="1531170562103" redirect="true"/>
   <file name="oursong-intro.html" crc="264412539" seo="true" mt="1531077802987" redirect="true"/>
 </manifest>
