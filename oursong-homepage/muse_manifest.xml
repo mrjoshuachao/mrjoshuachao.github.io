@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531087188178">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531167474499">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="336088226" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="3931496034" ref="index"/>
     <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -66,12 +66,6 @@
     <file name="wavy-thing-lines-bg-virtical-white_2x.png" crc="3895721497" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-virtical-white-thick.png" crc="3899223926" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-virtical-white-thick_2x.png" crc="190644593" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="team-chris.jpg" crc="4024066013" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -120,9 +114,6 @@
     <file name="team-matt_2x.jpg" crc="4044434559" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="color-bg-6.jpg" crc="143401170" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="color-bg-1.jpg" crc="4244005041" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -132,28 +123,13 @@
     <file name="x_2x.gif" crc="469265948" seo="true" ref="oursong-intro">
       <caption webpage="oursong-intro" alt=""/>
     </file>
-    <file name="color-bg-2.jpg" crc="4013698466" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="wavy-thing-lines-bg-horizontal-white-i.png" crc="4044626895" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="63404804" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-virtical-white-flip.png" crc="4227750890" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-virtical-white-flip_2x.png" crc="4267571917" ref="index">
+    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="162614919" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="color-bg-5.jpg" crc="29582056" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i2.png" crc="4044626895" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i_2x2.png" crc="162614919" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="color-bg-4.jpg" crc="341560225" ref="index">
@@ -161,6 +137,6 @@
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
   </folder>
-  <file name="index.html" crc="399520663" seo="true" mt="1531087172838" redirect="true"/>
+  <file name="index.html" crc="3768400168" seo="true" mt="1531167471745" redirect="true"/>
   <file name="oursong-intro.html" crc="264412539" seo="true" mt="1531077802987" redirect="true"/>
 </manifest>
