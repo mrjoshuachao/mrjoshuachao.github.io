@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531209866395">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531210732318">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="225512620" ref="index"/>
+    <file name="index.css" crc="3793661016" ref="index"/>
     <file name="oursong-intro.css" crc="3989944023" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -118,7 +118,19 @@
     <file name="color-bg-6.jpg" crc="143401170" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i.png" crc="4044626895" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="162614919" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-5.jpg" crc="29582056" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-2.jpg" crc="4013698466" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="67243260" seo="true" mt="1531209855004" redirect="true"/>
+  <file name="index.html" crc="4257640624" seo="true" mt="1531210722128" redirect="true"/>
   <file name="oursong-intro.html" crc="264412539" seo="true" mt="1531077802987" redirect="true"/>
 </manifest>
