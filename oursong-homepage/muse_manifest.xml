@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531434125656">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531434578775">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4227611103" ref="index"/>
@@ -188,13 +188,13 @@
     <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cpo.gif" crc="340384011" seo="true" ref="index">
+    <file name="cpo.gif" crc="171270793" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cpo_2x.gif" crc="340384011" seo="true" ref="index">
+    <file name="cpo_2x.gif" crc="171270793" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="87032379" seo="true" mt="1531434089395" redirect="true"/>
+  <file name="index.html" crc="3808513246" seo="true" mt="1531434565874" redirect="true"/>
   <file name="oursong-intro.html" crc="417537211" seo="true" mt="1531349356406" redirect="true"/>
 </manifest>
