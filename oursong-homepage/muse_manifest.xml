@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531354436053">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531434125656">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="1903284" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="4227611103" ref="index"/>
     <file name="oursong-intro.css" crc="4198447876" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -134,16 +134,16 @@
     <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="acknowledgement-kkboxgroup.png" crc="163622683" seo="true" ref="index">
+    <file name="acknowledgement-kkboxgroup.png" crc="511247969" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="acknowledgement-kkboxgroup_2x.png" crc="4199314036" seo="true" ref="index">
+    <file name="acknowledgement-kkboxgroup_2x.png" crc="163622683" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="acknowledgement-muzeum.png" crc="120313766" seo="true" ref="index">
+    <file name="acknowledgement-muzeum.png" crc="3954861876" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="acknowledgement-muzeum_2x.png" crc="461668875" seo="true" ref="index">
+    <file name="acknowledgement-muzeum_2x.png" crc="4162310160" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="logotype--bd081c.png" crc="397240121" seo="true" ref="index">
@@ -188,13 +188,13 @@
     <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cpo.gif" crc="224928507" seo="true" ref="index">
+    <file name="cpo.gif" crc="340384011" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cpo_2x.gif" crc="224928507" seo="true" ref="index">
+    <file name="cpo_2x.gif" crc="340384011" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4089163480" seo="true" mt="1531354419153" redirect="true"/>
+  <file name="index.html" crc="87032379" seo="true" mt="1531434089395" redirect="true"/>
   <file name="oursong-intro.html" crc="417537211" seo="true" mt="1531349356406" redirect="true"/>
 </manifest>
