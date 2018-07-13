@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531439182497">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531452831173">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="370444639" ref="index"/>
-    <file name="oursong-intro.css" crc="4198447876" ref="oursong-intro"/>
+    <file name="index.css" crc="3822070744" ref="index"/>
+    <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro"/>
@@ -14,7 +14,7 @@
     <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
     <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
-    <file name="html5shiv.js" crc="4241844378" ref="index"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index:oursong-intro"/>
   </folder>
   <folder name="images">
     <file name="hero.jpg" crc="3809010540" ref="index">
@@ -194,7 +194,10 @@
     <file name="cpo_2x.gif" crc="323672708" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="story.gif" crc="3899764505" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="3882025410" seo="true" mt="1531439175162" redirect="true"/>
-  <file name="oursong-intro.html" crc="417537211" seo="true" mt="1531349356406" redirect="true"/>
+  <file name="index.html" crc="183727994" seo="true" mt="1531452802023" redirect="true"/>
+  <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
 </manifest>
