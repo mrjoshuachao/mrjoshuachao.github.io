@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531673876514">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531674671324">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="409137623" ref="index"/>
+    <file name="index.css" crc="4268957903" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -19,21 +19,8 @@
     <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
     <file name="html5shiv.js" crc="4241844378" ref="index"/>
-    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="video-play-2.png" crc="276358487" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="video-play-2_2x.png" crc="4127610004" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="video-play-1.png" crc="361684426" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="video-play-1_2x.png" crc="15825946" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="color-bg-long.jpg" crc="4237003314" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -151,19 +138,25 @@
     <file name="wavy-thing-lines-bg-virtical-black-blacker_2x.png" crc="4291658731" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="feature-numbers-1-white-u5453.png" crc="154386442" ref="index"/>
-    <file name="feature-numbers-1-white-u5453_2x.png" crc="3992878044" ref="index"/>
-    <file name="feature-numbers-2-white-u5461.png" crc="103140930" ref="index"/>
-    <file name="feature-numbers-2-white-u5461_2x.png" crc="95362015" ref="index"/>
-    <file name="feature-numbers-3-white-u5469.png" crc="4160644931" ref="index"/>
-    <file name="feature-numbers-3-white-u5469_2x.png" crc="275721736" ref="index"/>
-    <file name="feature-numbers-4-white-u5477.png" crc="520418396" ref="index"/>
-    <file name="feature-numbers-4-white-u5477_2x.png" crc="3877207205" ref="index"/>
-    <file name="feature-numbers-5-white-u5485.png" crc="142628888" ref="index"/>
-    <file name="feature-numbers-5-white-u5485_2x.png" crc="4002672275" ref="index"/>
-    <file name="feature-numbers-6-white-u5493.png" crc="4147450196" ref="index"/>
-    <file name="feature-numbers-6-white-u5493_2x.png" crc="3819774466" ref="index"/>
+    <file name="feature-numbers-1-white-u5453.png" crc="3984694595" ref="index"/>
+    <file name="feature-numbers-1-white-u5453_2x.png" crc="4093989803" ref="index"/>
+    <file name="feature-numbers-2-white-u5461.png" crc="4166149918" ref="index"/>
+    <file name="feature-numbers-2-white-u5461_2x.png" crc="4123451069" ref="index"/>
+    <file name="feature-numbers-3-white-u5469.png" crc="508737227" ref="index"/>
+    <file name="feature-numbers-3-white-u5469_2x.png" crc="400527663" ref="index"/>
+    <file name="feature-numbers-4-white-u5477.png" crc="3981624085" ref="index"/>
+    <file name="feature-numbers-4-white-u5477_2x.png" crc="198149262" ref="index"/>
+    <file name="feature-numbers-5-white-u5485.png" crc="23454369" ref="index"/>
+    <file name="feature-numbers-5-white-u5485_2x.png" crc="266946644" ref="index"/>
+    <file name="feature-numbers-6-white-u5493.png" crc="3802246538" ref="index"/>
+    <file name="feature-numbers-6-white-u5493_2x.png" crc="743755" ref="index"/>
+    <file name="video-play.png" crc="4199946521" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play_2x.png" crc="3868672986" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="3926800853" seo="true" mt="1531673870016" redirect="true"/>
+  <file name="index.html" crc="4194974940" seo="true" mt="1531674609126" redirect="true"/>
   <file name="oursong-intro.html" crc="410657510" seo="true" mt="1531673668293" redirect="true"/>
 </manifest>
