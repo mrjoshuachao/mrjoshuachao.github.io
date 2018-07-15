@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531667910617">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531673073266">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3997787324" ref="index"/>
+    <file name="index.css" crc="84565522" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -163,6 +163,6 @@
     <file name="feature-numbers-6-white-u5493.png" crc="4147450196" ref="index"/>
     <file name="feature-numbers-6-white-u5493_2x.png" crc="3819774466" ref="index"/>
   </folder>
-  <file name="index.html" crc="4046263308" seo="true" mt="1531667903936" redirect="true"/>
+  <file name="index.html" crc="47249231" seo="true" mt="1531673067231" redirect="true"/>
   <file name="oursong-intro.html" crc="4016958710" seo="true" mt="1531662387969" redirect="true"/>
 </manifest>
