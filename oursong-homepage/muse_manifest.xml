@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531673673013">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531673876514">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
@@ -19,6 +19,7 @@
     <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
     <file name="html5shiv.js" crc="4241844378" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="video-play-2.png" crc="276358487" seo="true" ref="index">
@@ -163,6 +164,6 @@
     <file name="feature-numbers-6-white-u5493.png" crc="4147450196" ref="index"/>
     <file name="feature-numbers-6-white-u5493_2x.png" crc="3819774466" ref="index"/>
   </folder>
-  <file name="index.html" crc="3811399043" seo="true" mt="1531673167874" redirect="true"/>
+  <file name="index.html" crc="3926800853" seo="true" mt="1531673870016" redirect="true"/>
   <file name="oursong-intro.html" crc="410657510" seo="true" mt="1531673668293" redirect="true"/>
 </manifest>
