@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531677938715">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531678361393">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="27563373" ref="index"/>
+    <file name="index.css" crc="294123999" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -162,7 +162,19 @@
     <file name="contact_2x.png" crc="286800429" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="logotype--ffffff.png" crc="4229138357" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logomark--ffffff-i.png" crc="82969761" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logomark--ffffff-i_2x.png" crc="467258527" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="4085938262" seo="true" mt="1531677907536" redirect="true"/>
+  <file name="index.html" crc="4004669572" seo="true" mt="1531678345991" redirect="true"/>
   <file name="oursong-intro.html" crc="410657510" seo="true" mt="1531673668293" redirect="true"/>
 </manifest>
