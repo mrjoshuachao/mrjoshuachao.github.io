@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531662649587">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531663675862">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="371224485" ref="index"/>
+    <file name="index.css" crc="91604784" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -150,43 +150,19 @@
     <file name="wavy-thing-lines-bg-virtical-black-blacker_2x.png" crc="4291658731" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="feature-numbers-1-white.png" crc="3838256532" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-1-white_2x.png" crc="3953457821" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-2-white.png" crc="424505785" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-2-white_2x.png" crc="4001621531" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-3-white.png" crc="57973364" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-3-white_2x.png" crc="347616374" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-4-white.png" crc="489334599" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-4-white_2x.png" crc="4212717814" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-5-white.png" crc="325147937" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-5-white_2x.png" crc="4177188945" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-6-white.png" crc="4018873008" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="feature-numbers-6-white_2x.png" crc="64821924" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
+    <file name="feature-numbers-1-white-u5453.png" crc="154386442" ref="index"/>
+    <file name="feature-numbers-1-white-u5453_2x.png" crc="3992878044" ref="index"/>
+    <file name="feature-numbers-2-white-u5461.png" crc="103140930" ref="index"/>
+    <file name="feature-numbers-2-white-u5461_2x.png" crc="95362015" ref="index"/>
+    <file name="feature-numbers-3-white-u5469.png" crc="4160644931" ref="index"/>
+    <file name="feature-numbers-3-white-u5469_2x.png" crc="275721736" ref="index"/>
+    <file name="feature-numbers-4-white-u5477.png" crc="520418396" ref="index"/>
+    <file name="feature-numbers-4-white-u5477_2x.png" crc="3877207205" ref="index"/>
+    <file name="feature-numbers-5-white-u5485.png" crc="142628888" ref="index"/>
+    <file name="feature-numbers-5-white-u5485_2x.png" crc="4002672275" ref="index"/>
+    <file name="feature-numbers-6-white-u5493.png" crc="4147450196" ref="index"/>
+    <file name="feature-numbers-6-white-u5493_2x.png" crc="3819774466" ref="index"/>
   </folder>
-  <file name="index.html" crc="364639109" seo="true" mt="1531662639498" redirect="true"/>
+  <file name="index.html" crc="72766696" seo="true" mt="1531663662521" redirect="true"/>
   <file name="oursong-intro.html" crc="4016958710" seo="true" mt="1531662387969" redirect="true"/>
 </manifest>
