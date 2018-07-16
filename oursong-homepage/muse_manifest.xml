@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531754359606">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531754533485">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4156952964" ref="index"/>
+    <file name="index.css" crc="323831943" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -201,6 +201,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="47619571" seo="true" mt="1531754322975" redirect="true"/>
+  <file name="index.html" crc="3931866468" seo="true" mt="1531754518230" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
 </manifest>
