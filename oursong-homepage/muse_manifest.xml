@@ -1,12 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531722567724">
-  <folder name="assets">
-    <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
-    <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
-    <file name="hero.webm" crc="303727245" seo="true" mt="1531659836000"/>
-  </folder>
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531754088708">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="371150941" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="3995824065" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -18,7 +13,8 @@
     <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro"/>
     <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
-    <file name="html5shiv.js" crc="4241844378" ref="index"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index:oursong-intro"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="color-bg-long.jpg" crc="4237003314" ref="index">
@@ -123,52 +119,86 @@
     <file name="cpo_2x.gif" crc="4209723443" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="story.gif" crc="3899764505" seo="true" ref="index">
+    <file name="story.gif" crc="4016715841" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i-whiter.png" crc="4228877684" ref="index">
+    <file name="hero.jpg" crc="3809010540" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-horizontal-white-i-whiter_2x.png" crc="4092458458" ref="index">
+    <file name="logomark--ffffff-i.png" crc="82969761" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-virtical-black-blacker.png" crc="196453108" ref="index">
+    <file name="logomark--ffffff-i_2x.png" crc="467258527" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="wavy-thing-lines-bg-virtical-black-blacker_2x.png" crc="4291658731" ref="index">
+    <file name="logotype--ffffff.png" crc="4229138357" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="feature-numbers-1-white-u5453.png" crc="3984694595" ref="index"/>
-    <file name="feature-numbers-1-white-u5453_2x.png" crc="4093989803" ref="index"/>
-    <file name="feature-numbers-2-white-u5461.png" crc="4166149918" ref="index"/>
-    <file name="feature-numbers-2-white-u5461_2x.png" crc="4123451069" ref="index"/>
-    <file name="feature-numbers-3-white-u5469.png" crc="508737227" ref="index"/>
-    <file name="feature-numbers-3-white-u5469_2x.png" crc="400527663" ref="index"/>
-    <file name="feature-numbers-4-white-u5477.png" crc="3981624085" ref="index"/>
-    <file name="feature-numbers-4-white-u5477_2x.png" crc="198149262" ref="index"/>
-    <file name="feature-numbers-5-white-u5485.png" crc="23454369" ref="index"/>
-    <file name="feature-numbers-5-white-u5485_2x.png" crc="266946644" ref="index"/>
-    <file name="feature-numbers-6-white-u5493.png" crc="3802246538" ref="index"/>
-    <file name="feature-numbers-6-white-u5493_2x.png" crc="743755" ref="index"/>
-    <file name="video-play.png" crc="4199946521" seo="true" ref="index">
+    <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play_2x.png" crc="3868672986" seo="true" ref="index">
+    <file name="video-play-2.png" crc="276358487" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="contact.png" crc="224342855" seo="true" ref="index">
+    <file name="video-play-2_2x.png" crc="4127610004" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="contact_2x.png" crc="286800429" seo="true" ref="index">
+    <file name="video-play-1.png" crc="361684426" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="referencing.gif" crc="195452825" seo="true" ref="index">
+    <file name="video-play-1_2x.png" crc="15825946" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="referencing_2x.gif" crc="195452825" seo="true" ref="index">
+    <file name="wavy-thing-lines-bg-virtical-white.png" crc="319564981" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="wavy-thing-lines-bg-virtical-white_2x.png" crc="3895721497" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i.png" crc="4044626895" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="162614919" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-1.png" crc="253546906" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-1_2x.png" crc="332026786" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-2.png" crc="415422772" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-2_2x.png" crc="4256712702" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-3.png" crc="4033999296" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-3_2x.png" crc="64538754" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-4.png" crc="4151790739" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-4_2x.png" crc="4175599182" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-5.png" crc="480639211" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-5_2x.png" crc="70458130" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-6.png" crc="4133690535" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="referencing-color-u5879.png" crc="450683219" ref="index"/>
   </folder>
-  <file name="index.html" crc="4236178066" seo="true" mt="1531722548393" redirect="true"/>
-  <file name="oursong-intro.html" crc="410657510" seo="true" mt="1531673668293" redirect="true"/>
+  <file name="index.html" crc="4024265619" seo="true" mt="1531754060003" redirect="true"/>
+  <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
 </manifest>

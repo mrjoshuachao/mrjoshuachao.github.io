@@ -39,27 +39,69 @@
       <image:loc>http://mrjoshuachao.github.io/images/story.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/video-play.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark--ffffff-i.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/video-play_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark--ffffff-i_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/contact.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype--ffffff.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/contact_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype--ffffff_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/referencing.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play-2.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/referencing_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/video-play-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-3_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-4.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-4_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-5.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-5_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-6.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-numbers-6_2x.png</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/oursong-intro.html</loc>
-    <lastmod>2018-07-16</lastmod>
+    <lastmod>2018-07-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -68,23 +110,5 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/x_2x.gif</image:loc>
     </image:image>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.ogg</loc>
-    <lastmod>2018-07-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.mp4</loc>
-    <lastmod>2018-07-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.webm</loc>
-    <lastmod>2018-07-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>
