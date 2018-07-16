@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531764155431">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531766665234">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4041623899" ref="index"/>
@@ -119,7 +119,7 @@
     <file name="cpo_2x.gif" crc="4209723443" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="story.gif" crc="474984649" seo="true" ref="index">
+    <file name="story.gif" crc="4247656848" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="hero.jpg" crc="3809010540" ref="index">
@@ -206,6 +206,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="131116603" seo="true" mt="1531764128054" redirect="true"/>
+  <file name="index.html" crc="3880276514" seo="true" mt="1531766654493" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
 </manifest>
