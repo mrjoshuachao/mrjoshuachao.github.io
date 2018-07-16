@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531693622804">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531722567724">
   <folder name="assets">
     <file name="hero.mp4" crc="232296344" seo="true" mt="1531659423000"/>
     <file name="hero.ogg" crc="4206853435" seo="true" mt="1531659916000"/>
     <file name="hero.webm" crc="303727245" seo="true" mt="1531659836000"/>
   </folder>
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4227344387" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="371150941" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -162,13 +162,13 @@
     <file name="contact_2x.png" crc="286800429" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="sampling.gif" crc="4165242416" seo="true" ref="index">
+    <file name="referencing.gif" crc="195452825" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="sampling_2x.gif" crc="4165242416" seo="true" ref="index">
+    <file name="referencing_2x.gif" crc="195452825" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="381928234" seo="true" mt="1531693617511" redirect="true"/>
+  <file name="index.html" crc="4236178066" seo="true" mt="1531722548393" redirect="true"/>
   <file name="oursong-intro.html" crc="410657510" seo="true" mt="1531673668293" redirect="true"/>
 </manifest>
