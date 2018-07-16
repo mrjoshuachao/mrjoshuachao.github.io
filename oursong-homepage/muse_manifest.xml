@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531766665234">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531771906755">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="4041623899" ref="index"/>
+    <file name="index.css" crc="4130958067" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
   </folder>
   <folder name="scripts">
@@ -205,7 +205,13 @@
     <file name="referencing-color_2x.gif" crc="8342435" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="distribution.gif" crc="4073552605" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="distribution_2x.gif" crc="4073552605" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="3880276514" seo="true" mt="1531766654493" redirect="true"/>
+  <file name="index.html" crc="4176406232" seo="true" mt="1531771900126" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
 </manifest>
