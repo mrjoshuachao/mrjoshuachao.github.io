@@ -1,19 +1,20 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531773397089">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531841416186">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="414447957" ref="index"/>
+    <file name="index.css" crc="3882391384" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
+    <file name="oursong-dsd.css" crc="4115438926" ref="oursong-dsd"/>
   </folder>
   <folder name="scripts">
-    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro"/>
-    <file name="museutils.js" crc="340535759" ref="index:oursong-intro"/>
-    <file name="whatinput.js" crc="86476730" ref="index:oursong-intro"/>
-    <file name="museconfig.js" crc="310584261" ref="index:oursong-intro"/>
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="museutils.js" crc="340535759" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="whatinput.js" crc="86476730" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="museconfig.js" crc="310584261" ref="index:oursong-intro:oursong-dsd"/>
     <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
-    <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro"/>
-    <file name="require.js" crc="7928878" ref="index:oursong-intro"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="require.js" crc="7928878" ref="index:oursong-intro:oursong-dsd"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
-    <file name="html5shiv.js" crc="4241844378" ref="index:oursong-intro"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index:oursong-intro:oursong-dsd"/>
     <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
@@ -71,10 +72,12 @@
     <file name="color-bg-1.jpg" crc="4244005041" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="x.gif" crc="3817775670" seo="true" ref="oursong-intro">
+    <file name="x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
+      <caption webpage="oursong-dsd" alt=""/>
       <caption webpage="oursong-intro" alt=""/>
     </file>
-    <file name="x_2x.gif" crc="3817775670" seo="true" ref="oursong-intro">
+    <file name="x_2x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
+      <caption webpage="oursong-dsd" alt=""/>
       <caption webpage="oursong-intro" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
@@ -119,10 +122,7 @@
     <file name="cpo_2x.gif" crc="4209723443" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="story.gif" crc="4247656848" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero.jpg" crc="3809010540" ref="index">
+    <file name="hero.jpg" crc="90017823" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="logomark--ffffff-i.png" crc="82969761" seo="true" ref="index">
@@ -197,21 +197,32 @@
     <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="referencing-color.gif" crc="8342435" seo="true" ref="index">
+    <file name="referencing-color.gif" crc="4283385505" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="contact-u5933.png" crc="21823931" ref="index"/>
-    <file name="contact-u5933_2x.png" crc="79367490" ref="index"/>
-    <file name="referencing-color_2x.gif" crc="8342435" seo="true" ref="index">
+    <file name="contact-u5933.png" crc="4259237658" ref="index"/>
+    <file name="contact-u5933_2x.png" crc="4219435401" ref="index"/>
+    <file name="distribution.gif" crc="4197879718" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="distribution.gif" crc="335885789" seo="true" ref="index">
+    <file name="oursong.gif" crc="4240899004" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="distribution_2x.gif" crc="335885789" seo="true" ref="index">
+    <file name="initiate.gif" crc="320355927" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="dsd.jpg" crc="3820649303" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="dsd_2x.jpg" crc="3917143854" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="story-transperent.gif" crc="410677519" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-dsd-favicon.ico" crc="96058428" ref="oursong-dsd"/>
   </folder>
-  <file name="index.html" crc="300934753" seo="true" mt="1531773390868" redirect="true"/>
+  <file name="index.html" crc="263033079" seo="true" mt="1531841407012" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
+  <file name="oursong-dsd.html" crc="4177592848" seo="true" mt="1531825954670" redirect="true"/>
 </manifest>
