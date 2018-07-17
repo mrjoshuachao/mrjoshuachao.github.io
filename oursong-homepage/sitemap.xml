@@ -33,9 +33,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/cpo.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/cpo_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark--ffffff-i.png</image:loc>
     </image:image>
     <image:image>
@@ -102,9 +99,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/distribution.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/oursong.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/initiate.gif</image:loc>
     </image:image>
     <image:image>
@@ -115,6 +109,9 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/story-transperent.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/ourcoin.gif</image:loc>
     </image:image>
   </url>
   <url>

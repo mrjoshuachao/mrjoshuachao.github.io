@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531843732953">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531845520362">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="288744458" ref="index"/>
+    <file name="index.css" crc="434015359" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4115438926" ref="oursong-dsd"/>
   </folder>
@@ -116,10 +116,7 @@
     <file name="logotype--bd081c_2x.png" crc="4188546639" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cpo.gif" crc="4209723443" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="cpo_2x.gif" crc="4209723443" seo="true" ref="index">
+    <file name="cpo.gif" crc="4205051559" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="hero.jpg" crc="90017823" ref="index">
@@ -205,10 +202,7 @@
     <file name="distribution.gif" crc="4197879718" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="oursong.gif" crc="3798698766" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="initiate.gif" crc="320355927" seo="true" ref="index">
+    <file name="initiate.gif" crc="3783286303" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="dsd.jpg" crc="3820649303" seo="true" ref="index">
@@ -221,8 +215,11 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="oursong-dsd-favicon.ico" crc="96058428" ref="oursong-dsd"/>
+    <file name="ourcoin.gif" crc="4153958697" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="100423200" seo="true" mt="1531843694257" redirect="true"/>
+  <file name="index.html" crc="3961054335" seo="true" mt="1531845498187" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
   <file name="oursong-dsd.html" crc="4177592848" seo="true" mt="1531825954670" redirect="true"/>
 </manifest>
