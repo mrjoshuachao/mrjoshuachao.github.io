@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531855682230">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531857765490">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="75062406" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="4045234940" ref="index"/>
     <file name="oursong-intro.css" crc="10398950" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4115438926" ref="oursong-dsd"/>
   </folder>
@@ -205,12 +205,6 @@
     <file name="initiate.gif" crc="95477412" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="dsd.jpg" crc="3820649303" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="dsd_2x.jpg" crc="3917143854" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="story-transperent.gif" crc="117581293" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -218,8 +212,11 @@
     <file name="ourcoin.gif" crc="4023293426" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="dsd.gif" crc="4246097454" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="438162696" seo="true" mt="1531855665439" redirect="true"/>
+  <file name="index.html" crc="519525135" seo="true" mt="1531857749926" redirect="true"/>
   <file name="oursong-intro.html" crc="4139757587" seo="true" mt="1531446585957" redirect="true"/>
   <file name="oursong-dsd.html" crc="4177592848" seo="true" mt="1531825954670" redirect="true"/>
 </manifest>
