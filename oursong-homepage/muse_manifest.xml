@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531888117878">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531889903375">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4045234940" ref="index"/>
@@ -202,9 +202,6 @@
     <file name="distribution.gif" crc="4257349612" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="initiate.gif" crc="95477412" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="story-transperent.gif" crc="117581293" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -215,8 +212,11 @@
     <file name="dsd.gif" crc="4246097454" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="initiate-2.gif" crc="35859696" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="519525135" seo="true" mt="1531857749926" redirect="true"/>
+  <file name="index.html" crc="4063573106" seo="true" mt="1531889885936" redirect="true"/>
   <file name="oursong-intro.html" crc="4200377" seo="true" mt="1531888105396" redirect="true"/>
   <file name="oursong-dsd.html" crc="4092049350" seo="true" mt="1531888097643" redirect="true"/>
 </manifest>

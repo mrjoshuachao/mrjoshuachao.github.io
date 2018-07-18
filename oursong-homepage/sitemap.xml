@@ -99,9 +99,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/distribution.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/initiate.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/story-transperent.gif</image:loc>
     </image:image>
     <image:image>
@@ -109,6 +106,9 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/dsd.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/initiate-2.gif</image:loc>
     </image:image>
   </url>
   <url>
