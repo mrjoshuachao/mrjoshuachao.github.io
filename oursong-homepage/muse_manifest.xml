@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531892419095">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1531896846254">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4045234940" ref="index"/>
-    <file name="oursong-intro.css" crc="248134041" ref="oursong-intro"/>
-    <file name="oursong-dsd.css" crc="513955687" ref="oursong-dsd"/>
+    <file name="oursong-intro.css" crc="196881237" ref="oursong-intro"/>
+    <file name="oursong-dsd.css" crc="287817176" ref="oursong-dsd"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro:oursong-dsd"/>
@@ -73,12 +73,12 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
-      <caption webpage="oursong-intro" alt=""/>
       <caption webpage="oursong-dsd" alt=""/>
+      <caption webpage="oursong-intro" alt=""/>
     </file>
     <file name="x_2x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
-      <caption webpage="oursong-intro" alt=""/>
       <caption webpage="oursong-dsd" alt=""/>
+      <caption webpage="oursong-intro" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
     <file name="color-bg-6.jpg" crc="143401170" ref="index">
@@ -217,6 +217,6 @@
     </file>
   </folder>
   <file name="index.html" crc="4063573106" seo="true" mt="1531889885936" redirect="true"/>
-  <file name="oursong-intro.html" crc="4189563710" seo="true" mt="1531892388581" redirect="true"/>
-  <file name="oursong-dsd.html" crc="404952439" seo="true" mt="1531892409581" redirect="true"/>
+  <file name="oursong-intro.html" crc="312279945" seo="true" mt="1531896833658" redirect="true"/>
+  <file name="oursong-dsd.html" crc="216377013" seo="true" mt="1531896838606" redirect="true"/>
 </manifest>
