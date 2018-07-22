@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532282975810">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532291383805">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="3813944558" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="270590881" ref="index"/>
     <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
   </folder>
@@ -176,7 +176,7 @@
     <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="referencing-color.gif" crc="147733809" seo="true" ref="index">
+    <file name="referencing-color.gif" crc="472443293" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="contact-u5933.png" crc="4259237658" ref="index"/>
@@ -191,7 +191,7 @@
     <file name="ourcoin.gif" crc="4023293426" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="dsd.gif" crc="4239278035" seo="true" ref="index">
+    <file name="dsd.gif" crc="418164513" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="initiate-2.gif" crc="35859696" seo="true" ref="index">
@@ -224,7 +224,7 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="30955121" seo="true" mt="1532282905694" redirect="true"/>
+  <file name="index.html" crc="4068380913" seo="true" mt="1532291376052" redirect="true"/>
   <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
   <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
 </manifest>
