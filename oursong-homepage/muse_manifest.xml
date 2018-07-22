@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532256038948">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532282654373">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
+    <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="58059977" ref="index"/>
-    <file name="oursong-intro.css" crc="196881237" ref="oursong-intro"/>
-    <file name="oursong-dsd.css" crc="287817176" ref="oursong-dsd"/>
+    <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
+    <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro:oursong-dsd"/>
@@ -66,13 +66,13 @@
     <file name="color-bg-1.jpg" crc="4244005041" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
-      <caption webpage="oursong-dsd" alt=""/>
+    <file name="x.gif" crc="3971941034" seo="true" ref="oursong-intro:oursong-dsd">
       <caption webpage="oursong-intro" alt=""/>
+      <caption webpage="oursong-dsd" alt=""/>
     </file>
-    <file name="x_2x.gif" crc="3817775670" seo="true" ref="oursong-intro:oursong-dsd">
-      <caption webpage="oursong-dsd" alt=""/>
+    <file name="x_2x.gif" crc="3971941034" seo="true" ref="oursong-intro:oursong-dsd">
       <caption webpage="oursong-intro" alt=""/>
+      <caption webpage="oursong-dsd" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
     <file name="color-bg-6.jpg" crc="143401170" ref="index">
@@ -225,6 +225,6 @@
     </file>
   </folder>
   <file name="index.html" crc="171590837" seo="true" mt="1532256029321" redirect="true"/>
-  <file name="oursong-intro.html" crc="312279945" seo="true" mt="1531896833658" redirect="true"/>
-  <file name="oursong-dsd.html" crc="216377013" seo="true" mt="1531896838606" redirect="true"/>
+  <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
+  <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
 </manifest>
