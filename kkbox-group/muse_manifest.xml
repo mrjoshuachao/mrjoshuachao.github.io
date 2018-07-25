@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532544868350">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532546755120">
   <folder name="assets">
     <file name="bgv.mp4" crc="3961538279" seo="true" mt="1532536963000"/>
     <file name="bgv.ogg" crc="507201262" seo="true" mt="1532537019000"/>
     <file name="bgv.webm" crc="3864385000" seo="true" mt="1532537032000"/>
   </folder>
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="4067052075" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="3868195015" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -98,26 +98,6 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="logo-oursong_2x.gif" crc="4130605405" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="enter-s.gif" crc="57298245" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="enter-s_2x.gif" crc="57298245" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
     <file name="logo-kddi.gif" crc="228553480" seo="true" ref="index">
@@ -229,6 +209,26 @@
     <file name="bg-investor_2x.gif" crc="3845876628" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="enter.gif" crc="4242282788" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="enter_2x.gif" crc="4242282788" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="4188601495" seo="true" mt="1532544838383" redirect="true"/>
+  <file name="index.html" crc="262723098" seo="true" mt="1532546741666" redirect="true"/>
 </manifest>

@@ -84,12 +84,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logo-oursong_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter-s.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter-s_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kddi.gif</image:loc>
     </image:image>
     <image:image>
@@ -148,6 +142,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkstream512x136_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
