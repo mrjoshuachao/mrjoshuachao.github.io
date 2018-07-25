@@ -1,7 +1,12 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532354228345">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532537748457">
+  <folder name="assets">
+    <file name="bgv.mp4" crc="3961538279" seo="true" mt="1532536963000"/>
+    <file name="bgv.ogg" crc="507201262" seo="true" mt="1532537019000"/>
+    <file name="bgv.webm" crc="3864385000" seo="true" mt="1532537032000"/>
+  </folder>
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4182369223" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="4047616220" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -12,31 +17,217 @@
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
     <file name="html5shiv.js" crc="4241844378" ref="index"/>
     <file name="require.js" crc="7928878" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="kkbox-group-favicon.ico" crc="507538501" ref="index"/>
     <file name="blank.gif" crc="4208392903" ref="index"/>
-    <file name="logo-kkbox-group.png" crc="11363255" seo="true" ref="index">
+    <file name="logo-kkbox.png" crc="211751388" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-kkbox.png" crc="4285937401" seo="true" ref="index">
+    <file name="logo-kktv.png" crc="222004754" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-kma.png" crc="3931936272" seo="true" ref="index">
+    <file name="logo-kkfarm.png" crc="29935261" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-kktv.png" crc="4165857758" seo="true" ref="index">
+    <file name="logo-kkstream.png" crc="141249739" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-justlive.png" crc="4067940784" seo="true" ref="index">
+    <file name="logo-kklive.png" crc="3963095367" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-kkfarm.png" crc="4192621050" seo="true" ref="index">
+    <file name="logo-kkboxgroup.png" crc="301250833" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-kkstream.png" crc="4011938660" seo="true" ref="index">
+    <file name="logo-kkboxgroup_2x.png" crc="316504285" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkbox_2x.png" crc="4014777324" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkboxmusicaward.png" crc="53183824" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkboxmusicaward_2x.png" crc="3939134755" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kktv_2x.png" crc="3920746235" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kklive_2x.png" crc="515811694" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkfarm_2x.png" crc="3934327096" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkstream_2x.png" crc="4006739235" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-jcom.gif" crc="265018343" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-jcom_2x.gif" crc="265018343" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-utapass.gif" crc="3898779234" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-utapass_2x.gif" crc="3898779234" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-videopass.gif" crc="347999201" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-videopass_2x.gif" crc="347999201" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logos-ideationlab.png" crc="4155494114" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logos-ideationlab_2x.png" crc="498096557" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-muzeum.gif" crc="304577299" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-muzeum_2x.gif" crc="304577299" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-oursong.gif" crc="4130605405" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-oursong_2x.gif" crc="4130605405" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="enter-s.gif" crc="57298245" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="enter-s_2x.gif" crc="57298245" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kddi.gif" crc="228553480" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kddi_2x.gif" crc="228553480" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-gic.gif" crc="234755832" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-gic_2x.gif" crc="234755832" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-igpi.gif" crc="3821056682" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-igpi_2x.gif" crc="3821056682" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-htc.gif" crc="3932716876" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-htc_2x.gif" crc="3932716876" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkboxgroup512x136.png" crc="3927205956" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkboxgroup512x136_2x.png" crc="301250833" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkbox512x136.png" crc="95363409" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkbox512x136_2x.png" crc="211751388" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kktv512x136.png" crc="3766693629" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kktv512x136_2x.png" crc="222004754" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kklive512x136.png" crc="3890047448" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kklive512x136_2x.png" crc="3963095367" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkfarm512x136.png" crc="31013073" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkfarm512x136_2x.png" crc="29935261" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkstream512x136.png" crc="477755265" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-kkstream512x136_2x.png" crc="141249739" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkboxgroup.png" crc="4263705705" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkboxgroup_2x.png" crc="4222450967" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkbox.png" crc="79952280" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkbox_2x.png" crc="57744912" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kktv.png" crc="3950737346" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kktv_2x.png" crc="6878801" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kklive.png" crc="229536542" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kklive_2x.png" crc="31320272" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkfarm.png" crc="224030040" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkfarm_2x.png" crc="4005676482" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkstream.png" crc="3810393415" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-kkstream_2x.png" crc="146907607" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-ideationlab.png" crc="452957578" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-ideationlab_2x.png" crc="342509597" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-investor.png" crc="197178979" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bg-investor_2x.png" crc="3839974103" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="257621656" seo="true" mt="1532354215725" redirect="true"/>
+  <file name="index.html" crc="18343759" seo="true" mt="1532537728690" redirect="true"/>
 </manifest>
