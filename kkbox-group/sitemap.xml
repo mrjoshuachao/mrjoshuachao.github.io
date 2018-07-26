@@ -120,12 +120,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkbox256x68_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup256x68.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup256x68_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkfarm256x68.png</image:loc>
     </image:image>
     <image:image>
@@ -148,6 +142,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kktv256x68_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup-center.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup-center_2x.png</image:loc>
     </image:image>
   </url>
   <url>
