@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532608609943">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532609028784">
   <folder name="assets">
     <file name="bgv.mp4" crc="4173346138" seo="true" mt="1532550000000"/>
     <file name="bgv.ogg" crc="133851151" seo="true" mt="1532550041000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="3979153035" ref="index"/>
+    <file name="index.css" crc="2499546" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -130,22 +130,22 @@
     <file name="bg-kkboxgroup_2x.gif" crc="4035372808" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kkbox.gif" crc="4149204862" ref="index">
+    <file name="bg-kkbox.gif" crc="91957364" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kkbox_2x.gif" crc="4149204862" ref="index">
+    <file name="bg-kkbox_2x.gif" crc="91957364" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kktv.gif" crc="3814343065" ref="index">
+    <file name="bg-kktv.gif" crc="4214537488" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kktv_2x.gif" crc="3814343065" ref="index">
+    <file name="bg-kktv_2x.gif" crc="4214537488" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kklive.gif" crc="526161832" ref="index">
+    <file name="bg-kklive.gif" crc="28559501" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kklive_2x.gif" crc="526161832" ref="index">
+    <file name="bg-kklive_2x.gif" crc="28559501" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="bg-kkfarm.gif" crc="142093013" ref="index">
@@ -154,16 +154,16 @@
     <file name="bg-kkfarm_2x.gif" crc="142093013" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kkstream.gif" crc="4220522497" ref="index">
+    <file name="bg-kkstream.gif" crc="3871759619" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-kkstream_2x.gif" crc="4220522497" ref="index">
+    <file name="bg-kkstream_2x.gif" crc="3871759619" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-ideationlab.gif" crc="4013500605" ref="index">
+    <file name="bg-ideationlab.gif" crc="4274314957" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="bg-ideationlab_2x.gif" crc="4013500605" ref="index">
+    <file name="bg-ideationlab_2x.gif" crc="4274314957" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="bg-investor.gif" crc="3845876628" ref="index">
@@ -208,7 +208,7 @@
     <file name="logo-kkboxgroup-center_2x.png" crc="4215175043" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enter-2.gif" crc="526095445" seo="true" ref="index">
+    <file name="enter-2.gif" crc="4065553534" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -218,7 +218,7 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enter-2_2x.gif" crc="526095445" seo="true" ref="index">
+    <file name="enter-2_2x.gif" crc="4065553534" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -229,5 +229,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4026337004" seo="true" mt="1532608601383" redirect="true"/>
+  <file name="index.html" crc="4195052772" seo="true" mt="1532608971840" redirect="true"/>
 </manifest>
