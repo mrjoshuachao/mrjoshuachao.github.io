@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532600028340">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532600156245">
   <folder name="assets">
     <file name="bgv.mp4" crc="4173346138" seo="true" mt="1532550000000"/>
     <file name="bgv.ogg" crc="133851151" seo="true" mt="1532550041000"/>
@@ -20,7 +20,7 @@
     <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="kkbox-group-favicon.ico" crc="507538501" ref="index"/>
+    <file name="kkbox-group-favicon.ico" crc="485101784" ref="index"/>
     <file name="blank.gif" crc="4208392903" ref="index"/>
     <file name="logo-kkbox.png" crc="401017193" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -230,5 +230,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3970930249" seo="true" mt="1532600016767" redirect="true"/>
+  <file name="index.html" crc="3902361246" seo="true" mt="1532600149409" redirect="true"/>
 </manifest>
