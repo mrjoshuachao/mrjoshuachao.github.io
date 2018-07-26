@@ -108,12 +108,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logo-htc_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkbox256x68.png</image:loc>
     </image:image>
     <image:image>
@@ -148,6 +142,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup-center_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter-2_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
