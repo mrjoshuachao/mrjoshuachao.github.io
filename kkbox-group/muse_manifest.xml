@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532605632122">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532608609943">
   <folder name="assets">
     <file name="bgv.mp4" crc="4173346138" seo="true" mt="1532550000000"/>
     <file name="bgv.ogg" crc="133851151" seo="true" mt="1532550041000"/>
@@ -6,7 +6,7 @@
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="103922808" ref="index"/>
+    <file name="index.css" crc="3979153035" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -208,7 +208,7 @@
     <file name="logo-kkboxgroup-center_2x.png" crc="4215175043" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enter-2.gif" crc="4042324202" seo="true" ref="index">
+    <file name="enter-2.gif" crc="526095445" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -218,7 +218,7 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enter-2_2x.gif" crc="4042324202" seo="true" ref="index">
+    <file name="enter-2_2x.gif" crc="526095445" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -229,5 +229,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="100049023" seo="true" mt="1532605626819" redirect="true"/>
+  <file name="index.html" crc="4026337004" seo="true" mt="1532608601383" redirect="true"/>
 </manifest>
