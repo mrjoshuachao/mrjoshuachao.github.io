@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1533020689659">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1533030743536">
   <folder name="assets">
-    <file name="hero_video.mp4" crc="3795857935" seo="true" mt="1533020584000"/>
-    <file name="hero_video.ogg" crc="4130877418" seo="true" mt="1533020650000"/>
-    <file name="hero_video.webm" crc="3794676921" seo="true" mt="1533020569000"/>
+    <file name="hero.mp4" crc="226364297" seo="true" mt="1533030672000"/>
+    <file name="hero.ogg" crc="4237195993" seo="true" mt="1533030705000"/>
+    <file name="hero.webm" crc="3980585427" seo="true" mt="1533030689000"/>
   </folder>
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3953154769" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="201336680" ref="index"/>
     <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
   </folder>
@@ -213,7 +213,7 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="21221388" seo="true" mt="1533020682984" redirect="true"/>
+  <file name="index.html" crc="470810104" seo="true" mt="1533030739610" redirect="true"/>
   <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
   <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
 </manifest>

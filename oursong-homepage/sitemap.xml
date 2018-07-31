@@ -112,19 +112,19 @@
     </image:image>
   </url>
   <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero_video.webm</loc>
+    <loc>http://mrjoshuachao.github.io/assets/hero.webm</loc>
     <lastmod>2018-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero_video.ogg</loc>
+    <loc>http://mrjoshuachao.github.io/assets/hero.ogg</loc>
     <lastmod>2018-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero_video.mp4</loc>
+    <loc>http://mrjoshuachao.github.io/assets/hero.mp4</loc>
     <lastmod>2018-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
