@@ -1,7 +1,12 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1532291383805">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1533020689659">
+  <folder name="assets">
+    <file name="hero_video.mp4" crc="3795857935" seo="true" mt="1533020584000"/>
+    <file name="hero_video.ogg" crc="4130877418" seo="true" mt="1533020650000"/>
+    <file name="hero_video.webm" crc="3794676921" seo="true" mt="1533020569000"/>
+  </folder>
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="270590881" ref="index"/>
+    <file name="index.css" crc="3953154769" ref="index"/>
     <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
   </folder>
@@ -15,7 +20,6 @@
     <file name="require.js" crc="7928878" ref="index:oursong-intro:oursong-dsd"/>
     <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
     <file name="html5shiv.js" crc="4241844378" ref="index"/>
-    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
   </folder>
   <folder name="images">
     <file name="color-bg-long.jpg" crc="4237003314" ref="index">
@@ -111,21 +115,6 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="cpo.gif" crc="4005059060" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero.jpg" crc="480127416" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logomark--ffffff-i.png" crc="82969761" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logomark--ffffff-i_2x.png" crc="467258527" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logotype--ffffff.png" crc="4229138357" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="wavy-thing-lines-bg-virtical-white.png" crc="319564981" ref="index">
@@ -224,7 +213,7 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4068380913" seo="true" mt="1532291376052" redirect="true"/>
+  <file name="index.html" crc="21221388" seo="true" mt="1533020682984" redirect="true"/>
   <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
   <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
 </manifest>
