@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2018-08-01</lastmod>
+    <lastmod>2018-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -86,6 +86,18 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/initiate-2.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark--ffffff-i.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark--ffffff-i_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype--ffffff.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype--ffffff_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/oursong-intro.html</loc>
@@ -110,23 +122,5 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/x_2x.gif</image:loc>
     </image:image>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.webm</loc>
-    <lastmod>2018-07-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.ogg</loc>
-    <lastmod>2018-07-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/assets/hero.mp4</loc>
-    <lastmod>2018-07-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>
