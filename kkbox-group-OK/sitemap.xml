@@ -2,15 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2018-08-11</lastmod>
+    <lastmod>2018-08-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter-2.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter-2_2x.gif</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup-center.png</image:loc>
     </image:image>
@@ -28,6 +22,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxmusicaward_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter-2_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kktv.png</image:loc>
@@ -148,42 +148,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-kktv256x68_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkbox220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkbox220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkboxgroup220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkfarm220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkfarm220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kklive220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kklive220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkstream220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kkstream220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kktv220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-kktv220x59_2x.png</image:loc>
     </image:image>
   </url>
   <url>
