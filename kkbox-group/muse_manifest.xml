@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534023953043">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534138579427">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3917304929" ref="index"/>
+    <file name="index.css" crc="297420719" ref="index"/>
     <file name="nomq_index.css" crc="248295691" ref="index"/>
   </folder>
   <folder name="assets">
@@ -140,13 +140,13 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-muzeum.gif" crc="304577299" seo="true" ref="index">
+    <file name="logo-muzeum.gif" crc="3970056984" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-muzeum_2x.gif" crc="304577299" seo="true" ref="index">
+    <file name="logo-muzeum_2x.gif" crc="3970056984" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -420,5 +420,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4059700261" seo="true" mt="1534023941991" redirect="true"/>
+  <file name="index.html" crc="4183790093" seo="true" mt="1534138560428" redirect="true"/>
 </manifest>
