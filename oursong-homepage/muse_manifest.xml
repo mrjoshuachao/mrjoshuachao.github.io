@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1533821034988">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534347171740">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4111442698" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="4289885203" ref="index"/>
     <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
     <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
   </folder>
@@ -188,8 +188,6 @@
     <file name="team-kai-2_2x.jpg" crc="3893280987" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="video-play-u1227.png" crc="4288821487" ref="index"/>
-    <file name="video-play-u1227_2x.png" crc="3967990655" ref="index"/>
     <file name="advisor-sean.jpg" crc="4111884695" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -223,8 +221,26 @@
     <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="video-play-2.png" crc="4123072558" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play-2_2x.png" crc="4062684958" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play_2x.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-timothy.jpg" crc="364614914" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-timothy_2x.jpg" crc="370927895" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="385731619" seo="true" mt="1533821012504" redirect="true"/>
+  <file name="index.html" crc="470220605" seo="true" mt="1534347168414" redirect="true"/>
   <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
   <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
 </manifest>
