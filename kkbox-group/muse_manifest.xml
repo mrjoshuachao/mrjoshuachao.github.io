@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534138579427">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534461658058">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="297420719" ref="index"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="275840388" ref="index"/>
     <file name="nomq_index.css" crc="248295691" ref="index"/>
   </folder>
   <folder name="assets">
@@ -420,5 +420,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4183790093" seo="true" mt="1534138560428" redirect="true"/>
+  <file name="index.html" crc="3851289631" seo="true" mt="1534461619287" redirect="true"/>
 </manifest>
