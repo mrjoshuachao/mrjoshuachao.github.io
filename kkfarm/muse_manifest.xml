@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534460860187">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534460912812">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="265477626" ref="index"/>
@@ -38,5 +38,5 @@
     </file>
     <file name="a-master-favicon.ico" crc="535169033" ref="index"/>
   </folder>
-  <file name="index.html" crc="4139693740" seo="true" mt="1534460840333" redirect="true"/>
+  <file name="index.html" crc="4172798170" seo="true" mt="1534460907619" redirect="true"/>
 </manifest>
