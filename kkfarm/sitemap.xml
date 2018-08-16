@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://mrjoshuachao.github.io/index.html</loc>
+    <lastmod>2018-08-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/kkfarm_logotype_-ffffff128x21.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/kkfarm_logotype_-ffffff128x21_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/soundscape_logotype_en.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/soundscape_logotype_en_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/platform_logos.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/platform_logos_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/kkfarm_logotype_-ffffff.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/kkfarm_logotype_-ffffff_2x.png</image:loc>
+    </image:image>
+  </url>
+</urlset>
