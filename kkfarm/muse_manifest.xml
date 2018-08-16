@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534461374020">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534462636519">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="60764438" ref="index"/>
+    <file name="index.css" crc="174386741" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -18,10 +18,10 @@
     <file name="kkfarm_logotype_-ffffff128x21_2x.png" crc="4223796623" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="soundscape_logotype_en.png" crc="3881656713" seo="true" ref="index">
+    <file name="soundscape_logotype_en.png" crc="4051851432" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="soundscape_logotype_en_2x.png" crc="524753962" seo="true" ref="index">
+    <file name="soundscape_logotype_en_2x.png" crc="175543345" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="platform_logos.png" crc="95688507" seo="true" ref="index">
@@ -38,5 +38,5 @@
     </file>
     <file name="a-master-favicon.ico" crc="535169033" ref="index"/>
   </folder>
-  <file name="index.html" crc="211745515" seo="true" mt="1534461348741" redirect="true"/>
+  <file name="index.html" crc="286346095" seo="true" mt="1534462612836" redirect="true"/>
 </manifest>
