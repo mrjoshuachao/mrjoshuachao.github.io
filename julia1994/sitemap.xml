@@ -210,10 +210,22 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-surprise.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-surprise_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/5201314.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/5201314_2x.gif</image:loc>
     </image:image>
   </url>
 </urlset>
