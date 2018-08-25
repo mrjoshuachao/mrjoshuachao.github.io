@@ -1,29 +1,30 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535218964267">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535220612505">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="3843742953" ref="index"/>
+    <file name="index.css" crc="3765896678" ref="index"/>
     <file name="video.css" crc="3845404020" ref="video"/>
-    <file name="artifact.css" crc="3807959465" ref="artifact"/>
+    <file name="artifact.css" crc="116600189" ref="artifact"/>
     <file name="portrait.css" crc="3845404020" ref="portrait"/>
-    <file name="song.css" crc="493511356" ref="song"/>
+    <file name="song.css" crc="78791565" ref="song"/>
     <file name="shop.css" crc="3845404020" ref="shop"/>
-    <file name="bojei-modem.css" crc="189220998" ref="bojei-modem"/>
-    <file name="bojei.css" crc="4197375861" ref="bojei"/>
+    <file name="bojei-modem.css" crc="500346299" ref="bojei-modem"/>
+    <file name="bojei.css" crc="3995233227" ref="bojei"/>
+    <file name="5201314.css" crc="3827357678" ref="5201314"/>
   </folder>
   <folder name="scripts">
-    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
-    <file name="museutils.js" crc="340535759" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
-    <file name="whatinput.js" crc="86476730" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
-    <file name="museconfig.js" crc="310584261" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
-    <file name="jquery.watch.js" crc="51536988" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
-    <file name="require.js" crc="7928878" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei"/>
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
+    <file name="museutils.js" crc="340535759" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
+    <file name="whatinput.js" crc="86476730" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
+    <file name="museconfig.js" crc="310584261" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
+    <file name="require.js" crc="7928878" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="392568895" ref="index:song"/>
-    <file name="text-00-homepage.gif" crc="298232278" seo="true" ref="index">
+    <file name="a-master-favicon.ico" crc="392568895" ref="index"/>
+    <file name="text-00-homepage.gif" crc="3890352396" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="text-00-homepage_2x.gif" crc="298232278" seo="true" ref="index">
+    <file name="text-00-homepage_2x.gif" crc="3890352396" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="00-homepage-bg.jpg" crc="3915395967" seo="true" ref="index">
@@ -36,19 +37,19 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="audio" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:artifact:song:bojei-modem:bojei">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="audio" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="text-01-bojei-intro.png" crc="126657547" seo="true" ref="song:bojei">
       <caption webpage="bojei" alt=""/>
@@ -70,17 +71,19 @@
       <caption webpage="song" alt=""/>
       <caption webpage="audio" alt=""/>
     </file>
-    <file name="text-01-bojei-title.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei">
+    <file name="text-01-bojei-title.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei:artifact">
       <caption webpage="bojei-modem" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
       <caption webpage="audio" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
-    <file name="text-01-bojei-title_2x.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei">
+    <file name="text-01-bojei-title_2x.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei:artifact">
       <caption webpage="bojei-modem" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
       <caption webpage="audio" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
     <file name="cover-art-01-bojei.gif" crc="225234787" seo="true" ref="song:bojei">
       <caption webpage="bojei" alt=""/>
@@ -90,63 +93,62 @@
       <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
     </file>
-    <file name="text-01-bojei-surprise.gif" crc="3770795915" seo="true" ref="song:bojei">
+    <file name="text-01-bojei-surprise.gif" crc="3770795915" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
     </file>
-    <file name="text-01-bojei-surprise_2x.gif" crc="3770795915" seo="true" ref="song:bojei">
+    <file name="text-01-bojei-surprise_2x.gif" crc="3770795915" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
     </file>
-    <file name="artifact-01-text-01-hello.gif" crc="320605929" seo="true" ref="artifact">
+    <file name="artifact-01-modem-back.gif" crc="4147875093" seo="true" ref="bojei-modem:artifact">
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-text-01-hello_2x.gif" crc="320605929" seo="true" ref="artifact">
+    <file name="artifact-01-modem-back_2x.gif" crc="4147875093" seo="true" ref="bojei-modem:artifact">
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="artifact" alt=""/>
     </file>
-    <file name="text-01-bojei-title-x.gif" crc="3779501144" seo="true" ref="artifact">
+    <file name="artifact-01-modem-front.gif" crc="487895648" seo="true" ref="bojei-modem:artifact">
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="artifact" alt=""/>
     </file>
-    <file name="text-01-bojei-title-x_2x.gif" crc="3779501144" seo="true" ref="artifact">
+    <file name="artifact-01-modem-front_2x.gif" crc="487895648" seo="true" ref="bojei-modem:artifact">
+      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-text-01-hello-x.gif" crc="86269674" seo="true" ref="bojei-modem">
+    <file name="artifact-02-text-01-modem-front.gif" crc="3852301252" seo="true" ref="bojei-modem:artifact">
       <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-text-01-hello-x_2x.gif" crc="86269674" seo="true" ref="bojei-modem">
+    <file name="artifact-02-text-01-modem-front_2x.gif" crc="3852301252" seo="true" ref="bojei-modem:artifact">
       <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-modem-back.gif" crc="4147875093" seo="true" ref="bojei-modem">
+    <file name="artifact-02-text-02-modem-back.gif" crc="3963673582" seo="true" ref="bojei-modem:artifact">
       <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-modem-back_2x.gif" crc="4147875093" seo="true" ref="bojei-modem">
+    <file name="artifact-02-text-02-modem-back_2x.gif" crc="3963673582" seo="true" ref="bojei-modem:artifact">
       <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="artifact" alt=""/>
     </file>
-    <file name="artifact-01-modem-front.gif" crc="487895648" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
+    <file name="text-00-homepage-title.gif" crc="3815350513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
     </file>
-    <file name="artifact-01-modem-front_2x.gif" crc="487895648" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
-    </file>
-    <file name="artifact-02-text-01-modem-front.gif" crc="3852301252" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
-    </file>
-    <file name="artifact-02-text-01-modem-front_2x.gif" crc="3852301252" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
-    </file>
-    <file name="artifact-02-text-02-modem-back.gif" crc="3963673582" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
-    </file>
-    <file name="artifact-02-text-02-modem-back_2x.gif" crc="3963673582" seo="true" ref="bojei-modem">
-      <caption webpage="bojei-modem" alt=""/>
+    <file name="text-00-homepage-title_2x.gif" crc="3815350513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4226594122" seo="true" mt="1535216765086" redirect="true"/>
+  <file name="index.html" crc="3767864940" seo="true" mt="1535220492723" redirect="true"/>
   <file name="video.html" crc="238111472" seo="true" mt="1535215123512" redirect="false"/>
-  <file name="artifact.html" crc="4222580" seo="true" mt="1535218681209" redirect="true"/>
+  <file name="artifact.html" crc="506664680" seo="true" mt="1535220470519" redirect="true"/>
   <file name="portrait.html" crc="3871618121" seo="true" mt="1535215123512" redirect="false"/>
-  <file name="song.html" crc="494119135" seo="true" mt="1535218597986" redirect="true"/>
+  <file name="song.html" crc="225974219" seo="true" mt="1535220266622" redirect="true"/>
   <file name="shop.html" crc="373159799" seo="true" mt="1535216775198" redirect="false"/>
-  <file name="bojei-modem.html" crc="395498533" seo="true" mt="1535218936290" redirect="true"/>
-  <file name="bojei.html" crc="261032662" seo="true" mt="1535218607862" redirect="true"/>
+  <file name="bojei-modem.html" crc="3821047772" seo="true" mt="1535220447168" redirect="true"/>
+  <file name="bojei.html" crc="3799378983" seo="true" mt="1535220389143" redirect="true"/>
+  <file name="5201314.html" crc="12683644" seo="true" mt="1535220607005" redirect="true"/>
 </manifest>

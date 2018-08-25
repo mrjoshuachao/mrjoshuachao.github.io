@@ -23,6 +23,12 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-00-homepage-title.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-00-homepage-title_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/video.html</loc>
@@ -42,16 +48,34 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-text-01-hello.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-text-01-hello_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-modem-back.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-modem-back_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-modem-front.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-modem-front_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-front.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-front_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-02-modem-back.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-02-modem-back_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
@@ -95,12 +119,6 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei_2x.gif</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-surprise.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-surprise_2x.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/shop.html</loc>
@@ -124,12 +142,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-text-01-hello-x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/artifact-01-text-01-hello-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/artifact-01-modem-back.gif</image:loc>
@@ -191,6 +203,12 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei_2x.gif</image:loc>
     </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/5201314.html</loc>
+    <lastmod>2018-08-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-surprise.gif</image:loc>
     </image:image>
