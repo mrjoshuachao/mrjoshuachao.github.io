@@ -35,6 +35,18 @@
     <lastmod>2018-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/artifact.html</loc>
@@ -226,6 +238,24 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/5201314_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/bojei-jutv.html</loc>
+    <lastmod>2018-08-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
     </image:image>
   </url>
 </urlset>
