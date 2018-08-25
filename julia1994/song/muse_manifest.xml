@@ -1,31 +1,61 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535224493800">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535225342511">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="249973887" ref="index"/>
-    <file name="video.css" crc="3889248415" ref="video"/>
-    <file name="artifact.css" crc="116600189" ref="artifact"/>
     <file name="portrait.css" crc="3845404020" ref="portrait"/>
-    <file name="song.css" crc="78791565" ref="song"/>
-    <file name="shop.css" crc="3845404020" ref="shop"/>
-    <file name="bojei-modem.css" crc="500346299" ref="bojei-modem"/>
     <file name="bojei.css" crc="3995233227" ref="bojei"/>
+    <file name="artifact.css" crc="116600189" ref="artifact"/>
+    <file name="index.css" crc="249973887" ref="index"/>
+    <file name="bojei-jutv.css" crc="361193363" ref="bojei-jutv"/>
+    <file name="shop.css" crc="3845404020" ref="shop"/>
+    <file name="video.css" crc="4114044446" ref="video"/>
     <file name="5201314.css" crc="383027520" ref="5201314"/>
-    <file name="bojei-jutv.css" crc="123810066" ref="bojei-jutv"/>
+    <file name="bojei-modem.css" crc="500346299" ref="bojei-modem"/>
+    <file name="song.css" crc="78791565" ref="song"/>
   </folder>
   <folder name="scripts">
-    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
-    <file name="museutils.js" crc="340535759" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
-    <file name="whatinput.js" crc="86476730" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
-    <file name="museconfig.js" crc="310584261" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
-    <file name="jquery.watch.js" crc="51536988" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
-    <file name="require.js" crc="7928878" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="museutils.js" crc="340535759" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="whatinput.js" crc="86476730" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="museconfig.js" crc="310584261" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
+    <file name="require.js" crc="7928878" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="392568895" ref="index:song:video"/>
+    <file name="a-master-favicon.ico" crc="4025032037" ref="index"/>
     <file name="text-00-homepage.gif" crc="19179489" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="text-00-homepage_2x.gif" crc="19179489" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="enter.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:5201314:bojei-jutv">
+      <caption webpage="5201314" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="video" alt=""/>
+    </file>
+    <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:5201314:bojei-jutv">
+      <caption webpage="5201314" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="video" alt=""/>
+    </file>
+    <file name="text-00-homepage-title.gif" crc="3815350513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="text-00-homepage-title_2x.gif" crc="3815350513" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="00-homepage-bg.jpg" crc="3915395967" seo="true" ref="index">
@@ -34,125 +64,83 @@
     <file name="00-homepage-bg_2x.jpg" crc="184366770" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enter.gif" crc="4204944790" seo="true" ref="index:artifact:song:bojei-modem:bojei:5201314:video:bojei-jutv">
-      <caption webpage="5201314" alt=""/>
-      <caption webpage="song" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="audio" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="artifact" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
-    </file>
-    <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:artifact:song:bojei-modem:bojei:5201314:video:bojei-jutv">
-      <caption webpage="5201314" alt=""/>
-      <caption webpage="song" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="audio" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="artifact" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
-    </file>
     <file name="text-01-bojei-intro.png" crc="126657547" seo="true" ref="song:bojei">
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
-      <caption webpage="audio" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="text-01-bojei-intro_2x.png" crc="47204559" seo="true" ref="song:bojei">
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
-      <caption webpage="audio" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="text-01-bojei-lyrics.gif" crc="363145367" seo="true" ref="song:bojei">
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
-      <caption webpage="audio" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="text-01-bojei-lyrics_2x.gif" crc="363145367" seo="true" ref="song:bojei">
+      <caption webpage="song" alt=""/>
       <caption webpage="bojei" alt=""/>
-      <caption webpage="song" alt=""/>
-      <caption webpage="audio" alt=""/>
     </file>
-    <file name="text-01-bojei-title.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei:artifact:video:bojei-jutv">
+    <file name="text-01-bojei-title.gif" crc="222661419" seo="true" ref="song:video:artifact:bojei-modem:bojei:bojei-jutv">
       <caption webpage="song" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="audio" alt=""/>
       <caption webpage="artifact" alt=""/>
+      <caption webpage="video" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="bojei-jutv" alt=""/>
-    </file>
-    <file name="text-01-bojei-title_2x.gif" crc="222661419" seo="true" ref="song:bojei-modem:bojei:artifact:video:bojei-jutv">
-      <caption webpage="song" alt=""/>
       <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="audio" alt=""/>
+    </file>
+    <file name="text-01-bojei-title_2x.gif" crc="222661419" seo="true" ref="song:video:artifact:bojei-modem:bojei:bojei-jutv">
+      <caption webpage="song" alt=""/>
       <caption webpage="artifact" alt=""/>
+      <caption webpage="video" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
     </file>
     <file name="cover-art-01-bojei.gif" crc="225234787" seo="true" ref="song:bojei">
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
+      <caption webpage="bojei" alt=""/>
     </file>
     <file name="cover-art-01-bojei_2x.gif" crc="225234787" seo="true" ref="song:bojei">
-      <caption webpage="bojei" alt=""/>
       <caption webpage="song" alt=""/>
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="artifact-01-modem-back.gif" crc="4147875093" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-01-modem-back_2x.gif" crc="4147875093" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-01-modem-front.gif" crc="487895648" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-01-modem-front_2x.gif" crc="487895648" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-02-text-01-modem-front.gif" crc="3852301252" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-02-text-01-modem-front_2x.gif" crc="3852301252" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-02-text-02-modem-back.gif" crc="3963673582" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="artifact-02-text-02-modem-back_2x.gif" crc="3963673582" seo="true" ref="artifact:bojei-modem">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
     </file>
     <file name="text-01-bojei-surprise.gif" crc="3770795915" seo="true" ref="5201314">
       <caption webpage="5201314" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="song" alt=""/>
     </file>
     <file name="text-01-bojei-surprise_2x.gif" crc="3770795915" seo="true" ref="5201314">
       <caption webpage="5201314" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="song" alt=""/>
-    </file>
-    <file name="artifact-01-modem-back.gif" crc="4147875093" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-01-modem-back_2x.gif" crc="4147875093" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-01-modem-front.gif" crc="487895648" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-01-modem-front_2x.gif" crc="487895648" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-02-text-01-modem-front.gif" crc="3852301252" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-02-text-01-modem-front_2x.gif" crc="3852301252" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-02-text-02-modem-back.gif" crc="3963673582" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="artifact-02-text-02-modem-back_2x.gif" crc="3963673582" seo="true" ref="bojei-modem:artifact">
-      <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="artifact" alt=""/>
-    </file>
-    <file name="text-00-homepage-title.gif" crc="3815350513" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="text-00-homepage-title_2x.gif" crc="3815350513" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
     </file>
     <file name="5201314.gif" crc="4086130565" seo="true" ref="5201314">
       <caption webpage="5201314" alt=""/>
@@ -161,14 +149,14 @@
       <caption webpage="5201314" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4284827555" seo="true" mt="1535223892287" redirect="true"/>
-  <file name="video.html" crc="446709145" seo="true" mt="1535222970337" redirect="true"/>
-  <file name="artifact.html" crc="506664680" seo="true" mt="1535220470519" redirect="true"/>
-  <file name="portrait.html" crc="3871618121" seo="true" mt="1535215123512" redirect="false"/>
-  <file name="song.html" crc="225974219" seo="true" mt="1535220756865" redirect="true"/>
-  <file name="shop.html" crc="373159799" seo="true" mt="1535216775198" redirect="false"/>
-  <file name="bojei-modem.html" crc="3821047772" seo="true" mt="1535220447168" redirect="true"/>
-  <file name="bojei.html" crc="3799378983" seo="true" mt="1535220389143" redirect="true"/>
-  <file name="5201314.html" crc="4026189851" seo="true" mt="1535222303954" redirect="true"/>
-  <file name="bojei-jutv.html" crc="4290999519" seo="true" mt="1535222985144" redirect="true"/>
+  <file name="index.html" crc="376219720" seo="true" mt="1535223892287" redirect="true"/>
+  <file name="song.html" crc="533937348" seo="true" mt="1535220756865" redirect="true"/>
+  <file name="video.html" crc="29461670" seo="true" mt="1535222970337" redirect="true"/>
+  <file name="artifact.html" crc="411455462" seo="true" mt="1535220470519" redirect="true"/>
+  <file name="portrait.html" crc="4211672568" seo="true" mt="1535215123512" redirect="false"/>
+  <file name="shop.html" crc="400000707" seo="true" mt="1535216775198" redirect="false"/>
+  <file name="bojei-modem.html" crc="277424903" seo="true" mt="1535220447168" redirect="true"/>
+  <file name="bojei.html" crc="4067851154" seo="true" mt="1535220389143" redirect="true"/>
+  <file name="5201314.html" crc="4139891607" seo="true" mt="1535222303954" redirect="true"/>
+  <file name="bojei-jutv.html" crc="225527655" seo="true" mt="1535222985144" redirect="true"/>
 </manifest>

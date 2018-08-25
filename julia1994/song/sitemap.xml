@@ -12,12 +12,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/text-00-homepage_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-bg.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-bg_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
     </image:image>
     <image:image>
@@ -28,6 +22,48 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-00-homepage-title_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-bg.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-bg_2x.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/song.html</loc>
+    <lastmod>2018-08-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
@@ -95,42 +131,6 @@
     <lastmod>2018-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://mrjoshuachao.github.io/song.html</loc>
-    <lastmod>2018-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-title_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/cover-art-01-bojei_2x.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/shop.html</loc>
