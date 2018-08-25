@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535222841176">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535222997306">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="3853299661" ref="index"/>
-    <file name="video.css" crc="3992415112" ref="video"/>
+    <file name="video.css" crc="3889248415" ref="video"/>
     <file name="artifact.css" crc="116600189" ref="artifact"/>
     <file name="portrait.css" crc="3845404020" ref="portrait"/>
     <file name="song.css" crc="78791565" ref="song"/>
@@ -10,7 +10,7 @@
     <file name="bojei-modem.css" crc="500346299" ref="bojei-modem"/>
     <file name="bojei.css" crc="3995233227" ref="bojei"/>
     <file name="5201314.css" crc="383027520" ref="5201314"/>
-    <file name="bojei-jutv.css" crc="3960524576" ref="bojei-jutv"/>
+    <file name="bojei-jutv.css" crc="123810066" ref="bojei-jutv"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
@@ -21,7 +21,7 @@
     <file name="require.js" crc="7928878" ref="index:video:artifact:portrait:song:shop:bojei-modem:bojei:5201314:bojei-jutv"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="392568895" ref="index:song"/>
+    <file name="a-master-favicon.ico" crc="392568895" ref="index:song:video"/>
     <file name="text-00-homepage.gif" crc="3890352396" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -36,27 +36,27 @@
     </file>
     <file name="enter.gif" crc="4204944790" seo="true" ref="index:artifact:song:bojei-modem:bojei:5201314:video:bojei-jutv">
       <caption webpage="5201314" alt=""/>
-      <caption webpage="artifact" alt=""/>
+      <caption webpage="audio" alt=""/>
+      <caption webpage="song" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="video" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="audio" alt=""/>
-      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
       <caption webpage="bojei-modem" alt=""/>
       <caption webpage="bojei-jutv" alt=""/>
     </file>
     <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:artifact:song:bojei-modem:bojei:5201314:video:bojei-jutv">
       <caption webpage="5201314" alt=""/>
-      <caption webpage="artifact" alt=""/>
+      <caption webpage="audio" alt=""/>
+      <caption webpage="song" alt=""/>
       <caption webpage="bojei" alt=""/>
       <caption webpage="video" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="audio" alt=""/>
-      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
       <caption webpage="bojei-modem" alt=""/>
       <caption webpage="bojei-jutv" alt=""/>
     </file>
@@ -162,7 +162,7 @@
     </file>
   </folder>
   <file name="index.html" crc="4224822293" seo="true" mt="1535222529480" redirect="true"/>
-  <file name="video.html" crc="3908424201" seo="true" mt="1535222458889" redirect="true"/>
+  <file name="video.html" crc="446709145" seo="true" mt="1535222970337" redirect="true"/>
   <file name="artifact.html" crc="506664680" seo="true" mt="1535220470519" redirect="true"/>
   <file name="portrait.html" crc="3871618121" seo="true" mt="1535215123512" redirect="false"/>
   <file name="song.html" crc="225974219" seo="true" mt="1535220756865" redirect="true"/>
@@ -170,5 +170,5 @@
   <file name="bojei-modem.html" crc="3821047772" seo="true" mt="1535220447168" redirect="true"/>
   <file name="bojei.html" crc="3799378983" seo="true" mt="1535220389143" redirect="true"/>
   <file name="5201314.html" crc="4026189851" seo="true" mt="1535222303954" redirect="true"/>
-  <file name="bojei-jutv.html" crc="497115326" seo="true" mt="1535222499724" redirect="true"/>
+  <file name="bojei-jutv.html" crc="4290999519" seo="true" mt="1535222985144" redirect="true"/>
 </manifest>
