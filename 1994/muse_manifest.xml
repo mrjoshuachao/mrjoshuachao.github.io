@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535310081813">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1535327104164">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="artifact.css" crc="477280726" ref="artifact"/>
-    <file name="index.css" crc="502677095" ref="index"/>
+    <file name="index.css" crc="4197141265" ref="index"/>
     <file name="portrait.css" crc="3845404020" ref="portrait"/>
     <file name="shop.css" crc="3845404020" ref="shop"/>
     <file name="5201314.css" crc="4290506550" ref="5201314"/>
@@ -29,26 +29,26 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="enter.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv">
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
       <caption webpage="song" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
     </file>
     <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv">
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
       <caption webpage="song" alt=""/>
-      <caption webpage="bojei-modem" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="video" alt=""/>
-      <caption webpage="bojei" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
     </file>
     <file name="00-homepage-text-1-title.gif" crc="3815350513" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -195,7 +195,7 @@
       <caption webpage="5201314" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4025697517" seo="true" mt="1535309393549" redirect="true"/>
+  <file name="index.html" crc="139499604" seo="true" mt="1535327088704" redirect="true"/>
   <file name="song.html" crc="291815297" seo="true" mt="1535309594955" redirect="true"/>
   <file name="video.html" crc="200278794" seo="true" mt="1535309681538" redirect="true"/>
   <file name="artifact.html" crc="3920833121" seo="true" mt="1535309900683" redirect="true"/>
