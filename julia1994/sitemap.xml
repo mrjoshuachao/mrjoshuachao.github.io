@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/song.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -42,10 +42,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics.gif</image:loc>
@@ -68,7 +68,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/video.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -86,7 +86,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/artifact.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -124,6 +124,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-02-modem-back_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-2_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -140,7 +152,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-modem.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -179,10 +191,22 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-02-modem-back_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/artifact-02-text-01-modem-story-2_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -192,10 +216,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-intro_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/text-01-bojei-lyrics.gif</image:loc>
@@ -218,7 +242,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/5201314.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -242,7 +266,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-jutv.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
