@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1539883647591">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1539883848763">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="artifact.css" crc="212755017" ref="artifact"/>
@@ -34,31 +34,31 @@
     </file>
     <file name="enter.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian">
       <caption webpage="wannian-building" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
       <caption webpage="bojei" alt=""/>
+      <caption webpage="video" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="wannian" alt=""/>
       <caption webpage="wannian-jutv" alt=""/>
       <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="video" alt=""/>
     </file>
     <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian">
       <caption webpage="wannian-building" alt=""/>
-      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
       <caption webpage="bojei" alt=""/>
+      <caption webpage="video" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="wannian" alt=""/>
       <caption webpage="wannian-jutv" alt=""/>
       <caption webpage="bojei-modem" alt=""/>
-      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
       <caption webpage="artifact" alt=""/>
-      <caption webpage="video" alt=""/>
     </file>
     <file name="00-homepage-text-1-title.gif" crc="3815350513" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -355,7 +355,7 @@
       <caption webpage="10000" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3960051985" seo="true" mt="1539883577166" redirect="true"/>
+  <file name="index.html" crc="3763452529" seo="true" mt="1539883839729" redirect="true"/>
   <file name="song.html" crc="4121430623" seo="true" mt="1539882073436" redirect="true"/>
   <file name="video.html" crc="3925461241" seo="true" mt="1539882333126" redirect="true"/>
   <file name="artifact.html" crc="3992805323" seo="true" mt="1539883211194" redirect="true"/>
