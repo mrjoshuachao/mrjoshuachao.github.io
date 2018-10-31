@@ -1,0 +1,252 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1534435720086">
+  <folder name="css">
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="3885619788" ref="index"/>
+    <file name="oursong-intro.css" crc="4141253941" ref="oursong-intro"/>
+    <file name="oursong-dsd.css" crc="4022134878" ref="oursong-dsd"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="museutils.js" crc="340535759" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="whatinput.js" crc="86476730" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="museconfig.js" crc="310584261" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="require.js" crc="7928878" ref="index:oursong-intro:oursong-dsd"/>
+    <file name="jquery.musemenu.js" crc="510910590" ref="index"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="color-bg-long.jpg" crc="4237003314" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-chris.jpg" crc="4024066013" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-chris_2x.jpg" crc="4221549748" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-pochang.jpg" crc="3808797501" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-pochang_2x.jpg" crc="413759873" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-meindert.jpg" crc="318234374" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-meindert_2x.jpg" crc="222803434" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-terry.jpg" crc="4278611769" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-terry_2x.jpg" crc="341392569" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-joshua.jpg" crc="3843902397" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-joshua_2x.jpg" crc="4079236332" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-kevin.jpg" crc="4201816292" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-kevin_2x.jpg" crc="3861494016" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-matt.jpg" crc="4168986199" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-matt_2x.jpg" crc="4044434559" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-1.jpg" crc="4244005041" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="x.gif" crc="3971941034" seo="true" ref="oursong-intro:oursong-dsd">
+      <caption webpage="oursong-intro" alt=""/>
+      <caption webpage="oursong-dsd" alt=""/>
+    </file>
+    <file name="x_2x.gif" crc="3971941034" seo="true" ref="oursong-intro:oursong-dsd">
+      <caption webpage="oursong-intro" alt=""/>
+      <caption webpage="oursong-dsd" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="color-bg-6.jpg" crc="143401170" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-5.jpg" crc="29582056" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="color-bg-2.jpg" crc="4013698466" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-favicon.ico" crc="96058428" ref="index"/>
+    <file name="logomark--bd081c-i.png" crc="271213927" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logomark--bd081c-i_2x.png" crc="4134269227" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-intro-favicon.ico" crc="96058428" ref="oursong-intro"/>
+    <file name="acknowledgement-kkboxgroup.png" crc="511247969" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="acknowledgement-kkboxgroup_2x.png" crc="163622683" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="acknowledgement-muzeum.png" crc="3954861876" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="acknowledgement-muzeum_2x.png" crc="4162310160" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype--bd081c.png" crc="397240121" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype--bd081c_2x.png" crc="4188546639" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="cpo.gif" crc="4005059060" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-virtical-white.png" crc="319564981" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-virtical-white_2x.png" crc="3895721497" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i.png" crc="4044626895" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="wavy-thing-lines-bg-horizontal-white-i_2x.png" crc="162614919" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-1.png" crc="253546906" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-1_2x.png" crc="332026786" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-2.png" crc="415422772" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-2_2x.png" crc="4256712702" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-3.png" crc="4033999296" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-3_2x.png" crc="64538754" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-4.png" crc="4151790739" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-4_2x.png" crc="4175599182" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-5.png" crc="480639211" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-5_2x.png" crc="70458130" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-6.png" crc="4133690535" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="feature-numbers-6_2x.png" crc="259524832" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="referencing-color.gif" crc="472443293" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="contact-u5933.png" crc="4259237658" ref="index"/>
+    <file name="contact-u5933_2x.png" crc="4219435401" ref="index"/>
+    <file name="distribution.gif" crc="4257349612" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="story-transperent.gif" crc="117581293" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-dsd-favicon.ico" crc="96058428" ref="oursong-dsd"/>
+    <file name="ourcoin.gif" crc="4023293426" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="dsd.gif" crc="418164513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="initiate-2.gif" crc="35859696" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-kai-2.jpg" crc="3763191743" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-kai-2_2x.jpg" crc="3893280987" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-sean.jpg" crc="4111884695" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-sean_2x.jpg" crc="4109222785" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-benjamin.jpg" crc="4105988280" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-benjamin_2x.jpg" crc="144678081" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-sarah.jpg" crc="54360283" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-sarah_2x.jpg" crc="104219792" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero.jpg" crc="480127416" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logomark--ffffff-i.png" crc="82969761" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logomark--ffffff-i_2x.png" crc="467258527" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype--ffffff.png" crc="4229138357" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype--ffffff_2x.png" crc="4167264795" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play-2.png" crc="4123072558" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play-2_2x.png" crc="4062684958" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="video-play_2x.gif" crc="4071583057" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-timothy.jpg" crc="364614914" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="team-timothy_2x.jpg" crc="370927895" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-jaeson.png" crc="3795316306" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="advisor-jaeson_2x.png" crc="3849354699" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="3931288034" seo="true" mt="1534435717031" redirect="true"/>
+  <file name="oursong-intro.html" crc="3881725198" seo="true" mt="1532282446024" redirect="true"/>
+  <file name="oursong-dsd.html" crc="3859930751" seo="true" mt="1532282461501" redirect="true"/>
+</manifest>
