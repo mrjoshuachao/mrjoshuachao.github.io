@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -24,15 +24,15 @@
       <image:loc>http://mrjoshuachao.github.io/images/00-homepage-text-1-title_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-2.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-3.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-2_2x.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-3_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/song.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -40,6 +40,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
@@ -48,42 +60,39 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-meme.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-1-intro.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-1-intro_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-2-lyrics.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-2-lyrics_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-picture-1.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-picture-1_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/video.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -91,6 +100,24 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
@@ -98,22 +125,10 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v_2x.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/artifact.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -121,6 +136,36 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
@@ -129,52 +174,28 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-1-door.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-1-door_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-2-floor.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-2-floor_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-2-floor-story.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-2-floor-story_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -191,7 +212,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-modem.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -201,10 +222,16 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-01-bojei-modem-2-back.gif</image:loc>
@@ -243,21 +270,21 @@
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-01-bojei-modem-4-story-2_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -265,6 +292,30 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro.gif</image:loc>
@@ -279,34 +330,16 @@
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-2-lyrics_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-meme-a.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-meme-b.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-picture-1.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-picture-1_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-meme-a.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-meme-b.gif</image:loc>
     </image:image>
   </url>
   <url>
@@ -329,7 +362,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-jutv.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -339,10 +372,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
@@ -351,15 +384,21 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian-building.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -369,16 +408,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
@@ -387,10 +432,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-1-door.gif</image:loc>
@@ -399,10 +444,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-1-door_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-1-door_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-2-floor.gif</image:loc>
@@ -411,10 +456,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wannian-2-floor_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-1-door-story_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-wannian-2-floor_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-2-floor-story.png</image:loc>
@@ -425,7 +470,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian-jutv.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -435,16 +480,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
@@ -455,7 +506,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian.html</loc>
-    <lastmod>2018-10-19</lastmod>
+    <lastmod>2018-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -465,16 +516,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v.gif</image:loc>
@@ -520,6 +577,174 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-10000_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/gameboy.html</loc>
+    <lastmod>2018-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1_2x.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/gameboy-jutv.html</loc>
+    <lastmod>2018-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/gameboy-toy.html</loc>
+    <lastmod>2018-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story_2x.png</image:loc>
     </image:image>
   </url>
 </urlset>
