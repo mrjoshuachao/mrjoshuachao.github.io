@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -24,15 +24,15 @@
       <image:loc>http://mrjoshuachao.github.io/images/00-homepage-text-1-title_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-3.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-1.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-3_2x.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/00-homepage-picture-1_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/song.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -60,39 +60,75 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-2-lyric_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-meme_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1_2x.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-4-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-4-story_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/video.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -112,12 +148,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
@@ -125,10 +155,22 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/artifact.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -148,24 +190,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-2-back_2x.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-02-gameboy-1-front_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
@@ -174,35 +198,119 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-1-front-story_2x.gif</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-1-sign.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-1-sign_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-2-menu.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-2-menu_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign-story.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign-story_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu-story_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/portrait.html</loc>
-    <lastmod>2018-08-26</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-01-bojei.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-01-bojei_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-02-wannian-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-02-wannian-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-03-gameboy-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-03-gameboy-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486-picture-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486-picture-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-05-xiaoxe-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-05-xiaoxe-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-06-xinhai-picture-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-06-xinhai-picture-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-07-chimon-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-07-chimon-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-08-xiaohuaja-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-08-xiaohuaja-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-4-portrait.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-4-portrait_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/shop.html</loc>
@@ -212,7 +320,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-modem.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -281,10 +389,16 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -318,12 +432,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-2-lyrics.gif</image:loc>
     </image:image>
     <image:image>
@@ -340,6 +448,66 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-picture-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro-new-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-1-intro-new-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-2_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-3.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-01-bojei-story-3_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
     </image:image>
   </url>
   <url>
@@ -362,7 +530,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/bojei-jutv.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -395,10 +563,16 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian-building.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -467,10 +641,16 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-02-wanniain-2-floor-story_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian-jutv.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -503,10 +683,16 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-v_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/wannian.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -560,6 +746,54 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-picture-1_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-1-intro-new-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-1-intro-new-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-story-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-02-wannian-story-2_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/10000.html</loc>
@@ -581,7 +815,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/gameboy.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -609,12 +843,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-v.gif</image:loc>
     </image:image>
     <image:image>
@@ -638,10 +866,64 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-picture-1_2x.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro-new-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-1-intro-new-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-story-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-03-gameboy-story-2_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/gameboy-jutv.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -674,10 +956,16 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/gameboy-toy.html</loc>
-    <lastmod>2018-11-08</lastmod>
+    <lastmod>2018-12-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -745,6 +1033,624 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-03-gameboy-2-back-story_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/80486.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-4-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-04-80486-4-story_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/05-poster-04-80486_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/xiaoxe.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-picture-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-4-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-05-xiaoxe-4-story_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/xinhai.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-4-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-4-story_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-picture-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-06-xinhai-picture-1_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/chimon.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-4-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-4-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-4-story-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-4-story-2_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-07-chimon-picture-1_2x.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/xiaohuaja.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-1-song_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-04-80486-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-05-xiaoxe-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-06-xinhai-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-1-intro.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-1-intro_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-2-credit.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-2-credit_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-3-lyrics.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-3-lyrics_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-4-story-1.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-4-story-1_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-4-story-2.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-4-story-2_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-08-xiaohuaja-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-picture-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/01-song-08-xiaohuaja-picture-1_2x.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/chimon-jutv.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-2-video_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v_2x.gif</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://mrjoshuachao.github.io/chimon-store.html</loc>
+    <lastmod>2018-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enter_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-01-bojei-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-02-wannian-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-00-museum-3-artifact_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-03-gameboy-x_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu-01-song-07-chimon-v_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-1-sign.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-1-sign_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-2-menu.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-picture-03-chimon-2-menu_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign-story.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-1-sign-story_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu-story.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/03-artifact-text-04-chimon-2-menu-story_2x.gif</image:loc>
     </image:image>
   </url>
 </urlset>

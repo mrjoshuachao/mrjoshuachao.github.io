@@ -1,0 +1,463 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1541690010143">
+  <folder name="css">
+    <file name="site_global.css" crc="444006867"/>
+    <file name="gameboy-toy.css" crc="147991913" ref="gameboy-toy"/>
+    <file name="bojei-jutv.css" crc="3875464453" ref="bojei-jutv"/>
+    <file name="portrait.css" crc="3845404020" ref="portrait"/>
+    <file name="song.css" crc="4290249941" ref="song"/>
+    <file name="bojei-modem.css" crc="150898368" ref="bojei-modem"/>
+    <file name="bojei.css" crc="489455183" ref="bojei"/>
+    <file name="10000.css" crc="491553470" ref="10000"/>
+    <file name="index.css" crc="4197141265" ref="index"/>
+    <file name="5201314.css" crc="4290506550" ref="5201314"/>
+    <file name="wannian.css" crc="4085610285" ref="wannian"/>
+    <file name="gameboy.css" crc="3996904055" ref="gameboy"/>
+    <file name="shop.css" crc="3845404020" ref="shop"/>
+    <file name="wannian-jutv.css" crc="281540509" ref="wannian-jutv"/>
+    <file name="video.css" crc="499444568" ref="video"/>
+    <file name="wannian-building.css" crc="74823461" ref="wannian-building"/>
+    <file name="gameboy-jutv.css" crc="435654584" ref="gameboy-jutv"/>
+    <file name="artifact.css" crc="460299795" ref="artifact"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+    <file name="museutils.js" crc="340535759" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+    <file name="whatinput.js" crc="86476730" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+    <file name="museconfig.js" crc="310584261" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+    <file name="require.js" crc="7928878" ref="index:song:video:artifact:portrait:shop:bojei-modem:bojei:5201314:bojei-jutv:wannian-building:wannian-jutv:wannian:10000:gameboy:gameboy-jutv:gameboy-toy"/>
+  </folder>
+  <folder name="images">
+    <file name="a-master-favicon.ico" crc="4025032037" ref="index"/>
+    <file name="00-homepage-text-2-intro.gif" crc="19179489" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="00-homepage-text-2-intro_2x.gif" crc="19179489" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="enter.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="enter_2x.gif" crc="4204944790" seo="true" ref="index:song:video:artifact:bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="00-homepage-text-1-title.gif" crc="3815350513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="00-homepage-text-1-title_2x.gif" crc="3815350513" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="00-homepage-picture-3.jpg" crc="4151173783" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="00-homepage-picture-3_2x.jpg" crc="238066911" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-x.gif" crc="3779501144" seo="true" ref="song:video:artifact:wannian-building:wannian-jutv:wannian:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-x_2x.gif" crc="3779501144" seo="true" ref="song:video:artifact:wannian-building:wannian-jutv:wannian:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-x.gif" crc="451510346" seo="true" ref="song:video:artifact:bojei-modem:bojei:bojei-jutv:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="video" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-x_2x.gif" crc="451510346" seo="true" ref="song:video:artifact:bojei-modem:bojei:bojei-jutv:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="video" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="menu-00-museum-1-song.gif" crc="378927712" seo="true" ref="song:bojei:wannian:gameboy">
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="menu-00-museum-1-song_2x.gif" crc="378927712" seo="true" ref="song:bojei:wannian:gameboy">
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-1-intro.gif" crc="4223582534" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-1-intro_2x.gif" crc="4223582534" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="menu-01-song-03-gameboy-v.gif" crc="3924333092" seo="true" ref="song:video:artifact:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="video" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="menu-01-song-03-gameboy-v_2x.gif" crc="3924333092" seo="true" ref="song:video:artifact:gameboy:gameboy-jutv:gameboy-toy">
+      <caption webpage="video" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="song" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-2-lyric.gif" crc="522373733" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-2-lyric_2x.gif" crc="522373733" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-meme.gif" crc="4164670802" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-meme_2x.gif" crc="4164670802" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-picture-1.jpg" crc="4028371103" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="01-song-03-gameboy-picture-1_2x.jpg" crc="369771457" seo="true" ref="song:gameboy">
+      <caption webpage="gameboy" alt=""/>
+      <caption webpage="song" alt=""/>
+    </file>
+    <file name="menu-00-museum-2-video.gif" crc="3779667503" seo="true" ref="video:bojei-jutv:wannian-jutv:gameboy-jutv">
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+    </file>
+    <file name="menu-00-museum-2-video_2x.gif" crc="3779667503" seo="true" ref="video:bojei-jutv:wannian-jutv:gameboy-jutv">
+      <caption webpage="video" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="gameboy-jutv" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-gameboy-2-back.gif" crc="4000035411" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-gameboy-2-back_2x.gif" crc="4000035411" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-gameboy-1-front.gif" crc="4000585214" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-gameboy-1-front_2x.gif" crc="4000585214" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="menu-00-museum-3-artifact.gif" crc="496611519" seo="true" ref="artifact:bojei-modem:wannian-building:gameboy-toy">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="menu-00-museum-3-artifact_2x.gif" crc="496611519" seo="true" ref="artifact:bojei-modem:wannian-building:gameboy-toy">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-1-front.gif" crc="126697359" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-1-front_2x.gif" crc="126697359" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-2-back.gif" crc="4033861752" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-2-back_2x.gif" crc="4033861752" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-1-front-story.gif" crc="30843326" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-1-front-story_2x.gif" crc="30843326" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-2-back-story.png" crc="4152085238" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-text-03-gameboy-2-back-story_2x.png" crc="3963844309" seo="true" ref="artifact:gameboy-toy">
+      <caption webpage="artifact" alt=""/>
+      <caption webpage="gameboy-toy" alt=""/>
+    </file>
+    <file name="03-artifact-picture-01-bojei-modem-2-back.gif" crc="4147875093" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-picture-01-bojei-modem-2-back_2x.gif" crc="4147875093" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-picture-01-bojei-modem-1-front.gif" crc="487895648" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-picture-01-bojei-modem-1-front_2x.gif" crc="487895648" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-1-front.gif" crc="3852301252" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-1-front_2x.gif" crc="3852301252" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-3-back.gif" crc="3963673582" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-3-back_2x.gif" crc="3963673582" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-2-story-1.gif" crc="256871798" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-2-story-1_2x.gif" crc="256871798" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-4-story-2.png" crc="400458216" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="03-artifact-text-01-bojei-modem-4-story-2_2x.png" crc="17207602" seo="true" ref="bojei-modem">
+      <caption webpage="bojei-modem" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-v.gif" crc="222661419" seo="true" ref="bojei-modem:bojei:bojei-jutv">
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-v_2x.gif" crc="222661419" seo="true" ref="bojei-modem:bojei:bojei-jutv">
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+    </file>
+    <file name="menu-01-song-03-gameboy-x.gif" crc="420118863" seo="true" ref="bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="menu-01-song-03-gameboy-x_2x.gif" crc="420118863" seo="true" ref="bojei-modem:bojei:bojei-jutv:wannian-building:wannian-jutv:wannian">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="bojei" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="bojei-modem" alt=""/>
+      <caption webpage="bojei-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-1-intro.gif" crc="3946078996" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-1-intro_2x.gif" crc="3946078996" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-2-lyrics.gif" crc="363145367" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-2-lyrics_2x.gif" crc="363145367" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-meme-a.gif" crc="4091694593" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-meme-b.gif" crc="4197237396" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-picture-1.gif" crc="225234787" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-picture-1_2x.gif" crc="225234787" seo="true" ref="bojei">
+      <caption webpage="bojei" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-3-surprise.gif" crc="3770795915" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
+    </file>
+    <file name="01-song-01-bojei-3-surprise_2x.gif" crc="3770795915" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-5201314.gif" crc="4086130565" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
+    </file>
+    <file name="menu-01-song-01-bojei-5201314_2x.gif" crc="4086130565" seo="true" ref="5201314">
+      <caption webpage="5201314" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-v.gif" crc="324002858" seo="true" ref="wannian-building:wannian-jutv:wannian">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-v_2x.gif" crc="324002858" seo="true" ref="wannian-building:wannian-jutv:wannian">
+      <caption webpage="wannian-building" alt=""/>
+      <caption webpage="wannian-jutv" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wannian-1-door.gif" crc="505791351" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wannian-1-door_2x.gif" crc="505791351" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-wannian-1-door.gif" crc="249032972" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-wannian-1-door_2x.gif" crc="249032972" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wanniain-1-door-story.gif" crc="201783668" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wanniain-1-door-story_2x.gif" crc="201783668" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wannian-2-floor.gif" crc="347873490" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wannian-2-floor_2x.gif" crc="347873490" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-wannian-2-floor.gif" crc="475577819" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-picture-02-wannian-2-floor_2x.gif" crc="475577819" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wanniain-2-floor-story.png" crc="3838247703" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="03-artifact-text-02-wanniain-2-floor-story_2x.png" crc="163185911" seo="true" ref="wannian-building">
+      <caption webpage="wannian-building" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-meme.gif" crc="59036467" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-1-intro.png" crc="495769663" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-1-intro_2x.png" crc="4279652180" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-2-lyrics.gif" crc="275382614" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-2-lyrics_2x.gif" crc="275382614" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-picture-1.gif" crc="4291474374" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-picture-1_2x.gif" crc="4291474374" seo="true" ref="wannian">
+      <caption webpage="wannian" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-3-secret.gif" crc="4061776278" seo="true" ref="10000">
+      <caption webpage="10000" alt=""/>
+    </file>
+    <file name="01-song-02-wannian-3-secret_2x.gif" crc="4061776278" seo="true" ref="10000">
+      <caption webpage="10000" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-10000.gif" crc="504495146" seo="true" ref="10000">
+      <caption webpage="10000" alt=""/>
+    </file>
+    <file name="menu-01-song-02-wannian-10000_2x.gif" crc="504495146" seo="true" ref="10000">
+      <caption webpage="10000" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="265945360" seo="true" mt="1541688615402" redirect="true"/>
+  <file name="song.html" crc="4091863322" seo="true" mt="1541689954805" redirect="true"/>
+  <file name="video.html" crc="4094532756" seo="true" mt="1541687606232" redirect="true"/>
+  <file name="artifact.html" crc="415202998" seo="true" mt="1541687592548" redirect="true"/>
+  <file name="portrait.html" crc="4211672568" seo="true" mt="1535215123512" redirect="false"/>
+  <file name="shop.html" crc="400000707" seo="true" mt="1535216775198" redirect="false"/>
+  <file name="bojei-modem.html" crc="3979513664" seo="true" mt="1541687308583" redirect="true"/>
+  <file name="bojei.html" crc="127916724" seo="true" mt="1541688846082" redirect="true"/>
+  <file name="5201314.html" crc="441077894" seo="true" mt="1539881414410" redirect="true"/>
+  <file name="bojei-jutv.html" crc="289996268" seo="true" mt="1541687392253" redirect="true"/>
+  <file name="wannian-building.html" crc="3765387898" seo="true" mt="1541687294394" redirect="true"/>
+  <file name="wannian-jutv.html" crc="4273226130" seo="true" mt="1541687366209" redirect="true"/>
+  <file name="wannian.html" crc="97034135" seo="true" mt="1541688858013" redirect="true"/>
+  <file name="10000.html" crc="83465370" seo="true" mt="1539881678131" redirect="true"/>
+  <file name="gameboy.html" crc="3853356111" seo="true" mt="1541689910770" redirect="true"/>
+  <file name="gameboy-jutv.html" crc="4184710730" seo="true" mt="1541687601188" redirect="true"/>
+  <file name="gameboy-toy.html" crc="4160059077" seo="true" mt="1541687587197" redirect="true"/>
+</manifest>
