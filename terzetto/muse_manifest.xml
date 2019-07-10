@@ -1,6 +1,6 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1562758283186">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1562764096508">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
+    <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="286345901" ref="index"/>
   </folder>
   <folder name="scripts">
@@ -147,5 +147,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="34488644" seo="true" mt="1562758027946" redirect="true"/>
+  <file name="index.html" crc="245534713" seo="true" mt="1562764089035" redirect="true"/>
 </manifest>
