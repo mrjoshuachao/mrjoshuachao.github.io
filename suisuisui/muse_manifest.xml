@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593987130213">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593987325198">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="01.css" crc="412679288" ref="01"/>
+    <file name="01.css" crc="3866776456" ref="01"/>
     <file name="index.css" crc="71211589" ref="index"/>
   </folder>
   <folder name="scripts">
@@ -13,20 +13,17 @@
     <file name="require.js" crc="7928878" ref="index:01"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="3874393455" ref="index"/>
+    <file name="a-master-favicon.ico" crc="3874393455" ref="index:01"/>
     <file name="sui-page-top.png" crc="24947761" seo="true" ref="01">
       <caption webpage="01" alt=""/>
     </file>
     <file name="sui-dot.png" crc="48005208" seo="true" ref="01">
       <caption webpage="01" alt=""/>
     </file>
-    <file name="01.jpg" crc="3767537243" seo="true" ref="01">
-      <caption webpage="01" alt=""/>
-    </file>
-    <file name="01_2x.jpg" crc="148343776" seo="true" ref="01">
+    <file name="01.jpg" crc="133634821" seo="true" ref="01">
       <caption webpage="01" alt=""/>
     </file>
   </folder>
   <file name="index.html" crc="3777881404" seo="true" mt="1593984940428" redirect="false"/>
-  <file name="01.html" crc="4075524779" seo="true" mt="1593987057549" redirect="true"/>
+  <file name="01.html" crc="75513281" seo="true" mt="1593987313879" redirect="true"/>
 </manifest>

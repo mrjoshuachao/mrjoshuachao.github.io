@@ -20,8 +20,5 @@
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/sui/images/01.jpg</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>https://mrjoshuachao.github.io/sui/images/01_2x.jpg</image:loc>
-    </image:image>
   </url>
 </urlset>
