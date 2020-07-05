@@ -2,20 +2,19 @@
 <html class="nojs html css_verticalspacer" lang="en-US">
  <head>
 
-<script language="JavaScript"> 
-<!--
-y = 0;
-function scrollTest(){
-if (y<300) scroll(0,y++);
-timer=setTimeout('scrollTest()',1);
-status = y;
-}
-function scrollstp(){
-clearTimeout(timer);
-}
-// -->
+<script type="text/javascript">
+setTimeout(function() {
+	// IE
+	if(document.all) {
+		document.getElementById("clickMe").click();
+	}
+	else {
+		var e = document.createEvent("MouseEvents");
+		e.initEvent("click", true, true);
+		document.getElementById("clickMe").dispatchEvent(e);
+	}
+}, 1);
 </script>
-
   <meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
   <meta name="generator" content="2018.1.0.386"/>
   
