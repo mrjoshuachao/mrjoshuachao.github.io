@@ -10,19 +10,34 @@
 document.documentElement.className = document.documentElement.className.replace(/\bnojs\b/g, 'js');
 
 // Check that all required assets are uploaded and up-to-date
-if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.watch.js", "require.js", "index.css"], "outOfDate":[]};
+if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "jquery.watch.js", "require.js", "06.css"], "outOfDate":[]};
 </script>
   
   <link rel="shortcut icon" href="images/a-master-favicon.ico?crc=3874393455"/>
   <title>SUI</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=444006867"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=71211589" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/06.css?crc=4108434242" id="pagesheet"/>
    </head>
  <body>
 
-  <div class="clearfix" id="page"><!-- column -->
-   <div class="verticalspacer" data-offset-top="0" data-content-above-spacer="0" data-content-below-spacer="2048"></div>
+  <div class="clearfix" id="page"><!-- group -->
+   <div class="browser_width grpelem" id="u340-bw">
+    <div id="u340"><!-- column -->
+     <div class="clearfix" id="u340_align_to_page">
+      <div class="clip_frame colelem" id="u338"><!-- image -->
+       <img class="block" id="u338_img" src="images/sui-page-top.jpg?crc=110526805" data-hidpi-src="images/sui-page-top_2x.jpg?crc=3957464895" alt="" width="640" height="1024"/>
+      </div>
+      <div class="clip_frame colelem" id="u341"><!-- image -->
+       <img class="block" id="u341_img" src="images/enter.gif?crc=4065553534" data-hidpi-src="images/enter_2x.gif?crc=4065553534" alt="" width="128" height="128"/>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="verticalspacer" data-offset-top="1986" data-content-above-spacer="1986" data-content-below-spacer="61"></div>
+   <div class="clip_frame grpelem" id="u336"><!-- image -->
+    <img class="block" id="u336_img" src="images/06.jpg?crc=328561575" data-hidpi-src="images/06_2x.jpg?crc=454824024" alt="" width="512" height="512"/>
+   </div>
   </div>
   <!-- Other scripts -->
   <script type="text/javascript">
@@ -40,6 +55,8 @@ window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
 Muse.Utils.prepHyperlinks(true);/* body */
+Muse.Utils.resizeHeight('.browser_width');/* resize height */
+Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized'); });/* mark body as initialized */
 Muse.Utils.makeButtonsVisibleAfterSettingMinWidth();/* body */
 Muse.Utils.fullPage('#page');/* 100% height page */
 Muse.Utils.showWidgetsWhenReady();/* body */
