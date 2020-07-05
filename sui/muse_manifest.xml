@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593987662781">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593989734031">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="71211589" ref="index"/>
+    <file name="index.css" crc="350415866" ref="index"/>
     <file name="03.css" crc="469886627" ref="03"/>
     <file name="08.css" crc="4071842279" ref="08"/>
     <file name="09.css" crc="395782593" ref="09"/>
@@ -25,27 +25,27 @@
     <file name="a-master-favicon.ico" crc="3874393455" ref="index"/>
     <file name="sui-page-top.png" crc="24947761" seo="true" ref="01:02:03:04:05:06:07:08:09:10">
       <caption webpage="10" alt=""/>
-      <caption webpage="09" alt=""/>
       <caption webpage="04" alt=""/>
       <caption webpage="07" alt=""/>
-      <caption webpage="02" alt=""/>
       <caption webpage="08" alt=""/>
+      <caption webpage="01" alt=""/>
       <caption webpage="06" alt=""/>
       <caption webpage="03" alt=""/>
+      <caption webpage="09" alt=""/>
+      <caption webpage="02" alt=""/>
       <caption webpage="05" alt=""/>
-      <caption webpage="01" alt=""/>
     </file>
     <file name="sui-dot.png" crc="48005208" seo="true" ref="01:02:03:04:05:06:07:08:09:10">
       <caption webpage="10" alt=""/>
-      <caption webpage="09" alt=""/>
       <caption webpage="04" alt=""/>
       <caption webpage="07" alt=""/>
-      <caption webpage="02" alt=""/>
       <caption webpage="08" alt=""/>
+      <caption webpage="01" alt=""/>
       <caption webpage="06" alt=""/>
       <caption webpage="03" alt=""/>
+      <caption webpage="09" alt=""/>
+      <caption webpage="02" alt=""/>
       <caption webpage="05" alt=""/>
-      <caption webpage="01" alt=""/>
     </file>
     <file name="01.jpg" crc="133634821" seo="true" ref="01">
       <caption webpage="01" alt=""/>
@@ -78,7 +78,7 @@
       <caption webpage="10" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3777881404" seo="true" mt="1593984940428" redirect="false"/>
+  <file name="index.html" crc="4248494089" seo="true" mt="1593989710211" redirect="false"/>
   <file name="01.html" crc="3904568203" seo="true" mt="1593987484216" redirect="true"/>
   <file name="02.html" crc="239065628" seo="true" mt="1593987535385" redirect="true"/>
   <file name="03.html" crc="4148394520" seo="true" mt="1593987548548" redirect="true"/>
@@ -88,5 +88,5 @@
   <file name="07.html" crc="167941322" seo="true" mt="1593987600689" redirect="true"/>
   <file name="08.html" crc="146146700" seo="true" mt="1593987613138" redirect="true"/>
   <file name="09.html" crc="4058367403" seo="true" mt="1593987623662" redirect="true"/>
-  <file name="10.html" crc="4165414402" seo="true" mt="1593987635466" redirect="true"/>
+  <file name="10.html" crc="4165414402" seo="true" mt="1593989624036" redirect="true"/>
 </manifest>
