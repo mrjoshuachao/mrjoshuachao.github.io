@@ -1,17 +1,17 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593986219658">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io/sui" resolutions="1x,2x" timestamp="1593986525665">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="07.css" crc="3988893113" ref="07"/>
+    <file name="07.css" crc="4239821398" ref="07"/>
     <file name="index.css" crc="71211589" ref="index"/>
-    <file name="02.css" crc="3957744169" ref="02"/>
-    <file name="05.css" crc="75412261" ref="05"/>
-    <file name="06.css" crc="3877875170" ref="06"/>
-    <file name="01.css" crc="4128461133" ref="01"/>
-    <file name="08.css" crc="78199253" ref="08"/>
-    <file name="10.css" crc="6072662" ref="10"/>
-    <file name="09.css" crc="4134650443" ref="09"/>
-    <file name="04.css" crc="4183386234" ref="04"/>
-    <file name="03.css" crc="249174591" ref="03"/>
+    <file name="02.css" crc="4203824582" ref="02"/>
+    <file name="05.css" crc="352949450" ref="05"/>
+    <file name="06.css" crc="4132735501" ref="06"/>
+    <file name="01.css" crc="3882120866" ref="01"/>
+    <file name="08.css" crc="366878266" ref="08"/>
+    <file name="10.css" crc="288067257" ref="10"/>
+    <file name="09.css" crc="3875988900" ref="09"/>
+    <file name="04.css" crc="3895349141" ref="04"/>
+    <file name="03.css" crc="531447248" ref="03"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:01:02:03:04:05:06:07:08:09:10"/>
@@ -23,7 +23,7 @@
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="3874393455" ref="index"/>
-    <file name="sui-page-top.jpg" crc="238429032" seo="true" ref="01:02:03:04:05:06:07:08:09:10">
+    <file name="sui-page-top.png" crc="24947761" seo="true" ref="01:02:03:04:05:06:07:08:09:10">
       <caption webpage="10" alt=""/>
       <caption webpage="09" alt=""/>
       <caption webpage="04" alt=""/>
@@ -97,14 +97,14 @@
     </file>
   </folder>
   <file name="index.html" crc="3777881404" seo="true" mt="1593984940428" redirect="false"/>
-  <file name="01.html" crc="412612292" seo="true" mt="1593986200671" redirect="true"/>
-  <file name="02.html" crc="297476582" seo="true" mt="1593986200787" redirect="true"/>
-  <file name="03.html" crc="4006318962" seo="true" mt="1593986200819" redirect="true"/>
-  <file name="04.html" crc="4000378641" seo="true" mt="1593986200852" redirect="true"/>
-  <file name="05.html" crc="3855355307" seo="true" mt="1593986200882" redirect="true"/>
-  <file name="06.html" crc="259269460" seo="true" mt="1593986200915" redirect="true"/>
-  <file name="07.html" crc="3914197263" seo="true" mt="1593986200953" redirect="true"/>
-  <file name="08.html" crc="174829764" seo="true" mt="1593986200994" redirect="true"/>
-  <file name="09.html" crc="3899600319" seo="true" mt="1593986201035" redirect="true"/>
-  <file name="10.html" crc="3326574" seo="true" mt="1593986201616" redirect="true"/>
+  <file name="01.html" crc="4011323738" seo="true" mt="1593986517842" redirect="true"/>
+  <file name="02.html" crc="4218852578" seo="true" mt="1593986511656" redirect="true"/>
+  <file name="03.html" crc="3762277967" seo="true" mt="1593986508015" redirect="true"/>
+  <file name="04.html" crc="4089269095" seo="true" mt="1593986505788" redirect="true"/>
+  <file name="05.html" crc="4007182384" seo="true" mt="1593986503605" redirect="true"/>
+  <file name="06.html" crc="4049303620" seo="true" mt="1593986501077" redirect="true"/>
+  <file name="07.html" crc="173228677" seo="true" mt="1593986498720" redirect="true"/>
+  <file name="08.html" crc="137223072" seo="true" mt="1593986495877" redirect="true"/>
+  <file name="09.html" crc="3999729639" seo="true" mt="1593986481296" redirect="true"/>
+  <file name="10.html" crc="117026716" seo="true" mt="1593986485778" redirect="true"/>
 </manifest>
