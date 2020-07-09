@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1594268964820">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1594270649059">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3788366685" ref="index"/>
-    <file name="nomq_index.css" crc="473341626" ref="index"/>
+    <file name="index.css" crc="325336195" ref="index"/>
+    <file name="nomq_index.css" crc="277014185" ref="index"/>
   </folder>
   <folder name="assets">
     <file name="bgv-400px.mp4" crc="4188452189" seo="true" mt="1552234688000"/>
@@ -276,30 +276,6 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-utapass.gif" crc="4085950239" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-utapass_2x.gif" crc="4085950239" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-videopass.gif" crc="347999201" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-videopass_2x.gif" crc="347999201" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="logo-kkfarm.png" crc="4044778071" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -480,5 +456,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="298507606" seo="true" mt="1594268860414" redirect="true"/>
+  <file name="index.html" crc="4092726965" seo="true" mt="1594270635169" redirect="true"/>
 </manifest>
