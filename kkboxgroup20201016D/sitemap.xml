@@ -36,12 +36,6 @@
       <image:loc>https://kkboxcorp.com/images/logo-kkbox256x68_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm256x68.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm256x68_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kklab256x68.png</image:loc>
     </image:image>
     <image:image>
@@ -76,6 +70,12 @@
     </image:image>
     <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-oursong256x68_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm256x68.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm256x68_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kddi.gif</image:loc>
@@ -168,12 +168,6 @@
       <image:loc>https://kkboxcorp.com/images/logo-kkbox192x51_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm192x51.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm192x51_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kklab192x51.png</image:loc>
     </image:image>
     <image:image>
@@ -210,6 +204,12 @@
       <image:loc>https://kkboxcorp.com/images/logo-oursong192x51_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm192x51.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm192x51_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kkboxgroup220x59.png</image:loc>
     </image:image>
     <image:image>
@@ -220,18 +220,6 @@
     </image:image>
     <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kkbox220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkstream220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkstream220x59_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm220x59.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://kkboxcorp.com/images/logo-kkfarm220x59_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-kktix220x59.png</image:loc>
@@ -262,6 +250,18 @@
     </image:image>
     <image:image>
       <image:loc>https://kkboxcorp.com/images/logo-oursong220x59_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkstream220x59.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkstream220x59_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm220x59.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://kkboxcorp.com/images/logo-kkfarm220x59_2x.png</image:loc>
     </image:image>
   </url>
   <url>
