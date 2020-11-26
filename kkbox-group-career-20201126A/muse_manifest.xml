@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1606378062443">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1606378620704">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="job-description---kkbox-group-career.css" crc="9915282" ref="job-description---kkbox-group-career"/>
@@ -50,5 +50,5 @@
     </file>
   </folder>
   <file name="index.html" crc="3791790745" seo="true" mt="1606377848131" redirect="true"/>
-  <file name="job-description---kkbox-group-career.html" crc="4010255441" seo="true" mt="1606378035902" redirect="true"/>
+  <file name="job-description---kkbox-group-career.html" crc="3910920652" seo="true" mt="1606378605192" redirect="true"/>
 </manifest>
