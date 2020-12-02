@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1606919230336">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1606919482884">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="320152177" ref="index"/>
-    <file name="job-description---kkbox-group-career.css" crc="171081934" ref="job-description---kkbox-group-career"/>
+    <file name="job-description---kkbox-group-career.css" crc="3966555980" ref="job-description---kkbox-group-career"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:job-description---kkbox-group-career"/>
@@ -50,5 +50,5 @@
     </file>
   </folder>
   <file name="index.html" crc="4141028417" seo="true" mt="1606377848131" redirect="true"/>
-  <file name="job-description---kkbox-group-career.html" crc="100441084" seo="true" mt="1606919186869" redirect="true"/>
+  <file name="job-description---kkbox-group-career.html" crc="42877697" seo="true" mt="1606919473969" redirect="true"/>
 </manifest>
