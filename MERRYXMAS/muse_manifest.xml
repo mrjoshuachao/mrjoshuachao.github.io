@@ -1,7 +1,7 @@
-<manifest alg="2" build="2017.0.4.363" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x" timestamp="1607590377408">
+<manifest alg="2" build="2017.0.4.363" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="https://mrjoshuachao.github.io" resolutions="1x" timestamp="1607590743697">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="index.css" crc="3902907334" ref="index"/>
+    <file name="index.css" crc="3859142248" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -17,7 +17,8 @@
     </file>
     <file name="wood_metal_award_trophies_2.jpg" crc="149805920" seo="true" ref="index">
       <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3909352879" seo="true" mt="1607590279212" redirect="true"/>
+  <file name="index.html" crc="3842087247" seo="true" mt="1607590739840" redirect="true"/>
 </manifest>
