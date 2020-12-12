@@ -1,0 +1,60 @@
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607768871999">
+  <folder name="css">
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="4255497332" ref="index"/>
+    <file name="job-description---kkbox-group-career.css" crc="24978231" ref="job-description---kkbox-group-career"/>
+  </folder>
+  <folder name="assets">
+    <file name="bg-video.mp4" crc="28962513" seo="true" mt="1607768827000"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:job-description---kkbox-group-career"/>
+    <file name="museutils.js" crc="3939489907" ref="index:job-description---kkbox-group-career"/>
+    <file name="whatinput.js" crc="86476730" ref="index:job-description---kkbox-group-career"/>
+    <file name="museconfig.js" crc="128606099" ref="index:job-description---kkbox-group-career"/>
+    <file name="jquery.watch.js" crc="522499760" ref="index:job-description---kkbox-group-career"/>
+    <file name="require.js" crc="4177726516" ref="index:job-description---kkbox-group-career"/>
+  </folder>
+  <folder name="images">
+    <file name="kkbox-group-career-favicon.ico" crc="485101784" ref="index"/>
+    <file name="layout-0.png" crc="3838586386" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-1.png" crc="3774738875" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-2.png" crc="4054094507" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-3.png" crc="3918301186" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-4.png" crc="126252340" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-5.png" crc="404406642" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-6.png" crc="3994904320" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-7.png" crc="130716864" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="layout-8.png" crc="4267859531" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="job-description---kkbox-group-career-favicon.ico" crc="485101784" ref="job-description---kkbox-group-career"/>
+    <file name="layout-jd-kkbox-1.png" crc="227109646" seo="true" ref="job-description---kkbox-group-career">
+      <caption webpage="job-description---kkbox-group-career" alt=""/>
+    </file>
+    <file name="layout-jd-kkbox-2.png" crc="152865163" seo="true" ref="job-description---kkbox-group-career">
+      <caption webpage="job-description---kkbox-group-career" alt=""/>
+    </file>
+    <file name="layout-jd-kkbox-3.png" crc="3963589143" seo="true" ref="job-description---kkbox-group-career">
+      <caption webpage="job-description---kkbox-group-career" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="290312045" seo="true" mt="1607768517118" redirect="true"/>
+  <file name="job-description---kkbox-group-career.html" crc="168901122" seo="true" mt="1607768417137" redirect="true"/>
+</manifest>
