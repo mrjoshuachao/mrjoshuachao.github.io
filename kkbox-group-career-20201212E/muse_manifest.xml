@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607772066393">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607772271309">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="188778061" ref="index"/>
-    <file name="job-description---kkbox-group-career.css" crc="4000663022" ref="job-description---kkbox-group-career"/>
+    <file name="index.css" crc="4232309155" ref="index"/>
+    <file name="job-description---kkbox-group-career.css" crc="409525218" ref="job-description---kkbox-group-career"/>
   </folder>
   <folder name="assets">
     <file name="bg-video.mp4" crc="318540408" seo="true" mt="1607771348000"/>
@@ -55,6 +55,6 @@
       <caption webpage="job-description---kkbox-group-career" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="50050322" seo="true" mt="1607772054133" redirect="true"/>
-  <file name="job-description---kkbox-group-career.html" crc="528665897" seo="true" mt="1607772040001" redirect="true"/>
+  <file name="index.html" crc="3918594453" seo="true" mt="1607772254223" redirect="true"/>
+  <file name="job-description---kkbox-group-career.html" crc="4230579214" seo="true" mt="1607772263459" redirect="true"/>
 </manifest>
