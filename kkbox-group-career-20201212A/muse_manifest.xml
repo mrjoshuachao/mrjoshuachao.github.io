@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607769554801">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607769644410">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="59811820" ref="index"/>
