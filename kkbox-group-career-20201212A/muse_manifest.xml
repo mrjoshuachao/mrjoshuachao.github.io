@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607768871999">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1607769554801">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4255497332" ref="index"/>
-    <file name="job-description---kkbox-group-career.css" crc="24978231" ref="job-description---kkbox-group-career"/>
+    <file name="index.css" crc="59811820" ref="index"/>
+    <file name="job-description---kkbox-group-career.css" crc="3859756129" ref="job-description---kkbox-group-career"/>
   </folder>
   <folder name="assets">
     <file name="bg-video.mp4" crc="28962513" seo="true" mt="1607768827000"/>
@@ -43,6 +43,7 @@
     </file>
     <file name="layout-8.png" crc="4267859531" seo="true" ref="index">
       <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
     <file name="job-description---kkbox-group-career-favicon.ico" crc="485101784" ref="job-description---kkbox-group-career"/>
     <file name="layout-jd-kkbox-1.png" crc="227109646" seo="true" ref="job-description---kkbox-group-career">
@@ -53,8 +54,9 @@
     </file>
     <file name="layout-jd-kkbox-3.png" crc="3963589143" seo="true" ref="job-description---kkbox-group-career">
       <caption webpage="job-description---kkbox-group-career" alt=""/>
+      <caption webpage="job-description---kkbox-group-career" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="290312045" seo="true" mt="1607768517118" redirect="true"/>
-  <file name="job-description---kkbox-group-career.html" crc="168901122" seo="true" mt="1607768417137" redirect="true"/>
+  <file name="index.html" crc="188612924" seo="true" mt="1607769544471" redirect="true"/>
+  <file name="job-description---kkbox-group-career.html" crc="246814391" seo="true" mt="1607769486189" redirect="true"/>
 </manifest>
