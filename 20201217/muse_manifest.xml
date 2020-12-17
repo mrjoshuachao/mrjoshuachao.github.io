@@ -1,0 +1,40 @@
+<manifest alg="2" build="2017.0.4.363" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.google.com" resolutions="1x,2x" timestamp="1608198526104">
+  <folder name="css">
+    <file name="site_global.css" crc="115987215"/>
+    <file name="index.css" crc="272364958" ref="index"/>
+    <file name="3.css" crc="3904145399" ref="3"/>
+    <file name="1.css" crc="214859709" ref="1"/>
+    <file name="2.css" crc="4251864195" ref="2"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:1:2:3"/>
+    <file name="museutils.js" crc="4216313831" ref="index:1:2:3"/>
+    <file name="whatinput.js" crc="86476730" ref="index:1:2:3"/>
+    <file name="museconfig.js" crc="4177022356" ref="index:1:2:3"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4110862005" ref="index"/>
+    <file name="jquery.watch.js" crc="460461809" ref="index:1:2:3"/>
+    <file name="jquery.scrolleffects.js" crc="128250821" ref="index"/>
+    <file name="require.js" crc="3951022091" ref="index:1:2:3"/>
+  </folder>
+  <folder name="images">
+    <file name="tumblr_piaf8hqokv1sk7i0do1_500.jpg" crc="4165898399" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="65314208_385700175400774_5161079715032727552_n.jpg" crc="12126280" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="65314208_385700175400774_5161079715032727552_n_2x.jpg" crc="132942574" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="67428306_1328441753976941_4692080659382927360_n.jpg" crc="29507295" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="67428306_1328441753976941_4692080659382927360_n_2x.jpg" crc="3920501576" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="4005058799" seo="true" mt="1608198521460" redirect="true"/>
+  <file name="1.html" crc="462299981" seo="true" mt="1608197341011" redirect="true"/>
+  <file name="2.html" crc="4252441089" seo="true" mt="1608197420479" redirect="true"/>
+  <file name="3.html" crc="262408314" seo="true" mt="1608197464828" redirect="true"/>
+</manifest>
