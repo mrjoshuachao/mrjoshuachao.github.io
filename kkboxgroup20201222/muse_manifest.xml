@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1608540545101">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="https://kkboxcorp.com" resolutions="1x,2x" timestamp="1608624143192">
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="4052875385" ref="index"/>
-    <file name="nomq_index.css" crc="3779405372" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="187702018" ref="index"/>
+    <file name="nomq_index.css" crc="468552182" ref="index"/>
   </folder>
   <folder name="assets">
     <file name="bgv-400px.mp4" crc="4188452189" seo="true" mt="1552234688000"/>
@@ -460,5 +460,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3858587084" seo="true" mt="1608540516018" redirect="true"/>
+  <file name="index.html" crc="294333501" seo="true" mt="1608624074644" redirect="true"/>
 </manifest>
