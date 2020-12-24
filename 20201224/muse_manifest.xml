@@ -1,8 +1,8 @@
-<manifest alg="2" build="2017.0.4.363" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.google.com" resolutions="1x,2x" timestamp="1608799421442">
+<manifest alg="2" build="2017.0.4.363" opt="true" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.google.com" resolutions="1x,2x" timestamp="1608800440029">
   <folder name="css">
     <file name="site_global.css" crc="3899272545"/>
     <file name="2.css" crc="4251864195" ref="2"/>
-    <file name="index.css" crc="335531542" ref="index"/>
+    <file name="index.css" crc="250836130" ref="index"/>
     <file name="4.css" crc="83432538" ref="4"/>
     <file name="3.css" crc="3904145399" ref="3"/>
     <file name="1.css" crc="214859709" ref="1"/>
@@ -14,6 +14,10 @@
     <file name="museconfig.js" crc="4177022356" ref="index:1:2:3:4"/>
     <file name="jquery.musepolyfill.bgsize.js" crc="4110862005" ref="index"/>
     <file name="jquery.watch.js" crc="460461809" ref="index:1:2:3:4"/>
+    <file name="webpro.js" crc="4143865194" ref="index"/>
+    <file name="musewpslideshow.js" crc="3781122836" ref="index"/>
+    <file name="jquery.museoverlay.js" crc="4030747646" ref="index"/>
+    <file name="touchswipe.js" crc="4200445185" ref="index"/>
     <file name="jquery.scrolleffects.js" crc="128250821" ref="index"/>
     <file name="require.js" crc="3951022091" ref="index:1:2:3:4"/>
   </folder>
@@ -33,8 +37,34 @@
     <file name="67428306_1328441753976941_4692080659382927360_n_2x.jpg" crc="3920501576" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="69479955_10156279461640264_2393892574675861504_n.jpg" crc="4059175640" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="69479955_10156279461640264_2393892574675861504_n_2x.jpg" crc="3858697855" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="90159745_2740475232949043_8274842274903359488_n.jpg" crc="3988212378" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="90159745_2740475232949043_8274842274903359488_n_2x.jpg" crc="325445891" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="94205825_216682883120226_543369669965250560_n.jpg" crc="390678164" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="94205825_216682883120226_543369669965250560_n_2x.jpg" crc="180293198" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="e.jpg" crc="188979339" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="e_2x.jpg" crc="3984049074" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="loading.gif" crc="3815509949" ref="index"/>
   </folder>
-  <file name="index.html" crc="4159811803" seo="true" mt="1608799274900" redirect="true"/>
+  <file name="index.html" crc="4211568881" seo="true" mt="1608800431629" redirect="true"/>
   <file name="1.html" crc="394517568" seo="true" mt="1608197341011" redirect="true"/>
   <file name="2.html" crc="3802206739" seo="true" mt="1608197420479" redirect="true"/>
   <file name="3.html" crc="497191391" seo="true" mt="1608197464828" redirect="true"/>
