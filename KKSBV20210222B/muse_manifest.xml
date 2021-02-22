@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1613975459449">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1614001457739">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="loom.css" crc="3882436748" ref="loom"/>
-    <file name="stories.css" crc="332695011" ref="stories"/>
-    <file name="kaleido.css" crc="465448228" ref="kaleido"/>
-    <file name="index.css" crc="106476697" ref="index"/>
-    <file name="about.css" crc="98502676" ref="about"/>
-    <file name="moment.css" crc="468003905" ref="moment"/>
+    <file name="loom.css" crc="4249577796" ref="loom"/>
+    <file name="stories.css" crc="390441104" ref="stories"/>
+    <file name="kaleido.css" crc="4215704841" ref="kaleido"/>
+    <file name="index.css" crc="424776564" ref="index"/>
+    <file name="about.css" crc="512497477" ref="about"/>
+    <file name="moment.css" crc="3863685198" ref="moment"/>
   </folder>
   <folder name="assets">
     <file name="bgv.mp4" crc="505201542" seo="true" mt="1613911632000"/>
@@ -27,26 +27,26 @@
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="4152271683" ref="index"/>
-    <file name="picture-perfect.png" crc="3894685612" seo="true" ref="index">
+    <file name="picture-perfect.png" crc="4045465499" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="enterprise.jpg" crc="83031217" seo="true" ref="index">
+    <file name="enterprise.jpg" crc="3980763807" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="1.png" crc="10393625" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="all-logos-1.png" crc="4172290913" seo="true" ref="index">
+    <file name="all-logos-1.png" crc="163361988" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="all-logos-1_2x.png" crc="175433670" seo="true" ref="index">
+    <file name="all-logos-1_2x.png" crc="435557787" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:about"/>
-    <file name="all-logos-2.png" crc="74281308" seo="true" ref="index">
+    <file name="all-logos-2.png" crc="163361988" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="all-logos-2_2x.png" crc="3825197198" seo="true" ref="index">
+    <file name="all-logos-2_2x.png" crc="435557787" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="loading.gif" crc="3815509949" ref="index:about"/>
@@ -55,10 +55,10 @@
     </file>
     <file name="top.png" crc="132620913" seo="true" ref="index:kaleido:moment:loom:about:stories">
       <caption webpage="index" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="kaleido" alt=""/>
-      <caption webpage="about" alt=""/>
       <caption webpage="stories" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="kaleido" alt=""/>
       <caption webpage="moment" alt=""/>
     </file>
     <file name="2.png" crc="4257380111" seo="true" ref="kaleido">
@@ -91,73 +91,48 @@
     <file name="6.png" crc="126342747" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-jcom.png" crc="178618506" seo="true" ref="stories">
+    <file name="logo-giloo.png" crc="422836289" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-jcom_2x.png" crc="4040187421" seo="true" ref="stories">
+    <file name="logo-giloo_2x.png" crc="422836289" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-giloo.png" crc="61448922" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-giloo_2x.png" crc="147525021" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
+    <file name="logo-telasa.png" crc="240741281" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-telasa.png" crc="289272071" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-telasa_2x.png" crc="262648630" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
+    <file name="logo-telasa_2x.png" crc="240741281" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-videopass.png" crc="89566185" seo="true" ref="stories">
+    <file name="logo-kktv.png" crc="3768944432" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-videopass_2x.png" crc="520515650" seo="true" ref="stories">
+    <file name="logo-kktv_2x.png" crc="3768944432" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-kktv.png" crc="536174097" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-kktv_2x.png" crc="3767093484" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
+    <file name="logo-up.png" crc="4122955640" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-up.png" crc="4176847905" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-up_2x.png" crc="3981211276" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
+    <file name="logo-up_2x.png" crc="286310758" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-kktix.png" crc="527911160" seo="true" ref="stories">
+    <file name="footer.png" crc="3763534115" seo="true" ref="index:kaleido:moment:loom:stories">
+      <caption webpage="index" alt=""/>
       <caption webpage="stories" alt=""/>
+      <caption webpage="moment" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="kaleido" alt=""/>
     </file>
-    <file name="logo-kktix_2x.png" crc="3920810892" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
+    <file name="footer-2.png" crc="3935652298" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="logo-kddi.png" crc="351489023" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-kddi_2x.png" crc="4045330962" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-tvbs.png" crc="505696254" seo="true" ref="stories">
-      <caption webpage="stories" alt=""/>
-    </file>
-    <file name="logo-tvbs_2x.png" crc="13316487" seo="true" ref="stories">
+    <file name="all-logos-wall.png" crc="3784329245" seo="true" ref="stories">
       <caption webpage="stories" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="493212026" seo="true" mt="1613975445025" redirect="true"/>
-  <file name="kaleido.html" crc="240455686" seo="true" mt="1613965842868" redirect="true"/>
-  <file name="moment.html" crc="3788345778" seo="true" mt="1613965842013" redirect="true"/>
-  <file name="loom.html" crc="373422315" seo="true" mt="1613965841192" redirect="true"/>
-  <file name="about.html" crc="3841374493" seo="true" mt="1613965839471" redirect="true"/>
-  <file name="stories.html" crc="442105909" seo="true" mt="1613965838562" redirect="true"/>
+  <file name="index.html" crc="4122024101" seo="true" mt="1614001437427" redirect="true"/>
+  <file name="kaleido.html" crc="284706834" seo="true" mt="1614000004480" redirect="true"/>
+  <file name="moment.html" crc="383246369" seo="true" mt="1614000041134" redirect="true"/>
+  <file name="loom.html" crc="463657386" seo="true" mt="1614000072105" redirect="true"/>
+  <file name="about.html" crc="93046079" seo="true" mt="1614000111919" redirect="true"/>
+  <file name="stories.html" crc="425857765" seo="true" mt="1614001391957" redirect="true"/>
 </manifest>
