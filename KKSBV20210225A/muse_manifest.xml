@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1614223231242">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1614223777167">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="220781393" ref="index"/>
-    <file name="loom.css" crc="41821848" ref="loom"/>
-    <file name="kaleido.css" crc="3805892021" ref="kaleido"/>
-    <file name="story.css" crc="407841134" ref="story"/>
-    <file name="moment.css" crc="3762663491" ref="moment"/>
-    <file name="about.css" crc="106920634" ref="about"/>
+    <file name="loom.css" crc="380930872" ref="loom"/>
+    <file name="kaleido.css" crc="4128497685" ref="kaleido"/>
+    <file name="story.css" crc="70338311" ref="story"/>
+    <file name="moment.css" crc="4103020003" ref="moment"/>
+    <file name="about.css" crc="3838244633" ref="about"/>
   </folder>
   <folder name="assets">
     <file name="bgv.mp4" crc="505201542" seo="true" mt="1613911632000"/>
@@ -41,10 +41,10 @@
     </file>
     <file name="footer-dark.png" crc="526621799" seo="true" ref="index:kaleido:moment:loom:story">
       <caption webpage="index" alt=""/>
-      <caption webpage="moment" alt=""/>
       <caption webpage="story" alt=""/>
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="moment" alt=""/>
     </file>
     <file name="interview-mockup.jpg" crc="312420677" seo="true" ref="index:story">
       <caption webpage="index" alt=""/>
@@ -69,11 +69,11 @@
     <file name="loading.gif" crc="3815509949" ref="index:about"/>
     <file name="top-dark.png" crc="434935317" seo="true" ref="index:kaleido:moment:loom:about:story">
       <caption webpage="index" alt=""/>
-      <caption webpage="moment" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="loom" alt=""/>
       <caption webpage="story" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="moment" alt=""/>
     </file>
     <file name="2-dark.png" crc="4012205298" seo="true" ref="kaleido">
       <caption webpage="kaleido" alt=""/>
@@ -133,10 +133,10 @@
       <caption webpage="story" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="193340338" seo="true" mt="1614223223446" redirect="true"/>
-  <file name="kaleido.html" crc="123991574" seo="true" mt="1614223050035" redirect="true"/>
-  <file name="moment.html" crc="4042590024" seo="true" mt="1614223037746" redirect="true"/>
-  <file name="loom.html" crc="3962682068" seo="true" mt="1614223019251" redirect="true"/>
-  <file name="about.html" crc="173095957" seo="true" mt="1614223009741" redirect="true"/>
-  <file name="story.html" crc="3897624576" seo="true" mt="1614222985122" redirect="true"/>
+  <file name="index.html" crc="193340338" seo="true" mt="1614223572040" redirect="true"/>
+  <file name="kaleido.html" crc="4128959667" seo="true" mt="1614223758190" redirect="true"/>
+  <file name="moment.html" crc="4280987850" seo="true" mt="1614223745425" redirect="true"/>
+  <file name="loom.html" crc="3783356179" seo="true" mt="1614223717542" redirect="true"/>
+  <file name="about.html" crc="3499424" seo="true" mt="1614223709367" redirect="true"/>
+  <file name="story.html" crc="207059632" seo="true" mt="1614223691274" redirect="true"/>
 </manifest>
