@@ -6,34 +6,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/1-dark.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enterprise.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/enterprise-words.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-2.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-2_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment.jpg</image:loc>
@@ -46,6 +19,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment-center_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
@@ -72,7 +51,25 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/enterprise.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/enterprise-words.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-2_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
@@ -81,10 +78,13 @@
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -93,13 +93,13 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/2-dark.png</image:loc>
@@ -144,22 +144,22 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/4-dark.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/4-dark.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-loom.jpg</image:loc>
@@ -177,19 +177,19 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/6-dark-a.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/interview-mockup.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/6-dark-a.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/image-telasa-1280x800.jpg</image:loc>
@@ -225,22 +225,22 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/footer-dark.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/3-dark.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/3-dark.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-moment.jpg</image:loc>
