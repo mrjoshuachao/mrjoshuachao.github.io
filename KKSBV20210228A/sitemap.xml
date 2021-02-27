@@ -213,9 +213,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/6-dark-a.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-mockup.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/image-telasa-1280x800.jpg</image:loc>
     </image:image>
     <image:image>
@@ -247,6 +244,9 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-contact-us_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi.jpg</image:loc>
     </image:image>
   </url>
   <url>
