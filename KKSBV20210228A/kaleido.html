@@ -10,17 +10,17 @@
 document.documentElement.className = document.documentElement.className.replace(/\bnojs\b/g, 'js');
 
 // Check that all required assets are uploaded and up-to-date
-if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "webpro.js", "musewpslideshow.js", "jquery.museoverlay.js", "touchswipe.js", "jquery.watch.js", "require.js", "kaleido.css"], "outOfDate":[]};
+if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required":["museutils.js", "museconfig.js", "webpro.js", "musewpslideshow.js", "jquery.museoverlay.js", "touchswipe.js", "jquery.watch.js", "jquery.musepolyfill.bgsize.js", "require.js", "kaleido.css"], "outOfDate":[]};
 </script>
   
   <link rel="shortcut icon" href="images/a-master-favicon.ico?crc=4152271683"/>
   <title>BlendVision Kaleido | KKStream</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=229390053"/>
-  <link rel="stylesheet" type="text/css" href="css/kaleido.css?crc=4076953991" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/kaleido.css?crc=335298078" id="pagesheet"/>
   <!-- Other scripts -->
   <script type="text/javascript">
-   (function(c){var b={src:(c.location.protocol=="https:"?"https:":"http:")+"//use.typekit.net/ik/QNYafoWoYhAh2flhg5csFZfr840umbmuV-x1EHAjwrbfeCwgfw013b6PHQIa52bawRbDWh9ajhJk5ABqZQ4KFDqUjQBRFQZcFQbkjAZqw2IDZeJaeqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJ-emkdku0ZWS7f6R86MJbMg6YJMJ7f6Ri6MJbMg62JMJ7f6R66MJbMg6BJMJ7f6Rp6MJbMg6IJM4HgIuuShAbMpn8_GIe.js",scriptTimeout:3000,async:!0},d=c.documentElement,a=setTimeout(function(){d.className=d.className.replace(/\bwf-loading\b/g,"")+" wf-inactive"},b.scriptTimeout),f=c.createElement("script"),c=c.getElementsByTagName("script")[0],h=!1,g=null;d.className+=" wf-loading";f.src=b.src;f.async=!0;f.onload=f.onreadystatechange=function(){g=this.readyState;if(!(h||g&&g!="complete"&&g!="loaded")){h=!0;clearTimeout(a);
+   (function(c){var b={src:(c.location.protocol=="https:"?"https:":"http:")+"//use.typekit.net/ik/xp2aNnXU5DcelCz4FT21tvsor2BEkovXDqQoa3ldU3wfeCwgfw013b6PHQIa52bawRbDWDmy5QjUjhBKwAbtjQwD5emq5QmRwD4yFRbaZcmywQjueqG7Ocuk-cND-Ymyjhyydko1-WsGiAJ0-AvCdW47daFGiABR-eBzOciTieyujKoTdkUaiaS0dW47daFGiABR-eBzOciTieyujKoTdkJJ-emkdku0ZWS7f6R86MJbMg6YJMJ7f6Ri6MJbMg62JMJ7f6R66MJbMg6BJMJ7f6Rp6MJbMg6IJM4HgIuuShAbMSdJ_tIe.js",scriptTimeout:3000,async:!0},d=c.documentElement,a=setTimeout(function(){d.className=d.className.replace(/\bwf-loading\b/g,"")+" wf-inactive"},b.scriptTimeout),f=c.createElement("script"),c=c.getElementsByTagName("script")[0],h=!1,g=null;d.className+=" wf-loading";f.src=b.src;f.async=!0;f.onload=f.onreadystatechange=function(){g=this.readyState;if(!(h||g&&g!="complete"&&g!="loaded")){h=!0;clearTimeout(a);
 try{Typekit.load(b)}catch(c){}}};c.parentNode.insertBefore(f,c)})(document);
 
 </script>
@@ -167,25 +167,24 @@ try{Typekit.load(b)}catch(c){}}};c.parentNode.insertBefore(f,c)})(document);
     <div class="browser_width colelem" id="u31075-bw">
      <div id="u31075"><!-- group -->
       <div class="clearfix" id="u31075_align_to_page">
-       <div class="clip_frame grpelem" id="u30523"><!-- image -->
-        <img class="block" id="u30523_img" src="images/hero-kaleido.jpg?crc=425310901" alt="" width="1600" height="900"/>
-       </div>
-       <div class="clip_frame grpelem" id="u30655"><!-- image -->
-        <img class="block" id="u30655_img" src="images/logotype-blendvision163x29.png?crc=272492862" data-hidpi-src="images/logotype-blendvision163x29_2x.png?crc=4038830199" alt="" width="163" height="29"/>
-       </div>
-       <div class="clip_frame grpelem" id="u30663"><!-- image -->
-        <img class="block" id="u30663_img" src="images/logotype-kaleido.png?crc=4057674906" data-hidpi-src="images/logotype-kaleido_2x.png?crc=3849273489" alt="" width="317" height="59"/>
-       </div>
-       <a class="nonblock nontext clearfix grpelem" id="u34303-4" href="loom.html"><!-- content --><p>Iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore.</p></a>
-       <div class="clearfix grpelem" id="u34349"><!-- group -->
-        <div class="clip_frame grpelem" id="u34339"><!-- image -->
-         <img class="block" id="u34339_img" src="images/button-tall-wide.png?crc=4243416581" data-hidpi-src="images/button-tall-wide_2x.png?crc=3792380732" alt="" width="300" height="63"/>
+       <div class="museBGSize clearfix grpelem" id="u38760"><!-- column -->
+        <div class="clip_frame colelem" id="u30655"><!-- image -->
+         <img class="block" id="u30655_img" src="images/logotype-blendvision163x29.png?crc=272492862" data-hidpi-src="images/logotype-blendvision163x29_2x.png?crc=4038830199" alt="" width="163" height="29"/>
         </div>
-        <div class="clearfix grpelem" id="u34306"><!-- group -->
-         <div class="clearfix grpelem" id="u34309"><!-- group -->
-          <div class="pointer_cursor MuseLinkActive clearfix grpelem" id="u34310-5"><!-- content -->
-           <a class="block" href="kaleido.html"><!-- Block link tag --></a>
-           <p><a class="nonblock" href="kaleido.html"><span id="u34310">Download datasheet</span></a></p>
+        <div class="clip_frame colelem" id="u30663"><!-- image -->
+         <img class="block" id="u30663_img" src="images/logotype-kaleido.png?crc=4057674906" data-hidpi-src="images/logotype-kaleido_2x.png?crc=3849273489" alt="" width="317" height="59"/>
+        </div>
+        <a class="nonblock nontext clearfix colelem" id="u34303-4" href="loom.html"><!-- content --><p>Iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore.</p></a>
+        <div class="clearfix colelem" id="u34349"><!-- group -->
+         <div class="clip_frame grpelem" id="u34339"><!-- image -->
+          <img class="block" id="u34339_img" src="images/button-tall-wide.png?crc=4243416581" data-hidpi-src="images/button-tall-wide_2x.png?crc=3792380732" alt="" width="300" height="63"/>
+         </div>
+         <div class="clearfix grpelem" id="u34306"><!-- group -->
+          <div class="clearfix grpelem" id="u34309"><!-- group -->
+           <div class="pointer_cursor MuseLinkActive clearfix grpelem" id="u34310-5"><!-- content -->
+            <a class="block" href="kaleido.html"><!-- Block link tag --></a>
+            <p><a class="nonblock" href="kaleido.html"><span id="u34310">Download datasheet</span></a></p>
+           </div>
           </div>
          </div>
         </div>
@@ -193,27 +192,23 @@ try{Typekit.load(b)}catch(c){}}};c.parentNode.insertBefore(f,c)})(document);
       </div>
      </div>
     </div>
-    <div class="clearfix colelem" id="pu34532"><!-- group -->
+    <div class="clearfix colelem" id="u39611"><!-- group -->
      <div class="grpelem" id="u34532"><!-- content --></div>
-     <a class="nonblock nontext clearfix grpelem" id="u34284-7" href="loom.html"><!-- content --><p id="u34284-2">An overview sentence explaining what Kaleido is.</p><p id="u34284-3">&nbsp;</p><p id="u34284-5">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait.</p></a>
+     <a class="nonblock nontext clearfix grpelem" id="u34284-9" href="loom.html"><!-- content --><p id="u34284-2">An overview sentence</p><p id="u34284-4">explaining what Kaleido is.</p><p id="u34284-5">&nbsp;</p><p id="u34284-7">Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait.</p></a>
     </div>
     <div class="browser_width colelem" id="u35433-bw">
      <div id="u35433"><!-- group -->
       <div class="clearfix" id="u35433_align_to_page">
-       <div class="clearfix grpelem" id="u34529"><!-- group -->
-        <div class="clip_frame grpelem" id="u34235"><!-- image -->
-         <img class="block" id="u34235_img" src="images/interview-kddi-2.jpg?crc=72065762" alt="" width="1600" height="675"/>
-        </div>
-        <div class="clearfix grpelem" id="u34237-13"><!-- content -->
-         <p id="u34237-2">“Once you get used to having a high-fidelity</p>
-         <p id="u34237-4">prototype as your deliverable it’s hard to go back</p>
-         <p id="u34237-6">to the days of just sending your engineering team</p>
-         <p id="u34237-8">a static file and asking them to go build it.”</p>
-         <p id="u34237-9">&nbsp;</p>
-         <p id="u34237-11">Doug DeMarco, Design Manager at KDDI</p>
-        </div>
-        <div class="clip_frame grpelem" id="u34233"><!-- image -->
-         <img class="block" id="u34233_img" src="images/client-logo-kddi-white.png?crc=159290551" data-hidpi-src="images/client-logo-kddi-white_2x.png?crc=3960143994" alt="" width="222" height="109"/>
+       <div class="clearfix grpelem" id="u38728"><!-- group -->
+        <div class="museBGSize clearfix grpelem" id="u38731"><!-- column -->
+         <div class="clip_frame colelem" id="u38729"><!-- image -->
+          <img class="block" id="u38729_img" src="images/client-logo-kddi-white.png?crc=159290551" data-hidpi-src="images/client-logo-kddi-white_2x.png?crc=3960143994" alt="" width="222" height="109"/>
+         </div>
+         <div class="clearfix colelem" id="u38732-7"><!-- content -->
+          <p id="u38732-2">“Once you get used to having a high-fidelity prototype as your deliverable it’s hard to go back to the days of just sending your engineering team a static file and asking them to go build it.”</p>
+          <p id="u38732-3">&nbsp;</p>
+          <p id="u38732-5">Doug DeMarco, Design Manager at KDDI</p>
+         </div>
         </div>
        </div>
       </div>
@@ -235,20 +230,16 @@ try{Typekit.load(b)}catch(c){}}};c.parentNode.insertBefore(f,c)})(document);
     <div class="browser_width colelem" id="u35436-bw">
      <div id="u35436"><!-- group -->
       <div class="clearfix" id="u35436_align_to_page">
-       <div class="clearfix grpelem" id="u34252"><!-- group -->
-        <div class="clip_frame grpelem" id="u34256"><!-- image -->
-         <img class="block" id="u34256_img" src="images/interview-kddi-2.jpg?crc=72065762" alt="" width="1600" height="675"/>
-        </div>
-        <div class="clearfix grpelem" id="u34253-13"><!-- content -->
-         <p id="u34253-2">“Once you get used to having a high-fidelity</p>
-         <p id="u34253-4">prototype as your deliverable it’s hard to go back</p>
-         <p id="u34253-6">to the days of just sending your engineering team</p>
-         <p id="u34253-8">a static file and asking them to go build it.”</p>
-         <p id="u34253-9">&nbsp;</p>
-         <p id="u34253-11">Doug DeMarco, Design Manager at KDDI</p>
-        </div>
-        <div class="clip_frame grpelem" id="u34254"><!-- image -->
-         <img class="block" id="u34254_img" src="images/client-logo-kddi-white.png?crc=159290551" data-hidpi-src="images/client-logo-kddi-white_2x.png?crc=3960143994" alt="" width="222" height="109"/>
+       <div class="clearfix grpelem" id="u38744"><!-- group -->
+        <div class="museBGSize clearfix grpelem" id="u38747"><!-- column -->
+         <div class="clip_frame colelem" id="u38745"><!-- image -->
+          <img class="block" id="u38745_img" src="images/client-logo-kddi-white.png?crc=159290551" data-hidpi-src="images/client-logo-kddi-white_2x.png?crc=3960143994" alt="" width="222" height="109"/>
+         </div>
+         <div class="clearfix colelem" id="u38748-7"><!-- content -->
+          <p id="u38748-2">“Once you get used to having a high-fidelity prototype as your deliverable it’s hard to go back to the days of just sending your engineering team a static file and asking them to go build it.”</p>
+          <p id="u38748-3">&nbsp;</p>
+          <p id="u38748-5">Doug DeMarco, Design Manager at KDDI</p>
+         </div>
         </div>
        </div>
       </div>
@@ -263,106 +254,107 @@ try{Typekit.load(b)}catch(c){}}};c.parentNode.insertBefore(f,c)})(document);
      <p>Ready to get started?</p>
     </div>
     <div class="clearfix colelem" id="pu34577-4"><!-- group -->
-     <a class="nonblock nontext clearfix grpelem" id="u34577-4" href="loom.html"><!-- content --><p>Nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p></a>
+     <a class="nonblock nontext clearfix grpelem" id="u34577-4" href="loom.html"><!-- content --><p>Nonummy nibh euismod tincidunt ut laoreet dolore.</p></a>
      <div class="clearfix grpelem" id="u34592"><!-- group -->
       <div class="clip_frame grpelem" id="u34596"><!-- image -->
        <img class="block" id="u34596_img" src="images/button-tall-wide.png?crc=4243416581" data-hidpi-src="images/button-tall-wide_2x.png?crc=3792380732" alt="" width="300" height="63"/>
       </div>
       <div class="clearfix grpelem" id="u34593"><!-- group -->
        <div class="clearfix grpelem" id="u34594"><!-- group -->
-        <div class="pointer_cursor MuseLinkActive clearfix grpelem" id="u34595-5"><!-- content -->
-         <a class="block" href="kaleido.html"><!-- Block link tag --></a>
+        <div class="clearfix grpelem" id="u34595-5"><!-- content -->
          <p><a class="nonblock" href="kaleido.html"><span id="u34595">Request for demo</span></a></p>
         </div>
        </div>
       </div>
      </div>
     </div>
-    <div class="clearfix colelem" id="pu34115"><!-- group -->
-     <div class="browser_width grpelem" id="u34115-bw">
-      <div id="u34115"><!-- column -->
-       <div class="clearfix" id="u34115_align_to_page">
-        <div class="clearfix colelem" id="pu34128"><!-- group -->
-         <a class="nonblock nontext clip_frame grpelem" id="u34128" href="index.html"><!-- image --><img class="block" id="u34128_img" src="images/logomark-kkstream-white.png?crc=440592819" data-hidpi-src="images/logomark-kkstream-white_2x.png?crc=4181610472" alt="" width="28" height="28"/></a>
-         <div class="clearfix grpelem" id="u34116-4"><!-- content -->
-          <p id="u34116-2"><span id="u34116">Product</span></p>
+    <div class="clearfix colelem" id="pu38929"><!-- group -->
+     <div class="browser_width grpelem" id="u38929-bw">
+      <div id="u38929"><!-- column -->
+       <div class="clearfix" id="u38929_align_to_page">
+        <div class="clearfix colelem" id="pu38925"><!-- group -->
+         <div class="clip_frame grpelem" id="u38925"><!-- image -->
+          <img class="block" id="u38925_img" src="images/logomark-kkstream-white.png?crc=440592819" data-hidpi-src="images/logomark-kkstream-white_2x.png?crc=4181610472" alt="" width="28" height="28"/>
          </div>
-         <div class="clearfix grpelem" id="u34124-4"><!-- content -->
-          <p id="u34124-2"><span id="u34124">Who We Are</span></p>
+         <div class="clearfix grpelem" id="u38913-4"><!-- content -->
+          <p id="u38913-2"><span id="u38913">Product</span></p>
          </div>
-         <div class="clearfix grpelem" id="u34121-4"><!-- content -->
-          <p id="u34121-2"><span id="u34121">Support</span></p>
+         <div class="clearfix grpelem" id="u38932-4"><!-- content -->
+          <p id="u38932-2"><span id="u38932">Who We Are</span></p>
          </div>
-         <div class="clearfix grpelem" id="u34130"><!-- group -->
-          <a class="nonblock nontext clip_frame grpelem" id="u34131" href="mailto:info@kkstream.com"><!-- image --><img class="block" id="u34131_img" src="images/button.png?crc=4150511824" data-hidpi-src="images/button_2x.png?crc=16391153" alt="" width="132" height="32"/></a>
-          <div class="clearfix grpelem" id="u34133"><!-- group -->
-           <div class="pointer_cursor clearfix grpelem" id="u34134-5"><!-- content -->
+         <div class="clearfix grpelem" id="u38928-4"><!-- content -->
+          <p id="u38928-2"><span id="u38928">Support</span></p>
+         </div>
+         <div class="clearfix grpelem" id="u38915"><!-- group -->
+          <a class="nonblock nontext clip_frame grpelem" id="u38918" href="mailto:info@kkstream.com"><!-- image --><img class="block" id="u38918_img" src="images/button.png?crc=4150511824" data-hidpi-src="images/button_2x.png?crc=16391153" alt="" width="132" height="32"/></a>
+          <div class="clearfix grpelem" id="u38916"><!-- group -->
+           <div class="pointer_cursor clearfix grpelem" id="u38917-5"><!-- content -->
             <a class="block" href="mailto:info@kkstream.com"><!-- Block link tag --></a>
-            <p id="u34134-3"><a class="nonblock" href="mailto:info@kkstream.com"><span id="u34134">Contect Us</span></a></p>
+            <p id="u38917-3"><a class="nonblock" href="mailto:info@kkstream.com"><span id="u38917">Contect Us</span></a></p>
            </div>
           </div>
          </div>
         </div>
-        <div class="clearfix colelem" id="pu34117-5"><!-- group -->
-         <div class="pointer_cursor MuseLinkActive clearfix grpelem" id="u34117-5"><!-- content -->
+        <div class="clearfix colelem" id="pu38920-5"><!-- group -->
+         <div class="pointer_cursor MuseLinkActive clearfix grpelem" id="u38920-5"><!-- content -->
           <a class="block" href="kaleido.html"><!-- Block link tag --></a>
-          <p id="u34117-3"><a class="nonblock" href="kaleido.html"><span id="u34117">Kaleido</span></a></p>
+          <p id="u38920-3"><a class="nonblock" href="kaleido.html"><span id="u38920">Kaleido</span></a></p>
          </div>
-         <div class="pointer_cursor clearfix grpelem" id="u34125-5"><!-- content -->
+         <div class="pointer_cursor clearfix grpelem" id="u38906-5"><!-- content -->
           <a class="block" href="about.html"><!-- Block link tag --></a>
-          <p id="u34125-3"><a class="nonblock" href="about.html"><span id="u34125">About KKStream</span></a></p>
+          <p id="u38906-3"><a class="nonblock" href="about.html"><span id="u38906">About KKStream</span></a></p>
          </div>
-         <div class="clearfix grpelem" id="u34122-4"><!-- content -->
-          <p id="u34122-2"><span id="u34122">FAQ</span></p>
+         <div class="clearfix grpelem" id="u38902-4"><!-- content -->
+          <p id="u38902-2"><span id="u38902">FAQ</span></p>
          </div>
         </div>
-        <div class="clearfix colelem" id="u34135"><!-- group -->
-         <div class="clip_frame grpelem" id="u34138"><!-- image -->
-          <img class="block" id="u34138_img" src="images/button.png?crc=4150511824" data-hidpi-src="images/button_2x.png?crc=16391153" alt="" width="132" height="32"/>
+        <div class="clearfix colelem" id="u38907"><!-- group -->
+         <div class="clip_frame grpelem" id="u38910"><!-- image -->
+          <img class="block" id="u38910_img" src="images/button.png?crc=4150511824" data-hidpi-src="images/button_2x.png?crc=16391153" alt="" width="132" height="32"/>
          </div>
-         <div class="clearfix grpelem" id="u34136"><!-- group -->
-          <div class="clearfix grpelem" id="u34137-4"><!-- content -->
-           <p id="u34137-2"><span id="u34137">Subscribe</span></p>
+         <div class="clearfix grpelem" id="u38908"><!-- group -->
+          <div class="clearfix grpelem" id="u38909-4"><!-- content -->
+           <p id="u38909-2"><span id="u38909">Subscribe</span></p>
           </div>
          </div>
         </div>
-        <div class="clearfix colelem" id="pu34119-5"><!-- group -->
-         <div class="pointer_cursor clearfix grpelem" id="u34119-5"><!-- content -->
+        <div class="clearfix colelem" id="pu38921-5"><!-- group -->
+         <div class="pointer_cursor clearfix grpelem" id="u38921-5"><!-- content -->
           <a class="block" href="moment.html"><!-- Block link tag --></a>
-          <p id="u34119-3"><a class="nonblock" href="moment.html"><span id="u34119">Moment</span></a></p>
+          <p id="u38921-3"><a class="nonblock" href="moment.html"><span id="u38921">Moment</span></a></p>
          </div>
-         <div class="pointer_cursor clearfix grpelem" id="u34126-5"><!-- content -->
+         <div class="pointer_cursor clearfix grpelem" id="u38927-5"><!-- content -->
           <a class="block" href="story.html"><!-- Block link tag --></a>
-          <p id="u34126-3"><a class="nonblock" href="story.html"><span id="u34126">Success Story</span></a></p>
+          <p id="u38927-3"><a class="nonblock" href="story.html"><span id="u38927">Success Story</span></a></p>
          </div>
-         <div class="clearfix grpelem" id="u34123-4"><!-- content -->
-          <p id="u34123-2"><span id="u34123">Pricavy Policy</span></p>
+         <div class="clearfix grpelem" id="u38912-4"><!-- content -->
+          <p id="u38912-2"><span id="u38912">Pricavy Policy</span></p>
          </div>
         </div>
-        <div class="clearfix colelem" id="pu34120-5"><!-- group -->
-         <div class="pointer_cursor clearfix grpelem" id="u34120-5"><!-- content -->
+        <div class="clearfix colelem" id="pu38933-5"><!-- group -->
+         <div class="pointer_cursor clearfix grpelem" id="u38933-5"><!-- content -->
           <a class="block" href="loom.html"><!-- Block link tag --></a>
-          <p id="u34120-3"><a class="nonblock" href="loom.html"><span id="u34120">Loom</span></a></p>
+          <p id="u38933-3"><a class="nonblock" href="loom.html"><span id="u38933">Loom</span></a></p>
          </div>
-         <div class="pointer_cursor clearfix grpelem" id="u34127-5"><!-- content -->
+         <div class="pointer_cursor clearfix grpelem" id="u38914-5"><!-- content -->
           <a class="block" href="https://careers.kkboxcorp.com/"><!-- Block link tag --></a>
-          <p id="u34127-3"><a class="nonblock" href="https://careers.kkboxcorp.com/"><span id="u34127">Career</span></a></p>
+          <p id="u38914-3"><a class="nonblock" href="https://careers.kkboxcorp.com/"><span id="u38914">Career</span></a></p>
          </div>
         </div>
-        <div class="colelem" id="u34140"><!-- simple frame --></div>
-        <div class="clearfix colelem" id="pu34118-4"><!-- group -->
-         <div class="clearfix grpelem" id="u34118-4"><!-- content -->
-          <p id="u34118-2"><span id="u34118">Copyright © 2021 KKStream Limited. All rights reserved.</span></p>
+        <div class="colelem" id="u38924"><!-- simple frame --></div>
+        <div class="clearfix colelem" id="pu38901-4"><!-- group -->
+         <div class="clearfix grpelem" id="u38901-4"><!-- content -->
+          <p id="u38901-2"><span id="u38901">Copyright © 2021 KKStream Limited. All rights reserved.</span></p>
          </div>
-         <a class="nonblock nontext clip_frame grpelem" id="u34141" href="https://www.facebook.com/KKStream.tv"><!-- image --><img class="block" id="u34141_img" src="images/icon-facebook.png?crc=30995328" data-hidpi-src="images/icon-facebook_2x.png?crc=406218879" alt="" width="28" height="28"/></a>
-         <a class="nonblock nontext clip_frame grpelem" id="u34143" href="https://www.linkedin.com/company/kkstream/"><!-- image --><img class="block" id="u34143_img" src="images/icon-linkedin.png?crc=136697959" data-hidpi-src="images/icon-linkedin_2x.png?crc=287821772" alt="" width="28" height="28"/></a>
-         <a class="nonblock nontext clip_frame grpelem" id="u34145" href="https://medium.com/kkstream"><!-- image --><img class="block" id="u34145_img" src="images/icon-medium.png?crc=51672205" data-hidpi-src="images/icon-medium_2x.png?crc=166256047" alt="" width="28" height="28"/></a>
+         <a class="nonblock nontext clip_frame grpelem" id="u38904" href="https://www.facebook.com/KKStream.tv"><!-- image --><img class="block" id="u38904_img" src="images/icon-facebook.png?crc=30995328" data-hidpi-src="images/icon-facebook_2x.png?crc=406218879" alt="" width="28" height="28"/></a>
+         <a class="nonblock nontext clip_frame grpelem" id="u38930" href="https://www.linkedin.com/company/kkstream/"><!-- image --><img class="block" id="u38930_img" src="images/icon-linkedin.png?crc=136697959" data-hidpi-src="images/icon-linkedin_2x.png?crc=287821772" alt="" width="28" height="28"/></a>
+         <a class="nonblock nontext clip_frame grpelem" id="u38922" href="https://medium.com/kkstream"><!-- image --><img class="block" id="u38922_img" src="images/icon-medium.png?crc=51672205" data-hidpi-src="images/icon-medium_2x.png?crc=166256047" alt="" width="28" height="28"/></a>
         </div>
        </div>
       </div>
      </div>
-     <div class="browser_width grpelem" id="u34611-bw">
-      <div id="u34611"><!-- simple frame --></div>
+     <div class="browser_width grpelem" id="u38903-bw">
+      <div id="u38903"><!-- simple frame --></div>
      </div>
     </div>
    </div>
@@ -379,7 +371,7 @@ var suppressMissingFileError = false
 k[1]:null,k=k&&k[2]?k[2]:null;switch(k.toLowerCase()){case "css":i=i.replace(/\W/gi,"_").replace(/^([^a-z])/gi,"_$1");g.className+=" "+i;i=a(d(g,"color"));k=a(d(g,"backgroundColor"));i!=0||k!=0?(Muse.assets.required.splice(j,1),"undefined"!=typeof b[l]&&(i!=b[l]>>>24||k!=(b[l]&16777215))&&Muse.assets.outOfDate.push(l)):j++;g.className="version";break;case "js":j++;break;default:throw Error("Unsupported file type: "+k);}}c?c().jquery!="1.8.3"&&Muse.assets.outOfDate.push("jquery-1.8.3.min.js"):Muse.assets.required.push("jquery-1.8.3.min.js");
 g.parentNode.removeChild(g);if(Muse.assets.outOfDate.length||Muse.assets.required.length)g="Some files on the server may be missing or incorrect. Clear browser cache and try again. If the problem persists please contact website author.",f&&Muse.assets.outOfDate.length&&(g+="\nOut of date: "+Muse.assets.outOfDate.join(",")),f&&Muse.assets.required.length&&(g+="\nMissing: "+Muse.assets.required.join(",")),suppressMissingFileError?(g+="\nUse SuppressMissingFileError key in AppPrefs.xml to show missing file error pop up.",console.log(g)):alert(g)};location&&location.search&&location.search.match&&location.search.match(/muse_debug/gi)?
 setTimeout(function(){f(!0)},5E3):f()}};
-var muse_init=function(){require.config({baseUrl:""});require(["jquery","museutils","whatinput","webpro","musewpslideshow","jquery.museoverlay","touchswipe","jquery.watch"],function(c){var $ = c;$(document).ready(function(){try{
+var muse_init=function(){require.config({baseUrl:""});require(["jquery","museutils","whatinput","webpro","musewpslideshow","jquery.museoverlay","touchswipe","jquery.musepolyfill.bgsize","jquery.watch"],function(c){var $ = c;$(document).ready(function(){try{
 window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
