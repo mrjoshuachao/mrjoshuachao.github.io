@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2021-02-28</lastmod>
+    <lastmod>2021-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -46,21 +46,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-all-logos-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-all-logos-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-all-logos-2.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-all-logos-2_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
@@ -140,15 +125,24 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center250x47_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall_2x2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall_2x_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
     <lastmod>2021-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
     </image:image>
@@ -207,9 +201,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
     </image:image>
     <image:image>
@@ -266,9 +257,6 @@
     <lastmod>2021-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
     </image:image>
@@ -368,9 +356,6 @@
     <lastmod>2021-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/interview-kddi-2.jpg</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
     </image:image>
