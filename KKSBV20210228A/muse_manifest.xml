@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1614916719681">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1614917688392">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="moment.css" crc="206498108" ref="moment"/>
     <file name="story.css" crc="352162194" ref="story"/>
-    <file name="index.css" crc="529370834" ref="index"/>
+    <file name="index.css" crc="3862054657" ref="index"/>
     <file name="loom.css" crc="4216791991" ref="loom"/>
     <file name="about.css" crc="410997937" ref="about"/>
     <file name="kaleido.css" crc="116981139" ref="kaleido"/>
@@ -115,29 +115,19 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-blendvision.png" crc="3782959859" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
+    <file name="logotype-kaleido-center.png" crc="4270480723" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-blendvision_2x.png" crc="4038830199" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
+    <file name="logotype-kaleido-center_2x.png" crc="4045734289" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-kaleido-center.png" crc="251169553" seo="true" ref="index">
+    <file name="hero-small-kaleido.jpg" crc="135094631" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-kaleido-center_2x.png" crc="282417676" seo="true" ref="index">
+    <file name="hero-small-moment.jpg" crc="3933303735" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-small-kaleido.jpg" crc="3928074032" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-moment.jpg" crc="21865606" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-loom.jpg" crc="4090206323" seo="true" ref="index">
+    <file name="hero-small-loom.jpg" crc="3929609455" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="business.jpg" crc="209781903" seo="true" ref="index">
@@ -191,16 +181,16 @@
       <caption webpage="story" alt=""/>
       <caption webpage="story" alt=""/>
     </file>
-    <file name="logotype-moment-center.png" crc="414653959" seo="true" ref="index">
+    <file name="logotype-moment-center.png" crc="3823189746" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-moment-center_2x.png" crc="451973027" seo="true" ref="index">
+    <file name="logotype-moment-center_2x.png" crc="437614518" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-loom-center.png" crc="4102379473" seo="true" ref="index">
+    <file name="logotype-loom-center.png" crc="4136861322" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-loom-center_2x.png" crc="3985071719" seo="true" ref="index">
+    <file name="logotype-loom-center_2x.png" crc="4199508234" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="icon-facebook.png" crc="30995328" seo="true" ref="index:kaleido:moment:loom:about:story">
@@ -351,54 +341,64 @@
     <file name="logotype-blendvision159x29_2x.png" crc="304263146" seo="true" ref="kaleido">
       <caption webpage="kaleido" alt=""/>
     </file>
-    <file name="hero-small-kaleido350x433.jpg" crc="4042082463" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-kaleido350x433_2x.jpg" crc="135094631" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-moment350x433.jpg" crc="3938491987" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-moment350x433_2x.jpg" crc="3933303735" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-loom350x433.jpg" crc="4260898452" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-small-loom350x433_2x.jpg" crc="3929609455" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logotype-blendvision96x17.png" crc="142137559" seo="true" ref="index">
+    <file name="logotype-blendvision96x17.png" crc="3967973935" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-blendvision96x17_2x.png" crc="3782959859" seo="true" ref="index">
+    <file name="logotype-blendvision96x17_2x.png" crc="3779553338" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-kaleido-center200x38.png" crc="401980597" seo="true" ref="index">
+    <file name="logotype-kaleido-center200x38.png" crc="3969538741" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-kaleido-center200x38_2x.png" crc="251169553" seo="true" ref="index">
+    <file name="logotype-kaleido-center200x38_2x.png" crc="457273981" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-moment-center200x38.png" crc="427876808" seo="true" ref="index">
+    <file name="logotype-moment-center200x38.png" crc="196438464" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-moment-center200x38_2x.png" crc="414653959" seo="true" ref="index">
+    <file name="logotype-moment-center200x38_2x.png" crc="461150447" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-loom-center200x38.png" crc="4211495963" seo="true" ref="index">
+    <file name="logotype-loom-center200x38.png" crc="530516103" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logotype-loom-center200x38_2x.png" crc="4102379473" seo="true" ref="index">
+    <file name="logotype-loom-center200x38_2x.png" crc="4174812280" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-kaleido300x371.jpg" crc="4092679072" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-kaleido300x371_2x.jpg" crc="94242948" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-moment300x371.jpg" crc="3790091803" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-moment300x371_2x.jpg" crc="363509374" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-loom300x371.jpg" crc="3775884229" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-loom300x371_2x.jpg" crc="4251402967" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision144x26.png" crc="3975091928" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision144x26_2x.png" crc="528146643" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4178347372" seo="true" mt="1614916695444" redirect="true"/>
+  <file name="index.html" crc="268009936" seo="true" mt="1614917675907" redirect="true"/>
   <file name="kaleido.html" crc="235051803" seo="true" mt="1614593975353" redirect="true"/>
   <file name="moment.html" crc="4216089121" seo="true" mt="1614593985384" redirect="true"/>
   <file name="loom.html" crc="405273547" seo="true" mt="1614593991722" redirect="true"/>
