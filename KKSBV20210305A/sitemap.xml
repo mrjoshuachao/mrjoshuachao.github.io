@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -140,7 +140,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/kaleido.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -200,7 +200,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -254,7 +254,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/about.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -290,7 +290,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/loom.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -344,7 +344,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story.html</loc>
-    <lastmod>2021-03-05</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -452,13 +452,13 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.webm</loc>
-    <lastmod>2021-03-03</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.mp4</loc>
-    <lastmod>2021-03-03</lastmod>
+    <lastmod>2021-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
