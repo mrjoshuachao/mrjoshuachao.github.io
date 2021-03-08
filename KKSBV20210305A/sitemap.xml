@@ -6,34 +6,10 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371_2x.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision96x17.png</image:loc>
@@ -42,22 +18,34 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision96x17_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center200x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center200x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment-center200x38.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment-center200x38_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center200x38.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center200x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center200x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center200x38_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall.png</image:loc>
@@ -76,6 +64,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom.jpg</image:loc>
@@ -114,10 +108,16 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom-center_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -144,6 +144,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
@@ -154,12 +160,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -204,6 +204,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
@@ -214,12 +220,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -294,6 +294,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
@@ -304,12 +310,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -348,6 +348,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
     <image:image>
@@ -358,12 +364,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -382,6 +382,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-medium_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1820x148.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1820x148_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-white.png</image:loc>
@@ -430,12 +436,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1820x148.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1820x148_2x.png</image:loc>
     </image:image>
   </url>
   <url>
