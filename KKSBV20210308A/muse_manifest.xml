@@ -1,11 +1,11 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615182424071">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615183032946">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="kaleido.css" crc="3847031160" ref="kaleido"/>
     <file name="moment.css" crc="4206089175" ref="moment"/>
     <file name="about.css" crc="259053950" ref="about"/>
     <file name="loom.css" crc="396286208" ref="loom"/>
-    <file name="index.css" crc="427180512" ref="index"/>
+    <file name="index.css" crc="4209317556" ref="index"/>
     <file name="story.css" crc="3924466456" ref="story"/>
   </folder>
   <folder name="assets">
@@ -399,7 +399,7 @@
       <caption webpage="story" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4181767035" seo="true" mt="1615181715252" redirect="true"/>
+  <file name="index.html" crc="473297664" seo="true" mt="1615183016977" redirect="true"/>
   <file name="kaleido.html" crc="3821179106" seo="true" mt="1615182379349" redirect="true"/>
   <file name="moment.html" crc="4070159305" seo="true" mt="1615182366341" redirect="true"/>
   <file name="loom.html" crc="390774499" seo="true" mt="1615182356812" redirect="true"/>
