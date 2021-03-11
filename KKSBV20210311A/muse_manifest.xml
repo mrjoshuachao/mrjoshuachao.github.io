@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615468771191">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615469041374">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="158279327" ref="about"/>
+    <file name="about.css" crc="37519690" ref="about"/>
     <file name="moment.css" crc="3885309377" ref="moment"/>
     <file name="loom.css" crc="520822726" ref="loom"/>
     <file name="index.css" crc="231864095" ref="index"/>
@@ -432,6 +432,6 @@
   <file name="kaleido.html" crc="241221937" seo="true" mt="1615182379349" redirect="true"/>
   <file name="moment.html" crc="4045482891" seo="true" mt="1615182366341" redirect="true"/>
   <file name="loom.html" crc="429753956" seo="true" mt="1615182356812" redirect="true"/>
-  <file name="about.html" crc="502133821" seo="true" mt="1615468658738" redirect="true"/>
+  <file name="about.html" crc="3980299800" seo="true" mt="1615468979210" redirect="true"/>
   <file name="story.html" crc="134294259" seo="true" mt="1615182333029" redirect="true"/>
 </manifest>
