@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615452912250">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615468771191">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="3904389963" ref="about"/>
+    <file name="about.css" crc="158279327" ref="about"/>
     <file name="moment.css" crc="3885309377" ref="moment"/>
     <file name="loom.css" crc="520822726" ref="loom"/>
     <file name="index.css" crc="231864095" ref="index"/>
@@ -28,7 +28,7 @@
     <file name="require.js" crc="7928878" ref="index:kaleido:moment:loom:about:story"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="4152271683" ref="index"/>
+    <file name="a-master-favicon.ico" crc="4152271683" ref="index:about"/>
     <file name="hero-small-moment300x371.jpg" crc="3790091803" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -349,36 +349,6 @@
     </file>
     <file name="map-u36203-fr.png" crc="242344747" ref="about"/>
     <file name="map-u36203-fr_2x.png" crc="382239927" ref="about"/>
-    <file name="eric.jpg" crc="4046557359" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="eric_2x.jpg" crc="423667570" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="michael.jpg" crc="3798189600" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="michael_2x.jpg" crc="3893078024" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="lily.jpg" crc="219318038" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="lily_2x.jpg" crc="527077890" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="tommy.jpg" crc="274376334" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="tommy_2x.jpg" crc="4088963999" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="drake.jpg" crc="42055853" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="drake_2x.jpg" crc="415293381" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
     <file name="client-logo-telasa-white.png" crc="4169127084" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
@@ -427,11 +397,41 @@
     <file name="client-logo-giloo-white_2x.png" crc="7908916" seo="true" ref="story">
       <caption webpage="story" alt=""/>
     </file>
+    <file name="team-eric.jpg" crc="4046557359" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-eric_2x.jpg" crc="423667570" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-michael.jpg" crc="244070314" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-michael_2x.jpg" crc="112233381" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-lily.jpg" crc="413800271" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-lily_2x.jpg" crc="242433124" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-tommy.jpg" crc="352508895" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-tommy_2x.jpg" crc="103476278" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-drake.jpg" crc="300656553" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-drake_2x.jpg" crc="3764534349" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
   </folder>
   <file name="index.html" crc="3996493939" seo="true" mt="1615183016977" redirect="true"/>
   <file name="kaleido.html" crc="241221937" seo="true" mt="1615182379349" redirect="true"/>
   <file name="moment.html" crc="4045482891" seo="true" mt="1615182366341" redirect="true"/>
   <file name="loom.html" crc="429753956" seo="true" mt="1615182356812" redirect="true"/>
-  <file name="about.html" crc="4080723666" seo="true" mt="1615452884346" redirect="true"/>
+  <file name="about.html" crc="502133821" seo="true" mt="1615468658738" redirect="true"/>
   <file name="story.html" crc="134294259" seo="true" mt="1615182333029" redirect="true"/>
 </manifest>
