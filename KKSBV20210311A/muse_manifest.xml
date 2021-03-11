@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615453029037">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1615452912250">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="4293272129" ref="about"/>
+    <file name="about.css" crc="3904389963" ref="about"/>
     <file name="moment.css" crc="3885309377" ref="moment"/>
     <file name="loom.css" crc="520822726" ref="loom"/>
     <file name="index.css" crc="231864095" ref="index"/>
@@ -28,7 +28,7 @@
     <file name="require.js" crc="7928878" ref="index:kaleido:moment:loom:about:story"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="4152271683" ref="index:about"/>
+    <file name="a-master-favicon.ico" crc="4152271683" ref="index"/>
     <file name="hero-small-moment300x371.jpg" crc="3790091803" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -367,18 +367,6 @@
     <file name="lily_2x.jpg" crc="527077890" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
-    <file name="hidetaka-ishikawa.jpg" crc="4189420115" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="hidetaka-ishikawa_2x.jpg" crc="3951967734" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="tani-kazuhiro.jpg" crc="519009611" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="tani-kazuhiro_2x.jpg" crc="4062416596" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-    </file>
     <file name="tommy.jpg" crc="274376334" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
@@ -440,10 +428,10 @@
       <caption webpage="story" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4109553258" seo="true" mt="1615183016977" redirect="true"/>
-  <file name="kaleido.html" crc="344935691" seo="true" mt="1615182379349" redirect="true"/>
-  <file name="moment.html" crc="2768359" seo="true" mt="1615182366341" redirect="true"/>
-  <file name="loom.html" crc="153351768" seo="true" mt="1615182356812" redirect="true"/>
-  <file name="about.html" crc="3903896731" seo="true" mt="1615453005493" redirect="true"/>
-  <file name="story.html" crc="109301192" seo="true" mt="1615182333029" redirect="true"/>
+  <file name="index.html" crc="3996493939" seo="true" mt="1615183016977" redirect="true"/>
+  <file name="kaleido.html" crc="241221937" seo="true" mt="1615182379349" redirect="true"/>
+  <file name="moment.html" crc="4045482891" seo="true" mt="1615182366341" redirect="true"/>
+  <file name="loom.html" crc="429753956" seo="true" mt="1615182356812" redirect="true"/>
+  <file name="about.html" crc="4080723666" seo="true" mt="1615452884346" redirect="true"/>
+  <file name="story.html" crc="134294259" seo="true" mt="1615182333029" redirect="true"/>
 </manifest>
