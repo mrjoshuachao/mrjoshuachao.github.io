@@ -155,7 +155,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/kaleido.html</loc>
-    <lastmod>2021-03-16</lastmod>
+    <lastmod>2021-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -238,6 +238,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-5.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2.jpg</image:loc>
     </image:image>
   </url>
   <url>
