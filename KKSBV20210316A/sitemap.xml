@@ -222,16 +222,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onblarding-step-frame-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onblarding-step-arrow-1.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onblarding-step-star-2.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-4.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-5.png</image:loc>
     </image:image>
   </url>
   <url>
