@@ -2,14 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2021-03-17</lastmod>
+    <lastmod>2021-03-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision_2x.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision96x17.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision96x17_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment-center200x38.png</image:loc>
@@ -48,10 +60,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision144x26.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision144x26_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kaleido-center.png</image:loc>
@@ -70,6 +82,27 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/business.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-telasa-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment-center.png</image:loc>
@@ -119,30 +152,21 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision144x26.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision144x26_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2-white_2x.png</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/kaleido.html</loc>
-    <lastmod>2021-03-17</lastmod>
+    <lastmod>2021-03-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-telasa-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black_2x.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white.png</image:loc>
     </image:image>
@@ -201,6 +225,12 @@
       <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-1.png</image:loc>
     </image:image>
     <image:image>
@@ -215,16 +245,10 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-5.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-1.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2.jpg</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
-    <lastmod>2021-03-18</lastmod>
+    <lastmod>2021-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -264,12 +288,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide.png</image:loc>
     </image:image>
     <image:image>
@@ -282,10 +300,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-foxconn-1.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-foxconn-1_2x.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -350,7 +368,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story.html</loc>
-    <lastmod>2021-03-18</lastmod>
+    <lastmod>2021-03-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -394,6 +412,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1980x177.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1980x177_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-white.png</image:loc>
@@ -442,21 +466,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white980x177.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white980x177_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-telasa-1.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-black_2x.png</image:loc>
     </image:image>
   </url>
   <url>
