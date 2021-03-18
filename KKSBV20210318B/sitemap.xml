@@ -452,6 +452,12 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-white_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-black_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/about.html</loc>
@@ -605,7 +611,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.mp4</loc>
-    <lastmod>2021-03-06</lastmod>
+    <lastmod>2021-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -617,7 +623,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.webm</loc>
-    <lastmod>2021-03-06</lastmod>
+    <lastmod>2021-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
