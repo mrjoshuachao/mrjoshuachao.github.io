@@ -206,21 +206,6 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2.jpg</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-2.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-3.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-4.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-1-kaleido-step-5.png</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
@@ -270,16 +255,25 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-foxconn-1.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-foxconn-white.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-foxconn-1_2x.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-foxconn-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-1.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-2.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -330,16 +324,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-telasa-1.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-black140x60.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-black140x60_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -528,12 +528,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white980x177.png</image:loc>
     </image:image>
     <image:image>
@@ -555,12 +549,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-black_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-up-1280x800.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-up-1280x800_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-up-white.png</image:loc>
     </image:image>
     <image:image>
@@ -573,22 +561,22 @@
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kktv-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-kktv-1280x800.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-kktv-1280x800_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-giloo-1280x800.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-giloo-1280x800_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-white.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-black_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kktv-black_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/client-logo-kktv-black_2x_2x.png</image:loc>
     </image:image>
   </url>
   <url>
