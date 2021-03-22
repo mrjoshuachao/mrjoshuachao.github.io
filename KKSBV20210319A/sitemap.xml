@@ -365,6 +365,12 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-giloo-black140x60_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/privacy-policy.html</loc>
