@@ -206,6 +206,18 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2_2x.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
@@ -274,6 +286,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-2.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-1_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-2_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
