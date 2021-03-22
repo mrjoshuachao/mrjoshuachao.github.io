@@ -198,9 +198,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-1.jpg</image:loc>
     </image:image>
     <image:image>
@@ -217,6 +214,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-kaleido-2_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -267,9 +270,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-moment.png</image:loc>
     </image:image>
     <image:image>
@@ -298,6 +298,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/scenarios-moment-2_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-moment.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-moment_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -342,13 +348,16 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision120x22_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/image-kaleido-overview.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-loom.png</image:loc>
@@ -370,6 +379,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-loom.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-loom_2x.jpg</image:loc>
     </image:image>
   </url>
   <url>
