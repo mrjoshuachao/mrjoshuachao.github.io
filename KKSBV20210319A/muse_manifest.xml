@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1616394274626">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1616395058589">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="moment.css" crc="210064401" ref="moment"/>
     <file name="privacy-policy.css" crc="39342828" ref="privacy-policy"/>
-    <file name="index.css" crc="4166462804" ref="index"/>
-    <file name="kaleido.css" crc="424932932" ref="kaleido"/>
+    <file name="index.css" crc="3883280961" ref="index"/>
+    <file name="kaleido.css" crc="317868931" ref="kaleido"/>
     <file name="loom.css" crc="4185345651" ref="loom"/>
     <file name="about.css" crc="3954810013" ref="about"/>
     <file name="success-stories.css" crc="1357734" ref="success-stories"/>
@@ -149,35 +149,35 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="logomark-kkstream-white.png" crc="440592819" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="logomark-kkstream-white_2x.png" crc="4181610472" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="button.png" crc="4150511824" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
-      <caption webpage="success-stories" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
+      <caption webpage="moment" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
@@ -187,23 +187,23 @@
       <caption webpage="privacy-policy" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
-      <caption webpage="moment" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="button_2x.png" crc="16391153" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
-      <caption webpage="success-stories" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
+      <caption webpage="moment" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
@@ -213,103 +213,103 @@
       <caption webpage="privacy-policy" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
-      <caption webpage="moment" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-facebook.png" crc="30995328" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-facebook_2x.png" crc="406218879" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-linkedin.png" crc="136697959" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-linkedin_2x.png" crc="287821772" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-medium.png" crc="51672205" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="icon-medium_2x.png" crc="166256047" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="logotype-kkstream-white.png" crc="122613185" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="logotype-kkstream-white_2x.png" crc="4028224289" seo="true" ref="index:kaleido:moment:loom:about:privacy-policy:success-stories">
-      <caption webpage="loom" alt=""/>
-      <caption webpage="success-stories" alt=""/>
+      <caption webpage="stories" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="moment" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="privacy-policy" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="moment" alt=""/>
+      <caption webpage="success-stories" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="hero-kaleido.jpg" crc="321186736" ref="kaleido">
       <caption webpage="kaleido" alt=""/>
     </file>
     <file name="logotype-blendvision120x22.png" crc="270139152" seo="true" ref="kaleido">
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="logotype-blendvision120x22_2x.png" crc="275415695" seo="true" ref="kaleido">
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="logotype-kaleido.png" crc="3867840319" seo="true" ref="kaleido">
       <caption webpage="kaleido" alt=""/>
@@ -320,23 +320,23 @@
     <file name="button-tall-wide.png" crc="4217994510" seo="true" ref="kaleido:moment:loom">
       <caption webpage="moment" alt=""/>
       <caption webpage="moment" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="button-tall-wide_2x.png" crc="155852765" seo="true" ref="kaleido:moment:loom">
       <caption webpage="moment" alt=""/>
       <caption webpage="moment" alt=""/>
-      <caption webpage="loom" alt=""/>
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="image-kaleido-overview.jpg" crc="3762429252" seo="true" ref="kaleido:moment:loom">
       <caption webpage="moment" alt=""/>
-      <caption webpage="loom" alt=""/>
       <caption webpage="kaleido" alt=""/>
+      <caption webpage="loom" alt=""/>
     </file>
     <file name="scenarios-kaleido-1.jpg" crc="3917091252" seo="true" ref="kaleido">
       <caption webpage="kaleido" alt=""/>
@@ -522,8 +522,8 @@
     <file name="map-u47443-fr.png" crc="242344747" ref="privacy-policy"/>
     <file name="map-u47443-fr_2x.png" crc="382239927" ref="privacy-policy"/>
   </folder>
-  <file name="index.html" crc="3863378657" seo="true" mt="1616393937571" redirect="true"/>
-  <file name="kaleido.html" crc="27192604" seo="true" mt="1616393104267" redirect="true"/>
+  <file name="index.html" crc="489275127" seo="true" mt="1616395034838" redirect="true"/>
+  <file name="kaleido.html" crc="13172408" seo="true" mt="1616394882541" redirect="true"/>
   <file name="moment.html" crc="382860741" seo="true" mt="1616393116294" redirect="true"/>
   <file name="loom.html" crc="4057029013" seo="true" mt="1616393130265" redirect="true"/>
   <file name="about.html" crc="252235039" seo="true" mt="1616394255957" redirect="true"/>
