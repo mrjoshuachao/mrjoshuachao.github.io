@@ -365,9 +365,21 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/success-stories.html</loc>
-    <lastmod>2021-03-22</lastmod>
+    <lastmod>2021-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-2-white_2x.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white.png</image:loc>
     </image:image>
@@ -418,12 +430,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kktv-black_2x_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white980x177.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/all-logos-wall-1-white980x177_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-white.png</image:loc>
