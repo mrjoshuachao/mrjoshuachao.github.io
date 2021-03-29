@@ -132,19 +132,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido300x371_2x.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371_2x.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
@@ -154,6 +145,24 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido450x557.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment450x557.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom450x557.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido640x792.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment640x792.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom640x792.jpg</image:loc>
     </image:image>
   </url>
   <url>
