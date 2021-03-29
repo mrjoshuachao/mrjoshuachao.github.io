@@ -1,11 +1,11 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1617030292333">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1617030892587">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="kaleido.css" crc="389547975" ref="kaleido"/>
     <file name="success-stories.css" crc="63815428" ref="success-stories"/>
     <file name="moment.css" crc="13443371" ref="moment"/>
-    <file name="index.css" crc="3828788465" ref="index"/>
-    <file name="nomq_index.css" crc="3900150508" ref="index"/>
+    <file name="index.css" crc="386922729" ref="index"/>
+    <file name="nomq_index.css" crc="3863740768" ref="index"/>
     <file name="loom.css" crc="3907805831" ref="loom"/>
     <file name="about.css" crc="311247903" ref="about"/>
     <file name="privacy-policy.css" crc="197411211" ref="privacy-policy"/>
@@ -691,8 +691,44 @@
     <file name="feature-stories-icon-k3_2x.png" crc="514811743" seo="true" ref="success-stories">
       <caption webpage="success-stories" alt=""/>
     </file>
+    <file name="hero-small-moment300x371.jpg" crc="3790091803" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-moment300x371_2x.jpg" crc="363509374" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-kaleido300x371.jpg" crc="4092679072" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-kaleido300x371_2x.jpg" crc="94242948" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-loom300x371.jpg" crc="3775884229" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-loom300x371_2x.jpg" crc="4251402967" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-kaleido.jpg" crc="135094631" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-moment.jpg" crc="3933303735" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-small-loom.jpg" crc="3929609455" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="84959658" seo="true" mt="1617030267192" redirect="true"/>
+  <file name="index.html" crc="3850853604" seo="true" mt="1617030863630" redirect="true"/>
   <file name="kaleido.html" crc="300351797" seo="true" mt="1617030244720" redirect="true"/>
   <file name="moment.html" crc="4092590668" seo="true" mt="1617030254441" redirect="true"/>
   <file name="loom.html" crc="500588795" seo="true" mt="1617030218626" redirect="true"/>
