@@ -486,24 +486,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-5_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91.png</image:loc>
     </image:image>
     <image:image>
@@ -520,6 +502,36 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-kaleido-desktop.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-3_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-4.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-4_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -579,24 +591,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-3.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-3_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3.png</image:loc>
     </image:image>
     <image:image>
@@ -630,18 +624,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-4_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-foxconn-white.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/client-logo-foxconn-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91.png</image:loc>
     </image:image>
     <image:image>
@@ -658,6 +640,42 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-moment-desktop.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-3_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-4.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-4_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-5.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-5_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -717,34 +735,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-3.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-3_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-4.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-4_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5.png</image:loc>
@@ -780,12 +774,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-4_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91.png</image:loc>
     </image:image>
     <image:image>
@@ -796,6 +784,42 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-l.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-1_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-2_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-3_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-4.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-4_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-5.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-5_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -830,13 +854,13 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.mp4</loc>
-    <lastmod>2021-04-03</lastmod>
+    <lastmod>2021-04-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv-about.mp4</loc>
-    <lastmod>2021-02-24</lastmod>
+    <lastmod>2021-04-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
