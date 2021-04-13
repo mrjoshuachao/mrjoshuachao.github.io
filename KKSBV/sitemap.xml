@@ -2,11 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-bgv-mobile.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment300x371.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-m.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center220x77.png</image:loc>
@@ -19,6 +37,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom300x371.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-k.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-l.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center220x77.png</image:loc>
@@ -37,6 +61,9 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-logo-wall-loop.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
@@ -72,12 +99,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
     </image:image>
     <image:image>
@@ -102,10 +123,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido450x557.jpg</image:loc>
@@ -125,38 +146,29 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom640x792.jpg</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-m.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-k.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-l.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-logo-wall-loop.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-bgv-mobile.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/about.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -183,10 +195,13 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-bgv-about-mobile.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/team-eric-2.jpg</image:loc>
@@ -242,26 +257,32 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/team-eric98x50_2x.jpg</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-bgv-about-mobile.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/success-stories.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-logo-wall-loop.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -288,16 +309,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-telasa-white.png</image:loc>
@@ -313,6 +328,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/client-logo-kddi-black_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t1_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-t2.png</image:loc>
@@ -386,15 +407,27 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-stories-icon-k3_2x.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-logo-wall-loop.gif</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/kaleido.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-k.gif</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-kaleido.jpg</image:loc>
     </image:image>
@@ -403,12 +436,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -435,10 +462,13 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-kaleido-mobile.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-left.png</image:loc>
@@ -486,21 +516,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-5_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-k.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-kaleido-mobile.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-kaleido-desktop.gif</image:loc>
     </image:image>
     <image:image>
@@ -533,12 +548,36 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-kaleido-icon-4_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-m.gif</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-moment.jpg</image:loc>
     </image:image>
@@ -547,12 +586,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -579,10 +612,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide.png</image:loc>
@@ -591,10 +624,13 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-moment-mobile.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-left.png</image:loc>
@@ -618,34 +654,19 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-2_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-3_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-4.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-4_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-moment.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-m.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-moment-mobile.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/placeholder-scenarios-moment-desktop.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-1.png</image:loc>
@@ -677,12 +698,36 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-moment-icon-5_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-moment.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/loom.html</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-l.gif</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-small-loom.jpg</image:loc>
     </image:image>
@@ -691,12 +736,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-kkstream-white_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/icon-facebook.png</image:loc>
@@ -723,10 +762,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logomark-kkstream-white_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/button-square_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/button-square-email_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide.png</image:loc>
@@ -735,16 +774,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-left.png</image:loc>
@@ -754,6 +787,12 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/overview-loom600x400.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-2.png</image:loc>
@@ -774,22 +813,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-4_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-loom.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/placeholder-hero-l.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/onboarding-step-arrow_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-5_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-1.png</image:loc>
@@ -820,6 +847,15 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-onboarding-loom-icon-5_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-loom.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -854,7 +890,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv.mp4</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
