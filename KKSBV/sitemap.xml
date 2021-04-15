@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -149,7 +149,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/about.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -260,7 +260,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/success-stories.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -410,7 +410,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/kaleido.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -483,7 +483,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/button-tall-wide_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido600x400.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-overview-k.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-kaleido-1.png</image:loc>
@@ -554,13 +557,10 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center260x91_2x.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-kaleido.jpg</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/moment.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -639,7 +639,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-left_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-moment600x400.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-moment.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-overview-m.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-moment-1.png</image:loc>
@@ -704,13 +707,10 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-moment-center260x91_2x.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-moment.jpg</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/loom.html</loc>
-    <lastmod>2021-04-13</lastmod>
+    <lastmod>2021-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -786,7 +786,10 @@
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-left_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-loom600x400.jpg</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/overview-loom.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/placeholder-overview-l.gif</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/feature-icon-loom-1.png</image:loc>
@@ -854,9 +857,6 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-loom-center260x91_2x.png</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/overview-loom.jpg</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/faq.html</loc>
@@ -896,7 +896,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/assets/bgv-about.mp4</loc>
-    <lastmod>2021-04-05</lastmod>
+    <lastmod>2021-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
