@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1619452947104">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1619457406973">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="453979825" ref="index"/>
-    <file name="nomq_index.css" crc="91118922" ref="index"/>
+    <file name="index.css" crc="3774130129" ref="index"/>
+    <file name="nomq_index.css" crc="4230766830" ref="index"/>
   </folder>
   <folder name="assets">
     <file name="bgv.mp4" crc="523599102" seo="true" mt="1619452059000"/>
@@ -28,5 +28,5 @@
     <file name="blank.gif" crc="4208392903" ref="index"/>
     <file name="favicon.ico" crc="485101784" ref="index"/>
   </folder>
-  <file name="index.html" crc="3763037500" seo="true" mt="1619452939917" redirect="true"/>
+  <file name="index.html" crc="127279721" seo="true" mt="1619457394709" redirect="true"/>
 </manifest>

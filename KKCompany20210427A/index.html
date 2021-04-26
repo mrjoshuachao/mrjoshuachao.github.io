@@ -18,10 +18,10 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
   <title>KKCompany</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=229390053"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=453979825" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=3774130129" id="pagesheet"/>
   <!-- IE-only CSS -->
   <!--[if lt IE 9]>
-  <link rel="stylesheet" type="text/css" href="css/nomq_index.css?crc=91118922" id="nomq_pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/nomq_index.css?crc=4230766830" id="nomq_pagesheet"/>
   <![endif]-->
     <!--HTML Widget code-->
   
@@ -58,14 +58,8 @@ Your browser does not support the video tag.
 
 
      </div>
-     <div class="browser_width colelem" id="u85413-bw">
-      <div class="gradient" id="u85413"><!-- group -->
-       <div class="clearfix" id="u85413_align_to_page">
-        <div class="clip_frame grpelem" id="u85433"><!-- image -->
-         <img class="block temp_no_img_src" id="u85433_img" data-orig-src="images/index.png?crc=468631103" data-hidpi-src="images/index_2x.png?crc=247003346" alt="" width="1280" height="2560" src="images/blank.gif?crc=4208392903"/>
-        </div>
-       </div>
-      </div>
+     <div class="clip_frame colelem" id="u85433"><!-- image -->
+      <img class="block temp_no_img_src" id="u85433_img" data-orig-src="images/index.png?crc=468631103" data-hidpi-src="images/index_2x.png?crc=247003346" alt="" width="1280" height="2560" src="images/blank.gif?crc=4208392903"/>
      </div>
      <div class="verticalspacer" data-offset-top="2560" data-content-above-spacer="2560" data-content-below-spacer="0"></div>
     </div>
@@ -90,8 +84,6 @@ window.Muse.assets.check($);/* body */
 Muse.Utils.transformMarkupToFixBrowserProblemsPreInit();/* body */
 Muse.Utils.detectScreenResolution();/* HiDPI screens */
 Muse.Utils.prepHyperlinks(true);/* body */
-Muse.Utils.resizeHeight('.browser_width');/* resize height */
-Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized'); });/* mark body as initialized */
 Muse.Utils.makeButtonsVisibleAfterSettingMinWidth();/* body */
 Muse.Utils.fullPage('#page');/* 100% height page */
 $( '.breakpoint' ).registerBreakpoint();/* Register breakpoints */
