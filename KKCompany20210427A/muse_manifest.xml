@@ -1,0 +1,32 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1619452947104">
+  <folder name="css">
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="453979825" ref="index"/>
+    <file name="nomq_index.css" crc="91118922" ref="index"/>
+  </folder>
+  <folder name="assets">
+    <file name="bgv.mp4" crc="523599102" seo="true" mt="1619452059000"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="340535759" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="310584261" ref="index"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index"/>
+    <file name="jquery.museresponsive.js" crc="527716135" ref="index"/>
+    <file name="require.js" crc="7928878" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="index.png" crc="468631103" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="index_2x.png" crc="247003346" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="favicon.ico" crc="485101784" ref="index"/>
+  </folder>
+  <file name="index.html" crc="3763037500" seo="true" mt="1619452939917" redirect="true"/>
+</manifest>
