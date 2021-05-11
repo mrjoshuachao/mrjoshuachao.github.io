@@ -1,11 +1,11 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1620737300366">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1620748656165">
   <folder name="assets">
     <file name="bgv-1280x720.mp4" crc="188523379" seo="true" mt="1618311627000"/>
   </folder>
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4018126942" ref="index"/>
-    <file name="nomq_index.css" crc="4081447464" ref="index"/>
+    <file name="index.css" crc="194828193" ref="index"/>
+    <file name="nomq_index.css" crc="3808255535" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -158,19 +158,19 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34.png" crc="4050888896" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34.png" crc="360223098" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34_2x.png" crc="4232552655" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34_2x.png" crc="3931816789" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w.png" crc="3804168115" seo="true" ref="index">
+    <file name="kkcompany-logotype-w.png" crc="3979385139" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w_2x.png" crc="3838055147" seo="true" ref="index">
+    <file name="kkcompany-logotype-w_2x.png" crc="3931816789" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
   </folder>
-  <file name="index.html" crc="3826052123" seo="true" mt="1620737287750" redirect="true"/>
+  <file name="index.html" crc="4176053470" seo="true" mt="1620748504547" redirect="true"/>
 </manifest>
