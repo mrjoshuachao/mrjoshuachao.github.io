@@ -1,11 +1,11 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1620763290352">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1620796714880">
   <folder name="assets">
     <file name="bgv-1280x720.mp4" crc="188523379" seo="true" mt="1618311627000"/>
   </folder>
   <folder name="css">
-    <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="468195049" ref="index"/>
-    <file name="nomq_index.css" crc="3789634853" ref="index"/>
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="143431231" ref="index"/>
+    <file name="nomq_index.css" crc="395128385" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -158,16 +158,18 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34.png" crc="360223098" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34.png" crc="3799423028" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34_2x.png" crc="3931816789" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34_2x.png" crc="177579608" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w.png" crc="3979385139" seo="true" ref="index">
+    <file name="kkcompany-logotype-w.png" crc="3856514968" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w_2x.png" crc="3931816789" seo="true" ref="index">
+    <file name="kkcompany-logotype-w_2x.png" crc="4215992917" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
@@ -183,6 +185,120 @@
     <file name="world_2x.png" crc="4195253500" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="kkstream-logotype-w132x33.png" crc="4265583659" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w132x33_2x.png" crc="3831411158" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w132x33.png" crc="3998894559" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w132x33_2x.png" crc="136724778" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w132x33.png" crc="215106392" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w132x33_2x.png" crc="382478987" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w132x33.png" crc="4058757615" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w132x33_2x.png" crc="371666309" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w132x33.png" crc="170138563" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w132x33_2x.png" crc="530825047" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w132x33.png" crc="136168036" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w132x33_2x.png" crc="4254104337" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w132x33.png" crc="4269760899" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w132x33_2x.png" crc="39872260" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w132x33.png" crc="21346029" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w132x33_2x.png" crc="4177077810" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktix-logotype-w132x33.png" crc="443155375" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktix-logotype-w132x33_2x.png" crc="177331637" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w200x50.png" crc="252419948" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w200x50_2x.png" crc="497958822" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w200x50.png" crc="186112762" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w200x50_2x.png" crc="3884951530" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w200x50.png" crc="4238942160" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w200x50_2x.png" crc="255828843" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w200x50.png" crc="150971336" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w200x50_2x.png" crc="4286633209" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktix-logotype-w200x50.png" crc="3999383840" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktix-logotype-w200x50_2x.png" crc="227244882" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w200x50.png" crc="174293928" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w200x50_2x.png" crc="457665853" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w200x50.png" crc="140557712" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w200x50_2x.png" crc="484793320" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w200x50.png" crc="3968353011" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w200x50_2x.png" crc="15065751" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w200x50.png" crc="4174340919" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w200x50_2x.png" crc="3783250123" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkcompany-logotype-w140x35.png" crc="3953194135" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkcompany-logotype-w140x35_2x.png" crc="514129728" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="4166315096" seo="true" mt="1620763284437" redirect="true"/>
+  <file name="index.html" crc="3956614664" seo="true" mt="1620796602109" redirect="true"/>
 </manifest>
