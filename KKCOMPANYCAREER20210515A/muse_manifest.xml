@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621066669392">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621067281126">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4192338316" ref="index"/>
-    <file name="nomq_index.css" crc="44847059" ref="index"/>
+    <file name="index.css" crc="4151497185" ref="index"/>
+    <file name="nomq_index.css" crc="497268994" ref="index"/>
     <file name="jobs.css" crc="4158168658" ref="jobs"/>
     <file name="nomq_jobs.css" crc="4230571186" ref="jobs"/>
   </folder>
@@ -90,6 +90,6 @@
       <caption webpage="jobs" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3921541320" seo="true" mt="1621066646608" redirect="true"/>
+  <file name="index.html" crc="160999717" seo="true" mt="1621067258463" redirect="true"/>
   <file name="jobs.html" crc="3883210563" seo="true" mt="1621066646552" redirect="true"/>
 </manifest>
