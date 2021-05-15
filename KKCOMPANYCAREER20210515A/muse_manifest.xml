@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621091425338">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621091953424">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="147088999" ref="index"/>
     <file name="nomq_index.css" crc="3883828756" ref="index"/>
-    <file name="jobs.css" crc="54843859" ref="jobs"/>
-    <file name="nomq_jobs.css" crc="4023115661" ref="jobs"/>
+    <file name="jobs.css" crc="3969519184" ref="jobs"/>
+    <file name="nomq_jobs.css" crc="166234881" ref="jobs"/>
   </folder>
   <folder name="assets">
     <file name="bgv.mp4" crc="535788991" seo="true" mt="1607910412000"/>
@@ -19,7 +19,7 @@
     <file name="require.js" crc="7928878" ref="index:jobs"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
+    <file name="a-master-favicon.ico" crc="4248326923" ref="index:jobs"/>
     <file name="bgv-placeholder-640x710.png" crc="3807417346" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -27,10 +27,10 @@
     <file name="20210515-catagories-m64x501.png" crc="460390275" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search-m64x63.png" crc="369540685" seo="true" ref="index">
+    <file name="20210515-search-m64x63.png" crc="62051684" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search-m64x63_2x.png" crc="4134589892" seo="true" ref="index">
+    <file name="20210515-search-m64x63_2x.png" crc="3921528964" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="20210515-search.png" crc="4118931589" seo="true" ref="index">
@@ -50,17 +50,21 @@
     <file name="20210515-catagories.png" crc="4049204540" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="world-b20x20.png" crc="3845733471" seo="true" ref="index">
+    <file name="world-b20x20.png" crc="3845733471" seo="true" ref="index:jobs">
       <caption webpage="index" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="world-b20x20_2x.png" crc="4108974954" seo="true" ref="index">
+    <file name="world-b20x20_2x.png" crc="4108974954" seo="true" ref="index:jobs">
       <caption webpage="index" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="kkcompany-career-logotype-b205x33.png" crc="4110728354" seo="true" ref="index">
+    <file name="kkcompany-career-logotype-b205x33.png" crc="4110728354" seo="true" ref="index:jobs">
       <caption webpage="index" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="kkcompany-career-logotype-b205x33_2x.png" crc="371214932" seo="true" ref="index">
+    <file name="kkcompany-career-logotype-b205x33_2x.png" crc="371214932" seo="true" ref="index:jobs">
       <caption webpage="index" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
     <file name="world-b.png" crc="343684502" seo="true" ref="index:jobs">
       <caption webpage="index" alt=""/>
@@ -87,10 +91,10 @@
     <file name="20210515-catagories128x416.png" crc="3766133080" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search-m.png" crc="3816344079" seo="true" ref="index">
+    <file name="20210515-search-m.png" crc="369388498" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search-m_2x.png" crc="271163308" seo="true" ref="index">
+    <file name="20210515-search-m_2x.png" crc="58703758" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="20210515-catagories-m.png" crc="105257779" seo="true" ref="index">
@@ -128,6 +132,6 @@
       <caption webpage="jobs" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="401480412" seo="true" mt="1621091395793" redirect="true"/>
-  <file name="jobs.html" crc="103732273" seo="true" mt="1621090809044" redirect="true"/>
+  <file name="index.html" crc="458263696" seo="true" mt="1621091844695" redirect="true"/>
+  <file name="jobs.html" crc="465272685" seo="true" mt="1621091927496" redirect="true"/>
 </manifest>
