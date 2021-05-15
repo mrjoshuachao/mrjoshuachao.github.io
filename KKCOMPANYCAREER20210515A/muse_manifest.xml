@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621090353052">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621090939132">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="147088999" ref="index"/>
     <file name="nomq_index.css" crc="3883828756" ref="index"/>
-    <file name="jobs.css" crc="76014573" ref="jobs"/>
-    <file name="nomq_jobs.css" crc="166234881" ref="jobs"/>
+    <file name="jobs.css" crc="54843859" ref="jobs"/>
+    <file name="nomq_jobs.css" crc="4023115661" ref="jobs"/>
   </folder>
   <folder name="assets">
     <file name="bgv.mp4" crc="535788991" seo="true" mt="1607910412000"/>
@@ -128,6 +128,6 @@
       <caption webpage="jobs" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4268451886" seo="true" mt="1621090173230" redirect="true"/>
-  <file name="jobs.html" crc="3883135631" seo="true" mt="1621090082279" redirect="true"/>
+  <file name="index.html" crc="493246871" seo="true" mt="1621090173230" redirect="true"/>
+  <file name="jobs.html" crc="103732273" seo="true" mt="1621090809044" redirect="true"/>
 </manifest>
