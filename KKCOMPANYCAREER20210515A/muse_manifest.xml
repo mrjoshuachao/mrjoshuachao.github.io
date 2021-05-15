@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621090939132">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621091425338">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="147088999" ref="index"/>
@@ -33,10 +33,10 @@
     <file name="20210515-search-m64x63_2x.png" crc="4134589892" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search.png" crc="494450337" seo="true" ref="index">
+    <file name="20210515-search.png" crc="4118931589" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search_2x.png" crc="163412786" seo="true" ref="index">
+    <file name="20210515-search_2x.png" crc="416317514" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="scroll-down-arrow.gif" crc="322672669" seo="true" ref="index">
@@ -78,10 +78,10 @@
       <caption webpage="index" alt=""/>
       <caption webpage="jobs" alt=""/>
     </file>
-    <file name="20210515-search128x66.png" crc="63284177" seo="true" ref="index">
+    <file name="20210515-search128x66.png" crc="4089929379" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="20210515-search128x66_2x.png" crc="4226552108" seo="true" ref="index">
+    <file name="20210515-search128x66_2x.png" crc="3871663344" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="20210515-catagories128x416.png" crc="3766133080" seo="true" ref="index">
@@ -128,6 +128,6 @@
       <caption webpage="jobs" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="493246871" seo="true" mt="1621090173230" redirect="true"/>
+  <file name="index.html" crc="401480412" seo="true" mt="1621091395793" redirect="true"/>
   <file name="jobs.html" crc="103732273" seo="true" mt="1621090809044" redirect="true"/>
 </manifest>
