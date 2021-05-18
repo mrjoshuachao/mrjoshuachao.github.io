@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621334089507">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621334670689">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="249290382" ref="index"/>
+    <file name="index.css" crc="370018934" ref="index"/>
   </folder>
   <folder name="assets">
     <file name="bgv-1280x720.mp4" crc="188523379" seo="true" mt="1618311627000"/>
@@ -18,9 +18,6 @@
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
-    <file name="bgv-placeholder-640x710.png" crc="3807417346" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="scroll-down-arrow.gif" crc="322672669" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -102,9 +99,6 @@
     <file name="gb-2.jpg" crc="145929680" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="gb-5.jpg" crc="500675619" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="kkstream-logotype-w.png" crc="222980915" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -165,6 +159,9 @@
     <file name="world_2x.png" crc="3816521387" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="gb-6.jpg" crc="4218718006" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="408890497" seo="true" mt="1621334082809" redirect="true"/>
+  <file name="index.html" crc="454727804" seo="true" mt="1621334662984" redirect="true"/>
 </manifest>
