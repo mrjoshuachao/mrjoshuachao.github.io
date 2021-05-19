@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621429238294">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621429584767">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="4035935977" ref="index"/>
   </folder>
   <folder name="assets">
-    <file name="bgv-1920x1080.mp4" crc="4102787683" seo="true" mt="1621429028000"/>
+    <file name="bgv.mp4" crc="3762705562" seo="true" mt="1621429497000"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -163,5 +163,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4205247745" seo="true" mt="1621429234393" redirect="true"/>
+  <file name="index.html" crc="3876717525" seo="true" mt="1621429578652" redirect="true"/>
 </manifest>
