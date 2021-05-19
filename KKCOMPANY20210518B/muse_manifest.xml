@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621417338949">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621418767991">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="387725561" ref="index"/>
@@ -163,5 +163,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="1189598" seo="true" mt="1621417333026" redirect="true"/>
+  <file name="index.html" crc="3857720589" seo="true" mt="1621418744480" redirect="true"/>
 </manifest>
