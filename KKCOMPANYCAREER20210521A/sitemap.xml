@@ -120,6 +120,18 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/world-b20x20.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/world-b20x20_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b205x33.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b205x33_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/world-b.png</image:loc>
     </image:image>
     <image:image>
