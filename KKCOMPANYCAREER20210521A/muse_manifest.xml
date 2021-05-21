@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621571784608">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621575443758">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="12349085" ref="index"/>
@@ -29,7 +29,7 @@
     <file name="require.js" crc="7928878" ref="index:jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering:privacy-policy:jd"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="4248326923" ref="index:jobs-all"/>
+    <file name="a-master-favicon.ico" crc="4248326923" ref="index:jobs-all:jobs-kkstream"/>
     <file name="bgv-placeholder-640x710.png" crc="3807417346" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -60,65 +60,69 @@
     <file name="20210515-catagories.png" crc="242120715" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="world-b20x20.png" crc="3845733471" seo="true" ref="index:jobs-all">
+    <file name="world-b20x20.png" crc="3845733471" seo="true" ref="index:jobs-all:jobs-kkstream">
       <caption webpage="index" alt=""/>
-      <caption webpage="jobs" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="world-b20x20_2x.png" crc="4108974954" seo="true" ref="index:jobs-all">
+    <file name="world-b20x20_2x.png" crc="4108974954" seo="true" ref="index:jobs-all:jobs-kkstream">
       <caption webpage="index" alt=""/>
-      <caption webpage="jobs" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="kkcompany-career-logotype-b205x33.png" crc="4110728354" seo="true" ref="index:jobs-all">
+    <file name="kkcompany-career-logotype-b205x33.png" crc="4110728354" seo="true" ref="index:jobs-all:jobs-kkstream">
       <caption webpage="index" alt=""/>
-      <caption webpage="jobs" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
-    <file name="kkcompany-career-logotype-b205x33_2x.png" crc="371214932" seo="true" ref="index:jobs-all">
+    <file name="kkcompany-career-logotype-b205x33_2x.png" crc="371214932" seo="true" ref="index:jobs-all:jobs-kkstream">
       <caption webpage="index" alt=""/>
-      <caption webpage="jobs" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jobs" alt=""/>
     </file>
     <file name="world-b.png" crc="343684502" seo="true" ref="index:jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering:privacy-policy:jd">
-      <caption webpage="jobs" alt=""/>
-      <caption webpage="jobs-kkstream" alt=""/>
+      <caption webpage="privacy-policy" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-engineering" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
-      <caption webpage="privacy-policy" alt=""/>
     </file>
     <file name="world-b_2x.png" crc="4108974954" seo="true" ref="index:jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering:privacy-policy:jd">
-      <caption webpage="jobs" alt=""/>
-      <caption webpage="jobs-kkstream" alt=""/>
+      <caption webpage="privacy-policy" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-engineering" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
-      <caption webpage="privacy-policy" alt=""/>
     </file>
     <file name="kkcompany-career-logotype-b.png" crc="190555972" seo="true" ref="index:jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering:privacy-policy:jd">
-      <caption webpage="jobs" alt=""/>
-      <caption webpage="jobs-kkstream" alt=""/>
+      <caption webpage="privacy-policy" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-engineering" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
-      <caption webpage="privacy-policy" alt=""/>
     </file>
     <file name="kkcompany-career-logotype-b_2x.png" crc="4084893047" seo="true" ref="index:jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering:privacy-policy:jd">
-      <caption webpage="jobs" alt=""/>
-      <caption webpage="jobs-kkstream" alt=""/>
+      <caption webpage="privacy-policy" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-engineering" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="jd" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
-      <caption webpage="privacy-policy" alt=""/>
     </file>
     <file name="20210515-search128x66.png" crc="4089929379" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -143,22 +147,23 @@
       <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-all" alt=""/>
     </file>
-    <file name="20210515-filter-m64x21.png" crc="165514791" seo="true" ref="jobs-all">
+    <file name="20210515-filter-m64x21.png" crc="165514791" seo="true" ref="jobs-all:jobs-kkstream">
       <caption webpage="jobs" alt=""/>
+      <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
     </file>
     <file name="20210515-list.png" crc="427013011" seo="true" ref="jobs-all">
       <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-all" alt=""/>
     </file>
-    <file name="20210515-filter.png" crc="4123208596" seo="true" ref="jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering">
+    <file name="20210515-filter.png" crc="4123208596" seo="true" ref="jobs-all">
       <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
       <caption webpage="jobs-engineering" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
     </file>
-    <file name="20210515-filter_2x.png" crc="119519799" seo="true" ref="jobs-all:jobs-kkstream:jobs-taipei:jobs-engineering">
+    <file name="20210515-filter_2x.png" crc="119519799" seo="true" ref="jobs-all">
       <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
@@ -174,9 +179,9 @@
       <caption webpage="jobs-all" alt=""/>
     </file>
     <file name="20210515-filter-m.png" crc="285282957" seo="true" ref="jobs-all:jobs-kkstream:jobs-taipei">
-      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-kkstream" alt=""/>
       <caption webpage="jobs-all" alt=""/>
+      <caption webpage="jobs" alt=""/>
       <caption webpage="jobs-taipei" alt=""/>
     </file>
     <file name="20210515-list128x464.png" crc="198256351" seo="true" ref="jobs-all">
@@ -253,12 +258,48 @@
     <file name="20210520-jd-m.png" crc="521673364" seo="true" ref="jd">
       <caption webpage="jd" alt=""/>
     </file>
+    <file name="20210520-filter-kkstream.png" crc="230629479" seo="true" ref="jobs-kkstream">
+      <caption webpage="jobs-kkstream" alt=""/>
+    </file>
+    <file name="20210520-filter-kkstream_2x.png" crc="56398025" seo="true" ref="jobs-kkstream">
+      <caption webpage="jobs-kkstream" alt=""/>
+    </file>
+    <file name="20210520-filter-kkstream128x18.png" crc="3941340958" seo="true" ref="jobs-kkstream">
+      <caption webpage="jobs-kkstream" alt=""/>
+    </file>
+    <file name="20210520-filter-kkstream128x18_2x.png" crc="3883371745" seo="true" ref="jobs-kkstream">
+      <caption webpage="jobs-kkstream" alt=""/>
+    </file>
+    <file name="20210520-filter-taipei.png" crc="212491945" seo="true" ref="jobs-taipei">
+      <caption webpage="jobs-taipei" alt=""/>
+    </file>
+    <file name="20210520-filter-taipei_2x.png" crc="3987863390" seo="true" ref="jobs-taipei">
+      <caption webpage="jobs-taipei" alt=""/>
+    </file>
+    <file name="20210520-filter-taipei128x18.png" crc="498161733" seo="true" ref="jobs-taipei">
+      <caption webpage="jobs-taipei" alt=""/>
+    </file>
+    <file name="20210520-filter-taipei128x18_2x.png" crc="436321823" seo="true" ref="jobs-taipei">
+      <caption webpage="jobs-taipei" alt=""/>
+    </file>
+    <file name="20210520-filter-engineering.png" crc="3918730085" seo="true" ref="jobs-engineering">
+      <caption webpage="jobs-engineering" alt=""/>
+    </file>
+    <file name="20210520-filter-engineering_2x.png" crc="221759066" seo="true" ref="jobs-engineering">
+      <caption webpage="jobs-engineering" alt=""/>
+    </file>
+    <file name="20210520-filter-engineering128x18.png" crc="4254824235" seo="true" ref="jobs-engineering">
+      <caption webpage="jobs-engineering" alt=""/>
+    </file>
+    <file name="20210520-filter-engineering128x18_2x.png" crc="4275925780" seo="true" ref="jobs-engineering">
+      <caption webpage="jobs-engineering" alt=""/>
+    </file>
   </folder>
   <file name="index.html" crc="257032436" seo="true" mt="1621538831286" redirect="true"/>
   <file name="jobs-all.html" crc="362505072" seo="true" mt="1621571693192" redirect="true"/>
-  <file name="jobs-kkstream.html" crc="3848513756" seo="true" mt="1621571674565" redirect="true"/>
-  <file name="jobs-taipei.html" crc="380264649" seo="true" mt="1621571658517" redirect="true"/>
-  <file name="jobs-engineering.html" crc="3968080768" seo="true" mt="1621571641447" redirect="true"/>
+  <file name="jobs-kkstream.html" crc="3921935204" seo="true" mt="1621575381784" redirect="true"/>
+  <file name="jobs-taipei.html" crc="4217319213" seo="true" mt="1621575336478" redirect="true"/>
+  <file name="jobs-engineering.html" crc="4049019099" seo="true" mt="1621575288669" redirect="true"/>
   <file name="privacy-policy.html" crc="164946672" seo="true" mt="1621571588828" redirect="true"/>
   <file name="jd.html" crc="4181514493" seo="true" mt="1621571610082" redirect="true"/>
 </manifest>

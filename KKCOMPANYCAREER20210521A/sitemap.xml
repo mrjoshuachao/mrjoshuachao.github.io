@@ -93,12 +93,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210515-filter-m.png</image:loc>
     </image:image>
     <image:image>
@@ -112,6 +106,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210520-list-taipei-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-taipei.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-taipei_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-taipei128x18.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-taipei128x18_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -180,6 +186,18 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/world-b20x20.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/world-b20x20_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b205x33.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b205x33_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/world-b.png</image:loc>
     </image:image>
     <image:image>
@@ -192,10 +210,7 @@
       <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter-m64x21.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210515-filter-m.png</image:loc>
@@ -211,6 +226,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210520-list-kkstream-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-kkstream.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-kkstream_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-kkstream128x18.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-kkstream128x18_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -261,12 +288,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/kkcompany-career-logotype-b_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/20210515-filter_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210520-list-engineering-m64x531.png</image:loc>
     </image:image>
     <image:image>
@@ -283,6 +304,18 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/20210520-list-engineering-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-engineering.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-engineering_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-engineering128x18.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/20210520-filter-engineering128x18_2x.png</image:loc>
     </image:image>
   </url>
   <url>
