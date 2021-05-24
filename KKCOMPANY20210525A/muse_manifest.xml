@@ -1,0 +1,224 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621877914057">
+  <folder name="css">
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="120999665" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="340535759" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="310584261" ref="index"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index"/>
+    <file name="webpro.js" crc="4059564322" ref="index"/>
+    <file name="musewpslideshow.js" crc="3862962738" ref="index"/>
+    <file name="jquery.museoverlay.js" crc="4147669564" ref="index"/>
+    <file name="touchswipe.js" crc="4075097462" ref="index"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4260645839" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="39568856" ref="index"/>
+    <file name="require.js" crc="7928878" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
+    <file name="hero-1.jpg" crc="4226791196" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="hero-2.jpg" crc="3888041002" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-3.jpg" crc="447400936" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-4.jpg" crc="3786787676" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="loading.gif" crc="3815509949" ref="index"/>
+    <file name="scroll-down-arrow.gif" crc="322672669" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="scroll-down-arrow_2x.gif" crc="322672669" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-2.jpg" crc="320877300" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-2_2x.jpg" crc="509993517" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="learn-more.png" crc="271420723" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="learn-more_2x.png" crc="376606654" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-1.jpg" crc="467736637" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-1_2x.jpg" crc="4026511534" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-4.jpg" crc="145952930" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-4_2x.jpg" crc="95944890" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-3.jpg" crc="166300219" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-s-3_2x.jpg" crc="3852841407" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center.png" crc="341001432" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center_2x.png" crc="12595695" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center.png" crc="36426744" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center_2x.png" crc="377814210" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center.png" crc="511508944" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center_2x.png" crc="3986725197" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox.png" crc="311451080" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox_2x.png" crc="107012493" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward.png" crc="23168581" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward_2x.png" crc="427043243" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv.png" crc="4249700627" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv_2x.png" crc="345441880" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbook.png" crc="1087212" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbook_2x.png" crc="299366206" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kknow.png" crc="218194518" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kknow_2x.png" crc="4232467488" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix.png" crc="4002282342" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix_2x.png" crc="3904353933" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-justlive.png" crc="415997778" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-justlive_2x.png" crc="415997778" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center.png" crc="159277641" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center_2x.png" crc="4213143392" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-oursong.png" crc="142382835" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-oursong_2x.png" crc="3905868954" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-3.jpg" crc="41645013" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-2.jpg" crc="145929680" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-4.jpg" crc="3969722482" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-6.jpg" crc="4218718006" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w.png" crc="222980915" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w_2x.png" crc="338880276" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w.png" crc="343198420" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w_2x.png" crc="4179459935" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w.png" crc="25913213" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w_2x.png" crc="4000612279" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w.png" crc="140352092" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kknow-logotype-w_2x.png" crc="203442166" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w.png" crc="3984470562" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w_2x.png" crc="372543748" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w.png" crc="188185410" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w_2x.png" crc="4062972904" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w.png" crc="3931258204" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w_2x.png" crc="4152307941" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w.png" crc="270862054" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w_2x.png" crc="3950932803" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkcompany-logotype-w.png" crc="364495534" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkcompany-logotype-w_2x.png" crc="177579608" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world.png" crc="4229842853" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world_2x.png" crc="3816521387" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="4260071551" seo="true" mt="1621877906059" redirect="true"/>
+</manifest>
