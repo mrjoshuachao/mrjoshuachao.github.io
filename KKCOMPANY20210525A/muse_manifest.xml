@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621877914057">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1621878384909">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="120999665" ref="index"/>
@@ -19,17 +19,17 @@
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
-    <file name="hero-1.jpg" crc="4226791196" seo="true" ref="index">
+    <file name="hero-1.jpg" crc="387403930" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
-    <file name="hero-2.jpg" crc="3888041002" seo="true" ref="index">
+    <file name="hero-2.jpg" crc="3956682815" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-3.jpg" crc="447400936" seo="true" ref="index">
+    <file name="hero-3.jpg" crc="289807356" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-4.jpg" crc="3786787676" seo="true" ref="index">
+    <file name="hero-4.jpg" crc="269098223" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="loading.gif" crc="3815509949" ref="index"/>
@@ -220,5 +220,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4260071551" seo="true" mt="1621877906059" redirect="true"/>
+  <file name="index.html" crc="173678898" seo="true" mt="1621878375400" redirect="true"/>
 </manifest>
