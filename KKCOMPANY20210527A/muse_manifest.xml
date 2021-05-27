@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622088287041">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622088404879">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="169529641" ref="index"/>
+    <file name="index.css" crc="3944135349" ref="index"/>
     <file name="nomq_index.css" crc="3974423557" ref="index"/>
   </folder>
   <folder name="scripts">
@@ -303,10 +303,10 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34.png" crc="4270240368" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34.png" crc="309183557" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w133x34_2x.png" crc="525866522" seo="true" ref="index">
+    <file name="kkcompany-logotype-w133x34_2x.png" crc="211765236" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="world20x20.png" crc="4055396547" seo="true" ref="index">
@@ -435,19 +435,19 @@
     <file name="gb-6_2x.jpg" crc="4218718006" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w.png" crc="138993696" seo="true" ref="index">
+    <file name="kkcompany-logotype-w.png" crc="246159147" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-w_2x.png" crc="3821248359" seo="true" ref="index">
+    <file name="kkcompany-logotype-w_2x.png" crc="490326895" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="world.png" crc="461479844" seo="true" ref="index">
+    <file name="world.png" crc="4190123480" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="world_2x.png" crc="398240793" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="menu.png" crc="477244562" seo="true" ref="index">
+    <file name="menu.png" crc="438061410" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="menu_2x.png" crc="4167045054" seo="true" ref="index">
@@ -460,5 +460,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4291292454" seo="true" mt="1622088267307" redirect="true"/>
+  <file name="index.html" crc="3967135183" seo="true" mt="1622088391302" redirect="true"/>
 </manifest>
