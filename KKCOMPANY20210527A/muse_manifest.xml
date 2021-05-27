@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622088404879">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622088786105">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3944135349" ref="index"/>
-    <file name="nomq_index.css" crc="3974423557" ref="index"/>
+    <file name="index.css" crc="469580158" ref="index"/>
+    <file name="nomq_index.css" crc="4052533317" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -21,37 +21,29 @@
   </folder>
   <folder name="images">
     <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
-    <file name="hero-txt-1-m.png" crc="152655598" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
+    <file name="hero-txt-1-m.png" crc="384159846" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-txt-1-m_2x.png" crc="275051613" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
+    <file name="hero-txt-1-m_2x.png" crc="187760830" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
-    <file name="hero-txt-2-m.png" crc="49974708" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-txt-2-m_2x.png" crc="4161227433" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
+    <file name="hero-txt-2-m.png" crc="386358425" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-txt-3-m.png" crc="46440819" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="hero-txt-3-m_2x.png" crc="448595621" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
+    <file name="hero-txt-2-m_2x.png" crc="397684729" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-txt-4-m.png" crc="4083606631" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
+    <file name="hero-txt-3-m.png" crc="316835672" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="hero-txt-4-m_2x.png" crc="3935200061" seo="true" ref="index">
+    <file name="hero-txt-3-m_2x.png" crc="290851647" seo="true" ref="index">
       <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m.png" crc="392371363" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m_2x.png" crc="3857591750" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="loading.gif" crc="3815509949" ref="index"/>
@@ -459,6 +451,30 @@
     <file name="menu25x25_2x.png" crc="4167045054" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="hero-txt-1-m315x248.png" crc="322270051" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-1-m315x248_2x.png" crc="4266188112" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-2-m315x248.png" crc="61841775" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-2-m315x248_2x.png" crc="197173718" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3-m315x248.png" crc="4121522887" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3-m315x248_2x.png" crc="3819523667" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m315x248.png" crc="4101190626" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m315x248_2x.png" crc="288896548" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="3967135183" seo="true" mt="1622088391302" redirect="true"/>
+  <file name="index.html" crc="271153861" seo="true" mt="1622088767972" redirect="true"/>
 </manifest>
