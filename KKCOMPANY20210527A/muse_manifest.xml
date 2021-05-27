@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622086841273">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622087692103">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="129604271" ref="index"/>
-    <file name="nomq_index.css" crc="4007715954" ref="index"/>
+    <file name="index.css" crc="224083337" ref="index"/>
+    <file name="nomq_index.css" crc="4217410156" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -447,6 +447,14 @@
     <file name="world_2x.png" crc="4195253500" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="menu.png" crc="3972231906" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu_2x.png" crc="3972231906" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="4145590559" seo="true" mt="1622086818860" redirect="true"/>
+  <file name="index.html" crc="3812027299" seo="true" mt="1622087678910" redirect="true"/>
 </manifest>
