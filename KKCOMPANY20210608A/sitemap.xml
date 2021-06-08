@@ -66,12 +66,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow.gif</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/scroll-down-arrow_2x.gif</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-1450x253.jpg</image:loc>
     </image:image>
     <image:image>
@@ -234,18 +228,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu25x25_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-logotype-b-mask174x40.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-logotype-b-mask174x40_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color166x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color166x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-163x22.png</image:loc>
     </image:image>
     <image:image>
@@ -378,16 +360,16 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-logotype-b-mask.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkcompany-logotype-b-mask_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40_2x.png</image:loc>
     </image:image>
   </url>
 </urlset>

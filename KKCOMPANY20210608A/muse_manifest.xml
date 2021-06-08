@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1623129477510">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1623157869457">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="3899330747" ref="index"/>
-    <file name="nomq_index.css" crc="4211186144" ref="index"/>
+    <file name="index.css" crc="4240923859" ref="index"/>
+    <file name="nomq_index.css" crc="3816151624" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -85,14 +85,6 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="hero-txt-4_2x.png" crc="4050170976" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="scroll-down-arrow.gif" crc="322672669" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="scroll-down-arrow_2x.gif" crc="322672669" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
     <file name="hero-1450x253.jpg" crc="194529278" seo="true" ref="index">
@@ -307,18 +299,6 @@
     <file name="menu25x25_2x.png" crc="4167045054" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-b-mask174x40.png" crc="334613299" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="kkcompany-logotype-b-mask174x40_2x.png" crc="3901940221" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-bg-color166x38.png" crc="336187722" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-bg-color166x38_2x.png" crc="4022972600" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="hero-txt-163x22.png" crc="212969965" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -475,18 +455,18 @@
     <file name="menu_2x.png" crc="4167045054" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-b-mask.png" crc="528749103" seo="true" ref="index">
+    <file name="logo-bg-color.png" crc="3860732273" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkcompany-logotype-b-mask_2x.png" crc="3843418117" seo="true" ref="index">
+    <file name="logo-bg-color_2x.png" crc="431451643" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-bg-color.png" crc="314809725" seo="true" ref="index">
+    <file name="logo-bg-color174x40.png" crc="3898813576" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-bg-color_2x.png" crc="4268838435" seo="true" ref="index">
+    <file name="logo-bg-color174x40_2x.png" crc="4167030024" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="209548094" seo="true" mt="1623129447034" redirect="true"/>
+  <file name="index.html" crc="4258581132" seo="true" mt="1623157844769" redirect="true"/>
 </manifest>
