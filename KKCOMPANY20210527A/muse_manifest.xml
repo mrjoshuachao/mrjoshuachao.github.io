@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1622090128380">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1623126418864">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="index.css" crc="4047698012" ref="index"/>
-    <file name="nomq_index.css" crc="96181286" ref="index"/>
+    <file name="index.css" crc="359126595" ref="index"/>
+    <file name="nomq_index.css" crc="242957051" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -476,5 +476,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4085685016" seo="true" mt="1622090115484" redirect="true"/>
+  <file name="index.html" crc="3784661373" seo="true" mt="1623126322113" redirect="true"/>
 </manifest>
