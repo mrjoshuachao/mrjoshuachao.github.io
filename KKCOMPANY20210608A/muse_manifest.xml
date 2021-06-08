@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1623157869457">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1623158584148">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="4240923859" ref="index"/>
@@ -299,6 +299,12 @@
     <file name="menu25x25_2x.png" crc="4167045054" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="logo-bg-color174x40.png" crc="3898813576" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-bg-color174x40_2x.png" crc="4167030024" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
     <file name="hero-txt-163x22.png" crc="212969965" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -461,12 +467,6 @@
     <file name="logo-bg-color_2x.png" crc="431451643" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="logo-bg-color174x40.png" crc="3898813576" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="logo-bg-color174x40_2x.png" crc="4167030024" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
   </folder>
-  <file name="index.html" crc="4258581132" seo="true" mt="1623157844769" redirect="true"/>
+  <file name="index.html" crc="3939563731" seo="true" mt="1623158545181" redirect="true"/>
 </manifest>

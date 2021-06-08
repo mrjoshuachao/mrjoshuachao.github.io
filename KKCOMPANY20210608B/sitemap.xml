@@ -228,6 +228,12 @@
       <image:loc>http://mrjoshuachao.github.io/images/menu25x25_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40_2x.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-163x22.png</image:loc>
     </image:image>
     <image:image>
@@ -364,12 +370,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color174x40_2x.png</image:loc>
     </image:image>
   </url>
 </urlset>
