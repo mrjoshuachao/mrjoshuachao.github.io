@@ -1,16 +1,16 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1626893468940">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1626941601384">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="story-kkstream-20210720.css" crc="3768823491" ref="story-kkstream-20210720"/>
-    <file name="nomq_story-kkstream-20210720.css" crc="459874301" ref="story-kkstream-20210720"/>
-    <file name="story-kklive-20210720.css" crc="34274163" ref="story-kklive-20210720"/>
-    <file name="nomq_story-kklive-20210720.css" crc="326248810" ref="story-kklive-20210720"/>
-    <file name="story-kkbox-20210720.css" crc="435797466" ref="story-kkbox-20210720"/>
-    <file name="nomq_story-kkbox-20210720.css" crc="4203658391" ref="story-kkbox-20210720"/>
-    <file name="story-kkfarm-20210720.css" crc="3826888373" ref="story-kkfarm-20210720"/>
-    <file name="nomq_story-kkfarm-20210720.css" crc="3825476532" ref="story-kkfarm-20210720"/>
-    <file name="index.css" crc="3764182540" ref="index"/>
-    <file name="nomq_index.css" crc="483456701" ref="index"/>
+    <file name="story-kkstream-20210720.css" crc="16467386" ref="story-kkstream-20210720"/>
+    <file name="nomq_story-kkstream-20210720.css" crc="312419233" ref="story-kkstream-20210720"/>
+    <file name="story-kklive-20210720.css" crc="4049095173" ref="story-kklive-20210720"/>
+    <file name="nomq_story-kklive-20210720.css" crc="4251347444" ref="story-kklive-20210720"/>
+    <file name="story-kkbox-20210720.css" crc="4057117457" ref="story-kkbox-20210720"/>
+    <file name="nomq_story-kkbox-20210720.css" crc="210925590" ref="story-kkbox-20210720"/>
+    <file name="story-kkfarm-20210720.css" crc="4103669898" ref="story-kkfarm-20210720"/>
+    <file name="nomq_story-kkfarm-20210720.css" crc="3932794193" ref="story-kkfarm-20210720"/>
+    <file name="index.css" crc="217490890" ref="index"/>
+    <file name="nomq_index.css" crc="4108561557" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720"/>
@@ -114,6 +114,14 @@
       <caption webpage="story-kkstream-20210720" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
@@ -130,14 +138,6 @@
       <caption webpage="story-kkfarm-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="learn-more_2x.png" crc="376606654" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
@@ -156,6 +156,14 @@
       <caption webpage="story-kkstream-20210720" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
@@ -172,14 +180,6 @@
       <caption webpage="story-kkfarm-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="story-kkbox-20210720-u92063-fr.jpg" crc="536290762" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720"/>
     <file name="story-kkbox-20210720-u92063-fr_2x.jpg" crc="371051645" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720"/>
@@ -568,44 +568,44 @@
     <file name="world.png" crc="4190123480" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="world_2x.png" crc="398240793" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="menu.png" crc="438061410" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="menu_2x.png" crc="4167045054" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="logo-bg-color.png" crc="89237039" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="logo-bg-color_2x.png" crc="4235066968" seo="true" ref="index:story-kkstream-20210720:story-kkbox-20210720:story-kklive-20210720:story-kkfarm-20210720">
       <caption webpage="index" alt=""/>
       <caption webpage="story-kkstream-20210720" alt=""/>
+      <caption webpage="story-kkbox-20210720" alt=""/>
       <caption webpage="story-kklive-20210720" alt=""/>
       <caption webpage="story-kkfarm-20210720" alt=""/>
-      <caption webpage="story-kkbox-20210720" alt=""/>
     </file>
     <file name="story-kkstream-20210720.jpg" crc="3942594961" seo="true" ref="story-kkstream-20210720">
       <caption webpage="story-kkstream-20210720" alt=""/>
@@ -632,9 +632,9 @@
       <caption webpage="story-kkfarm-20210720" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="417389345" seo="true" mt="1626891643264" redirect="true"/>
-  <file name="story-kkstream-20210720.html" crc="3940266413" seo="true" mt="1626893348971" redirect="true"/>
-  <file name="story-kkbox-20210720.html" crc="368244790" seo="true" mt="1626893381638" redirect="true"/>
-  <file name="story-kklive-20210720.html" crc="3846479576" seo="true" mt="1626893407362" redirect="true"/>
-  <file name="story-kkfarm-20210720.html" crc="39977493" seo="true" mt="1626893427995" redirect="true"/>
+  <file name="index.html" crc="369923092" seo="true" mt="1626941090524" redirect="true"/>
+  <file name="story-kkstream-20210720.html" crc="444418186" seo="true" mt="1626941351315" redirect="true"/>
+  <file name="story-kkbox-20210720.html" crc="3976743613" seo="true" mt="1626941328462" redirect="true"/>
+  <file name="story-kklive-20210720.html" crc="258256120" seo="true" mt="1626941467400" redirect="true"/>
+  <file name="story-kkfarm-20210720.html" crc="87311314" seo="true" mt="1626941538245" redirect="true"/>
 </manifest>
