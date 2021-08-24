@@ -1,0 +1,65 @@
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1629803757119">
+  <folder name="css">
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="4278123336" ref="index"/>
+    <file name="nomq_index.css" crc="3925398940" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="340535759" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="310584261" ref="index"/>
+    <file name="jquery.watch.js" crc="51536988" ref="index"/>
+    <file name="jquery.museresponsive.js" crc="527716135" ref="index"/>
+    <file name="require.js" crc="7928878" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="index-favicon.ico" crc="4006622782" ref="index"/>
+    <file name="v1.png" crc="167889815" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="v2.png" crc="4232319139" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world20x20.png" crc="533738987" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world20x20_2x.png" crc="60937252" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype122x22_2x.png" crc="3983883522" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu25x25.png" crc="193552180" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu25x25_2x.png" crc="193552180" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world.png" crc="339622068" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="world_2x.png" crc="3922872372" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype.png" crc="4200694733" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype_2x.png" crc="247889280" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu.png" crc="193552180" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu_2x.png" crc="193552180" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+  </folder>
+  <file name="index.html" crc="330929364" seo="true" mt="1629803704096" redirect="true"/>
+</manifest>
