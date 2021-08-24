@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1629785465494">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1629786197824">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="3955447426" ref="index"/>
-    <file name="nomq_index.css" crc="4265481875" ref="index"/>
+    <file name="index.css" crc="4067562999" ref="index"/>
+    <file name="nomq_index.css" crc="146751775" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -14,7 +14,6 @@
     <file name="require.js" crc="7928878" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="4248326923" ref="index"/>
     <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -56,6 +55,7 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="index-favicon.ico" crc="4006622782" ref="index"/>
   </folder>
-  <file name="index.html" crc="285430868" seo="true" mt="1629785421327" redirect="true"/>
+  <file name="index.html" crc="4203840130" seo="true" mt="1629786189497" redirect="true"/>
 </manifest>
