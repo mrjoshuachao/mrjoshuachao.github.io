@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630466850415">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630467588655">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="3778842074" ref="index"/>
     <file name="nomq_index.css" crc="4008971149" ref="index"/>
-    <file name="about.css" crc="3807051056" ref="about"/>
-    <file name="nomq_about.css" crc="3902128172" ref="about"/>
+    <file name="about.css" crc="506380905" ref="about"/>
+    <file name="nomq_about.css" crc="414442710" ref="about"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:about"/>
@@ -285,5 +285,5 @@
     </file>
   </folder>
   <file name="index.html" crc="188342570" seo="true" mt="1630465154289" redirect="true"/>
-  <file name="about.html" crc="3946314160" seo="true" mt="1630466818823" redirect="true"/>
+  <file name="about.html" crc="4081874923" seo="true" mt="1630467532005" redirect="true"/>
 </manifest>
