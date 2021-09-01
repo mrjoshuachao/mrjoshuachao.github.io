@@ -242,5 +242,11 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/team-ty_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-cards-shadow224x279.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/all-cards-shadow224x279_2x.png</image:loc>
+    </image:image>
   </url>
 </urlset>
