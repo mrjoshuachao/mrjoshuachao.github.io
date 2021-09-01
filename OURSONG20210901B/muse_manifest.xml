@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630465594980">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630465707167">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="3778842074" ref="index"/>
@@ -53,21 +53,17 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="menu25x25.png" crc="193552180" seo="true" ref="index:about">
+    <file name="menu25x25.png" crc="193552180" seo="true" ref="index">
       <caption webpage="index" alt=""/>
-      <caption webpage="about" alt=""/>
     </file>
-    <file name="menu25x25_2x.png" crc="193552180" seo="true" ref="index:about">
+    <file name="menu25x25_2x.png" crc="193552180" seo="true" ref="index">
       <caption webpage="index" alt=""/>
-      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index:about">
+    <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index">
       <caption webpage="index" alt=""/>
-      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22_2x.png" crc="3983883522" seo="true" ref="index:about">
+    <file name="oursong-logotype122x22_2x.png" crc="3983883522" seo="true" ref="index">
       <caption webpage="index" alt=""/>
-      <caption webpage="about" alt=""/>
     </file>
     <file name="download-badge-app-store.png" crc="4051292867" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -144,6 +140,6 @@
     <file name="team-ty-u1017562.png" crc="363560352" ref="about"/>
     <file name="team-ty-u101756_2x2.png" crc="4174731894" ref="about"/>
   </folder>
-  <file name="index.html" crc="4006273070" seo="true" mt="1630465154289" redirect="true"/>
-  <file name="about.html" crc="3780667783" seo="true" mt="1630465556759" redirect="true"/>
+  <file name="index.html" crc="188342570" seo="true" mt="1630465154289" redirect="true"/>
+  <file name="about.html" crc="493799571" seo="true" mt="1630465556759" redirect="true"/>
 </manifest>
