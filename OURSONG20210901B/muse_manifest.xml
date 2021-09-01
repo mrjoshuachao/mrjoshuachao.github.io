@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630470153160">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630471229204">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="3778842074" ref="index"/>
     <file name="nomq_index.css" crc="4008971149" ref="index"/>
-    <file name="about.css" crc="4083330544" ref="about"/>
-    <file name="nomq_about.css" crc="3931884727" ref="about"/>
+    <file name="about.css" crc="3969691611" ref="about"/>
+    <file name="nomq_about.css" crc="4214369925" ref="about"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:about"/>
@@ -99,30 +99,6 @@
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:about"/>
     <file name="about-favicon.ico" crc="4006622782" ref="about"/>
-    <file name="all-cards-shadow225x279.png" crc="56399061" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="all-cards-shadow225x279_2x.png" crc="4253504379" seo="true" ref="about">
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="about" alt=""/>
-    </file>
     <file name="team-chris161x268.png" crc="11645302" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
@@ -189,7 +165,7 @@
     <file name="team-akio160x268_2x.png" crc="458859748" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
-    <file name="all-cards-shadow.png" crc="220955640" seo="true" ref="about">
+    <file name="all-cards-shadow.png" crc="4225832488" seo="true" ref="about">
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
@@ -202,7 +178,7 @@
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
-    <file name="all-cards-shadow_2x.png" crc="279841871" seo="true" ref="about">
+    <file name="all-cards-shadow_2x.png" crc="4066676797" seo="true" ref="about">
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
@@ -281,13 +257,33 @@
     <file name="team-ty_2x.png" crc="104240509" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
-    <file name="all-cards-shadow224x279.png" crc="123103175" seo="true" ref="about">
+    <file name="all-cards-shadow72x268.png" crc="160002918" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
-    <file name="all-cards-shadow224x279_2x.png" crc="3889637790" seo="true" ref="about">
+    <file name="all-cards-shadow72x268_2x.png" crc="88224961" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
   </folder>
   <file name="index.html" crc="188342570" seo="true" mt="1630465154289" redirect="true"/>
-  <file name="about.html" crc="3967336472" seo="true" mt="1630470110482" redirect="true"/>
+  <file name="about.html" crc="4261630055" seo="true" mt="1630471204953" redirect="true"/>
 </manifest>
