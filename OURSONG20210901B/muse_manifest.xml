@@ -1,10 +1,10 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630465707167">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1630466850415">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="3778842074" ref="index"/>
     <file name="nomq_index.css" crc="4008971149" ref="index"/>
-    <file name="about.css" crc="264485303" ref="about"/>
-    <file name="nomq_about.css" crc="459369644" ref="about"/>
+    <file name="about.css" crc="3807051056" ref="about"/>
+    <file name="nomq_about.css" crc="3902128172" ref="about"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:about"/>
@@ -53,17 +53,21 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="menu25x25.png" crc="193552180" seo="true" ref="index">
+    <file name="menu25x25.png" crc="193552180" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="menu25x25_2x.png" crc="193552180" seo="true" ref="index">
+    <file name="menu25x25_2x.png" crc="193552180" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index">
+    <file name="oursong-logotype122x22.png" crc="93702348" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22_2x.png" crc="3983883522" seo="true" ref="index">
+    <file name="oursong-logotype122x22_2x.png" crc="3983883522" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
     <file name="download-badge-app-store.png" crc="4051292867" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -95,51 +99,191 @@
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:about"/>
     <file name="about-favicon.ico" crc="4006622782" ref="about"/>
-    <file name="team-chris-u101746.png" crc="388734908" ref="about"/>
-    <file name="team-chris-u101746_2x.png" crc="4176423222" ref="about"/>
-    <file name="team-john-u101758.png" crc="4070969845" ref="about"/>
-    <file name="team-john-u101758_2x.png" crc="4145014837" ref="about"/>
-    <file name="team-pochang-u101752.png" crc="296826701" ref="about"/>
-    <file name="team-pochang-u101752_2x.png" crc="3842101846" ref="about"/>
-    <file name="team-terence-u101764.png" crc="3839072018" ref="about"/>
-    <file name="team-terence-u101764_2x.png" crc="3785338940" ref="about"/>
-    <file name="team-kevin-u101748.png" crc="4036090272" ref="about"/>
-    <file name="team-kevin-u101748_2x.png" crc="3759163610" ref="about"/>
-    <file name="team-matt-u101760.png" crc="4035900172" ref="about"/>
-    <file name="team-matt-u101760_2x.png" crc="3918088374" ref="about"/>
-    <file name="team-james-u101754.png" crc="4191391424" ref="about"/>
-    <file name="team-james-u101754_2x.png" crc="468999171" ref="about"/>
-    <file name="team-ken-u101766.png" crc="4219581756" ref="about"/>
-    <file name="team-ken-u101766_2x.png" crc="514817353" ref="about"/>
-    <file name="team-che-u101750.png" crc="221953483" ref="about"/>
-    <file name="team-che-u101750_2x.png" crc="9233559" ref="about"/>
-    <file name="team-akio-u101762.png" crc="4252888997" ref="about"/>
-    <file name="team-akio-u101762_2x.png" crc="3908157792" ref="about"/>
-    <file name="team-ty-u101756.png" crc="361942890" ref="about"/>
-    <file name="team-ty-u101756_2x.png" crc="427432278" ref="about"/>
-    <file name="team-chris-u1017462.png" crc="3848361117" ref="about"/>
-    <file name="team-chris-u101746_2x2.png" crc="129800679" ref="about"/>
-    <file name="team-john-u1017582.png" crc="4140679086" ref="about"/>
-    <file name="team-john-u101758_2x2.png" crc="230049322" ref="about"/>
-    <file name="team-pochang-u1017522.png" crc="3806062288" ref="about"/>
-    <file name="team-pochang-u101752_2x2.png" crc="3780981435" ref="about"/>
-    <file name="team-terence-u1017642.png" crc="3893070094" ref="about"/>
-    <file name="team-terence-u101764_2x2.png" crc="4292303226" ref="about"/>
-    <file name="team-kevin-u1017482.png" crc="4248152155" ref="about"/>
-    <file name="team-kevin-u101748_2x2.png" crc="151317906" ref="about"/>
-    <file name="team-matt-u1017602.png" crc="3967090270" ref="about"/>
-    <file name="team-matt-u101760_2x2.png" crc="4193367494" ref="about"/>
-    <file name="team-james-u1017542.png" crc="105471522" ref="about"/>
-    <file name="team-james-u101754_2x2.png" crc="481559739" ref="about"/>
-    <file name="team-ken-u1017662.png" crc="37967276" ref="about"/>
-    <file name="team-ken-u101766_2x2.png" crc="107192087" ref="about"/>
-    <file name="team-che-u1017502.png" crc="468088487" ref="about"/>
-    <file name="team-che-u101750_2x2.png" crc="4290135298" ref="about"/>
-    <file name="team-akio-u1017622.png" crc="74581546" ref="about"/>
-    <file name="team-akio-u101762_2x2.png" crc="455389245" ref="about"/>
-    <file name="team-ty-u1017562.png" crc="363560352" ref="about"/>
-    <file name="team-ty-u101756_2x2.png" crc="4174731894" ref="about"/>
+    <file name="all-cards-shadow225x279.png" crc="4107921866" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="all-cards-shadow225x279_2x.png" crc="65517271" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-chris161x268.png" crc="11645302" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-chris161x268_2x.png" crc="4269176018" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-pochang160x268.png" crc="4136721202" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-pochang160x268_2x.png" crc="4126587866" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-john160x268.png" crc="4237444992" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-john160x268_2x.png" crc="4272133345" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-terence160x268.png" crc="491327167" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-terence160x268_2x.png" crc="3821489791" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-kevin160x268.png" crc="531029809" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-kevin160x268_2x.png" crc="237219105" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-james160x268.png" crc="4144822856" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-james160x268_2x.png" crc="4126900686" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-matt160x268.png" crc="247398025" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-matt160x268_2x.png" crc="4017173891" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ken160x268.png" crc="4192197806" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ken160x268_2x.png" crc="3849512443" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-che160x268.png" crc="339289429" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-che160x268_2x.png" crc="4009940142" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ty160x268.png" crc="4000286132" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ty160x268_2x.png" crc="104240509" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-akio160x268.png" crc="524941801" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-akio160x268_2x.png" crc="458859748" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="all-cards-shadow.png" crc="4082613473" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="all-cards-shadow_2x.png" crc="246561405" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-chris.png" crc="4269176018" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-chris_2x.png" crc="4269176018" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-john.png" crc="4272133345" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-john_2x.png" crc="4272133345" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-pochang.png" crc="4126587866" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-pochang_2x.png" crc="4126587866" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-terence.png" crc="3821489791" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-terence_2x.png" crc="3821489791" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-kevin.png" crc="237219105" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-kevin_2x.png" crc="237219105" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-matt.png" crc="4017173891" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-matt_2x.png" crc="4017173891" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-james.png" crc="4126900686" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-james_2x.png" crc="4126900686" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ken.png" crc="3849512443" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ken_2x.png" crc="3849512443" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-che.png" crc="4009940142" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-che_2x.png" crc="4009940142" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-akio.png" crc="458859748" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-akio_2x.png" crc="458859748" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ty.png" crc="104240509" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="team-ty_2x.png" crc="104240509" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
   </folder>
   <file name="index.html" crc="188342570" seo="true" mt="1630465154289" redirect="true"/>
-  <file name="about.html" crc="493799571" seo="true" mt="1630465556759" redirect="true"/>
+  <file name="about.html" crc="3946314160" seo="true" mt="1630466818823" redirect="true"/>
 </manifest>
