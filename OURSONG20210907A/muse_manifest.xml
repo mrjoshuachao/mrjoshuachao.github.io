@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631019242828">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631019594853">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="4250725585" ref="about"/>
+    <file name="about.css" crc="415004680" ref="about"/>
     <file name="nomq_about.css" crc="461707233" ref="about"/>
     <file name="index.css" crc="104152658" ref="index"/>
     <file name="nomq_index.css" crc="194765198" ref="index"/>
@@ -55,17 +55,21 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="menu25x25.png" crc="4078563105" seo="true" ref="index">
+    <file name="menu25x25.png" crc="4078563105" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="menu25x25_2x.png" crc="4220107625" seo="true" ref="index">
+    <file name="menu25x25_2x.png" crc="4220107625" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22.png" crc="22055700" seo="true" ref="index">
+    <file name="oursong-logotype122x22.png" crc="22055700" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="oursong-logotype122x22_2x.png" crc="14030632" seo="true" ref="index">
+    <file name="oursong-logotype122x22_2x.png" crc="14030632" seo="true" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
     <file name="download-badge-app-store.png" crc="4051292867" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -301,5 +305,5 @@
     </file>
   </folder>
   <file name="index.html" crc="155217623" seo="true" mt="1631018646316" redirect="true"/>
-  <file name="about.html" crc="282540243" seo="true" mt="1631019114805" redirect="true"/>
+  <file name="about.html" crc="155107012" seo="true" mt="1631019556671" redirect="true"/>
 </manifest>
