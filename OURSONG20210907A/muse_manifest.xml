@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631019594853">
+<manifest alg="2" build="2018.1.0.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631019987564">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="415004680" ref="about"/>
-    <file name="nomq_about.css" crc="461707233" ref="about"/>
+    <file name="about.css" crc="3953829643" ref="about"/>
+    <file name="nomq_about.css" crc="161934203" ref="about"/>
     <file name="index.css" crc="104152658" ref="index"/>
     <file name="nomq_index.css" crc="194765198" ref="index"/>
   </folder>
@@ -304,6 +304,6 @@
       <caption webpage="about" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="155217623" seo="true" mt="1631018646316" redirect="true"/>
-  <file name="about.html" crc="155107012" seo="true" mt="1631019556671" redirect="true"/>
+  <file name="index.html" crc="475885668" seo="true" mt="1631019883195" redirect="true"/>
+  <file name="about.html" crc="3999955442" seo="true" mt="1631019966300" redirect="true"/>
 </manifest>
