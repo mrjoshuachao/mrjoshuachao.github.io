@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631113214853">
+<manifest alg="2" build="2018.1.1.386" opt="true" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1631113500002">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="index.css" crc="234487311" ref="index"/>
     <file name="nomq_index.css" crc="194765198" ref="index"/>
-    <file name="about.css" crc="3812385256" ref="about"/>
+    <file name="about.css" crc="3782585905" ref="about"/>
     <file name="nomq_about.css" crc="119480492" ref="about"/>
     <file name="chris.css" crc="481476636" ref="chris"/>
     <file name="john.css" crc="3853505742" ref="john"/>
@@ -398,7 +398,7 @@
     <file name="ty-favicon.ico" crc="4006622782" ref="ty"/>
   </folder>
   <file name="index.html" crc="3794580800" seo="true" mt="1631088672230" redirect="true"/>
-  <file name="about.html" crc="3899111635" seo="true" mt="1631113089752" redirect="true"/>
+  <file name="about.html" crc="420898223" seo="true" mt="1631113456864" redirect="true"/>
   <file name="john.html" crc="269808375" seo="true" mt="1631112501569" redirect="true"/>
   <file name="chris.html" crc="108334644" seo="true" mt="1631112642440" redirect="true"/>
   <file name="pochang.html" crc="4066034102" seo="true" mt="1631112626117" redirect="true"/>
