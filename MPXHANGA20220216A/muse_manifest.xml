@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1645016182850">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1645016808190">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
-    <file name="index.css" crc="446768791" ref="index"/>
+    <file name="index.css" crc="307419211" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -12,7 +12,7 @@
     <file name="require.js" crc="4177726516" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="index-favicon.ico" crc="3912524263" ref="index"/>
+    <file name="index-favicon.ico" crc="4179662729" ref="index"/>
     <file name="a-(10).png" crc="42010772" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -173,5 +173,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="468974473" seo="true" mt="1645016089475" redirect="true"/>
+  <file name="index.html" crc="201959761" seo="true" mt="1645016774204" redirect="true"/>
 </manifest>
