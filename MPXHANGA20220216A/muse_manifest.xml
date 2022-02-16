@@ -1,0 +1,177 @@
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1645014700559">
+  <folder name="css">
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="index.css" crc="112176347" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="3939489907" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="3936894949" ref="index"/>
+    <file name="jquery.watch.js" crc="522499760" ref="index"/>
+    <file name="require.js" crc="4177726516" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="index-favicon.ico" crc="3912524263" ref="index"/>
+    <file name="a-(10).png" crc="42010772" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(1).png" crc="3955910619" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(4).png" crc="3914214046" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(32).png" crc="4026021355" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(20).png" crc="3760731974" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(6).png" crc="412209434" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(34).png" crc="4079212024" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(35).png" crc="3906609877" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(48).png" crc="3902560289" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(47).png" crc="31366799" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(51).png" crc="247192442" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(52).png" crc="329264411" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(44).png" crc="4251564852" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(41).png" crc="4233508908" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(49).png" crc="481475530" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(5).png" crc="4290277765" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(33).png" crc="4222610519" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(3).png" crc="291876111" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(30).png" crc="3875004124" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(29).png" crc="3893516309" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(25).png" crc="173170444" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(27).png" crc="402021225" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(38).png" crc="4146280461" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(16).png" crc="4105385504" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(28).png" crc="4276736858" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(15).png" crc="315937973" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(31).png" crc="4086647087" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(23).png" crc="52021062" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(7).png" crc="4241947955" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(39).png" crc="253065505" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(26).png" crc="486667487" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(11).png" crc="171334040" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(37).png" crc="443068373" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(21).png" crc="4293664640" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(22).png" crc="3767772067" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(53).png" crc="4203109712" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(36).png" crc="124174036" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(40).png" crc="122555124" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(42).png" crc="3861571924" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(19).png" crc="4226055726" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(8).png" crc="4189483069" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(9).png" crc="4218832225" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(50).png" crc="3894794747" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(43).png" crc="4209076742" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(12).png" crc="4273430295" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(13).png" crc="287290075" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(2).png" crc="3788085111" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(18).png" crc="4244021209" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(24).png" crc="390778439" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(14).png" crc="264559740" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(17).png" crc="4109768660" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(46).png" crc="264008465" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="a-(45).png" crc="3894129890" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="4014461358" seo="true" mt="1645014492473" redirect="true"/>
+</manifest>
