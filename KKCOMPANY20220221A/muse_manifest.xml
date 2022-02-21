@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1645419007036">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1645419156468">
   <folder name="css">
     <file name="site_global.css" crc="3779915718"/>
     <file name="index.css" crc="4005495177" ref="index"/>
@@ -7,14 +7,14 @@
     <file name="nomq_story-kkfarm.css" crc="3898904853" ref="story-kkfarm"/>
     <file name="story-kklive.css" crc="32704162" ref="story-kklive"/>
     <file name="nomq_story-kklive.css" crc="470827614" ref="story-kklive"/>
-    <file name="stories.css" crc="349527456" ref="stories"/>
-    <file name="nomq_stories.css" crc="37273540" ref="stories"/>
+    <file name="stories.css" crc="4031525914" ref="stories"/>
+    <file name="nomq_stories.css" crc="15129278" ref="stories"/>
     <file name="story-kkbox.css" crc="3977471306" ref="story-kkbox"/>
     <file name="nomq_story-kkbox.css" crc="10563189" ref="story-kkbox"/>
     <file name="story-kkstream.css" crc="266215579" ref="story-kkstream"/>
     <file name="nomq_story-kkstream.css" crc="280038865" ref="story-kkstream"/>
-    <file name="about.css" crc="3827603352" ref="about"/>
-    <file name="nomq_about.css" crc="4018773486" ref="about"/>
+    <file name="about.css" crc="4215465026" ref="about"/>
+    <file name="nomq_about.css" crc="4208436333" ref="about"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about"/>
@@ -32,31 +32,39 @@
     <file name="require.js" crc="4177726516" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="3846679712" ref="index"/>
-    <file name="hero-txt-1-m315x248.png" crc="3777665947" seo="true" ref="index">
+    <file name="a-master-favicon.ico" crc="3846679712" ref="index:stories"/>
+    <file name="hero-txt-1-m315x248.png" crc="3777665947" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-1-m315x248_2x.png" crc="474446972" seo="true" ref="index">
+    <file name="hero-txt-1-m315x248_2x.png" crc="474446972" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about"/>
-    <file name="hero-txt-2-m315x248.png" crc="4271801155" seo="true" ref="index">
+    <file name="hero-txt-2-m315x248.png" crc="4271801155" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-2-m315x248_2x.png" crc="4094100759" seo="true" ref="index">
+    <file name="hero-txt-2-m315x248_2x.png" crc="4094100759" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-3-m315x248.png" crc="3963475120" seo="true" ref="index">
+    <file name="hero-txt-3-m315x248.png" crc="3963475120" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-3-m315x248_2x.png" crc="3949434575" seo="true" ref="index">
+    <file name="hero-txt-3-m315x248_2x.png" crc="3949434575" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-4-m315x248.png" crc="4107103889" seo="true" ref="index">
+    <file name="hero-txt-4-m315x248.png" crc="4107103889" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="hero-txt-4-m315x248_2x.png" crc="289153680" seo="true" ref="index">
+    <file name="hero-txt-4-m315x248_2x.png" crc="289153680" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
     <file name="loading.gif" crc="3815509949" ref="index:stories"/>
     <file name="hero-1.jpg" crc="158573264" seo="true" ref="index">
@@ -337,17 +345,21 @@
     <file name="chynahouse-logotype-w250x63_2x.png" crc="189628549" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="menu25x25.png" crc="468813615" seo="true" ref="index">
+    <file name="menu25x25.png" crc="468813615" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="menu25x25_2x.png" crc="4167045054" seo="true" ref="index">
+    <file name="menu25x25_2x.png" crc="4167045054" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-bg-color174x40.png" crc="483724663" seo="true" ref="index">
+    <file name="logo-bg-color174x40.png" crc="483724663" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
-    <file name="logo-bg-color174x40_2x.png" crc="114060748" seo="true" ref="index">
+    <file name="logo-bg-color174x40_2x.png" crc="114060748" seo="true" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
     <file name="hero-txt-163x22.png" crc="416810881" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -415,11 +427,13 @@
     </file>
     <file name="mockup-1.jpg" crc="3940679779" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
     <file name="story-kkstream-20210720-u103459-fr2.jpg" crc="3933500113" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm"/>
     <file name="story-kkstream-20210720-u103459-fr_2x2.jpg" crc="3758957229" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm"/>
     <file name="mockup-2.jpg" crc="503164318" ref="index:stories">
       <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
     </file>
     <file name="story-kkbox-20210720-u103461-fr2.jpg" crc="256816546" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm"/>
     <file name="story-kkbox-20210720-u103461-fr_2x2.jpg" crc="321383283" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm"/>
@@ -554,40 +568,40 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="menu.png" crc="438061410" seo="true" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about">
-      <caption webpage="story-kkfarm" alt=""/>
       <caption webpage="story-kkstream" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="story-kkbox" alt=""/>
       <caption webpage="story-kklive" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkfarm" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kkbox" alt=""/>
     </file>
     <file name="menu_2x.png" crc="4167045054" seo="true" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about">
-      <caption webpage="story-kkfarm" alt=""/>
       <caption webpage="story-kkstream" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="story-kkbox" alt=""/>
       <caption webpage="story-kklive" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkfarm" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kkbox" alt=""/>
     </file>
     <file name="logo-bg-color.png" crc="207036374" seo="true" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about">
-      <caption webpage="story-kkfarm" alt=""/>
       <caption webpage="story-kkstream" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="story-kkbox" alt=""/>
       <caption webpage="story-kklive" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkfarm" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kkbox" alt=""/>
     </file>
     <file name="logo-bg-color_2x.png" crc="3870245535" seo="true" ref="index:story-kkstream:story-kkbox:story-kklive:story-kkfarm:stories:about">
-      <caption webpage="story-kkfarm" alt=""/>
       <caption webpage="story-kkstream" alt=""/>
-      <caption webpage="about" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="story-kkbox" alt=""/>
       <caption webpage="story-kklive" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkfarm" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kkbox" alt=""/>
     </file>
     <file name="story-kkstream-20210720.jpg" crc="3942594961" seo="true" ref="story-kkstream">
       <caption webpage="story-kkstream" alt=""/>
@@ -631,6 +645,6 @@
   <file name="story-kkbox.html" crc="3949441818" seo="true" mt="1637731469796" redirect="true"/>
   <file name="story-kklive.html" crc="3873510280" seo="true" mt="1637731482273" redirect="true"/>
   <file name="story-kkfarm.html" crc="10259448" seo="true" mt="1637731490014" redirect="true"/>
-  <file name="stories.html" crc="4277109793" seo="true" mt="1645418423007" redirect="true"/>
-  <file name="about.html" crc="4082700374" seo="true" mt="1645417547514" redirect="true"/>
+  <file name="stories.html" crc="4097896309" seo="true" mt="1645419112135" redirect="true"/>
+  <file name="about.html" crc="531834639" seo="true" mt="1645419084033" redirect="true"/>
 </manifest>
