@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2022-03-22</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -64,42 +64,6 @@
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center175x44.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center175x44_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w150x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w150x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w150x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w150x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w150x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w150x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w150x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w150x38_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w150x38.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w150x38_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w.png</image:loc>
@@ -294,42 +258,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4-m_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w220x55.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w220x55_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w220x55.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w220x55_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w220x55.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w220x55_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w220x55.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w220x55_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w220x55.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w220x55_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logotype-blendvision-kaleido-center.png</image:loc>
     </image:image>
     <image:image>
@@ -443,18 +371,30 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/see-more147x40.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/see-more147x40_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/see-more.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/see-more_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/more.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/more_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story-kkstream-2021q4.html</loc>
-    <lastmod>2022-03-21</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
@@ -467,18 +407,18 @@
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/story-kkstream-20210720640x400.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu30x30.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/menu30x30_2x.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story-kkbox-2021q4.html</loc>
-    <lastmod>2022-03-21</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
@@ -494,15 +434,9 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story-kklive-2021q4.html</loc>
-    <lastmod>2022-03-21</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
@@ -518,15 +452,9 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story-kkfarm-2021q4.html</loc>
-    <lastmod>2022-03-21</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
@@ -542,7 +470,7 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/stories.html</loc>
-    <lastmod>2022-03-22</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -570,12 +498,6 @@
       <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4-m_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
     <image:image>
@@ -584,15 +506,9 @@
   </url>
   <url>
     <loc>http://mrjoshuachao.github.io/story-kkstream-2022q2.html</loc>
-    <lastmod>2022-03-22</lastmod>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
@@ -607,27 +523,111 @@
     </image:image>
   </url>
   <url>
-    <loc>http://mrjoshuachao.github.io/story-kklive-2022q2.html</loc>
-    <lastmod>2022-03-21</lastmod>
+    <loc>http://mrjoshuachao.github.io/about.html</loc>
+    <lastmod>2022-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center175x44.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/menu_2x.png</image:loc>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center175x44_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w150x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w150x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w150x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w150x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w150x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w150x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w150x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w150x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w150x38.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w150x38_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-1-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-1-m_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-2-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-2-m_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-3-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-3-m_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4-m.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/hero-txt-4-m_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/logotype-kkcompany-white-center_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w220x55.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkbox-logotype-w220x55_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w220x55.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kktv-logotype-w220x55_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w220x55.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkstream-logotype-w220x55_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w220x55.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kkfarm-logotype-w220x55_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w220x55.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://mrjoshuachao.github.io/images/kklive-logotype-w220x55_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://mrjoshuachao.github.io/images/logo-bg-color_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-kklive-2022q2.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://mrjoshuachao.github.io/images/story-kklive-2022q2640x400.jpg</image:loc>
     </image:image>
   </url>
 </urlset>
