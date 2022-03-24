@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1648099274812">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1648099503661">
   <folder name="css">
     <file name="site_global.css" crc="229390053"/>
     <file name="stories.css" crc="289467549" ref="stories"/>
@@ -506,21 +506,21 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="logo-bg-color.png" crc="207036374" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about">
-      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="stories" alt=""/>
       <caption webpage="story-kklive-2021q4" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
       <caption webpage="story-kkstream-2022q2" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
     <file name="logo-bg-color_2x.png" crc="3870245535" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about">
-      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="stories" alt=""/>
       <caption webpage="story-kklive-2021q4" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
       <caption webpage="story-kkstream-2022q2" alt=""/>
       <caption webpage="about" alt=""/>
@@ -646,7 +646,7 @@
       <caption webpage="about" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="3980729974" seo="true" mt="1648099145409" redirect="true"/>
+  <file name="index.html" crc="4272817396" seo="true" mt="1648099470811" redirect="true"/>
   <file name="story-kkstream-2021q4.html" crc="212840749" seo="true" mt="1648096124115" redirect="true"/>
   <file name="story-kkbox-2021q4.html" crc="4012106278" seo="true" mt="1648096124252" redirect="true"/>
   <file name="story-kklive-2021q4.html" crc="3977838939" seo="true" mt="1648096124429" redirect="true"/>
