@@ -1,0 +1,656 @@
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="mrjoshuachao.github.io" resolutions="1x,2x" timestamp="1650303339520">
+  <folder name="css">
+    <file name="site_global.css" crc="229390053"/>
+    <file name="index.css" crc="461285458" ref="index"/>
+    <file name="nomq_index.css" crc="4072187557" ref="index"/>
+    <file name="story-kkfarm-2021q4.css" crc="440357528" ref="story-kkfarm-2021q4"/>
+    <file name="nomq_story-kkfarm-2021q4.css" crc="79800982" ref="story-kkfarm-2021q4"/>
+    <file name="story-kkstream-2022q2.css" crc="468680169" ref="story-kkstream-2022q2"/>
+    <file name="nomq_story-kkstream-2022q2.css" crc="3976183055" ref="story-kkstream-2022q2"/>
+    <file name="story-kklive-2022q2.css" crc="282808708" ref="story-kklive-2022q2"/>
+    <file name="nomq_story-kklive-2022q2.css" crc="204031795" ref="story-kklive-2022q2"/>
+    <file name="story-kkstream-2021q4.css" crc="38511356" ref="story-kkstream-2021q4"/>
+    <file name="nomq_story-kkstream-2021q4.css" crc="3882143707" ref="story-kkstream-2021q4"/>
+    <file name="about.css" crc="3900296505" ref="about"/>
+    <file name="nomq_about.css" crc="3857752053" ref="about"/>
+    <file name="story-kkbox-2021q4.css" crc="236089092" ref="story-kkbox-2021q4"/>
+    <file name="nomq_story-kkbox-2021q4.css" crc="215407451" ref="story-kkbox-2021q4"/>
+    <file name="story-kklive-2021q4.css" crc="124131196" ref="story-kklive-2021q4"/>
+    <file name="nomq_story-kklive-2021q4.css" crc="4151442291" ref="story-kklive-2021q4"/>
+    <file name="stories.css" crc="305888632" ref="stories"/>
+    <file name="nomq_stories.css" crc="4090171252" ref="stories"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="museutils.js" crc="3939489907" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="whatinput.js" crc="86476730" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="museconfig.js" crc="3936894949" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="jquery.watch.js" crc="522499760" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="webpro.js" crc="3856315280" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="musewpslideshow.js" crc="244150766" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="jquery.museoverlay.js" crc="3877667098" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="touchswipe.js" crc="3888935200" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="85124417" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="jquery.scrolleffects.js" crc="312044820" ref="index"/>
+    <file name="jquery.museresponsive.js" crc="95814420" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="require.js" crc="4177726516" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+  </folder>
+  <folder name="images">
+    <file name="a-master-favicon.ico" crc="3846679712" ref="index"/>
+    <file name="hero-txt-1-m315x248.png" crc="34954161" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-1-m315x248_2x.png" crc="3819425503" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2"/>
+    <file name="hero-txt-2-m315x248.png" crc="324511191" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-2-m315x248_2x.png" crc="3908795103" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3-m315x248.png" crc="3927557500" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3-m315x248_2x.png" crc="429173832" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m315x248.png" crc="204343822" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4-m315x248_2x.png" crc="509098437" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="loading.gif" crc="3815509949" ref="index:stories:about"/>
+    <file name="hero-1.jpg" crc="448589299" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-2.jpg" crc="4160968119" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-3.jpg" crc="4257901105" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-4.jpg" crc="4293648800" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-1.png" crc="4069207242" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-1_2x.png" crc="396995153" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-2.png" crc="223430616" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-2_2x.png" crc="4243981137" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3.png" crc="4181971534" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-3_2x.png" crc="3893480439" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4.png" crc="476577451" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-4_2x.png" crc="425367912" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="see-more147x40.png" crc="4185846744" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="see-more147x40_2x.png" crc="4231981088" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="story-kklive-20210720-u103389-fr.jpg" crc="3899285961" ref="index"/>
+    <file name="story-kklive-20210720-u103389-fr_2x.jpg" crc="259101028" ref="index"/>
+    <file name="story-kkstream-2022q2-u103292-fr.jpg" crc="4205633422" ref="index"/>
+    <file name="story-kkstream-2022q2-u103292-fr_2x.jpg" crc="4001011005" ref="index"/>
+    <file name="story-kkstream-20210720-u103459-fr.jpg" crc="4173957071" ref="index"/>
+    <file name="story-kkstream-20210720-u103459-fr_2x.jpg" crc="4244854932" ref="index"/>
+    <file name="story-kklive-2022q2-u103460-fr.jpg" crc="3831602150" ref="index"/>
+    <file name="story-kklive-2022q2-u103460-fr_2x.jpg" crc="73349422" ref="index"/>
+    <file name="story-kkbox-20210720-u103461-fr.jpg" crc="3990519740" ref="index"/>
+    <file name="story-kkbox-20210720-u103461-fr_2x.jpg" crc="3884366625" ref="index"/>
+    <file name="story-kkfarm-20210720-u103462-fr.jpg" crc="4238310315" ref="index"/>
+    <file name="story-kkfarm-20210720-u103462-fr_2x.jpg" crc="3945780245" ref="index"/>
+    <file name="gb-3.jpg" crc="41645013" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w.png" crc="3813344412" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w_2x.png" crc="3782755660" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center192x68.png" crc="3876478003" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center192x68_2x.png" crc="4003814287" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center192x68.png" crc="3800552883" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center192x68_2x.png" crc="300435189" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center192x68.png" crc="3840235702" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center192x68_2x.png" crc="244811938" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-2.jpg" crc="145929680" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w.png" crc="343198420" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w_2x.png" crc="4179459935" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox60x60.png" crc="90964179" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox60x60_2x.png" crc="3847193689" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward143x45.png" crc="4164190541" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward143x45_2x.png" crc="246263946" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w.png" crc="25913213" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kktv-logotype-w_2x.png" crc="4000612279" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv60x60.png" crc="533446005" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv60x60_2x.png" crc="80118877" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w.png" crc="3984470562" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklive-logotype-w_2x.png" crc="372543748" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix60x60.png" crc="127667454" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix60x60_2x.png" crc="3772549888" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-4.jpg" crc="3969722482" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w.png" crc="188185410" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w_2x.png" crc="4062972904" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center192x67.png" crc="4291823870" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center192x67_2x.png" crc="4294610459" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-6.jpg" crc="4218718006" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w250x63.png" crc="3989268309" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w250x63_2x.png" crc="4189643292" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w250x63.png" crc="269389054" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w250x63_2x.png" crc="3826719063" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="firstory-logotyp-w250x63.png" crc="344908711" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="firstory-logotyp-w250x63_2x.png" crc="157099066" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="studio76-logotype-w250x63.png" crc="31589701" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="studio76-logotype-w250x63_2x.png" crc="247895240" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="verse-logotype-w250x63.png" crc="231279842" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="verse-logotype-w250x63_2x.png" crc="110990418" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bios-logotype-w250x63.png" crc="474004304" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bios-logotype-w250x63_2x.png" crc="4216883635" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="skrpresents-logotype-w250x63.png" crc="238894790" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="skrpresents-logotype-w250x63_2x.png" crc="391122682" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="chynahouse-logotype-w250x63.png" crc="353590739" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="chynahouse-logotype-w250x63_2x.png" crc="189628549" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-bg-color174x40.png" crc="483724663" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-bg-color174x40_2x.png" crc="114060748" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu25x25.png" crc="12637555" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="menu25x25_2x.png" crc="3969865369" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-163x22.png" crc="415242830" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-163x22_2x.png" crc="3950918105" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-263x22.png" crc="4172608065" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-263x22_2x.png" crc="119724532" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-363x22.png" crc="391739925" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-363x22_2x.png" crc="129837488" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-463x22.png" crc="414636082" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-463x22_2x.png" crc="4181805820" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="hero-txt-1-m.png" crc="4135501890" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-1-m_2x.png" crc="4093474897" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-2-m.png" crc="3961310895" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-2-m_2x.png" crc="266694579" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-3-m.png" crc="26650917" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-3-m_2x.png" crc="3966479320" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-4-m.png" crc="3852356244" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="hero-txt-4-m_2x.png" crc="4031502268" seo="true" ref="index:stories:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="see-more.png" crc="372166247" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="see-more_2x.png" crc="3861346231" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="story-kkstream-2022q2-u103292-fr2.jpg" crc="103682203" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkstream-2022q2-u103292-fr_2x2.jpg" crc="4106727205" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kklive-20210720-u103389-fr2.jpg" crc="3827684841" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kklive-20210720-u103389-fr_2x2.jpg" crc="368686193" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkstream-20210720-u103459-fr2.jpg" crc="3933500113" ref="index"/>
+    <file name="story-kkstream-20210720-u103459-fr_2x2.jpg" crc="3758957229" ref="index"/>
+    <file name="story-kkbox-20210720-u103461-fr2.jpg" crc="256816546" ref="index"/>
+    <file name="story-kkbox-20210720-u103461-fr_2x2.jpg" crc="321383283" ref="index"/>
+    <file name="story-kkfarm-20210720-u103462-fr2.jpg" crc="228196308" ref="index"/>
+    <file name="story-kkfarm-20210720-u103462-fr_2x2.jpg" crc="144316074" ref="index"/>
+    <file name="story-kklive-2022q2-u103460-fr2.jpg" crc="3790834857" ref="index"/>
+    <file name="story-kklive-2022q2-u103460-fr_2x2.jpg" crc="4144669263" ref="index"/>
+    <file name="gb-32.jpg" crc="111001996" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-3_2x.jpg" crc="41645013" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center.png" crc="95512299" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-kaleido-center_2x.png" crc="185871627" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center.png" crc="381284443" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-moment-center_2x.png" crc="4134814368" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center.png" crc="4125856618" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-blendvision-loom-center_2x.png" crc="3871283944" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-22.jpg" crc="477659452" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-2_2x.jpg" crc="145929680" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox.png" crc="3783114450" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kkbox_2x.png" crc="28879929" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward.png" crc="4084063714" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-kkboxmusicaward_2x.png" crc="246263946" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv.png" crc="3833008226" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktv_2x.png" crc="4003623440" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix.png" crc="3934162017" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="app-icon-kktix_2x.png" crc="455827127" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-42.jpg" crc="4134998463" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-4_2x.jpg" crc="3969722482" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center.png" crc="4214205211" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logotype-soundscape-center_2x.png" crc="409853657" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-62.jpg" crc="3769447176" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="gb-6_2x.jpg" crc="4218718006" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w.png" crc="373051015" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kklab-logotype-w_2x.png" crc="3759858736" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w.png" crc="3978035193" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="oursong-logotype-w_2x.png" crc="4185310712" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="firstory-logotyp-w.png" crc="237667144" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="firstory-logotyp-w_2x.png" crc="4134250213" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="studio76-logotype-w.png" crc="4082047745" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="studio76-logotype-w_2x.png" crc="432726707" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="verse-logotype-w.png" crc="477778990" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="verse-logotype-w_2x.png" crc="283545040" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bios-logotype-w.png" crc="3881871995" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="bios-logotype-w_2x.png" crc="141060820" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="skrpresents-logotype-w.png" crc="3961847377" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="skrpresents-logotype-w_2x.png" crc="3982083411" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="chynahouse-logotype-w.png" crc="4028271820" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="chynahouse-logotype-w_2x.png" crc="264822943" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="logo-bg-color.png" crc="207036374" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2">
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="logo-bg-color_2x.png" crc="3870245535" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2">
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="menu.png" crc="3969865369" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2">
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="menu_2x.png" crc="3969865369" seo="true" ref="index:story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:about:story-kklive-2022q2">
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="story-kkstream-20210720.jpg" crc="3942594961" seo="true" ref="story-kkstream-2021q4">
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+    </file>
+    <file name="story-kklive-2022q2-u124039-fr.jpg" crc="4258354458" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kklive-2022q2-u124039-fr_2x.jpg" crc="338369263" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkstream-20210720-u124040-fr.jpg" crc="17573949" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkstream-20210720-u124040-fr_2x.jpg" crc="30775859" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkbox-20210720-u124042-fr.jpg" crc="536290762" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkbox-20210720-u124042-fr_2x.jpg" crc="371051645" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkfarm-20210720-u124043-fr.jpg" crc="3798634234" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkfarm-20210720-u124043-fr_2x.jpg" crc="268584161" ref="story-kkstream-2021q4:story-kkbox-2021q4:story-kklive-2021q4:story-kkfarm-2021q4:stories:story-kkstream-2022q2:story-kklive-2022q2"/>
+    <file name="story-kkstream-20210720640x400.jpg" crc="74426761" seo="true" ref="story-kkstream-2021q4">
+      <caption webpage="story-kkstream-2021q4" alt=""/>
+    </file>
+    <file name="story-kkbox-20210720.jpg" crc="4122121117" seo="true" ref="story-kkbox-2021q4">
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="story-kkbox-20210720640x400.jpg" crc="416460436" seo="true" ref="story-kkbox-2021q4">
+      <caption webpage="story-kkbox-2021q4" alt=""/>
+    </file>
+    <file name="story-kklive-20210720.jpg" crc="130068753" seo="true" ref="story-kklive-2021q4">
+      <caption webpage="story-kklive-2021q4" alt=""/>
+    </file>
+    <file name="story-kklive-20210720640x400.jpg" crc="28283209" seo="true" ref="story-kklive-2021q4">
+      <caption webpage="story-kklive-2021q4" alt=""/>
+    </file>
+    <file name="story-kkfarm-20210720.jpg" crc="306642024" seo="true" ref="story-kkfarm-2021q4">
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+    </file>
+    <file name="story-kkfarm-20210720640x400.jpg" crc="122708502" seo="true" ref="story-kkfarm-2021q4">
+      <caption webpage="story-kkfarm-2021q4" alt=""/>
+    </file>
+    <file name="story-kkstream-2022q2.jpg" crc="4228230434" seo="true" ref="story-kkstream-2022q2">
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+    </file>
+    <file name="story-kkstream-2022q2640x400.jpg" crc="534316491" seo="true" ref="story-kkstream-2022q2">
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+    </file>
+    <file name="logotype-kkcompany-white-center175x44.png" crc="430324579" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="logotype-kkcompany-white-center175x44_2x.png" crc="400862926" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kktv-logotype-w150x38.png" crc="3835093048" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kktv-logotype-w150x38_2x.png" crc="3923256889" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w150x38.png" crc="4279285657" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w150x38_2x.png" crc="3972714410" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w150x38.png" crc="487749618" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w150x38_2x.png" crc="368942896" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w150x38.png" crc="79280935" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w150x38_2x.png" crc="3977536448" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kklive-logotype-w150x38.png" crc="4230622534" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kklive-logotype-w150x38_2x.png" crc="4005292815" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="logotype-kkcompany-white-center.png" crc="357919618" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="logotype-kkcompany-white-center_2x.png" crc="51825055" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w220x55.png" crc="3917006977" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkbox-logotype-w220x55_2x.png" crc="4246024157" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kktv-logotype-w220x55.png" crc="3924352230" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kktv-logotype-w220x55_2x.png" crc="3939180684" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w220x55.png" crc="70139161" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkstream-logotype-w220x55_2x.png" crc="381493647" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w220x55.png" crc="238664858" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kkfarm-logotype-w220x55_2x.png" crc="524523197" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kklive-logotype-w220x55.png" crc="225529177" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="kklive-logotype-w220x55_2x.png" crc="4040008353" seo="true" ref="about">
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="story-kklive-2022q2.jpg" crc="178299105" seo="true" ref="story-kklive-2022q2">
+      <caption webpage="story-kklive-2022q2" alt=""/>
+    </file>
+    <file name="story-kklive-2022q2640x400.jpg" crc="344180572" seo="true" ref="story-kklive-2022q2">
+      <caption webpage="story-kklive-2022q2" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="4199034274" seo="true" mt="1650287106471" redirect="true"/>
+  <file name="story-kkstream-2021q4.html" crc="3794064604" seo="true" mt="1650301320098" redirect="true"/>
+  <file name="story-kkbox-2021q4.html" crc="4235180974" seo="true" mt="1650301337872" redirect="true"/>
+  <file name="story-kklive-2021q4.html" crc="270723660" seo="true" mt="1650301290686" redirect="true"/>
+  <file name="story-kkfarm-2021q4.html" crc="162080985" seo="true" mt="1650301360201" redirect="true"/>
+  <file name="stories.html" crc="3863418091" seo="true" mt="1650300957637" redirect="true"/>
+  <file name="story-kkstream-2022q2.html" crc="416843064" seo="true" mt="1650301224597" redirect="true"/>
+  <file name="about.html" crc="4024038013" seo="true" mt="1650287014296" redirect="true"/>
+  <file name="story-kklive-2022q2.html" crc="198814095" seo="true" mt="1650301256933" redirect="true"/>
+</manifest>
