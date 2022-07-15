@@ -1,26 +1,26 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="https://www.kkcompany.com" resolutions="1x,2x" timestamp="1657858635142">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="false" exportTarget="other" domain="https://www.kkcompany.com" resolutions="1x,2x" timestamp="1657860230217">
   <folder name="css">
-    <file name="site_global.css" crc="229390053"/>
-    <file name="about.css" crc="4268845046" ref="about"/>
-    <file name="nomq_about.css" crc="225123480" ref="about"/>
-    <file name="information-security-statement.css" crc="4267450547" ref="information-security-statement"/>
-    <file name="nomq_information-security-statement.css" crc="96406319" ref="information-security-statement"/>
-    <file name="story-kkbox-2021q4.css" crc="181950052" ref="story-kkbox-2021q4"/>
-    <file name="nomq_story-kkbox-2021q4.css" crc="485149752" ref="story-kkbox-2021q4"/>
-    <file name="stories.css" crc="3856367933" ref="stories"/>
+    <file name="site_global.css" crc="3779915718"/>
+    <file name="stories.css" crc="258037628" ref="stories"/>
     <file name="nomq_stories.css" crc="3779534796" ref="stories"/>
-    <file name="story-kklive-2021q4.css" crc="4258345186" ref="story-kklive-2021q4"/>
-    <file name="nomq_story-kklive-2021q4.css" crc="296151310" ref="story-kklive-2021q4"/>
-    <file name="story-kklive-2022q2.css" crc="333445159" ref="story-kklive-2022q2"/>
-    <file name="nomq_story-kklive-2022q2.css" crc="3775131448" ref="story-kklive-2022q2"/>
-    <file name="story-kkstream-2021q4.css" crc="213762003" ref="story-kkstream-2021q4"/>
+    <file name="about.css" crc="4290344830" ref="about"/>
+    <file name="nomq_about.css" crc="225123480" ref="about"/>
+    <file name="story-kkstream-2021q4.css" crc="3767261409" ref="story-kkstream-2021q4"/>
     <file name="nomq_story-kkstream-2021q4.css" crc="4249175619" ref="story-kkstream-2021q4"/>
-    <file name="index.css" crc="3926718549" ref="index"/>
-    <file name="nomq_index.css" crc="4260648257" ref="index"/>
-    <file name="story-kkstream-2022q2.css" crc="219875168" ref="story-kkstream-2022q2"/>
-    <file name="nomq_story-kkstream-2022q2.css" crc="413922813" ref="story-kkstream-2022q2"/>
-    <file name="story-kkfarm-2021q4.css" crc="92946665" ref="story-kkfarm-2021q4"/>
+    <file name="information-security-statement.css" crc="3789125981" ref="information-security-statement"/>
+    <file name="nomq_information-security-statement.css" crc="96406319" ref="information-security-statement"/>
+    <file name="story-kkfarm-2021q4.css" crc="3965683012" ref="story-kkfarm-2021q4"/>
     <file name="nomq_story-kkfarm-2021q4.css" crc="30691937" ref="story-kkfarm-2021q4"/>
+    <file name="story-kkbox-2021q4.css" crc="480356860" ref="story-kkbox-2021q4"/>
+    <file name="nomq_story-kkbox-2021q4.css" crc="485149752" ref="story-kkbox-2021q4"/>
+    <file name="story-kkstream-2022q2.css" crc="349273733" ref="story-kkstream-2022q2"/>
+    <file name="nomq_story-kkstream-2022q2.css" crc="413922813" ref="story-kkstream-2022q2"/>
+    <file name="index.css" crc="317845397" ref="index"/>
+    <file name="nomq_index.css" crc="4260648257" ref="index"/>
+    <file name="story-kklive-2022q2.css" crc="150838969" ref="story-kklive-2022q2"/>
+    <file name="nomq_story-kklive-2022q2.css" crc="3775131448" ref="story-kklive-2022q2"/>
+    <file name="story-kklive-2021q4.css" crc="447783364" ref="story-kklive-2021q4"/>
+    <file name="nomq_story-kklive-2021q4.css" crc="296151310" ref="story-kklive-2021q4"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:story-kklive-2022q2:story-kkstream-2022q2:story-kklive-2021q4:story-kkstream-2021q4:story-kkbox-2021q4:story-kkfarm-2021q4:stories:about:information-security-statement"/>
@@ -471,51 +471,51 @@
     </file>
     <file name="logo-bg-color.png" crc="207036374" seo="true" ref="index:story-kklive-2022q2:story-kkstream-2022q2:story-kklive-2021q4:story-kkstream-2021q4:story-kkbox-2021q4:story-kkfarm-2021q4:stories:about:information-security-statement">
       <caption webpage="about" alt=""/>
-      <caption webpage="story-kklive-2021q4" alt=""/>
-      <caption webpage="information-security-statement" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="story-kkstream-2022q2" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
       <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
-      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="information-security-statement" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
     </file>
     <file name="logo-bg-color_2x.png" crc="3870245535" seo="true" ref="index:story-kklive-2022q2:story-kkstream-2022q2:story-kklive-2021q4:story-kkstream-2021q4:story-kkbox-2021q4:story-kkfarm-2021q4:stories:about:information-security-statement">
       <caption webpage="about" alt=""/>
-      <caption webpage="story-kklive-2021q4" alt=""/>
-      <caption webpage="information-security-statement" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="story-kkstream-2022q2" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
       <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
-      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="information-security-statement" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
     </file>
     <file name="menu.png" crc="3969865369" seo="true" ref="index:story-kklive-2022q2:story-kkstream-2022q2:story-kklive-2021q4:story-kkstream-2021q4:story-kkbox-2021q4:story-kkfarm-2021q4:stories:about:information-security-statement">
       <caption webpage="about" alt=""/>
-      <caption webpage="story-kklive-2021q4" alt=""/>
-      <caption webpage="information-security-statement" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="story-kkstream-2022q2" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
       <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
-      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="information-security-statement" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
     </file>
     <file name="menu_2x.png" crc="3969865369" seo="true" ref="index:story-kklive-2022q2:story-kkstream-2022q2:story-kklive-2021q4:story-kkstream-2021q4:story-kkbox-2021q4:story-kkfarm-2021q4:stories:about:information-security-statement">
       <caption webpage="about" alt=""/>
-      <caption webpage="story-kklive-2021q4" alt=""/>
-      <caption webpage="information-security-statement" alt=""/>
-      <caption webpage="stories" alt=""/>
-      <caption webpage="story-kkstream-2022q2" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="story-kklive-2022q2" alt=""/>
       <caption webpage="story-kkstream-2021q4" alt=""/>
       <caption webpage="story-kkfarm-2021q4" alt=""/>
-      <caption webpage="story-kklive-2022q2" alt=""/>
+      <caption webpage="story-kkstream-2022q2" alt=""/>
+      <caption webpage="information-security-statement" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="story-kkbox-2021q4" alt=""/>
+      <caption webpage="stories" alt=""/>
+      <caption webpage="story-kklive-2021q4" alt=""/>
     </file>
     <file name="story-kklive-2022q2.jpg" crc="4043876364" seo="true" ref="story-kklive-2022q2">
       <caption webpage="story-kklive-2022q2" alt=""/>
@@ -634,14 +634,14 @@
       <caption webpage="about" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4141756299" seo="true" mt="1657857900951" redirect="true"/>
-  <file name="story-kklive-2022q2.html" crc="4096725335" seo="true" mt="1657857982041" redirect="true"/>
-  <file name="story-kkstream-2022q2.html" crc="4185679227" seo="true" mt="1657857967810" redirect="true"/>
-  <file name="story-kklive-2021q4.html" crc="137518338" seo="true" mt="1657857993829" redirect="true"/>
-  <file name="story-kkstream-2021q4.html" crc="4242709478" seo="true" mt="1657858083280" redirect="true"/>
-  <file name="story-kkbox-2021q4.html" crc="4104103310" seo="true" mt="1657858096297" redirect="true"/>
-  <file name="story-kkfarm-2021q4.html" crc="508501317" seo="true" mt="1657858105296" redirect="true"/>
-  <file name="stories.html" crc="4065487774" seo="true" mt="1657857932598" redirect="true"/>
-  <file name="about.html" crc="4175598222" seo="true" mt="1657858569431" redirect="true"/>
-  <file name="information-security-statement.html" crc="4013890795" seo="true" mt="1657857949538" redirect="true"/>
+  <file name="index.html" crc="4250740511" seo="true" mt="1657857900951" redirect="true"/>
+  <file name="story-kklive-2022q2.html" crc="503632362" seo="true" mt="1657857982041" redirect="true"/>
+  <file name="story-kkstream-2022q2.html" crc="4040458478" seo="true" mt="1657857967810" redirect="true"/>
+  <file name="story-kklive-2021q4.html" crc="4240414456" seo="true" mt="1657857993829" redirect="true"/>
+  <file name="story-kkstream-2021q4.html" crc="359891710" seo="true" mt="1657858083280" redirect="true"/>
+  <file name="story-kkbox-2021q4.html" crc="4080829057" seo="true" mt="1657858096297" redirect="true"/>
+  <file name="story-kkfarm-2021q4.html" crc="118494553" seo="true" mt="1657858105296" redirect="true"/>
+  <file name="stories.html" crc="4234519832" seo="true" mt="1657857932598" redirect="true"/>
+  <file name="about.html" crc="429454920" seo="true" mt="1657858569431" redirect="true"/>
+  <file name="information-security-statement.html" crc="197511858" seo="true" mt="1657857949538" redirect="true"/>
 </manifest>
