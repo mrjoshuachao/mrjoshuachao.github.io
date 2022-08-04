@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://mrjoshuachao.github.io/index.html</loc>
-    <lastmod>2017-10-12</lastmod>
+    <lastmod>2017-11-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -440,7 +440,7 @@
   </url>
   <url>
     <loc>https://mrjoshuachao.github.io/about.html</loc>
-    <lastmod>2017-10-11</lastmod>
+    <lastmod>2017-11-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -4200,6 +4200,12 @@
       <image:loc>https://mrjoshuachao.github.io/images/bar-bunnyian-space-adventure-01.jpg</image:loc>
     </image:image>
     <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/i-study-hard-and-you-have-fun-01.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/i-study-hard-and-you-have-fun-01_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/i-study-hard-and-you-have-fun-02.jpg</image:loc>
     </image:image>
     <image:image>
@@ -6286,6 +6292,12 @@
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/chess-on-the-dot-16_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/chess-on-the-dot-15.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://mrjoshuachao.github.io/images/chess-on-the-dot-15_2x.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mrjoshuachao.github.io/images/chess-on-the-dot-07.jpg</image:loc>
