@@ -8,5 +8,11 @@
     <image:image>
       <image:loc>http://www.kkculture.com/images/dots%20l.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s_2x.jpg</image:loc>
+    </image:image>
   </url>
 </urlset>
