@@ -26,5 +26,14 @@
     <image:image>
       <image:loc>http://www.kkculture.com/images/pixel-art_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l772x400.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l579x300.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l579x301.jpg</image:loc>
+    </image:image>
   </url>
 </urlset>
