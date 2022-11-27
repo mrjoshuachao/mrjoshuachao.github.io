@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1669541815169">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1669542277952">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="4129671654" ref="index"/>
-    <file name="nomq_index.css" crc="287549400" ref="index"/>
+    <file name="index.css" crc="428077299" ref="index"/>
+    <file name="nomq_index.css" crc="4041331741" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -70,10 +70,10 @@
     <file name="dots l600x311.jpg" crc="3922340097" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="dots l400x208.jpg" crc="3881455267" seo="true" ref="index">
+    <file name="dots l320x166.jpg" crc="3839198154" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4125666960" seo="true" mt="1669541751484" redirect="true"/>
+  <file name="index.html" crc="3876068671" seo="true" mt="1669542270462" redirect="true"/>
 </manifest>
