@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1669534641944">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1669537067856">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="3846069658" ref="index"/>
+    <file name="index.css" crc="8758719" ref="index"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
@@ -16,7 +16,7 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="kkculture-favicon.ico" crc="4090583146" ref="index"/>
+    <file name="kkculture-favicon.ico" crc="3885619609" ref="index"/>
     <file name="dots s.jpg" crc="178472492" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
@@ -36,5 +36,5 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4015741459" seo="true" mt="1669534637222" redirect="true"/>
+  <file name="index.html" crc="4285478350" seo="true" mt="1669537053794" redirect="true"/>
 </manifest>
