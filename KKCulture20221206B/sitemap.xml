@@ -12,16 +12,16 @@
       <image:loc>http://www.kkculture.com/images/kkculture_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://www.kkculture.com/images/keyboard.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/keyboard_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
     </image:image>
   </url>
   <url>
@@ -30,16 +30,13 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://www.kkculture.com/images/kkculture.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/kkculture_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/keyboard.png</image:loc>
@@ -48,7 +45,19 @@
       <image:loc>http://www.kkculture.com/images/keyboard_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20l.jpg</image:loc>
+      <image:loc>http://www.kkculture.com/images/dots%20l800x415.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l600x312.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20l320x166.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
     </image:image>
   </url>
   <url>
