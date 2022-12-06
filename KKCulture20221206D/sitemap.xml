@@ -51,10 +51,4 @@
       <image:loc>http://www.kkculture.com/images/dots%20l.jpg</image:loc>
     </image:image>
   </url>
-  <url>
-    <loc>http://www.kkculture.com/assets/l.mp4</loc>
-    <lastmod>2022-11-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
 </urlset>

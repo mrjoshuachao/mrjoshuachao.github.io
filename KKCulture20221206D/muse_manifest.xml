@@ -1,11 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1670313839508">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1670314516047">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="3889234183" ref="index"/>
+    <file name="index.css" crc="3777506495" ref="index"/>
     <file name="visual-identity---kkculture.css" crc="218734723" ref="visual-identity---kkculture"/>
-  </folder>
-  <folder name="assets">
-    <file name="l.mp4" crc="199424406" seo="true" mt="1669496110000"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity---kkculture"/>
@@ -53,6 +50,6 @@
       <caption webpage="visual-identity---kkculture" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="348799736" seo="true" mt="1670313641824" redirect="true"/>
+  <file name="index.html" crc="4037810926" seo="true" mt="1670314512490" redirect="true"/>
   <file name="visual-identity---kkculture.html" crc="235661831" seo="true" mt="1670313616154" redirect="true"/>
 </manifest>
