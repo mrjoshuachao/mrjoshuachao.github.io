@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html class="nojs html css_verticalspacer" lang="en-US">
+ <head>
+
+<script>
+var urls = new Array();
+urls[0] = '0.html';
+urls[1] = '1.html';
+urls[2] = '2.html';
+urls[3] = '3.html';
+urls[4] = '4.html';
+urls[5] = '5.html';
+urls[6] = '6.html';
+urls[7] = '7.html';
+urls[8] = '8.html';
+urls[9] = '9.html';
+var now   = new Date();
+document.write( '<meta http-equiv="refresh" content="0; url=' + urls[ now.getSeconds() % urls.length ] + '">' );
+</script>
+
+   </head>
+</html>
