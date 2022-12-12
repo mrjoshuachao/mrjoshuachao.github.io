@@ -1,8 +1,8 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1670861342739">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1670862081736">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="4047959291" ref="index"/>
-    <file name="visual-identity--kkculture.css" crc="4040895688" ref="visual-identity--kkculture"/>
+    <file name="index.css" crc="4275005107" ref="index"/>
+    <file name="visual-identity--kkculture.css" crc="3814014500" ref="visual-identity--kkculture"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity--kkculture"/>
@@ -42,8 +42,8 @@
       <caption webpage="visual-identity---kkculture" alt=""/>
     </file>
     <file name="dots l.jpg" crc="202140665" seo="true" ref="visual-identity--kkculture">
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="pixel-art.png" crc="68116965" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
@@ -57,6 +57,6 @@
     </file>
     <file name="visual-identity--kkculture-favicon.ico" crc="3885619609" ref="visual-identity--kkculture"/>
   </folder>
-  <file name="index.html" crc="4231179396" seo="true" mt="1670861300450" redirect="true"/>
-  <file name="visual-identity--kkculture.html" crc="3921614476" seo="true" mt="1670861300453" redirect="true"/>
+  <file name="index.html" crc="338147578" seo="true" mt="1670861990366" redirect="true"/>
+  <file name="visual-identity--kkculture.html" crc="293242523" seo="true" mt="1670862068427" redirect="true"/>
 </manifest>
