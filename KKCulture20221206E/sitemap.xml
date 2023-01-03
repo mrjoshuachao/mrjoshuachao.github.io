@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://www.kkculture.com/index.html</loc>
-    <lastmod>2022-12-13</lastmod>
+    <lastmod>2023-01-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -22,6 +22,12 @@
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/pixel-art_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkfarm-mv-loop-800x800-a.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkfarm-mv-loop-800x800-b.jpg</image:loc>
     </image:image>
   </url>
   <url>
