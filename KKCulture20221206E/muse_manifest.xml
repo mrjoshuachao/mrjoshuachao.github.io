@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672823612838">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672832731572">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="3921958171" ref="index"/>
     <file name="visual-identity.css" crc="3944746704" ref="visual-identity"/>
-    <file name="you-create.css" crc="520894149" ref="you-create"/>
+    <file name="you-create.css" crc="455802220" ref="you-create"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity:you-create"/>
@@ -72,15 +72,15 @@
     </file>
     <file name="you-create--kkculture-favicon.ico" crc="3885619609" ref="you-create"/>
     <file name="10-by-10-grid.jpg" crc="4130809535" seo="true" ref="you-create">
-      <caption webpage="you-create-kkculture" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="you-create-kkculture" alt=""/>
     </file>
     <file name="10-by-10-grid_2x.jpg" crc="3781939176" seo="true" ref="you-create">
-      <caption webpage="you-create-kkculture" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="you-create-kkculture" alt=""/>
     </file>
   </folder>
   <file name="index.html" crc="3966597706" seo="true" mt="1672822609268" redirect="true"/>
   <file name="visual-identity.html" crc="3819304256" seo="true" mt="1672823591665" redirect="true"/>
-  <file name="you-create.html" crc="3990638723" seo="true" mt="1672822602684" redirect="true"/>
+  <file name="you-create.html" crc="303623016" seo="true" mt="1672832724684" redirect="true"/>
 </manifest>
