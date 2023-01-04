@@ -77,5 +77,11 @@
     <image:image>
       <image:loc>http://www.kkculture.com/images/down_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/x_2x.png</image:loc>
+    </image:image>
   </url>
 </urlset>
