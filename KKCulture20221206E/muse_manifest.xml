@@ -1,4 +1,4 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672822616646">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672823612838">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="3921958171" ref="index"/>
@@ -67,8 +67,8 @@
     </file>
     <file name="visual-identity--kkculture-favicon.ico" crc="3885619609" ref="visual-identity"/>
     <file name="dots l.jpg" crc="3932288072" seo="true" ref="visual-identity">
-      <caption webpage="visual-identity-kkculture" alt=""/>
       <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity-kkculture" alt=""/>
     </file>
     <file name="you-create--kkculture-favicon.ico" crc="3885619609" ref="you-create"/>
     <file name="10-by-10-grid.jpg" crc="4130809535" seo="true" ref="you-create">
@@ -81,6 +81,6 @@
     </file>
   </folder>
   <file name="index.html" crc="3966597706" seo="true" mt="1672822609268" redirect="true"/>
-  <file name="visual-identity.html" crc="4256408180" seo="true" mt="1672822609269" redirect="true"/>
+  <file name="visual-identity.html" crc="3819304256" seo="true" mt="1672823591665" redirect="true"/>
   <file name="you-create.html" crc="3990638723" seo="true" mt="1672822602684" redirect="true"/>
 </manifest>
