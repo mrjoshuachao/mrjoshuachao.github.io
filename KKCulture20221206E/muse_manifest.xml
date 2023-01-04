@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672762582525">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672801547572">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="3923061202" ref="index"/>
+    <file name="index.css" crc="275971079" ref="index"/>
     <file name="visual-identity--kkculture.css" crc="3944746704" ref="visual-identity--kkculture"/>
   </folder>
   <folder name="scripts">
@@ -62,7 +62,10 @@
     <file name="marquee_2x.png" crc="371663380" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="kkfarm-mv-loop-800x800-c.jpg" crc="535509230" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="4228438973" seo="true" mt="1672762580916" redirect="true"/>
+  <file name="index.html" crc="4259956600" seo="true" mt="1672801544202" redirect="true"/>
   <file name="visual-identity--kkculture.html" crc="4112619189" seo="true" mt="1670868453529" redirect="true"/>
 </manifest>
