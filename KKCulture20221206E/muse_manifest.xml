@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672803012196">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672807199330">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="20007994" ref="index"/>
+    <file name="index.css" crc="25788117" ref="index"/>
     <file name="visual-identity--kkculture.css" crc="3944746704" ref="visual-identity--kkculture"/>
   </folder>
   <folder name="scripts">
@@ -12,28 +12,29 @@
     <file name="jquery.watch.js" crc="522499760" ref="index:visual-identity--kkculture"/>
     <file name="jquery.scrolleffects.js" crc="312044820" ref="index"/>
     <file name="require.js" crc="4177726516" ref="index:visual-identity--kkculture"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="85124417" ref="index"/>
   </folder>
   <folder name="images">
     <file name="kkculture-favicon.ico" crc="3885619609" ref="index"/>
     <file name="kkculture.png" crc="4027422175" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="kkculture_2x.png" crc="4266694927" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="dots s.png" crc="3920890151" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="dots s_2x.png" crc="3796890009" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="dots l.jpg" crc="3932288072" seo="true" ref="visual-identity--kkculture">
       <caption webpage="visual-identity---kkculture" alt=""/>
@@ -41,13 +42,13 @@
     </file>
     <file name="pixel-art.png" crc="68116965" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="pixel-art_2x.png" crc="157374853" seo="true" ref="index:visual-identity--kkculture">
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity--kkculture" alt=""/>
       <caption webpage="visual-identity---kkculture" alt=""/>
+      <caption webpage="visual-identity--kkculture" alt=""/>
     </file>
     <file name="visual-identity--kkculture-favicon.ico" crc="3885619609" ref="visual-identity--kkculture"/>
     <file name="kkfarm-mv-loop-800x800-a.jpg" crc="4205448427" seo="true" ref="index">
@@ -56,16 +57,19 @@
     <file name="kkfarm-mv-loop-800x800-b.jpg" crc="3894242184" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="marquee.png" crc="2899939" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="marquee_2x.png" crc="371663380" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="kkfarm-mv-loop-800x800-c.jpg" crc="535509230" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
+    <file name="marquee-mask.png" crc="463187499" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-mask_2x.png" crc="3763529788" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="linkedin-banner.jpg" crc="4044215076" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="391271780" seo="true" mt="1672803005234" redirect="true"/>
+  <file name="index.html" crc="481066750" seo="true" mt="1672807192724" redirect="true"/>
   <file name="visual-identity--kkculture.html" crc="4112619189" seo="true" mt="1670868453529" redirect="true"/>
 </manifest>
