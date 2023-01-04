@@ -1,7 +1,7 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672801547572">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1672803012196">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
-    <file name="index.css" crc="275971079" ref="index"/>
+    <file name="index.css" crc="20007994" ref="index"/>
     <file name="visual-identity--kkculture.css" crc="3944746704" ref="visual-identity--kkculture"/>
   </folder>
   <folder name="scripts">
@@ -66,6 +66,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="4259956600" seo="true" mt="1672801544202" redirect="true"/>
+  <file name="index.html" crc="391271780" seo="true" mt="1672803005234" redirect="true"/>
   <file name="visual-identity--kkculture.html" crc="4112619189" seo="true" mt="1670868453529" redirect="true"/>
 </manifest>
