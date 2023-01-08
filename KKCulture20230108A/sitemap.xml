@@ -87,23 +87,32 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/keyboard.png</image:loc>
+      <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/keyboard_2x.png</image:loc>
+      <image:loc>http://www.kkculture.com/images/kkculture-b_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20l.jpg</image:loc>
+      <image:loc>http://www.kkculture.com/images/vi-s-b.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20l738x415.jpg</image:loc>
+      <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20l554x312.jpg</image:loc>
+      <image:loc>http://www.kkculture.com/images/grid-b.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20l295x166.jpg</image:loc>
+      <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-l.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://www.kkculture.com/you-create.html</loc>
+    <lastmod>2023-01-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
     <image:image>
       <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
     </image:image>
@@ -115,6 +124,12 @@
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
     </image:image>
   </url>
 </urlset>
