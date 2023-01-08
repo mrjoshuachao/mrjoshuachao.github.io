@@ -1,12 +1,12 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673219688523">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673220080512">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="298852552" ref="index"/>
-    <file name="visual-identity.css" crc="4220524984" ref="visual-identity"/>
-    <file name="nomq_visual-identity.css" crc="4218580303" ref="visual-identity"/>
+    <file name="visual-identity.css" crc="7974146" ref="visual-identity"/>
+    <file name="nomq_visual-identity.css" crc="3784007501" ref="visual-identity"/>
     <file name="nomq_index.css" crc="4224503125" ref="index"/>
-    <file name="you-create.css" crc="4174543424" ref="you-create"/>
-    <file name="nomq_you-create.css" crc="4242052162" ref="you-create"/>
+    <file name="you-create.css" crc="4005633574" ref="you-create"/>
+    <file name="nomq_you-create.css" crc="4044080475" ref="you-create"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity:you-create"/>
@@ -211,14 +211,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="kkculture-b_2x.png" crc="469440715" seo="true" ref="index:visual-identity:you-create">
       <caption webpage="index" alt=""/>
@@ -233,14 +233,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="vi-s-b.png" crc="3920890151" seo="true" ref="index:visual-identity:you-create">
       <caption webpage="index" alt=""/>
@@ -255,14 +255,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="vi-s-b_2x.png" crc="3796890009" seo="true" ref="index:visual-identity:you-create">
       <caption webpage="index" alt=""/>
@@ -277,14 +277,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="grid-b.png" crc="4180942089" seo="true" ref="index:visual-identity:you-create">
       <caption webpage="index" alt=""/>
@@ -299,14 +299,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="grid-b_2x.png" crc="3806204113" seo="true" ref="index:visual-identity:you-create">
       <caption webpage="index" alt=""/>
@@ -321,14 +321,14 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
-      <caption webpage="visual-identity" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
       <caption webpage="you-create" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
     </file>
     <file name="kkculture-w.png" crc="4074756543" seo="true" ref="index">
       <caption webpage="index" alt=""/>
@@ -469,6 +469,6 @@
     <file name="you-create-favicon.ico" crc="3885619609" ref="you-create"/>
   </folder>
   <file name="index.html" crc="407380664" seo="true" mt="1673218615738" redirect="true"/>
-  <file name="visual-identity.html" crc="4066761214" seo="true" mt="1673219685720" redirect="true"/>
-  <file name="you-create.html" crc="355673115" seo="true" mt="1673217315027" redirect="true"/>
+  <file name="visual-identity.html" crc="4262740800" seo="true" mt="1673220074944" redirect="true"/>
+  <file name="you-create.html" crc="439562172" seo="true" mt="1673220049114" redirect="true"/>
 </manifest>
