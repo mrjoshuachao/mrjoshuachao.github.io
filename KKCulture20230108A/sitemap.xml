@@ -2,9 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://www.kkculture.com/index.html</loc>
-    <lastmod>2023-01-08</lastmod>
+    <lastmod>2023-01-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go30x30.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go30x30_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w30x30.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w30x30_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-w_2x.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/mv-1.jpg</image:loc>
     </image:image>
@@ -20,42 +80,12 @@
     <image:image>
       <image:loc>http://www.kkculture.com/images/mv-3.jpg</image:loc>
     </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid_2x.png</image:loc>
-    </image:image>
   </url>
   <url>
     <loc>http://www.kkculture.com/visual-identity.html</loc>
-    <lastmod>2023-01-08</lastmod>
+    <lastmod>2023-01-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/dots%20s_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/keyboard.png</image:loc>
     </image:image>
@@ -73,6 +103,18 @@
     </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/dots%20l295x166.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
     </image:image>
   </url>
 </urlset>
