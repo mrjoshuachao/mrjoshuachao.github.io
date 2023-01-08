@@ -1,0 +1,172 @@
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673178476462">
+  <folder name="css">
+    <file name="site_global.css" crc="444006867"/>
+    <file name="index.css" crc="4230306052" ref="index"/>
+    <file name="visual-identity.css" crc="35535541" ref="visual-identity"/>
+    <file name="nomq_visual-identity.css" crc="496684417" ref="visual-identity"/>
+    <file name="nomq_index.css" crc="4031596830" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity"/>
+    <file name="museutils.js" crc="3939489907" ref="index:visual-identity"/>
+    <file name="whatinput.js" crc="86476730" ref="index:visual-identity"/>
+    <file name="museconfig.js" crc="3936894949" ref="index:visual-identity"/>
+    <file name="jquery.watch.js" crc="522499760" ref="index:visual-identity"/>
+    <file name="jquery.scrolleffects.js" crc="312044820" ref="index"/>
+    <file name="jquery.museresponsive.js" crc="95814420" ref="visual-identity:index"/>
+    <file name="require.js" crc="4177726516" ref="index:visual-identity"/>
+  </folder>
+  <folder name="images">
+    <file name="kkculture-favicon.ico" crc="3885619609" ref="index"/>
+    <file name="mv-1.jpg" crc="54024007" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="white-dot-mask.png" crc="144146276" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="white-dot-mask_2x.png" crc="219347723" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="mv-2.jpg" crc="53761973" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="mv-3.jpg" crc="4217344231" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkculture.png" crc="4027422175" seo="true" ref="index:visual-identity">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="kkculture_2x.png" crc="4266694927" seo="true" ref="index:visual-identity">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots s.png" crc="3920890151" seo="true" ref="index:visual-identity">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots s_2x.png" crc="3796890009" seo="true" ref="index:visual-identity">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="visual-identity:index"/>
+    <file name="visual-identity-favicon.ico" crc="3885619609" ref="visual-identity"/>
+    <file name="keyboard.png" crc="308585743" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="keyboard_2x.png" crc="308585743" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots l.jpg" crc="271834877" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots l738x415.jpg" crc="262223790" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots l554x312.jpg" crc="110491268" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="dots l295x166.jpg" crc="4011182405" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="grid.png" crc="4180942089" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="grid_2x.png" crc="3806204113" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-c-pic.jpg" crc="4276172548" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-c-pic_2x.jpg" crc="216318655" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-b-pic.jpg" crc="101583997" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-b-pic_2x.jpg" crc="508732443" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-a-pic.jpg" crc="511700232" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-a-pic_2x.jpg" crc="3998182096" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-mask.png" crc="26822792" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-mask_2x.png" crc="25644132" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="369862477" seo="true" mt="1673178467620" redirect="true"/>
+  <file name="visual-identity.html" crc="4249614726" seo="true" mt="1673167490011" redirect="true"/>
+</manifest>
