@@ -1,9 +1,9 @@
-<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673218825534">
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673219688523">
   <folder name="css">
     <file name="site_global.css" crc="444006867"/>
     <file name="index.css" crc="298852552" ref="index"/>
-    <file name="visual-identity.css" crc="189727062" ref="visual-identity"/>
-    <file name="nomq_visual-identity.css" crc="4088742773" ref="visual-identity"/>
+    <file name="visual-identity.css" crc="4220524984" ref="visual-identity"/>
+    <file name="nomq_visual-identity.css" crc="4218580303" ref="visual-identity"/>
     <file name="nomq_index.css" crc="4224503125" ref="index"/>
     <file name="you-create.css" crc="4174543424" ref="you-create"/>
     <file name="nomq_you-create.css" crc="4242052162" ref="you-create"/>
@@ -469,6 +469,6 @@
     <file name="you-create-favicon.ico" crc="3885619609" ref="you-create"/>
   </folder>
   <file name="index.html" crc="407380664" seo="true" mt="1673218615738" redirect="true"/>
-  <file name="visual-identity.html" crc="3839543931" seo="true" mt="1673217272989" redirect="true"/>
+  <file name="visual-identity.html" crc="4066761214" seo="true" mt="1673219685720" redirect="true"/>
   <file name="you-create.html" crc="355673115" seo="true" mt="1673217315027" redirect="true"/>
 </manifest>
