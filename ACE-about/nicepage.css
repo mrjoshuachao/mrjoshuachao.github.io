@@ -46164,6 +46164,11 @@ a.u-link.u-text-hover-color-var:hover {
   margin: 14px 890px 0 0;
 }
 
+.u-header .u-btn-1 {
+  background-image: none;
+  padding: 0;
+}
+
 .u-header .u-menu-1 {
   margin: -29px auto 0;
 }
@@ -46181,7 +46186,7 @@ a.u-link.u-text-hover-color-var:hover {
 .u-header .u-text-2 {
   font-family: SF-Pro-Display-Medium;
   font-size: 1.0625rem;
-  margin: -25px 0 15px 890px;
+  margin: -25px 0 0 890px;
 }
 @media (max-width: 1199px) {
    .u-header {
