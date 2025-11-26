@@ -46212,10 +46212,6 @@ a.u-link.u-text-hover-color-var:hover {
   }
 }
 @media (max-width: 991px) {
-   .u-header {
-    min-height: auto;
-  }
-
   .u-header .u-sheet-1 {
     min-height: 50px;
   }
@@ -46238,10 +46234,6 @@ a.u-link.u-text-hover-color-var:hover {
   }
 }
 @media (max-width: 767px) {
-   .u-header {
-    min-height: 45px;
-  }
-
   .u-header .u-sheet-1 {
     min-height: 532px;
   }
@@ -46262,10 +46254,6 @@ a.u-link.u-text-hover-color-var:hover {
   }
 }
 @media (max-width: 575px) {
-   .u-header {
-    min-height: auto;
-  }
-
   .u-header .u-sheet-1 {
     min-height: 53px;
   }
