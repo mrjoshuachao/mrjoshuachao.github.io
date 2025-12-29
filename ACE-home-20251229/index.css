@@ -364,8 +364,8 @@
   font-family: SF-Pro-Display-Heavy;
   font-size: 1.875rem;
   --text-color-var: #000000;
-  width: 520px;
-  margin: 100px 310px 0;
+  width: 456px;
+  margin: 100px auto 0;
 }
 
 .u-section-4 .u-text-2 {
@@ -464,11 +464,6 @@
 }
 
 @media (max-width: 1199px) {
-  .u-section-4 .u-text-1 {
-    margin-left: 210px;
-    margin-right: 210px;
-  }
-
   .u-section-4 .u-text-2 {
     margin-left: 245px;
     margin-right: 245px;
@@ -521,11 +516,6 @@
 }
 
 @media (max-width: 991px) {
-  .u-section-4 .u-text-1 {
-    margin-left: 100px;
-    margin-right: 100px;
-  }
-
   .u-section-4 .u-text-2 {
     margin-left: 135px;
     margin-right: 135px;
@@ -581,8 +571,6 @@
 @media (max-width: 767px) {
   .u-section-4 .u-text-1 {
     margin-top: 547px;
-    margin-left: 10px;
-    margin-right: 10px;
   }
 
   .u-section-4 .u-text-2 {
@@ -650,8 +638,6 @@
   .u-section-4 .u-text-1 {
     width: 340px;
     margin-top: 60px;
-    margin-left: 0;
-    margin-right: 0;
   }
 
   .u-section-4 .u-text-2 {
