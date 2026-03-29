@@ -1017,12 +1017,14 @@ function hostHandleConn(c){
     broadcast({t:"players",numP:numP});
   });
   c.on("data",function(d){
-    if(d.t==="fence"&&d.fi===fci%numP){
-      var e=d.edge;e.key=e.key;
-      tryPlaceFenceNet(e);
+    if(d.t==="do"){
+      actionLog.push(d.edge);
+      tryPlaceFenceNet(d.edge);
+      // Forward to other clients
+      for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} }
     }
-    if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);broadcast(d); }
-    if(d.t==="hidepreview"){ hideRemotePreview();broadcast(d); }
+    if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
+    if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
   });
   c.on("close",function(){ conns=conns.filter(function(x){return x!==c;}); updateRoomUI(); });
 }
