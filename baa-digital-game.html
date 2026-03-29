@@ -924,7 +924,8 @@ function syncCounts(src){
 
 window.resetGame=function(){
   gameOver=false;fci=0;scores=[0,0,0,0,0];history=[];ilCache={};completedTris={};actionLog=[];
-  seed=Date.now();hexRots={};pendingKey=null;pendingEdge=null;lastPrevKey=null;
+  if(!netApplying)seed=Date.now();
+  hexRots={};pendingKey=null;pendingEdge=null;lastPrevKey=null;
   hidePreview();
   for(var k in fences){ fences[k].el.remove(); } fences={};
   for(var k in generated){ generated[k].remove(); } generated={};
@@ -1202,7 +1203,7 @@ function handleNetData(d){
     document.getElementById("aisel").value=0;
     document.getElementById("advToggle").checked=advMode;
     document.getElementById("winsel").value=winTarget;
-    resetGame();
+    netApplying=true;resetGame();netApplying=false;
     scores=d.scores;fci=d.fci;
     for(var i=0;i<d.log.length;i++){
       netApplying=true;
@@ -1243,10 +1244,10 @@ function handleNetData(d){
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="idx_update"){ myIdx=d.idx;updateSB(); }
-  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;resetGame(); }
+  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false; }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
-    spectator=false;resetGame();updateSB();
+    spectator=false;netApplying=true;resetGame();netApplying=false;updateSB();
     var cdiv=document.createElement("div");
     cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
     var box=document.createElement("div");
