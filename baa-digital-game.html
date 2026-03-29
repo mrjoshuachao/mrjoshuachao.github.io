@@ -19,7 +19,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #aisel{background:#444;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
 #winsel{background:#444;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
 .lbl{color:#fff;font-size:12px;font-family:'Segoe UI',sans-serif}
-.scores{display:flex;gap:8px;flex:1;justify-content:center}
+.scores{display:flex;gap:8px;position:absolute;left:50%;transform:translateX(-50%);justify-content:center}
 .ps{display:flex;align-items:center;gap:5px;color:#fff;font-size:15px;font-weight:bold}
 .pd{width:26px;height:26px;border-radius:50%;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:bold;text-shadow:0 0 3px rgba(0,0,0,0.6);line-height:1}
 #msg{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,0.75);color:#fff;padding:10px 24px;border-radius:12px;font:bold 15px 'Segoe UI',sans-serif;display:none;pointer-events:none;text-align:center}
@@ -62,9 +62,9 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
 </style></head><body>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:4px;flex:0 0 auto"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:4px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
-<div style="display:flex;align-items:center;gap:8px;flex:0 0 auto">
+<div style="display:flex;align-items:center;gap:8px;margin-left:auto">
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span class="lbl">人類</span>
 <select id="aisel"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><span class="lbl">電腦</span>
 </div>
@@ -258,6 +258,10 @@ function updateSB(){
       var aiLbl=document.createElement("span");aiLbl.textContent="電腦";aiLbl.style.cssText="font-size:7px;line-height:1;opacity:0.85";
       var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
       dot.appendChild(aiLbl);dot.appendChild(num);
+    }else if(online&&i===myIdx){
+      var meLbl=document.createElement("span");meLbl.textContent="我";meLbl.style.cssText="font-size:8px;line-height:1;opacity:0.85";
+      var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
+      dot.appendChild(meLbl);dot.appendChild(num);
     }else{
       dot.textContent=scores[i];
     }
@@ -710,10 +714,15 @@ function showPreviewEdge(edge){
   prevEl.setAttribute("width",fw.toFixed(2));prevEl.setAttribute("height",fh.toFixed(2));
   prevEl.setAttribute("fill",FCOLORS[fci%numP]);prevEl.setAttribute("opacity","0.4");
   prevEl.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang.toFixed(2)+")");
-  prevEl.setAttribute("visibility","visible");
-
+  prevEl.setAttribute("visibility","visible");prevVisible=true;
+  if(online&&!netApplying)broadcast({t:"preview",edge:{x1:edge.x1,y1:edge.y1,x2:edge.x2,y2:edge.y2,key:edge.key},pci:fci%numP});
 }
-function hidePreview(){ prevEl.setAttribute("visibility","hidden"); }
+var prevVisible=false;
+function hidePreview(){
+  prevEl.setAttribute("visibility","hidden");
+  if(online&&!netApplying&&prevVisible)broadcast({t:"hidepreview"});
+  prevVisible=false;
+}
 function isInsideCompleted(edge){
   var pair=findTriPair(edge.key);
   if(!pair)return false;
@@ -752,6 +761,7 @@ window.addEventListener("mousemove",function(e){
   }
   if(gameOver)return;
   if(online&&(spectator||myIdx!==(fci%numP))){ hidePreview();lastPrevKey=null;return; }
+  if(pendingKey)return;
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
@@ -768,9 +778,17 @@ svg.addEventListener("click",function(e){
   if(recentTouch()||dragDist>5||gameOver||isAITurn())return;
   if(online&&(spectator||myIdx!==(fci%numP))){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
-  if(!edge)return;
-  if(isEdgeBlocked(edge)){ showBlockReason(edge);return; }
-  tryPlaceFence(edge);hidePreview();lastPrevKey=null;
+  if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
+  var key=edge.key;
+  if(isEdgeBlocked(edge)){ pendingKey=null;hidePreview();showBlockReason(edge);return; }
+  if(pendingKey===key){
+    tryPlaceFence(edge);
+    pendingKey=null;pendingEdge=null;hidePreview();lastPrevKey=null;
+    return;
+  }
+  pendingKey=key;
+  pendingEdge=edge;
+  showPreviewEdge(edge);
 });
 
 // --- TOUCH (mobile/tablet only) ---
@@ -808,7 +826,6 @@ window.addEventListener("touchend",function(e){
   var key=edge.key;
   if(isEdgeBlocked(edge)){ pendingKey=null;hidePreview();showBlockReason(edge);return; }
   if(pendingKey===key){
-    if(online&&!netApplying)broadcast({t:"hidepreview"});
     tryPlaceFence(edge);
     pendingKey=null;pendingEdge=null;hidePreview();
     return;
@@ -816,7 +833,6 @@ window.addEventListener("touchend",function(e){
   pendingKey=key;
   pendingEdge=edge;
   showPreviewEdge(edge);
-  if(online&&!netApplying)broadcast({t:"preview",edge:{x1:edge.x1,y1:edge.y1,x2:edge.x2,y2:edge.y2,key:edge.key},pci:fci%numP});
 });
 
 var pendingChange=null,pendingCancel=null,prevHuman=2,prevAI=0;
@@ -837,8 +853,18 @@ document.getElementById("cfNo").addEventListener("click",function(){
   pendingChange=null;pendingCancel=null;
 });
 document.getElementById("psel").addEventListener("change",function(){
+  var newVal=parseInt(this.value);
+  if(online){
+    localHumans=newVal;
+    if(isHost){
+      recalcOnlinePlayers();
+    }else{
+      broadcast({t:"humans",count:newVal});
+    }
+    return;
+  }
   var oldH=numHuman,oldA=numAI;
-  numHuman=parseInt(this.value);syncCounts("human");
+  numHuman=newVal;syncCounts("human");
   if(history.length>0){
     pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
     pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
@@ -895,7 +921,7 @@ window.resetGame=function(){
   for(var k in generated){ generated[k].remove(); } generated={};
   document.getElementById("win").style.display="none";
   commitView();fillView();updateSB();scheduleAI();
-  if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed});
+  if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});
 };
 
 panX=-window.innerWidth/2;panY=-window.innerHeight/2;
@@ -962,6 +988,7 @@ window.saveMapImage=function(){
 
 // === MULTIPLAYER ===
 var peer=null,conns=[],myIdx=-1,isHost=false,roomCode="",online=false,actionLog=[];
+var connHumans=[];var localHumans=1;
 
 function genCode(){ var s="",ch="ABCDEFGHJKMNPQRSTUVWXYZ23456789";for(var i=0;i<5;i++)s+=ch[Math.floor(Math.random()*ch.length)];return s; }
 
@@ -992,6 +1019,7 @@ function updateRoomUI(){
 
 function createRoom(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
+  localHumans=parseInt(document.getElementById("psel").value)||1;connHumans=[];
   peer=new Peer("baa-"+roomCode);
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
@@ -1003,6 +1031,18 @@ function createRoom(){
   peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
 }
 
+function recalcOnlinePlayers(){
+  var total=localHumans;
+  for(var i=0;i<connHumans.length;i++)total+=connHumans[i];
+  total+=numAI;
+  if(total>5)total=5;
+  numHuman=total-numAI;numP=total;
+  document.getElementById("psel").value=localHumans;
+  updateSB();
+  broadcast({t:"reset",seed:Date.now(),numP:numP,numAI:numAI});
+  seed=Date.now();resetGame();
+}
+
 function hostHandleConn(c){
   c.on("open",function(){
     // Check if room is full (max 5 players)
@@ -1011,15 +1051,15 @@ function hostHandleConn(c){
       setTimeout(function(){c.close();},500);
       return;
     }
-    conns.push(c);
+    conns.push(c);connHumans.push(1);
     var idx=conns.length;
     var gameInProgress=(fci>0||Object.keys(fences).length>0);
+    // Recalculate total
+    var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
+    numHuman=total-numAI;numP=total;
     c.send({t:"init",idx:idx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
-    // Update player count
-    numHuman=conns.length+1;if(numHuman>5)numHuman=5;
-    numAI=0;numP=numHuman;
-    document.getElementById("psel").value=numHuman;
-    document.getElementById("aisel").value=0;
+    document.getElementById("psel").value=localHumans;
+    document.getElementById("aisel").value=numAI;
     updateRoomUI();updateSB();
     broadcast({t:"players",numP:numP});
   });
@@ -1027,8 +1067,11 @@ function hostHandleConn(c){
     if(d.t==="do"){
       actionLog.push(d.edge);
       tryPlaceFenceNet(d.edge);
-      // Forward to other clients
       for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} }
+    }
+    if(d.t==="humans"){
+      var ci=conns.indexOf(c);if(ci>=0)connHumans[ci]=d.count;
+      recalcOnlinePlayers();
     }
     if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
     if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
@@ -1036,14 +1079,14 @@ function hostHandleConn(c){
   c.on("close",function(){
     var ci=conns.indexOf(c);
     var pName=FNAMES[ci+1]||"?";
-    conns=conns.filter(function(x){return x!==c;});
-    numHuman=conns.length+1;numAI=0;numP=numHuman;
-    document.getElementById("psel").value=numHuman;
-    document.getElementById("aisel").value=0;
+    conns.splice(ci,1);connHumans.splice(ci,1);
+    var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
+    numHuman=total-numAI;numP=total;
+    document.getElementById("psel").value=localHumans;
     updateRoomUI();
     showMsg(pName+"色玩家已退出，遊戲即將重新開始",4000);
     broadcast({t:"left",name:pName});
-    setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed}); },2000);
+    setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI}); },2000);
   });
 }
 
@@ -1065,16 +1108,21 @@ function joinRoom(code){
 
 var spectator=false;
 function lockOnlineUI(){
-  document.getElementById("psel").disabled=true;
-  document.getElementById("aisel").disabled=true;
+  document.getElementById("psel").disabled=false;
   document.getElementById("winsel").disabled=true;
   document.getElementById("btnRestart").disabled=!isHost;
+  if(isHost){
+    document.getElementById("aisel").disabled=false;
+  }else{
+    document.getElementById("aisel").parentNode.style.display="none";
+  }
 }
 function unlockOnlineUI(){
   document.getElementById("psel").disabled=false;
   document.getElementById("aisel").disabled=false;
   document.getElementById("winsel").disabled=false;
   document.getElementById("btnRestart").disabled=false;
+  document.getElementById("aisel").parentNode.style.display="";
 }
 function handleNetData(d){
   if(d.t==="full"){
@@ -1128,7 +1176,7 @@ function handleNetData(d){
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
-  if(d.t==="reset"){ seed=d.seed;spectator=false;resetGame(); }
+  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;resetGame(); }
   if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
@@ -1197,6 +1245,11 @@ document.getElementById("btnJoin").addEventListener("click",function(){
   if(code.length>=4)joinRoom(code);else showMsg("請輸入房號");
 });
 document.getElementById("btnCloseModal").addEventListener("click",function(){ document.getElementById("modal").style.display="none"; });
+
+// Close connection on page refresh/close
+window.addEventListener("beforeunload",function(){
+  if(peer)try{peer.destroy();}catch(e){}
+});
 
 // Check URL for auto-join
 var urlRoom=(new URLSearchParams(location.search)).get("room");
