@@ -263,7 +263,7 @@ function updateSB(){
     }
     d.appendChild(dot);sa.appendChild(d);
   }
-  document.getElementById("btnUndo").disabled=history.length===0||isAITurn();
+  document.getElementById("btnUndo").disabled=history.length===0||isAITurn()||online;
 }
 
 function checkWin(){
@@ -751,6 +751,7 @@ window.addEventListener("mousemove",function(e){
     applyPan();return;
   }
   if(gameOver)return;
+  if(online&&myIdx!==(fci%numP)){ hidePreview();lastPrevKey=null;return; }
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
@@ -807,6 +808,7 @@ window.addEventListener("touchend",function(e){
   var key=edge.key;
   if(isEdgeBlocked(edge)){ pendingKey=null;hidePreview();showBlockReason(edge);return; }
   if(pendingKey===key){
+    if(online&&!netApplying)broadcast({t:"hidepreview"});
     tryPlaceFence(edge);
     pendingKey=null;pendingEdge=null;hidePreview();
     return;
@@ -814,6 +816,7 @@ window.addEventListener("touchend",function(e){
   pendingKey=key;
   pendingEdge=edge;
   showPreviewEdge(edge);
+  if(online&&!netApplying)broadcast({t:"preview",edge:{x1:edge.x1,y1:edge.y1,x2:edge.x2,y2:edge.y2,key:edge.key},pci:fci%numP});
 });
 
 var pendingChange=null,pendingCancel=null,prevHuman=2,prevAI=0;
@@ -973,7 +976,8 @@ function updateRoomUI(){
   var pl=document.getElementById("roomPlayers");
   if(isHost){
     var url=location.origin+location.pathname+"?room="+roomCode;
-    info.innerHTML="<b>房號："+roomCode+"</b><br><span style='font-size:12px;color:#666'>分享連結：<br>"+url+"</span>";
+    info.innerHTML="<div style='margin:8px 0'><b>房號：</b><span id='rcodeText'>"+roomCode+"</span> <button class='mbtn' style='background:#4CAF50;padding:4px 10px;font-size:12px' onclick='navigator.clipboard.writeText(""+roomCode+"");this.textContent="已複製";setTimeout(function(){document.querySelector("#roomInfo .mbtn").textContent="複製"},1500)'>複製</button></div>"
+      +"<div style='margin:8px 0;font-size:12px;color:#666'>連結：<br><span style='word-break:break-all'>"+url+"</span><br><button class='mbtn' style='background:#2196F3;padding:4px 10px;font-size:12px;margin-top:6px' onclick='navigator.clipboard.writeText(""+url+"");this.textContent="已複製";setTimeout(function(){document.querySelectorAll("#roomInfo .mbtn")[1].textContent="複製連結"},1500)'>複製連結</button></div>";
   }else{
     info.innerHTML="<b>已加入房間："+roomCode+"</b>";
   }
@@ -1015,7 +1019,8 @@ function hostHandleConn(c){
       var e=d.edge;e.key=e.key;
       tryPlaceFenceNet(e);
     }
-    if(d.t==="undo"){ undoLast();broadcast({t:"doundo"}); }
+    if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);broadcast(d); }
+    if(d.t==="hidepreview"){ hideRemotePreview();broadcast(d); }
   });
   c.on("close",function(){ conns=conns.filter(function(x){return x!==c;}); updateRoomUI(); });
 }
@@ -1045,21 +1050,69 @@ function handleNetData(d){
     document.getElementById("winsel").value=winTarget;
     resetGame();
     scores=d.scores;fci=d.fci;
-    for(var i=0;i<d.log.length;i++){ tryPlaceFenceNet(d.log[i]); }
+    for(var i=0;i<d.log.length;i++){
+      netApplying=true;
+      var le=d.log[i],edge={x1:le.x1,y1:le.y1,x2:le.x2,y2:le.y2,key:le.key};
+      tryPlaceFence(edge);
+      netApplying=false;
+    }
     updateRoomUI();updateSB();
   }
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="reset"){ seed=d.seed;resetGame(); }
+  if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
+  if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
 
 function tryPlaceFenceNet(e){
-  netApplying=true;
   var edge={x1:e.x1,y1:e.y1,x2:e.x2,y2:e.y2,key:e.key};
-  tryPlaceFence(edge);
-  netApplying=false;
+  // Pan to fence location first
+  var mx=(edge.x1+edge.x2)/2,my=(edge.y1+edge.y2)/2;
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var tgtX=mx-vw/2,tgtY=my-vh/2;
+  var fromX=panX,fromY=panY;
+  var startT=0,dur=800;
+  function animPan(ts){
+    if(!startT)startT=ts;
+    var p=Math.min((ts-startT)/dur,1);
+    var ease=p<0.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
+    panX=fromX+(tgtX-fromX)*ease;
+    panY=fromY+(tgtY-fromY)*ease;
+    applyPan();
+    if(p<1){ requestAnimationFrame(animPan); }
+    else{
+      commitView();fillView();
+      hideRemotePreview();
+      netApplying=true;
+      tryPlaceFence(edge);
+      netApplying=false;
+    }
+  }
+  requestAnimationFrame(animPan);
 }
+
+// Remote preview
+var remotePrevEl=null;
+function showRemotePreview(edge,pci){
+  if(!remotePrevEl){
+    remotePrevEl=document.createElementNS(NS,"rect");
+    remotePrevEl.setAttribute("rx","1.5");remotePrevEl.setAttribute("ry","1.5");
+    remotePrevEl.setAttribute("stroke","#222");remotePrevEl.setAttribute("stroke-width","1.8");
+    remotePrevEl.setAttribute("opacity","0.3");remotePrevEl.setAttribute("pointer-events","none");
+    svg.querySelector("#fenceLayer").parentNode.appendChild(remotePrevEl);
+  }
+  var mx=(edge.x1+edge.x2)/2,my=(edge.y1+edge.y2)/2;
+  var dx=edge.x2-edge.x1,dy=edge.y2-edge.y1,len=Math.sqrt(dx*dx+dy*dy);
+  var ang=Math.atan2(dy,dx)*180/Math.PI,fw=len*0.88,fh=12;
+  remotePrevEl.setAttribute("x",(-fw/2).toFixed(2));remotePrevEl.setAttribute("y",(-fh/2).toFixed(2));
+  remotePrevEl.setAttribute("width",fw.toFixed(2));remotePrevEl.setAttribute("height",fh.toFixed(2));
+  remotePrevEl.setAttribute("fill",FCOLORS[pci%numP]);
+  remotePrevEl.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang.toFixed(2)+")");
+  remotePrevEl.setAttribute("visibility","visible");
+}
+function hideRemotePreview(){ if(remotePrevEl)remotePrevEl.setAttribute("visibility","hidden"); }
 
 function broadcast(d){ for(var i=0;i<conns.length;i++)try{conns[i].send(d);}catch(e){} }
 
