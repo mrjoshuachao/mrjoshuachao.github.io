@@ -1050,16 +1050,17 @@ function recalcOnlinePlayers(){
   numHuman=total-numAI;numP=total;
   myIdx=0;
   document.getElementById("psel").value=localHumans;
-  updateSB();
   // Send each client their new starting index
   var startIdx=localHumans;
   for(var i=0;i<conns.length;i++){
     try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
     startIdx+=connHumans[i];
   }
-  var msg="房主把人類玩家人數改成 "+(total-numAI)+" 人、電腦玩家人數改成 "+numAI+" 人，遊戲重新開始";
+  var msg="房主把人類玩家人數改成 "+numHuman+" 人、電腦玩家人數改成 "+numAI+" 人，遊戲重新開始";
   broadcast({t:"host_changed",msg:msg,numP:numP,numAI:numAI,seed:Date.now()});
-  seed=Date.now();resetGame();
+  seed=Date.now();
+  netApplying=true;resetGame();netApplying=false;
+  updateSB();
 }
 
 function showHostApproval(onApprove,onReject){
