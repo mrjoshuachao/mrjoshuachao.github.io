@@ -1105,13 +1105,12 @@ function showHostApproval(onApprove,onReject){
 
 var pendingJoins=[];
 function hostHandleConn(c){
-  c.on("open",function(){
+  function onConnOpen(){
     var currentPlayers=localHumans;
     for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
     currentPlayers+=numAI;
     var isFull=(currentPlayers>=5);
     if(isFull){
-      // Room full - offer spectator
       c.send({t:"full_spectator"});
       c.on("data",function(d2){
         if(d2.t==="accept_spectate"){
@@ -1122,7 +1121,6 @@ function hostHandleConn(c){
       });
       return;
     }
-    // Ask host for approval
     var cname=FNAMES[currentPlayers]||"新";
     showHostApproval2(cname+"色玩家想要加入",function(){
       conns.push(c);connHumans.push(1);
@@ -1142,7 +1140,8 @@ function hostHandleConn(c){
       c.send({t:"rejected_join"});
       setTimeout(function(){c.close();},500);
     });
-  });
+  }
+  if(c.open)onConnOpen();else c.on("open",onConnOpen);
 }
 
 function showHostApproval2(msg,onApprove,onReject){
@@ -1212,12 +1211,12 @@ function setupConnHandlers(c){
 
 function joinRoom(code){
   roomCode=code.toUpperCase();isHost=false;online=true;
-  peer=new Peer(null,{config:iceConfig});
+  peer=new Peer({config:iceConfig});
   peer.on("open",function(){
     var c=peer.connect("baa-"+roomCode,{reliable:true});
     c.on("open",function(){
       conns=[c];
-      showMsg("已連線到房間 "+roomCode,3000);
+      showMsg("已連線，正在等待房主允許加入...",15000);
     });
     c.on("data",function(d){ handleNetData(d); });
     c.on("close",function(){ showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB(); });
