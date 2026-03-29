@@ -62,9 +62,9 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
 </style></head><body>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:4px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:4px;flex:0 0 auto"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
-<div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+<div style="display:flex;align-items:center;gap:8px;flex:0 0 auto">
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span class="lbl">人類</span>
 <select id="aisel"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><span class="lbl">電腦</span>
 </div>
@@ -995,7 +995,7 @@ function createRoom(){
   peer=new Peer("baa-"+roomCode);
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
-    updateRoomUI();
+    updateRoomUI();lockOnlineUI();
     numAI=0;document.getElementById("aisel").value=0;
     resetGame();
   });
@@ -1057,13 +1057,25 @@ function joinRoom(code){
       showMsg("已連線到房間 "+roomCode,3000);
     });
     c.on("data",function(d){ handleNetData(d); });
-    c.on("close",function(){ showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;updateSB(); });
+    c.on("close",function(){ showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB(); });
     c.on("error",function(){ showMsg("無法連線到房間"); });
   });
   peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
 }
 
 var spectator=false;
+function lockOnlineUI(){
+  document.getElementById("psel").disabled=true;
+  document.getElementById("aisel").disabled=true;
+  document.getElementById("winsel").disabled=true;
+  document.getElementById("btnRestart").disabled=!isHost;
+}
+function unlockOnlineUI(){
+  document.getElementById("psel").disabled=false;
+  document.getElementById("aisel").disabled=false;
+  document.getElementById("winsel").disabled=false;
+  document.getElementById("btnRestart").disabled=false;
+}
 function handleNetData(d){
   if(d.t==="full"){
     showMsg("房間已滿，請稍後再試",5000);
@@ -1085,7 +1097,7 @@ function handleNetData(d){
       netApplying=false;
     }
     spectator=!!d.inProgress;
-    updateRoomUI();updateSB();
+    updateRoomUI();updateSB();lockOnlineUI();
     // Show color notification
     var cname=FNAMES[myIdx];
     var cdiv=document.createElement("div");
