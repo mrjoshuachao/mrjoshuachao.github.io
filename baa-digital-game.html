@@ -258,7 +258,7 @@ function updateSB(){
       var aiLbl=document.createElement("span");aiLbl.textContent="電腦";aiLbl.style.cssText="font-size:7px;line-height:1;opacity:0.85";
       var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
       dot.appendChild(aiLbl);dot.appendChild(num);
-    }else if(online&&i===myIdx){
+    }else if(online&&isMyCircle(i)){
       var meLbl=document.createElement("span");meLbl.textContent="我";meLbl.style.cssText="font-size:8px;line-height:1;opacity:0.85";
       var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
       dot.appendChild(meLbl);dot.appendChild(num);
@@ -760,7 +760,7 @@ window.addEventListener("mousemove",function(e){
     applyPan();return;
   }
   if(gameOver)return;
-  if(online&&(spectator||myIdx!==(fci%numP))){ hidePreview();lastPrevKey=null;return; }
+  if(online&&(spectator||!isMyTurn())){ hidePreview();lastPrevKey=null;return; }
   if(pendingKey)return;
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ hidePreview();lastPrevKey=null;return; }
@@ -776,7 +776,7 @@ window.addEventListener("mouseup",function(){
 });
 svg.addEventListener("click",function(e){
   if(recentTouch()||dragDist>5||gameOver||isAITurn())return;
-  if(online&&(spectator||myIdx!==(fci%numP))){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
+  if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
@@ -818,7 +818,7 @@ window.addEventListener("touchend",function(e){
     pendingKey=null;hidePreview();return;
   }
   if(gameOver||isAITurn())return;
-  if(online&&(spectator||myIdx!==(fci%numP)))return;
+  if(online&&(spectator||!isMyTurn()))return;
   var t=e.changedTouches[0];
   var wx=panX+t.clientX,wy=panY+t.clientY;
   var edge=findEdge(wx,wy);
@@ -998,6 +998,8 @@ window.saveMapImage=function(){
 // === MULTIPLAYER ===
 var peer=null,conns=[],myIdx=-1,isHost=false,roomCode="",online=false,actionLog=[];
 var connHumans=[];var localHumans=1;
+function isMyTurn(){ var p=fci%numP;return p>=myIdx&&p<myIdx+localHumans; }
+function isMyCircle(i){ return i>=myIdx&&i<myIdx+localHumans; }
 
 function genCode(){ var s="",ch="ABCDEFGHJKMNPQRSTUVWXYZ23456789";for(var i=0;i<5;i++)s+=ch[Math.floor(Math.random()*ch.length)];return s; }
 
@@ -1046,8 +1048,15 @@ function recalcOnlinePlayers(){
   total+=numAI;
   if(total>5)total=5;
   numHuman=total-numAI;numP=total;
+  myIdx=0;
   document.getElementById("psel").value=localHumans;
   updateSB();
+  // Send each client their new starting index
+  var startIdx=localHumans;
+  for(var i=0;i<conns.length;i++){
+    try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
+    startIdx+=connHumans[i];
+  }
   var msg="房主把人類玩家人數改成 "+(total-numAI)+" 人、電腦玩家人數改成 "+numAI+" 人，遊戲重新開始";
   broadcast({t:"host_changed",msg:msg,numP:numP,numAI:numAI,seed:Date.now()});
   seed=Date.now();resetGame();
@@ -1075,12 +1084,14 @@ function hostHandleConn(c){
       return;
     }
     conns.push(c);connHumans.push(1);
-    var idx=conns.length;
+    // Calculate starting player index for this client
+    var startIdx=localHumans;
+    for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
     var gameInProgress=(fci>0||Object.keys(fences).length>0);
     // Recalculate total
     var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
     numHuman=total-numAI;numP=total;
-    c.send({t:"init",idx:idx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
+    c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
     document.getElementById("psel").value=localHumans;
     document.getElementById("aisel").value=numAI;
     updateRoomUI();updateSB();
@@ -1227,6 +1238,7 @@ function handleNetData(d){
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
+  if(d.t==="idx_update"){ myIdx=d.idx;updateSB(); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;resetGame(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
