@@ -859,7 +859,8 @@ document.getElementById("psel").addEventListener("change",function(){
     if(isHost){
       recalcOnlinePlayers();
     }else{
-      broadcast({t:"humans",count:newVal});
+      broadcast({t:"req_humans",count:newVal,name:FNAMES[myIdx]});
+      showMsg("正在等待房主同意修改人數...",10000);
     }
     return;
   }
@@ -874,6 +875,7 @@ document.getElementById("psel").addEventListener("change",function(){
 document.getElementById("aisel").addEventListener("change",function(){
   var oldH=numHuman,oldA=numAI;
   numAI=parseInt(this.value);syncCounts("ai");
+  if(online&&isHost){ recalcOnlinePlayers();return; }
   if(history.length>0){
     pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
     pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
@@ -884,7 +886,14 @@ document.getElementById("winsel").addEventListener("change",function(){
   var v=parseInt(this.value),prev=winTarget;
   confirmChange(function(){ winTarget=v; },function(){ winTarget=prev;document.getElementById("winsel").value=prev; });
 });
-document.getElementById("btnRestart").addEventListener("click",function(){ if(confirm("確定要重新開始嗎？"))resetGame(); });
+document.getElementById("btnRestart").addEventListener("click",function(){
+  if(online&&!isHost){
+    broadcast({t:"req_restart",name:FNAMES[myIdx]});
+    showMsg("正在等待房主同意重新開始...",10000);
+    return;
+  }
+  if(confirm("確定要重新開始嗎？"))resetGame();
+});
 document.getElementById("advToggle").addEventListener("change",function(){
   var v=this.checked,prev=advMode,el=this;
   confirmChange(function(){ advMode=v;resetGame(); },function(){ advMode=prev;el.checked=prev; });
@@ -1043,6 +1052,19 @@ function recalcOnlinePlayers(){
   seed=Date.now();resetGame();
 }
 
+function showHostApproval(onApprove,onReject){
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center";
+  box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>是否同意？</p>";
+  var yes=document.createElement("button");yes.textContent="同意";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
+  var no=document.createElement("button");no.textContent="不同意";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
+  yes.onclick=function(){d.remove();onApprove();};
+  no.onclick=function(){d.remove();onReject();};
+  box.appendChild(yes);box.appendChild(no);d.appendChild(box);document.body.appendChild(d);
+}
+
 function hostHandleConn(c){
   c.on("open",function(){
     // Check if room is full (max 5 players)
@@ -1069,9 +1091,31 @@ function hostHandleConn(c){
       tryPlaceFenceNet(d.edge);
       for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} }
     }
-    if(d.t==="humans"){
-      var ci=conns.indexOf(c);if(ci>=0)connHumans[ci]=d.count;
-      recalcOnlinePlayers();
+    if(d.t==="req_humans"){
+      var ci=conns.indexOf(c);
+      broadcast({t:"waiting",msg:d.name+"色玩家修改了人數，正在等待房主同意"});
+      showMsg(d.name+"色玩家想改為 "+d.count+" 人，正在等待你同意",30000);
+      showHostApproval(function(){
+        if(ci>=0)connHumans[ci]=d.count;
+        recalcOnlinePlayers();
+        broadcast({t:"approved",msg:"房主同意修改人數，遊戲重新開始"});
+        showMsg("已同意修改人數",2000);
+      },function(){
+        broadcast({t:"rejected",msg:"房主不同意修改人數，遊戲繼續"});
+        showMsg("已拒絕修改人數",2000);
+      });
+    }
+    if(d.t==="req_restart"){
+      broadcast({t:"waiting",msg:d.name+"色玩家想要重新開始，正在等待房主同意"});
+      showMsg(d.name+"色玩家想要重新開始",30000);
+      showHostApproval(function(){
+        broadcast({t:"approved",msg:"房主同意重新開始"});
+        showMsg("已同意重新開始",2000);
+        resetGame();
+      },function(){
+        broadcast({t:"rejected",msg:"房主不同意重新開始，遊戲繼續"});
+        showMsg("已拒絕重新開始",2000);
+      });
     }
     if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
     if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
@@ -1108,9 +1152,12 @@ function joinRoom(code){
 
 var spectator=false;
 function lockOnlineUI(){
-  document.getElementById("psel").disabled=false;
+  var ps=document.getElementById("psel");ps.innerHTML="";
+  for(var i=1;i<=4;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===1)o.selected=true;ps.appendChild(o); }
+  localHumans=1;
+  ps.disabled=false;
   document.getElementById("winsel").disabled=true;
-  document.getElementById("btnRestart").disabled=!isHost;
+  document.getElementById("btnRestart").disabled=false;
   if(isHost){
     document.getElementById("aisel").disabled=false;
   }else{
@@ -1123,6 +1170,9 @@ function unlockOnlineUI(){
   document.getElementById("winsel").disabled=false;
   document.getElementById("btnRestart").disabled=false;
   document.getElementById("aisel").parentNode.style.display="";
+  // Restore psel options
+  var ps=document.getElementById("psel");ps.innerHTML="";
+  for(var i=1;i<=5;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===2)o.selected=true;ps.appendChild(o); }
 }
 function handleNetData(d){
   if(d.t==="full"){
@@ -1178,6 +1228,9 @@ function handleNetData(d){
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;resetGame(); }
   if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
+  if(d.t==="waiting"){ showMsg(d.msg,10000); }
+  if(d.t==="approved"){ showMsg(d.msg,3000); }
+  if(d.t==="rejected"){ showMsg(d.msg,3000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
