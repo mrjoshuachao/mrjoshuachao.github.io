@@ -1043,9 +1043,12 @@ function createRoom(){
 }
 
 function recalcOnlinePlayers(){
-  var total=localHumans;
-  for(var i=0;i<connHumans.length;i++)total+=connHumans[i];
-  total+=numAI;
+  var clientTotal=0;
+  for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
+  var maxHost=5-numAI-clientTotal;
+  if(maxHost<1)maxHost=1;
+  if(localHumans>maxHost)localHumans=maxHost;
+  var total=localHumans+clientTotal+numAI;
   if(total>5)total=5;
   numHuman=total-numAI;numP=total;
   myIdx=0;
