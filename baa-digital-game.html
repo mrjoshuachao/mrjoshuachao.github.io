@@ -1031,12 +1031,12 @@ function updateRoomUI(){
 
 function createRoom(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
-  localHumans=parseInt(document.getElementById("psel").value)||1;connHumans=[];
+  localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
+  document.getElementById("aisel").value=0;
   peer=new Peer("baa-"+roomCode);
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
     updateRoomUI();lockOnlineUI();
-    numAI=0;document.getElementById("aisel").value=0;
     resetGame();
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
