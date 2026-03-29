@@ -5,7 +5,7 @@
 <style>
 *{margin:0;padding:0}
 html,body{overflow:hidden;background:#a3d65c;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
-svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:visible;will-change:transform}
+svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:visible}
 .hex{cursor:pointer}
 @keyframes fgfade{0%,10%{opacity:0.9;}100%{opacity:0;}}
 .fg{animation:fgfade 1.2s ease-out forwards}
@@ -976,8 +976,10 @@ function updateRoomUI(){
   var pl=document.getElementById("roomPlayers");
   if(isHost){
     var url=location.origin+location.pathname+"?room="+roomCode;
-    info.innerHTML="<div style='margin:8px 0'><b>房號：</b><span id='rcodeText'>"+roomCode+"</span> <button class='mbtn' style='background:#4CAF50;padding:4px 10px;font-size:12px' onclick='navigator.clipboard.writeText(""+roomCode+"");this.textContent="已複製";setTimeout(function(){document.querySelector("#roomInfo .mbtn").textContent="複製"},1500)'>複製</button></div>"
-      +"<div style='margin:8px 0;font-size:12px;color:#666'>連結：<br><span style='word-break:break-all'>"+url+"</span><br><button class='mbtn' style='background:#2196F3;padding:4px 10px;font-size:12px;margin-top:6px' onclick='navigator.clipboard.writeText(""+url+"");this.textContent="已複製";setTimeout(function(){document.querySelectorAll("#roomInfo .mbtn")[1].textContent="複製連結"},1500)'>複製連結</button></div>";
+    info.innerHTML="<div style='margin:8px 0'><b>房號：</b><span>"+roomCode+"</span> <button class='mbtn' style='background:#4CAF50;padding:4px 10px;font-size:12px' id='cpCode'>複製</button></div>"
+      +"<div style='margin:8px 0;font-size:12px;color:#666'>連結：<br><span style='word-break:break-all'>"+url+"</span><br><button class='mbtn' style='background:#2196F3;padding:4px 10px;font-size:12px;margin-top:6px' id='cpUrl'>複製連結</button></div>";
+    document.getElementById("cpCode").onclick=function(){navigator.clipboard.writeText(roomCode);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製";},1500);};
+    document.getElementById("cpUrl").onclick=function(){navigator.clipboard.writeText(url);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製連結";},1500);};
   }else{
     info.innerHTML="<b>已加入房間："+roomCode+"</b>";
   }
