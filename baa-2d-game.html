@@ -68,13 +68,15 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span class="lbl">人類</span>
 <span id="aiWrap"><select id="aisel"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><span class="lbl">電腦</span></span>
 </div>
-<span id="onTag">線上</span>
+<span id="onTag" style="display:none">線上</span>
+<span id="hostTag" style="display:none;background:#e74c3c;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:4px">房主</span>
 </div>
 <div id="bb">
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <button class="tbtn" id="btnRules" style="background:#FF9800">觀看規則</button>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
+<button class="tbtn" id="btnRoomCode" style="display:none;background:#555;font-size:11px;letter-spacing:1px" title="按一下複製房號"></button>
 <button class="tbtn" id="btnRestart">重新開始</button>
 </div>
 <div style="display:flex;gap:6px">
@@ -167,6 +169,14 @@ var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#2c2c2c"];
 var FNAMES=["紅","藍","黃","白","黑"];
 var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var hexRots={};var seed=Date.now();
+var turnOrder=[0,1,2,3,4];
+function curP(){ return turnOrder[fci%numP]; }
+function shuffleTurnOrder(){
+  turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
+  if(!online)return;
+  var s=seed;
+  for(var i=numP-1;i>0;i--){ s=(s*1103515245+12345)&0x7fffffff;var j=s%(i+1);var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp; }
+}
 var completedTris={};
 var netApplying=false;
 
@@ -252,7 +262,7 @@ function updateSB(){
     var isAI=i>=(numP-numAI);
     var dot=document.createElement("div");dot.className="pd";dot.id="pd"+i;dot.style.background=FCOLORS[i];
     
-    if(i===fci%numP) dot.style.boxShadow="0 0 0 3px #fff";
+    if(i===curP()) dot.style.boxShadow="0 0 0 3px #fff";
     dot.style.color=(i===2||i===3)?"#222":"#fff";
     if(isAI){
       var aiLbl=document.createElement("span");aiLbl.textContent="電腦";aiLbl.style.cssText="font-size:7px;line-height:1;opacity:0.85";
@@ -438,7 +448,7 @@ function tryPlaceFence(e){
   var illegal=wouldBeIllegal(e); if(illegal){ showMsg(illegal);return; }
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
-  var pci=fci%numP;
+  var pci=curP();
   var fg=document.createElementNS(NS,"g");
   var rc=document.createElementNS(NS,"rect"),fw=len*0.88,fh=12,ang2=Math.atan2(dy,dx)*180/Math.PI;
   rc.setAttribute("x",(-fw/2).toFixed(2));rc.setAttribute("y",(-fh/2).toFixed(2));
@@ -553,7 +563,7 @@ function undoLast(){
 
 // === AI ===
 var aiTimer=0;
-function isAITurn(){ return numAI>0&&(fci%numP)>=(numP-numAI); }
+function isAITurn(){ return numAI>0&&curP()>=(numP-numAI); }
 function scheduleAI(){ clearTimeout(aiTimer);if(isAITurn()&&!gameOver)aiTimer=setTimeout(aiMove,400); }
 
 function aiMove(){
@@ -582,7 +592,7 @@ function aiMove(){
   if(cands.length===0)return;
   // Evaluate: prioritize scoring moves
   var best=null,bestS=-1;
-  var aiIdx=fci%numP;
+  var aiIdx=curP();
   for(var i=0;i<cands.length;i++){
     var e=cands[i],sc=aiEval(e,aiIdx);
     if(sc>bestS){bestS=sc;best=e;}
@@ -712,10 +722,10 @@ function showPreviewEdge(edge){
   var ang=Math.atan2(dy,dx)*180/Math.PI,fw=len*0.88,fh=12;
   prevEl.setAttribute("x",(-fw/2).toFixed(2));prevEl.setAttribute("y",(-fh/2).toFixed(2));
   prevEl.setAttribute("width",fw.toFixed(2));prevEl.setAttribute("height",fh.toFixed(2));
-  prevEl.setAttribute("fill",FCOLORS[fci%numP]);prevEl.setAttribute("opacity","0.4");
+  prevEl.setAttribute("fill",FCOLORS[curP()]);prevEl.setAttribute("opacity","0.4");
   prevEl.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang.toFixed(2)+")");
   prevEl.setAttribute("visibility","visible");prevVisible=true;
-  if(online&&!netApplying)broadcast({t:"preview",edge:{x1:edge.x1,y1:edge.y1,x2:edge.x2,y2:edge.y2,key:edge.key},pci:fci%numP});
+  if(online&&!netApplying)broadcast({t:"preview",edge:{x1:edge.x1,y1:edge.y1,x2:edge.x2,y2:edge.y2,key:edge.key},pci:curP()});
 }
 var prevVisible=false;
 function hidePreview(){
@@ -925,6 +935,7 @@ function syncCounts(src){
 window.resetGame=function(){
   gameOver=false;fci=0;scores=[0,0,0,0,0];history=[];ilCache={};completedTris={};actionLog=[];
   if(!netApplying)seed=Date.now();
+  shuffleTurnOrder();
   hexRots={};pendingKey=null;pendingEdge=null;lastPrevKey=null;
   hidePreview();
   for(var k in fences){ fences[k].el.remove(); } fences={};
@@ -999,7 +1010,7 @@ window.saveMapImage=function(){
 // === MULTIPLAYER ===
 var peer=null,conns=[],myIdx=-1,isHost=false,roomCode="",online=false,actionLog=[];
 var connHumans=[];var localHumans=1;
-function isMyTurn(){ var p=fci%numP;return p>=myIdx&&p<myIdx+localHumans; }
+function isMyTurn(){ var p=curP();return p>=myIdx&&p<myIdx+localHumans; }
 function isMyCircle(i){ return i>=myIdx&&i<myIdx+localHumans; }
 
 function genCode(){ var s="",ch="ABCDEFGHJKMNPQRSTUVWXYZ23456789";for(var i=0;i<5;i++)s+=ch[Math.floor(Math.random()*ch.length)];return s; }
@@ -1029,11 +1040,22 @@ function updateRoomUI(){
   document.getElementById("modalRoom").style.display="block";
 }
 
+var iceConfig={iceServers:[
+  {urls:"stun:stun.l.google.com:19302"},
+  {urls:"stun:stun1.l.google.com:19302"},
+  {urls:"stun:stun2.l.google.com:19302"},
+  {urls:"stun:stun3.l.google.com:19302"},
+  {urls:"stun:stun4.l.google.com:19302"},
+  {urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},
+  {urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},
+  {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}
+]};
+
 function createRoom(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
   document.getElementById("aisel").value=0;
-  peer=new Peer("baa-"+roomCode);
+  peer=new Peer("baa-"+roomCode,{config:iceConfig});
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
     updateRoomUI();lockOnlineUI();
@@ -1081,28 +1103,62 @@ function showHostApproval(onApprove,onReject){
   box.appendChild(yes);box.appendChild(no);d.appendChild(box);document.body.appendChild(d);
 }
 
+var pendingJoins=[];
 function hostHandleConn(c){
   c.on("open",function(){
-    // Check if room is full (max 5 players)
-    if(conns.length>=4){
-      c.send({t:"full"});
-      setTimeout(function(){c.close();},500);
+    var currentPlayers=localHumans;
+    for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
+    currentPlayers+=numAI;
+    var isFull=(currentPlayers>=5);
+    if(isFull){
+      // Room full - offer spectator
+      c.send({t:"full_spectator"});
+      c.on("data",function(d2){
+        if(d2.t==="accept_spectate"){
+          conns.push(c);connHumans.push(0);
+          c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});
+          setupConnHandlers(c);
+        }
+      });
       return;
     }
-    conns.push(c);connHumans.push(1);
-    // Calculate starting player index for this client
-    var startIdx=localHumans;
-    for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
-    var gameInProgress=(fci>0||Object.keys(fences).length>0);
-    // Recalculate total
-    var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
-    numHuman=total-numAI;numP=total;
-    c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
-    document.getElementById("psel").value=localHumans;
-    document.getElementById("aisel").value=numAI;
-    updateRoomUI();updateSB();
-    broadcast({t:"players",numP:numP});
+    // Ask host for approval
+    var cname=FNAMES[currentPlayers]||"新";
+    showHostApproval2(cname+"色玩家想要加入",function(){
+      conns.push(c);connHumans.push(1);
+      var startIdx=localHumans;
+      for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
+      var gameInProgress=(fci>0||Object.keys(fences).length>0);
+      var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
+      numHuman=total-numAI;numP=total;
+      var pName=FNAMES[startIdx]||"新";
+      c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
+      document.getElementById("psel").value=localHumans;
+      updateRoomUI();updateSB();
+      broadcast({t:"player_joined",name:pName,numP:numP});
+      showMsg(pName+"色玩家已加入，正在等候下一局",3000);
+      setupConnHandlers(c);
+    },function(){
+      c.send({t:"rejected_join"});
+      setTimeout(function(){c.close();},500);
+    });
   });
+}
+
+function showHostApproval2(msg,onApprove,onReject){
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;max-width:300px";
+  box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>"+msg+"</p>";
+  var yes=document.createElement("button");yes.textContent="允許";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
+  var no=document.createElement("button");no.textContent="拒絕";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
+  yes.onclick=function(){d.remove();onApprove();};
+  no.onclick=function(){d.remove();onReject();};
+  box.appendChild(yes);box.appendChild(no);d.appendChild(box);document.body.appendChild(d);
+}
+
+function setupConnHandlers(c){
   c.on("data",function(d){
     if(d.t==="do"){
       actionLog.push(d.edge);
@@ -1112,7 +1168,7 @@ function hostHandleConn(c){
     if(d.t==="req_humans"){
       var ci=conns.indexOf(c);
       broadcast({t:"waiting",msg:d.name+"色玩家修改了人數，正在等待房主同意"});
-      showMsg(d.name+"色玩家想改為 "+d.count+" 人，正在等待你同意",30000);
+      showMsg(d.name+"色玩家想改為 "+d.count+" 人",30000);
       showHostApproval(function(){
         if(ci>=0)connHumans[ci]=d.count;
         recalcOnlinePlayers();
@@ -1140,8 +1196,10 @@ function hostHandleConn(c){
   });
   c.on("close",function(){
     var ci=conns.indexOf(c);
-    var pName=FNAMES[ci+1]||"?";
+    var wasSpectator=(connHumans[ci]===0);
+    var pName=FNAMES[ci+localHumans]||"?";
     conns.splice(ci,1);connHumans.splice(ci,1);
+    if(wasSpectator){ updateRoomUI();return; }
     var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
     numHuman=total-numAI;numP=total;
     document.getElementById("psel").value=localHumans;
@@ -1154,7 +1212,7 @@ function hostHandleConn(c){
 
 function joinRoom(code){
   roomCode=code.toUpperCase();isHost=false;online=true;
-  peer=new Peer();
+  peer=new Peer(null,{config:iceConfig});
   peer.on("open",function(){
     var c=peer.connect("baa-"+roomCode,{reliable:true});
     c.on("open",function(){
@@ -1176,6 +1234,12 @@ function lockOnlineUI(){
   ps.disabled=false;
   document.getElementById("winsel").disabled=true;
   document.getElementById("btnRestart").disabled=false;
+  document.getElementById("btnUndo").style.display="none";
+  var rcBtn=document.getElementById("btnRoomCode");
+  rcBtn.style.display="";rcBtn.textContent="房間 "+roomCode;
+  rcBtn.onclick=function(){navigator.clipboard.writeText(roomCode);showMsg("已複製房號 "+roomCode,1500);};
+  document.getElementById("hostTag").style.display=isHost?"inline":"none";
+  document.getElementById("onTag").style.display="inline";
   if(isHost){
     document.getElementById("aisel").disabled=false;
   }else{
@@ -1188,11 +1252,31 @@ function unlockOnlineUI(){
   document.getElementById("winsel").disabled=false;
   document.getElementById("btnRestart").disabled=false;
   document.getElementById("aiWrap").style.display="";
-  // Restore psel options
+  document.getElementById("btnUndo").style.display="";
+  document.getElementById("btnRoomCode").style.display="none";
+  document.getElementById("hostTag").style.display="none";
+  document.getElementById("onTag").style.display="none";
   var ps=document.getElementById("psel");ps.innerHTML="";
   for(var i=1;i<=5;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===2)o.selected=true;ps.appendChild(o); }
 }
 function handleNetData(d){
+  if(d.t==="full_spectator"){
+    var cdiv=document.createElement("div");
+    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+    var box=document.createElement("div");
+    box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px";
+    box.innerHTML="<p style='font-size:16px;line-height:1.6;margin-bottom:16px'>目前房間人數已滿，無法以玩家身分加入，但是可以旁觀。<br>你要加入旁觀嗎？</p>";
+    var yes=document.createElement("button");yes.textContent="是";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
+    var no=document.createElement("button");no.textContent="否";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin:0 8px";
+    yes.onclick=function(){cdiv.remove();broadcast({t:"accept_spectate"});};
+    no.onclick=function(){cdiv.remove();online=false;showMsg("已退出房間");};
+    box.appendChild(yes);box.appendChild(no);cdiv.appendChild(box);document.body.appendChild(cdiv);
+    return;
+  }
+  if(d.t==="rejected_join"){
+    showMsg("房主拒絕你加入",5000);
+    online=false;return;
+  }
   if(d.t==="full"){
     showMsg("房間已滿，請稍後再試",5000);
     online=false;return;
@@ -1200,7 +1284,7 @@ function handleNetData(d){
   if(d.t==="init"){
     myIdx=d.idx;seed=d.seed;numP=d.numP;advMode=d.advMode;winTarget=d.winTarget;
     numHuman=numP;numAI=0;
-    document.getElementById("psel").value=numHuman;
+    document.getElementById("psel").value=localHumans;
     document.getElementById("aisel").value=0;
     document.getElementById("advToggle").checked=advMode;
     document.getElementById("winsel").value=winTarget;
@@ -1212,40 +1296,43 @@ function handleNetData(d){
       tryPlaceFence(edge);
       netApplying=false;
     }
-    spectator=!!d.inProgress;
+    spectator=!!d.inProgress||!!d.spectateOnly;
     updateRoomUI();updateSB();lockOnlineUI();
-    // Show color notification
-    var cname=FNAMES[myIdx];
-    var cdiv=document.createElement("div");
-    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);font-family:'Segoe UI',sans-serif";
-    var box=document.createElement("div");
-    box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center";
-    var dot=document.createElement("div");
-    dot.style.cssText="width:50px;height:50px;border-radius:50%;margin:0 auto 16px;border:3px solid #333;background:"+FCOLORS[myIdx];
-    box.appendChild(dot);
-    var txt=document.createElement("div");
-    txt.style.cssText="font-size:22px;font-weight:bold;margin-bottom:8px";
-    txt.textContent="你是"+cname+"色";
-    box.appendChild(txt);
-    if(spectator){
-      var sp=document.createElement("div");
-      sp.style.cssText="font-size:14px;color:#888;margin-bottom:16px";
-      sp.textContent="目前遊戲進行中，等待重新開始後即可加入";
-      box.appendChild(sp);
+    if(myIdx>=0){
+      var cname=FNAMES[myIdx];
+      var cdiv=document.createElement("div");
+      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);font-family:'Segoe UI',sans-serif";
+      var box=document.createElement("div");
+      box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center";
+      var dot=document.createElement("div");
+      dot.style.cssText="width:50px;height:50px;border-radius:50%;margin:0 auto 16px;border:3px solid #333;background:"+FCOLORS[myIdx];
+      box.appendChild(dot);
+      var txt=document.createElement("div");
+      txt.style.cssText="font-size:22px;font-weight:bold;margin-bottom:8px";
+      txt.textContent="你是"+cname+"色";
+      box.appendChild(txt);
+      if(spectator){
+        var sp=document.createElement("div");
+        sp.style.cssText="font-size:14px;color:#888;margin-bottom:16px";
+        sp.textContent="旁觀中，正在等待下一局。";
+        box.appendChild(sp);
+      }
+      var btn=document.createElement("button");
+      btn.style.cssText="padding:10px 30px;font-size:16px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer";
+      btn.textContent="我知道了";
+      btn.onclick=function(){cdiv.remove();};
+      box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
+    }else{
+      spectator=true;
+      lockOnlineUI();
+      showMsg("旁觀模式",3000);
     }
-    var btn=document.createElement("button");
-    btn.style.cssText="padding:10px 30px;font-size:16px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer";
-    btn.textContent="我知道了";
-    btn.onclick=function(){cdiv.remove();};
-    box.appendChild(btn);
-    cdiv.appendChild(box);
-    document.body.appendChild(cdiv);
   }
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="idx_update"){ myIdx=d.idx;updateSB(); }
-  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false; }
+  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
     spectator=false;netApplying=true;resetGame();netApplying=false;updateSB();
@@ -1261,6 +1348,7 @@ function handleNetData(d){
     box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
   }
   if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
+  if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB();showMsg(d.name+"色玩家已加入，正在等候下一局。",3000); }
   if(d.t==="waiting"){ showMsg(d.msg,10000); }
   if(d.t==="approved"){ showMsg(d.msg,3000); }
   if(d.t==="rejected"){ showMsg(d.msg,3000); }
