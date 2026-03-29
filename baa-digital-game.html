@@ -35,7 +35,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.7);justify-content:center;align-items:center}
 #modal>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:260px}
 #modal h3{margin-bottom:12px;font-size:20px}
-#modal input{padding:8px 12px;font-size:18px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:4px}
+#modal input{padding:8px 12px;font-size:18px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:normal}
 #modal .mbtn{display:inline-block;margin:8px 4px;padding:8px 18px;font-size:14px;border:none;border-radius:8px;cursor:pointer;color:#fff}
 .obtn{background:#2196F3}.obtn:hover{background:#1976D2}
 .cbtn{background:#4CAF50}.cbtn:hover{background:#388E3C}
@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <h3 id="modalTitle">連線對戰</h3>
 <div id="modalCreate">
 <button class="mbtn cbtn" id="btnCreate">建立房間</button><br>
-<div style="margin:12px 0">— 或 —</div>
+<div style="margin:12px 0">或</div>
 <input id="roomInput" maxlength="5" placeholder="輸入房號">
 <button class="mbtn obtn" id="btnJoin">加入</button>
 </div>
@@ -751,7 +751,7 @@ window.addEventListener("mousemove",function(e){
     applyPan();return;
   }
   if(gameOver)return;
-  if(online&&myIdx!==(fci%numP)){ hidePreview();lastPrevKey=null;return; }
+  if(online&&(spectator||myIdx!==(fci%numP))){ hidePreview();lastPrevKey=null;return; }
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
@@ -766,7 +766,7 @@ window.addEventListener("mouseup",function(){
 });
 svg.addEventListener("click",function(e){
   if(recentTouch()||dragDist>5||gameOver||isAITurn())return;
-  if(online&&myIdx!==(fci%numP)){showMsg("等待其他玩家...");return;}
+  if(online&&(spectator||myIdx!==(fci%numP))){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge)return;
   if(isEdgeBlocked(edge)){ showBlockReason(edge);return; }
@@ -800,7 +800,7 @@ window.addEventListener("touchend",function(e){
     pendingKey=null;hidePreview();return;
   }
   if(gameOver||isAITurn())return;
-  if(online&&myIdx!==(fci%numP))return;
+  if(online&&(spectator||myIdx!==(fci%numP)))return;
   var t=e.changedTouches[0];
   var wx=panX+t.clientX,wy=panY+t.clientY;
   var edge=findEdge(wx,wy);
@@ -991,7 +991,7 @@ function updateRoomUI(){
 }
 
 function createRoom(){
-  roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];
+  roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   peer=new Peer("baa-"+roomCode);
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
@@ -1005,9 +1005,16 @@ function createRoom(){
 
 function hostHandleConn(c){
   c.on("open",function(){
+    // Check if room is full (max 5 players)
+    if(conns.length>=4){
+      c.send({t:"full"});
+      setTimeout(function(){c.close();},500);
+      return;
+    }
     conns.push(c);
     var idx=conns.length;
-    c.send({t:"init",idx:idx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog});
+    var gameInProgress=(fci>0||Object.keys(fences).length>0);
+    c.send({t:"init",idx:idx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
     // Update player count
     numHuman=conns.length+1;if(numHuman>5)numHuman=5;
     numAI=0;numP=numHuman;
@@ -1026,7 +1033,18 @@ function hostHandleConn(c){
     if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
     if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
   });
-  c.on("close",function(){ conns=conns.filter(function(x){return x!==c;}); updateRoomUI(); });
+  c.on("close",function(){
+    var ci=conns.indexOf(c);
+    var pName=FNAMES[ci+1]||"?";
+    conns=conns.filter(function(x){return x!==c;});
+    numHuman=conns.length+1;numAI=0;numP=numHuman;
+    document.getElementById("psel").value=numHuman;
+    document.getElementById("aisel").value=0;
+    updateRoomUI();
+    showMsg(pName+"色玩家已退出，遊戲即將重新開始",4000);
+    broadcast({t:"left",name:pName});
+    setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed}); },2000);
+  });
 }
 
 function joinRoom(code){
@@ -1039,12 +1057,18 @@ function joinRoom(code){
       showMsg("已連線到房間 "+roomCode,3000);
     });
     c.on("data",function(d){ handleNetData(d); });
+    c.on("close",function(){ showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;updateSB(); });
     c.on("error",function(){ showMsg("無法連線到房間"); });
   });
   peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
 }
 
+var spectator=false;
 function handleNetData(d){
+  if(d.t==="full"){
+    showMsg("房間已滿，請稍後再試",5000);
+    online=false;return;
+  }
   if(d.t==="init"){
     myIdx=d.idx;seed=d.seed;numP=d.numP;advMode=d.advMode;winTarget=d.winTarget;
     numHuman=numP;numAI=0;
@@ -1060,12 +1084,40 @@ function handleNetData(d){
       tryPlaceFence(edge);
       netApplying=false;
     }
+    spectator=!!d.inProgress;
     updateRoomUI();updateSB();
+    // Show color notification
+    var cname=FNAMES[myIdx];
+    var cdiv=document.createElement("div");
+    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);font-family:'Segoe UI',sans-serif";
+    var box=document.createElement("div");
+    box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center";
+    var dot=document.createElement("div");
+    dot.style.cssText="width:50px;height:50px;border-radius:50%;margin:0 auto 16px;border:3px solid #333;background:"+FCOLORS[myIdx];
+    box.appendChild(dot);
+    var txt=document.createElement("div");
+    txt.style.cssText="font-size:22px;font-weight:bold;margin-bottom:8px";
+    txt.textContent="你是"+cname+"色";
+    box.appendChild(txt);
+    if(spectator){
+      var sp=document.createElement("div");
+      sp.style.cssText="font-size:14px;color:#888;margin-bottom:16px";
+      sp.textContent="目前遊戲進行中，等待重新開始後即可加入";
+      box.appendChild(sp);
+    }
+    var btn=document.createElement("button");
+    btn.style.cssText="padding:10px 30px;font-size:16px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer";
+    btn.textContent="我知道了";
+    btn.onclick=function(){cdiv.remove();};
+    box.appendChild(btn);
+    cdiv.appendChild(box);
+    document.body.appendChild(cdiv);
   }
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
-  if(d.t==="reset"){ seed=d.seed;resetGame(); }
+  if(d.t==="reset"){ seed=d.seed;spectator=false;resetGame(); }
+  if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
