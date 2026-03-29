@@ -1048,14 +1048,16 @@ var iceConfig={iceServers:[
   {urls:"stun:stun4.l.google.com:19302"},
   {urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},
   {urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},
-  {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}
+  {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"},
+  {urls:"turns:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"}
 ]};
+var peerOpts={config:iceConfig};
 
 function createRoom(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
   document.getElementById("aisel").value=0;
-  peer=new Peer("baa-"+roomCode,{config:iceConfig});
+  peer=new Peer("baa-"+roomCode,peerOpts);
   peer.on("open",function(){
     showMsg("房間 "+roomCode+" 已建立",5000);
     updateRoomUI();lockOnlineUI();
@@ -1211,18 +1213,61 @@ function setupConnHandlers(c){
 
 function joinRoom(code){
   roomCode=code.toUpperCase();isHost=false;online=true;
-  peer=new Peer({config:iceConfig});
-  peer.on("open",function(){
-    var c=peer.connect("baa-"+roomCode,{reliable:true});
-    c.on("open",function(){
-      conns=[c];
-      showMsg("已連線，正在等待房主允許加入...",15000);
+  document.getElementById("modal").style.display="none";
+  showMsg("正在連線到房間 "+roomCode+"...",30000);
+  var retries=0,maxRetries=2;
+  function tryConnect(){
+    if(peer)try{peer.destroy();}catch(e){}
+    peer=new Peer(peerOpts);
+    peer.on("open",function(){
+      var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
+      var connected=false;
+      var timeout=setTimeout(function(){
+        if(!connected){
+          if(retries<maxRetries){
+            retries++;
+            showMsg("連線逾時，正在重試 ("+retries+"/"+maxRetries+")...",10000);
+            tryConnect();
+          }else{
+            showMsg("無法連線到房間，請確認房號正確且房主在線",5000);
+            online=false;
+          }
+        }
+      },15000);
+      c.on("open",function(){
+        connected=true;clearTimeout(timeout);
+        conns=[c];
+        showMsg("已連線，正在等待房主允許加入...",15000);
+      });
+      c.on("data",function(d){ handleNetData(d); });
+      c.on("close",function(){ if(connected){showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB();} });
+      c.on("error",function(err){
+        connected=true;clearTimeout(timeout);
+        if(retries<maxRetries){
+          retries++;
+          showMsg("連線失敗，正在重試 ("+retries+"/"+maxRetries+")...",5000);
+          setTimeout(tryConnect,1000);
+        }else{
+          showMsg("無法連線到房間（"+(err.type||"unknown")+"），請確認房號正確",5000);
+          online=false;
+        }
+      });
     });
-    c.on("data",function(d){ handleNetData(d); });
-    c.on("close",function(){ showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB(); });
-    c.on("error",function(){ showMsg("無法連線到房間"); });
-  });
-  peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
+    peer.on("error",function(e){
+      if(e.type==="peer-unavailable"){
+        showMsg("找不到房間 "+roomCode+"，請確認房號正確",5000);
+        online=false;
+      }else if(retries<maxRetries){
+        retries++;
+        showMsg("連線錯誤，正在重試 ("+retries+"/"+maxRetries+")...",5000);
+        setTimeout(tryConnect,1000);
+      }else{
+        showMsg("連線錯誤："+e.type,5000);
+        online=false;
+      }
+    });
+  }
+  tryConnect();
 }
 
 var spectator=false;
