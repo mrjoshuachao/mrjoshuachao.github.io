@@ -88,13 +88,13 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
-<div id="modal"><div>
-<h3 id="modalTitle">連線對戰</h3>
+<div id="modal"><div style="position:relative">
+<span id="btnCloseModal" style="position:absolute;top:8px;right:12px;cursor:pointer;font-size:18px;color:#999">✕</span>
+<h3 id="modalTitle">房間創建成功</h3>
 <div id="modalRoom">
 <div id="roomInfo"></div>
 <div id="roomPlayers"></div>
 </div>
-<div style="margin-top:14px"><button class="mbtn xbtn" id="btnCloseModal">關閉</button></div>
 </div></div>
 <div id="msg"></div>
 <div id="confirm"><div>
@@ -274,13 +274,25 @@ function showPersistMsg(t){
 }
 function hidePersistMsg(){ var el=document.getElementById("persistMsg");if(el)el.remove(); }
 
+function showLobbyOverlay(msg){
+  lobbyActive=true;
+  var old=document.getElementById("lobbyOverlay");if(old)old.remove();
+  var d=document.createElement("div");d.id="lobbyOverlay";
+  d.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:300px";
+  box.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0'>"+msg+"</p>";
+  d.appendChild(box);document.body.appendChild(d);
+}
+function hideLobbyOverlay(){ lobbyActive=false;var el=document.getElementById("lobbyOverlay");if(el)el.remove(); }
+
 function checkAloneInRoom(){
   if(!online||!isHost)return;
   if(conns.length===0){
-    showMsg("房間裡只剩你一個人，已回到單機模式",3000);
+    showMsg("房間已解散，回到單機模式。",3000);
     if(peer)try{peer.destroy();}catch(e){}
     peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
-    hidePersistMsg();
+    hidePersistMsg();hideLobbyOverlay();
     var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
     unlockOnlineUI();
     numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
@@ -962,6 +974,10 @@ svg.addEventListener("click",function(e){
 // --- TOUCH (mobile/tablet only) ---
 svg.addEventListener("touchstart",function(e){
   if(e.touches.length!==1)return;
+  var ty=e.touches[0].clientY;
+  var sbH=document.getElementById("sb").offsetHeight;
+  var bbH=document.getElementById("bb").offsetHeight;
+  if(ty<sbH||ty>window.innerHeight-bbH)return;
   e.preventDefault();
   cancelCommit();
   lastTouchTime=Date.now();
@@ -988,6 +1004,9 @@ window.addEventListener("touchend",function(e){
   if(gameOver||isAITurn())return;
   if(online&&(spectator||!isMyTurn()))return;
   var t=e.changedTouches[0];
+  var sbH=document.getElementById("sb").offsetHeight;
+  var bbH=document.getElementById("bb").offsetHeight;
+  if(t.clientY<sbH||t.clientY>window.innerHeight-bbH)return;
   var wx=panX+t.clientX,wy=panY+t.clientY;
   var edge=findEdge(wx,wy);
   if(!edge){ pendingKey=null;hidePreview();return; }
@@ -1146,6 +1165,7 @@ window.resetGame=function(){
   for(var k in fences){ fences[k].el.remove(); } fences={};
   for(var k in generated){ generated[k].remove(); } generated={};
   document.getElementById("win").style.display="none";
+  hideLobbyOverlay();
   commitView();fillView();updateSB();scheduleAI();
   if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});
 };
@@ -1228,19 +1248,19 @@ function showModal(createMode){
 }
 
 var hostModalShown=false;
+var lobbyActive=false;
 function updateRoomUI(){
   var info=document.getElementById("roomInfo");
   var pl=document.getElementById("roomPlayers");
   var url=location.origin+location.pathname+"?room="+roomCode;
   if(isHost){
-    info.innerHTML="<p style='margin:12px 0;font-size:15px;color:#333'>請把房間網址傳給別人</p>"
+    info.innerHTML="<p style='margin:8px 0;font-size:14px;color:#666'>你現在是房主了，請把房間網址傳給別人：</p>"
       +"<div style='margin:12px 0;text-align:center'><button class='mbtn' style='background:#4CAF50;padding:10px 24px;font-size:14px;color:#fff;border:none;border-radius:8px;cursor:pointer' id='cpUrl'>複製房間網址</button></div>";
     document.getElementById("cpUrl").onclick=function(){navigator.clipboard.writeText(url);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製房間網址";},1500);};
   }else{
     info.innerHTML="";
   }
-  var n=conns.length+(isHost?1:1);
-  pl.textContent="目前 "+n+" 位玩家已連線";
+  pl.textContent="";
   if(isHost&&!hostModalShown){ document.getElementById("modal").style.display="flex";hostModalShown=true; }
 }
 
@@ -1260,18 +1280,34 @@ var peerOpts={config:iceNormal};
 var peerRelayOpts={config:iceRelay};
 
 function createRoom(){
+  // Show creating spinner
+  var cs=document.createElement("div");cs.id="createSpin";
+  cs.style.cssText="position:fixed;inset:0;z-index:260;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
+  cs.innerHTML="<div style='background:#fff;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)'>"
+    +"<div style='width:36px;height:36px;border:4px solid #ddd;border-top:4px solid #4CAF50;border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite'></div>"
+    +"<div style='font-size:16px;color:#333'>正在創建房間</div>"
+    +"</div>";
+  document.body.appendChild(cs);
+  if(!document.getElementById("spinCSS")){
+    var st=document.createElement("style");st.id="spinCSS";st.textContent="@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
+    document.head.appendChild(st);
+  }
   loadPeerJS(function(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
   document.getElementById("aisel").value=0;
   peer=new Peer("baa-"+roomCode,peerOpts);
   peer.on("open",function(){
-    showMsg("房間 "+roomCode+" 已建立",5000);
+    var el=document.getElementById("createSpin");if(el)el.remove();
     updateRoomUI();lockOnlineUI();
     resetGame();
+    showLobbyOverlay("等每個人都進房間後，請按「重新開始」。");
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
-  peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
+  peer.on("error",function(e){
+    var el=document.getElementById("createSpin");if(el)el.remove();
+    showMsg("連線錯誤："+e.type,5000);
+  });
   });
 }
 
@@ -1340,7 +1376,7 @@ function hostHandleConn(c){
       var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
       numHuman=total-numAI;numP=total;
       var pName=FNAMES[startIdx]||"新";
-      c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
+      c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});
       document.getElementById("psel").value=localHumans;
       updateRoomUI();updateSB();
       broadcast({t:"player_joined",name:pName,numP:numP});
@@ -1484,7 +1520,15 @@ function joinRoom(code){
         document.body.appendChild(w);
       });
       c.on("data",function(d){ handleNetData(d); });
-      c.on("close",function(){ if(connected){showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB();} });
+      c.on("close",function(){ if(connected){
+        showMsg("房間已解散，回到單機模式。",3000);
+        if(peer)try{peer.destroy();}catch(e){}
+        peer=null;online=false;spectator=false;conns=[];connHumans=[];
+        hidePersistMsg();hideLobbyOverlay();
+        var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+        unlockOnlineUI();
+        numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+      } });
       c.on("error",function(err){
         if(!connected&&online){
           connected=true;clearTimeout(timer);
@@ -1518,7 +1562,7 @@ function lockOnlineUI(){
   document.getElementById("btnRestart").disabled=false;
   document.getElementById("btnUndo").style.display="none";
   var rcBtn=document.getElementById("btnRoomCode");
-  rcBtn.style.display="";rcBtn.textContent="複製房間網址";
+  rcBtn.style.display="";rcBtn.textContent="房間網址";
   rcBtn.onclick=function(){var url=location.origin+location.pathname+"?room="+roomCode;navigator.clipboard.writeText(url);showMsg("已複製房間網址",1500);};
   document.getElementById("btnOnline").textContent="離開房間";
   if(isHost){
@@ -1583,6 +1627,7 @@ function handleNetData(d){
     }
     scores=d.scores;
     spectator=!!d.inProgress||!!d.spectateOnly;
+    if(d.lobby)showLobbyOverlay("房主正在等每個人都進房間，請稍候。");
     updateRoomUI();updateSB();lockOnlineUI();
     if(myIdx>=0){
       var cname=FNAMES[myIdx];
@@ -1640,7 +1685,7 @@ function handleNetData(d){
   if(d.t==="waiting"){ showPersistMsg(d.msg); }
   if(d.t==="approved"){ hidePersistMsg();showMsg(d.msg,3000); }
   if(d.t==="rejected"){ hidePersistMsg();showMsg(d.msg,3000); }
-  if(d.t==="host_restart"){ hidePersistMsg();showMsg("房主重新開始了遊戲",3000); }
+  if(d.t==="host_restart"){ hidePersistMsg();hideLobbyOverlay();showMsg("房主重新開始了遊戲",3000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
