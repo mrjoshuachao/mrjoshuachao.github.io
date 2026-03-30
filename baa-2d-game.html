@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.1</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.5</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -296,7 +296,7 @@ function hideLobbyOverlay(){ lobbyActive=false;var el=document.getElementById("l
 function checkAloneInRoom(){
   if(!online||!isHost)return;
   if(conns.length===0){
-    showMsg("房間已解散，回到單機模式。",3000);
+    showMsg("大家都離開這個房間了，回到單機模式。",3000);
     if(peer)try{peer.destroy();}catch(e){}
     peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
     hidePersistMsg();hideLobbyOverlay();
@@ -320,6 +320,12 @@ function kickPlayer(pi){
   var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
   numHuman=total-numAI;numP=total;
   document.getElementById("psel").value=localHumans;
+  // Send updated indices to remaining clients
+  var si=localHumans;
+  for(var i=0;i<conns.length;i++){
+    try{conns[i].send({t:"idx_update",idx:si});}catch(e){}
+    si+=connHumans[i];
+  }
   broadcast({t:"player_kicked",name:pName,numP:numP,numAI:numAI,seed:Date.now()});
   seed=Date.now();
   netApplying=true;resetGame();netApplying=false;
@@ -438,12 +444,12 @@ function checkWin(){
     return FNAMES[w]+(isAI?"(電腦)":"");
   });
   if(winners.length===1){
-    document.getElementById("winTitle").textContent="🏆 "+names[0]+"玩家獲勝！";
-    document.getElementById("winDetail").textContent="最終分數："+scores[winners[0]]+" 分";
+    document.getElementById("winTitle").textContent=names[0]+"玩家獲勝！";
+    document.getElementById("winDetail").textContent="";
   }else{
-    document.getElementById("winTitle").textContent="🏆 "+names.join("、")+"玩家共同獲勝！";
+    document.getElementById("winTitle").textContent=names.join("、")+"玩家共同獲勝！";
     var details=winners.map(function(w){ return FNAMES[w]+":"+scores[w]+"分"; }).join(" ");
-    document.getElementById("winDetail").textContent=details;
+    document.getElementById("winDetail").textContent="";
   }
   var winEl=document.getElementById("win");
   winEl.style.display="block";
@@ -1467,6 +1473,12 @@ function setupConnHandlers(c){
       var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
       numHuman=total-numAI;numP=total;
       document.getElementById("psel").value=localHumans;
+      // Send updated indices to all remaining clients
+      var startIdx=localHumans;
+      for(var i=0;i<conns.length;i++){
+        try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
+        startIdx+=connHumans[i];
+      }
       updateRoomUI();
       showMsg(pName+"色玩家已退出，遊戲即將重新開始",4000);
       broadcast({t:"left",name:pName});
@@ -1635,18 +1647,15 @@ function handleNetData(d){
     }
     scores=d.scores;
     spectator=!!d.inProgress||!!d.spectateOnly;
-    if(d.lobby)showLobbyOverlay("房主正在等每個人都進房間，請稍候。");
     updateRoomUI();updateSB();lockOnlineUI();
-    if(myIdx>=0){
+    if(myIdx>=0&&d.lobby){
       var cname=FNAMES[myIdx];
-      var cdiv=document.createElement("div");
-      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
+      var old=document.getElementById("lobbyOverlay");if(old)old.remove();
+      lobbyActive=true;
+      var ld=document.createElement("div");ld.id="lobbyOverlay";
+      ld.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
       var box=document.createElement("div");
-      box.style.cssText="background:#fff;border-radius:14px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
-      var title=document.createElement("div");
-      title.style.cssText="font-size:16px;font-weight:bold;color:#333;margin-bottom:12px";
-      title.textContent="加入成功";
-      box.appendChild(title);
+      box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:280px";
       var dot=document.createElement("div");
       dot.style.cssText="width:40px;height:40px;border-radius:50%;margin:0 auto 8px;border:2px solid #333;background:"+FCOLORS[myIdx];
       box.appendChild(dot);
@@ -1654,11 +1663,16 @@ function handleNetData(d){
       txt.style.cssText="font-size:13px;color:#666;margin-bottom:14px";
       txt.textContent="你是"+cname+"色";
       box.appendChild(txt);
-      var btn=document.createElement("button");
-      btn.style.cssText="padding:7px 24px;font-size:14px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer";
-      btn.textContent="好";
-      btn.onclick=function(){cdiv.remove();};
-      box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
+      var msg=document.createElement("div");
+      msg.style.cssText="font-size:14px;color:#333;line-height:1.6";
+      msg.textContent="房主正在等每個人都進房間，請稍候。";
+      box.appendChild(msg);
+      ld.appendChild(box);document.body.appendChild(ld);
+    }else if(myIdx>=0){
+      var cname=FNAMES[myIdx];
+      showMsg("加入成功，你是"+cname+"色",3000);
+    }else if(d.lobby){
+      showLobbyOverlay("房主正在等每個人都進房間，請稍候。");
     }else{
       spectator=true;
       lockOnlineUI();
