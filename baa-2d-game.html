@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.5</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.6</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -1371,11 +1371,11 @@ function hostHandleConn(c){
     currentPlayers+=numAI;
     var isFull=(currentPlayers>=6);
     if(isFull){
-      c.send({t:"full_spectator"});
+      try{c.send({t:"full_spectator"});}catch(e){}
       c.on("data",function(d2){
         if(d2.t==="accept_spectate"){
           conns.push(c);connHumans.push(0);
-          c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});
+          try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
           setupConnHandlers(c);
         }
       });
@@ -1390,25 +1390,25 @@ function hostHandleConn(c){
       var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
       numHuman=total-numAI;numP=total;
       var pName=FNAMES[startIdx]||"新";
-      c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});
+      try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
       document.getElementById("psel").value=localHumans;
       updateRoomUI();updateSB();
       broadcast({t:"player_joined",name:pName,numP:numP});
-      showMsg(pName+"色玩家已加入，正在等候下一局",3000);
+      showMsg(pName+"色玩家已加入",3000);
       setupConnHandlers(c);
     },function(){
-      c.send({t:"rejected_join"});
-      setTimeout(function(){c.close();},500);
+      try{c.send({t:"rejected_join"});}catch(e){}
+      setTimeout(function(){try{c.close();}catch(e){}},500);
     });
   }
-  if(c.open)onConnOpen();else c.on("open",onConnOpen);
+  c.on("open",onConnOpen);
 }
 
 function showHostApproval2(msg,onApprove,onReject){
   var container=document.getElementById("approvalStack");
   if(!container){
     container=document.createElement("div");container.id="approvalStack";
-    container.style.cssText="position:fixed;top:45px;right:10px;z-index:260;display:flex;flex-direction:column;gap:8px;font-family:'Segoe UI',sans-serif;pointer-events:none";
+    container.style.cssText="position:fixed;top:45px;right:10px;z-index:999;display:flex;flex-direction:column;gap:8px;font-family:'Segoe UI',sans-serif";
     document.body.appendChild(container);
   }
   var card=document.createElement("div");
