@@ -1131,7 +1131,7 @@ function updateRoomUI(){
   document.getElementById("cpUrl").onclick=function(){navigator.clipboard.writeText(url);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製房間網址";},1500);};
   var n=conns.length+(isHost?1:1);
   pl.textContent="目前 "+n+" 位玩家已連線";
-  document.getElementById("onTag").style.display="inline";
+  
   document.getElementById("modal").style.display="flex";
 }
 
@@ -1388,8 +1388,8 @@ function lockOnlineUI(){
   var rcBtn=document.getElementById("btnRoomCode");
   rcBtn.style.display="";rcBtn.textContent="複製房間網址";
   rcBtn.onclick=function(){var url=location.origin+location.pathname+"?room="+roomCode;navigator.clipboard.writeText(url);showMsg("已複製房間網址",1500);};
-  document.getElementById("hostTag").style.display=isHost?"inline":"none";
-  document.getElementById("onTag").style.display="inline";
+  
+  
   if(isHost){
     document.getElementById("aisel").disabled=false;
   }else{
