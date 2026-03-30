@@ -62,7 +62,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules .rt{font-size:18px;font-weight:bold;color:#333;text-align:center;margin:16px 24px 20px;line-height:1.6;font-family:'Segoe UI',sans-serif}
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
 #loading{position:fixed;inset:0;z-index:9999;background:#a3d65c;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif}
-#loading span{color:#fff;font-size:20px;font-weight:bold;letter-spacing:2px}
+#loading span{color:#fff;font-size:20px;font-weight:bold;letter-spacing:2px;text-shadow:0 1px 4px rgba(0,0,0,0.2)}
 </style></head><body>
 <div id="loading"><span>Loading</span></div>
 <div id="sb">
@@ -263,13 +263,13 @@ function updateSB(){
       s.style.textShadow="none";
     }
     var isAI=i>=(numP-numAI);
-    var label=isAI?"電腦":"";
+    var label=isAI?"電":"";
     if(online&&isMyCircle(i))label="我";
     var isCur=(i===curP());
     var h="";
-    if(label)h+="<span style='font-size:7px;opacity:0.7;position:absolute;top:-8px;left:50%;transform:translateX(-50%);white-space:nowrap'>"+label+"</span>";
+    if(label)h+="<span style='font-size:7px;opacity:0.7;position:absolute;top:-5px;left:50%;transform:translateX(-50%);white-space:nowrap'>"+label+"</span>";
     h+=scores[i];
-    if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-8px;left:50%;transform:translateX(-50%)'>▲</span>";
+    if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%)'>▲</span>";
     s.innerHTML=h;
     sa.appendChild(s);
   }
@@ -292,7 +292,7 @@ function updateSB(){
       var left=r.left+r.width/2-bw/2;
       if(left<4)left=4;if(left+bw>window.innerWidth-4)left=window.innerWidth-4-bw;
       tb.style.left=left+"px";
-      tb.style.top=(r.bottom+8)+"px";
+      tb.style.top=(r.bottom+14)+"px";
       // Arrow
       var al=r.left+r.width/2-left;
       tb.style.setProperty("--al",al+"px");
