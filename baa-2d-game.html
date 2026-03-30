@@ -1547,13 +1547,13 @@ function handleNetData(d){
     document.getElementById("advToggle").checked=advMode;
     document.getElementById("winsel").value=winTarget;
     netApplying=true;resetGame();netApplying=false;
-    scores=d.scores;fci=d.fci;
     for(var i=0;i<d.log.length;i++){
       netApplying=true;
       var le=d.log[i],edge={x1:le.x1,y1:le.y1,x2:le.x2,y2:le.y2,key:le.key};
       tryPlaceFence(edge);
       netApplying=false;
     }
+    scores=d.scores;
     spectator=!!d.inProgress||!!d.spectateOnly;
     updateRoomUI();updateSB();lockOnlineUI();
     if(myIdx>=0){
