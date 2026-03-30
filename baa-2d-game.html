@@ -66,7 +66,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </style></head><body>
 <div id="loading"><span>Loading</span></div>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:4px"><span class="lbl">超過</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:4px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
 <div style="display:flex;align-items:center;gap:3px;margin-left:auto">
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span class="lbl">人類</span>
@@ -130,7 +130,19 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <rect id="preview" x="0" y="0" width="0" height="0" rx="1.5" ry="1.5" fill="#888" stroke="#222" stroke-width="1.8" opacity="0.4" visibility="hidden" pointer-events="none"/>
 </svg>
 <div id="rules"><span class="rx" id="rulesClose">✕</span><img id="rulesImg" src=""><p class="rt" id="rulesTxt"></p><button class="rn" id="rulesNext">看下一張</button></div>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+var peerLoading=false,peerReady=false;
+function loadPeerJS(cb){
+  if(peerReady){cb();return;}
+  if(peerLoading){setTimeout(function(){loadPeerJS(cb);},200);return;}
+  peerLoading=true;
+  var s=document.createElement("script");
+  s.src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js";
+  s.onload=function(){peerReady=true;cb();};
+  s.onerror=function(){peerLoading=false;showMsg("連線功能無法載入",3000);};
+  document.head.appendChild(s);
+}
+</script>
 <script>
 (function(){
 var R=113.38,TW=113.38,TH=98.19,AX=56.69;
@@ -306,7 +318,7 @@ function checkWin(){
   // Only check at end of a complete round
   if(fci%numP!==0)return;
   var winners=[];
-  for(var i=0;i<numP;i++) if(scores[i]>winTarget) winners.push(i);
+  for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) winners.push(i);
   if(winners.length===0)return;
   gameOver=true;
   var names=winners.map(function(w){
@@ -1151,6 +1163,7 @@ var peerOpts={config:iceNormal};
 var peerRelayOpts={config:iceRelay};
 
 function createRoom(){
+  loadPeerJS(function(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
   document.getElementById("aisel").value=0;
@@ -1162,6 +1175,7 @@ function createRoom(){
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
   peer.on("error",function(e){ showMsg("連線錯誤："+e.type); });
+  });
 }
 
 function recalcOnlinePlayers(){
@@ -1309,14 +1323,31 @@ function setupConnHandlers(c){
 }
 
 function joinRoom(code){
+  loadPeerJS(function(){
   roomCode=code.toUpperCase();isHost=false;online=true;
   document.getElementById("modal").style.display="none";
-  showMsg("正在連線到房間 "+roomCode+"...",30000);
+  // Show spinner overlay
+  var spin=document.createElement("div");spin.id="joinSpin";
+  spin.style.cssText="position:fixed;inset:0;z-index:260;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
+  spin.innerHTML="<div style='background:#fff;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)'>"
+    +"<div style='width:36px;height:36px;border:4px solid #ddd;border-top:4px solid #4CAF50;border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite'></div>"
+    +"<div style='font-size:16px;color:#333'>正在嘗試加入房間</div>"
+    +"<div style='font-size:12px;color:#999;margin-top:8px'>請稍候...</div>"
+    +"<div style='margin-top:16px'><button id='joinCancel' style='padding:6px 20px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#666;cursor:pointer'>取消</button></div>"
+    +"</div>";
+  document.body.appendChild(spin);
+  document.getElementById("joinCancel").onclick=function(){var el=document.getElementById("joinSpin");if(el)el.remove();online=false;};
+  // Add spin animation if not exists
+  if(!document.getElementById("spinCSS")){
+    var st=document.createElement("style");st.id="spinCSS";st.textContent="@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
+    document.head.appendChild(st);
+  }
+  function removeSpinner(){ var el=document.getElementById("joinSpin");if(el)el.remove(); }
   var attempt=0;
   var modes=[peerOpts,peerRelayOpts,peerRelayOpts];
-  var labels=["直連模式","中繼模式","中繼模式（延長）"];
   var timeouts=[10000,12000,15000];
   function tryConnect(){
+    if(!online)return;
     if(peer)try{peer.destroy();}catch(e){}
     var opts=modes[attempt]||peerRelayOpts;
     peer=new Peer(opts);
@@ -1324,56 +1355,40 @@ function joinRoom(code){
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
       var connected=false;
       var timer=setTimeout(function(){
-        if(!connected){
+        if(!connected&&online){
           attempt++;
-          if(attempt<3){
-            showMsg("連線逾時，切換到"+labels[attempt]+"重試...",8000);
-            tryConnect();
-          }else{
-            showMsg("無法連線到房間，請確認房號正確且房主在線",5000);
-            online=false;
-          }
+          if(attempt<3)tryConnect();
+          else{ removeSpinner();showMsg("無法加入房間，請確認網址正確",5000);online=false; }
         }
       },timeouts[attempt]||15000);
       c.on("open",function(){
         connected=true;clearTimeout(timer);
         conns=[c];
-        if(attempt>0)showMsg("已透過中繼伺服器連線，正在等待房主允許加入...",15000);
-        else showMsg("已連線，正在等待房主允許加入...",15000);
+        removeSpinner();
       });
       c.on("data",function(d){ handleNetData(d); });
       c.on("close",function(){ if(connected){showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB();} });
       c.on("error",function(err){
-        if(!connected){
+        if(!connected&&online){
           connected=true;clearTimeout(timer);
           attempt++;
-          if(attempt<3){
-            showMsg("連線失敗，切換到"+labels[attempt]+"重試...",5000);
-            setTimeout(tryConnect,500);
-          }else{
-            showMsg("無法連線到房間（"+(err.type||"unknown")+"）",5000);
-            online=false;
-          }
+          if(attempt<3)setTimeout(tryConnect,500);
+          else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
         }
       });
     });
     peer.on("error",function(e){
       if(e.type==="peer-unavailable"){
-        showMsg("找不到房間 "+roomCode+"，請確認房號正確",5000);
-        online=false;
-      }else{
+        removeSpinner();showMsg("找不到房間，請確認網址正確",5000);online=false;
+      }else if(online){
         attempt++;
-        if(attempt<3){
-          showMsg("連線錯誤，切換到"+labels[attempt]+"重試...",5000);
-          setTimeout(tryConnect,500);
-        }else{
-          showMsg("連線錯誤："+e.type,5000);
-          online=false;
-        }
+        if(attempt<3)setTimeout(tryConnect,500);
+        else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
       }
     });
   }
   tryConnect();
+  });
 }
 
 var spectator=false;
@@ -1567,8 +1582,12 @@ document.getElementById("btnOnline").addEventListener("click",function(){ create
 document.getElementById("btnCloseModal").addEventListener("click",function(){ document.getElementById("modal").style.display="none"; });
 
 // Close connection on page refresh/close
-window.addEventListener("beforeunload",function(){
-  if(peer)try{peer.destroy();}catch(e){}
+window.addEventListener("beforeunload",function(e){
+  if(online&&isHost){
+    e.preventDefault();
+    e.returnValue="你是房主，關閉視窗會導致房間消失，確定嗎？";
+  }
+  if(peer)try{peer.destroy();}catch(ex){}
 });
 
 // Check URL for auto-join
