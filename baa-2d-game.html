@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.6</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.8</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -293,16 +293,29 @@ function showLobbyOverlay(msg,showStart){
 }
 function hideLobbyOverlay(){ lobbyActive=false;var el=document.getElementById("lobbyOverlay");if(el)el.remove(); }
 
+function showDissolveDialog(msg){
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
+  var txt=document.createElement("p");txt.style.cssText="font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0";
+  txt.textContent=msg;box.appendChild(txt);
+  var btn=document.createElement("button");btn.textContent="好";
+  btn.style.cssText="padding:8px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer";
+  btn.onclick=function(){window.location.href=location.origin+location.pathname;};
+  box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
+}
+
 function checkAloneInRoom(){
   if(!online||!isHost)return;
   if(conns.length===0){
-    showMsg("大家都離開這個房間了，回到單機模式。",3000);
     if(peer)try{peer.destroy();}catch(e){}
     peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
     hidePersistMsg();hideLobbyOverlay();
     var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
     unlockOnlineUI();
     numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+    showDissolveDialog("大家都離開這個房間了，即將回到單機模式。");
   }
 }
 
@@ -444,10 +457,10 @@ function checkWin(){
     return FNAMES[w]+(isAI?"(電腦)":"");
   });
   if(winners.length===1){
-    document.getElementById("winTitle").textContent=names[0]+"玩家獲勝！";
+    document.getElementById("winTitle").textContent=names[0]+"玩家獲勝";
     document.getElementById("winDetail").textContent="";
   }else{
-    document.getElementById("winTitle").textContent=names.join("、")+"玩家共同獲勝！";
+    document.getElementById("winTitle").textContent=names.join("、")+"玩家共同獲勝";
     var details=winners.map(function(w){ return FNAMES[w]+":"+scores[w]+"分"; }).join(" ");
     document.getElementById("winDetail").textContent="";
   }
@@ -1541,13 +1554,13 @@ function joinRoom(code){
       });
       c.on("data",function(d){ handleNetData(d); });
       c.on("close",function(){ if(connected){
-        showMsg("房間已解散，回到單機模式。",3000);
         if(peer)try{peer.destroy();}catch(e){}
         peer=null;online=false;spectator=false;conns=[];connHumans=[];
         hidePersistMsg();hideLobbyOverlay();
         var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
         unlockOnlineUI();
         numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+        showDissolveDialog("這個房間已經解散，即將回到單機模式。");
       } });
       c.on("error",function(err){
         if(!connected&&online){
@@ -1699,7 +1712,7 @@ function handleNetData(d){
     box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
   }
   if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
-  if(d.t==="kicked"){ showMsg("你被房主踢出了房間",5000);online=false;spectator=false;unlockOnlineUI();updateSB(); }
+  if(d.t==="kicked"){ if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB();showMsg(d.name+"色玩家已加入，正在等候下一局。",3000); }
   if(d.t==="waiting"){ showPersistMsg(d.msg); }
@@ -1785,11 +1798,9 @@ document.getElementById("btnOnline").addEventListener("click",function(){
 function leaveRoom(){
   if(peer)try{peer.destroy();}catch(e){}
   peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
-  hidePersistMsg();
+  hidePersistMsg();hideLobbyOverlay();
   var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
-  unlockOnlineUI();
-  numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
-  showMsg("已離開房間",2000);
+  window.location.href=location.origin+location.pathname;
 }
 document.getElementById("btnCloseModal").addEventListener("click",function(){ document.getElementById("modal").style.display="none"; });
 
