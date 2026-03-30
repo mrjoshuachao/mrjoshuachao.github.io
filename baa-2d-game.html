@@ -13,16 +13,16 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .fs{animation:fscale 0.5s ease-out}
 @keyframes tglow{0%,20%{opacity:0.7;}100%{opacity:0;}}
 .tg{animation:tglow 1.5s ease-out forwards}.hexinner{transition:transform .3s ease}
-#sb{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;padding:6px 12px;background:rgba(0,0,0,0.3);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;;gap:8px}
-#bb{position:fixed;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(0,0,0,0.3);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;}
-#psel{background:#444;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer}
-#aisel{background:#444;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
-#winsel{background:#444;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
-.lbl{color:#fff;font-size:12px;font-family:'Segoe UI',sans-serif}
-.scores{display:flex;gap:8px;position:absolute;left:50%;transform:translateX(-50%);justify-content:center}
-.ps{display:flex;align-items:center;gap:5px;color:#fff;font-size:15px;font-weight:bold}
-.pd{width:26px;height:26px;border-radius:50%;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:bold;text-shadow:0 0 3px rgba(0,0,0,0.6);line-height:1}
-#msg{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,0.75);color:#fff;padding:10px 24px;border-radius:12px;font:bold 15px 'Segoe UI',sans-serif;display:none;pointer-events:none;text-align:center}
+#sb{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;gap:8px}
+#bb{position:fixed;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;}
+#psel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer}
+#aisel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
+#winsel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
+.lbl{color:#555;font-size:12px;font-family:'Segoe UI',sans-serif}
+.scores{display:flex;gap:4px;position:absolute;left:50%;transform:translateX(-50%);align-items:center}
+.ps{font-size:15px;font-weight:bold;padding:0 1px}
+.pd{display:inline}
+#msg{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:20;background:#fff;color:#333;padding:10px 24px;border-radius:12px;font:bold 15px 'Segoe UI',sans-serif;display:none;pointer-events:none;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.12);transition:opacity 1s ease}
 #win{position:fixed;z-index:100;display:none;font-family:'Segoe UI',sans-serif}
 #win>div{position:relative;background:#fff;border-radius:12px;padding:16px 20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
 #win>div:before{content:"";position:absolute;top:-10px;left:var(--al,50%);transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid #fff}
@@ -32,8 +32,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .tbtn{background:#555;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:'Segoe UI',sans-serif}
 .tbtn:active{background:#777}
 .tbtn:disabled{background:#333;color:#666;cursor:default;border-color:#555}
-#modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.7);justify-content:center;align-items:center}
-#modal>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:260px}
+#modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.3);justify-content:center;align-items:center}
+#modal>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:260px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 #modal h3{margin-bottom:12px;font-size:20px}
 #modal input{padding:8px 12px;font-size:18px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:normal}
 #modal .mbtn{display:inline-block;margin:8px 4px;padding:8px 18px;font-size:14px;border:none;border-radius:8px;cursor:pointer;color:#fff}
@@ -42,8 +42,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .xbtn{background:#888}.xbtn:hover{background:#666}
 #roomInfo{margin:10px 0;font-size:14px;color:#333}
 #onTag{display:none;background:#2196F3;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-family:'Segoe UI',sans-serif}
-#confirm{position:fixed;inset:0;z-index:250;display:none;background:rgba(0,0,0,0.7);justify-content:center;align-items:center}
-#confirm>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:240px}
+#confirm{position:fixed;inset:0;z-index:250;display:none;background:rgba(0,0,0,0.3);justify-content:center;align-items:center}
+#confirm>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:240px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 #confirm p{font-size:16px;margin-bottom:16px}
 #confirm button{margin:0 6px;padding:8px 20px;font-size:14px;border:none;border-radius:8px;cursor:pointer;color:#fff}
 .rbtns{display:flex;gap:6px;margin-left:auto}
@@ -62,11 +62,11 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
 </style></head><body>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:4px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:4px"><span class="lbl">超過</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
-<div style="display:flex;align-items:center;gap:8px;margin-left:auto">
-<select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span class="lbl">人類</span>
-<span id="aiWrap"><select id="aisel"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><span class="lbl">電腦</span></span>
+<div style="display:flex;align-items:center;gap:3px;margin-left:auto">
+<select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span class="lbl">人類</span>
+<span id="aiWrap" style="display:inline-flex;align-items:center;gap:3px;margin-left:5px"><select id="aisel"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><span class="lbl">電腦</span></span>
 </div>
 <span id="onTag" style="display:none">線上</span>
 <span id="hostTag" style="display:none;background:#e74c3c;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:4px">房主</span>
@@ -78,6 +78,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnUndo">還原</button>
 <button class="tbtn" id="btnRoomCode" style="display:none;background:#555;font-size:11px;letter-spacing:1px" title="按一下複製房號"></button>
 <button class="tbtn" id="btnRestart">重新開始</button>
+<button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;gap:6px">
 <button class="tbtn" id="btnOnline" style="background:#2196F3">連線對戰</button>
@@ -165,11 +166,11 @@ var svg=document.getElementById("board"),world=document.getElementById("world"),
 var generated={};var panX=0,panY=0;var svgW=0,svgH=0;var commitX=0,commitY=0;
 var dragging=false,startX=0,startY=0,startPanX=0,startPanY=0,dragDist=0;
 
-var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#2c2c2c"];
-var FNAMES=["紅","藍","黃","白","黑"];
-var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
+var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#2c2c2c","#888888"];
+var FNAMES=["紅","藍","黃","白","黑","灰"];
+var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var hexRots={};var seed=Date.now();
-var turnOrder=[0,1,2,3,4];
+var turnOrder=[0,1,2,3,4,5];
 function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
@@ -252,55 +253,62 @@ function analyzeRegion(reg,fk){
   return {sheep:sheep,house:house,pts:pts,colors:cc};
 }
 
-var msgT=0;
-function showMsg(t,d){ var m=document.getElementById("msg");m.textContent=t;m.style.display="block";clearTimeout(msgT);msgT=setTimeout(function(){m.style.display="none";},d||3000); }
+var msgT=0,msgT2=0;
+function showMsg(t,d){ var m=document.getElementById("msg");m.textContent=t;m.style.display="block";m.style.opacity="1";clearTimeout(msgT);clearTimeout(msgT2);msgT=setTimeout(function(){m.style.opacity="0";msgT2=setTimeout(function(){m.style.display="none";},1000);},d||3000); }
 
 function updateSB(){
   var sa=document.getElementById("scoreArea");sa.innerHTML="";
   for(var i=0;i<numP;i++){
-    var d=document.createElement("div");d.className="ps";
-    var isAI=i>=(numP-numAI);
-    var dot=document.createElement("div");dot.className="pd";dot.id="pd"+i;dot.style.background=FCOLORS[i];
-    
-    if(i===curP()) dot.style.boxShadow="0 0 0 3px #fff";
-    dot.style.color=(i===2||i===3)?"#222":"#fff";
-    if(isAI){
-      var aiLbl=document.createElement("span");aiLbl.textContent="電腦";aiLbl.style.cssText="font-size:7px;line-height:1;opacity:0.85";
-      var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
-      dot.appendChild(aiLbl);dot.appendChild(num);
-    }else if(online&&isMyCircle(i)){
-      var meLbl=document.createElement("span");meLbl.textContent="我";meLbl.style.cssText="font-size:8px;line-height:1;opacity:0.85";
-      var num=document.createElement("span");num.textContent=scores[i];num.style.cssText="font-size:11px;line-height:1";
-      dot.appendChild(meLbl);dot.appendChild(num);
+    var s=document.createElement("span");s.className="ps";s.id="pd"+i;
+    s.style.color=FCOLORS[i];
+    if(FCOLORS[i]==="#ffffff"){
+      s.style.textShadow="0 0 1px #999,0 0 2px #aaa";
     }else{
-      dot.textContent=scores[i];
+      s.style.textShadow="none";
     }
-    d.appendChild(dot);sa.appendChild(d);
+    var isAI=i>=(numP-numAI);
+    var label=isAI?"電腦":"";
+    if(online&&isMyCircle(i))label="我";
+    var isCur=(i===curP());
+    if(label){
+      s.style.display="inline-flex";s.style.flexDirection="column";s.style.alignItems="center";s.style.lineHeight="1";
+      s.innerHTML="<span style='font-size:7px;opacity:0.7'>"+label+"</span><span style='"+(isCur?"text-decoration:underline;text-underline-offset:2px":"")+"'>"+scores[i]+"</span>";
+    }else{
+      s.innerHTML="<span style='"+(isCur?"text-decoration:underline;text-underline-offset:3px":"")+"'>"+scores[i]+"</span>";
+    }
+    sa.appendChild(s);
   }
-  document.getElementById("btnUndo").disabled=history.length===0||isAITurn()||online;
+  document.getElementById("btnUndo").disabled=history.length===0||isAITurn()||online||gameOver;
 }
 
 function checkWin(){
-  var anyReached=false;
-  for(var i=0;i<numP;i++) if(scores[i]>=winTarget) anyReached=true;
-  if(!anyReached)return;
-  var maxS=0,wi=-1;
-  for(var i=0;i<numP;i++) if(scores[i]>maxS){ maxS=scores[i];wi=i; }
+  // Only check at end of a complete round
+  if(fci%numP!==0)return;
+  var winners=[];
+  for(var i=0;i<numP;i++) if(scores[i]>winTarget) winners.push(i);
+  if(winners.length===0)return;
   gameOver=true;
-  var isAI=wi>=(numP-numAI);
-  document.getElementById("winTitle").textContent="🏆 "+FNAMES[wi]+(isAI?"(電腦)":"")+"玩家獲勝！";
-  document.getElementById("winDetail").textContent="最終分數："+scores[wi]+" 分";
+  var names=winners.map(function(w){
+    var isAI=w>=(numP-numAI);
+    return FNAMES[w]+(isAI?"(電腦)":"");
+  });
+  if(winners.length===1){
+    document.getElementById("winTitle").textContent="🏆 "+names[0]+"玩家獲勝！";
+    document.getElementById("winDetail").textContent="最終分數："+scores[winners[0]]+" 分";
+  }else{
+    document.getElementById("winTitle").textContent="🏆 "+names.join("、")+"玩家共同獲勝！";
+    var details=winners.map(function(w){ return FNAMES[w]+":"+scores[w]+"分"; }).join(" ");
+    document.getElementById("winDetail").textContent=details;
+  }
   var winEl=document.getElementById("win");
   winEl.style.display="block";
-  // Position below winner's circle
-  var dot=document.getElementById("pd"+wi);
+  var dot=document.getElementById("pd"+winners[0]);
   if(dot){
     var r=dot.getBoundingClientRect();
     var cx=r.left+r.width/2;
     var top2=r.bottom+12;
     winEl.style.left=Math.max(10,Math.min(window.innerWidth-200,cx-100))+"px";
     winEl.style.top=top2+"px";
-    // Move arrow to point at circle
     var arrow=winEl.querySelector("div");
     if(arrow){ var arrowLeft=cx-parseFloat(winEl.style.left); arrow.style.setProperty("--al",arrowLeft+"px"); }
   }
@@ -443,8 +451,8 @@ function tryPlaceFence(e){
   if(gameOver)return;
   var key=e.key;
   if(fences[key]){ fences[key].el.remove();delete fences[key];updateSB();return; }
+  if(isInsideCompleted(e)){ showMsg("已經完成的圈地裡面不能再放柵欄");return; }
   if(isTreeEdge(e)){ showMsg("大樹旁邊不能放柵欄");return; }
-  if(isInsideCompleted(e)){ showMsg("已經完成的圈地裡面不能放柵欄");return; }
   var illegal=wouldBeIllegal(e); if(illegal){ showMsg(illegal);return; }
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
@@ -483,7 +491,7 @@ function tryPlaceFence(e){
         if(a.sheep>0&&a.house>0){ var maxC=0;for(var j=0;j<numP;j++)if(a.colors[j]>maxC)maxC=a.colors[j];
           if(maxC>0){ var ws=[];for(var j=0;j<numP;j++)if(a.colors[j]===maxC)ws.push(j);
             for(var j=0;j<ws.length;j++){ scores[ws[j]]+=a.pts; scoreChanges.push({p:ws[j],d:a.pts}); }
-            showMsg(ws.map(function(w){return FNAMES[w];}).join("、")+"玩家得 "+a.pts+" 分！",4000);
+            showMsg(ws.map(function(w){return FNAMES[w];}).join("、")+" +"+a.pts+" 分",4000);
 
             for(var j=0;j<reg.length;j++){ var tk=reg[j].c+","+reg[j].r+","+reg[j].t; completedTris[tk]=1; newCompleted.push(tk); }
             // Glow effect on enclosed triangles
@@ -747,8 +755,31 @@ function isEdgeBlocked(edge){
 function showBlockReason(edge){
   var key=edge.key;
   if(fences[key])return;
+  if(isInsideCompleted(edge)){
+    showMsg("已經完成的圈地裡面不能再放柵欄");
+    var pair=findTriPair(edge.key);
+    if(pair){
+      var startTri=pair[0];
+      var visited={};var queue=[startTri];
+      visited[startTri.c+","+startTri.r+","+startTri.t]=1;
+      while(queue.length>0){
+        var tri=queue.shift();
+        glowTri(tri.c,tri.r,tri.t);
+        var edges=triEdges(tri.c,tri.r,tri.t);
+        for(var j=0;j<edges.length;j++){
+          var ek=edges[j].key;
+          if(fences[ek])continue;
+          var nb=edges[j].nb;
+          var nk=nb.c+","+nb.r+","+nb.t;
+          if(!visited[nk]&&completedTris[nk]){
+            visited[nk]=1;queue.push(nb);
+          }
+        }
+      }
+    }
+    return;
+  }
   if(isTreeEdge(edge)){ showMsg("大樹旁邊不能放柵欄");return; }
-  if(isInsideCompleted(edge)){ showMsg("已經完成的圈地裡面不能放柵欄");return; }
   var reason=wouldBeIllegal(edge);
   if(reason){ showMsg(reason);return; }
 }
@@ -902,38 +933,59 @@ document.getElementById("btnRestart").addEventListener("click",function(){
     showMsg("正在等待房主同意重新開始...",10000);
     return;
   }
-  if(confirm("確定要重新開始嗎？"))resetGame();
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
+  box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>確定要重新開始嗎？</p>";
+  var yes=document.createElement("button");yes.textContent="確定";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
+  var no=document.createElement("button");no.textContent="取消";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin:0 8px";
+  yes.onclick=function(){d.remove();resetGame();};
+  no.onclick=function(){d.remove();};
+  box.appendChild(yes);box.appendChild(no);d.appendChild(box);document.body.appendChild(d);
 });
 document.getElementById("advToggle").addEventListener("change",function(){
   var v=this.checked,prev=advMode,el=this;
   confirmChange(function(){ advMode=v;resetGame(); },function(){ advMode=prev;el.checked=prev; });
 });
 document.getElementById("btnUndo").addEventListener("click",function(){ undoLast(); });
+document.getElementById("btnHome").addEventListener("click",function(){
+  if(history.length===0)return;
+  var sx=0,sy=0,n=0;
+  for(var i=0;i<history.length;i++){
+    var e=history[i].edge;
+    sx+=(e.x1+e.x2)/2;sy+=(e.y1+e.y2)/2;n++;
+  }
+  if(n===0)return;
+  var cx=sx/n,cy=sy/n;
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var tgtX=cx-vw/2,tgtY=cy-vh/2;
+  var fromX=panX,fromY=panY,startT=0,dur=600;
+  function anim(ts){
+    if(!startT)startT=ts;
+    var p=Math.min((ts-startT)/dur,1);
+    var ease=p<0.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
+    panX=fromX+(tgtX-fromX)*ease;panY=fromY+(tgtY-fromY)*ease;
+    applyPan();
+    if(p<1)requestAnimationFrame(anim);
+    else{ commitView();fillView(); }
+  }
+  requestAnimationFrame(anim);
+});
 window.addEventListener("resize",function(){ initViewport();updateView();fillView(); });
 
 function syncCounts(src){
-  if(src==="human"){ if(numHuman+numAI>5)numAI=5-numHuman; }
-  else if(src==="ai"){ if(numHuman+numAI>5)numHuman=5-numAI; }
+  if(src==="human"){ if(numHuman+numAI>6)numAI=6-numHuman; }
+  else if(src==="ai"){ if(numHuman+numAI>6)numHuman=6-numAI; }
   if(numAI<0)numAI=0;if(numHuman<1)numHuman=1;
-  var minH=numAI>0?1:2;if(numHuman<minH)numHuman=minH;
-  if(numHuman+numAI>5){ if(src==="human")numAI=5-numHuman;else numHuman=5-numAI; }
+  if(numHuman+numAI<2){ if(src==="ai")numHuman=2-numAI; else numAI=2-numHuman; }
   numP=numHuman+numAI;
-  var ps=document.getElementById("psel");ps.innerHTML="";
-  for(var i=minH;i<=5-numAI;i++){
-    var o=document.createElement("option");o.value=i;o.textContent=i;
-    if(i===numHuman)o.selected=true;
-    ps.appendChild(o);
-  }
-  var as=document.getElementById("aisel");as.innerHTML="";
-  for(var i=0;i<=5-numHuman;i++){
-    var o=document.createElement("option");o.value=i;o.textContent=i;
-    if(i===numAI)o.selected=true;
-    as.appendChild(o);
-  }
+  document.getElementById("psel").value=numHuman;
+  document.getElementById("aisel").value=numAI;
 }
 
 window.resetGame=function(){
-  gameOver=false;fci=0;scores=[0,0,0,0,0];history=[];ilCache={};completedTris={};actionLog=[];
+  gameOver=false;fci=0;scores=[0,0,0,0,0,0];history=[];ilCache={};completedTris={};actionLog=[];
   if(!netApplying)seed=Date.now();
   shuffleTurnOrder();
   hexRots={};pendingKey=null;pendingEdge=null;lastPrevKey=null;
@@ -1070,11 +1122,11 @@ function createRoom(){
 function recalcOnlinePlayers(){
   var clientTotal=0;
   for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
-  var maxHost=5-numAI-clientTotal;
+  var maxHost=6-numAI-clientTotal;
   if(maxHost<1)maxHost=1;
   if(localHumans>maxHost)localHumans=maxHost;
   var total=localHumans+clientTotal+numAI;
-  if(total>5)total=5;
+  if(total>6)total=6;
   numHuman=total-numAI;numP=total;
   myIdx=0;
   document.getElementById("psel").value=localHumans;
@@ -1094,9 +1146,9 @@ function recalcOnlinePlayers(){
 
 function showHostApproval(onApprove,onReject){
   var d=document.createElement("div");
-  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
   var box=document.createElement("div");
-  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center";
+  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
   box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>是否同意？</p>";
   var yes=document.createElement("button");yes.textContent="同意";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
   var no=document.createElement("button");no.textContent="不同意";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
@@ -1111,7 +1163,7 @@ function hostHandleConn(c){
     var currentPlayers=localHumans;
     for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
     currentPlayers+=numAI;
-    var isFull=(currentPlayers>=5);
+    var isFull=(currentPlayers>=6);
     if(isFull){
       c.send({t:"full_spectator"});
       c.on("data",function(d2){
@@ -1129,7 +1181,7 @@ function hostHandleConn(c){
       var startIdx=localHumans;
       for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
       var gameInProgress=(fci>0||Object.keys(fences).length>0);
-      var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
+      var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
       numHuman=total-numAI;numP=total;
       var pName=FNAMES[startIdx]||"新";
       c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress});
@@ -1148,9 +1200,9 @@ function hostHandleConn(c){
 
 function showHostApproval2(msg,onApprove,onReject){
   var d=document.createElement("div");
-  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
   var box=document.createElement("div");
-  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;max-width:300px";
+  box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
   box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>"+msg+"</p>";
   var yes=document.createElement("button");yes.textContent="允許";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
   var no=document.createElement("button");no.textContent="拒絕";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
@@ -1201,7 +1253,7 @@ function setupConnHandlers(c){
     var pName=FNAMES[ci+localHumans]||"?";
     conns.splice(ci,1);connHumans.splice(ci,1);
     if(wasSpectator){ updateRoomUI();return; }
-    var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>5)total=5;
+    var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
     numHuman=total-numAI;numP=total;
     document.getElementById("psel").value=localHumans;
     updateRoomUI();
@@ -1273,7 +1325,7 @@ function joinRoom(code){
 var spectator=false;
 function lockOnlineUI(){
   var ps=document.getElementById("psel");ps.innerHTML="";
-  for(var i=1;i<=4;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===1)o.selected=true;ps.appendChild(o); }
+  for(var i=1;i<=5;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===1)o.selected=true;ps.appendChild(o); }
   localHumans=1;
   ps.disabled=false;
   document.getElementById("winsel").disabled=true;
@@ -1300,15 +1352,16 @@ function unlockOnlineUI(){
   document.getElementById("btnRoomCode").style.display="none";
   document.getElementById("hostTag").style.display="none";
   document.getElementById("onTag").style.display="none";
-  var ps=document.getElementById("psel");ps.innerHTML="";
-  for(var i=1;i<=5;i++){ var o=document.createElement("option");o.value=i;o.textContent=i;if(i===2)o.selected=true;ps.appendChild(o); }
+  numHuman=2;numAI=0;numP=2;
+  document.getElementById("psel").value=2;
+  document.getElementById("aisel").value=0;
 }
 function handleNetData(d){
   if(d.t==="full_spectator"){
     var cdiv=document.createElement("div");
-    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
     var box=document.createElement("div");
-    box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px";
+    box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
     box.innerHTML="<p style='font-size:16px;line-height:1.6;margin-bottom:16px'>目前房間人數已滿，無法以玩家身分加入，但是可以旁觀。<br>你要加入旁觀嗎？</p>";
     var yes=document.createElement("button");yes.textContent="是";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
     var no=document.createElement("button");no.textContent="否";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin:0 8px";
@@ -1345,9 +1398,9 @@ function handleNetData(d){
     if(myIdx>=0){
       var cname=FNAMES[myIdx];
       var cdiv=document.createElement("div");
-      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);font-family:'Segoe UI',sans-serif";
+      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
       var box=document.createElement("div");
-      box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center";
+      box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
       var dot=document.createElement("div");
       dot.style.cssText="width:50px;height:50px;border-radius:50%;margin:0 auto 16px;border:3px solid #333;background:"+FCOLORS[myIdx];
       box.appendChild(dot);
@@ -1381,9 +1434,9 @@ function handleNetData(d){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
     spectator=false;netApplying=true;resetGame();netApplying=false;updateSB();
     var cdiv=document.createElement("div");
-    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+    cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
     var box=document.createElement("div");
-    box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px";
+    box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
     var txt=document.createElement("p");txt.style.cssText="font-size:16px;line-height:1.6;margin-bottom:16px";
     txt.textContent=d.msg;box.appendChild(txt);
     var btn=document.createElement("button");btn.textContent="確認";
