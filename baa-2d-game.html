@@ -13,8 +13,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .fs{animation:fscale 0.5s ease-out}
 @keyframes tglow{0%,20%{opacity:0.7;}100%{opacity:0;}}
 .tg{animation:tglow 1.5s ease-out forwards}.hexinner{transition:transform .3s ease}
-#sb{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;gap:8px}
-#bb{position:fixed;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;}
+#sb{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;padding:6px 12px;background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;gap:8px}
+#bb{position:fixed;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:'Segoe UI',sans-serif;color:#333;}
 #psel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer}
 #aisel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
 #winsel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
@@ -24,12 +24,13 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .pd{display:inline}
 #msg{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:20;background:#fff;color:#333;padding:10px 24px;border-radius:12px;font:bold 15px 'Segoe UI',sans-serif;display:none;pointer-events:none;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.12);transition:opacity 1s ease}
 #win{position:fixed;z-index:100;display:none;font-family:'Segoe UI',sans-serif}
+#turnBubble::before{content:'';position:absolute;top:-6px;left:var(--al,50%);transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #fff}
 #win>div{position:relative;background:#fff;border-radius:12px;padding:16px 20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
 #win>div:before{content:"";position:absolute;top:-10px;left:var(--al,50%);transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid #fff}
 #win h2{font-size:18px;margin-bottom:6px}
 #win p{font-size:14px;margin-bottom:8px}
 #win button{padding:6px 16px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer}
-.tbtn{background:#555;color:#fff;border:1px solid #888;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:'Segoe UI',sans-serif}
+.tbtn{background:#fff;color:#333;border:1px solid #333;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:'Segoe UI',sans-serif}
 .tbtn:active{background:#777}
 .tbtn:disabled{background:#333;color:#666;cursor:default;border-color:#555}
 #modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.3);justify-content:center;align-items:center}
@@ -60,7 +61,10 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules img{max-width:88%;max-height:50vh;object-fit:contain}
 #rules .rt{font-size:18px;font-weight:bold;color:#333;text-align:center;margin:16px 24px 20px;line-height:1.6;font-family:'Segoe UI',sans-serif}
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
+#loading{position:fixed;inset:0;z-index:9999;background:#a3d65c;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif}
+#loading span{color:#fff;font-size:20px;font-weight:bold;letter-spacing:2px}
 </style></head><body>
+<div id="loading"><span>Loading</span></div>
 <div id="sb">
 <div style="display:flex;align-items:center;gap:4px"><span class="lbl">超過</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
@@ -73,15 +77,15 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </div>
 <div id="bb">
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
-<button class="tbtn" id="btnRules" style="background:#FF9800">觀看規則</button>
+<button class="tbtn" id="btnRules">觀看規則</button>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
-<button class="tbtn" id="btnRoomCode" style="display:none;background:#555;font-size:11px;letter-spacing:1px" title="按一下複製房號"></button>
+<button class="tbtn" id="btnRoomCode" style="display:none;font-size:11px;letter-spacing:1px" title="按一下複製房號"></button>
 <button class="tbtn" id="btnRestart">重新開始</button>
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;gap:6px">
-<button class="tbtn" id="btnOnline" style="background:#2196F3">連線對戰</button>
+<button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
 <div id="modal"><div>
@@ -174,9 +178,6 @@ var turnOrder=[0,1,2,3,4,5];
 function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
-  if(!online)return;
-  var s=seed;
-  for(var i=numP-1;i>0;i--){ s=(s*1103515245+12345)&0x7fffffff;var j=s%(i+1);var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp; }
 }
 var completedTris={};
 var netApplying=false;
@@ -261,6 +262,7 @@ function updateSB(){
   for(var i=0;i<numP;i++){
     var s=document.createElement("span");s.className="ps";s.id="pd"+i;
     s.style.color=FCOLORS[i];
+    s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
     if(FCOLORS[i]==="#ffffff"){
       s.style.textShadow="0 0 1px #999,0 0 2px #aaa";
     }else{
@@ -270,15 +272,40 @@ function updateSB(){
     var label=isAI?"電腦":"";
     if(online&&isMyCircle(i))label="我";
     var isCur=(i===curP());
-    if(label){
-      s.style.display="inline-flex";s.style.flexDirection="column";s.style.alignItems="center";s.style.lineHeight="1";
-      s.innerHTML="<span style='font-size:7px;opacity:0.7'>"+label+"</span><span style='"+(isCur?"text-decoration:underline;text-underline-offset:2px":"")+"'>"+scores[i]+"</span>";
-    }else{
-      s.innerHTML="<span style='"+(isCur?"text-decoration:underline;text-underline-offset:3px":"")+"'>"+scores[i]+"</span>";
-    }
+    var h="";
+    if(label)h+="<span style='font-size:7px;opacity:0.7;position:absolute;top:-8px;left:50%;transform:translateX(-50%);white-space:nowrap'>"+label+"</span>";
+    h+=scores[i];
+    if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-8px;left:50%;transform:translateX(-50%)'>▲</span>";
+    s.innerHTML=h;
     sa.appendChild(s);
   }
   document.getElementById("btnUndo").disabled=history.length===0||isAITurn()||online||gameOver;
+  // Turn indicator bubble for online
+  var tb=document.getElementById("turnBubble");
+  if(!tb){
+    tb=document.createElement("div");tb.id="turnBubble";
+    tb.style.cssText="position:fixed;z-index:15;background:#fff;color:#333;font-size:11px;font-weight:bold;padding:4px 10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);pointer-events:none;white-space:nowrap;display:none;font-family:'Segoe UI',sans-serif";
+    document.body.appendChild(tb);
+  }
+  if(online&&!gameOver){
+    var cp=curP();
+    var el=document.getElementById("pd"+cp);
+    if(el){
+      tb.textContent="現在輪到"+FNAMES[cp]+"色玩家";
+      tb.style.display="block";
+      var r=el.getBoundingClientRect();
+      var bw=tb.offsetWidth;
+      var left=r.left+r.width/2-bw/2;
+      if(left<4)left=4;if(left+bw>window.innerWidth-4)left=window.innerWidth-4-bw;
+      tb.style.left=left+"px";
+      tb.style.top=(r.bottom+8)+"px";
+      // Arrow
+      var al=r.left+r.width/2-left;
+      tb.style.setProperty("--al",al+"px");
+    }
+  }else{
+    tb.style.display="none";
+  }
 }
 
 function checkWin(){
@@ -1000,6 +1027,7 @@ window.resetGame=function(){
 
 panX=-window.innerWidth/2;panY=-window.innerHeight/2;
 initViewport();updateView();fillView();syncCounts();updateSB();scheduleAI();
+setTimeout(function(){var ld=document.getElementById("loading");if(ld)ld.remove();},100);
 
 // === SAVE IMAGE ===
 window.saveMapImage=function(){
