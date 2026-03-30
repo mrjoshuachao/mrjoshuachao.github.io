@@ -100,7 +100,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </div></div>
 <div id="msg"></div>
 <div id="confirm"><div>
-<p>這個更改會讓遊戲重新開始，確定要更改嗎？</p>
+<p>改變人數會讓遊戲重新開始，確定嗎？</p>
 <button id="cfYes" style="background:#e74c3c">確定</button>
 <button id="cfNo" style="background:#888">取消</button>
 </div></div>
@@ -166,8 +166,8 @@ var svg=document.getElementById("board"),world=document.getElementById("world"),
 var generated={};var panX=0,panY=0;var svgW=0,svgH=0;var commitX=0,commitY=0;
 var dragging=false,startX=0,startY=0,startPanX=0,startPanY=0,dragDist=0;
 
-var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#2c2c2c","#888888"];
-var FNAMES=["紅","藍","黃","白","黑","灰"];
+var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#888888","#2c2c2c"];
+var FNAMES=["紅","藍","黃","白","灰","黑"];
 var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var hexRots={};var seed=Date.now();
 var turnOrder=[0,1,2,3,4,5];
@@ -784,10 +784,11 @@ function showBlockReason(edge){
   if(reason){ showMsg(reason);return; }
 }
 function recentTouch(){ return Date.now()-lastTouchTime<800; }
+function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElementById("bb");var y=e.clientY;return y<sb.offsetHeight||y>window.innerHeight-bb.offsetHeight; }
 
 // --- MOUSE (desktop only, skip if recent touch) ---
 svg.addEventListener("mousedown",function(e){
-  if(recentTouch())return;
+  if(recentTouch()||overBar(e))return;
   cancelCommit();
   dragging=true;dragDist=0;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
   hidePreview();lastPrevKey=null;
@@ -800,7 +801,7 @@ window.addEventListener("mousemove",function(e){
     dragDist=Math.abs(dx)+Math.abs(dy);
     applyPan();return;
   }
-  if(gameOver)return;
+  if(gameOver||overBar(e)){ hidePreview();lastPrevKey=null;return; }
   if(online&&(spectator||!isMyTurn())){ hidePreview();lastPrevKey=null;return; }
   if(pendingKey)return;
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
@@ -1092,18 +1093,20 @@ function updateRoomUI(){
   document.getElementById("modalRoom").style.display="block";
 }
 
-var iceConfig={iceServers:[
-  {urls:"stun:stun.l.google.com:19302"},
-  {urls:"stun:stun1.l.google.com:19302"},
-  {urls:"stun:stun2.l.google.com:19302"},
-  {urls:"stun:stun3.l.google.com:19302"},
-  {urls:"stun:stun4.l.google.com:19302"},
+var turnServers=[
   {urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},
   {urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},
   {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"},
   {urls:"turns:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"}
-]};
-var peerOpts={config:iceConfig};
+];
+var iceNormal={iceServers:[
+  {urls:"stun:stun.l.google.com:19302"},
+  {urls:"stun:stun1.l.google.com:19302"},
+  {urls:"stun:stun2.l.google.com:19302"}
+].concat(turnServers)};
+var iceRelay={iceServers:turnServers,iceTransportPolicy:"relay"};
+var peerOpts={config:iceNormal};
+var peerRelayOpts={config:iceRelay};
 
 function createRoom(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
@@ -1267,41 +1270,48 @@ function joinRoom(code){
   roomCode=code.toUpperCase();isHost=false;online=true;
   document.getElementById("modal").style.display="none";
   showMsg("正在連線到房間 "+roomCode+"...",30000);
-  var retries=0,maxRetries=2;
+  var attempt=0;
+  var modes=[peerOpts,peerRelayOpts,peerRelayOpts];
+  var labels=["直連模式","中繼模式","中繼模式（延長）"];
+  var timeouts=[10000,12000,15000];
   function tryConnect(){
     if(peer)try{peer.destroy();}catch(e){}
-    peer=new Peer(peerOpts);
+    var opts=modes[attempt]||peerRelayOpts;
+    peer=new Peer(opts);
     peer.on("open",function(){
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
       var connected=false;
-      var timeout=setTimeout(function(){
+      var timer=setTimeout(function(){
         if(!connected){
-          if(retries<maxRetries){
-            retries++;
-            showMsg("連線逾時，正在重試 ("+retries+"/"+maxRetries+")...",10000);
+          attempt++;
+          if(attempt<3){
+            showMsg("連線逾時，切換到"+labels[attempt]+"重試...",8000);
             tryConnect();
           }else{
             showMsg("無法連線到房間，請確認房號正確且房主在線",5000);
             online=false;
           }
         }
-      },15000);
+      },timeouts[attempt]||15000);
       c.on("open",function(){
-        connected=true;clearTimeout(timeout);
+        connected=true;clearTimeout(timer);
         conns=[c];
-        showMsg("已連線，正在等待房主允許加入...",15000);
+        if(attempt>0)showMsg("已透過中繼伺服器連線，正在等待房主允許加入...",15000);
+        else showMsg("已連線，正在等待房主允許加入...",15000);
       });
       c.on("data",function(d){ handleNetData(d); });
       c.on("close",function(){ if(connected){showMsg("房主已離開，連線中斷",5000);online=false;spectator=false;unlockOnlineUI();updateSB();} });
       c.on("error",function(err){
-        connected=true;clearTimeout(timeout);
-        if(retries<maxRetries){
-          retries++;
-          showMsg("連線失敗，正在重試 ("+retries+"/"+maxRetries+")...",5000);
-          setTimeout(tryConnect,1000);
-        }else{
-          showMsg("無法連線到房間（"+(err.type||"unknown")+"），請確認房號正確",5000);
-          online=false;
+        if(!connected){
+          connected=true;clearTimeout(timer);
+          attempt++;
+          if(attempt<3){
+            showMsg("連線失敗，切換到"+labels[attempt]+"重試...",5000);
+            setTimeout(tryConnect,500);
+          }else{
+            showMsg("無法連線到房間（"+(err.type||"unknown")+"）",5000);
+            online=false;
+          }
         }
       });
     });
@@ -1309,13 +1319,15 @@ function joinRoom(code){
       if(e.type==="peer-unavailable"){
         showMsg("找不到房間 "+roomCode+"，請確認房號正確",5000);
         online=false;
-      }else if(retries<maxRetries){
-        retries++;
-        showMsg("連線錯誤，正在重試 ("+retries+"/"+maxRetries+")...",5000);
-        setTimeout(tryConnect,1000);
       }else{
-        showMsg("連線錯誤："+e.type,5000);
-        online=false;
+        attempt++;
+        if(attempt<3){
+          showMsg("連線錯誤，切換到"+labels[attempt]+"重試...",5000);
+          setTimeout(tryConnect,500);
+        }else{
+          showMsg("連線錯誤："+e.type,5000);
+          online=false;
+        }
       }
     });
   }
