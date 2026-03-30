@@ -1,0 +1,2713 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Globe Chess</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { overflow: hidden; }
+  body {
+    background: radial-gradient(circle at center, #c8c8c8 0%, #a0a0a0 40%, #707070 75%, #404040 100%);
+    overflow: hidden;
+    cursor: grab; user-select: none;
+    touch-action: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    overscroll-behavior: none;
+    margin: 0; padding: 0;
+    width: 100vw; height: 100vh;
+  }
+  body.dragging { cursor: grabbing; }
+  canvas {
+    display: block; touch-action: none;
+    position: fixed; top: 0; left: 0;
+    width: 100vw !important; height: 100vh !important;
+  }
+  /* ── Shared UI button base ── */
+  .ui-btn {
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; letter-spacing:0.18em; color:#000;
+    background:none; border:none; cursor:pointer;
+    padding:0; margin:0; opacity:0.4; transition:opacity .2s;
+    user-select:none; -webkit-user-select:none;
+    pointer-events:auto; white-space:nowrap; display:block;
+    text-align:left;
+  }
+  .ui-btn:hover { opacity:1; }
+  /* ── Turn indicator (top center) ── */
+  #turn {
+    position:fixed; top:28px; left:50%; transform:translateX(-50%);
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; letter-spacing:0.18em; color:#000; opacity:0.7;
+    pointer-events:none; z-index:100; white-space:nowrap;
+  }
+  /* ── AI toggle (top left) ── */
+  #aiWrap {
+    position:fixed; top:28px; left:28px;
+    display:flex; align-items:center; gap:9px;
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; letter-spacing:0.18em; color:#000;
+    opacity:0.4; transition:opacity .2s;
+    user-select:none; -webkit-user-select:none; z-index:100;
+  }
+  #aiWrap:hover { opacity:1; }
+  #aiSwitch { position:relative; width:36px; height:20px; cursor:pointer; flex-shrink:0; }
+  #aiSwitch input { display:none; }
+  #aiTrack { position:absolute; inset:0; border-radius:10px; background:#bbb; transition:background .25s; }
+  #aiSwitch input:checked ~ #aiTrack { background:#555; }
+  #aiThumb { position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%;
+    background:#fff; transition:transform .25s; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+  #aiSwitch input:checked ~ #aiThumb { transform:translateX(16px); }
+  /* ── New Game (top right) ── */
+  #newGameBtn {
+    position:fixed; top:28px; right:28px;
+  }
+  /* ── Test Mode (bottom left) ── */
+  #testBtn {
+    position:fixed; bottom:28px; left:28px;
+  }
+  #testBtn.active { opacity:1; color:#000; }
+  /* ── Test panel (above test button) ── */
+  #testPanel {
+    display:none; position:fixed; bottom:66px; left:28px;
+    z-index:200; pointer-events:auto;
+    background:rgba(248,248,248,0.96); border-radius:14px;
+    padding:16px 18px 14px; box-shadow:0 6px 32px rgba(0,0,0,0.22);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    flex-direction:column; align-items:flex-start; gap:12px;
+    font-family:'Times New Roman',Times,serif;
+    white-space:nowrap;
+  }
+  #testPanel.visible { display:flex; }
+  #testPanelTitle {
+    font-size:10px; letter-spacing:0.22em; color:#666;
+    font-family:'Times New Roman',Times,serif;
+  }
+  .test-row { display:flex; align-items:center; gap:7px; }
+  .test-row-label {
+    font-size:9px; letter-spacing:0.15em; color:#999; width:34px;
+    font-family:'Times New Roman',Times,serif;
+  }
+  .test-pieces { display:flex; gap:6px; }
+  .tpb {
+    width:34px; height:34px; border-radius:50%; border:1.5px solid #ccc;
+    background:#fff; cursor:pointer; font-size:12px; font-weight:600;
+    font-family:'Times New Roman',Times,serif;
+    color:#333; transition:opacity .15s; pointer-events:auto;
+    display:flex; align-items:center; justify-content:center; opacity:0.18;
+  }
+  .tpb[data-color="black"] { background:#222; color:#eee; border-color:#444; }
+  .tpb.sel { opacity:1; }
+  #testStartBtn {
+    align-self:center; padding:6px 24px; border-radius:18px;
+    border:1.5px solid #333; background:#333; color:#fff;
+    font-family:'Times New Roman',Times,serif;
+    font-size:10px; letter-spacing:0.20em; cursor:pointer; pointer-events:auto;
+    transition:opacity .15s;
+  }
+  #testStartBtn:disabled { opacity:0.35; cursor:default; }
+  /* Check flash overlay on king */
+  .check-ring { pointer-events:none; }
+  /* hidden controls */
+  #coordWrap { display:none; }
+  #toggleWrap { display:none; }
+  #bottomLeft { display:none; }
+  /* ── Battle area (bottom right) ── */
+  #battleArea {
+    position:fixed; bottom:28px; right:28px;
+    display:flex; flex-direction:column; align-items:flex-end;
+    gap:10px; z-index:100; pointer-events:auto;
+  }
+  #autoBattleBtn {
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; letter-spacing:0.18em; color:#000;
+    background:none; border:none; cursor:pointer; padding:0;
+    opacity:0.4; transition:opacity .2s;
+    user-select:none; -webkit-user-select:none;
+    pointer-events:auto; white-space:nowrap;
+  }
+  #autoBattleBtn:hover { opacity:1; }
+  #autoBattleControls {
+    display:none; flex-direction:column; align-items:flex-end; gap:10px;
+  }
+  #autoBattleControls button {
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; letter-spacing:0.18em; color:#000;
+    background:none; border:none; cursor:pointer; padding:0;
+    opacity:0.4; transition:opacity .2s;
+    pointer-events:auto; white-space:nowrap; display:block;
+  }
+  #autoBattleControls button:hover { opacity:1; }
+  #autoPauseBtn { opacity:0.7; }
+  /* ── Report Modal ── */
+  #reportModal {
+    display:none; position:fixed; inset:0; z-index:600;
+    background:rgba(0,0,0,0.84); justify-content:center; align-items:center;
+    pointer-events:auto;
+  }
+  #reportModal.visible { display:flex; }
+  #reportBox {
+    background:#f4f4f4; border-radius:16px;
+    width:min(660px,93vw); max-height:84vh;
+    display:flex; flex-direction:column; overflow:hidden;
+    box-shadow:0 28px 90px rgba(0,0,0,0.6);
+  }
+  #reportHead {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:13px 20px 10px; border-bottom:1px solid #ddd;
+    font-family:'Times New Roman',Times,serif;
+    font-size:11px; letter-spacing:0.20em; color:#444; flex-shrink:0;
+  }
+  #reportHead .rh-btns { display:flex; gap:14px; }
+  #reportHead button {
+    font-family:'Times New Roman',Times,serif; font-size:10px;
+    letter-spacing:0.18em; color:#000; background:none; border:none;
+    cursor:pointer; padding:0; opacity:0.4; transition:opacity .2s;
+    pointer-events:auto;
+  }
+  #reportHead button:hover { opacity:1; }
+  #reportText {
+    flex:1; font-family:'SF Mono','Menlo','Courier New',monospace; font-size:11px;
+    line-height:1.68; padding:14px 18px; background:#ebebeb;
+    border:none; outline:none; resize:none; cursor:pointer;
+    overflow-y:auto; color:#1a1a1a; -webkit-overflow-scrolling:touch;
+  }
+</style>
+</head>
+<body>
+<div id="turn">White to move</div>
+<button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
+<button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test mode</button>
+
+<!-- Test piece selector panel -->
+<div id="testPanel">
+  <div id="testPanelTitle">Select pieces to test</div>
+  <div class="test-row">
+    <div class="test-row-label">White</div>
+    <div class="test-pieces">
+      <button class="tpb" data-type="K" data-color="white">K</button>
+      <button class="tpb" data-type="Q" data-color="white">Q</button>
+      <button class="tpb" data-type="R" data-color="white">R</button>
+      <button class="tpb" data-type="B" data-color="white">B</button>
+      <button class="tpb" data-type="N" data-color="white">N</button>
+      <button class="tpb" data-type="P" data-color="white">P</button>
+    </div>
+  </div>
+  <div class="test-row">
+    <div class="test-row-label">Black</div>
+    <div class="test-pieces">
+      <button class="tpb" data-type="K" data-color="black">K</button>
+      <button class="tpb" data-type="Q" data-color="black">Q</button>
+      <button class="tpb" data-type="R" data-color="black">R</button>
+      <button class="tpb" data-type="B" data-color="black">B</button>
+      <button class="tpb" data-type="N" data-color="black">N</button>
+      <button class="tpb" data-type="P" data-color="black">P</button>
+    </div>
+  </div>
+  <button id="testStartBtn" disabled onclick="startTestWithSelection()">Start</button>
+</div>
+<!-- Battle area (bottom right, stacked vertically) -->
+<div id="battleArea">
+  <button id="autoBattleBtn" onclick="startAutoBattle()">Watch AI battle</button>
+  <div id="autoBattleControls">
+    <button id="autoPauseBtn" onclick="toggleAutoPause()">Pause</button>
+    <button onclick="newAutoBattle()">Reset</button>
+    <button onclick="stopAutoBattle()">Quit</button>
+  </div>
+</div>
+<!-- Report Modal -->
+<div id="reportModal">
+  <div id="reportBox">
+    <div id="reportHead">
+      <span>Battle report</span>
+      <div class="rh-btns">
+        <button id="copyReportBtn" onclick="copyReport()">Copy all</button>
+        <button onclick="closeReport()">Close</button>
+      </div>
+    </div>
+    <textarea id="reportText" readonly onclick="this.select()"></textarea>
+  </div>
+</div>
+<!-- AI opponent toggle (top left) -->
+<div id="aiWrap">
+  <label id="aiSwitch">
+    <input type="checkbox" id="aiToggle">
+    <div id="aiTrack"></div>
+    <div id="aiThumb"></div>
+  </label>
+  <span>AI opponent</span>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ─── Renderer ─────────────────────────────────────────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping        = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.outputEncoding     = THREE.sRGBEncoding;
+renderer.setClearColor(0x000000, 0);
+document.body.appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.01, 2000);
+camera.position.set(0, 0, innerWidth < 768 ? 5.5 : 4.2);
+
+// ─── Environment (cube camera) ────────────────────────────────────────────────
+const envDome = new THREE.Mesh(
+  new THREE.SphereGeometry(600, 48, 32),
+  new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    vertexShader: `varying vec3 vDir; void main(){ vDir=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `
+      varying vec3 vDir;
+      float rbox(vec3 d,vec3 c,vec3 u,vec3 r,float hw,float hh,float es){
+        vec3 cn=normalize(c); float fwd=dot(d,cn); if(fwd<0.0)return 0.0;
+        vec3 t=d-cn*fwd;
+        float uu=dot(t,normalize(r))/max(fwd,0.001);
+        float vv=dot(t,normalize(u))/max(fwd,0.001);
+        return (1.0-smoothstep(hw-es,hw+es,abs(uu)))*(1.0-smoothstep(hh-es,hh+es,abs(vv)))*smoothstep(0.3,0.7,fwd);
+      }
+      void main(){
+        float y=vDir.y;
+        vec3 col=mix(vec3(0.82),vec3(0.98),smoothstep(-1.0,1.0,y));
+        col+=vec3(rbox(vDir,vec3(-0.7,0.55,0.45),vec3(0,1,0),vec3(0,0,1),0.55,0.42,0.38)*0.92);
+        col+=vec3(rbox(vDir,vec3(0.65,0.40,0.65),vec3(0,1,0),vec3(1,0,0),0.45,0.32,0.32)*0.70);
+        col+=vec3(rbox(vDir,vec3(0.2,-0.35,-0.92),vec3(0,1,0),vec3(1,0,0),0.60,0.20,0.28)*0.55);
+        gl_FragColor=vec4(min(col,vec3(1.0)),1.0);
+      }
+    `,
+  })
+);
+scene.add(envDome);
+
+const cubeRT = new THREE.WebGLCubeRenderTarget(512, {
+  format: THREE.RGBFormat, generateMipmaps: true,
+  minFilter: THREE.LinearMipmapLinearFilter, encoding: THREE.sRGBEncoding,
+});
+const cubeCamera = new THREE.CubeCamera(1, 1500, cubeRT);
+scene.add(cubeCamera);
+cubeCamera.update(renderer, scene);
+envDome.visible = false;
+
+// ─── Lights ───────────────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff, 0.275));
+const kl=new THREE.DirectionalLight(0xffffff,1.4); kl.position.set(-7,8,3);  scene.add(kl);
+const fl=new THREE.DirectionalLight(0xffffff,0.5); fl.position.set(-3,6,3);  scene.add(fl);
+const rl=new THREE.DirectionalLight(0xffffff,0.06); rl.position.set(4,-4,-4); scene.add(rl);
+
+// ─── Globe Materials ──────────────────────────────────────────────────────────
+const PLASTIC={roughness:0.45,metalness:0.0};
+const matW=new THREE.MeshStandardMaterial({color:0x333333,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.2});
+const matB=new THREE.MeshStandardMaterial({color:0x111111,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.2});
+const matG=new THREE.MeshStandardMaterial({color:0x222222,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.0});
+
+// ─── Globe ────────────────────────────────────────────────────────────────────
+const R=1;
+const NUM_LAT=8, NUM_LON=8;
+const CAP_THETA=Math.PI/18;
+const BAND_THETA=(Math.PI-2*CAP_THETA)/NUM_LAT;
+const globe=new THREE.Group(); scene.add(globe);
+
+// Polar caps
+const capN=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,0,CAP_THETA),matG); globe.add(capN);
+const capS=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,Math.PI-CAP_THETA,CAP_THETA),matG); globe.add(capS);
+
+// Cell meshes
+const cellMeshes=[];
+for(let lat=0;lat<NUM_LAT;lat++){
+  for(let lon=0;lon<NUM_LON;lon++){
+    const geo=new THREE.SphereGeometry(R,28,14,(lon/NUM_LON)*Math.PI*2,(Math.PI*2)/NUM_LON,CAP_THETA+lat*BAND_THETA,BAND_THETA);
+    const mesh=new THREE.Mesh(geo,(lat+lon)%2===0?matW:matB);
+    mesh.userData={isCellMesh:true,lat,lon};
+    globe.add(mesh);
+    cellMeshes.push(mesh);
+  }
+}
+
+// ─── Board State ──────────────────────────────────────────────────────────────
+const board=Array.from({length:8},()=>Array(8).fill(null));
+
+function cellPos(lat,lon,r=R*1.12){
+  const theta=CAP_THETA+(lat+0.5)*BAND_THETA;
+  const phi=((lon+0.5)/NUM_LON)*Math.PI*2;
+  return new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi));
+}
+function cornerPos3D(latB,lonB,r=R*1.019){
+  const theta=latB===0?CAP_THETA:latB===8?Math.PI-CAP_THETA:CAP_THETA+latB*BAND_THETA;
+  const phi=((lonB)/NUM_LON)*Math.PI*2;
+  return new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi));
+}
+
+// ─── Piece Materials ──────────────────────────────────────────────────────────
+const matLight=new THREE.MeshStandardMaterial({color:0x444444,roughness:0.45,metalness:0.0,envMap:cubeRT.texture,envMapIntensity:1.2});
+const matDark=new THREE.MeshStandardMaterial({color:0x000000,roughness:0.45,metalness:0.0,envMap:cubeRT.texture,envMapIntensity:1.2});
+
+// ─── Letter Texture ───────────────────────────────────────────────────────────
+function makeLetterTex(letter,isBlack){
+  const S=512;
+  const cv=document.createElement('canvas');
+  cv.width=cv.height=S;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,S,S);
+  ctx.font=`bold ${Math.round(S*0.62)}px "New York","Times New Roman",Times,serif`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  const cx=S/2, cy=S/2+S*0.04;
+  // Foggy glow edge
+  const glowCol=isBlack?'rgba(255,255,255,1)':'rgba(0,0,0,1)';
+  ctx.fillStyle=glowCol;
+  ctx.shadowColor=glowCol;
+  ctx.shadowBlur=28;
+  for(let i=0;i<6;i++) ctx.fillText(letter,cx,cy);
+  // Pure color letter on top
+  ctx.shadowBlur=0;
+  ctx.shadowColor='transparent';
+  ctx.fillStyle=isBlack?'#000000':'#ffffff';
+  ctx.fillText(letter,cx,cy);
+  return new THREE.CanvasTexture(cv);
+}
+
+const allSprites=[];
+const _pieceUp=new THREE.Vector3(0,1,0);
+const u=0.062;
+
+// ─── Piece Mesh ───────────────────────────────────────────────────────────────
+function createPieceMesh(type,isBlack){
+  const g=new THREE.Group();
+  const mat=isBlack?matDark:matLight;
+  const hMin=u*4.5, hMax=u*7.5, step=(hMax-hMin)/4;
+  const heights={'P':hMin*1.2,'R':hMin+step*2.3,'N':hMin+step*2,'B':hMax*0.5*1.25,'Q':hMax,'K':hMax};
+  const r=u*1.65, h=heights[type]||hMin+step*2;
+  let cyl;
+
+  if(type==='P'){
+    const eggR=r*0.85*1.2;
+    cyl=new THREE.Mesh(new THREE.SphereGeometry(eggR,32,24),mat);
+    cyl.scale.y=hMin*1.2/(2*eggR);
+  } else if(type==='K'){
+    cyl=new THREE.Mesh(new THREE.CylinderGeometry(0.115,r*0.05,h,32),mat);
+  } else if(type==='B'){
+    cyl=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.10,h,32),mat);
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(r,32,16,0,Math.PI*2,0,Math.PI/2),mat);
+    dome.scale.y=1.5;
+    dome.position.y=h/2;
+    cyl.add(dome);
+  } else if(type==='Q'){
+    const rTop=r, rBot=r*1.10, waist=r*0.52;
+    const pts=[];
+    const N=40;
+    for(let i=0;i<=N;i++){
+      const t=i/N;
+      const rad=rBot+(rTop-rBot)*t - waist*Math.sin(Math.PI*t);
+      pts.push(new THREE.Vector2(Math.max(rad,r*0.18), t*h - h/2));
+    }
+    const geo=new THREE.LatheGeometry(pts,40);
+    cyl=new THREE.Mesh(geo,mat);
+    const topCap=new THREE.Mesh(new THREE.CircleGeometry(rTop,40),mat);
+    topCap.rotation.x=-Math.PI/2; topCap.position.y=h/2;
+    const botCap=new THREE.Mesh(new THREE.CircleGeometry(rBot,40),mat);
+    botCap.rotation.x=Math.PI/2; botCap.position.y=-h/2;
+    cyl.add(topCap); cyl.add(botCap);
+  } else if(type==='N'){
+    const W=r*2.6, H=h, d=W*0.618;
+    const crTR=H*0.32;
+    const crBL=H*0.45;
+    const yB=-H/2, yT=H/2;
+    const xOff=-crBL/2;
+    const shape=new THREE.Shape();
+    shape.moveTo(xOff-W/2+crBL, yB);
+    shape.lineTo(xOff+W/2,      yB);
+    shape.lineTo(xOff+W/2,      yT-crTR);
+    shape.quadraticCurveTo(xOff+W/2, yT, xOff+W/2-crTR, yT);
+    shape.lineTo(xOff-W/2,      yT);
+    shape.lineTo(xOff-W/2,      yB+crBL);
+    shape.quadraticCurveTo(xOff-W/2+crBL, yB+crBL, xOff-W/2+crBL, yB);
+    shape.closePath();
+    const geo=new THREE.ExtrudeGeometry(shape,{depth:d,bevelEnabled:true,bevelSize:r*0.04,bevelThickness:r*0.04,bevelSegments:3});
+    const mesh=new THREE.Mesh(geo,mat);
+    mesh.position.z=-d/2;
+    const wrapper=new THREE.Group();
+    wrapper.add(mesh);
+    wrapper.rotation.y=0;
+    cyl=wrapper;
+  } else {
+    cyl=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.10,h,32),mat);
+  }
+
+  cyl.position.y=h/2;
+  cyl.userData={isPiece:true};
+  g.add(cyl);
+
+  // Letter sprite
+  const spMat=new THREE.SpriteMaterial({map:makeLetterTex(type,isBlack),transparent:true,depthTest:true,depthWrite:false,sizeAttenuation:true});
+  const sp=new THREE.Sprite(spMat);
+  sp.raycast=()=>{};
+  const sz=r*1.1;
+  sp.scale.set(sz,sz,sz);
+  const domeExtra=(type==='B')?(0.48-h-sz*0.5):(type==='N')?-sz*0.05:(type==='P')?-sz*0.05:0;
+  sp.position.y=h+sz*0.5+domeExtra;
+  g.add(sp);
+  return g;
+}
+
+// ─── Blob Shadow ──────────────────────────────────────────────────────────────
+function createBlobGroup(){
+  const r=u*1.65;
+  const bS=256;
+  const bCv=document.createElement('canvas'); bCv.width=bCv.height=bS;
+  const bCtx=bCv.getContext('2d');
+  const bGrad=bCtx.createRadialGradient(bS/2,bS/2,0,bS/2,bS/2,bS/2);
+  bGrad.addColorStop(0,   'rgba(0,0,0,0.48)');
+  bGrad.addColorStop(0.35,'rgba(0,0,0,0.32)');
+  bGrad.addColorStop(0.65,'rgba(0,0,0,0.12)');
+  bGrad.addColorStop(1,   'rgba(0,0,0,0.00)');
+  bCtx.fillStyle=bGrad; bCtx.fillRect(0,0,bS,bS);
+  const mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bCv),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-4});
+  const circle=new THREE.Mesh(new THREE.CircleGeometry(r*1.3,32),mat);
+  circle.raycast=()=>{};
+  circle.rotation.x=-Math.PI/2;
+  circle.position.y=0.002;
+  const grp=new THREE.Group();
+  grp.add(circle);
+  return grp;
+}
+
+function orientPiece(obj,pos){
+  obj.quaternion.setFromUnitVectors(_pieceUp,pos.clone().normalize());
+}
+
+// Knight facing toward pole
+const _faceV1=new THREE.Vector3(), _faceV2=new THREE.Vector3();
+function faceKnightTowardPole(group,pos,towardNorth){
+  const radial=pos.clone().normalize();
+  const poleWorld=new THREE.Vector3(0,towardNorth?1:-1,0);
+  _faceV1.copy(poleWorld).addScaledVector(radial,-radial.dot(poleWorld));
+  if(_faceV1.lengthSq()<1e-5)return;
+  _faceV1.normalize();
+  _faceV2.copy(_faceV1).applyQuaternion(group.quaternion.clone().conjugate());
+  // Back cap (+Z) faces pole: Ry(α) Z_new=(sinα,0,cosα). sinα=tx,cosα=tz → α=atan2(tx,tz)+π/2
+  const angle=Math.atan2(_faceV2.x,_faceV2.z)+Math.PI/2;
+  group.children.forEach(c=>{if(c.isGroup)c.rotation.y=angle;});
+}
+
+function placePiece(type,isBlack,lat,lon){
+  const group=createPieceMesh(type,isBlack);
+  const pos=cellPos(lat,lon,R);
+  group.position.copy(pos);
+  orientPiece(group,pos);
+  if(type==='N') faceKnightTowardPole(group,pos,!isBlack);
+  group.userData={isPiece:true,lat,lon};
+  globe.add(group);
+  allSprites.push(group);
+  const blob=createBlobGroup();
+  blob.position.copy(pos);
+  orientPiece(blob,pos);
+  globe.add(blob);
+  board[lat][lon]={type,color:isBlack?'black':'white',sprite:group,blob,hasMoved:false};
+}
+
+// ─── Initial Placement ────────────────────────────────────────────────────────
+const MAJOR=['R','N','B','K','Q','B','N','R'];
+MAJOR.forEach((p,lon)=>placePiece(p,true,0,lon));
+for(let lon=0;lon<8;lon++)placePiece('P',true,1,lon);
+for(let lon=0;lon<8;lon++)placePiece('P',false,6,lon);
+MAJOR.forEach((p,lon)=>placePiece(p,false,7,lon));
+
+// ─── Cell Coordinate Labels ───────────────────────────────────────────────────
+const COL_LETTERS=['h','g','f','e','d','c','b','a'];
+const cellLabels=[];
+function makeCoordTex(text){
+  const S=128;
+  const cv=document.createElement('canvas'); cv.width=cv.height=S;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,S,S);
+  ctx.font=`600 ${Math.round(S*0.36)}px "New York","Times New Roman",Times,serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(128,128,128,0.92)';
+  ctx.fillText(text,S/2,S/2);
+  return new THREE.CanvasTexture(cv);
+}
+for(let lat=0;lat<8;lat++){
+  for(let lon=0;lon<8;lon++){
+    const col=COL_LETTERS[lon], row=8-lat;
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:makeCoordTex(col+row),transparent:true,depthTest:true,depthWrite:false,sizeAttenuation:true}));
+    sp.raycast=()=>{};
+    const pos=cellPos(lat,lon,R*1.06);
+    sp.position.copy(pos);
+    const sz=R*0.22;
+    sp.scale.set(sz,sz,sz);
+    sp.visible=false;
+    globe.add(sp);
+    cellLabels.push(sp);
+  }
+}
+
+// ─── Move Rules ───────────────────────────────────────────────────────────────
+function wL(n){return((n%8)+8)%8;}
+function poleRef(l,n){
+  if(l<0) return{l:-1-l,n:wL(n+4),pole:'N'};
+  if(l>7) return{l:15-l, n:wL(n+4),pole:'S'};
+  return{l,n,pole:null};
+}
+
+function getValidMoves(lat,lon){
+  const piece=board[lat][lon];
+  if(!piece)return[];
+  const{type,color}=piece;
+  const moves=[];
+  function ok(l){return l>=0&&l<=7;}
+  function ally(l,n){return ok(l)&&board[l][n]&&board[l][n].color===color;}
+  function enemy(l,n){return ok(l)&&board[l][n]&&board[l][n].color!==color;}
+
+  function straight(dl,dn){
+    const key=`S${dl},${dn}`;
+    let l=lat,n=lon,step=0,curDl=dl,pole=null;
+    for(let i=0;i<15;i++){
+      l+=curDl; n=wL(n+dn); step++;
+      if(dl!==0&&(l<0||l>7)){
+        if(pole)break;
+        const r=poleRef(l,n);l=r.l;n=r.n;curDl=-curDl;pole=r.pole;
+      }else if(dl===0&&!ok(l))break;
+      if(!ok(l))break;
+      if(ally(l,n))break;
+      moves.push({lat:l,lon:n,diagKey:null,diagWP:null,straightKey:key,straightDl:dl,straightDn:dn,step,pole});
+      if(enemy(l,n))break;
+    }
+  }
+
+  function diag(initDl,initDn){
+    const key=`${initDl},${initDn}`;
+    let l=lat,n=lon,cDl=initDl,cDn=initDn;
+    const wp=[];
+    for(let i=0;i<14;i++){
+      const nb=n; l+=cDl; n=wL(n+cDn);
+      if(l<0){l=0;n=wL(nb+4);cDl=1;cDn=-cDn;}
+      else if(l>7){l=7;n=wL(nb+4);cDl=-1;cDn=-cDn;}
+      if(ally(l,n))break;
+      wp.push(cellPos(l,n,R*1.019));
+      moves.push({lat:l,lon:n,diagKey:key,diagWP:wp.slice(),straightKey:null,step:i+1});
+      if(enemy(l,n))break;
+    }
+  }
+
+  if(type==='R'||type==='Q'){straight(1,0);straight(-1,0);straight(0,1);straight(0,-1);}
+  if(type==='B'||type==='Q'){diag(1,1);diag(1,-1);diag(-1,1);diag(-1,-1);}
+
+  if(type==='N'){
+    for(const[dl,dn]of[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
+      let l=lat+dl,n=wL(lon+dn);
+      const longLat=Math.abs(dl)===2;
+      const elbowLat=longLat?lat+dl:lat;
+      const elbowLon=longLat?lon:wL(lon+dn);
+      if(l<0||l>7){const r=poleRef(l,n);l=r.l;n=r.n;}
+      if(ok(l)&&!ally(l,n))moves.push({lat:l,lon:n,diagKey:null,diagWP:null,straightKey:null,isKnight:true,longLat,elbowLat,elbowLon});
+    }
+  }
+
+  if(type==='K'){
+    for(let dl=-1;dl<=1;dl++)for(let dn=-1;dn<=1;dn++){
+      if(!dl&&!dn)continue;
+      let l=lat+dl, n=wL(lon+dn);
+      if(l<0||l>7){
+        // All 3 "over-pole" directions converge to the same cell (pre-step lon+4).
+        // Add all 3 so visualization draws straight line + figure-8 loxodrome.
+        const refL=l<0?-1-l:15-l;
+        const refN=wL(lon+4); // pre-step lon+4 (same destination for all 3)
+        const pole=l<0?'N':'S';
+        if(ally(refL,refN))continue;
+        if(dn===0){
+          // Straight through pole (added first → used by execMove animation)
+          moves.push({lat:refL,lon:refN,diagKey:null,diagWP:null,
+            straightKey:`S${dl},0`,straightDl:dl,straightDn:0,step:1,pole});
+        } else {
+          // Diagonal through pole: lDiff=4 triggers loxodrome isPole → draws figure-8
+          moves.push({lat:refL,lon:refN,diagKey:`${dl},${dn}`,
+            diagWP:[cellPos(refL,refN,R*1.019)],straightKey:null});
+        }
+        continue;
+      }
+      if(!ok(l)||ally(l,n))continue;
+      if(dl!==0&&dn!==0){
+        moves.push({lat:l,lon:n,diagKey:`${dl},${dn}`,diagWP:[cellPos(l,n,R*1.019)],straightKey:null});
+      } else {
+        moves.push({lat:l,lon:n,diagKey:null,diagWP:null,
+          straightKey:`S${dl},${dn}`,straightDl:dl,straightDn:dn,step:1,pole:null});
+      }
+    }
+    // Castling (piece.hasMoved checked; check-safety handled by getLegalMoves)
+    if(!piece.hasMoved){
+      // Queenside: K lon3→lon1, R lon0→lon2; squares 1,2 must be empty
+      const rQ=board[lat][0];
+      if(rQ?.type==='R'&&!rQ.hasMoved&&rQ.color===color&&!board[lat][1]&&!board[lat][2])
+        moves.push({lat,lon:1,diagKey:null,diagWP:null,straightKey:null,isCastle:true,rookFromLon:0,rookToLon:2,passThroughLon:2});
+      // Kingside: K lon3→lon5, R lon7→lon4; squares 4,5,6 must be empty
+      const rK=board[lat][7];
+      if(rK?.type==='R'&&!rK.hasMoved&&rK.color===color&&!board[lat][4]&&!board[lat][5]&&!board[lat][6])
+        moves.push({lat,lon:5,diagKey:null,diagWP:null,straightKey:null,isCastle:true,rookFromLon:7,rookToLon:4,passThroughLon:4});
+    }
+  }
+
+  if(type==='P'){
+    const dir=color==='black'?1:-1,start=color==='black'?1:6;
+    const fl=lat+dir;
+    if(ok(fl)&&!board[fl][lon]){
+      moves.push({lat:fl,lon:lon,diagKey:null,diagWP:null,straightKey:null});
+      if(lat===start&&!board[fl+dir]?.[lon])
+        moves.push({lat:fl+dir,lon:lon,diagKey:null,diagWP:null,straightKey:null});
+    }
+    for(const cn of[wL(lon-1),wL(lon+1)])
+      if(ok(fl)&&board[fl][cn]?.color!==color&&board[fl][cn])
+        moves.push({lat:fl,lon:cn,diagKey:null,diagWP:null,straightKey:null});
+    // En passant
+    if(enPassantTarget&&ok(fl))
+      for(const cn of[wL(lon-1),wL(lon+1)])
+        if(fl===enPassantTarget.lat&&cn===enPassantTarget.lon)
+          moves.push({lat:fl,lon:cn,diagKey:null,diagWP:null,straightKey:null,isEnPassant:true,capturedLat:lat,capturedLon:cn});
+  }
+  return moves;
+}
+
+// ─── Check Detection ──────────────────────────────────────────────────────────
+function isInCheck(color){
+  let kLat=-1,kLon=-1;
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+    if(board[la][lo]?.type==='K'&&board[la][lo]?.color===color){kLat=la;kLon=lo;}
+  if(kLat===-1)return false;
+  const opp=color==='white'?'black':'white';
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p||p.color!==opp)continue;
+    if(p.type==='P'){
+      // Pawns threaten diagonals regardless of occupancy
+      const dir=p.color==='black'?1:-1;
+      if(la+dir===kLat&&(wL(lo-1)===kLon||wL(lo+1)===kLon))return true;
+    } else {
+      if(aiMoves(la,lo).some(m=>m.tLat===kLat&&m.tLon===kLon))return true;
+    }
+  }
+  return false;
+}
+
+function getLegalMoves(lat,lon){
+  const piece=board[lat][lon]; if(!piece)return[];
+  const raw=getValidMoves(lat,lon);
+  return raw.filter(m=>{
+    // Castling: king must not currently be in check, nor pass through a checked square
+    if(m.isCastle){
+      if(isInCheck(piece.color))return false;
+      const tmp=board[lat][m.passThroughLon];
+      board[lat][m.passThroughLon]=piece; board[lat][lon]=null;
+      const thru=isInCheck(piece.color);
+      board[lat][lon]=piece; board[lat][m.passThroughLon]=tmp||null;
+      if(thru)return false;
+    }
+    // En passant: temporarily remove the captured pawn for check simulation
+    let epSave=null;
+    if(m.isEnPassant){epSave=board[m.capturedLat][m.capturedLon]; board[m.capturedLat][m.capturedLon]=null;}
+    const cap=board[m.lat][m.lon];
+    board[m.lat][m.lon]=piece; board[lat][lon]=null;
+    const safe=!isInCheck(piece.color);
+    board[lat][lon]=piece; board[m.lat][m.lon]=cap||null;
+    if(m.isEnPassant&&epSave)board[m.capturedLat][m.capturedLon]=epSave;
+    return safe;
+  });
+}
+
+function hasAnyLegalMove(color){
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    if(board[la][lo]?.color!==color)continue;
+    if(getLegalMoves(la,lo).length>0)return true;
+  }
+  return false;
+}
+
+// ─── Check Ring Visual ────────────────────────────────────────────────────────
+let checkRingObjs=[];
+function clearCheckRing(){
+  checkRingObjs.forEach(o=>globe.remove(o));
+  checkRingObjs=[];
+}
+function showCheckRing(lat,lon){
+  clearCheckRing();
+  const center=cellPos(lat,lon,R*1.006);
+  const radial=center.clone().normalize();
+  const tmp=Math.abs(radial.y)<0.9?new THREE.Vector3(0,1,0):new THREE.Vector3(1,0,0);
+  const t1=new THREE.Vector3().crossVectors(radial,tmp).normalize();
+  const t2=new THREE.Vector3().crossVectors(radial,t1).normalize();
+  const rr=BAND_THETA*R*0.14;
+  for(let ring=0;ring<2;ring++){
+    const N=64; const pts=[];
+    const rOff=rr*(1+ring*0.55);
+    for(let i=0;i<=N;i++){
+      const a=(i/N)*Math.PI*2;
+      const pt=center.clone().addScaledVector(t1,Math.cos(a)*rOff).addScaledVector(t2,Math.sin(a)*rOff);
+      pts.push(pt.normalize().multiplyScalar(R*1.006));
+    }
+    const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts,true,'centripetal'),N,0.007,8,true);
+    geo.computeBoundingSphere();
+    const mat=new THREE.MeshBasicMaterial({color:0xcc0000,depthTest:true,depthWrite:false,
+      polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8,transparent:true,opacity:0.85-ring*0.3});
+    const mesh=new THREE.Mesh(geo,mat); mesh.renderOrder=5; mesh.frustumCulled=false;
+    globe.add(mesh); checkRingObjs.push(mesh);
+  }
+}
+
+// ─── Check Threat Visualization ───────────────────────────────────────────────
+// Shows the attack path(s) from threatening piece(s) to the king.
+// Uses computeAnimPath so diagonals, knights, pole-crossings all look correct.
+function showCheckThreats(color){
+  let kLat=-1,kLon=-1;
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+    if(board[la][lo]?.type==='K'&&board[la][lo]?.color===color){kLat=la;kLon=lo;}
+  if(kLat===-1)return;
+  const opp=color==='white'?'black':'white';
+  const redMat=()=>new THREE.MeshBasicMaterial({color:0x880000,depthTest:true,depthWrite:false,
+    polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-12});
+
+  // Draw dashed red path along pts — used for knight L-shape
+  function redDash(pts){
+    const H=R*1.007;
+    const sp=pts.map(p=>p.clone().normalize().multiplyScalar(H));
+    const cum=[0];
+    for(let i=1;i<sp.length;i++)cum.push(cum[i-1]+sp[i].distanceTo(sp[i-1]));
+    const tot=cum[cum.length-1];
+    function ptAt(s){
+      s=Math.max(0,Math.min(s,tot));
+      for(let i=1;i<cum.length;i++){
+        if(cum[i]>=s){const tt=(s-cum[i-1])/(cum[i]-cum[i-1]);
+          return sp[i-1].clone().lerp(sp[i],tt).normalize().multiplyScalar(H);}
+      }
+      return sp[sp.length-1].clone();
+    }
+    const dLen=0.035,gLen=0.04;let d=0;
+    while(d<tot){
+      const dEnd=Math.min(d+dLen,tot);const n=Math.max(2,Math.round((dEnd-d)/0.01));
+      const seg=[];for(let i=0;i<=n;i++)seg.push(ptAt(d+(dEnd-d)*i/n));
+      const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seg,false,'centripetal'),n,0.010,5,false);
+      geo.computeBoundingSphere();
+      const m=new THREE.Mesh(geo,redMat());m.renderOrder=6;m.frustumCulled=false;
+      globe.add(m);checkRingObjs.push(m);
+      d+=dLen+gLen;
+    }
+  }
+
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p||p.color!==opp)continue;
+    let attacks=false;
+    if(p.type==='P'){const dir=p.color==='black'?1:-1;attacks=(la+dir===kLat&&(wL(lo-1)===kLon||wL(lo+1)===kLon));}
+    else attacks=aiMoves(la,lo).some(m=>m.tLat===kLat&&m.tLon===kLon);
+    if(!attacks)continue;
+
+    // All valid moves from this piece that land on the king's square
+    const allMvs=getValidMoves(la,lo).filter(m=>m.lat===kLat&&m.lon===kLon);
+    if(!allMvs.length)continue;
+    const r=R*1.007;
+
+    if(p.type==='N'){
+      // Knights: draw the L-shaped dashed path (only one knight move can reach a given square)
+      const mv=allMvs[0];
+      if(!mv.isKnight)continue;
+      const from3d=cellPos(la,lo,r);
+      let seg1,seg2;
+      if(mv.longLat){
+        if(mv.elbowLat>=0&&mv.elbowLat<=7){
+          seg1=geodesicPts(from3d,cellPos(mv.elbowLat,mv.elbowLon,r),24);
+          seg2=latRingArc(mv.elbowLat,mv.elbowLon,kLon,12,r);
+        } else {
+          const isNorth=mv.elbowLat<0;
+          const polePt=new THREE.Vector3(0,(isNorth?1:-1)*r,0);
+          const ref=poleRef(mv.elbowLat,mv.elbowLon);
+          seg1=[...geodesicPts(from3d,polePt,12),...geodesicPts(polePt,cellPos(ref.l,ref.n,r),12).slice(1)];
+          seg2=latRingArc(ref.l,ref.n,kLon,12,r);
+        }
+      } else {
+        seg1=latRingArc(la,lo,mv.elbowLon,24,r);
+        seg2=geodesicPts(cellPos(mv.elbowLat,mv.elbowLon,r),cellPos(kLat,kLon,r),12);
+      }
+      redDash([...seg1,...seg2.slice(1)]);
+    } else {
+      // Non-knight: solid red tube along each valid attack path to the king.
+      // Using all matching moves covers the polar edge case where a queen can
+      // reach the same square via both a rank move AND a diagonal-through-pole.
+      for(const cm of allMvs){
+        const animPts=computeAnimPath(cm,la,lo,kLat,kLon,cellPos(la,lo,R));
+        if(!animPts||animPts.length<2)continue;
+        const surfPts=animPts.map(q=>q.clone().normalize().multiplyScalar(r));
+        const tGeo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(surfPts,false,'centripetal'),Math.max(surfPts.length*4,40),0.010,6,false);
+        tGeo.computeBoundingSphere();
+        const tube=new THREE.Mesh(tGeo,redMat());tube.renderOrder=6;tube.frustumCulled=false;
+        globe.add(tube);checkRingObjs.push(tube);
+      }
+    }
+    // Red dot at attacker's position
+    const aPos=cellPos(la,lo,R*1.007);
+    const dGeo=new THREE.CircleGeometry(BAND_THETA*R*0.13,36);
+    const dot=new THREE.Mesh(dGeo,redMat());
+    dot.position.copy(aPos);
+    dot.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),aPos.clone().normalize());
+    dot.renderOrder=6;dot.frustumCulled=false;
+    globe.add(dot);checkRingObjs.push(dot);
+  }
+}
+
+// ─── Path helpers ─────────────────────────────────────────────────────────────
+function geodesicPts(p1,p2,segs=48){
+  const pts=[];
+  for(let i=0;i<=segs;i++){
+    const t=i/segs;
+    const v=new THREE.Vector3().lerpVectors(p1,p2,t).normalize().multiplyScalar(p1.length());
+    pts.push(v);
+  }
+  return pts;
+}
+function latRingArc(latIdx,lonA,lonB,segs=40,r=R*1.019,dn_sign=0){
+  const theta=CAP_THETA+(latIdx+0.5)*BAND_THETA;
+  const sinT=Math.sin(theta),cosT=Math.cos(theta);
+  const phiA=((lonA+0.5)/NUM_LON)*Math.PI*2;
+  const phiB=((lonB+0.5)/NUM_LON)*Math.PI*2;
+  let dp=phiB-phiA;
+  // dn_sign forces the arc direction to match the actual move direction.
+  // Without this, a move that goes 6 steps to the right would be drawn as
+  // a 2-step arc to the left (shortest path), leaving intermediate dots disconnected.
+  if(dn_sign>0){if(dp<=0)dp+=Math.PI*2;}       // force clockwise (increasing phi)
+  else if(dn_sign<0){if(dp>=0)dp-=Math.PI*2;}  // force counterclockwise
+  else{if(dp>Math.PI)dp-=Math.PI*2;if(dp<-Math.PI)dp+=Math.PI*2;} // shortest (default)
+  const pts=[];
+  for(let i=0;i<=segs;i++){
+    const phi=phiA+(i/segs)*dp;
+    pts.push(new THREE.Vector3(r*sinT*Math.cos(phi),r*cosT,r*sinT*Math.sin(phi)));
+  }
+  return pts;
+}
+
+// ─── Visualization Materials ──────────────────────────────────────────────────
+const TUBE_F=new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+const DOT_F =new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+const DASH_F=new THREE.LineDashedMaterial({color:0xff6600,dashSize:0.035,gapSize:0.04,linewidth:2,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+const DASH_B=new THREE.LineDashedMaterial({color:0xd0d0d0,dashSize:0.035,gapSize:0.04,transparent:true,opacity:0.15,depthTest:false,depthWrite:false});
+const DOT_GEO=new THREE.SphereGeometry(0.048,32,32);
+
+let selectedCell=null,currentTargets=[],visObjects=[];
+let shakeAnims=[]; // [{group, basePos, radialDir, t}]
+
+function showMoves(lat,lon){
+  clearVis();
+  // In test mode, skip check-filtering so all raw moves are shown
+  const moves=testModeActive?getValidMoves(lat,lon):getLegalMoves(lat,lon);
+  if(!moves.length)return;
+  selectedCell={lat,lon};
+  currentTargets=moves;
+  const sel=board[lat][lon];
+  if(sel&&sel.sprite) startBounce(sel.sprite,lat,lon);
+  if(typeof updateDeleteBtn==='function')updateDeleteBtn();
+  const from=cellPos(lat,lon,R*1.019);
+
+  const ringR=BAND_THETA*R*0.14;
+  const fromCenter=cellPos(lat,lon,R*1.006);
+  // Trim start: remove points inside start ring, prepend exact boundary point
+  function trimStart(pts){
+    let i=0;
+    while(i<pts.length-1&&pts[i].distanceTo(fromCenter)<ringR)i++;
+    if(i===0)return pts;
+    const p0=pts[i-1],p1=pts[i];
+    const d0=p0.distanceTo(fromCenter),d1=p1.distanceTo(fromCenter);
+    const t=(d1-d0)>0.0001?(ringR-d0)/(d1-d0):0;
+    const bp=p0.clone().lerp(p1,t).normalize().multiplyScalar(R*1.006);
+    return[bp,...pts.slice(i)];
+  }
+  // Trim end: remove points inside target ring, append exact boundary point
+  function trimEnd(pts,tgtCenter){
+    let i=pts.length-1;
+    while(i>0&&pts[i].distanceTo(tgtCenter)<ringR)i--;
+    if(i===pts.length-1)return pts;
+    const p0=pts[i],p1=pts[i+1];
+    const d0=p0.distanceTo(tgtCenter),d1=p1.distanceTo(tgtCenter);
+    const t=(d0-d1)>0.0001?(d0-ringR)/(d0-d1):0;
+    const bp=p0.clone().lerp(p1,t).normalize().multiplyScalar(R*1.006);
+    return[...pts.slice(0,i+1),bp];
+  }
+
+  function addTube(pts,captureEnd=false,tgtCenter=null){
+    let tp=trimStart(pts);
+    if(tgtCenter) tp=trimEnd(tp,tgtCenter);
+    if(tp.length<2)return;
+    const surfPts=tp.map(p=>p.clone().normalize().multiplyScalar(R*1.006));
+
+    if(!captureEnd){
+      const segs=Math.max(surfPts.length*4,32);
+      const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(surfPts,false,'centripetal'),segs,0.008,5,false);
+      geo.computeBoundingSphere();
+      const m=new THREE.Mesh(geo,TUBE_F); m.renderOrder=4; m.frustumCulled=false;
+      globe.add(m); visObjects.push(m);
+      return;
+    }
+
+    // Compute arc-length split: orange part + last-one-cell gradient part
+    const cum=[0];
+    for(let k=1;k<surfPts.length;k++) cum.push(cum[k-1]+surfPts[k].distanceTo(surfPts[k-1]));
+    const totalLen=cum[cum.length-1];
+    const gradStartLen=Math.max(0,totalLen-BAND_THETA*R);
+
+    let si=surfPts.length-1;
+    for(let k=0;k<cum.length;k++){if(cum[k]>=gradStartLen){si=k;break;}}
+    let splitPt;
+    if(si>0&&cum[si]>gradStartLen){
+      const t=(gradStartLen-cum[si-1])/(cum[si]-cum[si-1]);
+      splitPt=surfPts[si-1].clone().lerp(surfPts[si],t).normalize().multiplyScalar(R*1.006);
+    }else{splitPt=surfPts[si].clone();}
+
+    // Orange part — TUBE_F (exact orange, no color space issues)
+    const oPts=[...surfPts.slice(0,si),splitPt];
+    if(oPts.length>=2){
+      const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(oPts,false,'centripetal'),Math.max(oPts.length*4,32),0.008,5,false);
+      geo.computeBoundingSphere();
+      const m=new THREE.Mesh(geo,TUBE_F); m.renderOrder=4; m.frustumCulled=false;
+      globe.add(m); visObjects.push(m);
+    }
+
+    // Gradient part — 60 MeshBasicMaterial segments for silky smooth transition
+    const gPts=[splitPt,...surfPts.slice(si)];
+    if(gPts.length>=2){
+      // Densify gradient zone so segments always have enough points
+      const gCurve=new THREE.CatmullRomCurve3(gPts,false,'centripetal');
+      const DENSE=120;
+      const densePts=gCurve.getPoints(DENSE);
+      const N=60;
+      const cFrom=new THREE.Color(0xff6600), cTo=new THREE.Color(0x880000);
+      for(let i=0;i<N;i++){
+        const i0=Math.floor(i/N*densePts.length);
+        const i1=Math.min(Math.ceil((i+1)/N*densePts.length),densePts.length-1);
+        const seg=densePts.slice(i0,i1+1);
+        if(seg.length<2)continue;
+        const col=cFrom.clone().lerp(cTo,(i+0.5)/N);
+        const mat=new THREE.MeshBasicMaterial({color:col,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+        const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seg,false,'centripetal'),Math.max(seg.length,4),0.008,5,false);
+        geo.computeBoundingSphere();
+        const m=new THREE.Mesh(geo,mat); m.renderOrder=4; m.frustumCulled=false;
+        globe.add(m); visObjects.push(m);
+      }
+    }
+  }
+  function surfPts_count(tp){return tp.length;}
+  function addDot(pos,lat,lon){
+    const spos=pos.clone().normalize().multiplyScalar(R*1.007);
+    const geo=new THREE.CircleGeometry(ringR,40);
+    const mat=new THREE.MeshBasicMaterial({color:0xff6600,side:THREE.FrontSide,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+    const circle=new THREE.Mesh(geo,mat);
+    circle.position.copy(spos);
+    // Orient flat on sphere surface — normal points radially outward
+    circle.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),spos.clone().normalize());
+    circle.renderOrder=4; circle.frustumCulled=false;
+    circle.userData={isMoveTarget:true,lat,lon};
+    globe.add(circle); visObjects.push(circle);
+  }
+  function addDash(pts){
+    const H=R*1.006;
+    const surfPts=pts.map(p=>p.clone().normalize().multiplyScalar(H));
+    const cum=[0];
+    for(let i=1;i<surfPts.length;i++) cum.push(cum[i-1]+surfPts[i].distanceTo(surfPts[i-1]));
+    const total=cum[cum.length-1];
+    function ptAt(s){
+      s=Math.max(0,Math.min(s,total));
+      for(let i=1;i<cum.length;i++){
+        if(cum[i]>=s){
+          const tt=(s-cum[i-1])/(cum[i]-cum[i-1]);
+          return surfPts[i-1].clone().lerp(surfPts[i],tt).normalize().multiplyScalar(H);
+        }
+      }
+      return surfPts[surfPts.length-1].clone();
+    }
+    const dashLen=0.035, gapLen=0.04;
+    let d=0;
+    while(d<total){
+      const dEnd=Math.min(d+dashLen,total);
+      const n=Math.max(2,Math.round((dEnd-d)/0.01));
+      const seg=[];
+      for(let i=0;i<=n;i++) seg.push(ptAt(d+(dEnd-d)*i/n));
+      const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seg,false,'centripetal'),n,0.008,5,false);
+      geo.computeBoundingSphere();
+      const front=new THREE.Mesh(geo,TUBE_F); front.renderOrder=4; front.frustumCulled=false;
+      globe.add(front); visObjects.push(front);
+      d+=dashLen+gapLen;
+    }
+  }
+
+  function addRing(lat,lon){
+    const center=cellPos(lat,lon,R*1.006);
+    const radial=center.clone().normalize();
+    const tmp=Math.abs(radial.y)<0.9?new THREE.Vector3(0,1,0):new THREE.Vector3(1,0,0);
+    const t1=new THREE.Vector3().crossVectors(radial,tmp).normalize();
+    const t2=new THREE.Vector3().crossVectors(radial,t1).normalize();
+    const N=64;
+    const pts=[];
+    for(let i=0;i<=N;i++){
+      const a=(i/N)*Math.PI*2;
+      const pt=center.clone().addScaledVector(t1,Math.cos(a)*ringR).addScaledVector(t2,Math.sin(a)*ringR);
+      pts.push(pt.normalize().multiplyScalar(R*1.006));
+    }
+    const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts,true,'centripetal'),N,0.008,8,true);
+    geo.computeBoundingSphere();
+    const mesh=new THREE.Mesh(geo,TUBE_F.clone()); mesh.renderOrder=4; mesh.frustumCulled=false;
+    globe.add(mesh); visObjects.push(mesh);
+  }
+
+  addRing(lat,lon);
+
+  const tubeDests=new Set(); // track destinations with tubes drawn — prevent duplicates
+
+  // Diagonal spiral paths
+  const diagGroups={};
+  moves.forEach(m=>{
+    if(!m.diagKey)return;
+    if(!diagGroups[m.diagKey])diagGroups[m.diagKey]=[];
+    diagGroups[m.diagKey].push(m);
+  });
+  Object.values(diagGroups).forEach(dmoves=>{
+    dmoves.sort((a,b)=>a.diagWP.length-b.diagWP.length);
+    const cells=[{lat,lon},...dmoves.map(m=>({lat:m.lat,lon:m.lon}))];
+    const SEGS=14, r=R*1.006;
+    const dn=parseInt(dmoves[0].diagKey.split(',')[1]); // initial dn from diagKey
+    let poleCrossCount=0; // tracks how many pole crossings so far (dn flips each time)
+    const pts=[];
+    for(let i=0;i<cells.length-1;i++){
+      const c0=cells[i],c1=cells[i+1];
+      const th0=CAP_THETA+(c0.lat+0.5)*BAND_THETA;
+      const th1=CAP_THETA+(c1.lat+0.5)*BAND_THETA;
+      const ph0=(c0.lon+0.5)/NUM_LON*Math.PI*2;
+      const ph1r=(c1.lon+0.5)/NUM_LON*Math.PI*2;
+      let dph=((ph1r-ph0+3*Math.PI)%(2*Math.PI))-Math.PI;
+      const lDiff=Math.min(((c1.lon-c0.lon+8)%8),((c0.lon-c1.lon+8)%8));
+      const isPole=c0.lat===c1.lat&&lDiff===4;
+      const skip=(i===0)?0:1;
+      if(isPole){
+        // Loxodrome continuation: diagonal keeps its dθ/dφ ratio through the pole,
+        // exits with fully reversed direction — creates smooth ∞/figure-8 shape.
+        const dn_cur=dn*(poleCrossCount%2===0?1:-1); // effective dn at this crossing
+        const dph_step=(2*Math.PI/NUM_LON)*dn_cur;   // φ change per "step unit"
+        const isNorth=c0.lat<4;
+        const poleTheta=isNorth?0:Math.PI;
+        const dl_sign=isNorth?-1:1;                  // θ direction toward pole
+        // Distance (in θ) from cell center to pole
+        const distToPole=isNorth?th0:(Math.PI-th0);
+        const t_half=distToPole/BAND_THETA;           // = 1.0 for this board geometry
+        const phi_pole=ph0+dph_step*t_half;
+        const N=SEGS*8;
+        for(let s=skip;s<=N;s++){
+          const t=(s/N)*2*t_half;
+          let theta,phi;
+          if(t<=t_half){
+            // Spiralling toward pole
+            theta=th0+dl_sign*BAND_THETA*t;
+            phi=ph0+dph_step*t;
+          } else {
+            // Spiralling away from pole in mirrored direction
+            const dt=t-t_half;
+            theta=poleTheta-dl_sign*BAND_THETA*dt;
+            phi=phi_pole+Math.PI-dph_step*dt;
+          }
+          theta=Math.max(0,Math.min(Math.PI,theta));
+          pts.push(new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi)));
+        }
+        poleCrossCount++;
+      } else {
+        for(let s=skip;s<=SEGS;s++){
+          const t=s/SEGS;
+          const theta=th0+(th1-th0)*t;
+          const phi=ph0+dph*t;
+          pts.push(new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi)));
+        }
+      }
+    }
+    const lastCell=cells[cells.length-1];
+    const isDiagCapture=!!(board[lastCell.lat]?.[lastCell.lon]&&board[lastCell.lat][lastCell.lon].color!==board[lat][lon]?.color);
+    // Use diagKey in dedup key so mirror diagonals (different dn) are BOTH drawn
+    const dk=`diag:${dmoves[0].diagKey}`;
+    if(!tubeDests.has(dk)){tubeDests.add(dk);addTube(pts,isDiagCapture,cellPos(lastCell.lat,lastCell.lon,R*1.006));}
+  });
+
+  // Straight paths
+  const straightDirs={};
+  moves.forEach(m=>{
+    if(m.straightKey&&(!straightDirs[m.straightKey]||m.step>straightDirs[m.straightKey].step))
+      straightDirs[m.straightKey]=m;
+  });
+  Object.values(straightDirs).forEach(({lat:tl,lon:tn,straightDl,straightDn,pole})=>{
+    const sk=`${tl},${tn}`;
+    if(tubeDests.has(sk))return;
+    tubeDests.add(sk);
+    let pts;
+    if(straightDl===0){
+      pts=latRingArc(lat,lon,tn,48,R*1.019,straightDn); // directional arc — no shortcut
+    } else if(pole){
+      const polePt=new THREE.Vector3(0,(pole==='N'?1:-1)*R*1.001,0);
+      pts=[...geodesicPts(from,polePt,20),...geodesicPts(polePt,cellPos(tl,tn,R*1.019),20)];
+    } else {
+      pts=geodesicPts(from,cellPos(tl,tn,R*1.019),32);
+    }
+    const isStraightCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
+    addTube(pts,isStraightCapture,cellPos(tl,tn,R*1.006));
+  });
+
+  // Knight L-shape dashed paths
+  moves.forEach(({isKnight,longLat,elbowLat,elbowLon,lat:tl,lon:tn})=>{
+    if(!isKnight)return;
+    const r=R*1.006;
+    let seg1,seg2;
+    if(longLat){
+      if(elbowLat>=0&&elbowLat<=7){
+        // Normal case: elbow is within the grid
+        seg1=geodesicPts(from,cellPos(elbowLat,elbowLon,r),24);
+        seg2=latRingArc(elbowLat,elbowLon,tn,12,r);
+      } else {
+        // Elbow is in the polar cap — route through the pole, then to reflected elbow
+        const isNorth=elbowLat<0;
+        const polePt=new THREE.Vector3(0,(isNorth?1:-1)*R*1.001,0);
+        const ref=poleRef(elbowLat,elbowLon);
+        seg1=[...geodesicPts(from,polePt,12),...geodesicPts(polePt,cellPos(ref.l,ref.n,r),12).slice(1)];
+        seg2=latRingArc(ref.l,ref.n,tn,12,r);
+      }
+    } else {
+      seg1=latRingArc(lat,lon,elbowLon,24,r);
+      seg2=geodesicPts(cellPos(elbowLat,elbowLon,r),cellPos(tl,tn,r),12);
+    }
+    addDash([...seg1,...seg2.slice(1)]);
+  });
+
+  // Pawn / King / fallback
+  const drawnDests=new Set();
+  moves.forEach(m=>{if(m.diagKey||m.straightKey||m.isKnight)drawnDests.add(`${m.lat},${m.lon}`);});
+  moves.forEach(({lat:tl,lon:tn,diagKey,straightKey,isKnight})=>{
+    if(diagKey||straightKey||isKnight)return;
+    if(drawnDests.has(`${tl},${tn}`))return;
+    const fk=`${tl},${tn}`;
+    if(tubeDests.has(fk))return;
+    tubeDests.add(fk);
+    const r2=R*1.006;
+    const fromPt=from.clone().normalize().multiplyScalar(r2);
+    const to3d=cellPos(tl,tn,r2);
+    // Detect pole-crossing (both near same pole, phi differs ~π)
+    const th0=CAP_THETA+(lat+0.5)*BAND_THETA;
+    const th1=CAP_THETA+(tl+0.5)*BAND_THETA;
+    const ph0=(lon+0.5)/NUM_LON*Math.PI*2;
+    const ph1r=(tl===lat)?Math.atan2(to3d.z,to3d.x):((tn+0.5)/NUM_LON*Math.PI*2);
+    let dphF=((ph1r-ph0+3*Math.PI)%(2*Math.PI))-Math.PI;
+    const nearN=th0<CAP_THETA+BAND_THETA*1.5&&th1<CAP_THETA+BAND_THETA*1.5;
+    const nearS=th0>Math.PI-CAP_THETA-BAND_THETA*1.5&&th1>Math.PI-CAP_THETA-BAND_THETA*1.5;
+    const isPoleF=(nearN||nearS)&&Math.abs(Math.abs(dphF)-Math.PI)<0.6;
+    let pts;
+    pts=geodesicPts(fromPt,to3d,60);
+    const isPawnCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
+    addTube(pts,isPawnCapture,cellPos(tl,tn,r2));
+  });
+
+  const CAPTURE_F=new THREE.MeshBasicMaterial({color:0x880000,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
+
+  function addCaptureRing(lat,lon){
+    const center=cellPos(lat,lon,R*1.006);
+    const radial=center.clone().normalize();
+    const tmp=Math.abs(radial.y)<0.9?new THREE.Vector3(0,1,0):new THREE.Vector3(1,0,0);
+    const t1=new THREE.Vector3().crossVectors(radial,tmp).normalize();
+    const t2=new THREE.Vector3().crossVectors(radial,t1).normalize();
+    const N=64;
+    const pts=[];
+    for(let i=0;i<=N;i++){
+      const a=(i/N)*Math.PI*2;
+      const pt=center.clone().addScaledVector(t1,Math.cos(a)*ringR).addScaledVector(t2,Math.sin(a)*ringR);
+      pts.push(pt.normalize().multiplyScalar(R*1.006));
+    }
+    const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts,true,'centripetal'),N,0.008,8,true);
+    geo.computeBoundingSphere();
+    const mesh=new THREE.Mesh(geo,CAPTURE_F.clone()); mesh.renderOrder=4; mesh.frustumCulled=false;
+    globe.add(mesh); visObjects.push(mesh);
+  }
+
+  // Dots at destinations — captures get red ring; en passant shows ring on captured pawn
+  moves.forEach(m=>{
+    const{lat:tl,lon:tn}=m;
+    const target=board[tl]?.[tn];
+    const isCapture=target&&target.color!==board[lat][lon]?.color;
+    if(m.isEnPassant){
+      // Orange dot at destination + capture ring on the adjacent pawn
+      addDot(cellPos(tl,tn,R*1.006),tl,tn);
+      addCaptureRing(m.capturedLat,m.capturedLon);
+      const epPawn=board[m.capturedLat]?.[m.capturedLon];
+      if(epPawn){
+        const bp=cellPos(m.capturedLat,m.capturedLon,R*1.035).clone();
+        shakeAnims.push({group:epPawn.sprite,basePos:bp,baseQ:epPawn.sprite.quaternion.clone(),radialDir:bp.clone().normalize(),t:Math.random()*Math.PI*2,type:epPawn.type});
+      }
+    } else if(!isCapture){
+      addDot(cellPos(tl,tn,R*1.006),tl,tn);
+    } else {
+      addCaptureRing(tl,tn);
+      const spos=cellPos(tl,tn,R*1.006).normalize().multiplyScalar(R*1.006);
+      const hit=new THREE.Mesh(DOT_GEO,new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));
+      hit.position.copy(spos); hit.renderOrder=4; hit.frustumCulled=false;
+      hit.userData={isMoveTarget:true,lat:tl,lon:tn};
+      globe.add(hit); visObjects.push(hit);
+      const basePos=cellPos(tl,tn,R*1.035).clone();
+      shakeAnims.push({group:target.sprite,basePos,baseQ:target.sprite.quaternion.clone(),radialDir:basePos.clone().normalize(),t:Math.random()*Math.PI*2,type:target.type});
+    }
+  });
+}
+
+function clearVis(){
+  stopBounce();
+  // Stop shake animations and restore positions
+  shakeAnims.forEach(s=>{s.group.position.copy(s.basePos);if(s.baseQ)s.group.quaternion.copy(s.baseQ);});
+  shakeAnims=[];
+  visObjects.forEach(o=>globe.remove(o));
+  visObjects=[];currentTargets=[];selectedCell=null;
+  if(typeof updateDeleteBtn==='function')updateDeleteBtn();
+}
+
+// ─── Move Animation ───────────────────────────────────────────────────────────
+let moveAnim=null;
+let bounceAnim=null;
+
+function startBounce(group,lat,lon){
+  const basePos=cellPos(lat,lon,R).clone();
+  const piece=board[lat][lon];
+  const blob=piece?piece.blob:null;
+  bounceAnim={group,blob,basePos,radialDir:basePos.clone().normalize(),t:0};
+}
+function stopBounce(){
+  if(bounceAnim){
+    bounceAnim.group.position.copy(bounceAnim.basePos);
+    // Restore blob opacity to full
+    if(bounceAnim.blob){
+      const mat=bounceAnim.blob.children[0]?.material;
+      if(mat) mat.opacity=0.48;
+    }
+    bounceAnim=null;
+  }
+}
+
+// ─── Animation duration helper ────────────────────────────────────────────────
+// Duration scales with actual 3D path length — not grid-step count.
+// Calibration: 1 latitude step (BAND_THETA) → 500 ms  |  longest spirals → 5000 ms
+// This ensures a bishop spiralling diagonally across the globe takes noticeably
+// longer than a rook creeping one step at high latitude, matching visual distance.
+function calcMoveDur(pathLen){
+  const minDist = BAND_THETA;          // shortest realistic path: 1 lat step
+  const maxDist = BAND_THETA * 25;     // practical upper bound for long loxodromes
+  return Math.min(5000, Math.max(500,
+    Math.round(500 + (pathLen - minDist) / (maxDist - minDist) * 4500)
+  ));
+}
+
+function startMoveAnim(sprite,blob,animPts,onDone){
+  let pathLen=0;
+  for(let i=1;i<animPts.length;i++) pathLen+=animPts[i].distanceTo(animPts[i-1]);
+  const dur=calcMoveDur(pathLen);
+  moveAnim={sprite,blob,pts:animPts,t:0,dur,onDone,pieceType:null,pieceIsWhite:null};
+}
+function setMoveAnimPiece(type,isWhite){
+  if(moveAnim){moveAnim.pieceType=type;moveAnim.pieceIsWhite=isWhite;}
+}
+
+function computeAnimPath(move,fromLat,fromLon,toLat,toLon,fromPos){
+  const r=R*1.01;
+  const snap=pts=>pts.map(p=>p.clone().normalize().multiplyScalar(r));
+  const from3d=fromPos.clone().normalize().multiplyScalar(r);
+  const to3d=cellPos(toLat,toLon,r);
+
+  if(move&&move.diagKey&&move.diagWP&&move.diagWP.length){
+    function toAngles(pt){const l=pt.length()||r;return{theta:Math.acos(Math.max(-1,Math.min(1,pt.y/l))),phi:Math.atan2(pt.z,pt.x)};}
+    const wp=snap(move.diagWP);
+    const rawWP=[from3d,...wp];
+    const allPts=[];
+    const SEGS=30;
+    const dn_init=parseInt(move.diagKey.split(',')[1]);
+    let diagPoleCount=0;
+    for(let i=0;i<rawWP.length-1;i++){
+      const{theta:th0,phi:ph0}=toAngles(rawWP[i]);
+      const{theta:th1,phi:ph1r}=toAngles(rawWP[i+1]);
+      let dph=((ph1r-ph0+3*Math.PI)%(2*Math.PI))-Math.PI;
+      const nearN=th0<CAP_THETA+BAND_THETA*1.5&&th1<CAP_THETA+BAND_THETA*1.5;
+      const nearS=th0>Math.PI-CAP_THETA-BAND_THETA*1.5&&th1>Math.PI-CAP_THETA-BAND_THETA*1.5;
+      const isPole=(nearN||nearS)&&Math.abs(Math.abs(dph)-Math.PI)<0.5;
+      const skip=i===0?0:1;
+      if(isPole){
+        // Loxodrome continuation — same formula as visualization
+        const dn_cur=dn_init*(diagPoleCount%2===0?1:-1);
+        const dph_step=(2*Math.PI/NUM_LON)*dn_cur;
+        const isNorth=nearN;
+        const poleTheta=isNorth?0:Math.PI;
+        const dl_sign=isNorth?-1:1;
+        const distToPole=isNorth?th0:(Math.PI-th0);
+        const t_half=distToPole/BAND_THETA;
+        const phi_pole=ph0+dph_step*t_half;
+        const N=SEGS*8;
+        for(let s=skip;s<=N;s++){
+          const t=(s/N)*2*t_half;
+          let theta,phi;
+          if(t<=t_half){
+            theta=th0+dl_sign*BAND_THETA*t;
+            phi=ph0+dph_step*t;
+          } else {
+            const dt=t-t_half;
+            theta=poleTheta-dl_sign*BAND_THETA*dt;
+            phi=phi_pole+Math.PI-dph_step*dt;
+          }
+          theta=Math.max(0,Math.min(Math.PI,theta));
+          allPts.push(new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi)));
+        }
+        diagPoleCount++;
+      } else {
+        for(let s=skip;s<=SEGS;s++){
+          const t=s/SEGS;
+          const theta=th0+(th1-th0)*t;
+          const phi=ph0+dph*t;
+          allPts.push(new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi)));
+        }
+      }
+    }
+    return allPts;
+  }
+
+  if(move&&move.isKnight){
+    const SEGS=120;
+    const s=from3d.clone().normalize();
+    const e=to3d.clone().normalize();
+    const ang=s.angleTo(e);
+    const maxLift=Math.max(0.40,Math.sin(ang)*0.84)*R;
+    const pts=[];
+    for(let i=0;i<=SEGS;i++){
+      const t=i/SEGS;
+      let dir;
+      if(ang<0.001){dir=s.clone();}
+      else{const sinA=Math.sin(ang);dir=new THREE.Vector3().addScaledVector(s,Math.sin((1-t)*ang)/sinA).addScaledVector(e,Math.sin(t*ang)/sinA);}
+      const lift=Math.sin(Math.PI*t)*maxLift;
+      pts.push(dir.normalize().multiplyScalar(r+lift));
+    }
+    return pts;
+  }
+
+  if(move&&move.straightKey){
+    if(move.straightDl===0) return snap(latRingArc(fromLat,fromLon,toLon,120,r,move.straightDn));
+    else if(move.pole){
+      const polePt=new THREE.Vector3(0,(move.pole==='N'?1:-1)*r,0);
+      return snap([...geodesicPts(from3d,polePt,60),...geodesicPts(polePt,to3d,60)]);
+    } else return snap(geodesicPts(from3d,to3d,120));
+  }
+  // Fallback (king, pawn, etc.) — pole-crossing: geodesicPts naturally passes through pole for antipodal polar points
+  return snap(geodesicPts(from3d,to3d,120));
+}
+
+function easeInOut(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+// ─── Move Execution ───────────────────────────────────────────────────────────
+let turnColor='white';
+const turnEl=document.getElementById('turn');
+
+// ─── En Passant State ─────────────────────────────────────────────────────────
+let enPassantTarget=null; // {lat,lon} = square a pawn passed through on a double-step
+
+// ─── Sound Effects (Web Audio API) ───────────────────────────────────────────
+let _ac=null;
+function getAC(){
+  if(!_ac)try{_ac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}
+  if(_ac?.state==='suspended')_ac.resume(); return _ac;
+}
+function sfxNoise(freq,vol,tau,delay=0){
+  const ctx=getAC();if(!ctx)return; const t=ctx.currentTime+delay;
+  const N=Math.ceil(ctx.sampleRate*0.16);
+  const buf=ctx.createBuffer(1,N,ctx.sampleRate); const d=buf.getChannelData(0);
+  const k=ctx.sampleRate*tau;
+  for(let i=0;i<N;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/k);
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const bpf=ctx.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=freq; bpf.Q.value=1.1;
+  const g=ctx.createGain(); g.gain.value=vol;
+  src.connect(bpf); bpf.connect(g); g.connect(ctx.destination); src.start(t);
+}
+function sfxTone(freq,vol,dur,delay=0){
+  const ctx=getAC();if(!ctx)return; const t=ctx.currentTime+delay;
+  const osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=freq;
+  const g=ctx.createGain();
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  osc.connect(g); g.connect(ctx.destination); osc.start(t); osc.stop(t+dur+0.02);
+}
+// Crisp mechanical click (like a mouse button): very short noise burst, high-Q bandpass
+function sfxClick(freq,vol,tau,delay=0){
+  const ctx=getAC();if(!ctx)return; const t=ctx.currentTime+delay;
+  const N=Math.ceil(ctx.sampleRate*0.05);
+  const buf=ctx.createBuffer(1,N,ctx.sampleRate); const d=buf.getChannelData(0);
+  const k=ctx.sampleRate*tau;
+  for(let i=0;i<N;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/k);
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const bpf=ctx.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=freq; bpf.Q.value=3.5;
+  const g=ctx.createGain(); g.gain.value=vol;
+  src.connect(bpf); bpf.connect(g); g.connect(ctx.destination); src.start(t);
+}
+// Each piece has its own pitch signature — listener can identify the piece by sound
+const _PC={P:{f:1500,v:0.28,tau:0.004},N:{f:860,v:0.40,tau:0.006},
+           B:{f:1180,v:0.34,tau:0.005},R:{f:600,v:0.46,tau:0.008},
+           Q:{f:760,v:0.44,tau:0.007},K:{f:500,v:0.42,tau:0.009}};
+function playMove(type){ const c=_PC[type]||_PC.P; sfxClick(c.f,c.v,c.tau); }
+// Capture: collision impact — low thud body + mid crunch + sharp high transient
+function playCapture(){ sfxNoise(150,0.88,0.040); sfxNoise(360,0.52,0.022); sfxClick(1800,0.22,0.003); }
+// Castle: king click + lighter rook click
+function playCastle() { sfxClick(500,0.42,0.009); sfxClick(900,0.30,0.005,0.19); }
+// Check: keep existing rising two-tone
+function playCheck()  { sfxTone(740,0.22,0.14); sfxTone(980,0.17,0.22,0.13); }
+// Game over: ascending C-E-G-C arpeggio — mission complete feeling
+function playGameOver(){ sfxTone(523,0.16,0.20); sfxTone(659,0.15,0.20,0.22);
+                         sfxTone(784,0.15,0.22,0.44); sfxTone(1047,0.20,0.40,0.66); }
+
+// ─── Capture Fly-Away Animation ───────────────────────────────────────────────
+let captureFlyAnims=[];
+function startCaptureFade(cap){
+  cap.sprite.traverse(child=>{
+    if(child.isMesh&&child.material){
+      child.material=child.material.clone();
+      child.material.transparent=true;
+      child.material.opacity=1;
+    }
+  });
+  captureFlyAnims.push({sprite:cap.sprite,t:0,dur:0.5});
+}
+
+
+function execMove(fromLat,fromLon,toLat,toLon){
+  const piece=board[fromLat][fromLon];
+  if(!piece||moveAnim)return;
+  const move=currentTargets.find(m=>m.lat===toLat&&m.lon===toLon);
+  // Store captured piece — remove blob, defer sprite removal until fade
+  let capturedPiece=null;
+  if(board[toLat][toLon]){
+    capturedPiece=board[toLat][toLon];
+    globe.remove(capturedPiece.blob);
+    const i=allSprites.indexOf(capturedPiece.sprite);if(i>=0)allSprites.splice(i,1);
+  }
+  board[toLat][toLon]=piece;
+  board[fromLat][fromLon]=null;
+  piece.hasMoved=true;
+  piece.sprite.userData.lat=toLat;
+  piece.sprite.userData.lon=toLon;
+  const fromPos=piece.sprite.position.clone();
+  const animPts=computeAnimPath(move,fromLat,fromLon,toLat,toLon,fromPos);
+  clearVis();
+  // En passant: remove the captured pawn from board & scene immediately
+  let epCaptured=null;
+  if(move?.isEnPassant){
+    epCaptured=board[move.capturedLat][move.capturedLon];
+    if(epCaptured){
+      globe.remove(epCaptured.blob);
+      const ei=allSprites.indexOf(epCaptured.sprite);if(ei>=0)allSprites.splice(ei,1);
+      board[move.capturedLat][move.capturedLon]=null;
+      setTimeout(()=>startCaptureFade(epCaptured),300);
+    }
+  }
+  // Always play the moving piece's click sound the moment it starts moving
+  if(move?.isCastle) playCastle(); else playMove(piece.type);
+  // Schedule captured piece fade — collision sound fires exactly when piece starts disappearing
+  if(capturedPiece){
+    const pathLen=animPts.reduce((s,p,i)=>i===0?0:s+p.distanceTo(animPts[i-1]),0);
+    setTimeout(()=>{startCaptureFade(capturedPiece);playCapture();},Math.max(0,calcMoveDur(pathLen)-500));
+  }
+  // En passant: collision sound fires when the passed pawn starts fading
+  if(epCaptured){
+    setTimeout(()=>{startCaptureFade(epCaptured);playCapture();},300);
+  }
+  startMoveAnim(piece.sprite,piece.blob,animPts,()=>{
+    const finalPos=cellPos(toLat,toLon,R);
+    piece.sprite.position.copy(finalPos);
+    orientPiece(piece.sprite,finalPos);
+    if(piece.type==='N') faceKnightTowardPole(piece.sprite,finalPos,piece.color==='white');
+    piece.blob.position.copy(finalPos);
+    orientPiece(piece.blob,finalPos);
+    if(piece.type==='P'){
+      const promLat=piece.color==='black'?7:0;
+      if(toLat===promLat){
+        piece.type='Q';
+        globe.remove(piece.sprite);
+        const idx=allSprites.indexOf(piece.sprite);if(idx>=0)allSprites.splice(idx,1);
+        const newGrp=createPieceMesh('Q',piece.color==='black');
+        newGrp.position.copy(finalPos);
+        orientPiece(newGrp,finalPos);
+        newGrp.userData={isPiece:true,lat:toLat,lon:toLon};
+        globe.add(newGrp); allSprites.push(newGrp);
+        piece.sprite=newGrp; board[toLat][toLon]=piece;
+      }
+    }
+    // Castling: snap rook to its new position
+    if(move?.isCastle){      const rook=board[toLat][move.rookFromLon];
+      if(rook){
+        board[toLat][move.rookToLon]=rook;
+        board[toLat][move.rookFromLon]=null;
+        rook.hasMoved=true;
+        rook.sprite.userData.lat=toLat;
+        rook.sprite.userData.lon=move.rookToLon;
+        const rookPos=cellPos(toLat,move.rookToLon,R);
+        rook.sprite.position.copy(rookPos); orientPiece(rook.sprite,rookPos);
+        rook.blob.position.copy(rookPos);   orientPiece(rook.blob,rookPos);
+      }
+    }
+    // Test mode: any piece can keep moving, no turn switch or check logic
+    if(testModeActive){
+      enPassantTarget=null;
+      turnEl.textContent='Test mode — tap any piece';
+      return;
+    }
+    // Update en passant target for the next turn
+    enPassantTarget=(piece.type==='P'&&Math.abs(toLat-fromLat)===2)
+      ?{lat:Math.round((fromLat+toLat)/2),lon:toLon}:null;
+    turnColor=turnColor==='black'?'white':'black';
+    clearCheckRing();
+    const inCheck=isInCheck(turnColor);
+    const hasMove=hasAnyLegalMove(turnColor);
+    if(!hasMove){
+      if(inCheck){
+        const winner=turnColor==='white'?'Black':'White';
+        turnEl.textContent=winner+' wins — checkmate';
+        playGameOver();
+        if(autoBattleActive){const r=turnColor==='white'?'BLACK_WINS_CHECKMATE':'WHITE_WINS_CHECKMATE';setTimeout(()=>_endAutoGame(r),600);}
+      } else {
+        turnEl.textContent='Stalemate  —  draw';
+        if(autoBattleActive){setTimeout(()=>_endAutoGame('DRAW_STALEMATE'),600);}
+      }
+      return;
+    }
+    if(inCheck){
+      for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+        if(board[la][lo]?.type==='K'&&board[la][lo]?.color===turnColor){showCheckRing(la,lo);}
+      showCheckThreats(turnColor);
+      turnEl.textContent=(turnColor==='black'?'Black':'White')+' to move  —  check';
+      playCheck();
+    } else {
+      turnEl.textContent=turnColor==='black'?'Black to move':'White to move';
+    }
+    if(autoBattleActive&&!autoBattlePaused){
+      _autoBattleTimer=setTimeout(doAutoMove,AUTO_DELAY);
+    } else if(aiMode&&turnColor===AI_COLOR){
+      turnEl.textContent=inCheck?'AI thinking… (check)':'AI thinking…';
+      setTimeout(doAiMove,700);
+    }
+  });
+  setMoveAnimPiece(piece.type,piece.color==='white');
+}
+
+// ─── Hit Detection (screen-space) ─────────────────────────────────────────────
+const raycaster=new THREE.Raycaster();
+const _hWP=new THREE.Vector3();
+function screenXY(worldPos){
+  worldPos.project(camera);
+  return{sx:(worldPos.x*0.5+0.5)*innerWidth,sy:(-worldPos.y*0.5+0.5)*innerHeight};
+}
+function hitTest(cx,cy){
+  globe.updateMatrixWorld(true);
+  const DOT_PX=38;
+  let bestDot=null, bestDotD=DOT_PX;
+  for(const o of visObjects){
+    if(!o.userData.isMoveTarget)continue;
+    o.getWorldPosition(_hWP);
+    if(_hWP.dot(camera.position)<=0)continue;
+    const{sx,sy}=screenXY(_hWP.clone());
+    const d=Math.hypot(cx-sx,cy-sy);
+    if(d<bestDotD){bestDotD=d;bestDot=o;}
+  }
+  if(bestDot)return{kind:'dot',...bestDot.userData};
+  const PIECE_PX=40;
+  let bestPiece=null, bestPieceDist=Infinity;
+  for(const grp of allSprites){
+    if(!grp.visible)continue; // skip hidden pieces (test mode)
+    grp.getWorldPosition(_hWP);
+    if(_hWP.dot(camera.position)<=0)continue; // back hemisphere
+    const{sx,sy}=screenXY(_hWP.clone());
+    const screenDist=Math.hypot(cx-sx,cy-sy);
+    if(screenDist>PIECE_PX)continue; // outside touch radius
+    // Among pieces within touch radius, pick the one closest to camera (frontmost)
+    const camDist=_hWP.distanceTo(camera.position);
+    if(camDist<bestPieceDist){bestPieceDist=camDist;bestPiece=grp;}
+  }
+  if(bestPiece)return{kind:'piece',...bestPiece.userData};
+  raycaster.setFromCamera({x:(cx/innerWidth)*2-1,y:-(cy/innerHeight)*2+1},camera);
+  const ch=raycaster.intersectObjects(cellMeshes);
+  if(ch.length)return{kind:'cell',...ch[0].object.userData};
+  return null;
+}
+
+// ─── Rotation + Interaction ────────────────────────────────────────────────────
+let dragging=false,prev={x:0,y:0},vel={x:0,y:0},autoRotate=false;
+let pDownPos=null;
+const WX=new THREE.Vector3(1,0,0),WY=new THREE.Vector3(0,1,0);
+const _qx=new THREE.Quaternion(),_qy=new THREE.Quaternion();
+
+const introSpinAxis=new THREE.Vector3(1/Math.SQRT2,1/Math.SQRT2,0);
+// Final view: qX(-90°) rotates south pole to face camera;
+// qZ(-90°) rotates ring so K+Q (phi=π) lands at upper center,
+// and Rooks (phi≈0) land at lower screen — "K+Q upper center, Rooks lower"
+const introFinalQ=(()=>{
+  const qX=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2);
+  const qZ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-Math.PI/2);
+  return new THREE.Quaternion().multiplyQuaternions(qZ,qX);
+})();
+// introR0 = q(-3π, spinAxis)·introFinalQ so q(3π)·introR0 = identity·introFinalQ ✓
+const introR0=(()=>{
+  const qSpin=new THREE.Quaternion().setFromAxisAngle(introSpinAxis,-3*Math.PI);
+  return new THREE.Quaternion().multiplyQuaternions(qSpin,introFinalQ);
+})();
+const _introQspin=new THREE.Quaternion();
+let introAnim={t:0,done:false};
+
+renderer.domElement.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+renderer.domElement.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+
+// ─── Multi-pointer rotation + pinch zoom ──────────────────────────────────────
+function applyDelta(dx,dy){
+  const s=2*Math.tan(21*Math.PI/180)*camera.position.z/innerHeight;
+  _qy.setFromAxisAngle(WY,dx*s);
+  _qx.setFromAxisAngle(WX,dy*s);
+  globe.quaternion.premultiply(_qy).premultiply(_qx);
+}
+const activePointers=new Map();
+let prevMidX=0,prevMidY=0,prevPinchDist=0,prevFingerAngle=null;
+
+renderer.domElement.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);}
+  renderer.domElement.setPointerCapture(e.pointerId);
+  activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  autoRotate=false; vel={x:0,y:0}; dragging=true;
+  document.body.classList.add('dragging');
+  const pts=[...activePointers.values()];
+  if(pts.length===1){
+    prevMidX=pts[0].x; prevMidY=pts[0].y;
+    pDownPos={x:e.clientX,y:e.clientY};
+  } else {
+    prevMidX=(pts[0].x+pts[1].x)/2; prevMidY=(pts[0].y+pts[1].y)/2;
+    prevPinchDist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+    prevFingerAngle=Math.atan2(pts[1].y-pts[0].y,pts[1].x-pts[0].x);
+    pDownPos=null; // cancel tap when two fingers touch
+  }
+});
+
+renderer.domElement.addEventListener('pointermove',e=>{
+  e.preventDefault();
+  if(!activePointers.has(e.pointerId))return;
+  activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const pts=[...activePointers.values()];
+  if(pts.length===1){
+    const dx=pts[0].x-prevMidX, dy=pts[0].y-prevMidY;
+    prevMidX=pts[0].x; prevMidY=pts[0].y;
+    vel={x:dx,y:dy};
+    applyDelta(dx,dy);
+  } else if(pts.length>=2){
+    const mx=(pts[0].x+pts[1].x)/2, my=(pts[0].y+pts[1].y)/2;
+    const dist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+    // Pinch zoom
+    camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+(prevPinchDist-dist)*0.012));
+    // Two-finger wheel: compute angle of finger-pair, delta → rotate around view axis
+    const angle=Math.atan2(pts[1].y-pts[0].y,pts[1].x-pts[0].x);
+    if(prevFingerAngle!==null){
+      let da=angle-prevFingerAngle;
+      if(da>Math.PI)da-=2*Math.PI;
+      if(da<-Math.PI)da+=2*Math.PI;
+      const qRoll=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-da);
+      globe.quaternion.premultiply(qRoll);
+    }
+    prevFingerAngle=angle;
+    prevMidX=mx; prevMidY=my; prevPinchDist=dist;
+  }
+});
+
+renderer.domElement.addEventListener('pointerup',e=>{
+  renderer.domElement.releasePointerCapture(e.pointerId);
+  const wasOne=activePointers.size===1;
+  activePointers.delete(e.pointerId);
+  dragging=activePointers.size>0;
+  if(!dragging) document.body.classList.remove('dragging');
+  // Tap detection only on single-finger lift
+  if(wasOne&&pDownPos){
+    const dx=e.clientX-pDownPos.x, dy=e.clientY-pDownPos.y;
+    pDownPos=null;
+    if(Math.hypot(dx,dy)<8&&!aiThinking){
+      const hit=hitTest(e.clientX,e.clientY);
+      if(hit?.kind==='dot'){
+        if(selectedCell)execMove(selectedCell.lat,selectedCell.lon,hit.lat,hit.lon);
+        return;
+      }
+      if(hit?.kind==='piece'||hit?.kind==='cell'){
+        const{lat,lon}=hit;
+        const piece=board[lat]?.[lon];
+        if(piece&&(piece.color===turnColor||testModeActive)){
+          if(selectedCell?.lat===lat&&selectedCell?.lon===lon)clearVis();
+          else showMoves(lat,lon);
+          return;
+        }
+        if(selectedCell){
+          const isTarget=currentTargets.some(t=>t.lat===lat&&t.lon===lon);
+          if(isTarget){execMove(selectedCell.lat,selectedCell.lon,lat,lon);return;}
+        }
+        clearVis();
+      } else clearVis();
+    }
+  } else { pDownPos=null; }
+  // Re-init midpoint for remaining finger
+  if(activePointers.size===1){
+    const pt=[...activePointers.values()][0];
+    prevMidX=pt.x; prevMidY=pt.y; prevFingerAngle=null;
+  }
+});
+
+renderer.domElement.addEventListener('pointerleave',e=>{
+  activePointers.delete(e.pointerId);
+  if(activePointers.size===0){dragging=false;document.body.classList.remove('dragging');}
+});
+
+renderer.domElement.addEventListener('wheel',e=>{camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+e.deltaY*0.008));},{passive:true});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── AI Player (minimax + alpha-beta, depth 3) ────────────────────────────────
+const AI_COLOR='black', HUMAN_COLOR='white';
+let aiMode=false, aiThinking=false;
+const AI_PVAL={K:20000,Q:950,R:500,B:345,N:330,P:100};
+const AI_POS=[6,10,13,16,16,13,10,6];
+
+function aiMoves(lat,lon){
+  const piece=board[lat][lon]; if(!piece)return[];
+  const{type,color}=piece; const mvs=[];
+  const ok=l=>l>=0&&l<=7;
+  const ally=(l,n)=>ok(l)&&board[l][n]?.color===color;
+  const occ=(l,n)=>ok(l)&&board[l][n];
+  function slide(dl,dn){
+    let l=lat,n=lon,pole=null,cDl=dl;
+    for(let i=0;i<15;i++){
+      l+=cDl;n=wL(n+dn);
+      if(dl!==0&&(l<0||l>7)){if(pole)break;const r=poleRef(l,n);l=r.l;n=r.n;cDl=-cDl;pole=r.pole;}
+      else if(dl===0&&!ok(l))break;
+      if(!ok(l)||ally(l,n))break;
+      mvs.push({tLat:l,tLon:n});
+      if(occ(l,n))break;
+    }
+  }
+  function diagS(dl,dn){
+    let l=lat,n=lon,cDl=dl,cDn=dn;
+    for(let i=0;i<14;i++){
+      const nb=n;l+=cDl;n=wL(n+cDn);
+      if(l<0){l=0;n=wL(nb+4);cDl=1;cDn=-cDn;}
+      else if(l>7){l=7;n=wL(nb+4);cDl=-1;cDn=-cDn;}
+      if(ally(l,n))break;
+      mvs.push({tLat:l,tLon:n});
+      if(occ(l,n))break;
+    }
+  }
+  if(type==='R'||type==='Q'){slide(1,0);slide(-1,0);slide(0,1);slide(0,-1);}
+  if(type==='B'||type==='Q'){diagS(1,1);diagS(1,-1);diagS(-1,1);diagS(-1,-1);}
+  if(type==='N'){
+    for(const[dl,dn]of[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
+      let l=lat+dl,n=wL(lon+dn);
+      if(l<0||l>7){const r=poleRef(l,n);l=r.l;n=r.n;}
+      if(ok(l)&&!ally(l,n))mvs.push({tLat:l,tLon:n});
+    }
+  }
+  if(type==='K'){
+    for(let dl=-1;dl<=1;dl++)for(let dn=-1;dn<=1;dn++){
+      if(!dl&&!dn)continue;
+      let l=lat+dl, n=wL(lon+dn);
+      if(l<0||l>7){
+        if(dn!==0)continue;      // all pole crossings converge — add once only
+        l=l<0?-1-l:15-l;        // reflected lat
+        n=wL(lon+4);              // pre-step lon + 4
+      }
+      if(ok(l)&&!ally(l,n))mvs.push({tLat:l,tLon:n});
+    }
+    if(!piece.hasMoved){
+      const rQ=board[lat][0];
+      if(rQ?.type==='R'&&!rQ.hasMoved&&rQ.color===color&&!board[lat][1]&&!board[lat][2])
+        mvs.push({tLat:lat,tLon:1,isCastle:true,rookFromLon:0,rookToLon:2});
+      const rK=board[lat][7];
+      if(rK?.type==='R'&&!rK.hasMoved&&rK.color===color&&!board[lat][4]&&!board[lat][5]&&!board[lat][6])
+        mvs.push({tLat:lat,tLon:5,isCastle:true,rookFromLon:7,rookToLon:4});
+    }
+  }
+  if(type==='P'){
+    const dir=color==='black'?1:-1,start=color==='black'?1:6;
+    const fl=lat+dir;
+    if(ok(fl)&&!board[fl][lon]){
+      mvs.push({tLat:fl,tLon:lon});
+      if(lat===start&&!board[fl+dir]?.[lon])mvs.push({tLat:fl+dir,tLon:lon});
+    }
+    for(const cn of[wL(lon-1),wL(lon+1)])
+      if(ok(fl)&&board[fl][cn]?.color!==color&&board[fl][cn])mvs.push({tLat:fl,tLon:cn});
+    if(enPassantTarget&&ok(fl))
+      for(const cn of[wL(lon-1),wL(lon+1)])
+        if(fl===enPassantTarget.lat&&cn===enPassantTarget.lon)
+          mvs.push({tLat:fl,tLon:cn,isEnPassant:true,capturedLat:lat,capturedLon:cn});
+  }
+  return mvs;
+}
+function allAIMoves(color){
+  const out=[];
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    if(board[la][lo]?.color!==color)continue;
+    aiMoves(la,lo).forEach(m=>out.push({fLat:la,fLon:lo,...m}));
+  }
+  return out;
+}
+function aiEval(){
+  let s=0;
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p)continue;
+    const v=AI_PVAL[p.type]+AI_POS[la];
+    const adv=p.type==='P'?(p.color==='black'?la*5:(7-la)*5):0;
+    s+=p.color==='black'?v+adv:-(v+adv);
+  }
+  return s;
+}
+function aiApply(m){
+  const c=board[m.tLat][m.tLon];
+  board[m.tLat][m.tLon]=board[m.fLat][m.fLon]; board[m.fLat][m.fLon]=null;
+  if(m.isCastle){board[m.tLat][m.rookToLon]=board[m.tLat][m.rookFromLon];board[m.tLat][m.rookFromLon]=null;}
+  let epCap=null;
+  if(m.isEnPassant){epCap=board[m.capturedLat][m.capturedLon];board[m.capturedLat][m.capturedLon]=null;}
+  return{c,epCap};
+}
+function aiUndo(m,piece,sv){
+  board[m.fLat][m.fLon]=piece; board[m.tLat][m.tLon]=sv.c||null;
+  if(m.isCastle){board[m.tLat][m.rookFromLon]=board[m.tLat][m.rookToLon];board[m.tLat][m.rookToLon]=null;}
+  if(m.isEnPassant&&sv.epCap)board[m.capturedLat][m.capturedLon]=sv.epCap;
+}
+function minimax(depth,alpha,beta,maxing){
+  if(depth===0)return aiEval();
+  const color=maxing?'black':'white';
+  const moves=allAIMoves(color);
+  if(!moves.length)return maxing?-18000:18000;
+  moves.sort((a,b)=>{
+    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
+    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
+    return vb-va;
+  });
+  let best=maxing?-Infinity:Infinity;
+  for(const m of moves){
+    const piece=board[m.fLat][m.fLon];
+    const sv=aiApply(m);
+    const score=minimax(depth-1,alpha,beta,!maxing);
+    aiUndo(m,piece,sv);
+    if(maxing){if(score>best)best=score;if(score>alpha)alpha=score;}
+    else{if(score<best)best=score;if(score<beta)beta=score;}
+    if(beta<=alpha)break;
+  }
+  return best;
+}
+function getBestAIMove(){
+  const moves=allAIMoves(AI_COLOR); if(!moves.length)return null;
+  for(let i=moves.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[moves[i],moves[j]]=[moves[j],moves[i]];}
+  moves.sort((a,b)=>{
+    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
+    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
+    return vb-va;
+  });
+  let best=null,bestScore=-Infinity;
+  for(const m of moves){
+    const piece=board[m.fLat][m.fLon];
+    const sv=aiApply(m);
+    const score=minimax(2,-Infinity,Infinity,false);
+    aiUndo(m,piece,sv);
+    if(score>bestScore){bestScore=score;best=m;}
+  }
+  return best;
+}
+
+// Globe rotation animation
+let globeRotAnim=null;
+function rotateGlobeToFace(localDir,dur,onDone){
+  const worldDir=localDir.clone().normalize().applyQuaternion(globe.quaternion);
+  if(worldDir.z>0.88){if(onDone)onDone();return;}
+  const Qr=new THREE.Quaternion().setFromUnitVectors(worldDir,new THREE.Vector3(0,0,1));
+  const endQ=new THREE.Quaternion().multiplyQuaternions(Qr,globe.quaternion);
+  globeRotAnim={startQ:globe.quaternion.clone(),endQ,t:0,dur:dur||650,onDone};
+}
+
+function doAiMove(){
+  if(!aiMode||aiThinking||turnColor!==AI_COLOR)return;
+  aiThinking=true;
+  turnEl.textContent='AI thinking…';
+  setTimeout(()=>{
+    const m=getBestAIMove();
+    if(!m){aiThinking=false;turnEl.textContent='Black has no moves.';return;}
+    const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+    rotateGlobeToFace(localDir,650,()=>{
+      showMoves(m.fLat,m.fLon);
+      setTimeout(()=>{
+        aiThinking=false;
+        execMove(m.fLat,m.fLon,m.tLat,m.tLon);
+      },480);
+    });
+  },30);
+}
+
+function resetGame(){
+  if(testModeActive){
+    // clean up test pieces before full reset
+    for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+      const p=board[la][lo];if(!p)continue;
+      globe.remove(p.sprite);globe.remove(p.blob);
+      const i=allSprites.indexOf(p.sprite);if(i>=0)allSprites.splice(i,1);
+      board[la][lo]=null;
+    }
+    testModeActive=false; _testSave=null;
+    document.getElementById('testPanel').classList.remove('visible');
+    document.querySelectorAll('.tpb.sel').forEach(b=>b.classList.remove('sel'));
+    document.getElementById('testStartBtn').disabled=true;
+    const btn=document.getElementById('testBtn');
+    btn.textContent='Test mode'; btn.classList.remove('active');
+  }
+  if(moveAnim)moveAnim=null;
+  clearVis();
+  clearCheckRing();
+  enPassantTarget=null;
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p)continue;
+    globe.remove(p.sprite);globe.remove(p.blob);
+    const i=allSprites.indexOf(p.sprite);if(i>=0)allSprites.splice(i,1);
+    board[la][lo]=null;
+  }
+  MAJOR.forEach((p,lon)=>placePiece(p,true,0,lon));
+  for(let lon=0;lon<8;lon++)placePiece('P',true,1,lon);
+  for(let lon=0;lon<8;lon++)placePiece('P',false,6,lon);
+  MAJOR.forEach((p,lon)=>placePiece(p,false,7,lon));
+  turnColor='white';
+  turnEl.textContent='White to move';
+}
+
+document.getElementById('aiToggle').addEventListener('change',function(){
+  aiMode=this.checked;
+  aiThinking=false;
+  resetGame();
+});
+
+// ─── Test Mode ────────────────────────────────────────────────────────────────
+let testModeActive=false;
+let _testSave=null;
+
+// Standard initial positions for each piece type and color
+const _testInitPos={
+  white:{K:[[7,3]],Q:[[7,4]],R:[[7,0],[7,7]],B:[[7,2],[7,5]],N:[[7,1],[7,6]],
+         P:[[6,0],[6,1],[6,2],[6,3],[6,4],[6,5],[6,6],[6,7]]},
+  black:{K:[[0,3]],Q:[[0,4]],R:[[0,0],[0,7]],B:[[0,2],[0,5]],N:[[0,1],[0,6]],
+         P:[[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]}
+};
+
+function toggleTestMode(){
+  if(testModeActive){ exitTestMode(); return; }
+  // Show selection panel
+  const panel=document.getElementById('testPanel');
+  panel.classList.toggle('visible');
+  if(panel.classList.contains('visible')){
+    const btn=document.getElementById('testBtn');
+    btn.textContent='Cancel'; btn.classList.add('active');
+  } else {
+    const btn=document.getElementById('testBtn');
+    btn.textContent='Test mode'; btn.classList.remove('active');
+  }
+}
+
+// Wire up piece-selector buttons
+document.querySelectorAll('.tpb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('sel');
+    const anySelected=document.querySelectorAll('.tpb.sel').length>0;
+    document.getElementById('testStartBtn').disabled=!anySelected;
+  });
+});
+
+function startTestWithSelection(){
+  const selected=[...document.querySelectorAll('.tpb.sel')].map(b=>({
+    type:b.dataset.type, color:b.dataset.color
+  }));
+  if(!selected.length)return;
+
+  // Hide panel, deselect all buttons
+  document.getElementById('testPanel').classList.remove('visible');
+  document.querySelectorAll('.tpb.sel').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('testStartBtn').disabled=true;
+
+  clearVis(); clearCheckRing(); if(moveAnim)moveAnim=null; aiThinking=false;
+  testModeActive=true;
+
+  // Save all current pieces
+  _testSave={pieces:[],turn:turnColor,ai:aiMode,ep:enPassantTarget};
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p)continue;
+    _testSave.pieces.push({p,la,lo});
+    p.sprite.visible=false;
+    p.blob.visible=false;
+    board[la][lo]=null;
+  }
+
+  // Place selected pieces at their standard initial positions
+  selected.forEach(({type,color})=>{
+    (_testInitPos[color][type]||[]).forEach(([la,lo])=>{
+      placePiece(type,color==='black',la,lo);
+    });
+  });
+
+  aiMode=false; enPassantTarget=null;
+  turnColor='white'; // allow any piece via testModeActive flag
+  const btn=document.getElementById('testBtn');
+  btn.textContent='Exit test'; btn.classList.add('active');
+  turnEl.textContent='Test mode — tap any piece';
+}
+
+function exitTestMode(){
+  if(!testModeActive)return;
+  clearVis(); clearCheckRing(); if(moveAnim)moveAnim=null;
+  testModeActive=false;
+
+  // Remove test pieces
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(!p)continue;
+    globe.remove(p.sprite); globe.remove(p.blob);
+    const i=allSprites.indexOf(p.sprite); if(i>=0)allSprites.splice(i,1);
+    board[la][lo]=null;
+  }
+
+  // Restore saved pieces
+  if(_testSave){
+    _testSave.pieces.forEach(({p,la,lo})=>{
+      p.sprite.visible=true; p.blob.visible=true; board[la][lo]=p;
+    });
+    turnColor=_testSave.turn;
+    aiMode=_testSave.ai;
+    enPassantTarget=_testSave.ep;
+    document.getElementById('aiToggle').checked=aiMode;
+    _testSave=null;
+  }
+  aiThinking=false;
+
+  // Hide panel if open
+  document.getElementById('testPanel').classList.remove('visible');
+  document.querySelectorAll('.tpb.sel').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('testStartBtn').disabled=true;
+
+  const btn=document.getElementById('testBtn');
+  btn.textContent='Test mode'; btn.classList.remove('active');
+
+  const inCheck=isInCheck(turnColor);
+  if(inCheck){
+    for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+      if(board[la][lo]?.type==='K'&&board[la][lo]?.color===turnColor){showCheckRing(la,lo);}
+    showCheckThreats(turnColor);
+    turnEl.textContent=(turnColor==='black'?'Black':'White')+' to move  —  check';
+  } else {
+    turnEl.textContent=turnColor==='black'?'Black to move':'White to move';
+  }
+}
+
+// Stub for hidden UI
+function updateDeleteBtn(){}
+
+// ─── Animate ──────────────────────────────────────────────────────────────────
+function animate(){
+  requestAnimationFrame(animate);
+
+  // Intro animation
+  if(!introAnim.done){
+    introAnim.t=Math.min(introAnim.t+16/2000,1);
+    const te=1-Math.pow(1-introAnim.t,5);
+    _introQspin.setFromAxisAngle(introSpinAxis,te*3.0*Math.PI);
+    globe.quaternion.multiplyQuaternions(_introQspin,introR0);
+    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);autoRotate=false;}
+    renderer.render(scene,camera);
+    return;
+  }
+
+  // Globe rotation animation
+  if(globeRotAnim){
+    globeRotAnim.t=Math.min(globeRotAnim.t+16/globeRotAnim.dur,1);
+    const te=easeInOut(globeRotAnim.t);
+    globe.quaternion.copy(globeRotAnim.startQ).slerp(globeRotAnim.endQ,te);
+    if(globeRotAnim.t>=1){const cb=globeRotAnim.onDone;globeRotAnim=null;if(cb)cb();}
+  }
+
+  // Shake animation for threatened pieces (fearful trembling)
+  if(shakeAnims.length){
+    // maxAngle scales inversely with piece height squared — pawn unchanged, large pieces calmer
+    // Effective heights (in multiples of u): P=5.4 N=6.0 R=6.2 B=7.2 Q=7.5 K=7.5
+    const SHAKE_AMP={P:0.090,N:0.073,R:0.068,B:0.051,Q:0.047,K:0.047};
+    const PIECE_H  ={P:5.4,  N:6.0,  R:6.2,  B:7.2,  Q:7.5,  K:7.5 };
+    const dt=16/1000;
+    shakeAnims.forEach(s=>{
+      s.t+=dt;
+      const maxAngle=SHAKE_AMP[s.type]??0.065;
+      const localX=new THREE.Vector3(1,0,0).applyQuaternion(s.baseQ);
+      const localZ=new THREE.Vector3(0,0,1).applyQuaternion(s.baseQ);
+      const rx=(Math.sin(s.t*53)+Math.sin(s.t*37)*0.6)*maxAngle;
+      const rz=(Math.sin(s.t*41)*0.8+Math.sin(s.t*29)*0.4)*maxAngle;
+      const perturbQ=new THREE.Quaternion()
+        .multiply(new THREE.Quaternion().setFromAxisAngle(localX,rx))
+        .multiply(new THREE.Quaternion().setFromAxisAngle(localZ,rz));
+      const hCenter=0.062*(PIECE_H[s.type]??6.5)/2*0.65;
+      const center=s.basePos.clone().addScaledVector(s.radialDir,hCenter);
+      const newQ=perturbQ.clone().multiply(s.baseQ);
+      s.group.quaternion.copy(newQ);
+      const newLocalY=new THREE.Vector3(0,1,0).applyQuaternion(newQ);
+      s.group.position.copy(center).addScaledVector(newLocalY,-hCenter);
+    });
+  }
+
+  // Captured piece fade-out
+  for(let i=captureFlyAnims.length-1;i>=0;i--){
+    const a=captureFlyAnims[i];
+    a.t+=16/1000;
+    const opacity=Math.max(0,1-a.t/a.dur);
+    a.sprite.traverse(child=>{
+      if(child.isMesh&&child.material)child.material.opacity=opacity;
+    });
+    if(a.t>=a.dur){globe.remove(a.sprite);captureFlyAnims.splice(i,1);}
+  }
+
+  // Bounce
+  if(bounceAnim){
+    bounceAnim.t+=16/1000;
+    const lift=Math.abs(Math.sin(bounceAnim.t*Math.PI))*0.18;
+    bounceAnim.group.position.copy(bounceAnim.basePos).addScaledVector(bounceAnim.radialDir,lift);
+    // Blob shadow fades as piece lifts: full opacity at ground, fades to ~20% at peak
+    if(bounceAnim.blob){
+      const mat=bounceAnim.blob.children[0]?.material;
+      if(mat){mat.opacity=0.48*(1-lift/0.18*0.8);mat.needsUpdate=true;}
+    }
+  }
+
+  // Move animation
+  if(moveAnim){
+    moveAnim.t=Math.min(moveAnim.t+16/moveAnim.dur,1);
+    const te=easeInOut(moveAnim.t);
+    const rawIdx=te*(moveAnim.pts.length-1);
+    const i0=Math.min(Math.floor(rawIdx),moveAnim.pts.length-2);
+    const frac=rawIdx-i0;
+    const pos=moveAnim.pts[i0].clone().lerp(moveAnim.pts[i0+1],frac);
+    moveAnim.sprite.position.copy(pos);
+    orientPiece(moveAnim.sprite,pos);
+    if(moveAnim.pieceType==='N') faceKnightTowardPole(moveAnim.sprite,pos,moveAnim.pieceIsWhite);
+    if((aiMode||autoBattleActive)&&!globeRotAnim){
+      const worldDir=pos.clone().normalize().applyQuaternion(globe.quaternion);
+      const offCentre=Math.max(0,1-worldDir.z);
+      const alpha=0.025+offCentre*0.035;
+      const Qr=new THREE.Quaternion().setFromUnitVectors(worldDir,new THREE.Vector3(0,0,1));
+      const tQ=new THREE.Quaternion().multiplyQuaternions(Qr,globe.quaternion);
+      globe.quaternion.slerp(tQ,alpha);
+    }
+    if(moveAnim.blob){
+      const blobPos=pos.clone().normalize().multiplyScalar(R);
+      moveAnim.blob.position.copy(blobPos);
+      orientPiece(moveAnim.blob,blobPos);
+    }
+    if(moveAnim.t>=1){const cb=moveAnim.onDone;moveAnim=null;cb();}
+  }
+
+  // Inertia
+  if(!dragging){
+    if(Math.abs(vel.x)>0.01||Math.abs(vel.y)>0.01){applyDelta(vel.x,vel.y);vel.x*=0.88;vel.y*=0.88;}
+    else{vel.x=0;vel.y=0;}
+    if(autoRotate){_qy.setFromAxisAngle(WY,0.0010);globe.quaternion.premultiply(_qy);}
+  }
+
+  renderer.render(scene,camera);
+}
+
+// ─── Auto Battle (AI vs AI) ───────────────────────────────────────────────────
+const AUTO_DELAY = 1500;       // ms between moves (watchable pace)
+const AUTO_MAX_MOVES = 250;    // draw if exceeded
+const RESIGN_THRESHOLD = 1000; // eval pts: losing by this much = hopeless → resign
+const RESIGN_STREAK    = 8;    // consecutive half-moves at that level to confirm
+const DRAW_EVAL_RANGE  = 80;    // eval pts: both sides within this = "mutually equal"
+const DRAW_STREAK      = 30;   // consecutive half-moves both agree it's equal → draw
+let autoBattleActive = false;
+let autoBattlePaused = false;
+let _autoBattleTimer = null;
+let _autoBattleLog = null;
+let _autoGameNum = 0;
+let _autoPosHist = {};
+
+// ── Globe-tactics-aware evaluation ──────────────────────────────────────────
+// Primary driver: piece material.
+// Secondary driver: pole proximity — pieces near polar caps attack in BOTH directions
+//   (normal + through the pole), doubling their tactical reach.
+// Tertiary: direct antipodal threat for Q/R exactly at the edge.
+function captureEval(){
+  const CV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
+  // Polar bonus per piece type (small enough not to override captures)
+  const POLAR={Q:30,R:27,B:24,N:20,P:0,K:0};
+  let s=0;
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    const p=board[la][lo];if(!p)continue;
+    let v=CV[p.type];
+    // Tiered polar bonus: ×2 at the edge (lat 0 or 7), ×1 just inside (lat 1 or 6)
+    const pd=Math.min(la,7-la); // 0=pole edge, 3=equator
+    if(pd<=1) v+=(2-pd)*(POLAR[p.type]||0);
+    // Antipodal threat: Q or R on the pole edge, enemy at wL(lo+4) same lat
+    // → can reach enemy in ONE straight move through the polar cap
+    if(pd===0&&(p.type==='Q'||p.type==='R')){
+      const opp=board[la][wL(lo+4)];
+      if(opp&&opp.color!==p.color) v+=Math.round(CV[opp.type]*0.09);
+    }
+    s+=p.color==='black'?v:-v;
+  }
+  return s;
+}
+
+// ── Quiescence search (captures only, up to qleft extra plies) ────────────
+// Prevents the "horizon effect": never stop in the middle of a capture sequence.
+// This is what lets the AI see through 3-ply pole-crossing exchange sequences.
+function _quiesce(alpha,beta,maxing,qleft){
+  const stand=captureEval();
+  if(qleft===0) return stand;
+  // Stand-pat: if the quiet position is already good enough, don't search further
+  if(maxing){if(stand>=beta)return beta;if(stand>alpha)alpha=stand;}
+  else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
+  const color=maxing?'black':'white';
+  // Only look at captures (and en passant)
+  const caps=allAIMoves(color).filter(m=>board[m.tLat][m.tLon]||m.isEnPassant);
+  caps.sort((a,b)=>{
+    const va=board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0;
+    const vb=board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0;
+    return vb-va;
+  });
+  for(const m of caps){
+    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+    const score=_quiesce(alpha,beta,!maxing,qleft-1);
+    aiUndo(m,pc,sv);
+    if(maxing){if(score>alpha){alpha=score;if(alpha>=beta)return beta;}}
+    else{if(score<beta){beta=score;if(beta<=alpha)return alpha;}}
+  }
+  return maxing?alpha:beta;
+}
+
+function captureMinim(depth,alpha,beta,maxing){
+  // At depth=0, run quiescence instead of returning raw eval —
+  // this ensures capture sequences (including pole-crossing ones) are fully resolved.
+  if(depth===0) return _quiesce(alpha,beta,maxing,3);
+  const color=maxing?'black':'white';
+  const mvs=allAIMoves(color);
+  if(!mvs.length) return captureEval();
+  // Captures first in search ordering
+  mvs.sort((a,b)=>{
+    const va=board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0;
+    const vb=board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0;
+    return vb-va;
+  });
+  let best=maxing?-Infinity:Infinity;
+  for(const m of mvs){
+    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+    const sc=captureMinim(depth-1,alpha,beta,!maxing);
+    aiUndo(m,pc,sv);
+    if(maxing){if(sc>best)best=sc;if(sc>alpha)alpha=sc;}
+    else{if(sc<best)best=sc;if(sc<beta)beta=sc;}
+    if(beta<=alpha)break;
+  }
+  return best;
+}
+
+// ── Get best legal move for either color ─────────────────────────────────────
+// Strategy: greedy capture ordering + captureMinim(depth=2) for tie-breaking.
+// Each AI evaluates independently — neither knows the other's chosen move.
+function getAutoAIMove(color){
+  const legal=[];
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    if(board[la][lo]?.color!==color)continue;
+    getLegalMoves(la,lo).forEach(mv=>legal.push({fLat:la,fLon:lo,tLat:mv.lat,tLon:mv.lon,...mv}));
+  }
+  if(!legal.length)return null;
+  // Shuffle first (variety within equal groups)
+  for(let i=legal.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];
+  }
+  // Primary sort: highest-value capture first
+  legal.sort((a,b)=>{
+    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
+    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
+    return vb-va;
+  });
+  const isBlack=color==='black';
+  const nextMax=!isBlack; // after black moves → white's turn (not maxing); after white → black (maxing)
+  let best=null,bestSc=isBlack?-Infinity:Infinity;
+  const top=Math.min(legal.length,30); // evaluate top 30 candidate moves
+  // Anti-oscillation: penalise moves that send a piece straight back where it came from
+  const recentOwn=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-3);
+  const OSC_PEN=700; // large enough to override same-value jitter, small enough to allow if only option
+  const isReversal=m=>recentOwn.some(prev=>
+    prev.coords[2]===m.fLat&&prev.coords[3]===m.fLon&&
+    prev.coords[0]===m.tLat&&prev.coords[1]===m.tLon);
+
+  for(let i=0;i<top;i++){
+    const m=legal[i];
+    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+    let sc=captureMinim(2,-Infinity,Infinity,nextMax);
+    aiUndo(m,pc,sv);
+    if(isReversal(m))sc=isBlack?sc-OSC_PEN:sc+OSC_PEN;
+    if(isBlack?sc>bestSc:sc<bestSc){bestSc=sc;best=m;}
+  }
+  return best;
+}
+
+// ── Logging helpers ───────────────────────────────────────────────────────────
+function _autoBoardHash(){
+  let h='';
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    const p=board[la][lo];h+=p?p.color[0]+p.type:'.';
+  }
+  return h+turnColor[0];
+}
+const _ACOL=['h','g','f','e','d','c','b','a'];
+function _autoNote(la,lo){return _ACOL[lo]+(8-la);}
+function _autoBoardSnap(){
+  let s='  a b c d e f g h\n';
+  for(let la=0;la<8;la++){
+    s+=''+(8-la)+' ';
+    for(let lo=7;lo>=0;lo--){
+      const p=board[la][lo];
+      s+=(p?(p.color==='white'?p.type:p.type.toLowerCase()):'.')+' ';
+    }
+    s+='\n';
+  }
+  return s;
+}
+function _autoLogAnomaly(type,desc,extra={}){
+  const entry={n:_autoBattleLog?.moves.length||0,type,desc,extra,
+    snap:_autoBoardSnap(),turn:turnColor};
+  _autoBattleLog?.anomalies.push(entry);
+  console.warn('[AUTO-BATTLE ANOMALY]',type,desc,extra);
+}
+
+// ── Main drive loop ───────────────────────────────────────────────────────────
+
+// Insufficient material: K/K+minor vs K/K+minor → cannot force checkmate
+function _autoInsufMaterial(){
+  let wX=[],bX=[];
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+    const p=board[la][lo];if(!p||p.type==='K')continue;
+    (p.color==='white'?wX:bX).push(p.type);
+  }
+  const minor=arr=>arr.length===0||(arr.length===1&&(arr[0]==='B'||arr[0]==='N'));
+  return minor(wX)&&minor(bX);
+}
+
+function doAutoMove(){
+  if(!autoBattleActive||autoBattlePaused)return;
+  if(moveAnim||globeRotAnim){_autoBattleTimer=setTimeout(doAutoMove,120);return;}
+
+  const log=_autoBattleLog;if(!log)return;
+
+  // Move-limit guard
+  if(log.moves.length>=AUTO_MAX_MOVES){
+    _autoLogAnomaly('MOVE_LIMIT',`Game exceeded ${AUTO_MAX_MOVES} moves — possible infinite loop`);
+    _endAutoGame('DRAW_MOVE_LIMIT');return;
+  }
+
+  // 3-fold repetition guard
+  const hash=_autoBoardHash();
+  _autoPosHist[hash]=(_autoPosHist[hash]||0)+1;
+  if(_autoPosHist[hash]>=3){
+    _autoLogAnomaly('REPETITION','Same position repeated 3 times',{count:_autoPosHist[hash]});
+    _endAutoGame('DRAW_REPETITION');return;
+  }
+
+  // Insufficient material — neither side can force checkmate
+  if(_autoInsufMaterial()){
+    _autoLogAnomaly('INSUF_MATERIAL','Both sides have insufficient mating material (K/K+minor vs K/K+minor)');
+    _endAutoGame('DRAW_INSUF_MATERIAL');return;
+  }
+
+  // 50-move rule — 100 half-moves without capture or pawn advance
+  if((log.halfMoveClock||0)>=100){
+    _autoLogAnomaly('FIFTY_MOVE',`50-move rule triggered after ${log.halfMoveClock} half-moves without capture or pawn advance`);
+    _endAutoGame('DRAW_FIFTY_MOVE');return;
+  }
+
+  // ── Resignation & draw-by-agreement ────────────────────────────────────────
+  // Evaluate the current position independently of whose turn it is.
+  const _ev=captureEval(); // positive = black advantage, negative = white advantage
+  if(_ev >= RESIGN_THRESHOLD){
+    // White is losing badly
+    log.wResignStreak++;log.bResignStreak=0;log.drawStreak=0;
+  } else if(_ev <= -RESIGN_THRESHOLD){
+    // Black is losing badly
+    log.bResignStreak++;log.wResignStreak=0;log.drawStreak=0;
+  } else {
+    log.wResignStreak=0;log.bResignStreak=0;
+    // Draw agreement: both sides see a balanced position (after opening)
+    if(log.moves.length>=40 && Math.abs(_ev)<=DRAW_EVAL_RANGE){
+      log.drawStreak++;
+    } else {
+      log.drawStreak=0;
+    }
+  }
+  if(log.wResignStreak>=RESIGN_STREAK){_endAutoGame('WHITE_RESIGNS');return;}
+  if(log.bResignStreak>=RESIGN_STREAK){_endAutoGame('BLACK_RESIGNS');return;}
+  if(log.drawStreak>=DRAW_STREAK){_endAutoGame('DRAW_AGREEMENT');return;}
+
+  // Game-end check (before AI thinks)
+  if(!hasAnyLegalMove(turnColor)){
+    _endAutoGame(isInCheck(turnColor)
+      ?(turnColor==='white'?'BLACK_WINS_CHECKMATE':'WHITE_WINS_CHECKMATE')
+      :'DRAW_STALEMATE');
+    return;
+  }
+
+  // Get AI move
+  const t0=Date.now();
+  const m=getAutoAIMove(turnColor);
+  const thinkMs=Date.now()-t0;
+
+  if(!m){
+    _autoLogAnomaly('NO_MOVE',`${turnColor} AI returned null despite available legal moves`,
+      {legalCheck:allAIMoves(turnColor).length});
+    _endAutoGame('ERROR_NO_MOVE');return;
+  }
+
+  const piece=board[m.fLat][m.fLon];
+  if(!piece){
+    _autoLogAnomaly('EMPTY_FROM','AI selected a move originating from an empty square',
+      {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
+    _endAutoGame('ERROR_EMPTY_SQUARE');return;
+  }
+
+  // Record move
+  const cap=board[m.tLat][m.tLon];
+  const color=turnColor;
+  const entry={
+    n:log.moves.length+1,color,piece:piece.type,
+    from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
+    captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
+    special:m.isCastle?'castle':m.isEnPassant?'ep':null,
+    thinkMs,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
+  };
+  log.moves.push(entry);
+  if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
+
+  // Update 50-move clock (reset on capture or pawn advance, else increment)
+  log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
+
+  // Status bar
+  turnEl.textContent=`Auto ${entry.n} — ${color==='white'?'White':'Black'}: ${piece.type} ${entry.from}→${entry.to}${cap?' x'+cap.type:''}${m.isCastle?' 0-0':''}`;
+
+  // Rotate globe to face the piece, show move dots briefly, execute
+  const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+  rotateGlobeToFace(localDir,460,()=>{
+    showMoves(m.fLat,m.fLon);
+    setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
+  });
+}
+
+// ── Game lifecycle ────────────────────────────────────────────────────────────
+function _endAutoGame(result){
+  if(!autoBattleActive)return;
+  autoBattleActive=false;autoBattlePaused=false;
+  clearTimeout(_autoBattleTimer);
+  clearVis();
+  if(_autoBattleLog){_autoBattleLog.result=result;_autoBattleLog.endTime=Date.now();}
+  // Show result on screen
+  const _MSG={
+    WHITE_RESIGNS:       'White resigns — Black wins',
+    BLACK_RESIGNS:       'Black resigns — White wins',
+    DRAW_AGREEMENT:      'Draw — by agreement',
+    BLACK_WINS_CHECKMATE:'Checkmate — Black wins',
+    WHITE_WINS_CHECKMATE:'Checkmate — White wins',
+    DRAW_STALEMATE:      'Draw — stalemate',
+    DRAW_REPETITION:     'Draw — threefold repetition',
+    DRAW_FIFTY_MOVE:     'Draw — 50-move rule',
+    DRAW_INSUF_MATERIAL: 'Draw — insufficient material',
+    DRAW_MOVE_LIMIT:     'Draw — move limit reached',
+    ERROR_NO_MOVE:       'Error — no move found',
+    ERROR_EMPTY_SQUARE:  'Error — empty square',
+    STOPPED_BY_USER:     'Stopped',
+  };
+  turnEl.textContent=_MSG[result]||result;
+  if(result==='WHITE_RESIGNS'||result==='BLACK_RESIGNS') playGameOver();
+  _updateAutoBattleUI();
+  if(_autoBattleLog&&_autoBattleLog.moves.length>0)_showAutoReport();
+}
+
+function startAutoBattle(){
+  if(testModeActive)return;
+  if(autoBattleActive)stopAutoBattle();
+  _autoGameNum++;_autoPosHist={};
+  _autoBattleLog={gameNum:_autoGameNum,moves:[],anomalies:[],wCapt:[],bCapt:[],
+    result:null,halfMoveClock:0,
+    wResignStreak:0,bResignStreak:0,drawStreak:0,
+    startTime:Date.now(),endTime:null};
+  autoBattleActive=true;autoBattlePaused=false;
+  // Disable human/AI controls during battle
+  document.getElementById('aiToggle').checked=false;
+  aiMode=false;aiThinking=false;
+  resetGame();
+  _updateAutoBattleUI();
+  _autoBattleTimer=setTimeout(doAutoMove,900);
+}
+
+function toggleAutoPause(){
+  if(!autoBattleActive)return;
+  autoBattlePaused=!autoBattlePaused;
+  document.getElementById('autoPauseBtn').textContent=autoBattlePaused?'Resume':'Pause';
+  if(!autoBattlePaused){clearTimeout(_autoBattleTimer);doAutoMove();}
+}
+
+function newAutoBattle(){
+  // Discard current log silently and restart
+  _autoBattleLog=null;autoBattleActive=false;
+  clearTimeout(_autoBattleTimer);
+  startAutoBattle();
+}
+
+function stopAutoBattle(){
+  if(!autoBattleActive)return;
+  const log=_autoBattleLog;
+  autoBattleActive=false;autoBattlePaused=false;
+  clearTimeout(_autoBattleTimer);
+  clearVis();
+  _updateAutoBattleUI();
+  if(log&&log.moves.length>0){
+    log.result='STOPPED_BY_USER';log.endTime=Date.now();
+    _showAutoReport();
+  } else {
+    turnEl.textContent='White to move';
+  }
+}
+
+function _updateAutoBattleUI(){
+  const btn=document.getElementById('autoBattleBtn');
+  const ctrl=document.getElementById('autoBattleControls');
+  const aw=document.getElementById('aiWrap');
+  if(autoBattleActive){
+    btn.style.display='none';
+    ctrl.style.display='flex';
+    aw.style.opacity='0.22';aw.style.pointerEvents='none';
+    document.getElementById('autoPauseBtn').textContent='Pause';
+  } else {
+    btn.style.display='';
+    ctrl.style.display='none';
+    aw.style.opacity='';aw.style.pointerEvents='';
+  }
+}
+
+// ── Report generation ─────────────────────────────────────────────────────────
+function _showAutoReport(){
+  const log=_autoBattleLog;if(!log)return;
+  const dur=log.endTime?Math.round((log.endTime-log.startTime)/1000):0;
+  const durStr=dur<60?dur+'s':Math.floor(dur/60)+'m '+(dur%60)+'s';
+
+  const LABELS={
+    BLACK_WINS_CHECKMATE:'⬛ BLACK WINS — Checkmate',
+    WHITE_WINS_CHECKMATE:'⬜ WHITE WINS — Checkmate',
+    WHITE_RESIGNS:       '⬛ BLACK WINS — White resigns',
+    BLACK_RESIGNS:       '⬜ WHITE WINS — Black resigns',
+    DRAW_AGREEMENT:      '½  DRAW — By mutual agreement',
+    DRAW_STALEMATE:      '½  DRAW — Stalemate',
+    DRAW_REPETITION:     '½  DRAW — 3-fold Repetition',
+    DRAW_MOVE_LIMIT:     `½  DRAW — ${AUTO_MAX_MOVES}-move Limit`,
+    DRAW_FIFTY_MOVE:     '½  DRAW — 50-move Rule',
+    DRAW_INSUF_MATERIAL: '½  DRAW — Insufficient Material (K/K+minor vs K/K+minor)',
+    ERROR_NO_MOVE:       '⚠  ERROR — AI returned null move',
+    ERROR_EMPTY_SQUARE:  '⚠  ERROR — Move from empty square',
+    STOPPED_BY_USER:     '⏹  Stopped by user'
+  };
+  const resultLabel=LABELS[log.result]||log.result;
+
+  const capLine=(arr,label)=>{
+    if(!arr.length)return `${label}: — (nothing captured)`;
+    const grp={};arr.forEach(({t,v})=>{if(!grp[t])grp[t]={n:0,total:0,each:v};grp[t].n++;grp[t].total+=v;});
+    const total=arr.reduce((s,{v})=>s+v,0);
+    const parts=Object.entries(grp).map(([t,{n,total}])=>`${t}×${n} (${total}pts)`).join(' + ');
+    return `${label}: ${parts}  →  total ${total} pts`;
+  };
+
+  const pad=(s,w)=>{s=String(s);return s.length>=w?s:s+' '.repeat(w-s.length);};
+
+  // Header row
+  const hdr='  #  Color  Piece  From→To   Captured       Special    Think';
+  const moveLines=log.moves.map(m=>{
+    const capS=m.captured?`×${m.captured}[${m.captureVal}pts]`:'—';
+    const spec=m.special||'—';
+    const col=m.color==='white'?'White':'Black';
+    return `${pad(m.n,4)} ${pad(col,6)} ${pad(m.piece,6)} ${m.from}→${pad(m.to,4)}  ${pad(capS,14)} ${pad(spec,10)} ${m.thinkMs}ms`;
+  }).join('\n');
+
+  const anomLines=log.anomalies.length===0?'  (none detected)'
+    :log.anomalies.map(a=>[
+        `  [Move #${a.n}] TYPE: ${a.type}`,
+        `  DESC: ${a.desc}`,
+        Object.keys(a.extra).length?`  EXTRA: ${JSON.stringify(a.extra)}`:'',
+        `  TURN: ${a.turn}`,
+        `  BOARD:\n${a.snap.split('\n').map(l=>'    '+l).join('\n')}`
+      ].filter(Boolean).join('\n')).join('\n\n');
+
+  const B='═'.repeat(62);
+  const b='─'.repeat(62);
+  const report=
+`${B}
+  GLOBE CHESS — AI vs AI BATTLE REPORT  #${log.gameNum}
+${B}
+
+  Date      : ${new Date(log.startTime).toLocaleString()}
+  Duration  : ${durStr}
+  Result    : ${resultLabel}
+  Total moves: ${log.moves.length}  (limit: ${AUTO_MAX_MOVES})
+
+CAPTURES
+${b}
+  ${capLine(log.wCapt,'White captured')}
+  ${capLine(log.bCapt,'Black captured')}
+
+MOVE LOG
+${b}
+${hdr}
+${b}
+${moveLines||'  (no moves played)'}
+
+ANOMALIES  (${log.anomalies.length} detected)
+${b}
+${anomLines}
+
+BOARD STATE AT END
+${b}
+${_autoBoardSnap()}
+SYSTEM INFO
+${b}
+  Globe Chess Auto Battle  v1
+  AI for both sides  : captureEval + captureMinim(depth=2) + quiescence(3) + greedy capture sort
+  White strategy     : minimize captureEval  (independent, capture-first, globe-tactics-aware)
+  Black strategy     : maximize captureEval  (independent, capture-first, globe-tactics-aware)
+  Legal move filter  : getLegalMoves() — no illegal moves executed
+  Repetition rule    : 3× same position → draw
+  50-move rule       : 100 half-moves without capture or pawn advance → draw
+  Insuf. material    : K/K+minor vs K/K+minor → draw
+  Resignation        : eval ≥ ${RESIGN_THRESHOLD} pts for ${RESIGN_STREAK} consecutive half-moves
+  Draw by agreement  : |eval| ≤ ${DRAW_EVAL_RANGE} pts for ${DRAW_STREAK} consecutive half-moves (after move 40)
+  Move limit         : ${AUTO_MAX_MOVES} moves → draw
+${B}`;
+
+  document.getElementById('reportText').value=report;
+  document.getElementById('reportModal').classList.add('visible');
+}
+
+function closeReport(){
+  document.getElementById('reportModal').classList.remove('visible');
+  if(!autoBattleActive)turnEl.textContent=turnColor==='white'?'White to move':'Black to move';
+}
+
+function copyReport(){
+  const ta=document.getElementById('reportText');
+  ta.select();ta.setSelectionRange(0,99999);
+  try{navigator.clipboard?.writeText(ta.value);}catch(e){}
+  try{document.execCommand('copy');}catch(e){}
+  const btn=document.getElementById('copyReportBtn');
+  const orig=btn.textContent;
+  btn.textContent='Copied ✓';
+  setTimeout(()=>btn.textContent=orig,1800);
+}
+
+animate();
+</script>
+</body>
+</html>
