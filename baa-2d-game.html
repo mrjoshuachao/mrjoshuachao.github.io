@@ -34,7 +34,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 .tbtn:active{background:#777}
 .tbtn:disabled{background:#333;color:#666;cursor:default;border-color:#555}
 #modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.3);justify-content:center;align-items:center}
-#modal>div{background:#fff;border-radius:16px;padding:24px 28px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:260px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+#modal>div{background:#fff;border-radius:14px;padding:18px 22px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:220px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
 #modal h3{margin-bottom:12px;font-size:20px}
 #modal input{padding:8px 12px;font-size:18px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:normal}
 #modal .mbtn{display:inline-block;margin:8px 4px;padding:8px 18px;font-size:14px;border:none;border-radius:8px;cursor:pointer;color:#fff}
@@ -84,13 +84,14 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnRestart">重新開始</button>
 <button class="tbtn" id="btnHome">回家</button>
 </div>
-<div style="display:flex;gap:6px">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.1</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
 <div id="modal"><div style="position:relative">
 <span id="btnCloseModal" style="position:absolute;top:8px;right:12px;cursor:pointer;font-size:18px;color:#999">✕</span>
-<h3 id="modalTitle">房間創建成功</h3>
+<h3 id="modalTitle">房間已創建</h3>
 <div id="modalRoom">
 <div id="roomInfo"></div>
 <div id="roomPlayers"></div>
@@ -274,14 +275,20 @@ function showPersistMsg(t){
 }
 function hidePersistMsg(){ var el=document.getElementById("persistMsg");if(el)el.remove(); }
 
-function showLobbyOverlay(msg){
+function showLobbyOverlay(msg,showStart){
   lobbyActive=true;
   var old=document.getElementById("lobbyOverlay");if(old)old.remove();
   var d=document.createElement("div");d.id="lobbyOverlay";
   d.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
   var box=document.createElement("div");
   box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:300px";
-  box.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0'>"+msg+"</p>";
+  box.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0'>"+msg+"</p>";
+  if(showStart){
+    var btn=document.createElement("button");btn.textContent="開始遊戲";
+    btn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
+    btn.onclick=function(){ hideLobbyOverlay();resetGame(); };
+    box.appendChild(btn);
+  }
   d.appendChild(box);document.body.appendChild(d);
 }
 function hideLobbyOverlay(){ lobbyActive=false;var el=document.getElementById("lobbyOverlay");if(el)el.remove(); }
@@ -366,7 +373,7 @@ function updateSB(){
   var tb=document.getElementById("turnBubble");
   if(!tb){
     tb=document.createElement("div");tb.id="turnBubble";
-    tb.style.cssText="position:fixed;z-index:15;background:#fff;color:#333;font-size:11px;font-weight:bold;padding:4px 10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);pointer-events:none;white-space:nowrap;display:none;font-family:'Segoe UI',sans-serif";
+    tb.style.cssText="position:fixed;z-index:15;background:#fff;color:#333;font-size:14px;font-weight:bold;padding:4px 10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);pointer-events:none;white-space:nowrap;display:none;font-family:'Segoe UI',sans-serif";
     document.body.appendChild(tb);
   }
   if(online&&!gameOver){
@@ -926,13 +933,13 @@ function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElement
 
 // --- MOUSE (desktop only, skip if recent touch) ---
 svg.addEventListener("mousedown",function(e){
-  if(recentTouch()||overBar(e))return;
+  if(lobbyActive||recentTouch()||overBar(e))return;
   cancelCommit();
   dragging=true;dragDist=0;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
   hidePreview();lastPrevKey=null;
 });
 window.addEventListener("mousemove",function(e){
-  if(recentTouch())return;
+  if(lobbyActive||recentTouch())return;
   if(dragging){
     var dx=e.clientX-startX,dy=e.clientY-startY;
     panX=startPanX-dx;panY=startPanY-dy;
@@ -955,7 +962,7 @@ window.addEventListener("mouseup",function(){
   dragging=false;deferCommit();
 });
 svg.addEventListener("click",function(e){
-  if(recentTouch()||dragDist>5||gameOver||isAITurn())return;
+  if(lobbyActive||recentTouch()||dragDist>5||gameOver||isAITurn())return;
   if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
@@ -973,7 +980,7 @@ svg.addEventListener("click",function(e){
 
 // --- TOUCH (mobile/tablet only) ---
 svg.addEventListener("touchstart",function(e){
-  if(e.touches.length!==1)return;
+  if(lobbyActive||e.touches.length!==1)return;
   var ty=e.touches[0].clientY;
   var sbH=document.getElementById("sb").offsetHeight;
   var bbH=document.getElementById("bb").offsetHeight;
@@ -997,6 +1004,7 @@ window.addEventListener("touchmove",function(e){
 window.addEventListener("touchend",function(e){
   lastTouchTime=Date.now();
   dragging=false;
+  if(lobbyActive)return;
   if(dragDist>10){
     deferCommit();
     pendingKey=null;hidePreview();return;
@@ -1254,7 +1262,7 @@ function updateRoomUI(){
   var pl=document.getElementById("roomPlayers");
   var url=location.origin+location.pathname+"?room="+roomCode;
   if(isHost){
-    info.innerHTML="<p style='margin:8px 0;font-size:14px;color:#666'>你現在是房主了，請把房間網址傳給別人：</p>"
+    info.innerHTML="<p style='margin:8px 0;font-size:14px;color:#666'>你是房主，請把房間網址傳給別人。</p>"
       +"<div style='margin:12px 0;text-align:center'><button class='mbtn' style='background:#4CAF50;padding:10px 24px;font-size:14px;color:#fff;border:none;border-radius:8px;cursor:pointer' id='cpUrl'>複製房間網址</button></div>";
     document.getElementById("cpUrl").onclick=function(){navigator.clipboard.writeText(url);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製房間網址";},1500);};
   }else{
@@ -1301,7 +1309,7 @@ function createRoom(){
     var el=document.getElementById("createSpin");if(el)el.remove();
     updateRoomUI();lockOnlineUI();
     resetGame();
-    showLobbyOverlay("等每個人都進房間後，請按「重新開始」。");
+    showLobbyOverlay("等每個人都加入房間後，請按「開始遊戲」。",true);
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
   peer.on("error",function(e){
@@ -1632,25 +1640,23 @@ function handleNetData(d){
     if(myIdx>=0){
       var cname=FNAMES[myIdx];
       var cdiv=document.createElement("div");
-      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
+      cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
       var box=document.createElement("div");
-      box.style.cssText="background:#fff;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
+      box.style.cssText="background:#fff;border-radius:14px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
+      var title=document.createElement("div");
+      title.style.cssText="font-size:16px;font-weight:bold;color:#333;margin-bottom:12px";
+      title.textContent="加入成功";
+      box.appendChild(title);
       var dot=document.createElement("div");
-      dot.style.cssText="width:50px;height:50px;border-radius:50%;margin:0 auto 16px;border:3px solid #333;background:"+FCOLORS[myIdx];
+      dot.style.cssText="width:40px;height:40px;border-radius:50%;margin:0 auto 8px;border:2px solid #333;background:"+FCOLORS[myIdx];
       box.appendChild(dot);
       var txt=document.createElement("div");
-      txt.style.cssText="font-size:22px;font-weight:bold;margin-bottom:8px";
+      txt.style.cssText="font-size:13px;color:#666;margin-bottom:14px";
       txt.textContent="你是"+cname+"色";
       box.appendChild(txt);
-      if(spectator){
-        var sp=document.createElement("div");
-        sp.style.cssText="font-size:14px;color:#888;margin-bottom:16px";
-        sp.textContent="旁觀中，正在等待下一局。";
-        box.appendChild(sp);
-      }
       var btn=document.createElement("button");
-      btn.style.cssText="padding:10px 30px;font-size:16px;border:none;border-radius:10px;background:#4CAF50;color:#fff;cursor:pointer";
-      btn.textContent="我知道了";
+      btn.style.cssText="padding:7px 24px;font-size:14px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer";
+      btn.textContent="好";
       btn.onclick=function(){cdiv.remove();};
       box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
     }else{
