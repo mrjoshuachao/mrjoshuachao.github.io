@@ -1970,7 +1970,29 @@ renderer.domElement.addEventListener('pointerleave',e=>{
   if(activePointers.size===0){dragging=false;document.body.classList.remove('dragging');}
 });
 
-renderer.domElement.addEventListener('wheel',e=>{camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+e.deltaY*0.008));},{passive:true});
+// Wheel zoom: regular scroll AND trackpad pinch (ctrlKey) both zoom camera, never browser
+renderer.domElement.addEventListener('wheel',e=>{
+  e.preventDefault();
+  // Trackpad pinch sends ctrlKey+wheel; regular scroll sends plain wheel
+  const delta=e.ctrlKey?e.deltaY*0.02:e.deltaY*0.008;
+  camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+delta));
+},{passive:false});
+// Prevent browser zoom on the whole page (Ctrl+scroll, Ctrl++/-)
+document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive:false});
+// Safari/macOS trackpad rotation gesture → spin globe like a wheel
+// Only applies when no touch pointers active (trackpad only, not touchscreen)
+let _prevGestureRot=0;
+document.addEventListener('gesturestart',e=>{e.preventDefault();_prevGestureRot=e.rotation||0;},{passive:false});
+document.addEventListener('gesturechange',e=>{
+  e.preventDefault();
+  if(activePointers.size>=2)return; // touchscreen uses pointer-based rotation instead
+  const rot=e.rotation||0;
+  const da=(rot-_prevGestureRot)*Math.PI/180;
+  _prevGestureRot=rot;
+  const qRoll=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-da);
+  globe.quaternion.premultiply(qRoll);
+},{passive:false});
+document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
 window.addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;
   camera.updateProjectionMatrix();
