@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.0.8</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.1.0</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -949,16 +949,25 @@ function showBlockReason(edge){
 }
 function recentTouch(){ return Date.now()-lastTouchTime<800; }
 function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElementById("bb");var y=e.clientY;return y<sb.offsetHeight||y>window.innerHeight-bb.offsetHeight; }
+function hasOverlay(){
+  if(lobbyActive)return true;
+  var m=document.getElementById("modal");if(m&&m.style.display==="flex")return true;
+  var c=document.getElementById("confirm");if(c&&c.style.display==="flex")return true;
+  if(document.getElementById("createSpin")||document.getElementById("waitApproval")||document.getElementById("joinSpin"))return true;
+  var q=document.body.children;
+  for(var i=0;i<q.length;i++){ var z=parseInt(q[i].style.zIndex||0);if(q[i].tagName==="DIV"&&z>199&&q[i].style.display!=="none")return true; }
+  return false;
+}
 
 // --- MOUSE (desktop only, skip if recent touch) ---
 svg.addEventListener("mousedown",function(e){
-  if(lobbyActive||recentTouch()||overBar(e))return;
+  if(hasOverlay()||recentTouch()||overBar(e))return;
   cancelCommit();
   dragging=true;dragDist=0;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
   hidePreview();lastPrevKey=null;
 });
 window.addEventListener("mousemove",function(e){
-  if(lobbyActive||recentTouch())return;
+  if(hasOverlay()||recentTouch())return;
   if(dragging){
     var dx=e.clientX-startX,dy=e.clientY-startY;
     panX=startPanX-dx;panY=startPanY-dy;
@@ -981,7 +990,7 @@ window.addEventListener("mouseup",function(){
   dragging=false;deferCommit();
 });
 svg.addEventListener("click",function(e){
-  if(lobbyActive||recentTouch()||dragDist>5||gameOver||isAITurn())return;
+  if(hasOverlay()||recentTouch()||dragDist>5||gameOver||isAITurn())return;
   if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
   var edge=findEdge(panX+e.clientX,panY+e.clientY);
   if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
@@ -999,7 +1008,7 @@ svg.addEventListener("click",function(e){
 
 // --- TOUCH (mobile/tablet only) ---
 svg.addEventListener("touchstart",function(e){
-  if(lobbyActive||e.touches.length!==1)return;
+  if(hasOverlay()||e.touches.length!==1)return;
   var ty=e.touches[0].clientY;
   var sbH=document.getElementById("sb").offsetHeight;
   var bbH=document.getElementById("bb").offsetHeight;
@@ -1023,7 +1032,7 @@ window.addEventListener("touchmove",function(e){
 window.addEventListener("touchend",function(e){
   lastTouchTime=Date.now();
   dragging=false;
-  if(lobbyActive)return;
+  if(hasOverlay())return;
   if(dragDist>10){
     deferCommit();
     pendingKey=null;hidePreview();return;
@@ -1326,9 +1335,32 @@ function createRoom(){
   peer=new Peer("baa-"+roomCode,peerOpts);
   peer.on("open",function(){
     var el=document.getElementById("createSpin");if(el)el.remove();
-    updateRoomUI();lockOnlineUI();
+    lockOnlineUI();
     resetGame();
-    showLobbyOverlay("等每個人都加入房間後，請按「開始遊戲」。",true);
+    // Show combined lobby overlay for host
+    lobbyActive=true;
+    var old=document.getElementById("lobbyOverlay");if(old)old.remove();
+    var d=document.createElement("div");d.id="lobbyOverlay";
+    d.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
+    var box=document.createElement("div");
+    box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:280px";
+    var title=document.createElement("div");title.style.cssText="font-size:17px;font-weight:bold;color:#333;margin-bottom:8px";
+    title.textContent="房間已創建";box.appendChild(title);
+    var desc=document.createElement("div");desc.style.cssText="font-size:13px;color:#666;margin-bottom:14px";
+    desc.textContent="你是房主，請把房間網址傳給別人。";box.appendChild(desc);
+    var url=location.origin+location.pathname+"?room="+roomCode;
+    var cpBtn=document.createElement("button");cpBtn.textContent="複製房間網址";
+    cpBtn.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
+    cpBtn.onclick=function(){navigator.clipboard.writeText(url);cpBtn.textContent="已複製";setTimeout(function(){cpBtn.textContent="複製房間網址";},1500);};
+    box.appendChild(cpBtn);
+    var sep=document.createElement("div");sep.style.cssText="border-top:1px solid #eee;margin-bottom:14px";box.appendChild(sep);
+    var msg=document.createElement("div");msg.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
+    msg.textContent="等每個人都加入房間後，請按「開始遊戲」。";box.appendChild(msg);
+    var startBtn=document.createElement("button");startBtn.textContent="開始遊戲";
+    startBtn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
+    startBtn.onclick=function(){ hideLobbyOverlay();resetGame(); };
+    box.appendChild(startBtn);
+    d.appendChild(box);document.body.appendChild(d);
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
   peer.on("error",function(e){
