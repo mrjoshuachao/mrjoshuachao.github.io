@@ -47,6 +47,15 @@
     font-weight:400; font-style:italic; letter-spacing:normal; color:#fff; opacity:0.85;
     pointer-events:none; z-index:100; white-space:nowrap;
   }
+  /* ── See original (bottom center) ── */
+  #seeOrigBtn {
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
+    opacity:0.5; transition:opacity .2s; text-decoration:none;
+    pointer-events:auto; z-index:100; white-space:nowrap;
+  }
+  #seeOrigBtn:hover { opacity:1; }
   /* ── AI toggle (top left) ── */
   #aiWrap {
     position:fixed; top:28px; left:28px;
@@ -167,7 +176,10 @@
 </style>
 </head>
 <body>
+<div id="introFade" style="position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;transition:opacity 2s ease-out;"></div>
 <div id="turn">White to move</div>
+<a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
+<button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
@@ -228,6 +240,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ─── Renderer ─────────────────────────────────────────────────────────────────
+let _pieceLettersVisible=true; // must be before placePiece calls
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 renderer.setSize(innerWidth, innerHeight);
@@ -296,6 +309,7 @@ const NUM_LAT=8, NUM_LON=8;
 const CAP_THETA=Math.PI/18;
 const BAND_THETA=(Math.PI-2*CAP_THETA)/NUM_LAT;
 const globe=new THREE.Group(); scene.add(globe);
+globe.scale.set(0.3,0.3,0.3); // start small for intro animation
 
 // Polar caps
 const capN=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,0,CAP_THETA),matG); globe.add(capN);
@@ -507,6 +521,8 @@ function placePiece(type,isBlack,lat,lon){
   orientPiece(blob,pos);
   globe.add(blob);
   board[lat][lon]={type,color:isBlack?'black':'white',sprite:group,blob,hasMoved:false};
+  if(!_pieceLettersVisible)
+    group.traverse(c=>{if(c.isSprite)c.visible=false;});
 }
 
 // ─── Initial Placement ────────────────────────────────────────────────────────
@@ -748,7 +764,7 @@ function showCheckRing(lat,lon){
     const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts,true,'centripetal'),N,0.007,8,true);
     geo.computeBoundingSphere();
     const mat=new THREE.MeshBasicMaterial({color:0xcc0000,depthTest:true,depthWrite:false,
-      polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8,transparent:true,opacity:0.85-ring*0.3});
+      polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
     const mesh=new THREE.Mesh(geo,mat); mesh.renderOrder=5; mesh.frustumCulled=false;
     globe.add(mesh); checkRingObjs.push(mesh);
   }
@@ -1010,6 +1026,18 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     const cum=[0];
     for(let i=1;i<surfPts.length;i++) cum.push(cum[i-1]+surfPts[i].distanceTo(surfPts[i-1]));
     const total=cum[cum.length-1];
+    // Find arc-length where path exits the origin ring
+    let startOffset=0;
+    for(let i=0;i<surfPts.length;i++){
+      if(surfPts[i].distanceTo(fromCenter)>=ringR){
+        if(i>0){
+          const d0=surfPts[i-1].distanceTo(fromCenter), d1=surfPts[i].distanceTo(fromCenter);
+          const t=(d1-d0)>0.0001?(ringR-d0)/(d1-d0):0;
+          startOffset=cum[i-1]+(cum[i]-cum[i-1])*t;
+        }
+        break;
+      }
+    }
     function ptAt(s){
       s=Math.max(0,Math.min(s,total));
       for(let i=1;i<cum.length;i++){
@@ -1021,7 +1049,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       return surfPts[surfPts.length-1].clone();
     }
     const dashLen=0.035, gapLen=0.04;
-    let d=0;
+    let d=startOffset;
     while(d<total){
       const dEnd=Math.min(d+dashLen,total);
       const n=Math.max(2,Math.round((dEnd-d)/0.01));
@@ -1210,6 +1238,8 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       const isStraightCapture=!!(board[farthest.lat]?.[farthest.lon]&&board[farthest.lat][farthest.lon].color!==board[lat][lon]?.color);
       addTube(pts,isStraightCapture,cellPos(farthest.lat,farthest.lon,R*1.006));
     }
+    // Track cell coords so fallback doesn't draw a duplicate geodesic
+    tubeDests.add(`${farthest.lat},${farthest.lon}`);
   });
 
   // Knight L-shape dashed paths
@@ -1236,6 +1266,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       seg2=geodesicPts(cellPos(elbowLat,elbowLon,r),cellPos(tl,tn,r),12);
     }
     addDash([...seg1,...seg2.slice(1)]);
+    tubeDests.add(`${tl},${tn}`);
   });
 
   // Pawn / King / fallback — also catches failed diagonal/straight tubes during auto-battle
@@ -1613,10 +1644,9 @@ function execMove(fromLat,fromLon,toLat,toLon){
   piece.sprite.userData.lon=toLon;
   // Stop bounce BEFORE capturing fromPos so animation starts from cell center,
   // not from a mid-bounce lifted position.
-  if(autoBattleActive) stopBounce();
+  stopBounce(); // stop bounce but keep path lines visible until animation completes
   const fromPos=piece.sprite.position.clone();
   const animPts=computeAnimPath(move,fromLat,fromLon,toLat,toLon,fromPos);
-  if(!autoBattleActive) clearVis(); // In auto-battle keep path visible while piece moves
   // En passant: remove the captured pawn from board & scene immediately
   let epCaptured=null;
   if(move?.isEnPassant){
@@ -1646,6 +1676,8 @@ function execMove(fromLat,fromLon,toLat,toLon){
     turnEl.textContent=_mover+': '+_preNote;
   }
   startMoveAnim(piece.sprite,piece.blob,animPts,()=>{
+    // Clear path visualization after animation completes
+    clearVis();
     const finalPos=cellPos(toLat,toLon,R);
     piece.sprite.position.copy(finalPos);
     orientPiece(piece.sprite,finalPos);
@@ -1663,6 +1695,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
         orientPiece(newGrp,finalPos);
         newGrp.userData={isPiece:true,lat:toLat,lon:toLon};
         globe.add(newGrp); allSprites.push(newGrp);
+        if(!_pieceLettersVisible) newGrp.traverse(c=>{if(c.isSprite)c.visible=false;});
         piece.sprite=newGrp; board[toLat][toLon]=piece;
       }
     }
@@ -1760,21 +1793,23 @@ function hitTest(cx,cy){
     if(d<bestDotD){bestDotD=d;bestDot=o;}
   }
   if(bestDot)return{kind:'dot',...bestDot.userData};
-  const PIECE_PX=40;
+  // Raycast against all piece meshes (entire body, not just base point)
+  raycaster.setFromCamera({x:(cx/innerWidth)*2-1,y:-(cy/innerHeight)*2+1},camera);
   let bestPiece=null, bestPieceDist=Infinity;
   for(const grp of allSprites){
-    if(!grp.visible)continue; // skip hidden pieces (test mode)
+    if(!grp.visible)continue;
+    // Quick front-hemisphere check using base position
     grp.getWorldPosition(_hWP);
-    if(_hWP.dot(camera.position)<=0)continue; // back hemisphere
-    const{sx,sy}=screenXY(_hWP.clone());
-    const screenDist=Math.hypot(cx-sx,cy-sy);
-    if(screenDist>PIECE_PX)continue; // outside touch radius
-    // Among pieces within touch radius, pick the one closest to camera (frontmost)
-    const camDist=_hWP.distanceTo(camera.position);
-    if(camDist<bestPieceDist){bestPieceDist=camDist;bestPiece=grp;}
+    if(_hWP.dot(camera.position)<=0)continue;
+    // Raycast against all meshes in this piece group
+    const hits=raycaster.intersectObject(grp,true);
+    for(const hit of hits){
+      if(hit.distance<bestPieceDist){
+        bestPieceDist=hit.distance;bestPiece=grp;
+      }
+    }
   }
   if(bestPiece)return{kind:'piece',...bestPiece.userData};
-  raycaster.setFromCamera({x:(cx/innerWidth)*2-1,y:-(cy/innerHeight)*2+1},camera);
   const ch=raycaster.intersectObjects(cellMeshes);
   if(ch.length)return{kind:'cell',...ch[0].object.userData};
   return null;
@@ -1825,7 +1860,7 @@ let prevMidX=0,prevMidY=0,prevPinchDist=0,prevFingerAngle=null;
 
 renderer.domElement.addEventListener('pointerdown',e=>{
   e.preventDefault();
-  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);}
+  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);const _fd=document.getElementById('introFade');if(_fd)_fd.remove();}
   renderer.domElement.setPointerCapture(e.pointerId);
   activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   autoRotate=false; vel={x:0,y:0}; dragging=true;
@@ -2287,6 +2322,16 @@ function exitTestMode(){
 
 function updateDeleteBtn(){}
 
+// ─── Piece Letter Toggle ─────────────────────────────────────────────────────
+function togglePieceLetters(){
+  _pieceLettersVisible=!_pieceLettersVisible;
+  document.getElementById('pieceLetterBtn').textContent=_pieceLettersVisible?'Piece letter on':'Piece letter off';
+  // Toggle letter sprites on all live pieces
+  allSprites.forEach(grp=>{
+    grp.traverse(c=>{if(c.isSprite)c.visible=_pieceLettersVisible;});
+  });
+}
+
 // ─── Animate ──────────────────────────────────────────────────────────────────
 function animate(){
   requestAnimationFrame(animate);
@@ -2297,7 +2342,18 @@ function animate(){
     const te=1-Math.pow(1-introAnim.t,5);
     _introQspin.setFromAxisAngle(introSpinAxis,te*3.0*Math.PI);
     globe.quaternion.multiplyQuaternions(_introQspin,introR0);
-    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);autoRotate=false;}
+    // Scale: start small (0.3), grow to full size (1.0)
+    const sc=0.3+0.7*te;
+    globe.scale.set(sc,sc,sc);
+    // Trigger black fade-out on first frame
+    if(!introAnim._fadeStarted){
+      introAnim._fadeStarted=true;
+      requestAnimationFrame(()=>{
+        const fd=document.getElementById('introFade');
+        if(fd){fd.style.opacity='0';setTimeout(()=>fd.remove(),2100);}
+      });
+    }
+    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);autoRotate=false;}
     renderer.render(scene,camera);
     return;
   }
@@ -2825,16 +2881,14 @@ function doAutoMove(){
   }
 
   // Show thinking status
-  const moveNum=log.moves.length+1;
   const cLabel=turnColor==='white'?'White':'Black';
-  turnEl.textContent=`Auto ${moveNum} — ${cLabel}: thinking…`;
+  turnEl.textContent=cLabel+' thinking…';
 
   // Async AI search — aggressive + spectacular play
   const t0=Date.now();
   _findBestMove(turnColor,_AUTO_THINK_MS,
     (depth,elapsed)=>{
-      const txt=`Auto ${moveNum} — ${cLabel}: depth ${depth} (${(elapsed/1000).toFixed(1)}s)`;
-      turnEl.textContent=txt;
+      turnEl.textContent=cLabel+' thinking…';
     },
     (m,fd)=>{
       if(!autoBattleActive)return;
@@ -2863,9 +2917,9 @@ function doAutoMove(){
       log.moves.push(entry);
       if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
       log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
-      // Status bar
-      const statusText=`Auto ${entry.n} — ${color==='white'?'White':'Black'}: ${piece.type} ${entry.from}→${entry.to}${cap?' x'+cap.type:''}${m.isCastle?' 0-0':''}  (d${fd} ${(thinkMs/1000).toFixed(1)}s)`;
-      turnEl.textContent=statusText;
+      // Chess notation status
+      const _an=_moveNotation(piece,m.fLat,m.fLon,m.tLat,m.tLon,!!cap||!!m.isEnPassant,m,false,false);
+      turnEl.textContent=(color==='white'?'White':'Black')+': '+_an;
       // Rotate globe to face the piece, show move dots briefly, execute
       const localDir=cellPos(m.fLat,m.fLon,R).normalize();
       rotateGlobeToFace(localDir,460,()=>{
