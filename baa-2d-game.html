@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.2</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.3</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -338,7 +338,7 @@ function checkAloneInRoom(){
     var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
     unlockOnlineUI();
     numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
-    showDissolveDialog("大家都離開這個房間了，即將回到單機模式。");
+    showDissolveDialog("大家都離開了，即將回到單機模式。");
   }
 }
 
@@ -383,12 +383,12 @@ function updateSB(){
     }
     var isAI=i>=(numP-numAI);
     var label=isAI?"電":"";
-    if(online&&isMyCircle(i))label="我";
+    if(online&&isMyCircle(i))label="你";
     var isCur=(i===curP());
     var h="";
     if(label)h+="<span style='font-size:7px;opacity:0.7;position:absolute;top:-5px;left:50%;transform:translateX(-50%);white-space:nowrap'>"+label+"</span>";
     h+=scores[i];
-    if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%)'>▲</span>";
+    if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%)'>●</span>";
     s.innerHTML=h;
     if(online&&isHost&&!isMyCircle(i)&&i<(numP-numAI)){
       s.style.cursor="pointer";
@@ -1455,7 +1455,7 @@ function hostHandleConn(c){
       return;
     }
     var cname=FNAMES[currentPlayers]||"新";
-    showHostApproval2(cname+"色玩家想要加入",function(){
+    showHostApproval2(cname+"色想要加入",function(){
       conns.push(c);connHumans.push(1);
       var startIdx=localHumans;
       for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
