@@ -5,7 +5,7 @@
 <style>
 *{margin:0;padding:0}
 html,body{overflow:hidden;background:#a3d65c;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
-svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:visible}
+svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:visible;will-change:transform;user-select:none;-webkit-user-select:none;touch-action:none}
 .hex{cursor:pointer}
 @keyframes fgfade{0%,10%{opacity:0.9;}100%{opacity:0;}}
 .fg{animation:fgfade 1.2s ease-out forwards}
@@ -79,7 +79,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.3.2</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.3.4</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -473,7 +473,6 @@ function hideTurnBubble(){
 }
 window.addEventListener("touchstart",function(){hideTurnBubble();},true);
 window.addEventListener("mousedown",function(){hideTurnBubble();},true);
-window.addEventListener("mousemove",function(){hideTurnBubble();},true);
 
 function checkWin(){
   if(fci%numP!==0)return;
@@ -579,7 +578,7 @@ function cancelCommit(){
   if(commitTimer){ clearTimeout(commitTimer);commitTimer=0; }
 }
 function applyPan(){
-  svg.style.transform="translate("+( -(panX-commitX))+"px,"+(-(panY-commitY))+"px)";
+  svg.style.transform="translate3d("+( -(panX-commitX))+"px,"+(-(panY-commitY))+"px,0)";
 }
 function updateView(){
   commitView();
@@ -991,29 +990,34 @@ function screenToWorld(sx,sy){
 function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElementById("bb");var y=e.clientY;return y<sb.offsetHeight||y>window.innerHeight-bb.offsetHeight; }
 function hasOverlay(){
   if(lobbyActive)return true;
-  var m=document.getElementById("modal");if(m&&m.style.display==="flex")return true;
-  var c=document.getElementById("confirm");if(c&&c.style.display==="flex")return true;
-  if(document.getElementById("createSpin")||document.getElementById("waitApproval")||document.getElementById("joinSpin"))return true;
-  var q=document.body.children;
-  for(var i=0;i<q.length;i++){ var z=parseInt(q[i].style.zIndex||0);if(q[i].tagName==="DIV"&&z>199&&q[i].style.display!=="none")return true; }
+  if(gameOver)return true;
+  var ids=["modal","confirm","createSpin","waitApproval","joinSpin","centerNotice","winOverlay"];
+  for(var i=0;i<ids.length;i++){
+    var el=document.getElementById(ids[i]);
+    if(el&&el.style.display!=="none"&&(ids[i]!=="modal"||el.style.display==="flex")&&(ids[i]!=="confirm"||el.style.display==="flex"))return true;
+  }
   return false;
 }
 
 // --- MOUSE (desktop only, skip if recent touch) ---
 svg.addEventListener("mousedown",function(e){
   if(hasOverlay()||recentTouch()||overBar(e))return;
+  e.preventDefault();
   cancelCommit();
   dragging=true;dragDist=0;startX=e.clientX;startY=e.clientY;startPanX=panX;startPanY=panY;
   hidePreview();lastPrevKey=null;
 });
+svg.addEventListener("dragstart",function(e){e.preventDefault();});
 window.addEventListener("mousemove",function(e){
-  if(hasOverlay()||recentTouch())return;
+  if(recentTouch())return;
   if(dragging){
+    e.preventDefault();
     var dx=e.clientX-startX,dy=e.clientY-startY;
     panX=startPanX-dx;panY=startPanY-dy;
     dragDist=Math.abs(dx)+Math.abs(dy);
     applyPan();return;
   }
+  if(hasOverlay())return;
   if(gameOver||overBar(e)){ hidePreview();lastPrevKey=null;return; }
   if(online&&(spectator||!isMyTurn())){ hidePreview();lastPrevKey=null;return; }
   if(pendingKey)return;
