@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.1.3</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.0</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -304,6 +304,17 @@ function showCenterNotice(msg){
   d.appendChild(box);document.body.appendChild(d);
   setTimeout(function(){var el=document.getElementById("centerNotice");if(el)el.remove();},4000);
 }
+function showCenterFade(msg,dur){
+  var old=document.getElementById("centerNotice");if(old)old.remove();
+  var d=document.createElement("div");d.id="centerNotice";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif;transition:opacity 1s ease";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
+  var txt=document.createElement("p");txt.style.cssText="font-size:15px;color:#333;line-height:1.6;margin:0";
+  txt.textContent=msg;box.appendChild(txt);
+  d.appendChild(box);document.body.appendChild(d);
+  setTimeout(function(){d.style.opacity="0";setTimeout(function(){d.remove();},1000);},dur||1000);
+}
 
 function showDissolveDialog(msg){
   var d=document.createElement("div");
@@ -365,7 +376,7 @@ function updateSB(){
     var s=document.createElement("span");s.className="ps";s.id="pd"+i;
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
-    if(FCOLORS[i]==="#ffffff"){
+    if(FCOLORS[i]==="#ffffff"||FCOLORS[i]==="#f1c40f"){
       s.style.textShadow="0 0 1px #999,0 0 2px #aaa";
     }else{
       s.style.textShadow="none";
@@ -408,13 +419,13 @@ function updateSB(){
     tb.style.cssText="position:fixed;z-index:15;background:#fff;color:#333;font-size:14px;font-weight:bold;padding:4px 10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);pointer-events:none;white-space:nowrap;display:none;font-family:'Segoe UI',sans-serif";
     document.body.appendChild(tb);
   }
-  if(online&&!gameOver){
+  if(online&&!gameOver&&!lobbyActive){
     var cp=curP();
     var el=document.getElementById("pd"+cp);
     if(el){
-      tb.textContent=isMyTurn()?"現在輪到我":"現在輪到"+FNAMES[cp]+"色玩家";
+      tb.textContent=isMyTurn()?"現在輪到你":"現在輪到"+FNAMES[cp]+"色玩家";
       tb.dataset.cp=cp;
-      // Position but keep hidden; timer will show it
+      tb.dataset.mine=isMyTurn()?"1":"0";
       tb.style.display="none";
       scheduleTurnBubble();
     }
@@ -429,12 +440,15 @@ function scheduleTurnBubble(){
   var tb=document.getElementById("turnBubble");
   if(tb)tb.style.display="none";
   turnBubbleTimer=setTimeout(function(){
-    if(!online||gameOver)return;
+    if(!online||gameOver||lobbyActive)return;
     var tb=document.getElementById("turnBubble");
     if(!tb)return;
     var cp=parseInt(tb.dataset.cp);
     var el=document.getElementById("pd"+cp);
     if(el){
+      var isMine=tb.dataset.mine==="1";
+      if(isMine){tb.style.fontSize="18px";tb.style.padding="8px 16px";}
+      else{tb.style.fontSize="14px";tb.style.padding="4px 10px";}
       tb.style.display="block";
       var r=el.getBoundingClientRect();
       var bw=tb.offsetWidth;
@@ -459,7 +473,6 @@ window.addEventListener("mousedown",function(){hideTurnBubble();},true);
 window.addEventListener("mousemove",function(){hideTurnBubble();},true);
 
 function checkWin(){
-  // Only check at end of a complete round
   if(fci%numP!==0)return;
   var winners=[];
   for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) winners.push(i);
@@ -469,26 +482,19 @@ function checkWin(){
     var isAI=w>=(numP-numAI);
     return FNAMES[w]+(isAI?"(電腦)":"");
   });
-  if(winners.length===1){
-    document.getElementById("winTitle").textContent=names[0]+"玩家獲勝";
-    document.getElementById("winDetail").textContent="";
-  }else{
-    document.getElementById("winTitle").textContent=names.join("、")+"玩家共同獲勝";
-    var details=winners.map(function(w){ return FNAMES[w]+":"+scores[w]+"分"; }).join(" ");
-    document.getElementById("winDetail").textContent="";
-  }
-  var winEl=document.getElementById("win");
-  winEl.style.display="block";
-  var dot=document.getElementById("pd"+winners[0]);
-  if(dot){
-    var r=dot.getBoundingClientRect();
-    var cx=r.left+r.width/2;
-    var top2=r.bottom+12;
-    winEl.style.left=Math.max(10,Math.min(window.innerWidth-200,cx-100))+"px";
-    winEl.style.top=top2+"px";
-    var arrow=winEl.querySelector("div");
-    if(arrow){ var arrowLeft=cx-parseFloat(winEl.style.left); arrow.style.setProperty("--al",arrowLeft+"px"); }
-  }
+  var winText=winners.length===1?names[0]+"玩家獲勝":names.join("、")+"玩家共同獲勝";
+  var d=document.createElement("div");d.id="winOverlay";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:300px";
+  var h=document.createElement("h2");h.style.cssText="font-size:20px;color:#333;margin:0 0 12px 0";
+  h.textContent=winText;box.appendChild(h);
+  var sub=document.createElement("p");sub.style.cssText="font-size:11px;color:#888;margin:0 0 12px 0";
+  sub.textContent="關閉後可截圖保存紀錄";box.appendChild(sub);
+  var btn=document.createElement("button");btn.textContent="關閉";
+  btn.style.cssText="padding:6px 20px;font-size:13px;border:none;border-radius:6px;background:#888;color:#fff;cursor:pointer";
+  btn.onclick=function(){d.remove();};
+  box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
 }
 
 // === HEX GRID ===
@@ -806,7 +812,18 @@ function aiEval(e,aiIdx){
   var key=e.key;
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var pair=findTriPair(key);
-  if(!pair)return Math.random()*0.1;
+  if(!pair)return -999;
+  
+  // DISTANCE PENALTY: never place far from existing fences
+  var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
+  for(var k in fences){
+    var f=fences[k];
+    var fx=(f.x1+f.x2)/2,fy=(f.y1+f.y2)/2;
+    var dd=Math.abs(mx-fx)+Math.abs(my-fy);
+    if(dd<minDist)minDist=dd;
+  }
+  if(Object.keys(fences).length>0&&minDist>R*6)return -999;
+  
   var sc=0,completesAny=false;
   // Check if completes enclosure
   for(var i=0;i<2;i++){
@@ -816,26 +833,24 @@ function aiEval(e,aiIdx){
       if(a.sheep>0&&a.house>0){
         completesAny=true;
         var cc=a.colors.slice();cc[aiIdx]++;
-        var mx=0;for(var j=0;j<numP;j++)if(cc[j]>mx)mx=cc[j];
-        var aiWins=(cc[aiIdx]===mx);
+        var mx2=0;for(var j=0;j<numP;j++)if(cc[j]>mx2)mx2=cc[j];
+        var aiWins=(cc[aiIdx]===mx2);
         var othersWin=false;
-        for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===mx)othersWin=true;
+        for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===mx2)othersWin=true;
         if(aiWins&&!othersWin) sc+=500+a.pts*20;
-        else if(aiWins&&othersWin) sc+=100+a.pts*5;
-        else sc-=300-a.pts*15;
+        else if(aiWins&&othersWin) sc+=150+a.pts*8;
+        else sc-=200;
       }
     }
   }
   if(completesAny)return sc;
 
-  // === DEFENSIVE: detect and cut opponent's big enclosures ===
+  // SABOTAGE: detect and cut opponent near-complete enclosures
   var cutBonus=0;
   var curFk={};for(var k in fences)curFk[k]=1;
   for(var i=0;i<2;i++){
-    // Check region WITHOUT this edge (current state) to see what opponent is building
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,curFk);
     if(!reg||reg.length<3)continue;
-    // Count fences on boundary by color and count open edges
     var regSet={};for(var j=0;j<reg.length;j++)regSet[reg[j].c+","+reg[j].r+","+reg[j].t]=1;
     var oppFence=0,aiFence=0,openEdges=0,totalPts=0;
     for(var j=0;j<reg.length;j++){
@@ -853,14 +868,14 @@ function aiEval(e,aiIdx){
         }else openEdges++;
       }
     }
-    // Opponent building big enclosure: many opp fences, few open edges, high value
-    if(oppFence>=3&&openEdges<=oppFence*2&&totalPts>=2){
-      var urgency=oppFence/(openEdges+1);
-      cutBonus+=urgency*totalPts*8;
+    // Strong sabotage: opponent almost done, high value target
+    if(oppFence>=2&&openEdges<=3&&totalPts>=2){
+      var urgency=(oppFence*2)/(openEdges+1);
+      cutBonus+=urgency*totalPts*15;
     }
   }
 
-  // Heuristic: build near OPPONENT fences to leverage them
+  // COOPERATION: build near any fences to help complete shared enclosures
   var nearOwn=0,nearOpp=0,nearVal=0;
   for(var i=0;i<2;i++){
     var tile=getTile(pair[i].c,pair[i].r,pair[i].t);
@@ -873,12 +888,14 @@ function aiEval(e,aiIdx){
       var f=fences[te[j].key];
       if(f){
         var ci=FCOLORS.indexOf(f.color);
-        if(ci===aiIdx)nearOwn+=1;
-        else nearOpp+=5;
+        if(ci===aiIdx)nearOwn+=2;
+        else nearOpp+=4;
       }
     }
   }
-  return nearVal+nearOpp+nearOwn*0.5+cutBonus+Math.random()*0.5;
+  // Distance bonus: prefer closer to cluster center
+  var distBonus=Math.max(0,5-minDist/(R*2));
+  return nearVal+nearOpp+nearOwn+cutBonus+distBonus+Math.random()*1.5;
 }
 
 // === TRIANGLE GLOW ===
@@ -1125,7 +1142,7 @@ document.getElementById("winsel").addEventListener("change",function(){
 document.getElementById("btnRestart").addEventListener("click",function(){
   if(online&&!isHost){
     broadcast({t:"req_restart",name:FNAMES[myIdx]});
-    showPersistMsg("你想要重新開始，正在等待房主同意");
+    showCenterNotice("你申請了重新開始，正在等待房主同意。");
     return;
   }
   var d=document.createElement("div");
@@ -1214,6 +1231,7 @@ window.resetGame=function(){
   for(var k in fences){ fences[k].el.remove(); } fences={};
   for(var k in generated){ generated[k].remove(); } generated={};
   document.getElementById("win").style.display="none";
+  var wo=document.getElementById("winOverlay");if(wo)wo.remove();
   hideLobbyOverlay();
   var cn=document.getElementById("centerNotice");if(cn)cn.remove();
   commitView();fillView();updateSB();scheduleAI();
@@ -1300,18 +1318,7 @@ function showModal(createMode){
 var hostModalShown=false;
 var lobbyActive=false;
 function updateRoomUI(){
-  var info=document.getElementById("roomInfo");
-  var pl=document.getElementById("roomPlayers");
-  var url=location.origin+location.pathname+"?room="+roomCode;
-  if(isHost){
-    info.innerHTML="<p style='margin:8px 0;font-size:14px;color:#666'>你是房主，請把房間網址傳給別人。</p>"
-      +"<div style='margin:12px 0;text-align:center'><button class='mbtn' style='background:#4CAF50;padding:10px 24px;font-size:14px;color:#fff;border:none;border-radius:8px;cursor:pointer' id='cpUrl'>複製房間網址</button></div>";
-    document.getElementById("cpUrl").onclick=function(){navigator.clipboard.writeText(url);this.textContent="已複製";var b=this;setTimeout(function(){b.textContent="複製房間網址";},1500);};
-  }else{
-    info.innerHTML="";
-  }
-  pl.textContent="";
-  if(isHost&&!hostModalShown){ document.getElementById("modal").style.display="flex";hostModalShown=true; }
+  // No longer shows modal - lobby overlay handles everything
 }
 
 var turnServers=[
@@ -1360,7 +1367,7 @@ function createRoom(){
     box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:280px";
     var title=document.createElement("div");title.style.cssText="font-size:17px;font-weight:bold;color:#333;margin-bottom:8px";
     title.textContent="房間已創建";box.appendChild(title);
-    var desc=document.createElement("div");desc.style.cssText="font-size:13px;color:#666;margin-bottom:14px";
+    var desc=document.createElement("div");desc.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
     desc.textContent="你是房主，請把房間網址傳給別人。";box.appendChild(desc);
     var url=location.origin+location.pathname+"?room="+roomCode;
     var cpBtn=document.createElement("button");cpBtn.textContent="複製房間網址";
@@ -1503,17 +1510,19 @@ function setupConnHandlers(c){
       });
     }
     if(d.t==="req_restart"){
-      broadcast({t:"waiting",msg:d.name+"色玩家想要重新開始，正在等待房主同意"});
-      showMsg(d.name+"色玩家想要重新開始",30000);
-      showHostApproval(function(){
-        broadcast({t:"approved",msg:"房主同意重新開始"});
-        showMsg("已同意重新開始",2000);
-        broadcast({t:"host_restart"});
-        resetGame();
-      },function(){
-        broadcast({t:"rejected",msg:"房主不同意重新開始，遊戲繼續"});
-        showMsg("已拒絕重新開始",2000);
-      });
+      broadcast({t:"waiting",msg:d.name+"色申請了重新開始，正在等待房主同意。"});
+      // Show centered approval for host
+      var old=document.getElementById("centerNotice");if(old)old.remove();
+      var dd=document.createElement("div");dd.id="centerNotice";
+      dd.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+      var bx=document.createElement("div");
+      bx.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
+      bx.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0'>"+d.name+"色申請了重新開始，你允許嗎？</p>";
+      var yes=document.createElement("button");yes.textContent="允許";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
+      var no=document.createElement("button");no.textContent="拒絕";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
+      yes.onclick=function(){dd.remove();broadcast({t:"approved_restart"});broadcast({t:"host_restart"});resetGame();};
+      no.onclick=function(){dd.remove();broadcast({t:"rejected_restart"});};
+      bx.appendChild(yes);bx.appendChild(no);dd.appendChild(bx);document.body.appendChild(dd);
     }
     if(d.t==="preview"){ showRemotePreview(d.edge,d.pci);for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
     if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
@@ -1761,10 +1770,12 @@ function handleNetData(d){
   if(d.t==="kicked"){ if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB();showMsg(d.name+"色玩家已加入，正在等候下一局。",3000); }
-  if(d.t==="waiting"){ showPersistMsg(d.msg); }
-  if(d.t==="approved"){ hidePersistMsg();showMsg(d.msg,3000); }
-  if(d.t==="rejected"){ hidePersistMsg();showMsg(d.msg,3000); }
-  if(d.t==="host_restart"){ hidePersistMsg();hideLobbyOverlay();showMsg("房主重新開始了遊戲",3000); }
+  if(d.t==="waiting"){ showCenterNotice(d.msg); }
+  if(d.t==="approved"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
+  if(d.t==="rejected"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
+  if(d.t==="approved_restart"){ var cn=document.getElementById("centerNotice");if(cn)cn.remove();showCenterFade("房主允許了，遊戲重新開始。",1000); }
+  if(d.t==="rejected_restart"){ var cn=document.getElementById("centerNotice");if(cn)cn.remove();showCenterFade("房主拒絕了，遊戲繼續。",2000); }
+  if(d.t==="host_restart"){ hidePersistMsg();hideLobbyOverlay();showCenterFade("房主重新開始了遊戲",1000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
