@@ -33,9 +33,9 @@
   /* ── Shared UI button base ── */
   .ui-btn {
     font-family:'Times New Roman',Times,serif; font-size:11px;
-    font-weight:400; letter-spacing:0.18em; color:#000;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
     background:none; border:none; cursor:pointer;
-    padding:0; margin:0; opacity:0.4; transition:opacity .2s;
+    padding:0; margin:0; opacity:0.5; transition:opacity .2s;
     user-select:none; -webkit-user-select:none;
     pointer-events:auto; white-space:nowrap; display:block;
     text-align:left;
@@ -45,7 +45,7 @@
   #turn {
     position:fixed; top:28px; left:50%; transform:translateX(-50%);
     font-family:'Times New Roman',Times,serif; font-size:11px;
-    font-weight:400; letter-spacing:0.18em; color:#000; opacity:0.7;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff; opacity:0.85;
     pointer-events:none; z-index:100; white-space:nowrap;
   }
   /* ── AI toggle (top left) ── */
@@ -53,66 +53,72 @@
     position:fixed; top:28px; left:28px;
     display:flex; align-items:center; gap:9px;
     font-family:'Times New Roman',Times,serif; font-size:11px;
-    font-weight:400; letter-spacing:0.18em; color:#000;
-    opacity:0.4; transition:opacity .2s;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
+    opacity:0.5; transition:opacity .2s;
     user-select:none; -webkit-user-select:none; z-index:100;
   }
   #aiWrap:hover { opacity:1; }
   #aiSwitch { position:relative; width:36px; height:20px; cursor:pointer; flex-shrink:0; }
   #aiSwitch input { display:none; }
-  #aiTrack { position:absolute; inset:0; border-radius:10px; background:#bbb; transition:background .25s; }
-  #aiSwitch input:checked ~ #aiTrack { background:#555; }
+  #aiTrack { position:absolute; inset:0; border-radius:10px; background:rgba(255,255,255,0.3); transition:background .25s; }
+  #aiSwitch input:checked ~ #aiTrack { background:rgba(255,255,255,0.7); }
   #aiThumb { position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%;
     background:#fff; transition:transform .25s; box-shadow:0 1px 3px rgba(0,0,0,.25); }
   #aiSwitch input:checked ~ #aiThumb { transform:translateX(16px); }
   /* ── New Game (top right) ── */
   #newGameBtn {
     position:fixed; top:28px; right:28px;
+    z-index:100; pointer-events:auto;
   }
   /* ── Test Mode (bottom left) ── */
   #testBtn {
     position:fixed; bottom:28px; left:28px;
+    z-index:100; pointer-events:auto;
   }
-  #testBtn.active { opacity:1; color:#000; }
-  /* ── Test panel (above test button) ── */
+  #testBtn.active { opacity:1; color:#fff; }
+  /* ── Test panel (plain text, bottom left, above test button) ── */
   #testPanel {
-    display:none; position:fixed; bottom:66px; left:28px;
+    display:none; position:fixed; bottom:46px; left:28px;
     z-index:200; pointer-events:auto;
-    background:rgba(248,248,248,0.96); border-radius:14px;
-    padding:16px 18px 14px; box-shadow:0 6px 32px rgba(0,0,0,0.22);
-    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-    flex-direction:column; align-items:flex-start; gap:12px;
-    font-family:'Times New Roman',Times,serif;
+    background:none; border-radius:0; padding:0; box-shadow:none;
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+    flex-direction:column; align-items:flex-start; gap:4px;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
     white-space:nowrap;
   }
   #testPanel.visible { display:flex; }
   #testPanelTitle {
-    font-size:10px; letter-spacing:0.22em; color:#666;
-    font-family:'Times New Roman',Times,serif;
+    font-size:11px; letter-spacing:normal; color:#fff; opacity:0.4;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    margin-bottom:2px;
   }
-  .test-row { display:flex; align-items:center; gap:7px; }
+  .test-row { display:flex; align-items:center; gap:3px; }
   .test-row-label {
-    font-size:9px; letter-spacing:0.15em; color:#999; width:34px;
-    font-family:'Times New Roman',Times,serif;
+    font-size:11px; letter-spacing:normal; color:#fff; opacity:0.4; width:auto;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    margin-right:4px;
   }
-  .test-pieces { display:flex; gap:6px; }
+  .test-pieces { display:flex; gap:1px; }
   .tpb {
-    width:34px; height:34px; border-radius:50%; border:1.5px solid #ccc;
-    background:#fff; cursor:pointer; font-size:12px; font-weight:600;
-    font-family:'Times New Roman',Times,serif;
-    color:#333; transition:opacity .15s; pointer-events:auto;
-    display:flex; align-items:center; justify-content:center; opacity:0.18;
+    width:auto; height:auto; border-radius:0; border:none;
+    background:none; cursor:pointer; font-size:11px; font-weight:400;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    color:#fff; transition:opacity .15s; pointer-events:auto;
+    display:inline-flex; align-items:center; justify-content:center;
+    opacity:0.3; padding:1px 3px;
   }
-  .tpb[data-color="black"] { background:#222; color:#eee; border-color:#444; }
+  .tpb[data-color="black"] { background:none; color:#fff; border-color:transparent; }
   .tpb.sel { opacity:1; }
+  .tpb:hover { opacity:0.7; }
   #testStartBtn {
-    align-self:center; padding:6px 24px; border-radius:18px;
-    border:1.5px solid #333; background:#333; color:#fff;
-    font-family:'Times New Roman',Times,serif;
-    font-size:10px; letter-spacing:0.20em; cursor:pointer; pointer-events:auto;
-    transition:opacity .15s;
+    align-self:flex-start; padding:0; border-radius:0;
+    border:none; background:none; color:#fff;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    font-size:11px; letter-spacing:normal; cursor:pointer; pointer-events:auto;
+    opacity:0.4; transition:opacity .2s; margin-top:2px;
   }
-  #testStartBtn:disabled { opacity:0.35; cursor:default; }
+  #testStartBtn:hover { opacity:1; }
+  #testStartBtn:disabled { opacity:0.15; cursor:default; }
   /* Check flash overlay on king */
   .check-ring { pointer-events:none; }
   /* hidden controls */
@@ -123,29 +129,29 @@
   #battleArea {
     position:fixed; bottom:28px; right:28px;
     display:flex; flex-direction:column; align-items:flex-end;
-    gap:10px; z-index:100; pointer-events:auto;
+    gap:4px; z-index:100; pointer-events:auto;
   }
   #autoBattleBtn {
     font-family:'Times New Roman',Times,serif; font-size:11px;
-    font-weight:400; letter-spacing:0.18em; color:#000;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
     background:none; border:none; cursor:pointer; padding:0;
-    opacity:0.4; transition:opacity .2s;
+    opacity:0.5; transition:opacity .2s;
     user-select:none; -webkit-user-select:none;
     pointer-events:auto; white-space:nowrap;
   }
   #autoBattleBtn:hover { opacity:1; }
   #autoBattleControls {
-    display:none; flex-direction:column; align-items:flex-end; gap:10px;
+    display:none; flex-direction:column; align-items:flex-end; gap:4px;
   }
   #autoBattleControls button {
     font-family:'Times New Roman',Times,serif; font-size:11px;
-    font-weight:400; letter-spacing:0.18em; color:#000;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
     background:none; border:none; cursor:pointer; padding:0;
-    opacity:0.4; transition:opacity .2s;
+    opacity:0.5; transition:opacity .2s;
     pointer-events:auto; white-space:nowrap; display:block;
   }
   #autoBattleControls button:hover { opacity:1; }
-  #autoPauseBtn { opacity:0.7; }
+  #autoPauseBtn { opacity:0.85; }
   /* ── Report Modal ── */
   #reportModal {
     display:none; position:fixed; inset:0; z-index:600;
@@ -162,13 +168,13 @@
   #reportHead {
     display:flex; align-items:center; justify-content:space-between;
     padding:13px 20px 10px; border-bottom:1px solid #ddd;
-    font-family:'Times New Roman',Times,serif;
-    font-size:11px; letter-spacing:0.20em; color:#444; flex-shrink:0;
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    font-size:11px; letter-spacing:normal; color:#444; flex-shrink:0;
   }
   #reportHead .rh-btns { display:flex; gap:14px; }
   #reportHead button {
-    font-family:'Times New Roman',Times,serif; font-size:10px;
-    letter-spacing:0.18em; color:#000; background:none; border:none;
+    font-family:'Times New Roman',Times,serif; font-size:10px; font-style:italic;
+    letter-spacing:normal; color:#000; background:none; border:none;
     cursor:pointer; padding:0; opacity:0.4; transition:opacity .2s;
     pointer-events:auto;
   }
@@ -178,6 +184,68 @@
     line-height:1.68; padding:14px 18px; background:#ebebeb;
     border:none; outline:none; resize:none; cursor:pointer;
     overflow-y:auto; color:#1a1a1a; -webkit-overflow-scrolling:touch;
+  }
+  /* ── Per-panel battle info overlay ── */
+  #panelInfo { display:none; position:fixed; inset:0; pointer-events:none; z-index:60; }
+  #panelInfo .pi {
+    position:absolute; transform:translateX(-50%);
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff; opacity:0.75;
+    white-space:nowrap;
+  }
+  /* ── Battle selector: all right-aligned at bottom right ── */
+  #splitRow {
+    position:fixed; bottom:64px; right:28px;
+    display:none; flex-direction:row; gap:8px; align-items:center;
+    z-index:100; pointer-events:auto; white-space:nowrap;
+  }
+  #battleStartBtn {
+    position:fixed; bottom:28px; right:28px;
+    display:none;
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
+    background:none; border:none; cursor:pointer; padding:0;
+    opacity:0.85; transition:opacity .2s;
+    pointer-events:auto; white-space:nowrap; z-index:100;
+  }
+  #battleStartBtn:hover { opacity:1; }
+  #battleCancelBtn {
+    position:fixed; bottom:46px; right:28px;
+    display:none;
+    font-family:'Times New Roman',Times,serif; font-size:11px;
+    font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
+    background:none; border:none; cursor:pointer; padding:0;
+    opacity:0.5; transition:opacity .2s;
+    pointer-events:auto; white-space:nowrap; z-index:100;
+  }
+  #battleCancelBtn:hover { opacity:1; }
+  #splitLabel {
+    font-family:'Times New Roman',Times,serif; font-size:11px; font-style:italic;
+    letter-spacing:normal; color:#fff; opacity:0.5; pointer-events:none;
+  }
+  .spb {
+    font-family:'Times New Roman',Times,serif; font-size:11px; font-style:italic;
+    letter-spacing:normal; color:#fff; background:none; border:none;
+    cursor:pointer; padding:0; opacity:0.3; transition:opacity .2s;
+    pointer-events:auto; white-space:nowrap;
+  }
+  .spb.sel { opacity:0.9; }
+  .spb:hover { opacity:1; }
+  #mvLines {
+    display:none; position:fixed; inset:0; pointer-events:none; z-index:50;
+  }
+  #mvLines.mv2 { display:block;
+    background:linear-gradient(180deg,transparent calc(50% - 1px),rgba(255,255,255,0.2) calc(50% - 1px),rgba(255,255,255,0.2) calc(50% + 1px),transparent calc(50% + 1px));
+  }
+  #mvLines.mv4 { display:block;
+    background:
+      linear-gradient(90deg,transparent calc(50% - 1px),rgba(255,255,255,0.2) calc(50% - 1px),rgba(255,255,255,0.2) calc(50% + 1px),transparent calc(50% + 1px)),
+      linear-gradient(180deg,transparent calc(50% - 1px),rgba(255,255,255,0.2) calc(50% - 1px),rgba(255,255,255,0.2) calc(50% + 1px),transparent calc(50% + 1px));
+  }
+  #mvLines.mv6 { display:block;
+    background:
+      linear-gradient(90deg, transparent calc(50% - 1px), rgba(255,255,255,0.2) calc(50% - 1px), rgba(255,255,255,0.2) calc(50% + 1px), transparent calc(50% + 1px)),
+      linear-gradient(180deg, transparent calc(33.33% - 1px), rgba(255,255,255,0.2) calc(33.33% - 1px), rgba(255,255,255,0.2) calc(33.33% + 1px), transparent calc(33.33% + 1px), transparent calc(66.66% - 1px), rgba(255,255,255,0.2) calc(66.66% - 1px), rgba(255,255,255,0.2) calc(66.66% + 1px), transparent calc(66.66% + 1px));
   }
 </style>
 </head>
@@ -213,15 +281,33 @@
   </div>
   <button id="testStartBtn" disabled onclick="startTestWithSelection()">Start</button>
 </div>
-<!-- Battle area (bottom right, stacked vertically) -->
+<!-- Split selector row — bottom left (shown during selector mode) -->
+<div id="splitRow">
+  <span id="splitLabel">Split</span>
+  <button class="spb sel" data-v="0" onclick="setSplitView(0)">1</button>
+  <button class="spb" data-v="2" onclick="setSplitView(2)">2</button>
+  <button class="spb" data-v="4" onclick="setSplitView(4)">4</button>
+  <button class="spb" data-v="6" onclick="setSplitView(6)">6</button>
+</div>
+<!-- Start button — bottom right (shown during selector mode) -->
+<button id="battleStartBtn" onclick="startAutoBattle()">Start</button>
+<!-- Cancel button — bottom centre (shown during selector mode) -->
+<button id="battleCancelBtn" onclick="closeBattleSelector()">Cancel</button>
+<!-- Battle area (bottom right) -->
 <div id="battleArea">
-  <button id="autoBattleBtn" onclick="startAutoBattle()">Watch AI battle</button>
+  <!-- Idle state -->
+  <button id="autoBattleBtn" onclick="openBattleSelector()">Watch AI battle</button>
+  <!-- Active battle controls -->
   <div id="autoBattleControls">
     <button id="autoPauseBtn" onclick="toggleAutoPause()">Pause</button>
     <button onclick="newAutoBattle()">Reset</button>
     <button onclick="stopAutoBattle()">Quit</button>
   </div>
 </div>
+<!-- Split-screen grid separator lines (z-index 50, pointer-events none) -->
+<div id="mvLines"></div>
+<!-- Per-panel battle info overlay (z-index 60, pointer-events none) -->
+<div id="panelInfo"></div>
 <!-- Report Modal -->
 <div id="reportModal">
   <div id="reportBox">
@@ -320,17 +406,30 @@ const globe=new THREE.Group(); scene.add(globe);
 const capN=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,0,CAP_THETA),matG); globe.add(capN);
 const capS=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,Math.PI-CAP_THETA,CAP_THETA),matG); globe.add(capS);
 
-// Cell meshes
+// Depth occluder: invisible BackSide sphere. The front-side cell tiles do not cover the far
+// hemisphere's depth buffer (they're back-face-culled), so pieces on the back of the globe
+// pass the depth test and bleed through. This hidden sphere fills the far hemisphere's depth
+// buffer and occludes any pieces behind the globe surface.
+const _depthOccluder=new THREE.Mesh(
+  new THREE.SphereGeometry(R*0.998,48,32),
+  new THREE.MeshBasicMaterial({colorWrite:false,depthWrite:true,side:THREE.BackSide})
+);
+globe.add(_depthOccluder);
+
+// Cell meshes — renderOrder:-1 so globe geometry ALWAYS writes depth before chess pieces
+// (renderOrder 0) test it. This guarantees pieces behind the sphere fail depth test.
 const cellMeshes=[];
 for(let lat=0;lat<NUM_LAT;lat++){
   for(let lon=0;lon<NUM_LON;lon++){
     const geo=new THREE.SphereGeometry(R,28,14,(lon/NUM_LON)*Math.PI*2,(Math.PI*2)/NUM_LON,CAP_THETA+lat*BAND_THETA,BAND_THETA);
     const mesh=new THREE.Mesh(geo,(lat+lon)%2===0?matW:matB);
+    mesh.renderOrder=-1;
     mesh.userData={isCellMesh:true,lat,lon};
     globe.add(mesh);
     cellMeshes.push(mesh);
   }
 }
+capN.renderOrder=-1; capS.renderOrder=-1; _depthOccluder.renderOrder=-1;
 
 // ─── Board State ──────────────────────────────────────────────────────────────
 const board=Array.from({length:8},()=>Array(8).fill(null));
@@ -897,7 +996,8 @@ const DOT_GEO=new THREE.SphereGeometry(0.048,32,32);
 let selectedCell=null,currentTargets=[],visObjects=[];
 let shakeAnims=[]; // [{group, basePos, radialDir, t}]
 
-function showMoves(lat,lon){
+function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
+  // autoOnlyLat/Lon: when set (auto-battle), only draw path for that specific destination
   clearVis();
   // In test mode, skip check-filtering so all raw moves are shown
   const moves=testModeActive?getValidMoves(lat,lon):getLegalMoves(lat,lon);
@@ -1002,7 +1102,6 @@ function showMoves(lat,lon){
     const mat=new THREE.MeshBasicMaterial({color:0xff6600,side:THREE.FrontSide,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
     const circle=new THREE.Mesh(geo,mat);
     circle.position.copy(spos);
-    // Orient flat on sphere surface — normal points radially outward
     circle.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),spos.clone().normalize());
     circle.renderOrder=4; circle.frustumCulled=false;
     circle.userData={isMoveTarget:true,lat,lon};
@@ -1071,6 +1170,12 @@ function showMoves(lat,lon){
   });
   Object.values(diagGroups).forEach(dmoves=>{
     dmoves.sort((a,b)=>a.diagWP.length-b.diagWP.length);
+    // Auto-battle: only draw the direction containing the target, keeping all intermediates
+    if(autoOnlyLat!==null){
+      const _ti=dmoves.findIndex(m=>m.lat===autoOnlyLat&&m.lon===autoOnlyLon);
+      if(_ti===-1)return;
+      dmoves=dmoves.slice(0,_ti+1);
+    }
     const cells=[{lat,lon},...dmoves.map(m=>({lat:m.lat,lon:m.lon}))];
     const SEGS=14, r=R*1.006;
     const dn=parseInt(dmoves[0].diagKey.split(',')[1]); // initial dn from diagKey
@@ -1132,32 +1237,84 @@ function showMoves(lat,lon){
     if(!tubeDests.has(dk)){tubeDests.add(dk);addTube(pts,isDiagCapture,cellPos(lastCell.lat,lastCell.lon,R*1.006));}
   });
 
-  // Straight paths
-  const straightDirs={};
+  // Straight paths — group ALL moves per direction, build path through every intermediate
+  // cell so each visible dot has a tube segment passing through it.
+  // (Old approach: one long tube from piece to farthest → tube goes around back hemisphere
+  //  and intermediate dots appear "disconnected".)
+  const straightGroups={};
   moves.forEach(m=>{
-    if(m.straightKey&&(!straightDirs[m.straightKey]||m.step>straightDirs[m.straightKey].step))
-      straightDirs[m.straightKey]=m;
+    if(!m.straightKey)return;
+    if(!straightGroups[m.straightKey])straightGroups[m.straightKey]=[];
+    straightGroups[m.straightKey].push(m);
   });
-  Object.values(straightDirs).forEach(({lat:tl,lon:tn,straightDl,straightDn,pole})=>{
-    const sk=`${tl},${tn}`;
+  Object.entries(straightGroups).forEach(([,grpMoves])=>{
+    grpMoves.sort((a,b)=>a.step-b.step);
+    // Auto-battle: only draw the direction containing the target, keeping all intermediates
+    if(autoOnlyLat!==null){
+      const _ti=grpMoves.findIndex(m=>m.lat===autoOnlyLat&&m.lon===autoOnlyLon);
+      if(_ti===-1)return;
+      grpMoves=grpMoves.slice(0,_ti+1);
+    }
+    const farthest=grpMoves[grpMoves.length-1];
+    // Dedup by direction (straightKey), NOT by cell coordinates.
+    // Two different directions can share the same farthest cell (e.g. a vertical pole-crossing
+    // path and a horizontal path both ending at the same cell). Each direction must draw its
+    // own tube independently — cell-based dedup would skip one entirely, leaving dots with no lines.
+    const sk=grpMoves[0].straightKey;
     if(tubeDests.has(sk))return;
     tubeDests.add(sk);
     let pts;
-    if(straightDl===0){
-      pts=latRingArc(lat,lon,tn,48,R*1.019,straightDn); // directional arc — no shortcut
-    } else if(pole){
-      const polePt=new THREE.Vector3(0,(pole==='N'?1:-1)*R*1.001,0);
-      pts=[...geodesicPts(from,polePt,20),...geodesicPts(polePt,cellPos(tl,tn,R*1.019),20)];
+    if(farthest.straightDl===0){
+      // Horizontal ring arc: single arc, as before
+      pts=latRingArc(lat,lon,farthest.lon,48,R*1.019,farthest.straightDn);
     } else {
-      pts=geodesicPts(from,cellPos(tl,tn,R*1.019),32);
+      // Vertical: separate pre-pole and post-pole segments.
+      // A single CatmullRomCurve3 through the whole path (including the U-turn at the
+      // pole) overshoots inside the sphere at the pole junction → the post-pole tube
+      // segment is hidden by depth testing. Drawing two separate tubes avoids this.
+      const poleVec=grpMoves.find(m=>m.pole);
+      const isStraightCapture=!!(board[farthest.lat]?.[farthest.lon]&&board[farthest.lat][farthest.lon].color!==board[lat][lon]?.color);
+      if(!poleVec){
+        // No pole crossing: single smooth tube through all cells
+        pts=[from];
+        grpMoves.forEach(m=>pts.push(cellPos(m.lat,m.lon,R*1.019)));
+        const ptsFlat=[];
+        for(let i=0;i<pts.length-1;i++){
+          const seg=geodesicPts(pts[i],pts[i+1],8);if(i>0)seg.shift();ptsFlat.push(...seg);
+        }
+        addTube(ptsFlat,isStraightCapture,cellPos(farthest.lat,farthest.lon,R*1.006));
+      } else {
+        // Pole crossing: tube 1 = piece→pole, tube 2 = pole→farthest (no U-turn in either)
+        const polePt=new THREE.Vector3(0,(poleVec.pole==='N'?1:-1)*R*1.001,0);
+        const preWP=[from,...grpMoves.filter(m=>!m.pole).map(m=>cellPos(m.lat,m.lon,R*1.019)),polePt];
+        const postWP=[polePt,...grpMoves.filter(m=>!!m.pole).map(m=>cellPos(m.lat,m.lon,R*1.019))];
+        // Draw pre-pole tube (piece → pole)
+        const prePts=[];
+        for(let i=0;i<preWP.length-1;i++){
+          const seg=geodesicPts(preWP[i],preWP[i+1],8);if(i>0)seg.shift();prePts.push(...seg);
+        }
+        addTube(prePts,false,null); // don't trim at pole — continuous with post-pole tube
+        // Draw post-pole tube (pole → farthest)
+        if(postWP.length>=2){
+          const postPts=[];
+          for(let i=0;i<postWP.length-1;i++){
+            const seg=geodesicPts(postWP[i],postWP[i+1],8);if(i>0)seg.shift();postPts.push(...seg);
+          }
+          addTube(postPts,isStraightCapture,cellPos(farthest.lat,farthest.lon,R*1.006));
+        }
+      }
+      pts=null; // already handled above
     }
-    const isStraightCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
-    addTube(pts,isStraightCapture,cellPos(tl,tn,R*1.006));
+    if(pts!==null){
+      const isStraightCapture=!!(board[farthest.lat]?.[farthest.lon]&&board[farthest.lat][farthest.lon].color!==board[lat][lon]?.color);
+      addTube(pts,isStraightCapture,cellPos(farthest.lat,farthest.lon,R*1.006));
+    }
   });
 
   // Knight L-shape dashed paths
   moves.forEach(({isKnight,longLat,elbowLat,elbowLon,lat:tl,lon:tn})=>{
     if(!isKnight)return;
+    if(autoOnlyLat!==null&&!(tl===autoOnlyLat&&tn===autoOnlyLon))return;
     const r=R*1.006;
     let seg1,seg2;
     if(longLat){
@@ -1185,6 +1342,7 @@ function showMoves(lat,lon){
   moves.forEach(m=>{if(m.diagKey||m.straightKey||m.isKnight)drawnDests.add(`${m.lat},${m.lon}`);});
   moves.forEach(({lat:tl,lon:tn,diagKey,straightKey,isKnight})=>{
     if(diagKey||straightKey||isKnight)return;
+    if(autoOnlyLat!==null&&!(tl===autoOnlyLat&&tn===autoOnlyLon))return;
     if(drawnDests.has(`${tl},${tn}`))return;
     const fk=`${tl},${tn}`;
     if(tubeDests.has(fk))return;
@@ -1202,7 +1360,26 @@ function showMoves(lat,lon){
     const nearS=th0>Math.PI-CAP_THETA-BAND_THETA*1.5&&th1>Math.PI-CAP_THETA-BAND_THETA*1.5;
     const isPoleF=(nearN||nearS)&&Math.abs(Math.abs(dphF)-Math.PI)<0.6;
     let pts;
-    pts=geodesicPts(fromPt,to3d,60);
+    // Pawn diagonal capture: use loxodromic (constant dθ/dφ) path instead of great circle
+    // Great circles deviate visibly from the true diagonal on a sphere
+    const _pType=board[lat]?.[lon]?.type;
+    if(_pType==='P'&&tl!==lat&&tn!==lon){
+      const _SEGS=20;
+      const _th0=CAP_THETA+(lat+0.5)*BAND_THETA;
+      const _th1=CAP_THETA+(tl+0.5)*BAND_THETA;
+      const _ph0=((lon+0.5)/NUM_LON)*Math.PI*2;
+      const _ph1=((tn+0.5)/NUM_LON)*Math.PI*2;
+      let _dp=((_ph1-_ph0+3*Math.PI)%(2*Math.PI))-Math.PI;
+      pts=[];
+      for(let s=0;s<=_SEGS;s++){
+        const t=s/_SEGS;
+        const theta=_th0+(_th1-_th0)*t;
+        const phi=_ph0+_dp*t;
+        pts.push(new THREE.Vector3(r2*Math.sin(theta)*Math.cos(phi),r2*Math.cos(theta),r2*Math.sin(theta)*Math.sin(phi)));
+      }
+    } else {
+      pts=geodesicPts(fromPt,to3d,60);
+    }
     const isPawnCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
     addTube(pts,isPawnCapture,cellPos(tl,tn,r2));
   });
@@ -1231,6 +1408,7 @@ function showMoves(lat,lon){
   // Dots at destinations — captures get red ring; en passant shows ring on captured pawn
   moves.forEach(m=>{
     const{lat:tl,lon:tn}=m;
+    if(autoOnlyLat!==null&&!(tl===autoOnlyLat&&tn===autoOnlyLon))return;
     const target=board[tl]?.[tn];
     const isCapture=target&&target.color!==board[lat][lon]?.color;
     if(m.isEnPassant){
@@ -1306,7 +1484,13 @@ function startMoveAnim(sprite,blob,animPts,onDone){
   let pathLen=0;
   for(let i=1;i<animPts.length;i++) pathLen+=animPts[i].distanceTo(animPts[i-1]);
   const dur=calcMoveDur(pathLen);
-  moveAnim={sprite,blob,pts:animPts,t:0,dur,onDone,pieceType:null,pieceIsWhite:null};
+  // Precompute cumulative arc-length table so the animate loop can sample
+  // by actual distance rather than by point index.
+  // This eliminates the apparent speed spike/slowdown caused by non-uniform
+  // point density (e.g., pole-crossing spirals pack points tightly near the pole).
+  const cum=[0];
+  for(let i=1;i<animPts.length;i++) cum.push(cum[i-1]+animPts[i].distanceTo(animPts[i-1]));
+  moveAnim={sprite,blob,pts:animPts,cum,totalLen:pathLen,t:0,dur,onDone,pieceType:null,pieceIsWhite:null};
 }
 function setMoveAnimPiece(type,isWhite){
   if(moveAnim){moveAnim.pieceType=type;moveAnim.pieceIsWhite=isWhite;}
@@ -1492,9 +1676,12 @@ function execMove(fromLat,fromLon,toLat,toLon){
   piece.hasMoved=true;
   piece.sprite.userData.lat=toLat;
   piece.sprite.userData.lon=toLon;
+  // Stop bounce BEFORE capturing fromPos so animation starts from cell center,
+  // not from a mid-bounce lifted position.
+  if(autoBattleActive) stopBounce();
   const fromPos=piece.sprite.position.clone();
   const animPts=computeAnimPath(move,fromLat,fromLon,toLat,toLon,fromPos);
-  clearVis();
+  if(!autoBattleActive) clearVis(); // In auto-battle keep path visible while piece moves
   // En passant: remove the captured pawn from board & scene immediately
   let epCaptured=null;
   if(move?.isEnPassant){
@@ -1535,6 +1722,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
         orientPiece(newGrp,finalPos);
         newGrp.userData={isPiece:true,lat:toLat,lon:toLon};
         globe.add(newGrp); allSprites.push(newGrp);
+        if(multiViewMode>0&&autoBattleActive) newGrp.traverse(c=>c.layers.set(1));
         piece.sprite=newGrp; board[toLat][toLon]=piece;
       }
     }
@@ -1551,9 +1739,19 @@ function execMove(fromLat,fromLon,toLat,toLon){
         rook.blob.position.copy(rookPos);   orientPiece(rook.blob,rookPos);
       }
     }
-    // Test mode: any piece can keep moving, no turn switch or check logic
+    // Test mode: no turn alternation; after each move check both kings for threats
     if(testModeActive){
-      enPassantTarget=null;
+      // Update en passant target so en passant captures work in test mode
+      enPassantTarget=(piece.type==='P'&&Math.abs(toLat-fromLat)===2)
+        ?{lat:Math.round((fromLat+toLat)/2),lon:toLon}:null;
+      clearCheckRing();
+      for(const col of['white','black']){
+        if(isInCheck(col)){
+          for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+            if(board[la][lo]?.type==='K'&&board[la][lo]?.color===col){showCheckRing(la,lo);}
+          showCheckThreats(col);
+        }
+      }
       turnEl.textContent='Test mode — tap any piece';
       return;
     }
@@ -1658,15 +1856,33 @@ const introR0=(()=>{
 const _introQspin=new THREE.Quaternion();
 let introAnim={t:0,done:false};
 
-renderer.domElement.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
-renderer.domElement.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+renderer.domElement.addEventListener('touchstart',e=>{
+  // Don't hijack touches that started on a UI button/control
+  if(e.target!==renderer.domElement)return;
+  e.preventDefault();
+},{passive:false});
+renderer.domElement.addEventListener('touchmove',e=>{
+  if(e.target!==renderer.domElement)return;
+  e.preventDefault();
+},{passive:false});
 
 // ─── Multi-pointer rotation + pinch zoom ──────────────────────────────────────
 function applyDelta(dx,dy){
   const s=2*Math.tan(21*Math.PI/180)*camera.position.z/innerHeight;
-  _qy.setFromAxisAngle(WY,dx*s);
-  _qx.setFromAxisAngle(WX,dy*s);
-  globe.quaternion.premultiply(_qy).premultiply(_qx);
+  if(multiViewMode>0&&_dragCi>=0){
+    _qy.setFromAxisAngle(_mvUps[_dragCi],   dx*s);
+    _qx.setFromAxisAngle(_mvRights[_dragCi],dy*s);
+    if(autoBattleActive){
+      // Battle: accumulate user offset in _mvBattleQ; auto-tracking still runs underneath
+      _mvBattleQ[_dragCi].premultiply(_qy).premultiply(_qx);
+    } else {
+      _mvPanelQ[_dragCi].premultiply(_qy).premultiply(_qx);
+    }
+  } else {
+    _qy.setFromAxisAngle(WY,dx*s);
+    _qx.setFromAxisAngle(WX,dy*s);
+    globe.quaternion.premultiply(_qy).premultiply(_qx);
+  }
 }
 const activePointers=new Map();
 let prevMidX=0,prevMidY=0,prevPinchDist=0,prevFingerAngle=null;
@@ -1678,6 +1894,14 @@ renderer.domElement.addEventListener('pointerdown',e=>{
   activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   autoRotate=false; vel={x:0,y:0}; dragging=true;
   document.body.classList.add('dragging');
+  // In split-view preview mode, find which panel was touched
+  if(multiViewMode>0){
+    _dragCi=-1;
+    const layout=_mvLayout();
+    if(layout) for(const{ci,x,y,w,h}of layout){
+      if(e.clientX>=x&&e.clientX<x+w&&e.clientY>=y&&e.clientY<y+h){_dragCi=ci;break;}
+    }
+  }
   const pts=[...activePointers.values()];
   if(pts.length===1){
     prevMidX=pts[0].x; prevMidY=pts[0].y;
@@ -1687,6 +1911,14 @@ renderer.domElement.addEventListener('pointerdown',e=>{
     prevPinchDist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
     prevFingerAngle=Math.atan2(pts[1].y-pts[0].y,pts[1].x-pts[0].x);
     pDownPos=null; // cancel tap when two fingers touch
+    // Re-detect panel from midpoint so pinch zoom targets the right panel
+    if(multiViewMode>0){
+      _dragCi=-1;
+      const layout=_mvLayout();
+      if(layout) for(const{ci,x,y,w,h}of layout){
+        if(prevMidX>=x&&prevMidX<x+w&&prevMidY>=y&&prevMidY<y+h){_dragCi=ci;break;}
+      }
+    }
   }
 });
 
@@ -1703,16 +1935,29 @@ renderer.domElement.addEventListener('pointermove',e=>{
   } else if(pts.length>=2){
     const mx=(pts[0].x+pts[1].x)/2, my=(pts[0].y+pts[1].y)/2;
     const dist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
-    // Pinch zoom
-    camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+(prevPinchDist-dist)*0.012));
+    // Pinch zoom — per-panel in split-view preview, shared camera otherwise
+    if(multiViewMode>0&&_dragCi>=0){
+      _mvPanelDist[_dragCi]=Math.max(1.6,Math.min(7,_mvPanelDist[_dragCi]+(prevPinchDist-dist)*0.012));
+    } else {
+      camera.position.z=Math.max(1.6,Math.min(7,camera.position.z+(prevPinchDist-dist)*0.012));
+    }
     // Two-finger wheel: compute angle of finger-pair, delta → rotate around view axis
     const angle=Math.atan2(pts[1].y-pts[0].y,pts[1].x-pts[0].x);
     if(prevFingerAngle!==null){
       let da=angle-prevFingerAngle;
       if(da>Math.PI)da-=2*Math.PI;
       if(da<-Math.PI)da+=2*Math.PI;
-      const qRoll=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-da);
-      globe.quaternion.premultiply(qRoll);
+      if(multiViewMode>0&&_dragCi>=0){
+        const qRollPanel=new THREE.Quaternion().setFromAxisAngle(_mvPds[_dragCi],-da);
+        if(autoBattleActive){
+          _mvBattleQ[_dragCi].premultiply(qRollPanel);
+        } else {
+          _mvPanelQ[_dragCi].premultiply(qRollPanel);
+        }
+      } else {
+        const qRoll=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-da);
+        globe.quaternion.premultiply(qRoll);
+      }
     }
     prevFingerAngle=angle;
     prevMidX=mx; prevMidY=my; prevPinchDist=dist;
@@ -1729,7 +1974,10 @@ renderer.domElement.addEventListener('pointerup',e=>{
   if(wasOne&&pDownPos){
     const dx=e.clientX-pDownPos.x, dy=e.clientY-pDownPos.y;
     pDownPos=null;
-    if(Math.hypot(dx,dy)<8&&!aiThinking){
+    // During auto-battle, ignore taps — prevent accidental touches on mobile from
+    // clearing the move visualization (clearVis) and currentTargets needed by execMove.
+    if(autoBattleActive){}
+    else if(Math.hypot(dx,dy)<8&&!aiThinking){
       const hit=hitTest(e.clientX,e.clientY);
       if(hit?.kind==='dot'){
         if(selectedCell)execMove(selectedCell.lat,selectedCell.lon,hit.lat,hit.lon);
@@ -1738,6 +1986,14 @@ renderer.domElement.addEventListener('pointerup',e=>{
       if(hit?.kind==='piece'||hit?.kind==='cell'){
         const{lat,lon}=hit;
         const piece=board[lat]?.[lon];
+        // In test mode: if the clicked piece is an enemy AND a valid capture target → execute capture
+        if(testModeActive&&selectedCell&&piece){
+          const selPiece=board[selectedCell.lat]?.[selectedCell.lon];
+          if(selPiece&&piece.color!==selPiece.color){
+            const isTarget=currentTargets.some(t=>t.lat===lat&&t.lon===lon);
+            if(isTarget){execMove(selectedCell.lat,selectedCell.lon,lat,lon);return;}
+          }
+        }
         if(piece&&(piece.color===turnColor||testModeActive)){
           if(selectedCell?.lat===lat&&selectedCell?.lon===lon)clearVis();
           else showMoves(lat,lon);
@@ -1866,14 +2122,27 @@ function aiEval(){
 }
 function aiApply(m){
   const c=board[m.tLat][m.tLon];
-  board[m.tLat][m.tLon]=board[m.fLat][m.fLon]; board[m.fLat][m.fLon]=null;
+  const piece=board[m.fLat][m.fLon];
+  const prevEP=enPassantTarget;
+  // Update en passant target BEFORE promotion changes the type
+  enPassantTarget=(piece&&piece.type==='P'&&Math.abs(m.tLat-m.fLat)===2)
+    ?{lat:Math.round((m.fLat+m.tLat)/2),lon:m.tLon}:null;
+  board[m.tLat][m.tLon]=piece; board[m.fLat][m.fLon]=null;
+  // Promotion: pawn reaching opposite end becomes queen (visible to deeper search levels)
+  let wasType=null;
+  if(piece&&piece.type==='P'){
+    const promLat=piece.color==='black'?7:0;
+    if(m.tLat===promLat){wasType='P';piece.type='Q';}
+  }
   if(m.isCastle){board[m.tLat][m.rookToLon]=board[m.tLat][m.rookFromLon];board[m.tLat][m.rookFromLon]=null;}
   let epCap=null;
   if(m.isEnPassant){epCap=board[m.capturedLat][m.capturedLon];board[m.capturedLat][m.capturedLon]=null;}
-  return{c,epCap};
+  return{c,epCap,wasType,prevEP};
 }
 function aiUndo(m,piece,sv){
+  if(sv.wasType)piece.type=sv.wasType;
   board[m.fLat][m.fLon]=piece; board[m.tLat][m.tLon]=sv.c||null;
+  enPassantTarget=sv.prevEP;
   if(m.isCastle){board[m.tLat][m.rookFromLon]=board[m.tLat][m.rookToLon];board[m.tLat][m.rookToLon]=null;}
   if(m.isEnPassant&&sv.epCap)board[m.capturedLat][m.capturedLon]=sv.epCap;
 }
@@ -1931,19 +2200,18 @@ function rotateGlobeToFace(localDir,dur,onDone){
 function doAiMove(){
   if(!aiMode||aiThinking||turnColor!==AI_COLOR)return;
   aiThinking=true;
-  turnEl.textContent='AI thinking…';
-  setTimeout(()=>{
-    const m=getBestAIMove();
-    if(!m){aiThinking=false;turnEl.textContent='Black has no moves.';return;}
-    const localDir=cellPos(m.fLat,m.fLon,R).normalize();
-    rotateGlobeToFace(localDir,650,()=>{
-      showMoves(m.fLat,m.fLon);
-      setTimeout(()=>{
-        aiThinking=false;
-        execMove(m.fLat,m.fLon,m.tLat,m.tLon);
-      },480);
-    });
-  },30);
+  turnEl.textContent='AI thinking… depth 1';
+  _findBestMove(AI_COLOR,_AI_THINK_MS,
+    (depth,elapsed)=>{turnEl.textContent=`AI thinking… depth ${depth} (${(elapsed/1000).toFixed(1)}s)`;},
+    (m)=>{
+      if(!m){aiThinking=false;turnEl.textContent='Black has no moves.';return;}
+      const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+      rotateGlobeToFace(localDir,650,()=>{
+        showMoves(m.fLat,m.fLon);
+        setTimeout(()=>{aiThinking=false;execMove(m.fLat,m.fLon,m.tLat,m.tLon);},480);
+      });
+    }
+  );
 }
 
 function resetGame(){
@@ -2051,6 +2319,19 @@ function startTestWithSelection(){
       placePiece(type,color==='black',la,lo);
     });
   });
+
+  // Snap globe instantly so selected pieces are centred on screen
+  const dirs=[];
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    if(board[la][lo]) dirs.push(cellPos(la,lo,R).normalize());
+  }
+  if(dirs.length){
+    const avg=dirs.reduce((s,d)=>s.clone().add(d),new THREE.Vector3()).normalize();
+    const worldDir=avg.clone().applyQuaternion(globe.quaternion).normalize();
+    const Qr=new THREE.Quaternion().setFromUnitVectors(worldDir,new THREE.Vector3(0,0,1));
+    globe.quaternion.premultiply(Qr);
+    globeRotAnim=null;
+  }
 
   aiMode=false; enPassantTarget=null;
   turnColor='white'; // allow any piece via testModeActive flag
@@ -2183,9 +2464,13 @@ function animate(){
   if(moveAnim){
     moveAnim.t=Math.min(moveAnim.t+16/moveAnim.dur,1);
     const te=easeInOut(moveAnim.t);
-    const rawIdx=te*(moveAnim.pts.length-1);
-    const i0=Math.min(Math.floor(rawIdx),moveAnim.pts.length-2);
-    const frac=rawIdx-i0;
+    // Arc-length parameterization: map eased time → target arc distance → point
+    const targetDist=te*moveAnim.totalLen;
+    const cum=moveAnim.cum;
+    let i0=0;
+    for(let i=1;i<cum.length-1;i++){if(cum[i]>=targetDist)break;i0=i;}
+    const segLen=cum[i0+1]-cum[i0];
+    const frac=segLen>1e-9?(targetDist-cum[i0])/segLen:0;
     const pos=moveAnim.pts[i0].clone().lerp(moveAnim.pts[i0+1],frac);
     moveAnim.sprite.position.copy(pos);
     orientPiece(moveAnim.sprite,pos);
@@ -2210,18 +2495,374 @@ function animate(){
   if(!dragging){
     if(Math.abs(vel.x)>0.01||Math.abs(vel.y)>0.01){applyDelta(vel.x,vel.y);vel.x*=0.88;vel.y*=0.88;}
     else{vel.x=0;vel.y=0;}
-    if(autoRotate){_qy.setFromAxisAngle(WY,0.0010);globe.quaternion.premultiply(_qy);}
+    if(autoRotate){
+      const rotSpeed=multiViewMode>0?0.0032:0.0010;
+      _qy.setFromAxisAngle(WY,rotSpeed);globe.quaternion.premultiply(_qy);
+    }
   }
 
-  renderer.render(scene,camera);
+  // Split-view intro animation: update all panel quaternions independently of globe.quaternion
+  if(_splitIntroAnim.active){
+    _splitIntroAnim.t=Math.min(_splitIntroAnim.t+16/2000,1);
+    const te=1-Math.pow(1-_splitIntroAnim.t,5);
+    _introQspin.setFromAxisAngle(introSpinAxis,te*3.0*Math.PI);
+    _splitIntroQ.multiplyQuaternions(_introQspin,introR0);
+    _mvPanelQ.forEach(q=>q.copy(_splitIntroQ));
+    if(_splitIntroAnim.t>=1){
+      _splitIntroAnim.active=false;
+      _mvPanelQ.forEach(q=>q.copy(introFinalQ));
+    }
+  }
+
+  // Side-game animations + tracking
+  if(_pgActive&&autoBattleActive){
+    for(const g of _pgGames){
+      if(!g)continue;
+      // Drive piece move animation (great-circle arc)
+      if(g.pgMoveAnim){
+        const anim=g.pgMoveAnim;
+        anim.t=Math.min(anim.t+16/700,1);
+        const te=0.5-0.5*Math.cos(Math.PI*anim.t); // ease in-out
+        // Quaternion slerp: stable for ALL move distances including near-antipodal
+        // (lerp+normalize breaks when from≈-to, giving zero vector → NaN → pieces "lie flat")
+        const _qCur=anim.fromQ.clone().slerp(anim.toQ,te);
+        const curDir=new THREE.Vector3(0,1,0).applyQuaternion(_qCur).normalize();
+        const curPos=curDir.clone().multiplyScalar(anim.radius);
+        anim.mesh.position.copy(curPos);
+        orientPiece(anim.mesh,curPos); // keep orientation correct each frame (prevents flash)
+        if(anim.piece.type==='N') faceKnightTowardPole(anim.mesh,curPos,anim.piece.color!=='black');
+        // Animate blob shadow along with piece
+        if(anim.blob){anim.blob.position.copy(curPos);orientPiece(anim.blob,curPos);}
+        // Per-frame tracking: keep moving piece centred in panel
+        const _wd=curDir.clone().applyQuaternion(g.globeQ);
+        const _Qr=new THREE.Quaternion().setFromUnitVectors(_wd,new THREE.Vector3(0,0,1));
+        g.targetGlobeQ.multiplyQuaternions(_Qr,g.globeQ);
+        g.targetGlobeQ.normalize();
+        if(anim.t>=1){ g.pgMoveAnim=null; if(anim.onDone)anim.onDone(); }
+      }
+      // Slerp globeQ toward target (runs whether or not animation is active)
+      g.globeQ.slerp(g.targetGlobeQ,0.065);
+    }
+  }
+
+  if(multiViewMode>0) _renderMultiView(); else renderer.render(scene,camera);
 }
 
-// ─── Auto Battle (AI vs AI) ───────────────────────────────────────────────────
-const AUTO_DELAY = 1500;       // ms between moves (watchable pace)
+// ─── Multi-view split screen ──────────────────────────────────────────────────
+let multiViewMode=0;
+// Six fixed viewpoints around the globe:  front · back · left · right · north · south
+const _mvDefs=[
+  {pd:[0,0,1],  up:[0,1,0]},   // 0 front
+  {pd:[0,0,-1], up:[0,1,0]},   // 1 back
+  {pd:[-1,0,0], up:[0,1,0]},   // 2 left
+  {pd:[1,0,0],  up:[0,1,0]},   // 3 right
+  {pd:[0,1,0],  up:[0,0,-1]},  // 4 north pole (top-down)
+  {pd:[0,-1,0], up:[0,0,1]},   // 5 south pole (bottom-up)
+];
+// Cameras created lazily (Three.js must already be loaded at this point)
+const _mvCams=_mvDefs.map(()=>new THREE.PerspectiveCamera(42,1,0.01,2000));
+// Per-panel independent rotation quaternions (used only during preview, not during battle)
+const _mvPanelQ=_mvDefs.map(()=>new THREE.Quaternion());
+let _dragCi=-1; // camera-index of the panel currently being dragged (-1 = single-view or none)
+// Pre-computed camera-relative rotation axes for each panel definition.
+// These make the drag/roll in every split panel feel exactly like the normal full-screen mode:
+//   horizontal drag → around camera's "up" axis
+//   vertical drag   → around camera's "right" axis (= cross(up, pd))
+//   roll gesture    → around camera's "pd" axis (position direction)
+const _mvPds  = _mvDefs.map(d=>new THREE.Vector3(d.pd[0],d.pd[1],d.pd[2]));
+const _mvUps  = _mvDefs.map(d=>new THREE.Vector3(d.up[0],d.up[1],d.up[2]));
+const _mvRights = _mvDefs.map((_,i)=>
+  new THREE.Vector3().crossVectors(_mvUps[i],_mvPds[i]).normalize());
+// Per-panel rotation offset for battle rendering:
+// Multiplied onto globe.quaternion so the tracked piece is centred in EACH panel's view
+// (front panel = identity; back panel = 180° around Y; left = 90° around Y; etc.)
+const _mvPanelOffsets = _mvDefs.map(def=>
+  new THREE.Quaternion().setFromUnitVectors(
+    new THREE.Vector3(0,0,1),
+    new THREE.Vector3(def.pd[0],def.pd[1],def.pd[2])
+  )
+);
+// Per-panel camera distances (independent zoom per panel)
+const _mvPanelDist = _mvDefs.map(()=>camera.position.z);
+// Per-panel user-controlled rotation overlay during battle (identity = no override).
+// Applied on top of auto-tracking so manual spin and AI tracking coexist.
+const _mvBattleQ = _mvDefs.map(()=>new THREE.Quaternion());
+// Independent split-view intro animation (animates _mvPanelQ instead of globe.quaternion)
+let _splitIntroAnim = {t:0, active:false};
+const _splitIntroQ  = new THREE.Quaternion(); // reusable temp, avoids per-frame allocation
+
+function setSplitView(n){
+  multiViewMode=n;
+  _dragCi=-1;
+  // Re-initialise panel quaternions and distances so new panels start at current globe state
+  _mvPanelQ.forEach(q=>q.copy(globe.quaternion));
+  _mvPanelDist.forEach((_,i)=>{ _mvPanelDist[i]=camera.position.z; });
+  document.querySelectorAll('.spb').forEach(b=>{
+    b.classList.toggle('sel',parseInt(b.dataset.v)===n);
+  });
+  document.getElementById('mvLines').className=n>0?`mv${n}`:'';
+}
+
+function _mvLayout(){
+  const W=innerWidth,H=innerHeight;
+  if(multiViewMode===2)return[
+    {ci:0,x:0,y:0,   w:W,h:H/2},
+    {ci:1,x:0,y:H/2, w:W,h:H/2},
+  ];
+  if(multiViewMode===4)return[
+    {ci:0,x:0,   y:0,   w:W/2,h:H/2},
+    {ci:1,x:W/2, y:0,   w:W/2,h:H/2},
+    {ci:2,x:0,   y:H/2, w:W/2,h:H/2},
+    {ci:3,x:W/2, y:H/2, w:W/2,h:H/2},
+  ];
+  // 6 panels: 2 columns × 3 rows — wider panels, better aspect ratio on portrait phones
+  if(multiViewMode===6)return[
+    {ci:0,x:0,   y:0,     w:W/2,h:H/3},  // top-left:    front
+    {ci:1,x:W/2, y:0,     w:W/2,h:H/3},  // top-right:   back
+    {ci:2,x:0,   y:H/3,   w:W/2,h:H/3},  // mid-left:    left
+    {ci:3,x:W/2, y:H/3,   w:W/2,h:H/3},  // mid-right:   right
+    {ci:4,x:0,   y:H*2/3, w:W/2,h:H/3},  // bot-left:    north pole
+    {ci:5,x:W/2, y:H*2/3, w:W/2,h:H/3},  // bot-right:   south pole
+  ];
+  return null;
+}
+
+function _renderMultiView(){
+  const layout=_mvLayout();if(!layout)return;
+  const H=innerHeight;
+  const savedAC=renderer.autoClear;
+  renderer.autoClear=false;
+  renderer.setScissorTest(true);
+  for(const{ci,x,y,w,h}of layout){
+    const cam=_mvCams[ci];
+    const def=_mvDefs[ci];
+    const dist = _mvPanelDist[ci];
+    cam.aspect=w/h; cam.updateProjectionMatrix();
+    cam.position.set(def.pd[0]*dist, def.pd[1]*dist, def.pd[2]*dist);
+    cam.up.set(def.up[0], def.up[1], def.up[2]);
+    cam.lookAt(0,0,0);
+    renderer.setViewport(x, H-y-h, w, h);
+    renderer.setScissor(x, H-y-h, w, h);
+    renderer.clear(true,true,false);
+    const savedQ=globe.quaternion.clone();
+
+    if(!autoBattleActive||_splitIntroAnim.active){
+      cam.layers.enableAll();
+      globe.quaternion.copy(_mvPanelQ[ci]);
+      _pgGames.forEach(g=>g&&(g.grp.visible=false));
+    } else if(ci===0){
+      // Panel 0: main game — globe (layer 0) + main pieces/vis (layer 1)
+      cam.layers.mask=3;
+      globe.quaternion.copy(savedQ);
+      globe.quaternion.premultiply(_mvBattleQ[0]);
+    } else {
+      // Panels 1–5: independent side games — globe (layer 0) + side pieces (layer ci+2)
+      cam.layers.mask=(1<<0)|(1<<(ci+2));
+      const pgQ=_pgGames[ci]?.globeQ||savedQ;
+      globe.quaternion.multiplyQuaternions(_mvPanelOffsets[ci],pgQ);
+      globe.quaternion.premultiply(_mvBattleQ[ci]);
+      if(_pgGames[ci]){
+        _pgGames[ci].grp.visible=true;
+        _pgGames[ci].grp.quaternion.copy(globe.quaternion);
+      }
+    }
+    // EnvDome as independent 3D background per panel
+    envDome.visible=true;
+    renderer.render(scene,cam);
+    envDome.visible=false;
+    cam.layers.enableAll();
+    globe.quaternion.copy(savedQ);
+  }
+  renderer.setScissorTest(false);
+  renderer.autoClear=savedAC;
+  renderer.setViewport(0,0,innerWidth,innerHeight);
+}
+
+// ─── Independent side games for split-view panels ────────────────────────────
+// Panel 0 = main full-featured game (uses global state).
+// Panels 1–5 = independent games with AI, blob shadows, and smooth animation.
+const _pgGames = [];   // sparse array indexed by ci; index 0 unused
+let   _pgActive = false;
+
+function _pgNewGame(ci){
+  const MAJOR=['R','N','B','K','Q','B','N','R'];
+  const pgBoard=Array.from({length:8},()=>Array(8).fill(null));
+  const meshes=[];
+  const layer=ci+2;
+  const grp=new THREE.Group();
+  grp.visible=true;
+  scene.add(grp);
+  function _pgPlace(type,color,la,lo){
+    const sprite=createPieceMesh(type,color==='black');
+    const outer=new THREE.Group();
+    outer.add(sprite);
+    outer.traverse(c=>{c.layers.set(layer);c.frustumCulled=false;});
+    const pos=cellPos(la,lo,R);
+    outer.position.copy(pos);orientPiece(outer,pos);
+    if(type==='N') faceKnightTowardPole(outer,pos,color!=='black');
+    const blob=createBlobGroup();
+    blob.position.copy(pos);orientPiece(blob,pos);
+    blob.traverse(c=>{c.layers.set(layer);c.frustumCulled=false;});
+    grp.add(blob);
+    const p={type,color,mesh:outer,blob,hasMoved:false};
+    pgBoard[la][lo]=p;
+    grp.add(outer);meshes.push(outer);
+  }
+  for(let lo=0;lo<8;lo++){
+    _pgPlace(MAJOR[lo],'black',0,lo);_pgPlace('P','black',1,lo);
+    _pgPlace(MAJOR[lo],'white',7,lo);_pgPlace('P','white',6,lo);
+  }
+  const g={ci,board:pgBoard,meshes,grp,turnColor:'white',halfMove:0,
+    enPassantTarget:null,
+    globeQ:new THREE.Quaternion().copy(introFinalQ),
+    targetGlobeQ:new THREE.Quaternion().copy(introFinalQ),
+    pgMoveAnim:null,timer:null,done:false};
+  g.timer=setTimeout(()=>_pgMoveGo(ci),2400+ci*300+Math.random()*500);
+  return g;
+}
+
+function _pgStart(n){
+  _pgStop();_pgActive=true;
+  for(let ci=1;ci<n;ci++) _pgGames[ci]=_pgNewGame(ci);
+}
+
+function _pgStop(){
+  _pgActive=false;
+  for(const g of _pgGames){
+    if(!g)continue;
+    if(g.timer)clearTimeout(g.timer);
+    g.pgMoveAnim=null;
+    scene.remove(g.grp);
+  }
+  _pgGames.length=0;
+}
+
+function _pgMoveGo(ci){
+  const g=_pgGames[ci];
+  if(!g||g.done||!_pgActive||!autoBattleActive)return;
+  // Save global state
+  const svBoard=board.map(r=>r.slice());
+  const svEP=enPassantTarget;const svLog=_autoBattleLog;
+  // Load side-game state
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++) board[la][lo]=g.board[la][lo];
+  enPassantTarget=g.enPassantTarget;_autoBattleLog=null;
+  const hasMove=hasAnyLegalMove(g.turnColor);
+  let move=null;
+  if(hasMove){
+    // AI search: synchronous depth-2 with 400 ms limit
+    const legal=[];
+    for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+      if(board[la][lo]?.color!==g.turnColor)continue;
+      getLegalMoves(la,lo).forEach(mv=>legal.push({fLat:la,fLon:lo,tLat:mv.lat,tLon:mv.lon,...mv}));
+    }
+    for(let i=legal.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];}
+    const isBlack=g.turnColor==='black';
+    let bestSc=isBlack?-Infinity:Infinity;
+    const dl=Date.now()+400;
+    for(const m of legal){
+      if(Date.now()>=dl)break;
+      const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+      let sc=_abSearch(1,-Infinity,Infinity,!isBlack,dl);
+      aiUndo(m,pc,sv);
+      if(sv.c||sv.epCap){const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
+        if(capT)sc+=(isBlack?1:-1)*Math.min(Math.round(_EV[capT]*0.12),150);}
+      const steps=m.step||0;let gb=0;
+      if(steps>3)gb+=(steps-3)*12;if(m.pole)gb+=50;
+      if(m.straightDn&&steps>4)gb+=35;if(m.diagKey&&steps>3)gb+=(steps-3)*10+30;
+      if(gb>0)sc+=(isBlack?1:-1)*gb;
+      if(isBlack?sc>bestSc:sc<bestSc){bestSc=sc;move=m;}
+    }
+  }
+  // Restore global state
+  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++) board[la][lo]=svBoard[la][lo];
+  enPassantTarget=svEP;_autoBattleLog=svLog;
+  if(!hasMove||!move){g.done=true;return;}
+  // Pre-rotate to face the moving piece
+  const _fpos=cellPos(move.fLat,move.fLon,R).normalize();
+  const _fwd=_fpos.clone().applyQuaternion(g.globeQ);
+  const _fQr=new THREE.Quaternion().setFromUnitVectors(_fwd,new THREE.Vector3(0,0,1));
+  g.targetGlobeQ.multiplyQuaternions(_fQr,g.globeQ);
+  g.targetGlobeQ.normalize();
+  g.timer=setTimeout(()=>{
+    if(!g||g.done||!_pgActive||!autoBattleActive)return;
+    _pgApply(g,move);
+  },460);
+}
+
+function _pgApply(g,m){
+  const b=g.board;
+  const {fLat:fl,fLon:fn,lat:tl,lon:tn}=m;
+  const piece=b[fl][fn];if(!piece)return;
+  piece.hasMoved=true;
+  // En passant capture
+  if(m.isEnPassant&&m.capturedLat!=null){
+    const cp=b[m.capturedLat][m.capturedLon];
+    if(cp){g.grp.remove(cp.mesh);g.grp.remove(cp.blob);
+      g.meshes.splice(g.meshes.indexOf(cp.mesh),1);b[m.capturedLat][m.capturedLon]=null;}
+  }
+  // Normal capture
+  if(b[tl][tn]){
+    const cp=b[tl][tn];
+    g.grp.remove(cp.mesh);g.grp.remove(cp.blob);
+    g.meshes.splice(g.meshes.indexOf(cp.mesh),1);b[tl][tn]=null;
+  }
+  // Castling
+  if(m.isCastle){
+    const isKS=tn>fn,rfl=isKS?7:0,rtl=isKS?5:2;
+    const rook=b[fl][rfl];
+    if(rook){
+      b[fl][rtl]=rook;b[fl][rfl]=null;rook.hasMoved=true;
+      const rp=cellPos(fl,rtl,R);
+      rook.mesh.position.copy(rp);orientPiece(rook.mesh,rp);
+      rook.blob.position.copy(rp);orientPiece(rook.blob,rp);
+    }
+  }
+  const _fromPos=piece.mesh.position.clone();
+  b[tl][tn]=piece;b[fl][fn]=null;
+  const np=cellPos(tl,tn,R);
+  // Promotion
+  if(piece.type==='P'&&(tl===0||tl===7)){
+    piece.type='Q';
+    const _qLayer=g.ci+2;
+    const _qOuter=new THREE.Group();
+    _qOuter.add(createPieceMesh('Q',piece.color==='black'));
+    _qOuter.traverse(c=>{c.layers.set(_qLayer);c.frustumCulled=false;});
+    _qOuter.position.copy(_fromPos);orientPiece(_qOuter,_fromPos);
+    g.grp.remove(piece.mesh);
+    const _qi=g.meshes.indexOf(piece.mesh);if(_qi>=0)g.meshes.splice(_qi,1);
+    g.grp.add(_qOuter);g.meshes.push(_qOuter);
+    piece.mesh=_qOuter;
+  }
+  g.enPassantTarget=(piece.type==='P'&&Math.abs(tl-fl)===2)?{lat:Math.round((fl+tl)/2),lon:tn}:null;
+  g.turnColor=g.turnColor==='white'?'black':'white';
+  g.halfMove++;
+  // Animated move with blob shadow
+  const _pType=piece.type;const _pColor=piece.color;
+  const _animUp=new THREE.Vector3(0,1,0);
+  const _fromDir2=_fromPos.clone().normalize();
+  const _toDir2=np.clone().normalize();
+  g.pgMoveAnim={
+    mesh:piece.mesh, blob:piece.blob,
+    fromDir:_fromDir2, toDir:_toDir2,
+    fromQ:new THREE.Quaternion().setFromUnitVectors(_animUp,_fromDir2),
+    toQ:  new THREE.Quaternion().setFromUnitVectors(_animUp,_toDir2),
+    radius:R, t:0,
+    piece:piece,
+    onDone:()=>{
+      piece.mesh.position.copy(np);orientPiece(piece.mesh,np);
+      piece.blob.position.copy(np);orientPiece(piece.blob,np);
+      if(_pType==='N') faceKnightTowardPole(piece.mesh,np,_pColor!=='black');
+      if(!g.done&&_pgActive&&autoBattleActive)
+        g.timer=setTimeout(()=>_pgMoveGo(g.ci),AUTO_DELAY+Math.random()*500);
+    }
+  };
+}
+
+const AUTO_DELAY = 300;        // ms between moves (AI thinking time is the main pacing now)
 const AUTO_MAX_MOVES = 250;    // draw if exceeded
-const RESIGN_THRESHOLD = 1000; // eval pts: losing by this much = hopeless → resign
+const RESIGN_THRESHOLD = 1200; // eval pts: losing by this much = hopeless → resign
 const RESIGN_STREAK    = 8;    // consecutive half-moves at that level to confirm
-const DRAW_EVAL_RANGE  = 80;    // eval pts: both sides within this = "mutually equal"
+const DRAW_EVAL_RANGE  = 150;  // eval pts: both sides within this = "mutually equal"
 const DRAW_STREAK      = 30;   // consecutive half-moves both agree it's equal → draw
 let autoBattleActive = false;
 let autoBattlePaused = false;
@@ -2393,6 +3034,194 @@ function _autoInsufMaterial(){
   return minor(wX)&&minor(bX);
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── Enhanced AI Engine — positional evaluation + iterative deepening α-β ────
+const _AI_THINK_MS  = 8000;   // AI opponent: 8 s per move
+const _AUTO_THINK_MS= 1000;   // Auto-battle: 1 s per move (fast aggressive play)
+
+// Piece-square tables (index = latForPST: 0=own back rank, 7=opponent back rank)
+const _PST={
+  P:[0,0,10,20,35,55,80,0],
+  N:[-20,-5,10,18,18,10,-5,-20],
+  B:[-10,0,8,12,12,8,0,-10],
+  R:[5,0,0,5,5,0,0,5],
+  Q:[-10,-5,0,5,5,0,-5,-10],
+  Km:[20,5,-10,-20,-20,-10,5,20],   // king middlegame: stay back
+  Ke:[-10,0,10,15,15,10,0,-10]      // king endgame: centralize
+};
+const _EV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
+const _POL={Q:30,R:27,B:24,N:20,P:0,K:0};
+
+function evaluate(){
+  let s=0,nonPK=0;
+  const pLon=[new Uint8Array(8),new Uint8Array(8)]; // [black,white] pawn lon counts
+  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+    const p=board[a][o];if(!p||p.type==='K'||p.type==='P')continue;
+    nonPK+=_EV[p.type];
+  }
+  const eg=nonPK<2600;
+  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+    const p=board[a][o];if(!p)continue;
+    const bk=p.color==='black';
+    const lp=bk?a:(7-a);
+    let v=_EV[p.type];
+    // PST
+    v+=(p.type==='K'?(eg?_PST.Ke:_PST.Km):_PST[p.type]||[])[lp]||0;
+    // Polar bonus
+    const pd=Math.min(a,7-a);
+    if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
+    if(pd===0&&(p.type==='Q'||p.type==='R')){
+      const op=board[a][wL(o+4)];
+      if(op&&op.color!==p.color)v+=Math.round(_EV[op.type]*0.09);
+    }
+    // Development: minor pieces still on starting square
+    if(!p.hasMoved&&(p.type==='N'||p.type==='B'))v-=18;
+    if(p.type==='R'&&p.hasMoved)v+=8;
+    // Pawn tracking
+    if(p.type==='P')pLon[bk?0:1][o]++;
+    s+=bk?v:-v;
+  }
+  // Pawn structure penalties
+  for(let side=0;side<2;side++){
+    const sgn=side===0?1:-1; // black penalty → s↓, white penalty → s↑
+    let pen=0;
+    for(let o=0;o<8;o++){
+      const c=pLon[side][o];
+      if(c>1)pen+=(c-1)*15;   // doubled pawns
+      if(c>0&&!pLon[side][wL(o-1)]&&!pLon[side][wL(o+1)])pen+=12; // isolated
+    }
+    s-=pen*sgn;
+  }
+  return s;
+}
+
+// α-β with time deadline
+function _abSearch(depth,alpha,beta,maxing,deadline){
+  if(Date.now()>=deadline)return evaluate();
+  if(depth<=0)return _abQuiesce(alpha,beta,maxing,4,deadline);
+  const color=maxing?'black':'white';
+  const mvs=allAIMoves(color);
+  if(!mvs.length)return evaluate();
+  mvs.sort((a,b)=>{
+    const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
+    const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
+    return vb-va;
+  });
+  let best=maxing?-Infinity:Infinity;
+  for(const m of mvs){
+    if(Date.now()>=deadline)break;
+    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+    const sc=_abSearch(depth-1,alpha,beta,!maxing,deadline);
+    aiUndo(m,pc,sv);
+    if(maxing){if(sc>best)best=sc;if(sc>alpha)alpha=sc;}
+    else{if(sc<best)best=sc;if(sc<beta)beta=sc;}
+    if(beta<=alpha)break;
+  }
+  return best;
+}
+function _abQuiesce(alpha,beta,maxing,qleft,deadline){
+  if(Date.now()>=deadline)return evaluate();
+  const stand=evaluate();
+  if(qleft<=0)return stand;
+  if(maxing){if(stand>=beta)return beta;if(stand>alpha)alpha=stand;}
+  else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
+  const color=maxing?'black':'white';
+  const caps=allAIMoves(color).filter(m=>board[m.tLat][m.tLon]||m.isEnPassant);
+  caps.sort((a,b)=>{
+    const va=board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0;
+    const vb=board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0;
+    return vb-va;
+  });
+  for(const m of caps){
+    if(Date.now()>=deadline)break;
+    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+    const sc=_abQuiesce(alpha,beta,!maxing,qleft-1,deadline);
+    aiUndo(m,pc,sv);
+    if(maxing){if(sc>alpha){alpha=sc;if(alpha>=beta)return beta;}}
+    else{if(sc<beta){beta=sc;if(beta<=alpha)return alpha;}}
+  }
+  return maxing?alpha:beta;
+}
+
+// Iterative deepening with time control + progress UI
+function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
+  const captureBonus=(opts?.captureBonus)||0;
+  const globeBonus=(opts?.globeBonus)||0;  // scale factor for globe-wrapping spectacle bonus
+  const t0=Date.now(),deadline=t0+timeLimitMs;
+  // Pre-compute phase deadlines as absolute timestamps
+  const dlEarly=t0+timeLimitMs*0.55;  // stop starting new depths after 55% of time
+  const dlMid  =t0+timeLimitMs*0.80;  // abort if no time for a full depth
+  const dlLate =t0+timeLimitMs*0.95;  // stop mid-depth if nearly out of time
+  const legal=[];
+  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+    if(board[a][o]?.color!==color)continue;
+    getLegalMoves(a,o).forEach(mv=>legal.push({fLat:a,fLon:o,tLat:mv.lat,tLon:mv.lon,...mv}));
+  }
+  if(!legal.length){onDone(null,0);return;}
+  // Shuffle for variety among equal-scoring moves
+  for(let i=legal.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];}
+  // Initial ordering: captures first
+  legal.sort((a,b)=>{
+    const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
+    const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
+    return vb-va;
+  });
+  let bestMove=legal[0],finalDepth=0;
+  // Anti-oscillation (auto-battle only)
+  const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-3):[];
+  const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
+  let searchDepth=0;
+
+  function nextDepth(){
+    searchDepth++;
+    if(searchDepth>8||Date.now()>=dlEarly){onDone(bestMove,finalDepth);return;}
+    if(onProgress)onProgress(searchDepth,Date.now()-t0);
+    setTimeout(()=>{
+      if(Date.now()>=dlMid){onDone(bestMove,finalDepth);return;}
+      const isBlack=color==='black';
+      let dBest=null,dBestSc=isBlack?-Infinity:Infinity;
+      let completed=true;
+      for(const m of legal){
+        if(Date.now()>=dlLate){completed=false;break;}
+        const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+        let sc=_abSearch(searchDepth-1,-Infinity,Infinity,!isBlack,deadline);
+        aiUndo(m,pc,sv);
+        // Capture incentive: bias top-level selection toward moves that eat enemy pieces.
+        // This makes the AI prefer captures even when the search says they're slightly worse,
+        // creating much more exciting, action-packed games.
+        if(captureBonus>0&&(sv.c||sv.epCap)){
+          const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
+          if(capT)sc+=(isBlack?1:-1)*Math.min(Math.round(_EV[capT]*captureBonus),150);
+        }
+        // Globe spectacle bonus: reward moves that showcase the spherical topology —
+        // pole crossings, long wrap-arounds, diagonal spirals.  These are the moves that
+        // are impossible on a flat board and make Globe Chess visually unique.
+        if(globeBonus>0){
+          let gb=0;
+          const steps=m.step||0;
+          if(steps>3) gb+=(steps-3)*12;           // long-distance travel
+          if(m.pole) gb+=50;                       // straight pole crossing
+          if(m.straightDn&&steps>4) gb+=35;        // horizontal wrap-around (>half the ring)
+          if(m.diagKey&&steps>3) gb+=(steps-3)*10+30; // long diagonal spiral
+          sc+=(isBlack?1:-1)*Math.round(gb*globeBonus);
+        }
+        if(isRev(m))sc=isBlack?sc-700:sc+700;
+        if(isBlack?sc>dBestSc:sc<dBestSc){dBestSc=sc;dBest=m;}
+      }
+      // Only update bestMove if this depth completed fully (partial results unreliable)
+      if(completed&&dBest){
+        bestMove=dBest;finalDepth=searchDepth;
+        const idx=legal.indexOf(dBest);
+        if(idx>0){legal.splice(idx,1);legal.unshift(dBest);}
+      }
+      nextDepth();
+    },4);
+  }
+  nextDepth();
+}
+
+// ── Main drive loop ───────────────────────────────────────────────────────────
+
 function doAutoMove(){
   if(!autoBattleActive||autoBattlePaused)return;
   if(moveAnim||globeRotAnim){_autoBattleTimer=setTimeout(doAutoMove,120);return;}
@@ -2426,17 +3255,13 @@ function doAutoMove(){
   }
 
   // ── Resignation & draw-by-agreement ────────────────────────────────────────
-  // Evaluate the current position independently of whose turn it is.
-  const _ev=captureEval(); // positive = black advantage, negative = white advantage
+  const _ev=evaluate();
   if(_ev >= RESIGN_THRESHOLD){
-    // White is losing badly
     log.wResignStreak++;log.bResignStreak=0;log.drawStreak=0;
   } else if(_ev <= -RESIGN_THRESHOLD){
-    // Black is losing badly
     log.bResignStreak++;log.wResignStreak=0;log.drawStreak=0;
   } else {
     log.wResignStreak=0;log.bResignStreak=0;
-    // Draw agreement: both sides see a balanced position (after opening)
     if(log.moves.length>=40 && Math.abs(_ev)<=DRAW_EVAL_RANGE){
       log.drawStreak++;
     } else {
@@ -2455,55 +3280,70 @@ function doAutoMove(){
     return;
   }
 
-  // Get AI move
+  // Show thinking status
+  const moveNum=log.moves.length+1;
+  const cLabel=turnColor==='white'?'White':'Black';
+  turnEl.textContent=`Auto ${moveNum} — ${cLabel}: thinking…`;
+  _updatePanelInfo(`${cLabel}: thinking…`);
+
+  // Async AI search — aggressive + spectacular play
   const t0=Date.now();
-  const m=getAutoAIMove(turnColor);
-  const thinkMs=Date.now()-t0;
-
-  if(!m){
-    _autoLogAnomaly('NO_MOVE',`${turnColor} AI returned null despite available legal moves`,
-      {legalCheck:allAIMoves(turnColor).length});
-    _endAutoGame('ERROR_NO_MOVE');return;
-  }
-
-  const piece=board[m.fLat][m.fLon];
-  if(!piece){
-    _autoLogAnomaly('EMPTY_FROM','AI selected a move originating from an empty square',
-      {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
-    _endAutoGame('ERROR_EMPTY_SQUARE');return;
-  }
-
-  // Record move
-  const cap=board[m.tLat][m.tLon];
-  const color=turnColor;
-  const entry={
-    n:log.moves.length+1,color,piece:piece.type,
-    from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
-    captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
-    special:m.isCastle?'castle':m.isEnPassant?'ep':null,
-    thinkMs,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
-  };
-  log.moves.push(entry);
-  if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
-
-  // Update 50-move clock (reset on capture or pawn advance, else increment)
-  log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
-
-  // Status bar
-  turnEl.textContent=`Auto ${entry.n} — ${color==='white'?'White':'Black'}: ${piece.type} ${entry.from}→${entry.to}${cap?' x'+cap.type:''}${m.isCastle?' 0-0':''}`;
-
-  // Rotate globe to face the piece, show move dots briefly, execute
-  const localDir=cellPos(m.fLat,m.fLon,R).normalize();
-  rotateGlobeToFace(localDir,460,()=>{
-    showMoves(m.fLat,m.fLon);
-    setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
-  });
+  _findBestMove(turnColor,_AUTO_THINK_MS,
+    (depth,elapsed)=>{
+      const txt=`Auto ${moveNum} — ${cLabel}: depth ${depth} (${(elapsed/1000).toFixed(1)}s)`;
+      turnEl.textContent=txt;_updatePanelInfo(txt);
+    },
+    (m,fd)=>{
+      if(!autoBattleActive)return;
+      const thinkMs=Date.now()-t0;
+      if(!m){
+        _autoLogAnomaly('NO_MOVE',`${turnColor} AI returned null despite available legal moves`,
+          {legalCheck:allAIMoves(turnColor).length});
+        _endAutoGame('ERROR_NO_MOVE');return;
+      }
+      const piece=board[m.fLat][m.fLon];
+      if(!piece){
+        _autoLogAnomaly('EMPTY_FROM','AI selected a move originating from an empty square',
+          {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
+        _endAutoGame('ERROR_EMPTY_SQUARE');return;
+      }
+      // Record move
+      const cap=board[m.tLat][m.tLon];
+      const color=turnColor;
+      const entry={
+        n:log.moves.length+1,color,piece:piece.type,
+        from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
+        captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
+        special:m.isCastle?'castle':m.isEnPassant?'ep':null,
+        thinkMs,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
+      };
+      log.moves.push(entry);
+      if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
+      log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
+      // Status bar
+      const statusText=`Auto ${entry.n} — ${color==='white'?'White':'Black'}: ${piece.type} ${entry.from}→${entry.to}${cap?' x'+cap.type:''}${m.isCastle?' 0-0':''}  (d${fd} ${(thinkMs/1000).toFixed(1)}s)`;
+      turnEl.textContent=statusText;
+      _updatePanelInfo(statusText);
+      // Rotate globe to face the piece, show move dots briefly, execute
+      const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+      rotateGlobeToFace(localDir,460,()=>{
+        showMoves(m.fLat,m.fLon,m.tLat,m.tLon);
+        if(multiViewMode>0) visObjects.forEach(o=>o.layers.set(1));
+        setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
+      });
+    },
+    {captureBonus:0.12, globeBonus:1}  // aggressive captures + globe-wrapping spectacle
+  );
 }
 
 // ── Game lifecycle ────────────────────────────────────────────────────────────
 function _endAutoGame(result){
   if(!autoBattleActive)return;
   autoBattleActive=false;autoBattlePaused=false;
+  _splitIntroAnim.active=false;
+  _pgStop();
+  allSprites.forEach(s=>s.traverse(c=>c.layers.enableAll())); // restore main pieces to all layers
+  _forEachBlob(c=>c.layers.enableAll());
   clearTimeout(_autoBattleTimer);
   clearVis();
   if(_autoBattleLog){_autoBattleLog.result=result;_autoBattleLog.endTime=Date.now();}
@@ -2524,11 +3364,20 @@ function _endAutoGame(result){
     STOPPED_BY_USER:     'Stopped',
   };
   turnEl.textContent=_MSG[result]||result;
+  _updatePanelInfo(_MSG[result]||result);
   if(result==='WHITE_RESIGNS'||result==='BLACK_RESIGNS') playGameOver();
   _updateAutoBattleUI();
   if(_autoBattleLog&&_autoBattleLog.moves.length>0)_showAutoReport();
 }
 
+
+// Helper: apply a layer operation to every currently-live main-game blob shadow.
+// Blobs are sibling globe children (not in allSprites) so they need separate handling.
+function _forEachBlob(fn){
+  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+    const p=board[la][lo]; if(p&&p.blob) p.blob.traverse(fn);
+  }
+}
 function startAutoBattle(){
   if(testModeActive)return;
   if(autoBattleActive)stopAutoBattle();
@@ -2543,7 +3392,27 @@ function startAutoBattle(){
   aiMode=false;aiThinking=false;
   resetGame();
   _updateAutoBattleUI();
-  _autoBattleTimer=setTimeout(doAutoMove,900);
+
+  if(multiViewMode>0){
+    // Split-view intro: animate each panel's own quaternion (does NOT touch globe.quaternion)
+    // so the split screen stays active throughout the animation.
+    autoRotate=false;
+    globeRotAnim=null;
+    _mvPanelQ.forEach(q=>q.copy(introR0));
+    _mvBattleQ.forEach(q=>q.set(0,0,0,1));      // reset user spin overlays
+    _mvPanelDist.forEach((_,i)=>{_mvPanelDist[i]=camera.position.z;}); // sync zoom
+    _splitIntroAnim.t=0; _splitIntroAnim.active=true;
+    // Tag main-game pieces to layer 1 so only panel 0's camera sees them.
+    allSprites.forEach(s=>s.traverse(c=>c.layers.set(1)));
+    _forEachBlob(c=>c.layers.set(1));
+    // Start independent AI-driven side games for panels 1+
+    const layout=_mvLayout();
+    if(layout&&layout.length>1) _pgStart(layout.length);
+    // Wait for intro (~2 s) before first move
+    _autoBattleTimer=setTimeout(doAutoMove, 2400);
+  } else {
+    _autoBattleTimer=setTimeout(doAutoMove,900);
+  }
 }
 
 function toggleAutoPause(){
@@ -2564,6 +3433,10 @@ function stopAutoBattle(){
   if(!autoBattleActive)return;
   const log=_autoBattleLog;
   autoBattleActive=false;autoBattlePaused=false;
+  _splitIntroAnim.active=false;
+  _pgStop();
+  allSprites.forEach(s=>s.traverse(c=>c.layers.enableAll())); // restore main pieces to all layers
+  _forEachBlob(c=>c.layers.enableAll());
   clearTimeout(_autoBattleTimer);
   clearVis();
   _updateAutoBattleUI();
@@ -2575,19 +3448,81 @@ function stopAutoBattle(){
   }
 }
 
+function openBattleSelector(){
+  if(testModeActive)return;
+  autoRotate=false;
+  // Hide other UI elements immediately
+  document.getElementById('aiWrap').style.display='none';
+  document.getElementById('newGameBtn').style.display='none';
+  document.getElementById('testBtn').style.display='none';
+  document.getElementById('turn').style.display='none';
+  document.getElementById('autoBattleBtn').style.display='none';
+  // Show the three selector elements at their fixed positions
+  document.getElementById('splitRow').style.display='flex';
+  document.getElementById('battleStartBtn').style.display='block';
+  document.getElementById('battleCancelBtn').style.display='block';
+  // Give each panel its own copy of the current globe orientation and camera distance
+  _mvPanelQ.forEach(q=>q.copy(globe.quaternion));
+  _mvPanelDist.forEach((_,i)=>{ _mvPanelDist[i]=camera.position.z; });
+  _dragCi=-1;
+  if(multiViewMode===0) setSplitView(0);
+}
+
+function closeBattleSelector(){
+  // Restore all hidden elements
+  document.getElementById('aiWrap').style.display='';
+  document.getElementById('newGameBtn').style.display='';
+  document.getElementById('testBtn').style.display='';
+  document.getElementById('turn').style.display='';
+  document.getElementById('autoBattleBtn').style.display='';
+  // Hide selector elements
+  document.getElementById('splitRow').style.display='none';
+  document.getElementById('battleStartBtn').style.display='none';
+  document.getElementById('battleCancelBtn').style.display='none';
+  setSplitView(0);
+}
+
+function _updatePanelInfo(text){
+  const el=document.getElementById('panelInfo');
+  if(!autoBattleActive||multiViewMode===0){el.style.display='none';return;}
+  el.style.display='block';
+  const layout=_mvLayout();
+  if(!layout){el.style.display='none';return;}
+  el.innerHTML=layout.map(({x,y,w})=>
+    `<div class="pi" style="left:${x+w/2}px;top:${y+14}px">${text}</div>`
+  ).join('');
+}
+
 function _updateAutoBattleUI(){
   const btn=document.getElementById('autoBattleBtn');
   const ctrl=document.getElementById('autoBattleControls');
   const aw=document.getElementById('aiWrap');
+  const ng=document.getElementById('newGameBtn');
+  const tb=document.getElementById('testBtn');
+  const turn=document.getElementById('turn');
   if(autoBattleActive){
     btn.style.display='none';
+    // Hide selector elements (in case battle started from selector)
+    document.getElementById('splitRow').style.display='none';
+    document.getElementById('battleStartBtn').style.display='none';
+    document.getElementById('battleCancelBtn').style.display='none';
     ctrl.style.display='flex';
-    aw.style.opacity='0.22';aw.style.pointerEvents='none';
+    // Hide other UI elements that should not be accessible during battle
+    aw.style.display='none';
+    ng.style.display='none';
+    tb.style.display='none';
+    // Hide the central turn indicator when split view shows per-panel info
+    if(multiViewMode>0) turn.style.display='none';
     document.getElementById('autoPauseBtn').textContent='Pause';
   } else {
     btn.style.display='';
     ctrl.style.display='none';
-    aw.style.opacity='';aw.style.pointerEvents='';
+    // Restore all hidden elements
+    aw.style.display='';
+    ng.style.display='';
+    tb.style.display='';
+    turn.style.display='';
+    _updatePanelInfo('');
   }
 }
 
@@ -2674,10 +3609,11 @@ ${b}
 ${_autoBoardSnap()}
 SYSTEM INFO
 ${b}
-  Globe Chess Auto Battle  v1
-  AI for both sides  : captureEval + captureMinim(depth=2) + quiescence(3) + greedy capture sort
-  White strategy     : minimize captureEval  (independent, capture-first, globe-tactics-aware)
-  Black strategy     : maximize captureEval  (independent, capture-first, globe-tactics-aware)
+  Globe Chess Auto Battle  v2
+  AI for both sides  : evaluate() + iterative deepening α-β + quiescence(4) + PST + pawn structure
+  White strategy     : minimize evaluate()  (PST, development, polar-tactics, pawn structure)
+  Black strategy     : maximize evaluate()  (PST, development, polar-tactics, pawn structure)
+  Search             : iterative deepening depth 1→8, ${_AUTO_THINK_MS/1000}s limit, capture bonus 12%, globe spectacle bonus
   Legal move filter  : getLegalMoves() — no illegal moves executed
   Repetition rule    : 3× same position → draw
   50-move rule       : 100 half-moves without capture or pawn advance → draw
