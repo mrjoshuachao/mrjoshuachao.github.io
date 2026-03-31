@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.0</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.2</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -978,6 +978,13 @@ function showBlockReason(edge){
   if(reason){ showMsg(reason);return; }
 }
 function recentTouch(){ return Date.now()-lastTouchTime<800; }
+function screenToWorld(sx,sy){
+  var pt=svg.createSVGPoint();pt.x=sx;pt.y=sy;
+  var ctm=svg.getScreenCTM();
+  if(!ctm)return{x:panX+sx,y:panY+sy};
+  var wp=pt.matrixTransform(ctm.inverse());
+  return wp;
+}
 function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElementById("bb");var y=e.clientY;return y<sb.offsetHeight||y>window.innerHeight-bb.offsetHeight; }
 function hasOverlay(){
   if(lobbyActive)return true;
@@ -1007,7 +1014,7 @@ window.addEventListener("mousemove",function(e){
   if(gameOver||overBar(e)){ hidePreview();lastPrevKey=null;return; }
   if(online&&(spectator||!isMyTurn())){ hidePreview();lastPrevKey=null;return; }
   if(pendingKey)return;
-  var edge=findEdge(panX+e.clientX,panY+e.clientY);
+  var wp=screenToWorld(e.clientX,e.clientY);var edge=findEdge(wp.x,wp.y);
   if(!edge){ hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
   if(key===lastPrevKey)return;
@@ -1022,7 +1029,7 @@ window.addEventListener("mouseup",function(){
 svg.addEventListener("click",function(e){
   if(hasOverlay()||recentTouch()||dragDist>5||gameOver||isAITurn())return;
   if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始":"等待其他玩家...");return;}
-  var edge=findEdge(panX+e.clientX,panY+e.clientY);
+  var wp=screenToWorld(e.clientX,e.clientY);var edge=findEdge(wp.x,wp.y);
   if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
   if(isEdgeBlocked(edge)){ pendingKey=null;hidePreview();showBlockReason(edge);return; }
@@ -1073,7 +1080,7 @@ window.addEventListener("touchend",function(e){
   var sbH=document.getElementById("sb").offsetHeight;
   var bbH=document.getElementById("bb").offsetHeight;
   if(t.clientY<sbH||t.clientY>window.innerHeight-bbH)return;
-  var wx=panX+t.clientX,wy=panY+t.clientY;
+  var wp=screenToWorld(t.clientX,t.clientY);var wx=wp.x,wy=wp.y;
   var edge=findEdge(wx,wy);
   if(!edge){ pendingKey=null;hidePreview();return; }
   var key=edge.key;
@@ -1460,7 +1467,6 @@ function hostHandleConn(c){
       document.getElementById("psel").value=localHumans;
       updateRoomUI();updateSB();
       broadcast({t:"player_joined",name:pName,numP:numP});
-      showMsg(pName+"色玩家已加入",3000);
       setupConnHandlers(c);
     },function(){
       try{c.send({t:"rejected_join"});}catch(e){}
@@ -1489,7 +1495,12 @@ function showHostApproval2(msg,onApprove,onReject){
 }
 
 function setupConnHandlers(c){
+  // Heartbeat to keep WebRTC alive
+  c._hb=setInterval(function(){try{c.send({t:"ping"});}catch(e){}},15000);
   c.on("data",function(d){
+    if(d.t==="ping"||d.t==="pong")return;
+    // Cancel pending disconnect if we get real data
+    if(c._dcTimer){clearTimeout(c._dcTimer);c._dcTimer=null;}
     if(d.t==="do"){
       actionLog.push(d.edge);
       tryPlaceFenceNet(d.edge);
@@ -1528,6 +1539,7 @@ function setupConnHandlers(c){
     if(d.t==="hidepreview"){ hideRemotePreview();for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} } }
   });
   c.on("close",function(){
+    if(c._hb)clearInterval(c._hb);
     var ci=conns.indexOf(c);
     if(ci<0)return;
     var wasSpectator=(connHumans[ci]===0);
@@ -1607,8 +1619,11 @@ function joinRoom(code){
           +"</div>";
         document.body.appendChild(w);
       });
-      c.on("data",function(d){ handleNetData(d); });
+      c.on("data",function(d){ if(d.t==="ping")return;handleNetData(d); });
+      // Client heartbeat
+      c._hb=setInterval(function(){try{c.send({t:"pong"});}catch(e){}},15000);
       c.on("close",function(){ if(connected){
+        if(c._hb)clearInterval(c._hb);
         if(peer)try{peer.destroy();}catch(e){}
         peer=null;online=false;spectator=false;conns=[];connHumans=[];
         hidePersistMsg();hideLobbyOverlay();
@@ -1769,7 +1784,7 @@ function handleNetData(d){
   if(d.t==="left"){ showCenterNotice(d.name+"色玩家離開房間，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
-  if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB();showMsg(d.name+"色玩家已加入，正在等候下一局。",3000); }
+  if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="waiting"){ showCenterNotice(d.msg); }
   if(d.t==="approved"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
   if(d.t==="rejected"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
