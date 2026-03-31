@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.1.0</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.1.3</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -293,6 +293,18 @@ function showLobbyOverlay(msg,showStart){
 }
 function hideLobbyOverlay(){ lobbyActive=false;var el=document.getElementById("lobbyOverlay");if(el)el.remove(); }
 
+function showCenterNotice(msg){
+  var old=document.getElementById("centerNotice");if(old)old.remove();
+  var d=document.createElement("div");d.id="centerNotice";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
+  var txt=document.createElement("p");txt.style.cssText="font-size:15px;color:#333;line-height:1.6;margin:0";
+  txt.textContent=msg;box.appendChild(txt);
+  d.appendChild(box);document.body.appendChild(d);
+  setTimeout(function(){var el=document.getElementById("centerNotice");if(el)el.remove();},4000);
+}
+
 function showDissolveDialog(msg){
   var d=document.createElement("div");
   d.style.cssText="position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
@@ -388,6 +400,7 @@ function updateSB(){
     sa.appendChild(s);
   }
   document.getElementById("btnUndo").disabled=history.length===0||isAITurn()||online||gameOver;
+  document.getElementById("btnHome").disabled=history.length===0;
   // Turn indicator bubble for online (delayed)
   var tb=document.getElementById("turnBubble");
   if(!tb){
@@ -1202,6 +1215,7 @@ window.resetGame=function(){
   for(var k in generated){ generated[k].remove(); } generated={};
   document.getElementById("win").style.display="none";
   hideLobbyOverlay();
+  var cn=document.getElementById("centerNotice");if(cn)cn.remove();
   commitView();fillView();updateSB();scheduleAI();
   if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});
 };
@@ -1350,12 +1364,12 @@ function createRoom(){
     desc.textContent="你是房主，請把房間網址傳給別人。";box.appendChild(desc);
     var url=location.origin+location.pathname+"?room="+roomCode;
     var cpBtn=document.createElement("button");cpBtn.textContent="複製房間網址";
-    cpBtn.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
+    cpBtn.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
     cpBtn.onclick=function(){navigator.clipboard.writeText(url);cpBtn.textContent="已複製";setTimeout(function(){cpBtn.textContent="複製房間網址";},1500);};
     box.appendChild(cpBtn);
     var sep=document.createElement("div");sep.style.cssText="border-top:1px solid #eee;margin-bottom:14px";box.appendChild(sep);
     var msg=document.createElement("div");msg.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
-    msg.textContent="等每個人都加入房間後，請按「開始遊戲」。";box.appendChild(msg);
+    msg.textContent="等每個人都進入房間後，請按「開始遊戲」。";box.appendChild(msg);
     var startBtn=document.createElement("button");startBtn.textContent="開始遊戲";
     startBtn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
     startBtn.onclick=function(){ hideLobbyOverlay();resetGame(); };
@@ -1525,7 +1539,7 @@ function setupConnHandlers(c){
         startIdx+=connHumans[i];
       }
       updateRoomUI();
-      showMsg(pName+"色玩家已退出，遊戲即將重新開始",4000);
+      showCenterNotice(pName+"色玩家離開房間，遊戲即將重新開始。");
       broadcast({t:"left",name:pName});
       setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});checkAloneInRoom(); },2000);
     },15000);
@@ -1743,7 +1757,7 @@ function handleNetData(d){
     btn.onclick=function(){cdiv.remove();};
     box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
   }
-  if(d.t==="left"){ showMsg(d.name+"色玩家已退出，遊戲即將重新開始",4000); }
+  if(d.t==="left"){ showCenterNotice(d.name+"色玩家離開房間，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB();showMsg(d.name+"色玩家已加入，正在等候下一局。",3000); }
