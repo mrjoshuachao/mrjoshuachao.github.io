@@ -46,6 +46,7 @@
     font-family:'Times New Roman',Times,serif; font-size:11px;
     font-weight:400; font-style:italic; letter-spacing:normal; color:#fff; opacity:0.85;
     pointer-events:none; z-index:100; white-space:nowrap;
+    text-align:center; line-height:1.6;
   }
   /* ── See original (bottom center) ── */
   #seeOrigBtn {
@@ -292,7 +293,9 @@ cubeCamera.update(renderer, scene);
 envDome.visible = false;
 
 // ─── Lights ───────────────────────────────────────────────────────────────────
-scene.add(new THREE.AmbientLight(0xffffff, 0.275));
+const _ambLight=new THREE.AmbientLight(0xffffff, 0);
+scene.add(_ambLight);
+const _ambTarget=0.275; // normal intensity
 const kl=new THREE.DirectionalLight(0xffffff,1.4); kl.position.set(-7,8,3);  scene.add(kl);
 const fl=new THREE.DirectionalLight(0xffffff,0.5); fl.position.set(-3,6,3);  scene.add(fl);
 const rl=new THREE.DirectionalLight(0xffffff,0.06); rl.position.set(4,-4,-4); scene.add(rl);
@@ -468,19 +471,21 @@ function createPieceMesh(type,isBlack){
 }
 
 // ─── Blob Shadow ──────────────────────────────────────────────────────────────
-function createBlobGroup(){
+function createBlobGroup(blobScale,blobOpacity){
+  blobScale=blobScale||1;
+  blobOpacity=blobOpacity||1;
   const r=u*1.65;
   const bS=256;
   const bCv=document.createElement('canvas'); bCv.width=bCv.height=bS;
   const bCtx=bCv.getContext('2d');
   const bGrad=bCtx.createRadialGradient(bS/2,bS/2,0,bS/2,bS/2,bS/2);
-  bGrad.addColorStop(0,   'rgba(0,0,0,0.48)');
-  bGrad.addColorStop(0.35,'rgba(0,0,0,0.32)');
-  bGrad.addColorStop(0.65,'rgba(0,0,0,0.12)');
+  bGrad.addColorStop(0,   `rgba(0,0,0,${0.48*blobOpacity})`);
+  bGrad.addColorStop(0.35,`rgba(0,0,0,${0.32*blobOpacity})`);
+  bGrad.addColorStop(0.65,`rgba(0,0,0,${0.12*blobOpacity})`);
   bGrad.addColorStop(1,   'rgba(0,0,0,0.00)');
   bCtx.fillStyle=bGrad; bCtx.fillRect(0,0,bS,bS);
   const mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(bCv),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-4});
-  const circle=new THREE.Mesh(new THREE.CircleGeometry(r*1.3,32),mat);
+  const circle=new THREE.Mesh(new THREE.CircleGeometry(r*1.3*blobScale,32),mat);
   circle.raycast=()=>{};
   circle.rotation.x=-Math.PI/2;
   circle.position.y=0.002;
@@ -516,7 +521,9 @@ function placePiece(type,isBlack,lat,lon){
   group.userData={isPiece:true,lat,lon};
   globe.add(group);
   allSprites.push(group);
-  const blob=createBlobGroup();
+  const _blobSc=(type==='K'||type==='P')?0.5:(type==='Q'||type==='R'||type==='B')?1.25:1;
+  const _blobOp=(type==='K')?0.5:1;
+  const blob=createBlobGroup(_blobSc,_blobOp);
   blob.position.copy(pos);
   orientPiece(blob,pos);
   globe.add(blob);
@@ -948,7 +955,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
 
   function addTube(pts,captureEnd=false,tgtCenter=null){
     let tp=trimStart(pts);
-    if(tgtCenter) tp=trimEnd(tp,tgtCenter);
+    if(tgtCenter&&captureEnd) tp=trimEnd(tp,tgtCenter);
     if(tp.length<2)return false;
     const surfPts=tp.map(p=>p.clone().normalize().multiplyScalar(R*1.006));
 
@@ -1010,7 +1017,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
   }
   function surfPts_count(tp){return tp.length;}
   function addDot(pos,lat,lon){
-    const spos=pos.clone().normalize().multiplyScalar(R*1.007);
+    const spos=pos.clone().normalize().multiplyScalar(R*1.006);
     const geo=new THREE.CircleGeometry(ringR,40);
     const mat=new THREE.MeshBasicMaterial({color:0xff6600,side:THREE.FrontSide,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
     const circle=new THREE.Mesh(geo,mat);
@@ -1545,9 +1552,10 @@ function _moveNotation(piece,fromLat,fromLon,toLat,toLon,captured,move,inCheck,i
   return n;
 }
 
-function _showNotation(text,duration){
+function _showNotation(noteLine,turnLine,duration){
   clearTimeout(_notationTimer);
-  turnEl.textContent=text;
+  if(turnLine) turnEl.innerHTML=noteLine+'<br>'+turnLine;
+  else turnEl.textContent=noteLine;
   if(duration>0) _notationTimer=setTimeout(()=>{
     if(autoBattleActive||aiThinking||testModeActive)return;
     const ck=isInCheck(turnColor);
@@ -1740,7 +1748,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
         const winner=turnColor==='white'?'Black':'White';
         const _note=_moveNotation({type:_origType,color:piece.color},fromLat,fromLon,toLat,toLon,_wasCapture,move,true,true);
         const _mover=piece.color==='white'?'White':'Black';
-        turnEl.textContent=_mover+': '+_note+'  —  '+winner+' wins';
+        turnEl.innerHTML=_mover+': '+_note+'<br>'+winner+' wins';
         playGameOver();
         if(autoBattleActive){const r=turnColor==='white'?'BLACK_WINS_CHECKMATE':'WHITE_WINS_CHECKMATE';setTimeout(()=>_endAutoGame(r),600);}
       } else {
@@ -1761,13 +1769,14 @@ function execMove(fromLat,fromLon,toLat,toLon){
     if(autoBattleActive&&!autoBattlePaused){
       _autoBattleTimer=setTimeout(doAutoMove,AUTO_DELAY);
     } else if(aiMode&&turnColor===AI_COLOR){
-      _showNotation(_mover+': '+_note,2000);
+      const _aiTurnLabel=inCheck?'AI thinking… (check)':'AI thinking…';
+      _showNotation(_mover+': '+_note, _aiTurnLabel, 2000);
       setTimeout(()=>{turnEl.textContent=inCheck?'AI thinking… (check)':'AI thinking…';},2000);
       setTimeout(doAiMove,2200);
     } else {
-      // Human play: show notation for 5 seconds, then fade to "X to move"
+      // Human play: show notation + turn on two lines for 5 seconds
       const _turnLabel=(turnColor==='white'?'White':'Black')+' to move'+(inCheck?' — check':'');
-      _showNotation(_mover+': '+_note+'    '+_turnLabel, 5000);
+      _showNotation(_mover+': '+_note, _turnLabel, 5000);
     }
   });
   setMoveAnimPiece(piece.type,piece.color==='white');
@@ -1860,7 +1869,7 @@ let prevMidX=0,prevMidY=0,prevPinchDist=0,prevFingerAngle=null;
 
 renderer.domElement.addEventListener('pointerdown',e=>{
   e.preventDefault();
-  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);const _fd=document.getElementById('introFade');if(_fd)_fd.remove();}
+  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);_ambLight.intensity=_ambTarget;const _fd=document.getElementById('introFade');if(_fd)_fd.remove();}
   renderer.domElement.setPointerCapture(e.pointerId);
   activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   autoRotate=false; vel={x:0,y:0}; dragging=true;
@@ -2345,6 +2354,8 @@ function animate(){
     // Scale: start small (0.3), grow to full size (1.0)
     const sc=0.3+0.7*te;
     globe.scale.set(sc,sc,sc);
+    // Ambient light: dark to normal over 2s
+    _ambLight.intensity=_ambTarget*introAnim.t;
     // Trigger black fade-out on first frame
     if(!introAnim._fadeStarted){
       introAnim._fadeStarted=true;
@@ -2353,10 +2364,13 @@ function animate(){
         if(fd){fd.style.opacity='0';setTimeout(()=>fd.remove(),2100);}
       });
     }
-    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);autoRotate=false;}
+    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);_ambLight.intensity=_ambTarget;autoRotate=false;}
     renderer.render(scene,camera);
     return;
   }
+
+  // ── Skip all animations when paused (freeze frame) ──
+  if(!autoBattlePaused){
 
   // Globe rotation animation
   if(globeRotAnim){
@@ -2455,6 +2469,8 @@ function animate(){
       _qy.setFromAxisAngle(WY,rotSpeed);globe.quaternion.premultiply(_qy);
     }
   }
+
+  } // end pause guard
   renderer.render(scene,camera);
 }
 

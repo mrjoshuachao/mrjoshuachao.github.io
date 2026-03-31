@@ -85,7 +85,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnHome">回家</button>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.3</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.2.5</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -1149,7 +1149,7 @@ document.getElementById("winsel").addEventListener("change",function(){
 document.getElementById("btnRestart").addEventListener("click",function(){
   if(online&&!isHost){
     broadcast({t:"req_restart",name:FNAMES[myIdx]});
-    showCenterNotice("你申請了重新開始，正在等待房主同意。");
+    showCenterNotice("你按了想要重新開始，正在等待房主允許。");
     return;
   }
   var d=document.createElement("div");
@@ -1383,7 +1383,7 @@ function createRoom(){
     box.appendChild(cpBtn);
     var sep=document.createElement("div");sep.style.cssText="border-top:1px solid #eee;margin-bottom:14px";box.appendChild(sep);
     var msg=document.createElement("div");msg.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
-    msg.textContent="等每個人都進入房間後，請按「開始遊戲」。";box.appendChild(msg);
+    msg.textContent="等每個人都進房間後，請按「開始遊戲」。";box.appendChild(msg);
     var startBtn=document.createElement("button");startBtn.textContent="開始遊戲";
     startBtn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
     startBtn.onclick=function(){ hideLobbyOverlay();resetGame(); };
@@ -1521,14 +1521,14 @@ function setupConnHandlers(c){
       });
     }
     if(d.t==="req_restart"){
-      broadcast({t:"waiting",msg:d.name+"色申請了重新開始，正在等待房主同意。"});
+      broadcast({t:"waiting",msg:d.name+"色想要重新開始，正在等待房主回應。"});
       // Show centered approval for host
       var old=document.getElementById("centerNotice");if(old)old.remove();
       var dd=document.createElement("div");dd.id="centerNotice";
       dd.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
       var bx=document.createElement("div");
       bx.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
-      bx.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0'>"+d.name+"色申請了重新開始，你允許嗎？</p>";
+      bx.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0'>"+d.name+"色想要重新開始。</p>";
       var yes=document.createElement("button");yes.textContent="允許";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
       var no=document.createElement("button");no.textContent="拒絕";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
       yes.onclick=function(){dd.remove();broadcast({t:"approved_restart"});broadcast({t:"host_restart"});resetGame();};
@@ -1750,6 +1750,8 @@ function handleNetData(d){
       msg.style.cssText="font-size:14px;color:#333;line-height:1.6";
       msg.textContent="房主正在等每個人都進房間，請稍候。";
       box.appendChild(msg);
+      var msg2=document.createElement("div");msg2.style.cssText="font-size:12px;color:#999;margin-top:8px";msg2.textContent="請不要滑走或關閉視窗。";
+      box.appendChild(msg2);
       ld.appendChild(box);document.body.appendChild(ld);
     }else if(myIdx>=0){
       var cname=FNAMES[myIdx];
