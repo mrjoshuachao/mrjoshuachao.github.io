@@ -1,4 +1,24 @@
 <!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  Globe Chess — 球面西洋棋                                    ║
+  ║                                                              ║
+  ║  整個遊戲寫在這一個 HTML 檔案裡，約 3200 行。                   ║
+  ║  唯一的外部依賴是 Three.js（3D 繪圖程式庫）。                   ║
+  ║                                                              ║
+  ║  程式結構（從上到下）：                                        ║
+  ║   1. CSS 外觀裝潢        — 介面文字的字體、顏色、位置           ║
+  ║   2. HTML 介面元素       — 按鈕、文字、彈窗                    ║
+  ║   3. 3D 舞台搭建         — 攝影機、燈光、背景、球體             ║
+  ║   4. 棋子模型和影子       — 六種棋子的 3D 形狀配方              ║
+  ║   5. 走棋規則引擎        — 球面上的西洋棋規則                   ║
+  ║   6. 路線視覺化          — 橘色線條、圓點、紅色吃子漸層         ║
+  ║   7. 動畫和音效          — 移動、跳動、消失、將軍聲等           ║
+  ║   8. 操控互動            — 觸控、滑鼠、trackpad 手勢            ║
+  ║   9. AI 大腦             — α-β 剪枝搜索 + 位置評估             ║
+  ║  10. 模式切換            — 對弈、測試、AI 對戰                  ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
+<!-- ====== 外觀裝潢：所有介面文字的字體、大小、顏色、位置 ====== -->
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { overflow: hidden; }
@@ -174,16 +195,25 @@
     border:none; outline:none; resize:none; cursor:pointer;
     overflow-y:auto; color:#1a1a1a; -webkit-overflow-scrolling:touch;
   }
+<!-- ====== 外觀裝潢結束 ====== -->
 </style>
 </head>
+<!-- ====== 畫面上看得到的介面元素：按鈕、文字、彈窗 ====== -->
 <body>
+<!-- 開場全黑遮罩，2秒淡出 -->
 <div id="introFade" style="position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;transition:opacity 2s ease-out;"></div>
+<!-- 畫面頂部中央：顯示輪到誰走、棋譜記錄 -->
 <div id="turn">White to move</div>
+<!-- See original 連結（目前隱藏） -->
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
+<!-- 畫面底部中央：棋子英文字母 開/關 按鈕 -->
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
+<!-- 右上角：重新開局按鈕 -->
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
+<!-- 左下角：測試模式按鈕 -->
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
+<!-- 測試模式的棋子選擇面板（按字母即時放上/移除棋子） -->
 <!-- Test piece selector panel -->
 <div id="testPanel">
   <div class="test-row">
@@ -209,6 +239,7 @@
     </div>
   </div>
 </div>
+<!-- 右下角：AI 對戰控制區（Watch AI battle / Pause / Reset / Quit） -->
 <!-- Battle area (bottom right) -->
 <div id="battleArea">
   <!-- Idle state -->
@@ -220,6 +251,7 @@
     <button onclick="stopAutoBattle()">Quit</button>
   </div>
 </div>
+<!-- 戰報彈窗（目前隱藏） -->
 <!-- Report Modal -->
 <div id="reportModal">
   <div id="reportBox">
@@ -233,13 +265,17 @@
     <textarea id="reportText" readonly onclick="this.select()"></textarea>
   </div>
 </div>
+<!-- 左上角：AI 對手 開/關 文字按鈕 -->
 <!-- AI opponent toggle (top left) -->
 <div id="aiWrap" onclick="toggleAI()">
   <input type="checkbox" id="aiToggle" style="display:none">
   <span id="aiLabel">AI opponent off</span>
 </div>
+<!-- 引入 Three.js 3D 繪圖程式庫（唯一的外部依賴） -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- ====== 以下是所有程式邏輯 ====== -->
 <script>
+// ===== 【3D 畫布】建立 WebGL 渲染器，負責把 3D 場景畫到螢幕上 =====
 // ─── Renderer ─────────────────────────────────────────────────────────────────
 let _pieceLettersVisible=true; // must be before placePiece calls
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -255,6 +291,7 @@ const scene  = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.01, 2000);
 camera.position.set(0, 0, innerWidth < 768 ? 5.5 : 4.2);
 
+// ===== 【背景天空】灰色漸層球形背景，讓球體看起來有環境光澤 =====
 // ─── Environment (cube camera) ────────────────────────────────────────────────
 const envDome = new THREE.Mesh(
   new THREE.SphereGeometry(600, 48, 32),
@@ -292,6 +329,7 @@ scene.add(cubeCamera);
 cubeCamera.update(renderer, scene);
 envDome.visible = false;
 
+// ===== 【燈光】環境光（整體亮度）+ 方向光（投射陰影感） =====
 // ─── Lights ───────────────────────────────────────────────────────────────────
 const _ambLight=new THREE.AmbientLight(0xffffff, 0);
 scene.add(_ambLight);
@@ -300,12 +338,14 @@ const kl=new THREE.DirectionalLight(0xffffff,1.4); kl.position.set(-7,8,3);  sce
 const fl=new THREE.DirectionalLight(0xffffff,0.5); fl.position.set(-3,6,3);  scene.add(fl);
 const rl=new THREE.DirectionalLight(0xffffff,0.06); rl.position.set(4,-4,-4); scene.add(rl);
 
+// ===== 【球面材質】黑格和白格的材質設定（塑膠感） =====
 // ─── Globe Materials ──────────────────────────────────────────────────────────
 const PLASTIC={roughness:0.45,metalness:0.0};
 const matW=new THREE.MeshStandardMaterial({color:0x333333,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.2});
 const matB=new THREE.MeshStandardMaterial({color:0x111111,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.2});
 const matG=new THREE.MeshStandardMaterial({color:0x222222,...PLASTIC,envMap:cubeRT.texture,envMapIntensity:1.0});
 
+// ===== 【棋盤球體】在球面上切出 8×8 = 64 個格子 =====
 // ─── Globe ────────────────────────────────────────────────────────────────────
 const R=1;
 const NUM_LAT=8, NUM_LON=8;
@@ -343,6 +383,7 @@ for(let lat=0;lat<NUM_LAT;lat++){
 }
 capN.renderOrder=-1; capS.renderOrder=-1; _depthOccluder.renderOrder=-1;
 
+// ===== 【棋盤資料】8×8 陣列記錄每格的棋子，以及座標轉換函數 =====
 // ─── Board State ──────────────────────────────────────────────────────────────
 const board=Array.from({length:8},()=>Array(8).fill(null));
 
@@ -357,10 +398,12 @@ function cornerPos3D(latB,lonB,r=R*1.019){
   return new THREE.Vector3(r*Math.sin(theta)*Math.cos(phi),r*Math.cos(theta),r*Math.sin(theta)*Math.sin(phi));
 }
 
+// ===== 【棋子材質】白棋（淺色塑膠）和黑棋（深色塑膠）的外觀 =====
 // ─── Piece Materials ──────────────────────────────────────────────────────────
 const matLight=new THREE.MeshStandardMaterial({color:0x444444,roughness:0.45,metalness:0.0,envMap:cubeRT.texture,envMapIntensity:1.2});
 const matDark=new THREE.MeshStandardMaterial({color:0x000000,roughness:0.45,metalness:0.0,envMap:cubeRT.texture,envMapIntensity:1.2});
 
+// ===== 【棋子字母】在 canvas 上畫出 K Q R B N P 字母，貼到棋子頭頂 =====
 // ─── Letter Texture ───────────────────────────────────────────────────────────
 function makeLetterTex(letter,isBlack){
   const S=512;
@@ -390,6 +433,7 @@ const allSprites=[];
 const _pieceUp=new THREE.Vector3(0,1,0);
 const u=0.062;
 
+// ===== 【棋子模型】每種棋子的 3D 形狀配方（高度、寬度、圓頂、腰身等） =====
 // ─── Piece Mesh ───────────────────────────────────────────────────────────────
 function createPieceMesh(type,isBlack){
   const g=new THREE.Group();
@@ -470,6 +514,7 @@ function createPieceMesh(type,isBlack){
   return g;
 }
 
+// ===== 【棋子影子】每顆棋子腳底的圓形半透明陰影 =====
 // ─── Blob Shadow ──────────────────────────────────────────────────────────────
 function createBlobGroup(blobScale,blobOpacity){
   blobScale=blobScale||1;
@@ -532,6 +577,7 @@ function placePiece(type,isBlack,lat,lon){
     group.traverse(c=>{if(c.isSprite)c.visible=false;});
 }
 
+// ===== 【開局擺棋】把 32 顆棋子放到標準起始位置 =====
 // ─── Initial Placement ────────────────────────────────────────────────────────
 const MAJOR=['R','N','B','K','Q','B','N','R'];
 MAJOR.forEach((p,lon)=>placePiece(p,true,0,lon));
@@ -539,6 +585,7 @@ for(let lon=0;lon<8;lon++)placePiece('P',true,1,lon);
 for(let lon=0;lon<8;lon++)placePiece('P',false,6,lon);
 MAJOR.forEach((p,lon)=>placePiece(p,false,7,lon));
 
+// ===== 【格子座標標籤】a-h 和 1-8 的小字標記（球面上的座標） =====
 // ─── Cell Coordinate Labels ───────────────────────────────────────────────────
 const COL_LETTERS=['h','g','f','e','d','c','b','a'];
 const cellLabels=[];
@@ -568,6 +615,7 @@ for(let lat=0;lat<8;lat++){
   }
 }
 
+// ===== 【走棋規則】每種棋子能走哪些格子（含球面經緯度環繞和極點翻轉） =====
 // ─── Move Rules ───────────────────────────────────────────────────────────────
 function wL(n){return((n%8)+8)%8;}
 function poleRef(l,n){
@@ -693,6 +741,7 @@ function getValidMoves(lat,lon){
   return moves;
 }
 
+// ===== 【將軍偵測】判斷國王是否被攻擊、是否有合法走法 =====
 // ─── Check Detection ──────────────────────────────────────────────────────────
 function isInCheck(color){
   let kLat=-1,kLon=-1;
@@ -746,6 +795,7 @@ function hasAnyLegalMove(color){
   return false;
 }
 
+// ===== 【將軍紅圈】國王腳底的紅色警告圓圈 =====
 // ─── Check Ring Visual ────────────────────────────────────────────────────────
 let checkRingObjs=[];
 function clearCheckRing(){
@@ -777,6 +827,7 @@ function showCheckRing(lat,lon){
   }
 }
 
+// ===== 【威脅路線】畫出正在攻擊國王的棋子的攻擊路線（紅色線條） =====
 // ─── Check Threat Visualization ───────────────────────────────────────────────
 // Shows the attack path(s) from threatening piece(s) to the king.
 // Uses computeAnimPath so diagonals, knights, pole-crossings all look correct.
@@ -875,6 +926,7 @@ function showCheckThreats(color){
   }
 }
 
+// ===== 【路線繪圖工具】大圓弧線、緯度弧線的數學計算 =====
 // ─── Path helpers ─────────────────────────────────────────────────────────────
 function geodesicPts(p1,p2,segs=48){
   const pts=[];
@@ -905,6 +957,7 @@ function latRingArc(latIdx,lonA,lonB,segs=40,r=R*1.019,dn_sign=0){
   return pts;
 }
 
+// ===== 【路線視覺材質】橘色線條、橘色圓點、虛線、紅色吃子漸層的顏色設定 =====
 // ─── Visualization Materials ──────────────────────────────────────────────────
 const TUBE_F=new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
 const DOT_F =new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-8});
@@ -915,6 +968,7 @@ const DOT_GEO=new THREE.SphereGeometry(0.048,32,32);
 let selectedCell=null,currentTargets=[],visObjects=[];
 let shakeAnims=[]; // [{group, basePos, radialDir, t}]
 
+// ===== 【顯示走法路線】點選棋子後畫出所有可走位置的橘色線條和圓點 =====
 function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
   // autoOnlyLat/Lon: when set (auto-battle), only draw path for that specific destination
   clearVis();
@@ -1389,6 +1443,7 @@ function clearVis(){
   if(typeof updateDeleteBtn==='function')updateDeleteBtn();
 }
 
+// ===== 【移動動畫】棋子沿路線滑動、選中棋子跳動 =====
 // ─── Move Animation ───────────────────────────────────────────────────────────
 let moveAnim=null;
 let bounceAnim=null;
@@ -1411,6 +1466,7 @@ function stopBounce(){
   }
 }
 
+// ===== 【動畫時間計算】路線越長動畫越久 =====
 // ─── Animation duration helper ────────────────────────────────────────────────
 // Duration scales with actual 3D path length — not grid-step count.
 // Calibration: 1 latitude step (BAND_THETA) → 500 ms  |  longest spirals → 5000 ms
@@ -1531,6 +1587,7 @@ function computeAnimPath(move,fromLat,fromLon,toLat,toLon,fromPos){
 
 function easeInOut(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
 
+// ===== 【執行走棋】更新棋盤資料、播放動畫、判定勝負、顯示棋譜 =====
 // ─── Move Execution ───────────────────────────────────────────────────────────
 let turnColor='white';
 const turnEl=document.getElementById('turn');
@@ -1563,9 +1620,11 @@ function _showNotation(noteLine,turnLine,duration){
   },duration);
 }
 
+// ===== 【吃過路兵】記錄上一步是否雙格前進，供下一步判斷 =====
 // ─── En Passant State ─────────────────────────────────────────────────────────
 let enPassantTarget=null; // {lat,lon} = square a pawn passed through on a double-step
 
+// ===== 【音效】用 Web Audio API 即時合成走棋聲、吃子聲、將軍聲等 =====
 // ─── Sound Effects (Web Audio API) ───────────────────────────────────────────
 let _ac=null;
 function getAC(){
@@ -1618,6 +1677,7 @@ function playCheck()  { sfxTone(740,0.22,0.14); sfxTone(980,0.17,0.22,0.13); }
 function playGameOver(){ sfxTone(523,0.16,0.20); sfxTone(659,0.15,0.20,0.22);
                          sfxTone(784,0.15,0.22,0.44); sfxTone(1047,0.20,0.40,0.66); }
 
+// ===== 【被吃棋子消失動畫】被吃掉的棋子漸漸淡出透明 =====
 // ─── Capture Fly-Away Animation ───────────────────────────────────────────────
 let captureFlyAnims=[];
 function startCaptureFade(cap){
@@ -1782,6 +1842,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
   setMoveAnimPiece(piece.type,piece.color==='white');
 }
 
+// ===== 【觸碰偵測】判斷手指/滑鼠按到了哪顆棋子或哪個圓點 =====
 // ─── Hit Detection (screen-space) ─────────────────────────────────────────────
 const raycaster=new THREE.Raycaster();
 const _hWP=new THREE.Vector3();
@@ -1824,6 +1885,7 @@ function hitTest(cx,cy){
   return null;
 }
 
+// ===== 【操控互動】拖動旋轉球、慣性減速、自動旋轉 =====
 // ─── Rotation + Interaction ────────────────────────────────────────────────────
 let dragging=false,prev={x:0,y:0},vel={x:0,y:0},autoRotate=false;
 let pDownPos=null;
@@ -1857,6 +1919,7 @@ renderer.domElement.addEventListener('touchmove',e=>{
   e.preventDefault();
 },{passive:false});
 
+// ===== 【雙指操作】雙指縮放、雙指旋轉、滾輪縮放、Trackpad 手勢 =====
 // ─── Multi-pointer rotation + pinch zoom ──────────────────────────────────────
 function applyDelta(dx,dy){
   const s=2*Math.tan(21*Math.PI/180)*camera.position.z/innerHeight;
@@ -2001,6 +2064,7 @@ window.addEventListener('resize',()=>{
 });
 
 // ══════════════════════════════════════════════════════════════════════════════
+// ===== 【AI 大腦 - 基礎版】極小極大搜索 + α-β 剪枝，用於一般 AI 對手 =====
 // ─── AI Player (minimax + alpha-beta, depth 3) ────────────────────────────────
 const AI_COLOR='black', HUMAN_COLOR='white';
 let aiMode=false, aiThinking=false;
@@ -2238,6 +2302,7 @@ function _updateAILabel(){
   document.getElementById('aiToggle').checked=aiMode;
 }
 
+// ===== 【測試模式】按字母即時放上/移除棋子，自由測試走法 =====
 // ─── Test Move ───────────────────────────────────────────────────────────────
 let testModeActive=false;
 let _testSave=null;
@@ -2353,6 +2418,7 @@ function exitTestMode(){
 
 function updateDeleteBtn(){}
 
+// ===== 【棋子字母開關】顯示或隱藏所有棋子頭上的英文字母 =====
 // ─── Piece Letter Toggle ─────────────────────────────────────────────────────
 function togglePieceLetters(){
   _pieceLettersVisible=!_pieceLettersVisible;
@@ -2363,6 +2429,7 @@ function togglePieceLetters(){
   });
 }
 
+// ===== 【主動畫迴圈】每秒跑 60 次，驅動所有動畫和渲染 =====
 // ─── Animate ──────────────────────────────────────────────────────────────────
 function animate(){
   requestAnimationFrame(animate);
@@ -2391,7 +2458,8 @@ function animate(){
     return;
   }
 
-  // ── Skip all animations when paused (freeze frame) ──
+    // ===== 暫停時跳過以下所有動畫，畫面定格 =====
+// ── Skip all animations when paused (freeze frame) ──
   if(!autoBattlePaused){
 
   // Globe rotation animation
@@ -2509,6 +2577,7 @@ let _autoBattleLog = null;
 let _autoGameNum = 0;
 let _autoPosHist = {};
 
+// ===== 【AI 評估函數】計算盤面分數：棋子價值 + 位置分 + 兵型 + 極區戰術 =====
 // ── Globe-tactics-aware evaluation ──────────────────────────────────────────
 // Primary driver: piece material.
 // Secondary driver: pole proximity — pieces near polar caps attack in BOTH directions
@@ -2536,6 +2605,7 @@ function captureEval(){
   return s;
 }
 
+// ===== 【靜態搜索】只搜索吃子走法，避免在激烈交換中途誤判 =====
 // ── Quiescence search (captures only, up to qleft extra plies) ────────────
 // Prevents the "horizon effect": never stop in the middle of a capture sequence.
 // This is what lets the AI see through 3-ply pole-crossing exchange sequences.
@@ -2588,6 +2658,7 @@ function captureMinim(depth,alpha,beta,maxing){
   return best;
 }
 
+// ===== 【選擇最佳走法】迭代加深搜索，時間限制內找最好的一步 =====
 // ── Get best legal move for either color ─────────────────────────────────────
 // Strategy: greedy capture ordering + captureMinim(depth=2) for tie-breaking.
 // Each AI evaluates independently — neither knows the other's chosen move.
@@ -2630,6 +2701,7 @@ function getAutoAIMove(color){
   return best;
 }
 
+// ===== 【紀錄工具】記錄 AI 對戰的每一步棋，用於戰報 =====
 // ── Logging helpers ───────────────────────────────────────────────────────────
 function _autoBoardHash(){
   let h='';
@@ -2659,6 +2731,7 @@ function _autoLogAnomaly(type,desc,extra={}){
   console.warn('[AUTO-BATTLE ANOMALY]',type,desc,extra);
 }
 
+// ===== 【AI 對戰主循環】輪流讓黑白 AI 思考和走棋 =====
 // ── Main drive loop ───────────────────────────────────────────────────────────
 
 // Insufficient material: K/K+minor vs K/K+minor → cannot force checkmate
@@ -2673,6 +2746,7 @@ function _autoInsufMaterial(){
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+// ===== 【AI 大腦 - 增強版】更深的搜索、位置評估表、時間管理 =====
 // ─── Enhanced AI Engine — positional evaluation + iterative deepening α-β ────
 const _AI_THINK_MS  = 8000;   // AI opponent: 8 s per move
 const _AUTO_THINK_MS= 1000;   // Auto-battle: 1 s per move (fast aggressive play)
@@ -2892,7 +2966,8 @@ function doAutoMove(){
     _endAutoGame('DRAW_FIFTY_MOVE');return;
   }
 
-  // ── Resignation & draw-by-agreement ────────────────────────────────────────
+  // ===== 【認輸和議和判定】連續劣勢太久就認輸，雙方持平太久就議和 =====
+// ── Resignation & draw-by-agreement ────────────────────────────────────────
   const _ev=evaluate();
   if(_ev >= RESIGN_THRESHOLD){
     log.wResignStreak++;log.bResignStreak=0;log.drawStreak=0;
@@ -2969,6 +3044,7 @@ function doAutoMove(){
   );
 }
 
+// ===== 【遊戲生命週期】開始對戰、暫停、重置、停止 =====
 // ── Game lifecycle ────────────────────────────────────────────────────────────
 function _endAutoGame(result){
   if(!autoBattleActive)return;
@@ -3056,6 +3132,7 @@ function stopAutoBattle(){
 
 
 
+// ===== 【戰報生成】把整場比賽的走法整理成可複製的文字報告 =====
 // ── Report generation ─────────────────────────────────────────────────────────
 function _showAutoReport(){
   const log=_autoBattleLog;if(!log)return;
