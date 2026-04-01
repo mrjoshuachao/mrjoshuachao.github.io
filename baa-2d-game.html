@@ -79,7 +79,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.5.3</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -130,7 +130,7 @@ function loadPeerJS(cb){
 (function(){
 var R=113.38,TW=113.38,TH=98.19,AX=56.69;
 var R3=R*Math.sqrt(3),R3h=R3/2;
-var ROTS=[180,240,300,0,60,120];
+var ROTS=[300,0,60,120,180,240];
 var NS="http://www.w3.org/2000/svg",XL="http://www.w3.org/1999/xlink";
 var svg=document.getElementById("board"),world=document.getElementById("world"),fenceLayer=document.getElementById("fenceLayer"),glowLayer=document.getElementById("glowLayer");
 var generated={};var panX=0,panY=0;var svgW=0,svgH=0;var commitX=0,commitY=0;
@@ -577,7 +577,6 @@ function findEdge(wx,wy){
 
 // === FIND TWO TRIANGLES SHARING AN EDGE (algebraic, no sampling) ===
 function findTriPair(edgeKey){
-  // Decode midpoint from edgeKey
   var parts=edgeKey.split(",");
   var emx=parseFloat(parts[0]),emy=parseFloat(parts[1]);
   var h=ptToHex(emx,emy);
@@ -671,25 +670,14 @@ function wouldBeIllegal(e){
   if(ilCache[key]!==undefined)return ilCache[key];
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var pair=findTriPair(key);
-  var starts=[];
-  if(pair){ starts.push(pair[0]);starts.push(pair[1]); }
-  else{
-    var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1;
-    var len=Math.sqrt(dx*dx+dy*dy),nx=-dy/len*15,ny=dx/len*15;
-    for(var s=-1;s<=1;s+=2){ var px=mx+nx*s,py=my+ny*s,h=ptToHex(px,py),o=((h.c%2)+2)%2;
-      var cx2=h.c*1.5*R,cy2=h.r*R3+o*R3h,ang=Math.atan2(py-cy2,px-cx2)*180/Math.PI;
-      var tri=Math.floor(((ang%360+360)%360)/60);
-      starts.push({c:h.c,r:h.r,t:tri});
-    }
-  }
-  for(var i=0;i<starts.length;i++){
-    var reg=floodFill(starts[i].c,starts[i].r,starts[i].t,tfk);
-    if(reg){
-      if(reg.length<2){ var reason="圈地裡面要有羊和羊舍";ilCache[key]=reason;return reason; }
+  if(!pair){ ilCache[key]=null;return null; }
+  for(var i=0;i<2;i++){
+    var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
+    if(reg&&reg.length>=1){
       var a=analyzeRegion(reg,tfk);
-      if(a.sheep===0&&a.house===0){ var reason="圈地裡面要有羊和羊舍";ilCache[key]=reason;return reason; }
       if(a.sheep>0&&a.house===0){ var reason="圈地裡面要有羊舍";ilCache[key]=reason;return reason; }
       if(a.sheep===0&&a.house>0){ var reason="圈地裡面要有羊";ilCache[key]=reason;return reason; }
+      if(a.sheep===0&&a.house===0){ var reason="圈地裡面要有羊和羊舍";ilCache[key]=reason;return reason; }
     }
   }
   ilCache[key]=null;return null;
@@ -989,7 +977,7 @@ window.addEventListener("mousemove",function(e){
     var dx=e.clientX-startX,dy=e.clientY-startY;
     panX=startPanX-dx;panY=startPanY-dy;
     dragDist=Math.abs(dx)+Math.abs(dy);
-    if(!dragRAF)dragRAF=requestAnimationFrame(function(){applyPan();dragRAF=0;});
+    applyPan();
     return;
   }
   if(hasOverlay())return;
