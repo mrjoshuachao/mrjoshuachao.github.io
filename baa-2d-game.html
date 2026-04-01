@@ -80,7 +80,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.2</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -775,13 +775,14 @@ function aiEval(e,aiIdx){
   
   // DISTANCE PENALTY: never place far from existing fences
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
-  for(var k in fences){
-    var f=fences[k];
-    var fx=(f.x1+f.x2)/2,fy=(f.y1+f.y2)/2;
+  var fkeys=Object.keys(fences);
+  for(var fi=0;fi<fkeys.length;fi++){
+    var parts=fkeys[fi].split(",");
+    var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
     var dd=Math.abs(mx-fx)+Math.abs(my-fy);
     if(dd<minDist)minDist=dd;
   }
-  if(Object.keys(fences).length>0&&minDist>R*6)return -999;
+  if(fkeys.length>0&&minDist>R*6)return -999;
   
   var sc=0,completesAny=false;
   // Check if completes enclosure
