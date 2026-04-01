@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Baa!</title>
 <style>
 *{margin:0;padding:0}
@@ -79,7 +79,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.5.2</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.5.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -976,6 +976,12 @@ svg.addEventListener("mousedown",function(e){
   hidePreview();lastPrevKey=null;
 });
 svg.addEventListener("dragstart",function(e){e.preventDefault();});
+// Prevent all zoom: pinch, trackpad, Ctrl+wheel
+document.addEventListener("gesturestart",function(e){e.preventDefault();},{passive:false});
+document.addEventListener("gesturechange",function(e){e.preventDefault();},{passive:false});
+document.addEventListener("gestureend",function(e){e.preventDefault();},{passive:false});
+document.addEventListener("wheel",function(e){if(e.ctrlKey)e.preventDefault();},{passive:false});
+document.addEventListener("touchstart",function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});
 window.addEventListener("mousemove",function(e){
   if(recentTouch())return;
   if(dragging){
