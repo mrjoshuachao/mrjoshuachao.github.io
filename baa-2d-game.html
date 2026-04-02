@@ -80,7 +80,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.3</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.4</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -242,7 +242,7 @@ function analyzeRegion(reg,fk){
     }
     if(tile==="H")house++;
   }
-  var cc=[0,0,0,0,0],regSet={};
+  var cc=[0,0,0,0,0,0],regSet={};
   for(var i=0;i<reg.length;i++) regSet[reg[i].c+","+reg[i].r+","+reg[i].t]=1;
   for(var i=0;i<reg.length;i++){
     var edges=triEdges(reg[i].c,reg[i].r,reg[i].t);
