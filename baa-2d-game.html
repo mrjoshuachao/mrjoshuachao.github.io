@@ -19,7 +19,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #psel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer}
 #aisel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
 #winsel{background:#fff;color:#333;border:1px solid #ccc;border-radius:6px;padding:4px 6px;font-size:12px;cursor:pointer}
-.lbl{color:#555;font-size:12px;font-family:'Segoe UI',sans-serif}
+.lbl{color:#333;font-size:10px;font-family:'Segoe UI',sans-serif}
+#sb select{font-size:10px;color:#333;font-family:'Segoe UI',sans-serif}
 .scores{display:flex;gap:4px;position:absolute;left:50%;transform:translateX(-50%);align-items:center}
 .ps{font-size:15px;font-weight:bold;padding:0 1px}
 .pd{display:inline}
@@ -67,7 +68,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </style></head><body>
 <div id="loading"><span>Loading</span></div>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:4px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:8px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
 <div class="scores" id="scoreArea"></div>
 <div style="display:flex;align-items:center;gap:3px;margin-left:auto">
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span class="lbl">人類</span>
@@ -78,9 +79,9 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </div>
 <div id="bb">
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
-<div style="display:flex;align-items:center;gap:4px">
+<div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.7</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -88,8 +89,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <button class="tbtn" id="btnRestart">重新開始</button>
 <button class="tbtn" id="btnHome">回家</button>
 </div>
-<div style="display:flex;align-items:center;gap:4px">
-<span id="hostLabel" style="display:none;font-size:9px;color:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif">你是房主</span>
+<div style="display:flex;align-items:center;gap:8px">
+<span id="hostLabel" style="display:none;font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">你是房主</span>
 <button class="tbtn" id="btnOnline">連線對戰</button>
 </div>
 </div>
@@ -376,7 +377,7 @@ function updateSB(){
       s.style.textShadow="none";
     }
     var isAI=i>=(numP-numAI);
-    var label=isAI?"電":"";
+    var label=isAI?"ϟ":"";
     if(online&&isMyCircle(i))label="你";
     var isCur=(i===curP());
     var h="";
@@ -644,7 +645,7 @@ function tryPlaceFence(e){
         if(a.sheep>0&&a.house>0){ var maxC=0;for(var j=0;j<numP;j++)if(a.colors[j]>maxC)maxC=a.colors[j];
           if(maxC>0){ var ws=[];for(var j=0;j<numP;j++)if(a.colors[j]===maxC)ws.push(j);
             for(var j=0;j<ws.length;j++){ scores[ws[j]]+=a.pts; scoreChanges.push({p:ws[j],d:a.pts}); }
-            showMsg(ws.map(function(w){return FNAMES[w];}).join("、")+" +"+a.pts+" 分",4000);
+            showMsg(ws.map(function(w){return FNAMES[w];}).join("、")+" +"+a.pts+" 分",10000);
 
             for(var j=0;j<reg.length;j++){ var tk=reg[j].c+","+reg[j].r+","+reg[j].t; completedTris[tk]=1; newCompleted.push(tk); }
             // Glow effect on enclosed triangles
@@ -1109,6 +1110,7 @@ document.getElementById("psel").addEventListener("change",function(){
   if(history.length>0){
     pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
     pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
+    document.getElementById("confirm").querySelector("p").textContent="改變人數會讓遊戲重新開始，確定嗎？";
     document.getElementById("confirm").style.display="flex";
   }else{ prevHuman=numHuman;prevAI=numAI;resetGame(); }
 });
@@ -1119,6 +1121,7 @@ document.getElementById("aisel").addEventListener("change",function(){
   if(history.length>0){
     pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
     pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
+    document.getElementById("confirm").querySelector("p").textContent="改變人數會讓遊戲重新開始，確定嗎？";
     document.getElementById("confirm").style.display="flex";
   }else{ prevHuman=numHuman;prevAI=numAI;resetGame(); }
 });
