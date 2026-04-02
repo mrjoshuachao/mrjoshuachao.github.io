@@ -80,7 +80,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:4px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.4</span>
+<span style="font-size:9px;color:rgba(0,0,0,0.3)">v1.6.7</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -137,7 +137,7 @@ var svg=document.getElementById("board"),world=document.getElementById("world"),
 var generated={};var panX=0,panY=0;var svgW=0,svgH=0;var commitX=0,commitY=0;
 var dragging=false,startX=0,startY=0,startPanX=0,startPanY=0,dragDist=0;
 
-var FCOLORS=["#e74c3c","#3498db","#f1c40f","#ffffff","#888888","#2c2c2c"];
+var FCOLORS=["#e74c3c","#3498db","#ffe030","#ffffff","#888888","#2c2c2c"];
 var FNAMES=["紅","藍","黃","白","灰","黑"];
 var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var seed=Date.now();var winDismissed=false;
@@ -370,8 +370,8 @@ function updateSB(){
     var s=document.createElement("span");s.className="ps";s.id="pd"+i;
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
-    if(FCOLORS[i]==="#ffffff"||FCOLORS[i]==="#f1c40f"){
-      s.style.textShadow="0 0 1px #999,0 0 2px #aaa";
+    if(FCOLORS[i]==="#ffffff"||FCOLORS[i]==="#ffe030"){
+      s.style.textShadow="0 0 1px #000";
     }else{
       s.style.textShadow="none";
     }
@@ -1075,9 +1075,10 @@ window.addEventListener("touchend",function(e){
 });
 
 var pendingChange=null,pendingCancel=null,prevHuman=2,prevAI=0;
-function confirmChange(fn,cancelFn){
+function confirmChange(fn,cancelFn,msg){
   if(history.length>0){
     pendingChange=fn;pendingCancel=cancelFn||null;
+    document.getElementById("confirm").querySelector("p").textContent=msg||"改變人數會讓遊戲重新開始，確定嗎？";
     document.getElementById("confirm").style.display="flex";
   }else{ fn(); }
 }
@@ -1128,7 +1129,7 @@ document.getElementById("winsel").addEventListener("change",function(){
     broadcast({t:"winTarget",val:v});
     showMsg("已更改為先得 "+v+" 分獲勝",2000);
   }else{
-    confirmChange(function(){ winTarget=v; },function(){ winTarget=prev;document.getElementById("winsel").value=prev; });
+    confirmChange(function(){ winTarget=v;resetGame(); },function(){ winTarget=prev;document.getElementById("winsel").value=prev; },"改變獲勝分數會讓遊戲重新開始，確定嗎？");
   }
 });
 document.getElementById("btnRestart").addEventListener("click",function(){
