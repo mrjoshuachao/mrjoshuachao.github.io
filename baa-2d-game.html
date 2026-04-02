@@ -950,7 +950,7 @@ function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElement
 function hasOverlay(){
   if(lobbyActive)return true;
   if(gameOver&&!winDismissed)return true;
-  var ids=["modal","confirm","createSpin","waitApproval","joinSpin","centerNotice","winOverlay"];
+  var ids=["modal","confirm","createSpin","waitApproval","joinSpin","centerNotice","winOverlay","restartDlg"];
   for(var i=0;i<ids.length;i++){
     var el=document.getElementById(ids[i]);
     if(el&&el.style.display!=="none"&&(ids[i]!=="modal"||el.style.display==="flex")&&(ids[i]!=="confirm"||el.style.display==="flex"))return true;
@@ -1141,7 +1141,7 @@ document.getElementById("btnRestart").addEventListener("click",function(){
     showCenterNotice("你按了想要重新開始，正在等待房主允許。",true);
     return;
   }
-  var d=document.createElement("div");
+  var d=document.createElement("div");d.id="restartDlg";
   d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
   var box=document.createElement("div");
   box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
