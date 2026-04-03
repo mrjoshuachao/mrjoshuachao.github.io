@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.2.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.3.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -2869,6 +2869,42 @@ function evaluate(){
       if(c>0&&!pLon[side][wL(o-1)]&&!pLon[side][wL(o+1)])pen+=15; // isolated (increased)
     }
     s-=pen*sgn;
+  }
+  // Passed pawn detection + bonus
+  const passedPawns=[];
+  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+    const p=board[a][o];if(!p||p.type!=='P')continue;
+    const bk=p.color==='black';
+    const promoLat=bk?7:0;
+    let passed=true;
+    // Check opponent pawns on same or adjacent lons ahead of this pawn
+    for(let dlo=-1;dlo<=1;dlo++){
+      const lo=wL(o+dlo);
+      if(bk){for(let la=a+1;la<=7;la++){const bp=board[la][lo];if(bp&&bp.type==='P'&&bp.color==='white'){passed=false;break;}}}
+      else{for(let la=a-1;la>=0;la--){const bp=board[la][lo];if(bp&&bp.type==='P'&&bp.color==='black'){passed=false;break;}}}
+      if(!passed)break;
+    }
+    if(passed){
+      const dist=Math.abs(promoLat-a);
+      passedPawns.push({lat:a,lon:o,color:p.color,dist});
+      // Exponential bonus: closer to promotion = much more valuable
+      const bonus=dist<=1?250:dist<=2?140:dist<=3?85:dist<=4?55:dist<=5?35:20;
+      s+=bk?bonus:-bonus;
+    }
+  }
+  // Endgame: king proximity to passed pawns
+  if(eg&&passedPawns.length>0){
+    const lonDist=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
+    for(const pp of passedPawns){
+      const bk=pp.color==='black';
+      const ownKLat=bk?bKingLat:wKingLat, ownKLon=bk?bKingLon:wKingLon;
+      const oppKLat=bk?wKingLat:bKingLat, oppKLon=bk?wKingLon:bKingLon;
+      if(ownKLat<0||oppKLat<0)continue;
+      const ownDist=Math.max(Math.abs(ownKLat-pp.lat),lonDist(ownKLon,pp.lon));
+      const oppDist=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
+      // Own king close to support passer; opponent king far = good
+      s+=(bk?1:-1)*((7-ownDist)*6-(7-oppDist)*8);
+    }
   }
   // Bishop pair bonus (having both bishops is worth extra)
   if(wBishops>=2)s-=35;
