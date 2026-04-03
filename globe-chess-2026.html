@@ -180,8 +180,9 @@
 <div id="introFade" style="position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;transition:opacity 2s ease-out;"></div>
 <div id="turn">White to move</div>
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
-<button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
+<button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.0.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -2056,7 +2057,7 @@ renderer.domElement.addEventListener('pointerup',e=>{
     // During auto-battle, ignore taps — prevent accidental touches on mobile from
     // clearing the move visualization (clearVis) and currentTargets needed by execMove.
     if(autoBattleActive){}
-    else if(Math.hypot(dx,dy)<8&&!aiThinking){
+    else if(Math.hypot(dx,dy)<8&&!moveAnim&&!globeRotAnim){
       const hit=hitTest(e.clientX,e.clientY);
       if(hit?.kind==='dot'){
         if(selectedCell)execMove(selectedCell.lat,selectedCell.lon,hit.lat,hit.lon);
@@ -2594,7 +2595,7 @@ function animate(){
     moveAnim.sprite.position.copy(pos);
     orientPiece(moveAnim.sprite,pos);
     if(moveAnim.pieceType==='N') faceKnightTowardPole(moveAnim.sprite,pos,moveAnim.pieceIsWhite);
-    if((aiMode||autoBattleActive)&&!globeRotAnim){
+    if((aiMode||autoBattleActive)&&!globeRotAnim&&!dragging){
       const worldDir=pos.clone().normalize().applyQuaternion(globe.quaternion);
       const offCentre=Math.max(0,1-worldDir.z);
       const alpha=0.025+offCentre*0.035;
@@ -2990,7 +2991,7 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
 
 function doAutoMove(){
   if(!autoBattleActive||autoBattlePaused)return;
-  if(moveAnim||globeRotAnim){_autoBattleTimer=setTimeout(doAutoMove,120);return;}
+  if(moveAnim||globeRotAnim||dragging){_autoBattleTimer=setTimeout(doAutoMove,120);return;}
 
   const log=_autoBattleLog;if(!log)return;
 
@@ -3115,13 +3116,19 @@ function _endAutoGame(result){
   };
   turnEl.textContent=_MSG[result]||result;
   if(result==='WHITE_RESIGNS'||result==='BLACK_RESIGNS') playGameOver();
-  // Restore UI
-  document.getElementById('aiWrap').style.display='';
-  document.getElementById('newGameBtn').style.display='';
-  document.getElementById('testBtn').style.display='';
-  document.getElementById('autoBattleBtn').style.display='';
-  document.getElementById('autoBattleControls').style.display='none';
-  // if(_autoBattleLog&&_autoBattleLog.moves.length>0)_showAutoReport(); // report hidden
+  // Show Report button (replace Pause), keep Reset and Quit
+  const pauseBtn=document.getElementById('autoPauseBtn');
+  if(_autoBattleLog&&_autoBattleLog.moves.length>0){
+    pauseBtn.textContent='Report';
+    pauseBtn.onclick=()=>_showAutoReport();
+  } else {
+    // No moves — just restore UI
+    document.getElementById('aiWrap').style.display='';
+    document.getElementById('newGameBtn').style.display='';
+    document.getElementById('testBtn').style.display='';
+    document.getElementById('autoBattleBtn').style.display='';
+    document.getElementById('autoBattleControls').style.display='none';
+  }
 }
 
 function startAutoBattle(){
@@ -3142,7 +3149,8 @@ function startAutoBattle(){
   document.getElementById('testBtn').style.display='none';
   document.getElementById('autoBattleBtn').style.display='none';
   document.getElementById('autoBattleControls').style.display='flex';
-  document.getElementById('autoPauseBtn').textContent='Pause';
+  const _pb=document.getElementById('autoPauseBtn');
+  _pb.textContent='Pause'; _pb.onclick=toggleAutoPause;
   _autoBattleTimer=setTimeout(doAutoMove,900);
 }
 
@@ -3154,30 +3162,29 @@ function toggleAutoPause(){
 }
 
 function newAutoBattle(){
-  // Discard current log silently and restart
   _autoBattleLog=null;autoBattleActive=false;
   clearTimeout(_autoBattleTimer);
+  const pb=document.getElementById('autoPauseBtn');
+  pb.textContent='Pause'; pb.onclick=toggleAutoPause;
   startAutoBattle();
 }
 
 function stopAutoBattle(){
-  if(!autoBattleActive)return;
-  const log=_autoBattleLog;
-  autoBattleActive=false;autoBattlePaused=false;
   clearTimeout(_autoBattleTimer);
   clearVis();
-  // Restore UI
+  if(autoBattleActive&&_autoBattleLog&&_autoBattleLog.moves.length>0){
+    _autoBattleLog.result='STOPPED_BY_USER';_autoBattleLog.endTime=Date.now();
+  }
+  autoBattleActive=false;autoBattlePaused=false;
+  // Restore pause button and full UI
+  const pb=document.getElementById('autoPauseBtn');
+  pb.textContent='Pause'; pb.onclick=toggleAutoPause;
   document.getElementById('aiWrap').style.display='';
   document.getElementById('newGameBtn').style.display='';
   document.getElementById('testBtn').style.display='';
   document.getElementById('autoBattleBtn').style.display='';
   document.getElementById('autoBattleControls').style.display='none';
-  if(log&&log.moves.length>0){
-    log.result='STOPPED_BY_USER';log.endTime=Date.now();
-    // _showAutoReport(); // report hidden
-  } else {
-    turnEl.textContent='White to move';
-  }
+  turnEl.textContent='White to move';
 }
 
 
