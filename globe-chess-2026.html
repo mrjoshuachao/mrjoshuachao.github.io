@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.1.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.2.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -757,8 +757,10 @@ function hasAnyLegalMove(color){
 
 // ─── Check Ring Visual ────────────────────────────────────────────────────────
 let checkRingObjs=[];
-let _checkOuterR=0, _checkCenter=null; // for trimming threat lines at outer ring
+let _checkOuterR=0, _checkCenter=null;
+let _checkmateActive=false; // when true, check threats are never cleared
 function clearCheckRing(){
+  if(_checkmateActive)return; // permanent on checkmate
   checkRingObjs.forEach(o=>globe.remove(o));
   checkRingObjs=[];
 }
@@ -978,11 +980,6 @@ function _ghostMat(color,pgOF,pgOU,sRef){
 function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
   // autoOnlyLat/Lon: when set (auto-battle), only draw path for that specific destination
   clearVis();
-  // Hide check rings when king is selected (orange ring replaces red rings)
-  const _selPiece=board[lat]?.[lon];
-  if(_selPiece?.type==='K'&&checkRingObjs.length>0){
-    checkRingObjs.forEach(o=>o.visible=false);
-  }
   // In test mode, skip check-filtering so all raw moves are shown
   const moves=testModeActive?getValidMoves(lat,lon):getLegalMoves(lat,lon);
   if(!moves.length)return;
@@ -1503,8 +1500,6 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
 
 function clearVis(){
   stopBounce();
-  // Restore check rings if hidden
-  checkRingObjs.forEach(o=>o.visible=true);
   // Stop shake animations and restore positions
   shakeAnims.forEach(s=>{s.group.position.copy(s.basePos);if(s.baseQ)s.group.quaternion.copy(s.baseQ);});
   shakeAnims=[];
@@ -1875,6 +1870,12 @@ function execMove(fromLat,fromLon,toLat,toLon){
     const hasMove=hasAnyLegalMove(turnColor);
     if(!hasMove){
       if(inCheck){
+        // Checkmate — draw permanent threat lines
+        _checkmateActive=false; // temporarily allow drawing
+        for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+          if(board[la][lo]?.type==='K'&&board[la][lo]?.color===turnColor){showCheckRing(la,lo);}
+        showCheckThreats(turnColor);
+        _checkmateActive=true; // now lock them permanently
         const winner=turnColor==='white'?'Black':'White';
         const _note=_moveNotation({type:_origType,color:piece.color},fromLat,fromLon,toLat,toLon,_wasCapture,move,true,true);
         const _mover=piece.color==='white'?'White':'Black';
@@ -2339,6 +2340,7 @@ function resetGame(){
   }
   if(moveAnim)moveAnim=null;
   clearVis();
+  _checkmateActive=false;
   clearCheckRing();
   enPassantTarget=null;
   for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
@@ -2382,7 +2384,7 @@ const _testInitPos={
 
 function toggleTestMode(){
   if(testModeActive){ exitTestMode(); return; }
-  clearVis(); clearCheckRing(); if(moveAnim)moveAnim=null; aiThinking=false;
+  clearVis(); _checkmateActive=false; clearCheckRing(); if(moveAnim)moveAnim=null; aiThinking=false;
   testModeActive=true;
   _testActive.clear();
   _testSave={pieces:[],turn:turnColor,ai:aiMode,ep:enPassantTarget};
@@ -2423,7 +2425,7 @@ document.querySelectorAll('.tpb').forEach(btn=>{
         if(!board[la][lo]) placePiece(type,color==='black',la,lo);
       });
     }
-    clearVis(); clearCheckRing();
+    clearVis(); _checkmateActive=false; clearCheckRing();
     for(const col of['white','black']){
       if(isInCheck(col)){
         for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
@@ -2447,7 +2449,7 @@ document.querySelectorAll('.tpb').forEach(btn=>{
 
 function exitTestMode(){
   if(!testModeActive)return;
-  clearVis(); clearCheckRing(); if(moveAnim)moveAnim=null;
+  clearVis(); _checkmateActive=false; clearCheckRing(); if(moveAnim)moveAnim=null;
   testModeActive=false; _testActive.clear();
   for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
     const p=board[la][lo]; if(!p)continue;
@@ -2914,7 +2916,11 @@ function _abSearch(depth,alpha,beta,maxing,deadline){
   if(depth<=0)return _abQuiesce(alpha,beta,maxing,4,deadline);
   const color=maxing?'black':'white';
   const mvs=allAIMoves(color);
-  if(!mvs.length)return evaluate();
+  if(!mvs.length){
+    // No moves: checkmate or stalemate
+    if(isInCheck(color))return maxing?(-90000+depth*100):(90000-depth*100); // checkmate (prefer faster mate)
+    return 0; // stalemate
+  }
   mvs.sort((a,b)=>{
     const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
     const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
@@ -2930,7 +2936,7 @@ function _abSearch(depth,alpha,beta,maxing,deadline){
     else{if(sc<best)best=sc;if(sc<beta)beta=sc;}
     if(beta<=alpha)break;
   }
-  return best;
+  return best===(-Infinity)||best===Infinity?evaluate():best;
 }
 function _abQuiesce(alpha,beta,maxing,qleft,deadline){
   if(Date.now()>=deadline)return evaluate();
@@ -2999,37 +3005,43 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
       for(const m of legal){
         if(Date.now()>=dlLate){completed=false;break;}
         const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
+        // Check if this move gives check (primary aggression signal)
+        const opp=color==='black'?'white':'black';
+        const givesCheck=isInCheck(opp);
         let sc=_abSearch(searchDepth-1,-Infinity,Infinity,!isBlack,deadline);
         aiUndo(m,pc,sv);
-        // Repetition penalty: penalize moves that lead to positions we've seen in this game
+        // Repetition penalty
         if(autoBattleActive){
-          // Quick hash after this move (re-apply to check)
           const sv2=aiApply(m);
           const h=_autoBoardHash();
           aiUndo(m,pc,sv2);
           const cnt=posHist[h]||0;
-          if(cnt>=1)sc+=(isBlack?-1:1)*(cnt>=2?2000:400); // heavy penalty approaching 3-fold
+          if(cnt>=1)sc+=(isBlack?-1:1)*(cnt>=2?3000:600);
         }
-        // Capture incentive: bias top-level selection toward moves that eat enemy pieces.
-        // This makes the AI prefer captures even when the search says they're slightly worse,
-        // creating much more exciting, action-packed games.
+        // Check bonus: giving check is aggressive and constrains opponent
+        if(givesCheck)sc+=(isBlack?1:-1)*120;
+        // Capture incentive: bold captures even if slightly risky
         if(captureBonus>0&&(sv.c||sv.epCap)){
           const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
-          if(capT)sc+=(isBlack?1:-1)*Math.min(Math.round(_EV[capT]*captureBonus),150);
+          if(capT)sc+=(isBlack?1:-1)*Math.min(Math.round(_EV[capT]*captureBonus),250);
         }
-        // Globe spectacle bonus: reward moves that showcase the spherical topology —
-        // pole crossings, long wrap-arounds, diagonal spirals.  These are the moves that
-        // are impossible on a flat board and make Globe Chess visually unique.
+        // Forward aggression: reward pieces moving toward opponent's territory
+        if(pc){
+          const fromRank=isBlack?m.fLat:(7-m.fLat);
+          const toRank=isBlack?m.tLat:(7-m.tLat);
+          if(toRank>fromRank&&pc.type!=='K')sc+=(isBlack?1:-1)*((toRank-fromRank)*8);
+        }
+        // Globe spectacle bonus
         if(globeBonus>0){
           let gb=0;
           const steps=m.step||0;
-          if(steps>3) gb+=(steps-3)*12;           // long-distance travel
-          if(m.pole) gb+=50;                       // straight pole crossing
-          if(m.straightDn&&steps>4) gb+=35;        // horizontal wrap-around (>half the ring)
-          if(m.diagKey&&steps>3) gb+=(steps-3)*10+30; // long diagonal spiral
+          if(steps>3) gb+=(steps-3)*12;
+          if(m.pole) gb+=50;
+          if(m.straightDn&&steps>4) gb+=35;
+          if(m.diagKey&&steps>3) gb+=(steps-3)*10+30;
           sc+=(isBlack?1:-1)*Math.round(gb*globeBonus);
         }
-        if(isRev(m))sc=isBlack?sc-1200:sc+1200;
+        if(isRev(m))sc=isBlack?sc-1500:sc+1500;
         if(isBlack?sc>dBestSc:sc<dBestSc){dBestSc=sc;dBest=m;}
       }
       // Only update bestMove if this depth completed fully (partial results unreliable)
@@ -3151,7 +3163,7 @@ function doAutoMove(){
         setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
       });
     },
-    {captureBonus:0.12, globeBonus:1}  // aggressive captures + globe-wrapping spectacle
+    {captureBonus:0.25, globeBonus:1}  // aggressive captures + globe spectacle
   );
 }
 
