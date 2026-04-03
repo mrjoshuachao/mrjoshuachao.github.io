@@ -81,7 +81,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.2</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -327,6 +327,7 @@ function showDissolveDialog(msg){
 function checkAloneInRoom(){
   if(!online||!isHost)return;
   if(conns.length===0){
+    releaseWebLock();hostReconnSlots={};
     if(peer)try{peer.destroy();}catch(e){}
     peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
     hidePersistMsg();hideLobbyOverlay();
@@ -466,6 +467,145 @@ function hideTurnBubble(){
 window.addEventListener("touchstart",function(){hideTurnBubble();},true);
 window.addEventListener("mousedown",function(){hideTurnBubble();},true);
 
+// === GAME REPORT ===
+var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊","E":"空地","T":"大樹","R":"漿果"};
+function generateGameReport(){
+  var lines=[];
+  lines.push("=== Baa! 遊戲紀錄 ===");
+  lines.push("版本: v1.7.3");
+  lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
+  lines.push("種子: "+seed);
+  lines.push("");
+  // Settings
+  var humanCount=numP-numAI;
+  lines.push("--- 遊戲設定 ---");
+  lines.push("玩家人數: "+numP+" (人類 "+humanCount+" 位, 電腦 "+numAI+" 位)");
+  lines.push("獲勝條件: 先得 "+winTarget+" 分");
+  lines.push("進階模式: "+(advMode?"是（白綿羊=3分, 灰綿羊=2分, 黑綿羊=1分）":"否（每隻綿羊=1分）"));
+  lines.push("");
+  // Player list
+  lines.push("--- 玩家列表 ---");
+  for(var i=0;i<numP;i++){
+    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    lines.push((i+1)+". "+FNAMES[i]+"色 ("+ptype+")");
+  }
+  lines.push("");
+  // Board config: list tiles around a reasonable viewport
+  // (The tile layout is deterministic from seed, so Claude can reconstruct)
+  lines.push("--- 棋盤配置 (部分) ---");
+  lines.push("（棋盤由種子 "+seed+" 決定，格子座標 (col,row,tri) 的地形 = TILE_TABLE[((col*7919+row*104729+tri*1301+seed*31)>>>0)%18]）");
+  lines.push("TILE_TABLE = [H,H,H,H,H,W,W,W,G,G,G,B,B,B,E,E,T,R]");
+  lines.push("H=羊舍, W=白綿羊, G=灰綿羊, B=黑綿羊, E=空地, T=大樹, R=漿果");
+  lines.push("");
+  // Turn-by-turn log
+  lines.push("--- 逐步紀錄 ---");
+  var runningScores=[0,0,0,0,0,0];
+  for(var i=0;i<history.length;i++){
+    var h=history[i];
+    var playerIdx=turnOrder[h.fci%numP];
+    var pname=FNAMES[playerIdx]+"色";
+    var ptype=playerIdx>=(numP-numAI)?"電腦":"人類";
+    var step="第 "+(i+1)+" 步 (回合 "+(Math.floor(h.fci/numP)+1)+"): "+pname+"("+ptype+") 放置柵欄 ["+h.key+"]";
+    // Score changes
+    if(h.sc&&h.sc.length>0){
+      var parts=[];
+      for(var j=0;j<h.sc.length;j++){
+        var sc=h.sc[j];
+        runningScores[sc.p]+=sc.d;
+        parts.push(FNAMES[sc.p]+"色 +"+sc.d+"分");
+      }
+      step+=" → 完成圈地！ "+parts.join(", ");
+      // Enclosure details
+      if(h.ct&&h.ct.length>0){
+        var tileCount={"H":0,"W":0,"G":0,"B":0,"E":0,"T":0,"R":0};
+        for(var j=0;j<h.ct.length;j++){
+          var parts2=h.ct[j].split(",");
+          var tc=parseInt(parts2[0]),tr=parseInt(parts2[1]),tt=parseInt(parts2[2]);
+          var tile=getTile(tc,tr,tt);
+          tileCount[tile]++;
+        }
+        var tileDescs=[];
+        for(var tk in tileCount){
+          if(tileCount[tk]>0) tileDescs.push(TILE_NAMES_ZH[tk]+"×"+tileCount[tk]);
+        }
+        step+=" (圈地內容: "+tileDescs.join(", ")+", 共 "+h.ct.length+" 格)";
+      }
+    }
+    lines.push(step);
+  }
+  lines.push("");
+  // Final scores
+  lines.push("--- 最終比分 ---");
+  var winners=[];
+  for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) winners.push(i);
+  for(var i=0;i<numP;i++){
+    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    var marker=winners.indexOf(i)>=0?" ★ 獲勝":"";
+    lines.push(FNAMES[i]+"色 ("+ptype+"): "+scores[i]+" 分"+marker);
+  }
+  lines.push("");
+  // Summary statistics
+  lines.push("--- 分析摘要 ---");
+  lines.push("總共放置了 "+history.length+" 個柵欄");
+  // Per-player fence count and scoring events
+  var playerFences=[0,0,0,0,0,0];
+  var playerEnclosures=[0,0,0,0,0,0];
+  var playerScoringMoves=[0,0,0,0,0,0];
+  for(var i=0;i<history.length;i++){
+    var h=history[i];
+    var pi=turnOrder[h.fci%numP];
+    playerFences[pi]++;
+    if(h.sc&&h.sc.length>0){
+      playerScoringMoves[pi]++;
+      for(var j=0;j<h.sc.length;j++){
+        if(h.sc[j].p===pi) playerEnclosures[pi]++;
+      }
+    }
+  }
+  for(var i=0;i<numP;i++){
+    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    lines.push(FNAMES[i]+"色 ("+ptype+"): 放了 "+playerFences[i]+" 個柵欄, "+playerScoringMoves[i]+" 次觸發得分, 最終 "+scores[i]+" 分");
+  }
+  lines.push("");
+  lines.push("--- 請把這份紀錄貼給 Claude 分析策略 ---");
+  return lines.join("\n");
+}
+
+function showGameReport(){
+  var report=generateGameReport();
+  var d=document.createElement("div");d.id="reportOverlay";
+  d.style.cssText="position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 6px 30px rgba(0,0,0,0.3);max-width:90vw;max-height:85vh;display:flex;flex-direction:column";
+  var title=document.createElement("div");
+  title.style.cssText="font-size:16px;font-weight:bold;color:#333;margin-bottom:12px;text-align:center";
+  title.textContent="遊戲紀錄";box.appendChild(title);
+  var ta=document.createElement("textarea");
+  ta.value=report;
+  ta.style.cssText="width:100%;min-width:280px;height:50vh;font-size:11px;font-family:'Courier New',monospace;border:1px solid #ddd;border-radius:8px;padding:10px;resize:none;color:#333;background:#f9f9f9;line-height:1.5;box-sizing:border-box;-webkit-user-select:text;user-select:text";
+  ta.readOnly=true;
+  box.appendChild(ta);
+  var btnRow=document.createElement("div");
+  btnRow.style.cssText="display:flex;gap:10px;justify-content:center;margin-top:14px";
+  var cpBtn=document.createElement("button");cpBtn.textContent="複製全文";
+  cpBtn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
+  cpBtn.onclick=function(){
+    ta.select();ta.setSelectionRange(0,99999);
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(report).then(function(){cpBtn.textContent="已複製！";setTimeout(function(){cpBtn.textContent="複製全文";},1500);});
+    }else{
+      document.execCommand("copy");cpBtn.textContent="已複製！";setTimeout(function(){cpBtn.textContent="複製全文";},1500);
+    }
+  };
+  btnRow.appendChild(cpBtn);
+  var clBtn=document.createElement("button");clBtn.textContent="關閉";
+  clBtn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer";
+  clBtn.onclick=function(){d.remove();};
+  btnRow.appendChild(clBtn);
+  box.appendChild(btnRow);
+  d.appendChild(box);document.body.appendChild(d);
+}
+
 function checkWin(){
   if(fci%numP!==0)return;
   var winners=[];
@@ -484,11 +624,16 @@ function checkWin(){
   var h=document.createElement("h2");h.style.cssText="font-size:28px;color:#333;margin:0 0 16px 0";
   h.textContent=winText;box.appendChild(h);
   var sub=document.createElement("p");sub.style.cssText="font-size:12px;color:#888;margin:0 0 14px 0";
-  sub.textContent="關閉後可自行截圖保存紀錄";box.appendChild(sub);
+  sub.textContent="可以觀看本局紀錄並複製給 Claude 分析策略";box.appendChild(sub);
   var btn=document.createElement("button");btn.textContent="關閉";
-  btn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer";
+  btn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;display:block;margin:0 auto 10px auto";
   btn.onclick=function(){d.remove();winDismissed=true;};
-  box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
+  box.appendChild(btn);
+  var repBtn=document.createElement("button");repBtn.textContent="觀看紀錄";
+  repBtn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#2196F3;color:#fff;cursor:pointer;display:block;margin:0 auto";
+  repBtn.onclick=function(){ showGameReport(); };
+  box.appendChild(repBtn);
+  d.appendChild(box);document.body.appendChild(d);
 }
 
 // === HEX GRID ===
@@ -753,7 +898,7 @@ function aiMove(){
     var vw=window.innerWidth,vh=window.innerHeight;
     var tgtX=mx-vw/2,tgtY=my-vh/2;
     var fromX=panX,fromY=panY;
-    var startT=0,dur=1500;
+    var startT=0,dur=700;
     function animPan(ts){
       if(!startT)startT=ts;
       var p=Math.min((ts-startT)/dur,1);
@@ -1329,8 +1474,182 @@ var iceNormal={iceServers:[
   {urls:"stun:stun2.l.google.com:19302"}
 ].concat(turnServers)};
 var iceRelay={iceServers:turnServers,iceTransportPolicy:"relay"};
-var peerOpts={config:iceNormal};
-var peerRelayOpts={config:iceRelay};
+var peerOpts={config:iceNormal,pingInterval:5000};
+var peerRelayOpts={config:iceRelay,pingInterval:5000};
+
+// === KEEPALIVE & RECONNECTION SYSTEM ===
+var HB_INTERVAL=8000;       // heartbeat every 8s
+var HOST_GRACE_MS=60000;     // host waits 60s before removing disconnected player
+var CLIENT_RECONN_MAX=5;     // client tries 5 reconnect attempts
+var CLIENT_RECONN_DELAY=3000;// 3s between reconnect attempts
+var reconnToken="";          // unique token for this client session
+var clientReconnecting=false;
+var reconnAttempt=0;
+var savedMyIdx=-1;
+var savedRoomCode="";
+var savedLocalHumans=1;
+// Host-side: map of reconnToken -> {ci, timer, pName}
+var hostReconnSlots={};
+
+// Web Lock API: keeps the event loop alive in background (Chrome/Edge)
+var webLockHeld=false;
+function acquireWebLock(){
+  if(webLockHeld||typeof navigator==="undefined"||!navigator.locks)return;
+  webLockHeld=true;
+  navigator.locks.request("baa_keepalive_"+Date.now(),function(){
+    return new Promise(function(){}); // never resolves = lock held forever
+  }).catch(function(){});
+}
+function releaseWebLock(){ webLockHeld=false; }
+
+// Page Visibility: when page wakes up, immediately ping to prove we are alive
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="visible"&&online){
+    // Immediately send a ping burst on all connections
+    for(var i=0;i<conns.length;i++){
+      try{conns[i].send({t:"pong"});}catch(e){}
+    }
+    // For client: check if connection is still open
+    if(!isHost&&conns.length>0){
+      var dc=conns[0].peerConnection;
+      if(dc){
+        var state=dc.connectionState||dc.iceConnectionState||"";
+        if(state==="disconnected"||state==="failed"||state==="closed"){
+          // Connection died while we were asleep — trigger reconnect
+          initiateClientReconnect();
+        }
+      }
+      // Also check dataChannel state
+      try{
+        var chan=conns[0]._dc||conns[0].dataChannel;
+        if(chan&&(chan.readyState==="closed"||chan.readyState==="closing")){
+          initiateClientReconnect();
+        }
+      }catch(e){}
+    }
+  }
+});
+
+// Generate a reconnection token
+function genReconnToken(){
+  var s="",ch="ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  for(var i=0;i<12;i++)s+=ch[Math.floor(Math.random()*ch.length)];
+  return s;
+}
+
+// Client: automatic reconnection when connection drops unexpectedly
+function initiateClientReconnect(){
+  if(clientReconnecting||!online||isHost)return;
+  if(!reconnToken||!savedRoomCode)return;
+  clientReconnecting=true;
+  reconnAttempt=0;
+  // Clean up old connection without destroying peer state fully
+  for(var i=0;i<conns.length;i++){
+    if(conns[i]._hb)clearInterval(conns[i]._hb);
+    try{conns[i].close();}catch(e){}
+  }
+  conns=[];
+  showPersistMsg("連線中斷，正在嘗試重新連線...");
+  tryClientReconnect();
+}
+function tryClientReconnect(){
+  if(!clientReconnecting||!online)return;
+  if(reconnAttempt>=CLIENT_RECONN_MAX){
+    // Give up
+    clientReconnecting=false;
+    hidePersistMsg();
+    if(peer)try{peer.destroy();}catch(e){}
+    peer=null;online=false;spectator=false;conns=[];connHumans=[];
+    hideLobbyOverlay();
+    var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+    unlockOnlineUI();
+    numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+    showDissolveDialog("與房間的連線已中斷，無法重新連線。即將回到單機模式。");
+    return;
+  }
+  reconnAttempt++;
+  // Destroy old peer and create new one
+  if(peer)try{peer.destroy();}catch(e){}
+  var opts=(reconnAttempt<=2)?peerOpts:peerRelayOpts;
+  peer=new Peer(opts);
+  peer.on("open",function(){
+    var c=peer.connect("baa-"+savedRoomCode,{reliable:true,serialization:"json"});
+    var connected=false;
+    var timer=setTimeout(function(){
+      if(!connected&&clientReconnecting){
+        setTimeout(tryClientReconnect,CLIENT_RECONN_DELAY);
+      }
+    },12000);
+    c.on("open",function(){
+      connected=true;clearTimeout(timer);
+      conns=[c];
+      // Send reconnection request with token
+      try{c.send({t:"reconn",token:reconnToken,idx:savedMyIdx,humans:savedLocalHumans});}catch(e){}
+      // Setup heartbeat
+      c._hb=setInterval(function(){try{c.send({t:"pong"});}catch(e){}},HB_INTERVAL);
+      c.on("data",function(d){
+        if(d.t==="ping")return;
+        if(d.t==="reconn_ok"){
+          // Reconnection accepted!
+          clientReconnecting=false;
+          hidePersistMsg();
+          myIdx=d.idx;
+          showMsg("已重新連線",2000);
+          return;
+        }
+        if(d.t==="reconn_fail"){
+          // Host doesn't recognize us or slot gone
+          clientReconnecting=false;
+          hidePersistMsg();
+          if(peer)try{peer.destroy();}catch(e){}
+          peer=null;online=false;spectator=false;conns=[];connHumans=[];
+          hideLobbyOverlay();
+          var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+          unlockOnlineUI();
+          numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+          showDissolveDialog("與房間的連線已中斷。即將回到單機模式。");
+          return;
+        }
+        handleNetData(d);
+      });
+      c.on("close",function(){
+        if(c._hb)clearInterval(c._hb);
+        if(clientReconnecting)return; // already handling
+        if(online&&!isHost){
+          initiateClientReconnect();
+        }
+      });
+      c.on("error",function(){
+        if(!connected&&clientReconnecting){
+          connected=true;clearTimeout(timer);
+          setTimeout(tryClientReconnect,CLIENT_RECONN_DELAY);
+        }
+      });
+    });
+    c.on("error",function(){
+      if(!connected&&clientReconnecting){
+        connected=true;clearTimeout(timer);
+        setTimeout(tryClientReconnect,CLIENT_RECONN_DELAY);
+      }
+    });
+  });
+  peer.on("error",function(e){
+    if(e.type==="peer-unavailable"){
+      // Room no longer exists
+      clientReconnecting=false;
+      hidePersistMsg();
+      if(peer)try{peer.destroy();}catch(e2){}
+      peer=null;online=false;spectator=false;conns=[];connHumans=[];
+      hideLobbyOverlay();
+      var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+      unlockOnlineUI();
+      numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+      showDissolveDialog("這個房間已經解散，即將回到單機模式。");
+    }else if(clientReconnecting){
+      setTimeout(tryClientReconnect,CLIENT_RECONN_DELAY);
+    }
+  });
+}
 
 function createRoom(){
   // Show creating spinner
@@ -1348,6 +1667,9 @@ function createRoom(){
   loadPeerJS(function(){
   roomCode=genCode();isHost=true;myIdx=0;online=true;actionLog=[];spectator=false;
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
+  hostReconnSlots={};
+  acquireWebLock();
+  acquireWebLock();
   document.getElementById("aisel").value=0;
   peer=new Peer("baa-"+roomCode,peerOpts);
   peer.on("open",function(){
@@ -1428,39 +1750,85 @@ function showHostApproval(onApprove,onReject){
 var pendingJoins=[];
 function hostHandleConn(c){
   function onConnOpen(){
-    var currentPlayers=localHumans;
-    for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
-    currentPlayers+=numAI;
-    var isFull=(currentPlayers>=6);
-    if(isFull){
-      try{c.send({t:"full_spectator"});}catch(e){}
-      c.on("data",function(d2){
-        if(d2.t==="accept_spectate"){
-          conns.push(c);connHumans.push(0);
-          try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
-          setupConnHandlers(c);
+    // Wait briefly for a possible reconnection token message
+    var reconnHandled=false;
+    var reconnTimer=setTimeout(function(){
+      if(reconnHandled)return;
+      reconnHandled=true;
+      handleAsNewJoin();
+    },1500);
+    // Temporary listener for reconnection attempts
+    function onFirstData(d){
+      if(reconnHandled)return;
+      if(d.t==="reconn"&&d.token&&hostReconnSlots[d.token]){
+        reconnHandled=true;clearTimeout(reconnTimer);
+        c.removeListener("data",onFirstData);
+        // Reconnection! Reclaim the slot
+        var slot=hostReconnSlots[d.token];
+        // Cancel the pending disconnect timer for the old connection
+        if(slot.timer)clearTimeout(slot.timer);
+        // Find and remove the old dead connection from conns array
+        var oldCi=slot.ci;
+        // The old connection object might still be in conns
+        for(var i=0;i<conns.length;i++){
+          if(conns[i]._reconnToken===d.token&&conns[i]!==c){
+            conns.splice(i,1);connHumans.splice(i,1);
+            break;
+          }
         }
-      });
-      return;
+        // Insert the new connection
+        conns.push(c);connHumans.push(slot.humans);
+        c._reconnToken=d.token;
+        // Recalculate index
+        var startIdx=localHumans;
+        for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
+        delete hostReconnSlots[d.token];
+        try{c.send({t:"reconn_ok",idx:startIdx});}catch(e){}
+        setupConnHandlers(c);
+        return;
+      }
+      // Not a reconnection - proceed as new join
+      reconnHandled=true;clearTimeout(reconnTimer);
+      c.removeListener("data",onFirstData);
+      handleAsNewJoin();
     }
-    var cname=FNAMES[currentPlayers]||"新";
-    showHostApproval2(cname+"色想要加入",function(){
-      conns.push(c);connHumans.push(1);
-      var startIdx=localHumans;
-      for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
-      var gameInProgress=(fci>0||Object.keys(fences).length>0);
-      var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
-      numHuman=total-numAI;numP=total;
-      var pName=FNAMES[startIdx]||"新";
-      try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
-      document.getElementById("psel").value=localHumans;
-      updateRoomUI();updateSB();
-      broadcast({t:"player_joined",name:pName,numP:numP});
-      setupConnHandlers(c);
-    },function(){
-      try{c.send({t:"rejected_join"});}catch(e){}
-      setTimeout(function(){try{c.close();}catch(e){}},500);
-    });
+    c.on("data",onFirstData);
+
+    function handleAsNewJoin(){
+      var currentPlayers=localHumans;
+      for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
+      currentPlayers+=numAI;
+      var isFull=(currentPlayers>=6);
+      if(isFull){
+        try{c.send({t:"full_spectator"});}catch(e){}
+        c.on("data",function(d2){
+          if(d2.t==="accept_spectate"){
+            conns.push(c);connHumans.push(0);
+            try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
+            setupConnHandlers(c);
+          }
+        });
+        return;
+      }
+      var cname=FNAMES[currentPlayers]||"新";
+      showHostApproval2(cname+"色想要加入",function(){
+        conns.push(c);connHumans.push(1);
+        var startIdx=localHumans;
+        for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
+        var gameInProgress=(fci>0||Object.keys(fences).length>0);
+        var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
+        numHuman=total-numAI;numP=total;
+        var pName=FNAMES[startIdx]||"新";
+        try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
+        document.getElementById("psel").value=localHumans;
+        updateRoomUI();updateSB();
+        broadcast({t:"player_joined",name:pName,numP:numP});
+        setupConnHandlers(c);
+      },function(){
+        try{c.send({t:"rejected_join"});}catch(e){}
+        setTimeout(function(){try{c.close();}catch(e){}},500);
+      });
+    }
   }
   c.on("open",onConnOpen);
 }
@@ -1485,11 +1853,21 @@ function showHostApproval2(msg,onApprove,onReject){
 
 function setupConnHandlers(c){
   // Heartbeat to keep WebRTC alive
-  c._hb=setInterval(function(){try{c.send({t:"ping"});}catch(e){}},15000);
+  c._hb=setInterval(function(){try{c.send({t:"ping"});}catch(e){}},HB_INTERVAL);
   c.on("data",function(d){
-    if(d.t==="ping"||d.t==="pong")return;
-    // Cancel pending disconnect if we get real data
+    // Cancel pending disconnect on ANY data (including ping/pong)
     if(c._dcTimer){clearTimeout(c._dcTimer);c._dcTimer=null;}
+    // Also remove reconnection slot if client is still alive
+    if(c._reconnToken&&hostReconnSlots[c._reconnToken]){
+      clearTimeout(hostReconnSlots[c._reconnToken].timer);
+      delete hostReconnSlots[c._reconnToken];
+    }
+    if(d.t==="ping"||d.t==="pong")return;
+    // Handle reconnection token registration from client
+    if(d.t==="register_token"){
+      c._reconnToken=d.token;
+      return;
+    }
     if(d.t==="do"){
       actionLog.push(d.edge);
       tryPlaceFenceNet(d.edge);
@@ -1511,7 +1889,6 @@ function setupConnHandlers(c){
     }
     if(d.t==="req_restart"){
       broadcast({t:"waiting",msg:d.name+"色想要重新開始，正在等待房主回應。"});
-      // Show centered approval for host
       var old=document.getElementById("centerNotice");if(old)old.remove();
       var dd=document.createElement("div");dd.id="centerNotice";
       dd.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
@@ -1533,16 +1910,24 @@ function setupConnHandlers(c){
     if(ci<0)return;
     var wasSpectator=(connHumans[ci]===0);
     var pName=FNAMES[ci+localHumans]||"?";
-    // Delay removal to tolerate screen sleep
+    var savedHumans=connHumans[ci];
+    var savedIdx=localHumans;
+    for(var ii=0;ii<ci;ii++)savedIdx+=connHumans[ii];
+    // Save reconnection slot so client can reclaim it
+    if(c._reconnToken&&!wasSpectator){
+      hostReconnSlots[c._reconnToken]={ci:ci,pName:pName,humans:savedHumans,idx:savedIdx,timer:null};
+    }
+    // Delay removal to tolerate screen sleep / reconnection
     c._dcTimer=setTimeout(function(){
       var ci2=conns.indexOf(c);
       if(ci2<0)return;
+      // Clean up reconnection slot
+      if(c._reconnToken)delete hostReconnSlots[c._reconnToken];
       conns.splice(ci2,1);connHumans.splice(ci2,1);
       if(wasSpectator){ updateRoomUI();return; }
       var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
       numHuman=total-numAI;numP=total;
       document.getElementById("psel").value=localHumans;
-      // Send updated indices to all remaining clients
       var startIdx=localHumans;
       for(var i=0;i<conns.length;i++){
         try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
@@ -1552,13 +1937,22 @@ function setupConnHandlers(c){
       showCenterNotice(pName+"色玩家離開房間，遊戲即將重新開始。");
       broadcast({t:"left",name:pName});
       setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});checkAloneInRoom(); },2000);
-    },15000);
+    },HOST_GRACE_MS);
+    // Also store the timer ref in the reconn slot
+    if(c._reconnToken&&hostReconnSlots[c._reconnToken]){
+      hostReconnSlots[c._reconnToken].timer=c._dcTimer;
+    }
   });
 }
 
 function joinRoom(code){
   loadPeerJS(function(){
   roomCode=code.toUpperCase();isHost=false;online=true;
+  reconnToken=genReconnToken();
+  savedRoomCode=roomCode;
+  clientReconnecting=false;
+  reconnAttempt=0;
+  acquireWebLock();
   document.getElementById("modal").style.display="none";
   // Show spinner overlay
   var spin=document.createElement("div");spin.id="joinSpin";
@@ -1610,16 +2004,21 @@ function joinRoom(code){
       });
       c.on("data",function(d){ if(d.t==="ping")return;handleNetData(d); });
       // Client heartbeat
-      c._hb=setInterval(function(){try{c.send({t:"pong"});}catch(e){}},15000);
+      c._hb=setInterval(function(){try{c.send({t:"pong"});}catch(e){}},HB_INTERVAL);
       c.on("close",function(){ if(connected){
         if(c._hb)clearInterval(c._hb);
-        if(peer)try{peer.destroy();}catch(e){}
-        peer=null;online=false;spectator=false;conns=[];connHumans=[];
-        hidePersistMsg();hideLobbyOverlay();
-        var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
-        unlockOnlineUI();
-        numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
-        showDissolveDialog("這個房間已經解散，即將回到單機模式。");
+        // Don't immediately give up — try to reconnect
+        if(online&&!isHost&&reconnToken){
+          initiateClientReconnect();
+        }else{
+          if(peer)try{peer.destroy();}catch(e){}
+          peer=null;online=false;spectator=false;conns=[];connHumans=[];
+          hidePersistMsg();hideLobbyOverlay();
+          var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+          unlockOnlineUI();
+          numHuman=2;numAI=0;syncCounts();resetGame();updateSB();
+          showDissolveDialog("這個房間已經解散，即將回到單機模式。");
+        }
       } });
       c.on("error",function(err){
         if(!connected&&online){
@@ -1722,6 +2121,12 @@ function handleNetData(d){
     scores=d.scores;
     spectator=!!d.inProgress||!!d.spectateOnly;
     updateRoomUI();updateSB();lockOnlineUI();
+    // Register reconnection token with host and save state for auto-reconnect
+    if(reconnToken&&conns.length>0){
+      try{conns[0].send({t:"register_token",token:reconnToken});}catch(e){}
+    }
+    savedMyIdx=myIdx;
+    savedLocalHumans=localHumans;
     if(myIdx>=0&&d.lobby){
       var cname=FNAMES[myIdx];
       var old=document.getElementById("lobbyOverlay");if(old)old.remove();
@@ -1758,7 +2163,7 @@ function handleNetData(d){
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
-  if(d.t==="idx_update"){ myIdx=d.idx;updateSB(); }
+  if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
   if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為先得 "+d.val+" 分獲勝",2000); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false;updateSB(); }
   if(d.t==="host_changed"){
@@ -1776,7 +2181,7 @@ function handleNetData(d){
     box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
   }
   if(d.t==="left"){ showCenterNotice(d.name+"色玩家離開房間，遊戲即將重新開始。"); }
-  if(d.t==="kicked"){ if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
+  if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="waiting"){ showCenterNotice(d.msg,true); }
@@ -1862,8 +2267,11 @@ document.getElementById("btnOnline").addEventListener("click",function(){
   }
 });
 function leaveRoom(){
+  clientReconnecting=false;reconnToken="";savedRoomCode="";
+  releaseWebLock();
   if(peer)try{peer.destroy();}catch(e){}
   peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
+  hostReconnSlots={};
   hidePersistMsg();hideLobbyOverlay();
   var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
   window.location.href=location.origin+location.pathname;
