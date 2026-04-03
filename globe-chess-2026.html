@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.0.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.1.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -1777,6 +1777,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
   board[toLat][toLon]=piece;
   board[fromLat][fromLon]=null;
   piece.hasMoved=true;
+  if(move?.isCastle)piece._castled=true;
   piece.sprite.userData.lat=toLat;
   piece.sprite.userData.lon=toLon;
   // Stop bounce BEFORE capturing fromPos so animation starts from cell center,
@@ -2231,25 +2232,25 @@ function aiApply(m){
   const c=board[m.tLat][m.tLon];
   const piece=board[m.fLat][m.fLon];
   const prevEP=enPassantTarget;
-  // Update en passant target BEFORE promotion changes the type
   enPassantTarget=(piece&&piece.type==='P'&&Math.abs(m.tLat-m.fLat)===2)
     ?{lat:Math.round((m.fLat+m.tLat)/2),lon:m.tLon}:null;
   board[m.tLat][m.tLon]=piece; board[m.fLat][m.fLon]=null;
-  // Promotion: pawn reaching opposite end becomes queen (visible to deeper search levels)
   let wasType=null;
   if(piece&&piece.type==='P'){
     const promLat=piece.color==='black'?7:0;
     if(m.tLat===promLat){wasType='P';piece.type='Q';}
   }
-  if(m.isCastle){board[m.tLat][m.rookToLon]=board[m.tLat][m.rookFromLon];board[m.tLat][m.rookFromLon]=null;}
+  const wasCastled=piece?piece._castled:undefined;
+  if(m.isCastle){board[m.tLat][m.rookToLon]=board[m.tLat][m.rookFromLon];board[m.tLat][m.rookFromLon]=null;if(piece)piece._castled=true;}
   let epCap=null;
   if(m.isEnPassant){epCap=board[m.capturedLat][m.capturedLon];board[m.capturedLat][m.capturedLon]=null;}
-  return{c,epCap,wasType,prevEP};
+  return{c,epCap,wasType,prevEP,wasCastled};
 }
 function aiUndo(m,piece,sv){
   if(sv.wasType)piece.type=sv.wasType;
   board[m.fLat][m.fLon]=piece; board[m.tLat][m.tLon]=sv.c||null;
   enPassantTarget=sv.prevEP;
+  if(piece&&sv.wasCastled!==undefined)piece._castled=sv.wasCastled;
   if(m.isCastle){board[m.tLat][m.rookFromLon]=board[m.tLat][m.rookToLon];board[m.tLat][m.rookToLon]=null;}
   if(m.isEnPassant&&sv.epCap)board[m.capturedLat][m.capturedLon]=sv.epCap;
 }
@@ -2743,7 +2744,7 @@ function getAutoAIMove(color){
   const top=Math.min(legal.length,30); // evaluate top 30 candidate moves
   // Anti-oscillation: penalise moves that send a piece straight back where it came from
   const recentOwn=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-3);
-  const OSC_PEN=700; // large enough to override same-value jitter, small enough to allow if only option
+  const OSC_PEN=1200;
   const isReversal=m=>recentOwn.some(prev=>
     prev.coords[2]===m.fLat&&prev.coords[3]===m.fLon&&
     prev.coords[0]===m.tLat&&prev.coords[1]===m.tLon);
@@ -2808,13 +2809,13 @@ const _AUTO_THINK_MS= 1000;   // Auto-battle: 1 s per move (fast aggressive play
 
 // Piece-square tables (index = latForPST: 0=own back rank, 7=opponent back rank)
 const _PST={
-  P:[0,0,10,20,35,55,80,0],
-  N:[-20,-5,10,18,18,10,-5,-20],
-  B:[-10,0,8,12,12,8,0,-10],
-  R:[5,0,0,5,5,0,0,5],
-  Q:[-10,-5,0,5,5,0,-5,-10],
-  Km:[20,5,-10,-20,-20,-10,5,20],   // king middlegame: stay back
-  Ke:[-10,0,10,15,15,10,0,-10]      // king endgame: centralize
+  P:[0,5,15,30,45,65,90,0],         // stronger center push incentive
+  N:[-30,-5,15,25,25,15,-5,-30],     // much stronger center preference
+  B:[-10,5,12,18,18,12,5,-10],       // encourage development
+  R:[5,0,0,8,8,0,0,5],
+  Q:[-15,-5,0,5,5,0,-5,-15],
+  Km:[30,15,-15,-30,-30,-15,15,30],  // king middlegame: STAY BACK strongly
+  Ke:[-10,0,10,15,15,10,0,-10]       // king endgame: centralize
 };
 const _EV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
 const _POL={Q:30,R:27,B:24,N:20,P:0,K:0};
@@ -2822,11 +2823,19 @@ const _POL={Q:30,R:27,B:24,N:20,P:0,K:0};
 function evaluate(){
   let s=0,nonPK=0;
   const pLon=[new Uint8Array(8),new Uint8Array(8)]; // [black,white] pawn lon counts
+  let wBishops=0,bBishops=0,wKingLat=-1,wKingLon=-1,bKingLat=-1,bKingLon=-1;
+  let wCastled=false,bCastled=false;
   for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-    const p=board[a][o];if(!p||p.type==='K'||p.type==='P')continue;
-    nonPK+=_EV[p.type];
+    const p=board[a][o];if(!p)continue;
+    if(p.type==='K'){
+      if(p.color==='white'){wKingLat=a;wKingLon=o;wCastled=!!p._castled;}
+      else{bKingLat=a;bKingLon=o;bCastled=!!p._castled;}
+    }
+    if(p.type!=='K'&&p.type!=='P')nonPK+=_EV[p.type];
+    if(p.type==='B'){if(p.color==='white')wBishops++;else bBishops++;}
   }
   const eg=nonPK<2600;
+  const moveNum=(_autoBattleLog?.moves.length||0)/2;
   for(let a=0;a<8;a++)for(let o=0;o<8;o++){
     const p=board[a][o];if(!p)continue;
     const bk=p.color==='black';
@@ -2842,7 +2851,7 @@ function evaluate(){
       if(op&&op.color!==p.color)v+=Math.round(_EV[op.type]*0.09);
     }
     // Development: minor pieces still on starting square
-    if(!p.hasMoved&&(p.type==='N'||p.type==='B'))v-=18;
+    if(!p.hasMoved&&(p.type==='N'||p.type==='B'))v-=25;
     if(p.type==='R'&&p.hasMoved)v+=8;
     // Pawn tracking
     if(p.type==='P')pLon[bk?0:1][o]++;
@@ -2850,14 +2859,51 @@ function evaluate(){
   }
   // Pawn structure penalties
   for(let side=0;side<2;side++){
-    const sgn=side===0?1:-1; // black penalty → s↓, white penalty → s↑
+    const sgn=side===0?1:-1;
     let pen=0;
     for(let o=0;o<8;o++){
       const c=pLon[side][o];
-      if(c>1)pen+=(c-1)*15;   // doubled pawns
-      if(c>0&&!pLon[side][wL(o-1)]&&!pLon[side][wL(o+1)])pen+=12; // isolated
+      if(c>1)pen+=(c-1)*18;    // doubled pawns (increased)
+      if(c>0&&!pLon[side][wL(o-1)]&&!pLon[side][wL(o+1)])pen+=15; // isolated (increased)
     }
     s-=pen*sgn;
+  }
+  // Bishop pair bonus (having both bishops is worth extra)
+  if(wBishops>=2)s-=35;
+  if(bBishops>=2)s+=35;
+  // King safety (middlegame only)
+  if(!eg){
+    // Castling bonus
+    if(wCastled)s-=40; // white castled → good for white → s goes down
+    if(bCastled)s+=40;
+    // Penalty for uncastled king after early game
+    if(moveNum>8){
+      if(!wCastled&&wKingLat>=0){
+        const wkd=Math.min(wKingLat,7-wKingLat);
+        if(wkd>1)s+=25; // white king exposed in center → bad for white
+      }
+      if(!bCastled&&bKingLat>=0){
+        const bkd=Math.min(bKingLat,7-bKingLat);
+        if(bkd>1)s-=25;
+      }
+    }
+    // Pawn shield: count pawns adjacent to king
+    for(let side=0;side<2;side++){
+      const kLat=side===0?bKingLat:wKingLat;
+      const kLon=side===0?bKingLon:wKingLon;
+      if(kLat<0)continue;
+      const sgn=side===0?1:-1;
+      let shield=0;
+      const fwd=side===0?1:-1; // forward direction for each side
+      for(let dlo=-1;dlo<=1;dlo++){
+        const sLat=kLat+fwd, sLon=wL(kLon+dlo);
+        if(sLat>=0&&sLat<=7){
+          const sp=board[sLat][sLon];
+          if(sp&&sp.type==='P'&&sp.color===(side===0?'black':'white'))shield++;
+        }
+      }
+      s+=sgn*(shield*12); // each shield pawn worth 12
+    }
   }
   return s;
 }
@@ -2934,9 +2980,11 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
     return vb-va;
   });
   let bestMove=legal[0],finalDepth=0;
-  // Anti-oscillation (auto-battle only)
-  const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-3):[];
+  // Anti-oscillation (auto-battle only) — check last 6 moves for reversals
+  const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-6):[];
   const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
+  // Broader repetition: penalize moves that recreate ANY position we've seen before
+  const posHist=autoBattleActive?_autoPosHist:{};
   let searchDepth=0;
 
   function nextDepth(){
@@ -2953,6 +3001,15 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
         const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
         let sc=_abSearch(searchDepth-1,-Infinity,Infinity,!isBlack,deadline);
         aiUndo(m,pc,sv);
+        // Repetition penalty: penalize moves that lead to positions we've seen in this game
+        if(autoBattleActive){
+          // Quick hash after this move (re-apply to check)
+          const sv2=aiApply(m);
+          const h=_autoBoardHash();
+          aiUndo(m,pc,sv2);
+          const cnt=posHist[h]||0;
+          if(cnt>=1)sc+=(isBlack?-1:1)*(cnt>=2?2000:400); // heavy penalty approaching 3-fold
+        }
         // Capture incentive: bias top-level selection toward moves that eat enemy pieces.
         // This makes the AI prefer captures even when the search says they're slightly worse,
         // creating much more exciting, action-packed games.
@@ -2972,7 +3029,7 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           if(m.diagKey&&steps>3) gb+=(steps-3)*10+30; // long diagonal spiral
           sc+=(isBlack?1:-1)*Math.round(gb*globeBonus);
         }
-        if(isRev(m))sc=isBlack?sc-700:sc+700;
+        if(isRev(m))sc=isBlack?sc-1200:sc+1200;
         if(isBlack?sc>dBestSc:sc<dBestSc){dBestSc=sc;dBest=m;}
       }
       // Only update bestMove if this depth completed fully (partial results unreliable)

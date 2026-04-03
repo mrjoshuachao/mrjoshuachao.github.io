@@ -68,7 +68,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </style></head><body>
 <div id="loading"><span>Loading</span></div>
 <div id="sb">
-<div style="display:flex;align-items:center;gap:8px"><span class="lbl">先得</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分獲勝</span></div>
+<div style="display:flex;align-items:center;gap:4px"><span class="lbl">突破</span><select id="winsel"><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select><span class="lbl">分結束</span><span id="btnWinInfo" style="cursor:pointer;font-size:13px;line-height:1;margin-left:-4px">ⓘ</span></div>
 <div class="scores" id="scoreArea"></div>
 <div style="display:flex;align-items:center;gap:3px;margin-left:auto">
 <select id="psel"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span class="lbl">人類</span>
@@ -81,7 +81,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.3</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.5</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -472,7 +472,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.7.3");
+  lines.push("版本: v1.7.5");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -480,7 +480,7 @@ function generateGameReport(){
   var humanCount=numP-numAI;
   lines.push("--- 遊戲設定 ---");
   lines.push("玩家人數: "+numP+" (人類 "+humanCount+" 位, 電腦 "+numAI+" 位)");
-  lines.push("獲勝條件: 先得 "+winTarget+" 分");
+  lines.push("獲勝條件: 突破 "+winTarget+" 分時該回合結束，分數最高者獲勝");
   lines.push("進階模式: "+(advMode?"是（白綿羊=3分, 灰綿羊=2分, 黑綿羊=1分）":"否（每隻綿羊=1分）"));
   lines.push("");
   // Player list
@@ -536,8 +536,10 @@ function generateGameReport(){
   lines.push("");
   // Final scores
   lines.push("--- 最終比分 ---");
+  var maxScore=0;
+  for(var i=0;i<numP;i++) if(scores[i]>maxScore) maxScore=scores[i];
   var winners=[];
-  for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) winners.push(i);
+  for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
   for(var i=0;i<numP;i++){
     var ptype=i>=(numP-numAI)?"電腦":"人類";
     var marker=winners.indexOf(i)>=0?" ★ 獲勝":"";
@@ -608,10 +610,17 @@ function showGameReport(){
 
 function checkWin(){
   if(fci%numP!==0)return;
-  var winners=[];
-  for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) winners.push(i);
-  if(winners.length===0)return;
+  // Check if anyone crossed the threshold
+  var anyOver=false;
+  for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) anyOver=true;
+  if(!anyOver)return;
   gameOver=true;
+  // Find the highest score
+  var maxScore=0;
+  for(var i=0;i<numP;i++) if(scores[i]>maxScore) maxScore=scores[i];
+  // Winners = player(s) with the highest score
+  var winners=[];
+  for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
   var names=winners.map(function(w){
     var isAI=w>=(numP-numAI);
     return FNAMES[w]+(isAI?"(電腦)":"");
@@ -864,10 +873,20 @@ function scheduleAI(){ clearTimeout(aiTimer);if(isAITurn()&&!gameOver)aiTimer=se
 
 function aiMove(){
   if(!isAITurn()||gameOver)return;
-  var vw=window.innerWidth,vh=window.innerHeight,mg=R*3;
+  var vw=window.innerWidth,vh=window.innerHeight,mg=R*6;
   var cands=[],seen={};
-  var cMin=Math.floor((panX-mg)/(1.5*R))-1,cMax=Math.ceil((panX+vw+mg)/(1.5*R))+1;
-  var rMin=Math.floor((panY-mg)/R3)-1,rMax=Math.ceil((panY+vh+mg)/R3)+1;
+  // Search a wider area: viewport + large margin, and also around all existing fences
+  var cMin=Math.floor((panX-mg)/(1.5*R))-2,cMax=Math.ceil((panX+vw+mg)/(1.5*R))+2;
+  var rMin=Math.floor((panY-mg)/R3)-2,rMax=Math.ceil((panY+vh+mg)/R3)+2;
+  // Also include area around all existing fences (for hitchhiking & building)
+  var fkeys=Object.keys(fences);
+  for(var fi=0;fi<fkeys.length;fi++){
+    var parts=fkeys[fi].split(",");
+    var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
+    var fc=Math.round(fx/(1.5*R)),fr=Math.round(fy/R3);
+    if(fc-3<cMin)cMin=fc-3;if(fc+3>cMax)cMax=fc+3;
+    if(fr-3<rMin)rMin=fr-3;if(fr+3>rMax)rMax=fr+3;
+  }
   for(var c=cMin;c<=cMax;c++)for(var r=rMin;r<=rMax;r++){
     var hc=hexC(c,r);
     for(var t=0;t<6;t++){
@@ -917,9 +936,9 @@ function aiEval(e,aiIdx){
   var key=e.key;
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var pair=findTriPair(key);
-  if(!pair)return -999;
+  if(!pair)return -9999;
   
-  // DISTANCE PENALTY: never place far from existing fences
+  // DISTANCE PENALTY: never place far from existing fences (expanded range)
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
   var fkeys=Object.keys(fences);
   for(var fi=0;fi<fkeys.length;fi++){
@@ -928,10 +947,17 @@ function aiEval(e,aiIdx){
     var dd=Math.abs(mx-fx)+Math.abs(my-fy);
     if(dd<minDist)minDist=dd;
   }
-  if(fkeys.length>0&&minDist>R*6)return -999;
+  if(fkeys.length>0&&minDist>R*8)return -9999;
+  
+  // Calculate opponent max score for endgame awareness
+  var oppMaxScore=0;
+  for(var j=0;j<numP;j++){if(j!==aiIdx&&scores[j]>oppMaxScore)oppMaxScore=scores[j];}
+  var aiScore=scores[aiIdx];
+  var endgameThreshold=winTarget*0.6;
+  var isEndgame=oppMaxScore>=endgameThreshold||aiScore>=endgameThreshold;
   
   var sc=0,completesAny=false;
-  // Check if completes enclosure
+  // === SCORING MOVES: check if completes enclosure ===
   for(var i=0;i<2;i++){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
     if(reg&&reg.length>=2){
@@ -939,32 +965,89 @@ function aiEval(e,aiIdx){
       if(a.sheep>0&&a.house>0){
         completesAny=true;
         var cc=a.colors.slice();cc[aiIdx]++;
-        var mx2=0;for(var j=0;j<numP;j++)if(cc[j]>mx2)mx2=cc[j];
-        var aiWins=(cc[aiIdx]===mx2);
-        var othersWin=false;
-        for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===mx2)othersWin=true;
-        if(aiWins&&!othersWin) sc+=500+a.pts*20;
-        else if(aiWins&&othersWin) sc+=150+a.pts*8;
-        else sc-=200;
+        var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
+        var aiWins=(cc[aiIdx]===maxC);
+        // Count how many players share the win
+        var sharers=0;var oppSharers=0;
+        for(var j=0;j<numP;j++)if(cc[j]===maxC){sharers++;if(j!==aiIdx)oppSharers++;}
+        
+        if(aiWins){
+          // Check endgame: would this trigger end-of-round? (anyone crosses winTarget)
+          var triggersEnd=false;
+          var aiAfterScore=aiScore+a.pts;
+          var bestOppAfter=0;
+          for(var j=0;j<numP;j++){
+            var pAfter=scores[j]+(cc[j]===maxC?a.pts:0);
+            if(pAfter>winTarget-1)triggersEnd=true;
+            if(j!==aiIdx&&pAfter>bestOppAfter)bestOppAfter=pAfter;
+          }
+          // Under new rule: highest score wins when round ends
+          var aiWouldBeHighest=(aiAfterScore>=bestOppAfter);
+          var oppWouldBeHighest=(bestOppAfter>aiAfterScore);
+          
+          if(oppSharers===0){
+            // EXCLUSIVE: best case - huge bonus scaled by points
+            sc+=800+a.pts*30+a.sheep*5;
+            if(a.sheep>=4)sc+=200;
+            if(a.sheep>=6)sc+=300;
+            // If this triggers game end and AI is highest → jackpot
+            if(triggersEnd&&aiWouldBeHighest)sc+=1000;
+          }else if(triggersEnd&&aiWouldBeHighest&&oppWouldBeHighest===false){
+            // Triggers end and AI has highest score - great even if shared
+            sc+=900+a.pts*25;
+          }else if(triggersEnd&&oppWouldBeHighest){
+            // DANGER: triggers end but opponent has highest score!
+            sc-=2000;
+          }else{
+            // Normal shared: value decreases with more sharers
+            var shareDiscount=oppSharers===1?0.55:0.3;
+            var netBenefit=a.pts-(a.pts*oppSharers);
+            sc+=100+a.pts*15*shareDiscount;
+            if(netBenefit<0)sc+=netBenefit*20;
+            // Endgame: extra penalty for helping opponents near winTarget
+            if(isEndgame){
+              for(var j=0;j<numP;j++){
+                if(j!==aiIdx&&cc[j]===maxC){
+                  var oppAfter=scores[j]+a.pts;
+                  // Penalty if opponent would end up with higher score than AI
+                  if(oppAfter>aiAfterScore)sc-=a.pts*40;
+                  else{
+                    var dangerPct=oppAfter/winTarget;
+                    if(dangerPct>0.7)sc-=a.pts*dangerPct*30;
+                  }
+                }
+              }
+            }
+          }
+        }else{
+          // AI doesn't win this enclosure - bad
+          sc-=300;
+          // Even worse if it gives opponents lots of points
+          sc-=a.pts*15;
+        }
       }
     }
   }
   if(completesAny)return sc;
 
+  // === NON-SCORING MOVES ===
+  
   // SABOTAGE: detect and cut opponent near-complete enclosures
   var cutBonus=0;
   var curFk={};for(var k in fences)curFk[k]=1;
   for(var i=0;i<2;i++){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,curFk);
-    if(!reg||reg.length<3)continue;
+    if(!reg||reg.length<2)continue;
     var regSet={};for(var j=0;j<reg.length;j++)regSet[reg[j].c+","+reg[j].r+","+reg[j].t]=1;
-    var oppFence=0,aiFence=0,openEdges=0,totalPts=0;
+    var oppFence=0,aiFence=0,openEdges=0,totalPts=0,hasSH=false;
+    var regSheep=0,regHouse=0;
     for(var j=0;j<reg.length;j++){
       var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
       var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
-      if(tile==="W")totalPts+=advMode?3:1;
-      else if(tile==="G")totalPts+=advMode?2:1;
-      else if(tile==="B")totalPts+=1;
+      if(tile==="W"){totalPts+=advMode?3:1;regSheep++;}
+      else if(tile==="G"){totalPts+=advMode?2:1;regSheep++;}
+      else if(tile==="B"){totalPts+=1;regSheep++;}
+      else if(tile==="H")regHouse++;
       for(var k2=0;k2<3;k2++){
         var nb=te[k2].nb;
         if(regSet[nb.c+","+nb.r+","+nb.t])continue;
@@ -974,34 +1057,61 @@ function aiEval(e,aiIdx){
         }else openEdges++;
       }
     }
-    // Strong sabotage: opponent almost done, high value target
-    if(oppFence>=2&&openEdges<=3&&totalPts>=2){
+    hasSH=(regSheep>0&&regHouse>0);
+    
+    // HITCHHIKING: place fences near opponent regions to get credit
+    // Lesson: ~30% of winner's points come from hitchhiking
+    if(hasSH&&oppFence>=2&&aiFence===0&&openEdges>=2&&openEdges<=6){
+      // This region will likely score for opponents - infiltrate it!
+      var hitchVal=totalPts*8*(oppFence/(openEdges+1));
+      cutBonus+=hitchVal;
+    }
+    
+    // SABOTAGE: opponent almost done, high value target, AI won't benefit
+    if(hasSH&&oppFence>=2&&aiFence<=1&&openEdges<=3&&totalPts>=2){
       var urgency=(oppFence*2)/(openEdges+1);
-      cutBonus+=urgency*totalPts*15;
+      // More urgent in endgame
+      var endgameMultiplier=isEndgame?2.0:1.0;
+      cutBonus+=urgency*totalPts*18*endgameMultiplier;
+    }
+    
+    // BUILDING: AI is building a region - place fences to grow it
+    if(hasSH&&aiFence>=1&&openEdges>=2){
+      var buildVal=totalPts*3*(aiFence/(openEdges+1));
+      // Bonus for large potential enclosures (lesson: big > small)
+      if(regSheep>=3)buildVal*=1.5;
+      if(regSheep>=5)buildVal*=2.0;
+      cutBonus+=buildVal;
     }
   }
 
-  // COOPERATION: build near any fences to help complete shared enclosures
+  // TILE VALUE: evaluate what's near this edge
   var nearOwn=0,nearOpp=0,nearVal=0;
   for(var i=0;i<2;i++){
     var tile=getTile(pair[i].c,pair[i].r,pair[i].t);
     if(tile==="W")nearVal+=advMode?3:1;
     else if(tile==="G")nearVal+=advMode?2:1;
     else if(tile==="B")nearVal+=1;
-    else if(tile==="H")nearVal+=1.5;
+    else if(tile==="H")nearVal+=2;
+    else if(tile==="R")nearVal+=0.5; // Berry nearby = potential bonus
+    else if(tile==="E")nearVal+=0;
+    // Check for berry bonus potential
+    if(tile==="W"||tile==="G"||tile==="B"){
+      if(hasBerryBonus(pair[i].c,pair[i].r,pair[i].t,tfk))nearVal+=1;
+    }
     var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
     for(var j=0;j<3;j++){
       var f=fences[te[j].key];
       if(f){
         var ci=FCOLORS.indexOf(f.color);
-        if(ci===aiIdx)nearOwn+=2;
-        else nearOpp+=4;
+        if(ci===aiIdx)nearOwn+=3;
+        else nearOpp+=2; // Place near opponent fences for hitchhiking
       }
     }
   }
-  // Distance bonus: prefer closer to cluster center
-  var distBonus=Math.max(0,5-minDist/(R*2));
-  return nearVal+nearOpp+nearOwn+cutBonus+distBonus+Math.random()*1.5;
+  // Distance bonus: prefer closer to action
+  var distBonus=Math.max(0,6-minDist/(R*2));
+  return nearVal+nearOpp+nearOwn+cutBonus+distBonus+Math.random()*1.2;
 }
 
 // === TRIANGLE GLOW ===
@@ -1095,11 +1205,20 @@ function overBar(e){ var sb=document.getElementById("sb"),bb=document.getElement
 function hasOverlay(){
   if(lobbyActive)return true;
   if(gameOver&&!winDismissed)return true;
-  var ids=["modal","confirm","createSpin","waitApproval","joinSpin","centerNotice","winOverlay","restartDlg"];
-  for(var i=0;i<ids.length;i++){
-    var el=document.getElementById(ids[i]);
-    if(el&&el.style.display!=="none"&&(ids[i]!=="modal"||el.style.display==="flex")&&(ids[i]!=="confirm"||el.style.display==="flex"))return true;
+  // Generic check: any position:fixed element covering the screen with z-index >= 50
+  var els=document.body.children;
+  for(var i=0;i<els.length;i++){
+    var el=els[i];
+    if(el.tagName!=="DIV"||el.id==="sb"||el.id==="bb"||el.id==="msg"||el.id==="persistMsg"||el.id==="turnBubble")continue;
+    var s=el.style;
+    if(s.position==="fixed"&&s.display!=="none"){
+      var z=parseInt(s.zIndex)||0;
+      if(z>=50&&s.inset==="0px")return true;
+    }
   }
+  // Also check confirm dialog specifically (uses display:flex vs none)
+  var cf=document.getElementById("confirm");
+  if(cf&&cf.style.display==="flex")return true;
   return false;
 }
 
@@ -1128,6 +1247,7 @@ document.addEventListener("touchend",function(e){
 window.addEventListener("mousemove",function(e){
   if(recentTouch())return;
   if(dragging){
+    if(hasOverlay()){dragging=false;return;}
     e.preventDefault();
     var dx=e.clientX-startX,dy=e.clientY-startY;
     panX=startPanX-dx;panY=startPanY-dy;
@@ -1184,6 +1304,7 @@ svg.addEventListener("touchstart",function(e){
 },{passive:false});
 window.addEventListener("touchmove",function(e){
   if(!dragging||e.touches.length!==1)return;
+  if(hasOverlay()){dragging=false;return;}
   e.preventDefault();
   lastTouchTime=Date.now();
   var dx=e.touches[0].clientX-startX,dy=e.touches[0].clientY-startY;
@@ -1275,10 +1396,23 @@ document.getElementById("winsel").addEventListener("change",function(){
   if(online&&isHost){
     winTarget=v;
     broadcast({t:"winTarget",val:v});
-    showMsg("已更改為先得 "+v+" 分獲勝",2000);
+    showMsg("已更改為突破 "+v+" 分結束",2000);
   }else{
-    confirmChange(function(){ winTarget=v;resetGame(); },function(){ winTarget=prev;document.getElementById("winsel").value=prev; },"改變獲勝分數會讓遊戲重新開始，確定嗎？");
+    confirmChange(function(){ winTarget=v;resetGame(); },function(){ winTarget=prev;document.getElementById("winsel").value=prev; },"改變結束分數會讓遊戲重新開始，確定嗎？");
   }
+});
+document.getElementById("btnWinInfo").addEventListener("click",function(){
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:300px";
+  var txt=document.createElement("p");txt.style.cssText="font-size:15px;color:#333;line-height:1.7;margin:0 0 16px 0";
+  txt.textContent="只要有人突破 "+winTarget+" 分，遊戲就會在該回合結束時宣布最高分的人是贏家。";
+  box.appendChild(txt);
+  var btn=document.createElement("button");btn.textContent="我知道了";
+  btn.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer";
+  btn.onclick=function(){d.remove();};
+  box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
 });
 document.getElementById("btnRestart").addEventListener("click",function(){
   if(online&&!isHost){
@@ -2164,7 +2298,7 @@ function handleNetData(d){
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
-  if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為先得 "+d.val+" 分獲勝",2000); }
+  if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
