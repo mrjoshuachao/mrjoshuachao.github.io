@@ -81,7 +81,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.6</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.7</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -472,7 +472,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.7.6");
+  lines.push("版本: v1.7.7");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -938,7 +938,7 @@ function aiEval(e,aiIdx){
   var pair=findTriPair(key);
   if(!pair)return -9999;
   
-  // DISTANCE PENALTY: never place far from existing fences
+  // DISTANCE PENALTY
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
   var fkeys=Object.keys(fences);
   for(var fi=0;fi<fkeys.length;fi++){
@@ -949,9 +949,9 @@ function aiEval(e,aiIdx){
   }
   if(fkeys.length>0&&minDist>R*8)return -9999;
   
-  // === CONTEXT: scores, endgame, leading/trailing ===
-  var oppMaxScore=0;
-  for(var j=0;j<numP;j++){if(j!==aiIdx&&scores[j]>oppMaxScore)oppMaxScore=scores[j];}
+  // === CONTEXT ===
+  var oppMaxScore=0,leaderIdx=-1;
+  for(var j=0;j<numP;j++){if(j!==aiIdx&&scores[j]>oppMaxScore){oppMaxScore=scores[j];leaderIdx=j;}}
   var aiScore=scores[aiIdx];
   var endgameThreshold=winTarget*0.6;
   var isEndgame=oppMaxScore>=endgameThreshold||aiScore>=endgameThreshold;
@@ -959,9 +959,12 @@ function aiEval(e,aiIdx){
   var isTrailing=aiScore<oppMaxScore;
   var scoreDiff=aiScore-oppMaxScore;
   var is2P=(numP===2);
+  // [NEW #4] Player count factor: more players = fewer fences each = exclusive more important
+  var pCountFactor=Math.max(1,numP/2); // 2P=1, 3P=1.5, 6P=3
+  var isEarlyGame=(fci<numP*3);
   
   var sc=0,completesAny=false;
-  // === SCORING MOVES: check if completes enclosure ===
+  // === SCORING MOVES ===
   for(var i=0;i<2;i++){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
     if(reg&&reg.length>=2){
@@ -975,7 +978,6 @@ function aiEval(e,aiIdx){
         for(var j=0;j<numP;j++)if(cc[j]===maxC){sharers++;if(j!==aiIdx)oppSharers++;}
         
         if(aiWins){
-          // Endgame: would this trigger end-of-round?
           var triggersEnd=false;
           var aiAfterScore=aiScore+a.pts;
           var bestOppAfter=0;
@@ -988,32 +990,30 @@ function aiEval(e,aiIdx){
           var oppWouldBeHighest=(bestOppAfter>aiAfterScore);
           
           if(oppSharers===0){
-            // EXCLUSIVE: best case
-            sc+=800+a.pts*30+a.sheep*5;
+            // EXCLUSIVE: scaled by player count factor
+            sc+=800+a.pts*30*pCountFactor+a.sheep*5;
             if(a.sheep>=4)sc+=200;
             if(a.sheep>=6)sc+=300;
             if(triggersEnd&&aiWouldBeHighest)sc+=1000;
-            // [FIX #2] Trailing AI gets extra bonus for exclusive
             if(isTrailing)sc+=150;
           }else if(triggersEnd&&aiWouldBeHighest&&!oppWouldBeHighest){
             sc+=900+a.pts*25;
           }else if(triggersEnd&&oppWouldBeHighest){
             sc-=2000;
           }else{
-            // === SHARED enclosure ===
-            // [FIX #1] 2-player discount: shared = diff stays same = nearly useless
+            // SHARED: discount by player count and situation
             var baseShareDiscount;
             if(is2P){
               baseShareDiscount=isLeading?0.35:0.08;
             }else{
-              baseShareDiscount=oppSharers===1?0.55:0.3;
+              // [NEW #4] More sharers + more players = worse
+              var baseD=oppSharers===1?0.55:0.3;
+              baseShareDiscount=baseD/Math.max(1,(pCountFactor-0.5));
             }
-            // [FIX #2] Trailing: further penalize shared
             if(isTrailing){
               var trailPenalty=Math.min(Math.abs(scoreDiff)*0.05,0.3);
               baseShareDiscount=Math.max(baseShareDiscount-trailPenalty,0.02);
             }
-            // [FIX #2] Leading: shared is ok to rush finish
             if(isLeading&&aiAfterScore>winTarget-1){
               baseShareDiscount=0.6;
             }
@@ -1036,7 +1036,6 @@ function aiEval(e,aiIdx){
         }else{
           sc-=300;
           sc-=a.pts*15;
-          // [FIX #1] In 2P, gifting is even worse
           if(is2P)sc-=a.pts*20;
         }
       }
@@ -1052,44 +1051,81 @@ function aiEval(e,aiIdx){
     if(!reg||reg.length<2)continue;
     var regSet={};for(var j=0;j<reg.length;j++)regSet[reg[j].c+","+reg[j].r+","+reg[j].t]=1;
     var oppFence=0,aiFence=0,openEdges=0,totalPts=0;
-    var regSheep=0,regHouse=0;
+    var regSheep=0,regHouse=0,totalFenced=0;
+    var leaderFence=0;
     for(var j=0;j<reg.length;j++){
       var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
       var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
       if(tile==="W"||tile==="G"||tile==="B"){
         regSheep++;
         var base=advMode?(tile==="W"?3:tile==="G"?2:1):1;
-        // [FIX #7] Include berry bonus in totalPts
         totalPts+=hasBerryBonus(reg[j].c,reg[j].r,reg[j].t,curFk)?base+1:base;
       }else if(tile==="H")regHouse++;
       for(var k2=0;k2<3;k2++){
         var nb=te[k2].nb;
         if(regSet[nb.c+","+nb.r+","+nb.t])continue;
         if(curFk[te[k2].key]){
+          totalFenced++;
           var f=fences[te[k2].key];
-          if(f){ var ci=FCOLORS.indexOf(f.color); if(ci===aiIdx)aiFence++;else oppFence++; }
+          if(f){
+            var ci=FCOLORS.indexOf(f.color);
+            if(ci===aiIdx)aiFence++;
+            else{oppFence++;if(ci===leaderIdx)leaderFence++;}
+          }
         }else openEdges++;
       }
     }
     var hasSH=(regSheep>0&&regHouse>0);
     
-    // [FIX #4] HITCHHIKING: relaxed condition
+    // [NEW #1] CLOSEDNESS: reward moves that form closed shapes, not lines
+    // closedRatio = how close this region is to being fully enclosed
+    if(hasSH&&(aiFence>0||oppFence>0)){
+      var closedRatio=totalFenced/(totalFenced+openEdges);
+      // Only valuable if AI has stake AND region is getting closed
+      if(aiFence>0&&closedRatio>0.4){
+        var closeBonus=totalPts*closedRatio*12;
+        if(aiFence>oppFence)closeBonus*=1.5; // AI dominates = exclusive likely
+        cutBonus+=closeBonus;
+      }
+    }
+    
+    // [NEW #2] AREA COMMITMENT: strong bonus for continuing in invested areas
+    if(hasSH&&aiFence>=2){
+      var commitBonus=aiFence*totalPts*4;
+      // The more AI has invested, the more important to finish
+      if(aiFence>=3)commitBonus*=1.5;
+      if(aiFence>=5)commitBonus*=2.0;
+      cutBonus+=commitBonus;
+    }
+    
+    // [NEW #3] SABOTAGE LEADER: if someone is far ahead, actively block them
+    if(hasSH&&leaderFence>=2&&isTrailing&&openEdges<=5){
+      var leaderThreat=leaderFence*totalPts*10*(oppMaxScore/winTarget);
+      if(openEdges<=2)leaderThreat*=3.0; // urgent: leader almost done!
+      else if(openEdges<=3)leaderThreat*=2.0;
+      // In endgame, sabotage is critical
+      if(isEndgame)leaderThreat*=2.0;
+      cutBonus+=leaderThreat;
+    }
+    
+    // HITCHHIKING
     if(hasSH&&oppFence>=2&&aiFence<oppFence&&openEdges>=1&&openEdges<=8){
       var hitchVal=totalPts*8*(oppFence/(openEdges+1));
       if(aiFence+1>=oppFence)hitchVal*=2.5;
-      // [FIX #1] Less valuable in 2P when trailing
       if(is2P&&isTrailing)hitchVal*=0.2;
+      // [NEW #4] In many-player games, hitchhiking is diluted
+      if(numP>=4)hitchVal*=0.6;
       cutBonus+=hitchVal;
     }
     
-    // SABOTAGE
+    // SABOTAGE (general)
     if(hasSH&&oppFence>=2&&aiFence<=1&&openEdges<=3&&totalPts>=2){
       var urgency=(oppFence*2)/(openEdges+1);
       var endgameMultiplier=isEndgame?2.0:1.0;
       cutBonus+=urgency*totalPts*18*endgameMultiplier;
     }
     
-    // [FIX #3] NEAR-COMPLETION: AI close to finishing high-value enclosure
+    // NEAR-COMPLETION
     if(hasSH&&aiFence>=2&&openEdges<=3){
       var completionBonus=totalPts*25*(aiFence/(openEdges+aiFence));
       if(aiFence>oppFence)completionBonus*=2.0;
@@ -1108,7 +1144,7 @@ function aiEval(e,aiIdx){
       cutBonus+=buildVal;
     }
     
-    // [FIX #5] POTENTIAL: region missing sheep or house but neighbor has it
+    // POTENTIAL: region missing sheep or house but neighbor has it
     if(!hasSH&&(regSheep>=2||regHouse>=1)&&openEdges>=2&&openEdges<=10){
       var hasMissing=false;
       for(var j=0;j<reg.length&&!hasMissing;j++){
@@ -1147,12 +1183,36 @@ function aiEval(e,aiIdx){
       if(f){
         var ci=FCOLORS.indexOf(f.color);
         if(ci===aiIdx)nearOwn+=3;
-        else nearOpp+=2;
+        else nearOpp+=1.5; // [TUNED] reduced from 2 to discourage blind following
       }
     }
   }
+  
+  // [NEW #5] EARLY GAME: bonus for areas rich in sheep+house (tile density scan)
+  if(isEarlyGame){
+    var richness=0;
+    for(var i=0;i<2;i++){
+      var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
+      for(var k2=0;k2<3;k2++){
+        var nb=te[k2].nb;
+        var nt=getTile(nb.c,nb.r,nb.t);
+        if(nt==="W"||nt==="G"||nt==="B")richness+=1;
+        if(nt==="H")richness+=1.5;
+        if(nt==="R")richness+=0.5;
+        // Scan one more ring out
+        var te2=triEdges(nb.c,nb.r,nb.t);
+        for(var k3=0;k3<3;k3++){
+          var nb2=te2[k3].nb;
+          var nt2=getTile(nb2.c,nb2.r,nb2.t);
+          if(nt2==="W"||nt2==="G"||nt2==="B")richness+=0.3;
+          if(nt2==="H")richness+=0.5;
+        }
+      }
+    }
+    nearVal+=richness*0.8;
+  }
+  
   var distBonus=Math.max(0,6-minDist/(R*2));
-  // [FIX #6] Reduced random noise
   return nearVal+nearOpp+nearOwn+cutBonus+distBonus+Math.random()*0.4;
 }
 
