@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.4.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.6.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -1107,24 +1107,27 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     gCircle.renderOrder=8; gCircle.frustumCulled=false;
     globe.add(gCircle); visObjects.push(gCircle);
   }
-  function addDash(pts, isCapture, tgtLat, tgtLon){
+  function addDash(pts, isCapture, tgtLat, tgtLon, elbowIdx){
     const H=R*1.006;
     const surfPts=pts.map(p=>p.clone().normalize().multiplyScalar(H));
     const cum=[0];
     for(let i=1;i<surfPts.length;i++) cum.push(cum[i-1]+surfPts[i].distanceTo(surfPts[i-1]));
     const total=cum[cum.length-1];
-    let startOffset=0;
+    if(total<0.001)return;
+    // Find ring crossing arc-length (start)
+    let ringCross=0;
     for(let i=0;i<surfPts.length;i++){
       if(surfPts[i].distanceTo(fromCenter)>=ringR){
         if(i>0){
           const d0=surfPts[i-1].distanceTo(fromCenter), d1=surfPts[i].distanceTo(fromCenter);
           const t=(d1-d0)>0.0001?(ringR-d0)/(d1-d0):0;
-          startOffset=cum[i-1]+(cum[i]-cum[i-1])*t;
+          ringCross=cum[i-1]+(cum[i]-cum[i-1])*t;
         }
         break;
       }
     }
-    let endOffset=total;
+    // End: capture ring or full length
+    let endD=total;
     if(isCapture&&tgtLat!=null){
       const tgtCenter=cellPos(tgtLat,tgtLon,H);
       for(let i=surfPts.length-1;i>0;i--){
@@ -1132,13 +1135,21 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
           if(i<surfPts.length-1){
             const d0=surfPts[i].distanceTo(tgtCenter), d1=surfPts[i+1].distanceTo(tgtCenter);
             const t2=(d0-d1)>0.0001?(d0-ringR)/(d0-d1):0;
-            endOffset=cum[i]+(cum[i+1]-cum[i])*t2;
+            endD=cum[i]+(cum[i+1]-cum[i])*t2;
           }
           break;
         }
       }
     }
-    const gradStartLen=isCapture?Math.max(0,endOffset-BAND_THETA*R):endOffset;
+    // Start: half a dash inside the ring so first dash intersects ring
+    const dashLen=0.035, gapLen=0.04, step=dashLen+gapLen;
+    const startD=Math.max(0,ringCross-dashLen*0.5);
+    // Elbow arc-length (L-corner)
+    const elbowArc=(elbowIdx!=null&&elbowIdx<cum.length)?cum[elbowIdx]:null;
+    const cornerHalf=dashLen*0.8; // half-width of solid corner segment
+    // Gradient for captures
+    const gradStartLen=isCapture?Math.max(0,endD-BAND_THETA*R):endD;
+    const cFrom=new THREE.Color(0xff6600), cTo=new THREE.Color(0x880000);
     function ptAt(s){
       s=Math.max(0,Math.min(s,total));
       for(let i=1;i<cum.length;i++){
@@ -1149,34 +1160,62 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       }
       return surfPts[surfPts.length-1].clone();
     }
-    const dashLen=0.035, gapLen=0.04;
-    let d=startOffset;
-    const cFrom=new THREE.Color(0xff6600), cTo=new THREE.Color(0x880000);
-    while(d<endOffset){
-      const dEnd=Math.min(d+dashLen,endOffset);
-      const n=Math.max(2,Math.round((dEnd-d)/0.01));
+    function dashColor(arcPos){
+      if(!isCapture||arcPos<=gradStartLen)return 0xff6600;
+      const frac=Math.min(1,(arcPos-gradStartLen)/(endD-gradStartLen+0.001));
+      return cFrom.clone().lerp(cTo,frac);
+    }
+    function drawSeg(sA,sB,col){
+      const n=Math.max(2,Math.round((sB-sA)/0.01));
       const seg=[];
-      for(let i=0;i<=n;i++) seg.push(ptAt(d+(dEnd-d)*i/n));
+      for(let i=0;i<=n;i++) seg.push(ptAt(sA+(sB-sA)*i/n));
       const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seg,false,'centripetal'),n,0.008,5,false);
       geo.computeBoundingSphere();
-      let dashCol=0xff6600;
-      if(isCapture&&d+dashLen/2>gradStartLen){
-        const frac=Math.min(1,(d+dashLen/2-gradStartLen)/(endOffset-gradStartLen+0.001));
-        dashCol=cFrom.clone().lerp(cTo,frac);
-      }
-      // Front: opaque, depthTest against original depth (hidden by pieces + globe)
-      const matFront=new THREE.MeshBasicMaterial({color:dashCol,depthTest:true,depthWrite:false,
+      const matF=new THREE.MeshBasicMaterial({color:col,depthTest:true,depthWrite:false,
         polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
-      const front=new THREE.Mesh(geo,matFront); front.renderOrder=7; front.frustumCulled=false;
+      const front=new THREE.Mesh(geo,matF); front.renderOrder=7; front.frustumCulled=false;
       globe.add(front); visObjects.push(front);
-      // Ghost: 50% transparent, depthTest against globe-only depth (after depth sphere reset).
-      // Behind pieces: only ghost shows (50%). Where front drew: ghost blends on top but
-      // same color at 50% over 100% = identical orange (srcAlpha blend). No visual stacking.
-      const geo2=geo.clone();
-      const matGhost=_ghostMat(dashCol);
-      const ghost=new THREE.Mesh(geo2,matGhost); ghost.renderOrder=6; ghost.frustumCulled=false;
+      const ghost=new THREE.Mesh(geo.clone(),_ghostMat(col));
+      ghost.renderOrder=6; ghost.frustumCulled=false;
       globe.add(ghost); visObjects.push(ghost);
-      d+=dashLen+gapLen;
+    }
+    // Define dash zones (excluding corner)
+    let cornerStart=null, cornerEnd=null;
+    if(elbowArc!=null&&elbowArc>startD&&elbowArc<endD){
+      cornerStart=Math.max(startD,elbowArc-cornerHalf);
+      cornerEnd=Math.min(endD,elbowArc+cornerHalf);
+      // Draw solid corner
+      drawSeg(cornerStart,cornerEnd,dashColor(elbowArc));
+    }
+    // Zone 1: startD to cornerStart (or endD if no corner)
+    const z1End=cornerStart!=null?cornerStart:endD;
+    const z1Len=z1End-startD;
+    if(z1Len>step*0.3){
+      const nDash=Math.max(1,Math.round(z1Len/step));
+      const actualStep=z1Len/nDash;
+      const aDash=actualStep*(dashLen/step); // proportional dash within step
+      for(let i=0;i<nDash;i++){
+        const dStart=startD+i*actualStep;
+        const dEnd=Math.min(dStart+aDash,z1End);
+        if(dEnd-dStart<0.002)continue;
+        drawSeg(dStart,dEnd,dashColor((dStart+dEnd)/2));
+      }
+    }
+    // Zone 2: cornerEnd to endD
+    if(cornerEnd!=null){
+      const z2Start=cornerEnd;
+      const z2Len=endD-z2Start;
+      if(z2Len>step*0.3){
+        const nDash=Math.max(1,Math.round(z2Len/step));
+        const actualStep=z2Len/nDash;
+        const aDash=actualStep*(dashLen/step);
+        for(let i=0;i<nDash;i++){
+          const dStart=z2Start+i*actualStep;
+          const dEnd=Math.min(dStart+aDash,endD);
+          if(dEnd-dStart<0.002)continue;
+          drawSeg(dStart,dEnd,dashColor((dStart+dEnd)/2));
+        }
+      }
     }
   }
 
@@ -1387,7 +1426,8 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       seg2=geodesicPts(cellPos(elbowLat,elbowLon,r),cellPos(tl,tn,r),12);
     }
     const _knightCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
-    addDash([...seg1,...seg2.slice(1)], _knightCapture, tl, tn);
+    const _elbowIdx=seg1.length-1; // elbow is at end of seg1
+    addDash([...seg1,...seg2.slice(1)], _knightCapture, tl, tn, _elbowIdx);
     tubeDests.add(`${tl},${tn}`);
   });
 
@@ -2817,7 +2857,7 @@ const _PST={
   R:[5,0,0,8,8,0,0,5],
   Q:[-15,-5,0,5,5,0,-5,-15],
   Km:[30,15,-15,-30,-30,-15,15,30],  // king middlegame: STAY BACK strongly
-  Ke:[-10,0,10,15,15,10,0,-10]       // king endgame: centralize
+  Ke:[-20,-5,15,25,25,15,-5,-20]      // king endgame: centralize MORE aggressively
 };
 const _EV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
 const _POL={Q:30,R:27,B:24,N:20,P:0,K:0};
@@ -2906,6 +2946,7 @@ function evaluate(){
     const lonDist=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
     for(const pp of passedPawns){
       const bk=pp.color==='black';
+      const promoLat=bk?7:0;
       const ownKLat=bk?bKingLat:wKingLat, ownKLon=bk?bKingLon:wKingLon;
       const oppKLat=bk?wKingLat:bKingLat, oppKLon=bk?wKingLon:bKingLon;
       if(ownKLat<0||oppKLat<0)continue;
@@ -2913,6 +2954,19 @@ function evaluate(){
       const oppDist=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
       // Own king close to support passer; opponent king far = good
       s+=(bk?1:-1)*((7-ownDist)*6-(7-oppDist)*8);
+      // Urgent interception: opponent king distance to PROMO SQUARE matters most for dangerous passers
+      if(pp.dist<=3){
+        const oppToPromo=Math.max(Math.abs(oppKLat-promoLat),lonDist(oppKLon,pp.lon));
+        // If opponent king can't reach promo square in time, passer is unstoppable
+        if(oppToPromo>pp.dist){
+          const unstopBonus=pp.dist<=1?400:pp.dist<=2?200:80;
+          s+=(bk?1:-1)*unstopBonus;
+        }
+        // Reward opponent king being close to the pawn (for interception)
+        // This encourages the DEFENDING side to move king toward the passer
+        const oppToPawn=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
+        s+=(bk?-1:1)*(7-oppToPawn)*12; // defending king close to pawn = good for defender
+      }
     }
   }
   // Bishop pair bonus (having both bishops is worth extra)
@@ -2952,24 +3006,49 @@ function evaluate(){
       s+=sgn*(shield*12); // each shield pawn worth 12
     }
   }
-  // Endgame: queen hunting enemy king
+  // Endgame bonuses
   if(eg){
     const _ld=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
-    let wHasQ=false,bHasQ=false,wQLat=-1,wQLon=-1,bQLat=-1,bQLon=-1;
-    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-      const p=board[a][o];if(!p||p.type!=='Q')continue;
-      if(p.color==='white'){wHasQ=true;wQLat=a;wQLon=o;}
-      else{bHasQ=true;bQLat=a;bQLon=o;}
+    // Push enemy king to polar edge (lat 0 or 7 = fewer escape squares on sphere)
+    if(wKingLat>=0){
+      const wkCenter=Math.min(wKingLat,7-wKingLat); // 0=pole edge, 3=equator
+      s+=(3-wkCenter)*10; // white king near edge → bad for white → s↑
     }
+    if(bKingLat>=0){
+      const bkCenter=Math.min(bKingLat,7-bKingLat);
+      s-=(3-bkCenter)*10; // black king near edge → bad for black → s↓
+    }
+    // Piece hunting enemy king (queen, rook, or any major piece)
+    let wHasQ=false,bHasQ=false,wQLat=-1,wQLon=-1,bQLat=-1,bQLon=-1;
+    let wMajors=0,bMajors=0;
+    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+      const p=board[a][o];if(!p)continue;
+      if(p.type==='Q'){
+        if(p.color==='white'){wHasQ=true;wQLat=a;wQLon=o;wMajors++;}
+        else{bHasQ=true;bQLat=a;bQLon=o;bMajors++;}
+      }
+      if(p.type==='R'){if(p.color==='white')wMajors++;else bMajors++;}
+    }
+    // Queen hunting enemy king
     if(wHasQ&&!bHasQ&&bKingLat>=0){
       const qd=Math.max(Math.abs(wQLat-bKingLat),_ld(wQLon,bKingLon));
-      s-=(7-qd)*15; // white queen close to black king → s↓ (good for white)
+      s-=(7-qd)*18;
     }
     if(bHasQ&&!wHasQ&&wKingLat>=0){
       const qd=Math.max(Math.abs(bQLat-wKingLat),_ld(bQLon,wKingLon));
-      s+=(7-qd)*15; // black queen close to white king → s↑ (good for black)
+      s+=(7-qd)*18;
     }
-    // Passed pawn blocker: if single piece blocks a dangerous passer, penalize blocker's side
+    // Major pieces (R/Q) should approach enemy king in endgame
+    if(wMajors>0&&!bHasQ&&bKingLat>=0){
+      // Reward own king proximity to enemy king (for coordinated mating attack)
+      const kkDist=Math.max(Math.abs(wKingLat-bKingLat),_ld(wKingLon,bKingLon));
+      s-=(7-kkDist)*8; // white king close to black king → good for white
+    }
+    if(bMajors>0&&!wHasQ&&wKingLat>=0){
+      const kkDist=Math.max(Math.abs(bKingLat-wKingLat),_ld(bKingLon,wKingLon));
+      s+=(7-kkDist)*8;
+    }
+    // Passed pawn blocker
     for(const pp of passedPawns){
       const bk=pp.color==='black';
       const dir=bk?1:-1;
@@ -2981,6 +3060,21 @@ function evaluate(){
       if(blockerCount===1&&pp.dist<=3){
         const pen=pp.dist<=1?80:pp.dist<=2?50:30;
         s+=(bk?1:-1)*pen;
+      }
+    }
+  }
+  // Middlegame: queen should stay near own king for defense when king is exposed
+  if(!eg){
+    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+      const p=board[a][o];if(!p||p.type!=='Q')continue;
+      const bk=p.color==='black';
+      const kLat=bk?bKingLat:wKingLat, kLon=bk?bKingLon:wKingLon;
+      if(kLat<0)continue;
+      const kCastled=bk?bCastled:wCastled;
+      if(!kCastled){
+        const _ld2=(x,y)=>Math.min(Math.abs(x-y),8-Math.abs(x-y));
+        const qkDist=Math.max(Math.abs(a-kLat),_ld2(o,kLon));
+        if(qkDist>4) s+=(bk?-1:1)*(qkDist-4)*12; // queen too far from uncastled king
       }
     }
   }
@@ -3079,6 +3173,27 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
   const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
   // Broader repetition: penalize moves that recreate ANY position we've seen before
   const posHist=autoBattleActive?_autoPosHist:{};
+  // Same-piece wandering detection: trace move chains to find pieces moved repeatedly without capturing
+  const _pieceWanderCount={};
+  if(autoBattleActive){
+    const allRecent=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-8);
+    // Build chain: for each recent move, the piece that ends at (tLat,tLon) was the one that started at (fLat,fLon)
+    // Track how many non-capture moves each origin square has in recent history
+    // Also count by piece type (catches rook shuffling between different squares)
+    const typeCount={};
+    allRecent.forEach(m=>{
+      if(!m.captured){
+        typeCount[m.piece]=(typeCount[m.piece]||0)+1;
+      }
+    });
+    // For each legal move's origin, check if it was a recent destination (same piece)
+    allRecent.forEach(m=>{
+      const key=`${m.coords[2]},${m.coords[3]}`; // destination = current position
+      _pieceWanderCount[key]=(_pieceWanderCount[key]||0)+1;
+    });
+    // Also store type counts for piece-type-level detection
+    _pieceWanderCount._types=typeCount;
+  }
   let searchDepth=0;
 
   function nextDepth(){
@@ -3118,6 +3233,23 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           const fromRank=isBlack?m.fLat:(7-m.fLat);
           const toRank=isBlack?m.tLat:(7-m.tLat);
           if(toRank>fromRank&&pc.type!=='K')sc+=(isBlack?1:-1)*((toRank-fromRank)*8);
+          // Retreat penalty: non-king pieces moving backward without capturing
+          if(toRank<fromRank&&pc.type!=='K'&&!sv.c&&!sv.epCap){
+            const retreatPen=(fromRank-toRank)*15;
+            // Extra penalty for retreating to back rank (lp=0)
+            const backPen=(toRank===0)?30:0;
+            sc+=(isBlack?-1:1)*(retreatPen+backPen);
+          }
+        }
+        // Wandering piece penalty: piece moved repeatedly without capturing
+        if(autoBattleActive&&!sv.c&&!sv.epCap&&pc){
+          // Check 1: this specific piece (at fLat,fLon) was moved recently
+          const pieceKey=`${m.fLat},${m.fLon}`;
+          const pmCount=_pieceWanderCount[pieceKey]||0;
+          if(pmCount>=2)sc+=(isBlack?-1:1)*(pmCount-1)*80;
+          // Check 2: this piece TYPE has been moved too much (catches shuffling between squares)
+          const typeCount=(_pieceWanderCount._types||{})[pc.type]||0;
+          if(typeCount>=3&&pc.type!=='K'&&pc.type!=='P')sc+=(isBlack?-1:1)*(typeCount-2)*50;
         }
         // Globe spectacle bonus
         if(globeBonus>0){
