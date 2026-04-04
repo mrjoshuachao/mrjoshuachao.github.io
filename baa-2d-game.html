@@ -81,7 +81,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.8</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.7.9</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -472,7 +472,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.7.8");
+  lines.push("版本: v1.7.9");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1053,6 +1053,8 @@ function aiEval(e,aiIdx){
     var oppFence=0,aiFence=0,openEdges=0,totalPts=0;
     var regSheep=0,regHouse=0,totalFenced=0;
     var leaderFence=0;
+    // [NEW] Per-player fence tracking to detect biggest builder
+    var playerFences=[];for(var j=0;j<numP;j++)playerFences.push(0);
     for(var j=0;j<reg.length;j++){
       var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
       var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
@@ -1069,6 +1071,7 @@ function aiEval(e,aiIdx){
           var f=fences[te[k2].key];
           if(f){
             var ci=FCOLORS.indexOf(f.color);
+            if(ci>=0&&ci<numP)playerFences[ci]++;
             if(ci===aiIdx)aiFence++;
             else{oppFence++;if(ci===leaderIdx)leaderFence++;}
           }
@@ -1077,35 +1080,57 @@ function aiEval(e,aiIdx){
     }
     var hasSH=(regSheep>0&&regHouse>0);
     
-    // [NEW #1] CLOSEDNESS: reward moves that form closed shapes, not lines
-    // closedRatio = how close this region is to being fully enclosed
+    // [NEW] Find biggest builder (opponent with most fences on this region)
+    var biggestBuilder=-1,biggestBuilderFences=0;
+    for(var j=0;j<numP;j++){
+      if(j===aiIdx)continue;
+      if(playerFences[j]>biggestBuilderFences){biggestBuilderFences=playerFences[j];biggestBuilder=j;}
+    }
+    
+    // CLOSEDNESS
     if(hasSH&&(aiFence>0||oppFence>0)){
       var closedRatio=totalFenced/(totalFenced+openEdges);
-      // Only valuable if AI has stake AND region is getting closed
       if(aiFence>0&&closedRatio>0.4){
         var closeBonus=totalPts*closedRatio*12;
-        if(aiFence>oppFence)closeBonus*=1.5; // AI dominates = exclusive likely
+        if(aiFence>oppFence)closeBonus*=1.5;
         cutBonus+=closeBonus;
       }
     }
     
-    // [NEW #2] AREA COMMITMENT: strong bonus for continuing in invested areas
+    // AREA COMMITMENT
     if(hasSH&&aiFence>=2){
       var commitBonus=aiFence*totalPts*4;
-      // The more AI has invested, the more important to finish
       if(aiFence>=3)commitBonus*=1.5;
       if(aiFence>=5)commitBonus*=2.0;
       cutBonus+=commitBonus;
     }
     
-    // [NEW #3] SABOTAGE LEADER: if someone is far ahead, actively block them
+    // SABOTAGE SCORE LEADER
     if(hasSH&&leaderFence>=2&&isTrailing&&openEdges<=5){
       var leaderThreat=leaderFence*totalPts*10*(oppMaxScore/winTarget);
-      if(openEdges<=2)leaderThreat*=3.0; // urgent: leader almost done!
+      if(openEdges<=2)leaderThreat*=3.0;
       else if(openEdges<=3)leaderThreat*=2.0;
-      // In endgame, sabotage is critical
       if(isEndgame)leaderThreat*=2.0;
       cutBonus+=leaderThreat;
+    }
+    
+    // [NEW] SABOTAGE BIGGEST BUILDER: block whoever is building the largest
+    // enclosure, regardless of their current score
+    if(hasSH&&biggestBuilder>=0&&biggestBuilderFences>=2&&aiFence<=1&&openEdges<=8){
+      var buildSize=reg.length;
+      var builderThreat=biggestBuilderFences*totalPts*5;
+      // Bigger region = more dangerous (lesson: 9-grid enclosure = 6+ pts)
+      if(buildSize>=6)builderThreat*=1.5;
+      if(buildSize>=9)builderThreat*=2.0;
+      // Closer to completion = more urgent
+      var builderClosedRatio=totalFenced/(totalFenced+openEdges);
+      if(builderClosedRatio>0.5)builderThreat*=1.5;
+      if(builderClosedRatio>0.7)builderThreat*=2.0;
+      // If builder would get exclusive (no AI fence there), extra urgent
+      if(aiFence===0)builderThreat*=1.5;
+      // Don't double-count if this is also the score leader
+      if(biggestBuilder===leaderIdx)builderThreat*=0.5;
+      cutBonus+=builderThreat;
     }
     
     // HITCHHIKING

@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.3.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.3.1</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -3015,13 +3015,17 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
   if(!legal.length){onDone(null,0);return;}
   // Shuffle for variety among equal-scoring moves
   for(let i=legal.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];}
-  // Initial ordering: captures first
+  // Initial ordering: captures first (stable: equal-value captures keep shuffled order)
+  // Assign shuffle index to preserve randomness within same-value groups
+  legal.forEach((m,i)=>m._si=i);
   legal.sort((a,b)=>{
     const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
     const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
-    return vb-va;
+    return vb-va||(a._si-b._si); // stable: preserve shuffle order for ties
   });
   let bestMove=legal[0],finalDepth=0;
+  // Random noise amplitude for tie-breaking (±15 pts — enough to vary openings, too small to affect real decisions)
+  const _noise=()=>(Math.random()-0.5)*30;
   // Anti-oscillation (auto-battle only) — check last 6 moves for reversals
   const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-6):[];
   const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
@@ -3078,6 +3082,8 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           sc+=(isBlack?1:-1)*Math.round(gb*globeBonus);
         }
         if(isRev(m))sc=isBlack?sc-1500:sc+1500;
+        // Random noise to break ties → different games each time
+        sc+=(isBlack?1:-1)*_noise();
         if(isBlack?sc>dBestSc:sc<dBestSc){dBestSc=sc;dBest=m;}
       }
       // Only update bestMove if this depth completed fully (partial results unreliable)
