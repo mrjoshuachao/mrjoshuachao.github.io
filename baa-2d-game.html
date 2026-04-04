@@ -2099,6 +2099,22 @@ function hostHandleConn(c){
         setupConnHandlers(c);
         return;
       }
+      // Not a reconnection — check if migration join (auto-admit)
+      if(d.t==="migration_join"&&window._pendingMigrants>0){
+        reconnHandled=true;clearTimeout(reconnTimer);
+        c.removeListener("data",onFirstData);
+        window._pendingMigrants--;
+        conns.push(c);connHumans.push(1);
+        recalcNumP();
+        var startIdx=localHumans;
+        for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
+        var gameInProgress=(fci>0||Object.keys(fences).length>0);
+        try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
+        broadcastIdxUpdates();
+        updateRoomUI();updateSB();
+        setupConnHandlers(c);
+        return;
+      }
       reconnHandled=true;clearTimeout(reconnTimer);
       c.removeListener("data",onFirstData);
       handleAsNewJoin();
@@ -2464,7 +2480,13 @@ function handleNetData(d){
       ld.appendChild(box);document.body.appendChild(ld);
     }else if(myIdx>=0){
       var cname=FNAMES[myIdx];
-      showMsg("加入成功，你是"+cname+"色",3000);
+      if(window._migrating){
+        window._migrating=false;
+        hidePersistMsg();
+        showCenterFade("已轉移到新房間",2000);
+      }else{
+        showMsg("加入成功，你是"+cname+"色",3000);
+      }
     }else if(d.lobby){
       showLobbyOverlay("房主正在等每個人都進房間，請稍候。");
     }else{
@@ -2500,45 +2522,90 @@ function handleNetData(d){
   if(d.t==="host_migrating"){
     showPersistMsg(d.msg||"房主離開了，正在轉移房間...");
   }
-  if(d.t==="become_host"){
-    // This client becomes the new host!
-    showPersistMsg("你成為新房主，正在建立連線...");
-    // Save game state from old host
-    var mig=d;
-    // Disconnect from old host
+  if(d.t==="reconnect_to"&&d.peerID){
+    // Old host told us to reconnect to new host automatically
+    showPersistMsg("正在連線到新房主...");
+    var newPeerID=d.peerID;
+    // Extract room code from peer ID (format: "baa-XXXXX")
+    var newCode=newPeerID.replace("baa-","");
     for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);try{conns[i].close();}catch(e){}}
     conns=[];connHumans=[];
     if(peer)try{peer.destroy();}catch(e){}
-    // Become host
+    reconnToken=genReconnToken();
+    roomCode=newCode;savedRoomCode=newCode;
+    window._migrating=true; // flag: show "已轉移" instead of normal join msg
+    peer=new Peer(peerOpts);
+    peer.on("open",function(){
+      var c=peer.connect(newPeerID,{reliable:true,serialization:"json"});
+      c.on("open",function(){
+        conns=[c];
+        // Tell new host we are a migrating player (auto-admit)
+        try{c.send({t:"migration_join"});}catch(e){}
+        c._hb=setInterval(function(){try{c.send({t:"pong"});}catch(e){}},HB_INTERVAL);
+        c.on("data",function(d2){if(d2.t==="ping")return;handleNetData(d2);});
+        c.on("close",function(){
+          if(c._hb)clearInterval(c._hb);
+          if(online&&!isHost&&reconnToken)initiateClientReconnect();
+          else{
+            if(peer)try{peer.destroy();}catch(e){}
+            peer=null;online=false;spectator=false;conns=[];connHumans=[];
+            hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();
+            numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
+            showDissolveDialog("房間已解散。");
+          }
+        });
+      });
+      c.on("error",function(){
+        hidePersistMsg();showMsg("無法連線到新房主",3000);
+        if(peer)try{peer.destroy();}catch(e){}
+        peer=null;online=false;conns=[];connHumans=[];unlockOnlineUI();
+        numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
+      });
+    });
+    peer.on("error",function(){
+      hidePersistMsg();showMsg("連線錯誤",3000);
+      online=false;conns=[];unlockOnlineUI();
+      numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
+    });
+  }
+  if(d.t==="become_host"){
+    // This client becomes the new host!
+    showPersistMsg("你成為新房主，正在建立連線...");
+    var mig=d;
+    var oldConn=conns[0]; // keep alive to send confirmation
+    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);}
+    conns=[];connHumans=[];
+    if(peer)try{peer.destroy();}catch(e){}
     isHost=true;myIdx=0;
     localHumans=mig.localHumans||1;
     seed=mig.seed;numP=mig.numP;numAI=mig.numAI;advMode=mig.advMode;winTarget=mig.winTarget;
     numHuman=numP-numAI;
     hostReconnSlots={};
     roomCode=genCode();
+    savedRoomCode=roomCode;
     acquireWebLock();
     loadPeerJS(function(){
       peer=new Peer("baa-"+roomCode,peerOpts);
       peer.on("open",function(){
+        // Tell old host we are ready — it will redirect other clients to us
+        try{oldConn.send({t:"new_host_ready",peerID:"baa-"+roomCode});}catch(e){}
+        setTimeout(function(){try{oldConn.close();}catch(e){}},3000);
         hidePersistMsg();
-        // Restore game state
         scores=mig.scores;fci=mig.fci;actionLog=mig.log;
         turnOrder=mig.turnOrder||[];
         gameOver=mig.gameOver||false;
         netApplying=true;resetGame();netApplying=false;
-        // Replay action log to restore fences
         for(var i=0;i<mig.log.length;i++){
           netApplying=true;
           var le=mig.log[i],edge={x1:le.x1,y1:le.y1,x2:le.x2,y2:le.y2,key:le.key};
           tryPlaceFence(edge);
           netApplying=false;
         }
-        scores=mig.scores; // restore scores after replay
+        scores=mig.scores;
+        turnOrder=mig.turnOrder||[];
         lockOnlineUI();updateSB();
-        // Broadcast new room code to old host's other clients
-        // They will need to reconnect via host_migrating handler
-        // For now, show host the new room code
-        showMsg("你現在是房主，房間號碼: "+roomCode,5000);
+        window._pendingMigrants=(mig.otherClients||[]).length;
+        showCenterFade("現在你是新房主了",2000);
         document.getElementById("btnOnline").textContent="離開房間";
       });
       peer.on("connection",function(c){ hostHandleConn(c); });
@@ -2672,32 +2739,45 @@ function leaveRoom(){
     for(var i=0;i<conns.length;i++){if(connHumans[i]>0){successorIdx=i;break;}}
     if(successorIdx>=0){
       var successor=conns[successorIdx];
-      // Send all game state to successor
+      // Collect game state
       var migrationData={
         t:"become_host",
         seed:seed,numP:numP,numAI:numAI,advMode:advMode,winTarget:winTarget,
         scores:scores.slice(),fci:fci,log:actionLog,turnOrder:turnOrder.slice(),
-        fenceData:{},gameOver:gameOver,localHumans:connHumans[successorIdx]
+        gameOver:gameOver,localHumans:connHumans[successorIdx]
       };
-      // Include fence data
-      for(var k in fences){
-        migrationData.fenceData[k]={color:fences[k].color};
-      }
-      // Collect info about other clients
       var otherClients=[];
       for(var i=0;i<conns.length;i++){
         if(i===successorIdx)continue;
         otherClients.push({humans:connHumans[i],isSpectator:connHumans[i]===0});
       }
       migrationData.otherClients=otherClients;
-      try{successor.send(migrationData);}catch(e){}
-      // Tell other clients to wait for new host
+      // Tell others to wait
       for(var i=0;i<conns.length;i++){
         if(i===successorIdx)continue;
         try{conns[i].send({t:"host_migrating",msg:"房主離開了，正在轉移房間..."});}catch(e){}
       }
-      // Give successor time to receive, then disconnect
-      setTimeout(function(){
+      // Listen for successor's confirmation with new peer ID
+      var migDone=false;
+      var origDataHandler=null;
+      successor.on("data",function onMigReply(d2){
+        if(migDone)return;
+        if(d2.t==="new_host_ready"&&d2.peerID){
+          migDone=true;
+          // Tell all OTHER clients to reconnect to the new host
+          for(var i=0;i<conns.length;i++){
+            if(i===successorIdx)continue;
+            try{conns[i].send({t:"reconnect_to",peerID:d2.peerID});}catch(e){}
+          }
+          // Give clients a moment to receive, then disconnect
+          setTimeout(doLeave,800);
+        }
+      });
+      // Send migration data to successor
+      try{successor.send(migrationData);}catch(e){}
+      // Timeout: if successor doesn't respond in 8s, leave anyway
+      setTimeout(function(){ if(!migDone){migDone=true;doLeave();} },8000);
+      function doLeave(){
         clientReconnecting=false;reconnToken="";savedRoomCode="";
         releaseWebLock();hostReconnSlots={};
         if(peer)try{peer.destroy();}catch(e){}
@@ -2707,7 +2787,7 @@ function leaveRoom(){
         unlockOnlineUI();
         numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
         showMsg("你已離開房間",2000);
-      },1500);
+      }
       return;
     }
   }

@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;top:28px;left:28px;z-index:100;text-align:left;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.6.7</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.7.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -2011,6 +2011,7 @@ function execMove(fromLat,fromLon,toLat,toLon){
       playCheck();
     }
     if(autoBattleActive&&!autoBattlePaused){
+      clearTimeout(_autoBattleTimer);
       _autoBattleTimer=setTimeout(doAutoMove,AUTO_DELAY);
     } else if(aiMode&&turnColor===AI_COLOR){
       const _aiTurnLabel=inCheck?'AI thinking… (check)':'AI thinking…';
@@ -3281,11 +3282,19 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
       for(const m of legal){
         if(Date.now()>=dlLate){completed=false;break;}
         const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-        // Check if this move gives check (primary aggression signal)
         const opp=color==='black'?'white':'black';
         const givesCheck=isInCheck(opp);
+        // Stalemate avoidance: if this move leaves opponent with no legal moves and not in check
+        // it's stalemate (draw). If we're winning, heavily penalize drawing.
+        const oppHasMoves=hasAnyLegalMove(opp);
         let sc=_abSearch(searchDepth-1,-Infinity,Infinity,!isBlack,deadline);
         aiUndo(m,pc,sv);
+        if(!oppHasMoves&&!givesCheck){
+          // Stalemate! If we have material advantage, this is terrible
+          const eval0=evaluate();
+          const ourAdvantage=isBlack?eval0:-eval0; // positive = we're winning
+          if(ourAdvantage>200) sc+=(isBlack?-1:1)*5000; // massive penalty for stalemate when winning
+        }
         // Repetition penalty
         if(autoBattleActive){
           const sv2=aiApply(m);
@@ -3314,15 +3323,15 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
             sc+=(isBlack?-1:1)*(retreatPen+backPen);
           }
         }
-        // Wandering piece penalty: piece moved repeatedly without capturing
-        if(autoBattleActive&&!sv.c&&!sv.epCap&&pc){
-          // Check 1: this specific piece (at fLat,fLon) was moved recently
+        // Wandering piece penalty: piece moved repeatedly without significant progress
+        // Only skip penalty for captures of pieces worth ≥300 (not pawn captures)
+        const _sigCapture=sv.c&&_EV[sv.c.type]>=300;
+        if(autoBattleActive&&!_sigCapture&&pc){
           const pieceKey=`${m.fLat},${m.fLon}`;
           const pmCount=_pieceWanderCount[pieceKey]||0;
-          if(pmCount>=2)sc+=(isBlack?-1:1)*(pmCount-1)*80;
-          // Check 2: this piece TYPE has been moved too much (catches shuffling between squares)
+          if(pmCount>=2)sc+=(isBlack?-1:1)*(pmCount-1)*100;
           const typeCount=(_pieceWanderCount._types||{})[pc.type]||0;
-          if(typeCount>=3&&pc.type!=='K'&&pc.type!=='P')sc+=(isBlack?-1:1)*(typeCount-2)*50;
+          if(typeCount>=3&&pc.type!=='K'&&pc.type!=='P')sc+=(isBlack?-1:1)*(typeCount-2)*70;
         }
         // Globe spectacle bonus
         if(globeBonus>0){
@@ -3435,9 +3444,14 @@ function doAutoMove(){
           {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
         _endAutoGame('ERROR_EMPTY_SQUARE');return;
       }
-      // Record move
+      // Record move (guard against double-recording)
       const cap=board[m.tLat][m.tLon];
       const color=turnColor;
+      const _lastMove=log.moves.length>0?log.moves[log.moves.length-1]:null;
+      if(_lastMove&&_lastMove.color===color&&_lastMove.coords[0]===m.fLat&&_lastMove.coords[1]===m.fLon
+        &&_lastMove.coords[2]===m.tLat&&_lastMove.coords[3]===m.tLon){
+        return; // exact same move already recorded — skip duplicate
+      }
       const entry={
         n:log.moves.length+1,color,piece:piece.type,
         from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
