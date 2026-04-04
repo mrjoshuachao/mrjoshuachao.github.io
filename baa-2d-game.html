@@ -81,7 +81,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.8.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.9.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -472,7 +472,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.8.0");
+  lines.push("版本: v1.9.0");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -874,10 +874,8 @@ function aiMove(){
   if(!isAITurn()||gameOver)return;
   var vw=window.innerWidth,vh=window.innerHeight,mg=R*6;
   var cands=[],seen={};
-  // Search a wider area: viewport + large margin, and also around all existing fences
   var cMin=Math.floor((panX-mg)/(1.5*R))-2,cMax=Math.ceil((panX+vw+mg)/(1.5*R))+2;
   var rMin=Math.floor((panY-mg)/R3)-2,rMax=Math.ceil((panY+vh+mg)/R3)+2;
-  // Also include area around all existing fences (for hitchhiking & building)
   var fkeys=Object.keys(fences);
   for(var fi=0;fi<fkeys.length;fi++){
     var parts=fkeys[fi].split(",");
@@ -904,158 +902,111 @@ function aiMove(){
     }
   }
   if(cands.length===0)return;
-  // Evaluate: prioritize scoring moves
-  var best=null,bestS=-1;
+  
   var aiIdx=curP();
+  var aiScore=scores[aiIdx];
+  var oppMax=0;for(var j=0;j<numP;j++){if(j!==aiIdx&&scores[j]>oppMax)oppMax=scores[j];}
+  var curFk={};for(var k in fences)curFk[k]=1;
+  
+  // === PASS 1: find immediate scoring moves ===
+  var scoringMoves=[];
   for(var i=0;i<cands.length;i++){
-    var e=cands[i],sc=aiEval(e,aiIdx);
-    if(sc>bestS){bestS=sc;best=e;}
-  }
-  if(best){
-    var mx=(best.x1+best.x2)/2,my=(best.y1+best.y2)/2;
-    var vw=window.innerWidth,vh=window.innerHeight;
-    var tgtX=mx-vw/2,tgtY=my-vh/2;
-    var fromX=panX,fromY=panY;
-    var startT=0,dur=700;
-    function animPan(ts){
-      if(!startT)startT=ts;
-      var p=Math.min((ts-startT)/dur,1);
-      var ease=p<0.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
-      panX=fromX+(tgtX-fromX)*ease;
-      panY=fromY+(tgtY-fromY)*ease;
-      applyPan();
-      if(p<1){ requestAnimationFrame(animPan); }
-      else{ commitView();fillView();setTimeout(function(){ if(!gameOver)tryPlaceFence(best); },300); }
+    var e=cands[i];
+    var tfk={};for(var k in fences)tfk[k]=1;tfk[e.key]=1;
+    var pair=findTriPair(e.key);
+    if(!pair)continue;
+    var moveScore=null;
+    for(var si=0;si<2;si++){
+      var reg=floodFill(pair[si].c,pair[si].r,pair[si].t,tfk);
+      if(!reg||reg.length<2)continue;
+      var a=analyzeRegion(reg,tfk);
+      if(a.sheep<=0||a.house<=0)continue;
+      // This move completes an enclosure!
+      var cc=a.colors.slice();cc[aiIdx]++;
+      var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
+      if(cc[aiIdx]<maxC)continue; // AI doesn't score — skip
+      var oppSharers=0;
+      for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===maxC)oppSharers++;
+      var aiAfter=aiScore+a.pts;
+      var bestOppAfter=0;
+      for(var j=0;j<numP;j++){
+        var pa=scores[j]+(cc[j]===maxC?a.pts:0);
+        if(j!==aiIdx&&pa>bestOppAfter)bestOppAfter=pa;
+      }
+      var triggersEnd=false;
+      for(var j=0;j<numP;j++){if(scores[j]+(cc[j]===maxC?a.pts:0)>winTarget-1)triggersEnd=true;}
+      var val=0;
+      if(triggersEnd&&aiAfter>=bestOppAfter) val=5000+a.pts*100; // WIN THE GAME
+      else if(triggersEnd&&aiAfter<bestOppAfter) val=-5000; // LOSE THE GAME
+      else if(oppSharers===0) val=2000+a.pts*50; // exclusive
+      else if(aiAfter>=bestOppAfter) val=1000+a.pts*30; // shared, still ahead
+      else val=500+a.pts*15; // shared, behind
+      if(!moveScore||val>moveScore)moveScore=val;
     }
-    requestAnimationFrame(animPan);
+    if(moveScore!==null)scoringMoves.push({e:e,s:moveScore});
   }
+  
+  // If we have scoring moves, pick the best one
+  if(scoringMoves.length>0){
+    scoringMoves.sort(function(a,b){return b.s-a.s;});
+    if(scoringMoves[0].s>0){
+      aiDoMove(scoringMoves[0].e);
+      return;
+    }
+  }
+  
+  // === PASS 2: strategic moves (build toward scoring + block opponents) ===
+  var best=null,bestS=-99999;
+  for(var i=0;i<cands.length;i++){
+    var e=cands[i];
+    var s=aiEvalStrategic(e,aiIdx,curFk);
+    if(s>bestS){bestS=s;best=e;}
+  }
+  if(best)aiDoMove(best);
 }
 
-function aiEval(e,aiIdx){
-  var key=e.key;
-  var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
-  var pair=findTriPair(key);
-  if(!pair)return -9999;
+function aiDoMove(best){
+  var mx=(best.x1+best.x2)/2,my=(best.y1+best.y2)/2;
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var tgtX=mx-vw/2,tgtY=my-vh/2;
+  var fromX=panX,fromY=panY;
+  var startT=0,dur=700;
+  function animPan(ts){
+    if(!startT)startT=ts;
+    var p=Math.min((ts-startT)/dur,1);
+    var ease=p<0.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
+    panX=fromX+(tgtX-fromX)*ease;panY=fromY+(tgtY-fromY)*ease;
+    applyPan();
+    if(p<1)requestAnimationFrame(animPan);
+    else{commitView();fillView();setTimeout(function(){if(!gameOver)tryPlaceFence(best);},300);}
+  }
+  requestAnimationFrame(animPan);
+}
+
+function aiEvalStrategic(e,aiIdx,curFk){
+  var pair=findTriPair(e.key);
+  if(!pair)return -99999;
   
-  // DISTANCE: prefer near existing fences (where the action is)
+  // Distance to nearest fence
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
   var fkeys=Object.keys(fences);
   for(var fi=0;fi<fkeys.length;fi++){
     var parts=fkeys[fi].split(",");
-    var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
-    var dd=Math.abs(mx-fx)+Math.abs(my-fy);
+    var dd=Math.abs(mx-parseFloat(parts[0]))+Math.abs(my-parseFloat(parts[1]));
     if(dd<minDist)minDist=dd;
   }
-  if(fkeys.length>0&&minDist>R*10)return -9999;
+  if(fkeys.length>0&&minDist>R*8)return -99999;
   
-  // === CONTEXT ===
-  var oppMaxScore=0,leaderIdx=-1;
-  var secondOppScore=0;
-  for(var j=0;j<numP;j++){
-    if(j!==aiIdx){
-      if(scores[j]>oppMaxScore){secondOppScore=oppMaxScore;oppMaxScore=scores[j];leaderIdx=j;}
-      else if(scores[j]>secondOppScore)secondOppScore=scores[j];
-    }
-  }
-  var aiScore=scores[aiIdx];
-  var isEndgame=(oppMaxScore>=winTarget*0.6||aiScore>=winTarget*0.6);
-  var isLeading=aiScore>oppMaxScore;
-  var isTrailing=aiScore<oppMaxScore;
-  var is2P=(numP===2);
-  // "Win by 1" mindset: what score does AI need?
-  var targetScore=oppMaxScore+1; // just beat the leader
-  var ptsNeeded=Math.max(0,targetScore-aiScore);
+  var sc=0;
   
-  var sc=0,completesAny=false;
-  
-  // =============================================
-  // === PHASE 1: SCORING MOVES (completes enclosure) ===
-  // =============================================
-  for(var i=0;i<2;i++){
-    var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
-    if(reg&&reg.length>=2){
-      var a=analyzeRegion(reg,tfk);
-      if(a.sheep>0&&a.house>0){
-        completesAny=true;
-        var cc=a.colors.slice();cc[aiIdx]++;
-        var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
-        var aiWins=(cc[aiIdx]===maxC);
-        var oppSharers=0;
-        for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===maxC)oppSharers++;
-        
-        if(!aiWins){
-          // AI doesn't even get points — bad
-          sc-=200-a.pts*10;
-          if(is2P)sc-=a.pts*15;
-        }else{
-          // AI gets points! Calculate aftermath
-          var aiAfterScore=aiScore+a.pts;
-          var triggersEnd=false;
-          var bestOppAfter=0;
-          for(var j=0;j<numP;j++){
-            var pAfter=scores[j]+(cc[j]===maxC?a.pts:0);
-            if(pAfter>winTarget-1)triggersEnd=true;
-            if(j!==aiIdx&&pAfter>bestOppAfter)bestOppAfter=pAfter;
-          }
-          
-          if(triggersEnd){
-            // Game might end this round!
-            if(aiAfterScore>=bestOppAfter){
-              // AI wins or ties for first — excellent!
-              sc+=1500+a.pts*30;
-            }else{
-              // Triggers end but opponent is higher — terrible
-              sc-=2000;
-            }
-          }else if(oppSharers===0){
-            // EXCLUSIVE (no one else scores): great for pulling ahead
-            sc+=600+a.pts*25;
-            if(a.sheep>=4)sc+=150;
-            if(a.sheep>=6)sc+=250;
-            // Even better if it puts AI in the lead
-            if(aiAfterScore>oppMaxScore)sc+=100;
-          }else{
-            // SHARED: everyone who ties gets full points
-            // Core insight: shared scoring IS the main strategy
-            // It's good as long as AI doesn't fall behind
-            var aiGap=aiAfterScore-bestOppAfter;
-            
-            if(aiGap>=0){
-              // AI still leading or tied after sharing — perfectly fine!
-              sc+=400+a.pts*18;
-            }else if(aiGap>=-2){
-              // Slightly behind after sharing — acceptable, keep playing
-              sc+=250+a.pts*12;
-            }else{
-              // Would fall far behind — less attractive
-              sc+=80+a.pts*5;
-            }
-            // 2P special: shared means gap stays same, fine if leading
-            if(is2P){
-              if(isLeading)sc+=100; // maintain lead, rush finish
-              else sc-=50; // trailing in 2P, shared doesn't help catch up
-            }
-          }
-        }
-      }
-    }
-  }
-  if(completesAny)return sc;
-  
-  // =============================================
-  // === PHASE 2: NON-SCORING MOVES ===
-  // Philosophy: (A) co-build with others (B) opportunistic exclusive
-  // =============================================
-  var bonus=0;
-  var curFk={};for(var k in fences)curFk[k]=1;
-  
+  // Analyze both regions adjacent to this edge
   for(var i=0;i<2;i++){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,curFk);
     if(!reg||reg.length<2)continue;
     var regSet={};for(var j=0;j<reg.length;j++)regSet[reg[j].c+","+reg[j].r+","+reg[j].t]=1;
-    var oppFence=0,aiFence=0,openEdges=0,totalPts=0;
-    var regSheep=0,regHouse=0,totalFenced=0;
-    var playerFences=[];for(var j=0;j<numP;j++)playerFences.push(0);
+    
+    var aiFence=0,oppFence=0,openEdges=0,totalFenced=0;
+    var regSheep=0,regHouse=0,totalPts=0;
     for(var j=0;j<reg.length;j++){
       var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
       var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
@@ -1070,125 +1021,89 @@ function aiEval(e,aiIdx){
         if(curFk[te[k2].key]){
           totalFenced++;
           var f=fences[te[k2].key];
-          if(f){
-            var ci=FCOLORS.indexOf(f.color);
-            if(ci>=0&&ci<numP)playerFences[ci]++;
-            if(ci===aiIdx)aiFence++;else oppFence++;
-          }
+          if(f){var ci=FCOLORS.indexOf(f.color);if(ci===aiIdx)aiFence++;else oppFence++;}
         }else openEdges++;
       }
     }
     var hasSH=(regSheep>0&&regHouse>0);
-    if(!hasSH&&regSheep===0&&regHouse===0)continue;
-    var closedRatio=totalFenced/(totalFenced+openEdges+0.01);
+    if(!hasSH)continue;
     
-    // === (A) CO-BUILD: join others' enclosures to share scoring ===
-    if(hasSH&&oppFence>=1&&openEdges>=1){
-      // Base value: more opponent fences + higher pts + closer to done = better
-      var coVal=totalPts*6*(oppFence/(openEdges+1));
-      // If adding this fence ties or beats opponents' count, AI gets credit!
-      if(aiFence+1>=oppFence&&oppFence>=2)coVal*=2.0;
-      // Closer to completion = higher urgency to join
-      if(closedRatio>0.5)coVal*=1.5;
-      if(closedRatio>0.7)coVal*=2.0;
-      // Bigger regions = more points = more worth joining
-      if(regSheep>=3)coVal*=1.3;
-      if(regSheep>=5)coVal*=1.5;
-      bonus+=coVal;
-    }
+    // KEY METRIC: how close is this region to being completed?
+    // completeness = 0 (wide open) to 1 (one edge away from done)
+    var completeness=totalFenced/(totalFenced+openEdges+0.01);
     
-    // === (B) OPPORTUNISTIC EXCLUSIVE: build where no one else is ===
-    if(hasSH&&oppFence===0&&aiFence>=1){
-      // Uncontested area! AI can build exclusive enclosure
-      var exVal=totalPts*10*(aiFence/(openEdges+1));
-      // Larger = more rewarding
-      if(regSheep>=3)exVal*=1.5;
-      if(regSheep>=5)exVal*=2.5;
-      // Closer to done = prioritize finishing
-      if(closedRatio>0.5)exVal*=1.5;
-      if(openEdges<=3)exVal*=2.0;
-      bonus+=exVal;
+    // === GOAL A: Build toward AI's own scoring enclosure ===
+    if(aiFence>=1){
+      // AI has fences here — keep building!
+      // Value = potential_points × completeness × ownership_ratio
+      var ownership=aiFence/(aiFence+oppFence+0.01);
+      var buildVal=totalPts*completeness*40*ownership;
+      // Almost done? HUGE bonus
+      if(openEdges<=1)buildVal+=totalPts*80;
+      else if(openEdges<=2)buildVal+=totalPts*40;
+      else if(openEdges<=3)buildVal+=totalPts*20;
+      // Exclusive potential
+      if(oppFence===0)buildVal*=1.5;
+      sc+=buildVal;
     }
     
-    // === AREA COMMITMENT: keep investing in started projects ===
-    if(hasSH&&aiFence>=2){
-      var commitVal=aiFence*totalPts*3;
-      if(openEdges<=3)commitVal*=2.0;
-      bonus+=commitVal;
+    // === GOAL A2: Start building in promising area (no AI fence yet) ===
+    if(aiFence===0&&oppFence===0&&totalPts>=2){
+      // Uncontested area with good tiles — plant flag
+      sc+=totalPts*3;
     }
     
-    // === NEAR-COMPLETION: AI almost done ===
-    if(hasSH&&aiFence>=2&&openEdges<=3){
-      var compVal=totalPts*20*(aiFence/(openEdges+aiFence));
-      if(aiFence>oppFence)compVal*=2.0;
-      if(regSheep>=4)compVal*=1.5;
-      bonus+=compVal;
+    // === GOAL B: Join others' regions (co-build for shared scoring) ===
+    if(oppFence>=1&&aiFence===0){
+      // Add AI presence to get shared credit when completed
+      var joinVal=totalPts*completeness*30;
+      // Almost done = urgent to join before it closes
+      if(openEdges<=2)joinVal+=totalPts*25;
+      else if(openEdges<=3)joinVal+=totalPts*12;
+      // Will AI match opponents? (need to tie for credit)
+      if(1>=oppFence)joinVal*=1.5; // one fence = tied = shared!
+      sc+=joinVal;
+    }else if(oppFence>=1&&aiFence>=1){
+      // AI already joined — keep building together
+      var coVal=totalPts*completeness*25;
+      if(openEdges<=2)coVal+=totalPts*15;
+      sc+=coVal;
     }
     
-    // === SABOTAGE: block leader or biggest builder approaching completion ===
-    if(hasSH&&aiFence<=1){
-      var biggestOpp=0,biggestOppIdx=-1;
-      for(var j=0;j<numP;j++){if(j!==aiIdx&&playerFences[j]>biggestOpp){biggestOpp=playerFences[j];biggestOppIdx=j;}}
-      // Block if opponent is about to complete a big exclusive enclosure
-      if(biggestOpp>=2&&openEdges<=4&&totalPts>=2){
-        var threat=biggestOpp*totalPts*8;
-        if(aiFence===0)threat*=1.3; // joining also gives AI credit = double benefit
-        if(openEdges<=2)threat*=2.5;
-        else if(openEdges<=3)threat*=1.5;
-        if(isEndgame)threat*=1.5;
-        // Extra urgent if this player is the score leader
-        if(biggestOppIdx===leaderIdx)threat*=1.5;
-        bonus+=threat;
-      }
-    }
-    
-    // === POTENTIAL: region still needs sheep or house ===
-    if(!hasSH&&(regSheep>=2||regHouse>=1)&&openEdges>=2&&openEdges<=8){
-      var hasMissing=false;
-      for(var j=0;j<reg.length&&!hasMissing;j++){
-        var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
-        for(var k2=0;k2<3&&!hasMissing;k2++){
-          if(curFk[te[k2].key])continue;
-          var nb=te[k2].nb;
-          if(regSet[nb.c+","+nb.r+","+nb.t])continue;
-          var nTile=getTile(nb.c,nb.r,nb.t);
-          if(regSheep===0&&(nTile==="W"||nTile==="G"||nTile==="B"))hasMissing=true;
-          if(regHouse===0&&nTile==="H")hasMissing=true;
-        }
-      }
-      if(hasMissing)bonus+=totalPts*2+regHouse*2;
-    }
-  }
-
-  // =============================================
-  // === PHASE 3: TILE & PROXIMITY VALUE ===
-  // =============================================
-  var nearOwn=0,nearOpp=0,nearVal=0;
-  for(var i=0;i<2;i++){
-    var tile=getTile(pair[i].c,pair[i].r,pair[i].t);
-    if(tile==="W")nearVal+=advMode?3:1;
-    else if(tile==="G")nearVal+=advMode?2:1;
-    else if(tile==="B")nearVal+=1;
-    else if(tile==="H")nearVal+=2.5;
-    else if(tile==="R")nearVal+=0.5;
-    if(tile==="W"||tile==="G"||tile==="B"){
-      if(hasBerryBonus(pair[i].c,pair[i].r,pair[i].t,tfk))nearVal+=1;
-    }
-    var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
-    for(var j=0;j<3;j++){
-      var f=fences[te[j].key];
-      if(f){
-        var ci=FCOLORS.indexOf(f.color);
-        if(ci===aiIdx)nearOwn+=3;
-        else nearOpp+=3; // HIGH: being near others is the core strategy
-      }
+    // === GOAL C: Block opponent's exclusive enclosure ===
+    if(oppFence>=2&&aiFence===0&&openEdges<=4){
+      // Opponent is building exclusive! Infiltrate!
+      var blockVal=totalPts*20;
+      if(openEdges<=2)blockVal*=3; // very urgent
+      else if(openEdges<=3)blockVal*=2;
+      // Bigger enclosure = more important to block
+      if(regSheep>=4)blockVal*=1.5;
+      sc+=blockVal;
     }
   }
   
-  var distBonus=Math.max(0,6-minDist/(R*2));
-  return nearVal+nearOpp+nearOwn+bonus+distBonus+Math.random()*0.3;
+  // Proximity to existing fences (prefer active areas)
+  var nearFence=0;
+  for(var i=0;i<2;i++){
+    var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
+    for(var j=0;j<3;j++){
+      if(fences[te[j].key])nearFence+=2;
+    }
+  }
+  sc+=nearFence;
+  
+  // Tile quality of adjacent triangles
+  for(var i=0;i<2;i++){
+    var tile=getTile(pair[i].c,pair[i].r,pair[i].t);
+    if(tile==="W"||tile==="G"||tile==="B")sc+=1;
+    if(tile==="H")sc+=2;
+  }
+  
+  // Small distance bonus
+  sc+=Math.max(0,4-minDist/(R*2));
+  
+  return sc+Math.random()*0.2;
 }
-
 
 // === TRIANGLE GLOW ===
 
