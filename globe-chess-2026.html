@@ -59,7 +59,7 @@
   #seeOrigBtn:hover { opacity:1; }
   /* ── AI toggle (top left) ── */
   #aiWrap {
-    position:fixed; top:28px; left:28px;
+    position:fixed; top:28px; right:28px; text-align:right;
     font-family:'Times New Roman',Times,serif; font-size:11px;
     font-weight:400; font-style:italic; letter-spacing:normal; color:#fff;
     opacity:0.5; transition:opacity .2s;
@@ -70,8 +70,8 @@
   #aiSwitch { display:none; }
   /* ── New Game (top right) ── */
   #newGameBtn {
-    position:fixed; top:28px; right:28px;
-    z-index:100; pointer-events:auto;
+    position:fixed; bottom:48px; left:50%; transform:translateX(-50%);
+    z-index:100; pointer-events:auto; text-align:center;
   }
   /* ── Test Mode (bottom left) ── */
   #testBtn {
@@ -180,9 +180,9 @@
 <div id="introFade" style="position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;transition:opacity 2s ease-out;"></div>
 <div id="turn">White to move</div>
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
-<button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
+<button id="pieceLetterBtn" class="ui-btn" style="position:fixed;top:28px;left:28px;z-index:100;text-align:left;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.6.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.6.7</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -1107,26 +1107,26 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     gCircle.renderOrder=8; gCircle.frustumCulled=false;
     globe.add(gCircle); visObjects.push(gCircle);
   }
-  function addDash(pts, isCapture, tgtLat, tgtLon, elbowIdx){
+  function addDash(pts, isCapture, tgtLat, tgtLon, elbowIdx, gapOnly, gapSize, startAfterElbow, skipZone2){
     const H=R*1.006;
     const surfPts=pts.map(p=>p.clone().normalize().multiplyScalar(H));
     const cum=[0];
     for(let i=1;i<surfPts.length;i++) cum.push(cum[i-1]+surfPts[i].distanceTo(surfPts[i-1]));
     const total=cum[cum.length-1];
     if(total<0.001)return;
-    // Find ring crossing arc-length (start)
-    let ringCross=0;
+    // Start: exactly at origin ring edge (ring interior stays empty)
+    let startD=0;
     for(let i=0;i<surfPts.length;i++){
       if(surfPts[i].distanceTo(fromCenter)>=ringR){
         if(i>0){
           const d0=surfPts[i-1].distanceTo(fromCenter), d1=surfPts[i].distanceTo(fromCenter);
           const t=(d1-d0)>0.0001?(ringR-d0)/(d1-d0):0;
-          ringCross=cum[i-1]+(cum[i]-cum[i-1])*t;
+          startD=cum[i-1]+(cum[i]-cum[i-1])*t;
         }
         break;
       }
     }
-    // End: capture ring or full length
+    // End: for captures stop at capture ring edge; for normal stops at dot edge
     let endD=total;
     if(isCapture&&tgtLat!=null){
       const tgtCenter=cellPos(tgtLat,tgtLon,H);
@@ -1140,13 +1140,23 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
           break;
         }
       }
+    } else if(tgtLat!=null){
+      // Non-capture: stop at destination dot edge (dot radius = ringR)
+      const dotCenter=cellPos(tgtLat,tgtLon,H);
+      for(let i=surfPts.length-1;i>0;i--){
+        if(surfPts[i].distanceTo(dotCenter)>=ringR){
+          if(i<surfPts.length-1){
+            const d0=surfPts[i].distanceTo(dotCenter), d1=surfPts[i+1].distanceTo(dotCenter);
+            const t2=(d0-d1)>0.0001?(d0-ringR)/(d0-d1):0;
+            endD=cum[i]+(cum[i+1]-cum[i])*t2;
+          }
+          break;
+        }
+      }
     }
-    // Start: half a dash inside the ring so first dash intersects ring
-    const dashLen=0.035, gapLen=0.04, step=dashLen+gapLen;
-    const startD=Math.max(0,ringCross-dashLen*0.5);
-    // Elbow arc-length (L-corner)
-    const elbowArc=(elbowIdx!=null&&elbowIdx<cum.length)?cum[elbowIdx]:null;
-    const cornerHalf=dashLen*0.8; // half-width of solid corner segment
+    if(endD<=startD)return;
+    // Corner arm length: equal on both sides of elbow
+    const cornerArm=0.025; // each arm of the ∟ shape
     // Gradient for captures
     const gradStartLen=isCapture?Math.max(0,endD-BAND_THETA*R):endD;
     const cFrom=new THREE.Color(0xff6600), cTo=new THREE.Color(0x880000);
@@ -1166,7 +1176,8 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       return cFrom.clone().lerp(cTo,frac);
     }
     function drawSeg(sA,sB,col){
-      const n=Math.max(2,Math.round((sB-sA)/0.01));
+      if(sB-sA<0.001)return;
+      const n=Math.max(2,Math.round((sB-sA)/0.008));
       const seg=[];
       for(let i=0;i<=n;i++) seg.push(ptAt(sA+(sB-sA)*i/n));
       const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(seg,false,'centripetal'),n,0.008,5,false);
@@ -1179,44 +1190,36 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       ghost.renderOrder=6; ghost.frustumCulled=false;
       globe.add(ghost); visObjects.push(ghost);
     }
-    // Define dash zones (excluding corner)
-    let cornerStart=null, cornerEnd=null;
-    if(elbowArc!=null&&elbowArc>startD&&elbowArc<endD){
-      cornerStart=Math.max(startD,elbowArc-cornerHalf);
-      cornerEnd=Math.min(endD,elbowArc+cornerHalf);
-      // Draw solid corner
-      drawSeg(cornerStart,cornerEnd,dashColor(elbowArc));
-    }
-    // Zone 1: startD to cornerStart (or endD if no corner)
-    const z1End=cornerStart!=null?cornerStart:endD;
-    const z1Len=z1End-startD;
-    if(z1Len>step*0.3){
-      const nDash=Math.max(1,Math.round(z1Len/step));
-      const actualStep=z1Len/nDash;
-      const aDash=actualStep*(dashLen/step); // proportional dash within step
+    function fillZone(zA,zB){
+      const len=zB-zA;
+      if(len<0.005)return;
+      const dashLen2=0.035, gapLen2=0.04, step2=dashLen2+gapLen2;
+      const nDash=Math.max(1,Math.round(len/step2));
+      const actualStep=len/nDash;
+      const aDash=actualStep*(dashLen2/step2);
       for(let i=0;i<nDash;i++){
-        const dStart=startD+i*actualStep;
-        const dEnd=Math.min(dStart+aDash,z1End);
-        if(dEnd-dStart<0.002)continue;
-        drawSeg(dStart,dEnd,dashColor((dStart+dEnd)/2));
+        const dS=zA+i*actualStep;
+        const dE=Math.min(dS+aDash,zB);
+        if(dE-dS<0.002)continue;
+        drawSeg(dS,dE,dashColor((dS+dE)/2));
       }
     }
-    // Zone 2: cornerEnd to endD
-    if(cornerEnd!=null){
-      const z2Start=cornerEnd;
-      const z2Len=endD-z2Start;
-      if(z2Len>step*0.3){
-        const nDash=Math.max(1,Math.round(z2Len/step));
-        const actualStep=z2Len/nDash;
-        const aDash=actualStep*(dashLen/step);
-        for(let i=0;i<nDash;i++){
-          const dStart=z2Start+i*actualStep;
-          const dEnd=Math.min(dStart+aDash,endD);
-          if(dEnd-dStart<0.002)continue;
-          drawSeg(dStart,dEnd,dashColor((dStart+dEnd)/2));
-        }
+    // Draw corner at elbow (solid ∟ with equal arms) — or just leave gap if gapOnly
+    let cornerStart=null, cornerEnd=null;
+    const _gapR=gapSize||cornerArm; // gap radius from elbow center
+    if(elbowIdx!=null){
+      const elbowArc=(elbowIdx<cum.length)?cum[elbowIdx]:null;
+      if(elbowArc!=null&&elbowArc>startD&&elbowArc<endD){
+        cornerStart=Math.max(startD,elbowArc-_gapR);
+        cornerEnd=Math.min(endD,elbowArc+_gapR);
+        if(!gapOnly) drawSeg(cornerStart,cornerEnd,dashColor(elbowArc));
       }
     }
+    // Zone 1: startD → cornerStart (or endD) — skip if startAfterElbow
+    const z1End=cornerStart!=null?cornerStart:endD;
+    if(!startAfterElbow&&z1End>startD) fillZone(startD,z1End);
+    // Zone 2: cornerEnd → endD — skip if skipZone2
+    if(!skipZone2&&cornerEnd!=null&&endD>cornerEnd) fillZone(cornerEnd,endD);
   }
 
   function addRing(lat,lon){
@@ -1403,32 +1406,102 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
   });
 
   // Knight L-shape dashed paths
-  moves.forEach(({isKnight,longLat,elbowLat,elbowLon,lat:tl,lon:tn})=>{
-    if(!isKnight)return;
-    if(autoOnlyLat!==null&&!(tl===autoOnlyLat&&tn===autoOnlyLon))return;
+  // Group by elbow to handle T-junctions (shared elbow = ⊥ shape with equal arms)
+  const _knightByElbow={};
+  const _drawnSeg2=new Set(); // track seg2 geodesics by sorted endpoint keys to prevent reverse-duplicate drawing
+  moves.forEach((m)=>{
+    if(!m.isKnight)return;
+    if(autoOnlyLat!==null&&!(m.lat===autoOnlyLat&&m.lon===autoOnlyLon))return;
+    const ek=`${m.elbowLat},${m.elbowLon},${m.longLat?1:0}`;
+    if(!_knightByElbow[ek])_knightByElbow[ek]=[];
+    _knightByElbow[ek].push(m);
+  });
+  Object.values(_knightByElbow).forEach(group=>{
+    const m0=group[0];
     const r=R*1.006;
-    let seg1,seg2;
-    if(longLat){
-      if(elbowLat>=0&&elbowLat<=7){
-        // Normal case: elbow is within the grid
-        seg1=geodesicPts(from,cellPos(elbowLat,elbowLon,r),24);
-        seg2=latRingArc(elbowLat,elbowLon,tn,12,r);
+    // Build shared seg1 (origin → elbow)
+    let seg1;
+    if(m0.longLat){
+      if(m0.elbowLat>=0&&m0.elbowLat<=7){
+        seg1=geodesicPts(from,cellPos(m0.elbowLat,m0.elbowLon,r),24);
       } else {
-        // Elbow is in the polar cap — route through the pole, then to reflected elbow
-        const isNorth=elbowLat<0;
+        const isNorth=m0.elbowLat<0;
         const polePt=new THREE.Vector3(0,(isNorth?1:-1)*R*1.001,0);
-        const ref=poleRef(elbowLat,elbowLon);
+        const ref=poleRef(m0.elbowLat,m0.elbowLon);
         seg1=[...geodesicPts(from,polePt,12),...geodesicPts(polePt,cellPos(ref.l,ref.n,r),12).slice(1)];
-        seg2=latRingArc(ref.l,ref.n,tn,12,r);
       }
     } else {
-      seg1=latRingArc(lat,lon,elbowLon,24,r);
-      seg2=geodesicPts(cellPos(elbowLat,elbowLon,r),cellPos(tl,tn,r),12);
+      seg1=latRingArc(lat,lon,m0.elbowLon,24,r);
     }
-    const _knightCapture=!!(board[tl]?.[tn]&&board[tl][tn].color!==board[lat][lon]?.color);
-    const _elbowIdx=seg1.length-1; // elbow is at end of seg1
-    addDash([...seg1,...seg2.slice(1)], _knightCapture, tl, tn, _elbowIdx);
-    tubeDests.add(`${tl},${tn}`);
+    // Build seg2 for each target — check for reverse-duplicate geodesics
+    const paths=group.map(m=>{
+      let seg2;
+      if(m.longLat){
+        if(m.elbowLat>=0&&m.elbowLat<=7){
+          seg2=latRingArc(m.elbowLat,m.elbowLon,m.lon,12,r);
+        } else {
+          const ref=poleRef(m.elbowLat,m.elbowLon);
+          seg2=latRingArc(ref.l,ref.n,m.lon,12,r);
+        }
+      } else {
+        seg2=geodesicPts(cellPos(m.elbowLat,m.elbowLon,r),cellPos(m.lat,m.lon,r),12);
+      }
+      const isCap=!!(board[m.lat]?.[m.lon]&&board[m.lat][m.lon].color!==board[lat][lon]?.color);
+      // Check if this seg2 geodesic (or its reverse) was already drawn
+      const s2Start=seg2[0], s2End=seg2[seg2.length-1];
+      const kA=`${Math.round(s2Start.x*80)},${Math.round(s2Start.y*80)},${Math.round(s2Start.z*80)}`;
+      const kB=`${Math.round(s2End.x*80)},${Math.round(s2End.y*80)},${Math.round(s2End.z*80)}`;
+      const seg2Key=[kA,kB].sort().join('|');
+      const seg2Dup=_drawnSeg2.has(seg2Key);
+      _drawnSeg2.add(seg2Key);
+      return{m,seg2,isCap,seg2Dup};
+    });
+    if(group.length===1){
+      const p=paths[0];
+      const _elbowIdx=seg1.length-1;
+      addDash([...seg1,...p.seg2.slice(1)],p.isCap,p.m.lat,p.m.lon,_elbowIdx,
+        false,undefined,false,p.seg2Dup);
+    } else {
+      const _elbowIdx=seg1.length-1;
+      const tCornerArm=0.025;
+      const tGap=tCornerArm*2;
+      paths.forEach((p,pi)=>{
+        const fullPts=[...seg1,...p.seg2.slice(1)];
+        addDash(fullPts,p.isCap,p.m.lat,p.m.lon,_elbowIdx,true,tGap,pi>0,p.seg2Dup);
+      });
+      // Draw T-corner arms
+      const H=R*1.006;
+      const elbowPt=seg1[seg1.length-1].clone().normalize().multiplyScalar(H);
+      const drawArm=(fromPt,toPt,len,col)=>{
+        const dir=toPt.clone().sub(fromPt).normalize();
+        const armN=8;
+        const armPts=[];
+        for(let i=0;i<=armN;i++){
+          const p=fromPt.clone().addScaledVector(dir,len*i/armN);
+          armPts.push(p.normalize().multiplyScalar(H));
+        }
+        if(armPts.length<2)return;
+        const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(armPts,false,'centripetal'),armN,0.008,5,false);
+        geo.computeBoundingSphere();
+        const matF=new THREE.MeshBasicMaterial({color:col,depthTest:true,depthWrite:false,
+          polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
+        const front=new THREE.Mesh(geo,matF);front.renderOrder=7;front.frustumCulled=false;
+        globe.add(front);visObjects.push(front);
+        const ghost=new THREE.Mesh(geo.clone(),_ghostMat(col));
+        ghost.renderOrder=6;ghost.frustumCulled=false;
+        globe.add(ghost);visObjects.push(ghost);
+      };
+      // Stem: 2×cornerArm toward origin (matches total horizontal bar width)
+      const stemRef=seg1.length>=2?seg1[seg1.length-2].clone().normalize().multiplyScalar(H):elbowPt;
+      drawArm(elbowPt,stemRef,tCornerArm*2,0xff6600);
+      // Each horizontal arm: cornerArm toward each target
+      paths.forEach(p=>{
+        const seg2Ref=p.seg2.length>=2?p.seg2[1].clone().normalize().multiplyScalar(H)
+          :p.seg2[0].clone().normalize().multiplyScalar(H);
+        drawArm(elbowPt,seg2Ref,tCornerArm,0xff6600);
+      });
+    }
+    group.forEach(m=>tubeDests.add(`${m.lat},${m.lon}`));
   });
 
   // Pawn / King / fallback — also catches failed diagonal/straight tubes during auto-battle
