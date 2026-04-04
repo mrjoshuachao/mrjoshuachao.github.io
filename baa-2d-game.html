@@ -622,8 +622,7 @@ function checkWin(){
   var winners=[];
   for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
   var names=winners.map(function(w){
-    var isAI=w>=(numP-numAI);
-    return FNAMES[w]+(isAI?"(電腦)":"");
+    return FNAMES[w];
   });
   var winText=winners.length===1?names[0]+"色獲勝":names.join("、")+"色獲勝";
   var d=document.createElement("div");d.id="winOverlay";
@@ -633,7 +632,7 @@ function checkWin(){
   var h=document.createElement("h2");h.style.cssText="font-size:28px;color:#333;margin:0 0 16px 0";
   h.textContent=winText;box.appendChild(h);
   var sub=document.createElement("p");sub.style.cssText="font-size:12px;color:#888;margin:0 0 14px 0";
-  sub.textContent="可以觀看本局紀錄並複製給 Claude 分析策略";box.appendChild(sub);
+  sub.textContent="關閉之後可以自行截圖保存紀錄";box.appendChild(sub);
   var btn=document.createElement("button");btn.textContent="關閉";
   btn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;display:block;margin:0 auto 10px auto";
   btn.onclick=function(){d.remove();winDismissed=true;};
