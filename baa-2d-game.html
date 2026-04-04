@@ -2,6 +2,9 @@
 <html lang="zh-TW"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Baa!</title>
+<meta name="description" content="用柵欄圈地，合作兼搞破壞，最多綿羊就贏！">
+<meta property="og:title" content="Baa!">
+<meta property="og:description" content="用柵欄圈地，合作兼搞破壞，最多綿羊就贏！">
 <style>
 *{margin:0;padding:0}
 html,body{overflow:hidden;background:#a3d65c;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
@@ -81,7 +84,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.9.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.9.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -472,7 +475,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.9.0");
+  lines.push("版本: v1.9.1");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -610,28 +613,42 @@ function showGameReport(){
 
 function checkWin(){
   if(fci%numP!==0)return;
-  // Check if anyone crossed the threshold
   var anyOver=false;
   for(var i=0;i<numP;i++) if(scores[i]>winTarget-1) anyOver=true;
   if(!anyOver)return;
   gameOver=true;
-  // Find the highest score
-  var maxScore=0;
-  for(var i=0;i<numP;i++) if(scores[i]>maxScore) maxScore=scores[i];
-  // Winners = player(s) with the highest score
-  var winners=[];
-  for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
-  var names=winners.map(function(w){
-    return FNAMES[w];
-  });
-  var winText=winners.length===1?names[0]+"色獲勝":names.join("、")+"色獲勝";
+  // Build sorted unique scores descending
+  var sorted=[];
+  for(var i=0;i<numP;i++)sorted.push({idx:i,sc:scores[i]});
+  sorted.sort(function(a,b){return b.sc-a.sc;});
+  // Group by score into ranks
+  var ranks=[];
+  var rank=1;
+  for(var i=0;i<sorted.length;){
+    var s=sorted[i].sc;
+    var group=[];
+    while(i<sorted.length&&sorted[i].sc===s){group.push(sorted[i].idx);i++;}
+    ranks.push({rank:rank,players:group,score:s});
+    rank+=group.length;
+  }
+  // Build overlay
   var d=document.createElement("div");d.id="winOverlay";
   d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
   var box=document.createElement("div");
-  box.style.cssText="background:#fff;border-radius:18px;padding:40px 50px;text-align:center;box-shadow:0 6px 30px rgba(0,0,0,0.2);max-width:340px";
-  var h=document.createElement("h2");h.style.cssText="font-size:28px;color:#333;margin:0 0 16px 0";
-  h.textContent=winText;box.appendChild(h);
-  var sub=document.createElement("p");sub.style.cssText="font-size:12px;color:#888;margin:0 0 14px 0";
+  box.style.cssText="background:#fff;border-radius:18px;padding:32px 40px;text-align:center;box-shadow:0 6px 30px rgba(0,0,0,0.2);max-width:340px";
+  // Ranking lines
+  for(var i=0;i<ranks.length;i++){
+    var r=ranks[i];
+    var names=r.players.map(function(p){return FNAMES[p];});
+    var line=document.createElement("p");
+    var isFirst=(r.rank===1);
+    line.style.cssText=isFirst
+      ?"font-size:22px;font-weight:bold;color:#333;margin:0 0 8px 0"
+      :"font-size:16px;color:#666;margin:0 0 6px 0";
+    line.textContent="第 "+r.rank+" 名："+names.join("、")+"色 "+r.score+" 分";
+    box.appendChild(line);
+  }
+  var sub=document.createElement("p");sub.style.cssText="font-size:12px;color:#888;margin:12px 0 14px 0";
   sub.textContent="關閉之後可以自行截圖保存紀錄";box.appendChild(sub);
   var btn=document.createElement("button");btn.textContent="關閉";
   btn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;display:block;margin:0 auto 10px auto";
@@ -926,7 +943,13 @@ function aiMove(){
       var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
       if(cc[aiIdx]<maxC)continue; // AI doesn't score — skip
       var oppSharers=0;
-      for(var j=0;j<numP;j++)if(j!==aiIdx&&cc[j]===maxC)oppSharers++;
+      var oppSharerTotalAfter=0;
+      for(var j=0;j<numP;j++){
+        if(j!==aiIdx&&cc[j]===maxC){
+          oppSharers++;
+          oppSharerTotalAfter+=scores[j]+a.pts;
+        }
+      }
       var aiAfter=aiScore+a.pts;
       var bestOppAfter=0;
       for(var j=0;j<numP;j++){
@@ -938,9 +961,35 @@ function aiMove(){
       var val=0;
       if(triggersEnd&&aiAfter>=bestOppAfter) val=5000+a.pts*100; // WIN THE GAME
       else if(triggersEnd&&aiAfter<bestOppAfter) val=-5000; // LOSE THE GAME
-      else if(oppSharers===0) val=2000+a.pts*50; // exclusive
-      else if(aiAfter>=bestOppAfter) val=1000+a.pts*30; // shared, still ahead
-      else val=500+a.pts*15; // shared, behind
+      else if(oppSharers===0) val=2000+a.pts*50; // exclusive — best!
+      else{
+        // SHARED: check if this actually helps AI or mostly helps opponents
+        // How many opponents benefit and how much they gain relative to AI
+        var oppTotalGain=oppSharers*a.pts;
+        var aiNetAdvantage=a.pts-oppTotalGain; // negative if opponents gain more total
+        
+        if(aiAfter>=bestOppAfter){
+          // AI still ahead after sharing — ok but discount by opponent count
+          val=800+a.pts*25-oppSharers*a.pts*8;
+        }else if(bestOppAfter-aiAfter<=2){
+          // Slightly behind — less attractive, scale by how many get helped
+          val=400+a.pts*15-oppSharers*a.pts*10;
+        }else{
+          // Would fall far behind — bad move, especially with many sharers
+          val=50+a.pts*5-oppSharers*a.pts*15;
+        }
+        // If AI gains less than any single opponent gains, penalize heavily
+        // (e.g. opponent goes from 15→18 while AI goes from 5→8 — opponent still way ahead)
+        for(var j=0;j<numP;j++){
+          if(j!==aiIdx&&cc[j]===maxC){
+            var oppBefore=scores[j],oppAfterJ=oppBefore+a.pts;
+            // If opponent is already ahead and stays ahead, this just helps them
+            if(oppBefore>aiScore&&oppAfterJ>aiAfter) val-=a.pts*20;
+            // If opponent would overtake AI, very bad
+            if(oppBefore<=aiScore&&oppAfterJ>aiAfter) val-=a.pts*30;
+          }
+        }
+      }
       if(!moveScore||val>moveScore)moveScore=val;
     }
     if(moveScore!==null)scoringMoves.push({e:e,s:moveScore});
@@ -987,19 +1036,74 @@ function aiEvalStrategic(e,aiIdx,curFk){
   var pair=findTriPair(e.key);
   if(!pair)return -99999;
   
-  // Distance to nearest fence
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
   var fkeys=Object.keys(fences);
+  // Track distance to AI's own fences
+  var minOwnDist=99999;
   for(var fi=0;fi<fkeys.length;fi++){
     var parts=fkeys[fi].split(",");
-    var dd=Math.abs(mx-parseFloat(parts[0]))+Math.abs(my-parseFloat(parts[1]));
+    var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
+    var dd=Math.abs(mx-fx)+Math.abs(my-fy);
     if(dd<minDist)minDist=dd;
+    var f=fences[fkeys[fi]];
+    if(f&&FCOLORS.indexOf(f.color)===aiIdx&&dd<minOwnDist)minOwnDist=dd;
   }
-  if(fkeys.length>0&&minDist>R*8)return -99999;
+  // Tighter distance as game progresses
+  // Round 1: max 1 triangle away from nearest fence (R*3)
+  // Early: R*6, Mid: R*5, Late: R*5
+  var maxR=R*(fci<numP?3:fci<numP*3?6:5);
+  if(fkeys.length>0&&minDist>maxR)return -99999;
   
   var sc=0;
+  var aiScore=scores[aiIdx];
   
-  // Analyze both regions adjacent to this edge
+  // === 1-STEP LOOKAHEAD: would placing here enable scoring next turn? ===
+  var tfk={};for(var k in fences)tfk[k]=1;tfk[e.key]=1;
+  for(var i=0;i<2;i++){
+    var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
+    if(!reg||reg.length<2)continue;
+    var regSet={};for(var j=0;j<reg.length;j++)regSet[reg[j].c+","+reg[j].r+","+reg[j].t]=1;
+    var openList=[];
+    var aiFenceT=0,oppFenceT=0,totalPtsT=0,regSheepT=0,regHouseT=0;
+    for(var j=0;j<reg.length;j++){
+      var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
+      var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
+      if(tile==="W"||tile==="G"||tile==="B"){
+        regSheepT++;
+        var base=advMode?(tile==="W"?3:tile==="G"?2:1):1;
+        totalPtsT+=hasBerryBonus(reg[j].c,reg[j].r,reg[j].t,tfk)?base+1:base;
+      }else if(tile==="H")regHouseT++;
+      for(var k2=0;k2<3;k2++){
+        var nb=te[k2].nb;
+        if(regSet[nb.c+","+nb.r+","+nb.t])continue;
+        if(tfk[te[k2].key]){
+          var f=fences[te[k2].key];
+          if(f){var ci=FCOLORS.indexOf(f.color);if(ci===aiIdx)aiFenceT++;else oppFenceT++;}
+          // Count the new fence (e.key) as AI's
+          if(te[k2].key===e.key)aiFenceT++;
+        }else{
+          openList.push(te[k2].key);
+        }
+      }
+    }
+    // If placing this fence leaves only 1 open edge AND region has sheep+house
+    // → next turn AI can complete it!
+    if(regSheepT>0&&regHouseT>0&&openList.length===1){
+      // Check if AI would score (AI fence count including new one)
+      var newAi=aiFenceT+1; // AI will place the closing fence next turn
+      if(newAi>=oppFenceT){
+        // AI will score! Huge bonus proportional to points
+        sc+=totalPtsT*60;
+        if(oppFenceT===0)sc+=totalPtsT*30; // exclusive!
+      }
+    }
+    // 2 open edges = 2 turns away, still valuable
+    if(regSheepT>0&&regHouseT>0&&openList.length===2&&aiFenceT>=1){
+      if(aiFenceT>=oppFenceT)sc+=totalPtsT*15;
+    }
+  }
+  
+  // === REGION ANALYSIS (current state, before placing) ===
   for(var i=0;i<2;i++){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,curFk);
     if(!reg||reg.length<2)continue;
@@ -1007,6 +1111,7 @@ function aiEvalStrategic(e,aiIdx,curFk){
     
     var aiFence=0,oppFence=0,openEdges=0,totalFenced=0;
     var regSheep=0,regHouse=0,totalPts=0;
+    var playerFences=[];for(var j=0;j<numP;j++)playerFences.push(0);
     for(var j=0;j<reg.length;j++){
       var te=triEdges(reg[j].c,reg[j].r,reg[j].t);
       var tile=getTile(reg[j].c,reg[j].r,reg[j].t);
@@ -1021,73 +1126,82 @@ function aiEvalStrategic(e,aiIdx,curFk){
         if(curFk[te[k2].key]){
           totalFenced++;
           var f=fences[te[k2].key];
-          if(f){var ci=FCOLORS.indexOf(f.color);if(ci===aiIdx)aiFence++;else oppFence++;}
+          if(f){
+            var ci=FCOLORS.indexOf(f.color);
+            if(ci>=0&&ci<numP)playerFences[ci]++;
+            if(ci===aiIdx)aiFence++;else oppFence++;
+          }
         }else openEdges++;
       }
     }
     var hasSH=(regSheep>0&&regHouse>0);
     if(!hasSH)continue;
-    
-    // KEY METRIC: how close is this region to being completed?
-    // completeness = 0 (wide open) to 1 (one edge away from done)
     var completeness=totalFenced/(totalFenced+openEdges+0.01);
     
-    // === GOAL A: Build toward AI's own scoring enclosure ===
+    // Find who dominates this region
+    var maxOppF=0,maxOppIdx=-1;
+    for(var j=0;j<numP;j++){if(j!==aiIdx&&playerFences[j]>maxOppF){maxOppF=playerFences[j];maxOppIdx=j;}}
+    
+    // === GOAL A: Build AI's own enclosure ===
     if(aiFence>=1){
-      // AI has fences here — keep building!
-      // Value = potential_points × completeness × ownership_ratio
       var ownership=aiFence/(aiFence+oppFence+0.01);
       var buildVal=totalPts*completeness*40*ownership;
-      // Almost done? HUGE bonus
       if(openEdges<=1)buildVal+=totalPts*80;
       else if(openEdges<=2)buildVal+=totalPts*40;
       else if(openEdges<=3)buildVal+=totalPts*20;
-      // Exclusive potential
       if(oppFence===0)buildVal*=1.5;
+      // Bigger regions = bigger payoff
+      if(regSheep>=4)buildVal*=1.3;
+      if(regSheep>=6)buildVal*=1.6;
       sc+=buildVal;
     }
     
-    // === GOAL A2: Start building in promising area (no AI fence yet) ===
+    // === GOAL A2: Start in uncontested area ===
     if(aiFence===0&&oppFence===0&&totalPts>=2){
-      // Uncontested area with good tiles — plant flag
       sc+=totalPts*3;
+      if(regSheep>=3)sc+=totalPts*2;
     }
     
-    // === GOAL B: Join others' regions (co-build for shared scoring) ===
+    // === GOAL B: Join others' regions ===
     if(oppFence>=1&&aiFence===0){
-      // Add AI presence to get shared credit when completed
       var joinVal=totalPts*completeness*30;
-      // Almost done = urgent to join before it closes
       if(openEdges<=2)joinVal+=totalPts*25;
       else if(openEdges<=3)joinVal+=totalPts*12;
-      // Will AI match opponents? (need to tie for credit)
-      if(1>=oppFence)joinVal*=1.5; // one fence = tied = shared!
+      // Check if 1 fence is enough to match the dominant opponent
+      if(1>=maxOppF)joinVal*=1.8; // one fence = tied = shared!
+      else if(maxOppF===2)joinVal*=0.8; // need 2 to match, risky
+      else joinVal*=0.3; // opponent dominates, hard to match
       sc+=joinVal;
     }else if(oppFence>=1&&aiFence>=1){
-      // AI already joined — keep building together
       var coVal=totalPts*completeness*25;
       if(openEdges<=2)coVal+=totalPts*15;
+      // Check if AI can match or beat dominant opponent
+      if(aiFence+1>=maxOppF)coVal*=1.5;
       sc+=coVal;
     }
     
-    // === GOAL C: Block opponent's exclusive enclosure ===
-    if(oppFence>=2&&aiFence===0&&openEdges<=4){
-      // Opponent is building exclusive! Infiltrate!
+    // === GOAL C: Block exclusive builder ===
+    if(maxOppF>=2&&aiFence===0&&openEdges<=5){
       var blockVal=totalPts*20;
-      if(openEdges<=2)blockVal*=3; // very urgent
+      if(openEdges<=2)blockVal*=3;
       else if(openEdges<=3)blockVal*=2;
-      // Bigger enclosure = more important to block
       if(regSheep>=4)blockVal*=1.5;
+      // Double benefit: blocking AND joining for shared credit
+      blockVal*=1.3;
       sc+=blockVal;
     }
   }
   
-  // Proximity to existing fences (prefer active areas)
+  // === PROXIMITY & EARLY GAME LOGIC ===
+  var isRound1=(fci<numP);
+  var isEarly=(fci<numP*3);
+  
+  // Proximity to existing fences (reduced in round 1 to avoid snowflake)
   var nearFence=0;
   for(var i=0;i<2;i++){
     var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
     for(var j=0;j<3;j++){
-      if(fences[te[j].key])nearFence+=2;
+      if(fences[te[j].key])nearFence+=(isRound1?0.5:2);
     }
   }
   sc+=nearFence;
@@ -1099,9 +1213,39 @@ function aiEvalStrategic(e,aiIdx,curFk){
     if(tile==="H")sc+=2;
   }
   
-  // Small distance bonus
-  sc+=Math.max(0,4-minDist/(R*2));
+  // EARLY GAME: scan neighborhood richness (sheep + house density)
+  // This guides AI to sheep-rich areas instead of all converging to one point
+  if(isEarly){
+    var richness=0;
+    for(var i=0;i<2;i++){
+      var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
+      for(var k2=0;k2<3;k2++){
+        var nb=te[k2].nb;
+        var nt=getTile(nb.c,nb.r,nb.t);
+        if(nt==="W"||nt==="G"||nt==="B")richness+=1.5;
+        if(nt==="H")richness+=2;
+        if(nt==="R")richness+=0.5;
+        // Second ring: lighter scan
+        var te2=triEdges(nb.c,nb.r,nb.t);
+        for(var k3=0;k3<3;k3++){
+          var nb2=te2[k3].nb;
+          var nt2=getTile(nb2.c,nb2.r,nb2.t);
+          if(nt2==="W"||nt2==="G"||nt2==="B")richness+=0.5;
+          if(nt2==="H")richness+=0.8;
+        }
+      }
+    }
+    sc+=richness*(isRound1?1.5:0.5);
+    // Round 1: add noise so different AIs pick different rich areas
+    if(isRound1)sc+=Math.random()*4;
+  }
   
+  // Anti-wander: penalize going far from AI's own fences mid-late game
+  if(minOwnDist<99999&&fci>=numP*3){
+    if(minOwnDist>R*5)sc-=(minOwnDist/(R*2))*3;
+  }
+  
+  sc+=Math.max(0,4-minDist/(R*2));
   return sc+Math.random()*0.2;
 }
 
