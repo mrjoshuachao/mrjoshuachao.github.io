@@ -84,7 +84,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v1.9.1</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.0.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -141,8 +141,20 @@ var svg=document.getElementById("board"),world=document.getElementById("world"),
 var generated={};var panX=0,panY=0;var svgW=0,svgH=0;var commitX=0,commitY=0;
 var dragging=false,startX=0,startY=0,startPanX=0,startPanY=0,dragDist=0;
 
-var FCOLORS=["#e74c3c","#3498db","#ffe030","#ffffff","#888888","#2c2c2c"];
-var FNAMES=["紅","藍","黃","白","灰","黑"];
+var FCOLORS_BASE=["#e74c3c","#3498db","#ffe030","#ffffff","#888888","#2c2c2c"];
+var FNAMES_BASE=["紅","藍","黃","白","灰","黑"];
+var FCOLORS=FCOLORS_BASE.slice();
+var FNAMES=FNAMES_BASE.slice();
+function shuffleColors(){
+  var idx=[0,1,2,3,4,5];
+  var rng=((seed*31+7)>>>0)%2147483647;
+  for(var i=5;i>0;i--){
+    rng=(rng*16807+0)%2147483647;
+    var j=rng%(i+1);
+    var tmp=idx[i];idx[i]=idx[j];idx[j]=tmp;
+  }
+  for(var i=0;i<6;i++){FCOLORS[i]=FCOLORS_BASE[idx[i]];FNAMES[i]=FNAMES_BASE[idx[i]];}
+}
 var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var seed=Date.now();var winDismissed=false;
 
@@ -192,16 +204,15 @@ var turnOrder=[0,1,2,3,4,5];
 function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
-  // Fisher-Yates shuffle for random turn order
-  if(online){
-    // Use seed-based shuffle so all clients get same order
-    var rng=seed;
-    for(var i=turnOrder.length-1;i>0;i--){
-      rng=(rng*16807+0)%2147483647;
-      var j=rng%( i+1);
-      var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp;
-    }
+  // Fisher-Yates shuffle for random turn order (seed-based for sync)
+  var rng=seed;
+  for(var i=turnOrder.length-1;i>0;i--){
+    rng=(rng*16807+0)%2147483647;
+    var j=rng%(i+1);
+    var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp;
   }
+  // Shuffle colors too
+  shuffleColors();
 }
 var completedTris={};
 var netApplying=false;
@@ -383,9 +394,9 @@ function updateSB(){
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
     if(FCOLORS[i]==="#ffffff"||FCOLORS[i]==="#ffe030"){
-      s.style.textShadow="0 0 1px #000";
+      s.style.webkitTextStroke="1.5px #000";s.style.textShadow="none";
     }else{
-      s.style.textShadow="none";
+      s.style.webkitTextStroke="none";s.style.textShadow="none";
     }
     var isAI=i>=(numP-numAI);
     var label=isAI?"ϟ":"";
@@ -482,7 +493,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v1.9.1");
+  lines.push("版本: v2.0.0");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -2159,7 +2170,9 @@ function hostHandleConn(c){
       for(var i=0;i<connHumans.length;i++)nextPlayerIdx+=connHumans[i];
       var cname=FNAMES[Math.min(nextPlayerIdx,5)]||"新";
       showHostApproval2(cname+"色想要加入",function(){
-        if(gameInProgress){
+        // Re-check NOW (not stale closure) whether game is in progress
+        var inProgress=(fci>0||Object.keys(fences).length>0);
+        if(inProgress){
           // Mid-game: join as spectator, activate on next game reset
           conns.push(c);connHumans.push(0);
           c._pendingPlayer=true; // will become active player on reset
@@ -2524,7 +2537,7 @@ function handleNetData(d){
   }
   if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
-  if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
+  if(d.t==="players"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
   if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
   if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
@@ -2545,7 +2558,7 @@ function handleNetData(d){
   if(d.t==="left"){ showCenterNotice(d.name+"色玩家離開房間，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
-  if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
+  if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
   if(d.t==="host_migrating"){
     showPersistMsg(d.msg||"房主離開了，正在轉移房間...");
   }
@@ -2746,7 +2759,7 @@ function showConnectDialog(){
   box.appendChild(joinLabel);
   var input=document.createElement("input");
   input.style.cssText="padding:8px 12px;font-size:20px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto";
-  input.maxLength=5;input.placeholder="XXXXX";
+  input.maxLength=5;input.placeholder="•••••";
   box.appendChild(input);
   var joinBtn=document.createElement("button");joinBtn.textContent="加入房間";
   joinBtn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#2196F3;color:#fff;cursor:pointer;width:100%";
