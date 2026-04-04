@@ -88,7 +88,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
-<button class="tbtn" id="btnRoomCode" style="display:none" title="按一下複製房間網址"></button>
+<button class="tbtn" id="btnRoomCode" style="display:none" title="按一下複製房間號碼"></button>
 <button class="tbtn" id="btnRestart">重新開始</button>
 <button class="tbtn" id="btnHome">回家</button>
 </div>
@@ -192,6 +192,16 @@ var turnOrder=[0,1,2,3,4,5];
 function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
+  // Fisher-Yates shuffle for random turn order
+  if(online){
+    // Use seed-based shuffle so all clients get same order
+    var rng=seed;
+    for(var i=turnOrder.length-1;i>0;i--){
+      rng=(rng*16807+0)%2147483647;
+      var j=rng%( i+1);
+      var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp;
+    }
+  }
 }
 var completedTris={};
 var netApplying=false;
@@ -349,18 +359,15 @@ function kickPlayer(pi){
   }
   if(ci<0)return;
   var pName=FNAMES[pi];
+  conns[ci]._replaced=true; // prevent close handler from processing
   conns[ci].send({t:"kicked",name:pName});
   setTimeout(function(){try{conns[ci].close();}catch(e){}},300);
+  if(conns[ci]._hb)clearInterval(conns[ci]._hb);
+  if(conns[ci]._reconnToken)delete hostReconnSlots[conns[ci]._reconnToken];
   conns.splice(ci,1);connHumans.splice(ci,1);
-  var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
-  numHuman=total-numAI;numP=total;
+  recalcNumP();
   document.getElementById("psel").value=localHumans;
-  // Send updated indices to remaining clients
-  var si=localHumans;
-  for(var i=0;i<conns.length;i++){
-    try{conns[i].send({t:"idx_update",idx:si});}catch(e){}
-    si+=connHumans[i];
-  }
+  broadcastIdxUpdates();
   broadcast({t:"player_kicked",name:pName,numP:numP,numAI:numAI,seed:Date.now()});
   seed=Date.now();
   netApplying=true;resetGame();netApplying=false;
@@ -1142,53 +1149,77 @@ function aiEvalStrategic(e,aiIdx,curFk){
     var maxOppF=0,maxOppIdx=-1;
     for(var j=0;j<numP;j++){if(j!==aiIdx&&playerFences[j]>maxOppF){maxOppF=playerFences[j];maxOppIdx=j;}}
     
-    // === GOAL A: Build AI's own enclosure ===
+    // === PRIORITY 1: CO-BUILD — join others' regions to score together ===
+    // This is THE core strategy: piggyback on others' work
+    if(oppFence>=1&&aiFence===0){
+      // First fence in someone else's region — infiltrate!
+      var joinVal=totalPts*completeness*60; // boosted from 30
+      // Near-complete = URGENT to join before it closes without AI
+      if(openEdges<=2)joinVal+=totalPts*50; // boosted from 25
+      else if(openEdges<=3)joinVal+=totalPts*30; // boosted from 12
+      else if(openEdges<=5)joinVal+=totalPts*10;
+      // Can AI match the dominant builder with just 1 fence?
+      if(1>=maxOppF)joinVal*=2.0; // one fence = tied = shared! (boosted from 1.8)
+      else if(maxOppF===2)joinVal*=1.2; // need 2 to match but still worth joining
+      else joinVal*=0.6; // opponent dominates, harder to match
+      // Bigger region = bigger potential score = more worth joining
+      if(regSheep>=3)joinVal*=1.3;
+      if(regSheep>=5)joinVal*=1.6;
+      sc+=joinVal;
+    }else if(oppFence>=1&&aiFence>=1){
+      // Already joined — keep co-building to stay in the scoring
+      var coVal=totalPts*completeness*50; // boosted from 25
+      if(openEdges<=2)coVal+=totalPts*30; // boosted from 15
+      else if(openEdges<=3)coVal+=totalPts*15;
+      if(aiFence+1>=maxOppF)coVal*=1.5; // will match or beat
+      if(regSheep>=4)coVal*=1.3;
+      sc+=coVal;
+    }
+    
+    // === PRIORITY 2: DISRUPT — block large exclusive enclosures early ===
+    // Don't wait until it's almost done — intervene as soon as it's big
+    if(aiFence===0&&maxOppF>=1&&openEdges>=1){
+      var isExclusive=(maxOppF>=2&&oppFence===maxOppF); // one player building alone
+      var isBigThreat=(regSheep>=3||totalPts>=3);
+      if(isExclusive&&isBigThreat){
+        // Someone is quietly building a big exclusive enclosure!
+        var blockVal=totalPts*30; // boosted base from 20
+        // Urgency by how close to completion
+        if(openEdges<=2)blockVal*=4.0; // boosted from 3
+        else if(openEdges<=3)blockVal*=2.5; // boosted from 2
+        else if(openEdges<=5)blockVal*=1.5;
+        // Bigger = more dangerous
+        if(regSheep>=4)blockVal*=1.5;
+        if(regSheep>=6)blockVal*=2.0;
+        // Blocking also means joining — double benefit
+        blockVal*=1.5;
+        sc+=blockVal;
+      }
+      // Even if not exclusive, large regions with few AI fences deserve attention
+      if(!isExclusive&&isBigThreat&&maxOppF>=2&&openEdges<=4){
+        var threatVal=totalPts*15;
+        if(openEdges<=2)threatVal*=2.0;
+        sc+=threatVal;
+      }
+    }
+    
+    // === SECONDARY: Build AI's own enclosure (opportunistic) ===
     if(aiFence>=1){
       var ownership=aiFence/(aiFence+oppFence+0.01);
-      var buildVal=totalPts*completeness*40*ownership;
+      var buildVal=totalPts*completeness*30*ownership; // reduced from 40
       if(openEdges<=1)buildVal+=totalPts*80;
       else if(openEdges<=2)buildVal+=totalPts*40;
       else if(openEdges<=3)buildVal+=totalPts*20;
       if(oppFence===0)buildVal*=1.5;
-      // Bigger regions = bigger payoff
       if(regSheep>=4)buildVal*=1.3;
       if(regSheep>=6)buildVal*=1.6;
       sc+=buildVal;
     }
     
-    // === GOAL A2: Start in uncontested area ===
+    // === LOW PRIORITY: Start in uncontested area ===
     if(aiFence===0&&oppFence===0&&totalPts>=2){
-      sc+=totalPts*3;
-      if(regSheep>=3)sc+=totalPts*2;
-    }
-    
-    // === GOAL B: Join others' regions ===
-    if(oppFence>=1&&aiFence===0){
-      var joinVal=totalPts*completeness*30;
-      if(openEdges<=2)joinVal+=totalPts*25;
-      else if(openEdges<=3)joinVal+=totalPts*12;
-      // Check if 1 fence is enough to match the dominant opponent
-      if(1>=maxOppF)joinVal*=1.8; // one fence = tied = shared!
-      else if(maxOppF===2)joinVal*=0.8; // need 2 to match, risky
-      else joinVal*=0.3; // opponent dominates, hard to match
-      sc+=joinVal;
-    }else if(oppFence>=1&&aiFence>=1){
-      var coVal=totalPts*completeness*25;
-      if(openEdges<=2)coVal+=totalPts*15;
-      // Check if AI can match or beat dominant opponent
-      if(aiFence+1>=maxOppF)coVal*=1.5;
-      sc+=coVal;
-    }
-    
-    // === GOAL C: Block exclusive builder ===
-    if(maxOppF>=2&&aiFence===0&&openEdges<=5){
-      var blockVal=totalPts*20;
-      if(openEdges<=2)blockVal*=3;
-      else if(openEdges<=3)blockVal*=2;
-      if(regSheep>=4)blockVal*=1.5;
-      // Double benefit: blocking AND joining for shared credit
-      blockVal*=1.3;
-      sc+=blockVal;
+      sc+=totalPts*2; // reduced from 3
+      if(regSheep>=3)sc+=totalPts*1;
     }
   }
   
@@ -1645,7 +1676,7 @@ window.resetGame=function(){
   hideLobbyOverlay();
   var cn=document.getElementById("centerNotice");if(cn)cn.remove();
   commitView();fillView();updateSB();scheduleAI();
-  if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});
+  if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});
 };
 
 panX=-window.innerWidth/2;panY=-window.innerHeight/2;
@@ -1955,11 +1986,12 @@ function createRoom(){
     var title=document.createElement("div");title.style.cssText="font-size:17px;font-weight:bold;color:#333;margin-bottom:8px";
     title.textContent="房間已創建";box.appendChild(title);
     var desc=document.createElement("div");desc.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
-    desc.textContent="你是房主，請把房間網址傳給別人。";box.appendChild(desc);
-    var url=location.origin+location.pathname+"?room="+roomCode;
-    var cpBtn=document.createElement("button");cpBtn.textContent="複製房間網址";
+    desc.textContent="你是房主，請把房間號碼傳給別人。";box.appendChild(desc);
+    var codeDisp=document.createElement("div");codeDisp.style.cssText="font-size:28px;font-weight:bold;letter-spacing:4px;color:#333;margin-bottom:8px;font-family:monospace";
+    codeDisp.textContent=roomCode;box.appendChild(codeDisp);
+    var cpBtn=document.createElement("button");cpBtn.textContent="複製房間號碼";
     cpBtn.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
-    cpBtn.onclick=function(){navigator.clipboard.writeText(url);cpBtn.textContent="已複製";setTimeout(function(){cpBtn.textContent="複製房間網址";},1500);};
+    cpBtn.onclick=function(){navigator.clipboard.writeText(roomCode);cpBtn.textContent="已複製";setTimeout(function(){cpBtn.textContent="複製房間號碼";},1500);};
     box.appendChild(cpBtn);
     var sep=document.createElement("div");sep.style.cssText="border-top:1px solid #eee;margin-bottom:14px";box.appendChild(sep);
     var msg=document.createElement("div");msg.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
@@ -1979,22 +2011,15 @@ function createRoom(){
 }
 
 function recalcOnlinePlayers(){
-  var clientTotal=0;
-  for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
-  var maxHost=6-numAI-clientTotal;
+  recalcNumP();
+  var maxHost=6-numAI;
+  for(var i=0;i<connHumans.length;i++)maxHost-=connHumans[i];
   if(maxHost<1)maxHost=1;
   if(localHumans>maxHost)localHumans=maxHost;
-  var total=localHumans+clientTotal+numAI;
-  if(total>6)total=6;
-  numHuman=total-numAI;numP=total;
+  recalcNumP(); // recalc again after adjusting localHumans
   myIdx=0;
   document.getElementById("psel").value=localHumans;
-  // Send each client their new starting index
-  var startIdx=localHumans;
-  for(var i=0;i<conns.length;i++){
-    try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
-    startIdx+=connHumans[i];
-  }
+  broadcastIdxUpdates();
   var msg="房主把人類玩家人數改成 "+numHuman+" 人、電腦玩家人數改成 "+numAI+" 人，遊戲重新開始";
   var newSeed=Date.now();
   seed=newSeed;
@@ -2017,46 +2042,63 @@ function showHostApproval(onApprove,onReject){
 }
 
 var pendingJoins=[];
+// Centralized player count recalculation — the single source of truth
+function recalcNumP(){
+  var clientTotal=0;
+  for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
+  var total=localHumans+clientTotal+numAI;
+  if(total>6)total=6;
+  numHuman=total-numAI;numP=total;
+}
+// Get the player index for connection ci (accounting for multi-human connections)
+function getConnPlayerIdx(ci){
+  var idx=localHumans;
+  for(var i=0;i<ci&&i<connHumans.length;i++)idx+=connHumans[i];
+  return idx;
+}
+// Send idx_update to all connections
+function broadcastIdxUpdates(){
+  var startIdx=localHumans;
+  for(var i=0;i<conns.length;i++){
+    try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
+    startIdx+=connHumans[i];
+  }
+}
 function hostHandleConn(c){
   function onConnOpen(){
-    // Wait briefly for a possible reconnection token message
     var reconnHandled=false;
     var reconnTimer=setTimeout(function(){
       if(reconnHandled)return;
       reconnHandled=true;
       handleAsNewJoin();
-    },1500);
-    // Temporary listener for reconnection attempts
+    },2000);
     function onFirstData(d){
       if(reconnHandled)return;
       if(d.t==="reconn"&&d.token&&hostReconnSlots[d.token]){
         reconnHandled=true;clearTimeout(reconnTimer);
         c.removeListener("data",onFirstData);
-        // Reconnection! Reclaim the slot
         var slot=hostReconnSlots[d.token];
-        // Cancel the pending disconnect timer for the old connection
         if(slot.timer)clearTimeout(slot.timer);
-        // Find and remove the old dead connection from conns array
-        var oldCi=slot.ci;
-        // The old connection object might still be in conns
-        for(var i=0;i<conns.length;i++){
+        // Mark old connections with this token as replaced
+        for(var i=conns.length-1;i>=0;i--){
           if(conns[i]._reconnToken===d.token&&conns[i]!==c){
+            conns[i]._replaced=true;
+            if(conns[i]._hb)clearInterval(conns[i]._hb);
+            try{conns[i].close();}catch(e){}
             conns.splice(i,1);connHumans.splice(i,1);
-            break;
           }
         }
-        // Insert the new connection
         conns.push(c);connHumans.push(slot.humans);
         c._reconnToken=d.token;
-        // Recalculate index
+        delete hostReconnSlots[d.token];
+        recalcNumP();
         var startIdx=localHumans;
         for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
-        delete hostReconnSlots[d.token];
         try{c.send({t:"reconn_ok",idx:startIdx});}catch(e){}
+        broadcastIdxUpdates();
         setupConnHandlers(c);
         return;
       }
-      // Not a reconnection - proceed as new join
       reconnHandled=true;clearTimeout(reconnTimer);
       c.removeListener("data",onFirstData);
       handleAsNewJoin();
@@ -2064,9 +2106,9 @@ function hostHandleConn(c){
     c.on("data",onFirstData);
 
     function handleAsNewJoin(){
-      var currentPlayers=localHumans;
-      for(var i=0;i<connHumans.length;i++)currentPlayers+=connHumans[i];
-      currentPlayers+=numAI;
+      // Recalc to ensure numP is accurate before checking
+      recalcNumP();
+      var currentPlayers=numP;
       var isFull=(currentPlayers>=6);
       if(isFull){
         try{c.send({t:"full_spectator"});}catch(e){}
@@ -2079,17 +2121,19 @@ function hostHandleConn(c){
         });
         return;
       }
-      var cname=FNAMES[currentPlayers]||"新";
+      var nextPlayerIdx=localHumans;
+      for(var i=0;i<connHumans.length;i++)nextPlayerIdx+=connHumans[i];
+      var cname=FNAMES[nextPlayerIdx]||"新";
       showHostApproval2(cname+"色想要加入",function(){
         conns.push(c);connHumans.push(1);
+        recalcNumP();
         var startIdx=localHumans;
         for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
-        var gameInProgress=(fci>0||Object.keys(fences).length>0);
-        var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
-        numHuman=total-numAI;numP=total;
         var pName=FNAMES[startIdx]||"新";
+        var gameInProgress=(fci>0||Object.keys(fences).length>0);
         try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
         document.getElementById("psel").value=localHumans;
+        broadcastIdxUpdates();
         updateRoomUI();updateSB();
         broadcast({t:"player_joined",name:pName,numP:numP});
         setupConnHandlers(c);
@@ -2175,39 +2219,36 @@ function setupConnHandlers(c){
   });
   c.on("close",function(){
     if(c._hb)clearInterval(c._hb);
+    // If this connection was replaced by a reconnection, do nothing
+    if(c._replaced)return;
     var ci=conns.indexOf(c);
     if(ci<0)return;
     var wasSpectator=(connHumans[ci]===0);
-    var pName=FNAMES[ci+localHumans]||"?";
+    var pName=FNAMES[getConnPlayerIdx(ci)]||"?";
     var savedHumans=connHumans[ci];
-    var savedIdx=localHumans;
-    for(var ii=0;ii<ci;ii++)savedIdx+=connHumans[ii];
+    var savedIdx=getConnPlayerIdx(ci);
     // Save reconnection slot so client can reclaim it
     if(c._reconnToken&&!wasSpectator){
       hostReconnSlots[c._reconnToken]={ci:ci,pName:pName,humans:savedHumans,idx:savedIdx,timer:null};
     }
     // Delay removal to tolerate screen sleep / reconnection
     c._dcTimer=setTimeout(function(){
+      // Re-check: connection might have been replaced during grace period
+      if(c._replaced)return;
       var ci2=conns.indexOf(c);
       if(ci2<0)return;
       // Clean up reconnection slot
       if(c._reconnToken)delete hostReconnSlots[c._reconnToken];
       conns.splice(ci2,1);connHumans.splice(ci2,1);
       if(wasSpectator){ updateRoomUI();return; }
-      var total=localHumans;for(var i=0;i<connHumans.length;i++)total+=connHumans[i];total+=numAI;if(total>6)total=6;
-      numHuman=total-numAI;numP=total;
+      recalcNumP();
       document.getElementById("psel").value=localHumans;
-      var startIdx=localHumans;
-      for(var i=0;i<conns.length;i++){
-        try{conns[i].send({t:"idx_update",idx:startIdx});}catch(e){}
-        startIdx+=connHumans[i];
-      }
+      broadcastIdxUpdates();
       updateRoomUI();
       showCenterNotice(pName+"色玩家離開房間，遊戲即將重新開始。");
       broadcast({t:"left",name:pName});
-      setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI});checkAloneInRoom(); },2000);
+      setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});checkAloneInRoom(); },2000);
     },HOST_GRACE_MS);
-    // Also store the timer ref in the reconn slot
     if(c._reconnToken&&hostReconnSlots[c._reconnToken]){
       hostReconnSlots[c._reconnToken].timer=c._dcTimer;
     }
@@ -2300,7 +2341,10 @@ function joinRoom(code){
     });
     peer.on("error",function(e){
       if(e.type==="peer-unavailable"){
-        removeSpinner();showMsg("找不到房間，請確認網址正確",5000);online=false;
+        // Room might not be registered yet on signaling server — retry
+        attempt++;
+        if(attempt<3)setTimeout(tryConnect,2000);
+        else{ removeSpinner();showMsg("找不到房間，請確認網址正確",5000);online=false; }
       }else if(online){
         attempt++;
         if(attempt<3)setTimeout(tryConnect,500);
@@ -2322,8 +2366,8 @@ function lockOnlineUI(){
   document.getElementById("btnRestart").disabled=false;
   document.getElementById("btnUndo").style.display="none";
   var rcBtn=document.getElementById("btnRoomCode");
-  rcBtn.style.display="";rcBtn.textContent="房間網址";
-  rcBtn.onclick=function(){var url=location.origin+location.pathname+"?room="+roomCode;navigator.clipboard.writeText(url);showMsg("已複製房間網址",1500);};
+  rcBtn.style.display="";rcBtn.textContent="房間號碼";
+  rcBtn.onclick=function(){navigator.clipboard.writeText(roomCode);showMsg("已複製房間號碼: "+roomCode,2000);};
   document.getElementById("btnOnline").textContent="離開房間";
   document.getElementById("hostLabel").style.display=isHost?"inline":"none";
   if(isHost){
@@ -2434,7 +2478,7 @@ function handleNetData(d){
   if(d.t==="players"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
   if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
   if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
-  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}spectator=false;netApplying=true;resetGame();netApplying=false;updateSB(); }
+  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
     spectator=false;netApplying=true;resetGame();netApplying=false;updateSB();
@@ -2453,6 +2497,54 @@ function handleNetData(d){
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ numP=d.numP;numHuman=numP;numAI=0;updateSB(); }
+  if(d.t==="host_migrating"){
+    showPersistMsg(d.msg||"房主離開了，正在轉移房間...");
+  }
+  if(d.t==="become_host"){
+    // This client becomes the new host!
+    showPersistMsg("你成為新房主，正在建立連線...");
+    // Save game state from old host
+    var mig=d;
+    // Disconnect from old host
+    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);try{conns[i].close();}catch(e){}}
+    conns=[];connHumans=[];
+    if(peer)try{peer.destroy();}catch(e){}
+    // Become host
+    isHost=true;myIdx=0;
+    localHumans=mig.localHumans||1;
+    seed=mig.seed;numP=mig.numP;numAI=mig.numAI;advMode=mig.advMode;winTarget=mig.winTarget;
+    numHuman=numP-numAI;
+    hostReconnSlots={};
+    roomCode=genCode();
+    acquireWebLock();
+    loadPeerJS(function(){
+      peer=new Peer("baa-"+roomCode,peerOpts);
+      peer.on("open",function(){
+        hidePersistMsg();
+        // Restore game state
+        scores=mig.scores;fci=mig.fci;actionLog=mig.log;
+        turnOrder=mig.turnOrder||[];
+        gameOver=mig.gameOver||false;
+        netApplying=true;resetGame();netApplying=false;
+        // Replay action log to restore fences
+        for(var i=0;i<mig.log.length;i++){
+          netApplying=true;
+          var le=mig.log[i],edge={x1:le.x1,y1:le.y1,x2:le.x2,y2:le.y2,key:le.key};
+          tryPlaceFence(edge);
+          netApplying=false;
+        }
+        scores=mig.scores; // restore scores after replay
+        lockOnlineUI();updateSB();
+        // Broadcast new room code to old host's other clients
+        // They will need to reconnect via host_migrating handler
+        // For now, show host the new room code
+        showMsg("你現在是房主，房間號碼: "+roomCode,5000);
+        document.getElementById("btnOnline").textContent="離開房間";
+      });
+      peer.on("connection",function(c){ hostHandleConn(c); });
+      peer.on("error",function(e){ showMsg("連線錯誤: "+e.type,3000); });
+    });
+  }
   if(d.t==="waiting"){ showCenterNotice(d.msg,true); }
   if(d.t==="approved"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
   if(d.t==="rejected"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
@@ -2532,10 +2624,94 @@ document.getElementById("btnOnline").addEventListener("click",function(){
     no.onclick=function(){d.remove();};
     box.appendChild(yes);box.appendChild(no);d.appendChild(box);document.body.appendChild(d);
   }else{
-    createRoom();
+    showConnectDialog();
   }
 });
+function showConnectDialog(){
+  var old=document.getElementById("connectDlg");if(old)old.remove();
+  var d=document.createElement("div");d.id="connectDlg";
+  d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+  var box=document.createElement("div");
+  box.style.cssText="background:#fff;border-radius:14px;padding:28px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px;position:relative";
+  // Close button
+  var closeBtn=document.createElement("span");
+  closeBtn.textContent="\u2715";closeBtn.style.cssText="position:absolute;top:10px;right:14px;cursor:pointer;font-size:18px;color:#999";
+  closeBtn.onclick=function(){d.remove();};
+  box.appendChild(closeBtn);
+  // Create room section
+  var createBtn=document.createElement("button");createBtn.textContent="創建房間";
+  createBtn.style.cssText="padding:12px 36px;font-size:16px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold;width:100%;margin-bottom:20px";
+  createBtn.onclick=function(){d.remove();createRoom();};
+  box.appendChild(createBtn);
+  // Separator
+  var sep=document.createElement("div");sep.style.cssText="border-top:1px solid #ddd;margin-bottom:16px";
+  box.appendChild(sep);
+  // Join room section
+  var joinLabel=document.createElement("div");joinLabel.textContent="或輸入房間號碼";
+  joinLabel.style.cssText="font-size:14px;color:#666;margin-bottom:10px";
+  box.appendChild(joinLabel);
+  var input=document.createElement("input");
+  input.style.cssText="padding:8px 12px;font-size:20px;text-align:center;border:2px solid #ccc;border-radius:8px;width:140px;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto";
+  input.maxLength=5;input.placeholder="XXXXX";
+  box.appendChild(input);
+  var joinBtn=document.createElement("button");joinBtn.textContent="加入房間";
+  joinBtn.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#2196F3;color:#fff;cursor:pointer;width:100%";
+  joinBtn.onclick=function(){
+    var code=input.value.trim().toUpperCase();
+    if(code.length<3){showMsg("請輸入房間號碼",2000);return;}
+    d.remove();joinRoom(code);
+  };
+  input.addEventListener("keydown",function(ev){if(ev.key==="Enter")joinBtn.click();});
+  box.appendChild(joinBtn);
+  d.appendChild(box);document.body.appendChild(d);
+}
 function leaveRoom(){
+  if(isHost&&conns.length>0){
+    // Host migration: transfer to first non-spectator client
+    var successorIdx=-1;
+    for(var i=0;i<conns.length;i++){if(connHumans[i]>0){successorIdx=i;break;}}
+    if(successorIdx>=0){
+      var successor=conns[successorIdx];
+      // Send all game state to successor
+      var migrationData={
+        t:"become_host",
+        seed:seed,numP:numP,numAI:numAI,advMode:advMode,winTarget:winTarget,
+        scores:scores.slice(),fci:fci,log:actionLog,turnOrder:turnOrder.slice(),
+        fenceData:{},gameOver:gameOver,localHumans:connHumans[successorIdx]
+      };
+      // Include fence data
+      for(var k in fences){
+        migrationData.fenceData[k]={color:fences[k].color};
+      }
+      // Collect info about other clients
+      var otherClients=[];
+      for(var i=0;i<conns.length;i++){
+        if(i===successorIdx)continue;
+        otherClients.push({humans:connHumans[i],isSpectator:connHumans[i]===0});
+      }
+      migrationData.otherClients=otherClients;
+      try{successor.send(migrationData);}catch(e){}
+      // Tell other clients to wait for new host
+      for(var i=0;i<conns.length;i++){
+        if(i===successorIdx)continue;
+        try{conns[i].send({t:"host_migrating",msg:"房主離開了，正在轉移房間..."});}catch(e){}
+      }
+      // Give successor time to receive, then disconnect
+      setTimeout(function(){
+        clientReconnecting=false;reconnToken="";savedRoomCode="";
+        releaseWebLock();hostReconnSlots={};
+        if(peer)try{peer.destroy();}catch(e){}
+        peer=null;online=false;isHost=false;spectator=false;conns=[];connHumans=[];
+        hidePersistMsg();hideLobbyOverlay();
+        var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
+        unlockOnlineUI();
+        numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
+        showMsg("你已離開房間",2000);
+      },1500);
+      return;
+    }
+  }
+  // Non-host or no clients: simple leave
   clientReconnecting=false;reconnToken="";savedRoomCode="";
   releaseWebLock();
   if(peer)try{peer.destroy();}catch(e){}
@@ -2543,16 +2719,14 @@ function leaveRoom(){
   hostReconnSlots={};
   hidePersistMsg();hideLobbyOverlay();
   var tb=document.getElementById("turnBubble");if(tb)tb.style.display="none";
-  window.location.href=location.origin+location.pathname;
+  unlockOnlineUI();
+  numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
+  showMsg("你已離開房間",2000);
 }
 document.getElementById("btnCloseModal").addEventListener("click",function(){ document.getElementById("modal").style.display="none"; });
 
 // Close connection on page refresh/close
 window.addEventListener("beforeunload",function(e){
-  if(online&&isHost){
-    e.preventDefault();
-    e.returnValue="你是房主，關閉視窗會導致房間消失，確定嗎？";
-  }
   if(peer)try{peer.destroy();}catch(ex){}
 });
 
