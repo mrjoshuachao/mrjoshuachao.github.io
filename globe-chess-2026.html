@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.3.1</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.35;pointer-events:none;z-index:100;">v1.4.0</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -2845,6 +2845,8 @@ function evaluate(){
     let v=_EV[p.type];
     // PST
     v+=(p.type==='K'?(eg?_PST.Ke:_PST.Km):_PST[p.type]||[])[lp]||0;
+    // Knight on own back rank (lp=0) is extra bad — trapped in corner of spherical board
+    if(p.type==='N'&&lp===0)v-=20;
     // Polar bonus
     const pd=Math.min(a,7-a);
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
@@ -2888,7 +2890,14 @@ function evaluate(){
       const dist=Math.abs(promoLat-a);
       passedPawns.push({lat:a,lon:o,color:p.color,dist});
       // Exponential bonus: closer to promotion = much more valuable
-      const bonus=dist<=1?250:dist<=2?140:dist<=3?85:dist<=4?55:dist<=5?35:20;
+      let bonus=dist<=1?250:dist<=2?140:dist<=3?85:dist<=4?55:dist<=5?35:20;
+      // Unblocked passer: no piece of ANY color in the way → even more dangerous
+      let clearPath=true;
+      const dir2=bk?1:-1;
+      for(let la=a+dir2;bk?(la<=7):(la>=0);la+=dir2){
+        if(board[la][o]){clearPath=false;break;}
+      }
+      if(clearPath&&dist<=2)bonus+=dist<=1?500:200; // nearly unstoppable
       s+=bk?bonus:-bonus;
     }
   }
@@ -2941,6 +2950,38 @@ function evaluate(){
         }
       }
       s+=sgn*(shield*12); // each shield pawn worth 12
+    }
+  }
+  // Endgame: queen hunting enemy king
+  if(eg){
+    const _ld=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
+    let wHasQ=false,bHasQ=false,wQLat=-1,wQLon=-1,bQLat=-1,bQLon=-1;
+    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+      const p=board[a][o];if(!p||p.type!=='Q')continue;
+      if(p.color==='white'){wHasQ=true;wQLat=a;wQLon=o;}
+      else{bHasQ=true;bQLat=a;bQLon=o;}
+    }
+    if(wHasQ&&!bHasQ&&bKingLat>=0){
+      const qd=Math.max(Math.abs(wQLat-bKingLat),_ld(wQLon,bKingLon));
+      s-=(7-qd)*15; // white queen close to black king → s↓ (good for white)
+    }
+    if(bHasQ&&!wHasQ&&wKingLat>=0){
+      const qd=Math.max(Math.abs(bQLat-wKingLat),_ld(bQLon,wKingLon));
+      s+=(7-qd)*15; // black queen close to white king → s↑ (good for black)
+    }
+    // Passed pawn blocker: if single piece blocks a dangerous passer, penalize blocker's side
+    for(const pp of passedPawns){
+      const bk=pp.color==='black';
+      const dir=bk?1:-1;
+      let blockerCount=0;
+      for(let la=pp.lat+dir;bk?(la<=7):(la>=0);la+=dir){
+        const bp=board[la][pp.lon];
+        if(bp&&bp.color!==(bk?'black':'white')){blockerCount++;break;}
+      }
+      if(blockerCount===1&&pp.dist<=3){
+        const pen=pp.dist<=1?80:pp.dist<=2?50:30;
+        s+=(bk?1:-1)*pen;
+      }
     }
   }
   return s;
@@ -3019,13 +3060,20 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
   // Assign shuffle index to preserve randomness within same-value groups
   legal.forEach((m,i)=>m._si=i);
   legal.sort((a,b)=>{
+    // Near-promotion pawns first (distance ≤2 to promo rank)
+    const pa=board[a.fLat]?.[a.fLon], pb=board[b.fLat]?.[b.fLon];
+    const promA=pa?.type==='P'?Math.abs((pa.color==='black'?7:0)-a.tLat):99;
+    const promB=pb?.type==='P'?Math.abs((pb.color==='black'?7:0)-b.tLat):99;
+    if(promA<=2&&promB>2)return -1;
+    if(promB<=2&&promA>2)return 1;
+    // Then captures by value
     const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
     const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
-    return vb-va||(a._si-b._si); // stable: preserve shuffle order for ties
+    return vb-va||(a._si-b._si);
   });
   let bestMove=legal[0],finalDepth=0;
-  // Random noise amplitude for tie-breaking (±15 pts — enough to vary openings, too small to affect real decisions)
-  const _noise=()=>(Math.random()-0.5)*30;
+  // Random noise for tie-breaking (±8 pts — varies openings without affecting real decisions)
+  const _noise=()=>(Math.random()-0.5)*16;
   // Anti-oscillation (auto-battle only) — check last 6 moves for reversals
   const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-6):[];
   const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
