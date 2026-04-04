@@ -1676,7 +1676,24 @@ window.resetGame=function(){
   hideLobbyOverlay();
   var cn=document.getElementById("centerNotice");if(cn)cn.remove();
   commitView();fillView();updateSB();scheduleAI();
-  if(online&&isHost&&!netApplying)broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});
+  // Activate pending spectators as real players on game reset
+  if(online&&isHost&&!netApplying){
+    var activated=false;
+    for(var i=0;i<conns.length;i++){
+      if(conns[i]._pendingPlayer){
+        conns[i]._pendingPlayer=false;
+        connHumans[i]=1;
+        activated=true;
+      }
+    }
+    if(activated){
+      recalcNumP();
+      shuffleTurnOrder();
+      broadcastIdxUpdates();
+      updateSB();
+    }
+    broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});
+  }
 };
 
 panX=-window.innerWidth/2;panY=-window.innerHeight/2;
@@ -2126,6 +2143,7 @@ function hostHandleConn(c){
       recalcNumP();
       var currentPlayers=numP;
       var isFull=(currentPlayers>=6);
+      var gameInProgress=(fci>0||Object.keys(fences).length>0);
       if(isFull){
         try{c.send({t:"full_spectator"});}catch(e){}
         c.on("data",function(d2){
@@ -2139,20 +2157,29 @@ function hostHandleConn(c){
       }
       var nextPlayerIdx=localHumans;
       for(var i=0;i<connHumans.length;i++)nextPlayerIdx+=connHumans[i];
-      var cname=FNAMES[nextPlayerIdx]||"新";
+      var cname=FNAMES[Math.min(nextPlayerIdx,5)]||"新";
       showHostApproval2(cname+"色想要加入",function(){
-        conns.push(c);connHumans.push(1);
-        recalcNumP();
-        var startIdx=localHumans;
-        for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
-        var pName=FNAMES[startIdx]||"新";
-        var gameInProgress=(fci>0||Object.keys(fences).length>0);
-        try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
-        document.getElementById("psel").value=localHumans;
-        broadcastIdxUpdates();
-        updateRoomUI();updateSB();
-        broadcast({t:"player_joined",name:pName,numP:numP});
-        setupConnHandlers(c);
+        if(gameInProgress){
+          // Mid-game: join as spectator, activate on next game reset
+          conns.push(c);connHumans.push(0);
+          c._pendingPlayer=true; // will become active player on reset
+          try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
+          setupConnHandlers(c);
+          showMsg(cname+"色加入觀戰，下局開始時加入遊戲",3000);
+        }else{
+          // Lobby or fresh game: join as active player
+          conns.push(c);connHumans.push(1);
+          recalcNumP();
+          var startIdx=localHumans;
+          for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
+          var pName=FNAMES[startIdx]||"新";
+          try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:false,lobby:lobbyActive});}catch(e){}
+          document.getElementById("psel").value=localHumans;
+          broadcastIdxUpdates();
+          updateRoomUI();updateSB();
+          broadcast({t:"player_joined",name:pName,numP:numP});
+          setupConnHandlers(c);
+        }
       },function(){
         try{c.send({t:"rejected_join"});}catch(e){}
         setTimeout(function(){try{c.close();}catch(e){}},500);
