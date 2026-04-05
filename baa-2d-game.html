@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.2</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -135,7 +135,7 @@ function loadPeerJS(cb){
   ];
   var ci=0;
   function tryLoad(){
-    if(ci>=cdns.length){peerLoading=false;showMsg("連線功能無法載入，請檢查網路",3000);return;}
+    if(ci>=cdns.length){peerLoading=false;showMsg("連線功能無法載入，請檢查網路。",3000);return;}
     var s=document.createElement("script");
     s.src=cdns[ci];
     s.onload=function(){peerReady=true;cb();};
@@ -558,7 +558,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.7.2");
+  lines.push("版本: v2.7.3");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -858,8 +858,8 @@ function tryPlaceFence(e){
   if(gameOver)return;
   var key=e.key;
   if(fences[key]){ if(netApplying)return; fences[key].el.remove();delete fences[key];updateSB();return; }
-  if(isInsideCompleted(e)){ showMsg("已經完成的圈地裡面不能再放柵欄");return; }
-  if(isTreeEdge(e)){ showMsg("大樹旁邊不能放柵欄");return; }
+  if(isInsideCompleted(e)){ showMsg("已經完成的圈地裡面不能再放柵欄。");return; }
+  if(isTreeEdge(e)){ showMsg("大樹旁邊不能放柵欄。");return; }
   var illegal=wouldBeIllegal(e); if(illegal){ showMsg(illegal);return; }
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
@@ -965,7 +965,7 @@ function wouldBeIllegal(e){
     var reg=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk);
     if(reg&&reg.length>=1){
       var a=analyzeRegion(reg,tfk);
-      if(a.sheep>0&&a.house===0){ var reason="圈地裡面要有羊舍";ilCache[key]=reason;return reason; }
+      if(a.sheep>0&&a.house===0){ var reason="圈地裡面要有羊舍。";ilCache[key]=reason;return reason; }
       if(a.sheep===0&&a.house>0){ var reason="圈地裡面要有羊";ilCache[key]=reason;return reason; }
       if(a.sheep===0&&a.house===0){ var reason="圈地裡面要有羊和羊舍";ilCache[key]=reason;return reason; }
     }
@@ -1443,7 +1443,7 @@ function showBlockReason(edge){
   var key=edge.key;
   if(fences[key])return;
   if(isInsideCompleted(edge)){
-    showMsg("已經完成的圈地裡面不能再放柵欄");
+    showMsg("已經完成的圈地裡面不能再放柵欄。");
     var pair=findTriPair(edge.key);
     if(pair){
       var startTri=pair[0];
@@ -1466,7 +1466,7 @@ function showBlockReason(edge){
     }
     return;
   }
-  if(isTreeEdge(edge)){ showMsg("大樹旁邊不能放柵欄");return; }
+  if(isTreeEdge(edge)){ showMsg("大樹旁邊不能放柵欄。");return; }
   var reason=wouldBeIllegal(edge);
   if(reason){ showMsg(reason);return; }
 }
@@ -1550,7 +1550,7 @@ window.addEventListener("mouseup",function(){
 });
 svg.addEventListener("click",function(e){
   if(hasOverlay()||recentTouch()||dragDist>5||gameOver||isAITurn())return;
-  if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始":"現在輪到別人，請稍候");return;}
+  if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始。":"現在輪到別人，請稍候。");return;}
   var wp=screenToWorld(e.clientX,e.clientY);var edge=findEdge(wp.x,wp.y);
   if(!edge){ pendingKey=null;hidePreview();lastPrevKey=null;return; }
   var key=edge.key;
@@ -1598,7 +1598,7 @@ window.addEventListener("touchend",function(e){
     pendingKey=null;hidePreview();return;
   }
   if(gameOver||isAITurn())return;
-  if(online&&(spectator||!isMyTurn()))return;
+  if(online&&(spectator||!isMyTurn())){showMsg(spectator?"觀戰中，等待重新開始。":"現在輪到別人，請稍候。");return;}
   var t=e.changedTouches[0];
   var sbH=document.getElementById("sb").offsetHeight;
   var bbH=document.getElementById("bb").offsetHeight;
@@ -1646,8 +1646,11 @@ document.getElementById("psel").addEventListener("change",function(){
         recalcOnlinePlayers();
       },function(){ localHumans=oldLocal;document.getElementById("psel").value=oldLocal; },"修改人數就要重新開始遊戲，確定嗎？");
     }else{
+      var oldLocal2=localHumans;
+      window._oldLocalHumans=oldLocal2;
+      localHumans=newVal;
       broadcast({t:"req_humans",count:newVal,name:FNAMES[myIdx]});
-      showMsg("正在等待房主同意修改人數...",10000);
+      showMsg("正在等待房主同意修改人數⋯⋯",10000);
     }
     return;
   }
@@ -1695,7 +1698,7 @@ document.getElementById("btnWinInfo").addEventListener("click",function(){
   box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
 });
 document.getElementById("btnRestart").addEventListener("click",function(){
-  if(spectator){showMsg("觀戰中，無法重新開始");return;}
+  if(spectator){showMsg("觀戰中，無法重新開始。");return;}
   if(online&&!isHost){
     broadcast({t:"req_restart",name:FNAMES[myIdx]});
     return;
@@ -1809,7 +1812,7 @@ window.resetGame=function(){
         if(c._reconnToken)delete hostReconnSlots[c._reconnToken];
         c._replaced=true;try{c.close();}catch(e){}
         conns.splice(i,1);connHumans.splice(i,1);
-        purged=true;showMsg(pName+"色已斷線，自動移除",2000);
+        purged=true;showMsg(pName+"色已斷線，自動移除。",2000);
       }
     }
     if(purged){recalcNumP();broadcastIdxUpdates();updateRoomUI();}
@@ -1898,7 +1901,7 @@ window.saveMapImage=function(){
       var imgUrl=canvas.toDataURL("image/png");
       var w2=window.open();
       if(w2){ w2.document.write('<img src="'+imgUrl+'" style="max-width:100%">'); }
-      else{ showMsg("請允許彈出視窗以儲存圖片"); }
+      else{ showMsg("請允許彈出視窗以儲存圖片。"); }
     }
   };
   img.src=url;
@@ -2115,7 +2118,7 @@ function tryClientReconnect(){
           clientReconnecting=false;
           hidePersistMsg();
           myIdx=d.idx;
-          showMsg("已重新連線",2000);
+          showMsg("已重新連線。",2000);
           return;
         }
         if(d.t==="reconn_fail"){
@@ -2229,8 +2232,8 @@ function createRoom(){
   peer.on("error",function hostErr(e){
     if(e.type==="unavailable-id"){roomCode=genCode();}
     var sp=document.getElementById("createSpin");
-    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在重新連線...";}
-    else showMsg("正在重新連線...",2000);
+    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在重新連線⋯⋯";}
+    else showMsg("正在重新連線⋯⋯",2000);
     setTimeout(function(){
       if(!online)return;
       if(peer)try{peer.destroy();}catch(e2){}
@@ -2478,17 +2481,18 @@ function setupConnHandlers(c){
     }
     if(d.t==="req_humans"){
       var ci=conns.indexOf(c);
-      broadcast({t:"waiting",msg:d.name+"色玩家修改了人數，正在等待房主同意"});
-      showMsg(d.name+"色玩家想改為 "+d.count+" 人",30000);
-      showHostApproval(function(){
-        if(ci>=0)connHumans[ci]=d.count;
-        recalcOnlinePlayers();
-        broadcast({t:"approved",msg:"房主同意修改人數，遊戲重新開始"});
-        showMsg("已同意修改人數",2000);
-      },function(){
-        broadcast({t:"rejected",msg:"房主不同意修改人數，遊戲繼續"});
-        showMsg("已拒絕修改人數",2000);
-      });
+      broadcast({t:"waiting",msg:d.name+"色玩家修改了人數，正在等待房主同意。"});
+      var old2=document.getElementById("centerNotice");if(old2)old2.remove();
+      var dd2=document.createElement("div");dd2.id="centerNotice";
+      dd2.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);font-family:'Segoe UI',sans-serif";
+      var bx2=document.createElement("div");
+      bx2.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:280px";
+      bx2.innerHTML="<p style='font-size:15px;color:#333;line-height:1.6;margin:0 0 16px 0'>"+d.name+"色玩家想改為 "+d.count+" 人，你同意嗎？</p>";
+      var yes2=document.createElement("button");yes2.textContent="同意";yes2.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
+      var no2=document.createElement("button");no2.textContent="不同意";no2.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
+      yes2.onclick=function(){dd2.remove();if(ci>=0)connHumans[ci]=d.count;recalcOnlinePlayers();broadcast({t:"approved",msg:"房主同意修改人數，遊戲重新開始。",count:d.count});showMsg("已同意修改人數。",2000);};
+      no2.onclick=function(){dd2.remove();broadcast({t:"rejected",msg:"房主不同意修改人數，遊戲繼續。"});showMsg("已拒絕修改人數。",2000);};
+      bx2.appendChild(yes2);bx2.appendChild(no2);dd2.appendChild(bx2);document.body.appendChild(dd2);
     }
     if(d.t==="req_restart"){
       broadcast({t:"waiting",msg:d.name+"色想要重新開始，正在等待房主回應。"});
@@ -2603,7 +2607,7 @@ function joinRoom(code){
         if(!connected&&online){
           attempt++;
           if(attempt<maxAttempts)tryConnect();
-          else{ removeSpinner();showMsg("無法加入房間，請確認房號正確",5000);online=false; }
+          else{ removeSpinner();showMsg("無法加入房間，請確認房號正確。",5000);online=false; }
         }
       },timeouts[attempt%timeouts.length]||15000);
       c.on("open",function(){
@@ -2643,7 +2647,7 @@ function joinRoom(code){
           var js=document.getElementById("joinStatus");if(js)js.textContent="連線錯誤，切換模式重試...";
           attempt++;
           if(attempt<maxAttempts)setTimeout(tryConnect,1000);
-          else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
+          else{ removeSpinner();showMsg("無法加入房間。",5000);online=false; }
         }
       });
     });
@@ -2652,12 +2656,12 @@ function joinRoom(code){
         var js=document.getElementById("joinStatus");if(js)js.textContent="找不到房間，等待房主上線...";
         attempt++;
         if(attempt<maxAttempts)setTimeout(tryConnect,2000);
-        else{ removeSpinner();showMsg("找不到房間，請確認房號正確",5000);online=false; }
+        else{ removeSpinner();showMsg("找不到房間，請確認房號正確。",5000);online=false; }
       }else if(online){
         var js=document.getElementById("joinStatus");if(js)js.textContent="信令伺服器錯誤("+e.type+")，重試中...";
         attempt++;
         if(attempt<maxAttempts)setTimeout(tryConnect,1500);
-        else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
+        else{ removeSpinner();showMsg("無法加入房間。",5000);online=false; }
       }
     });
   }
@@ -2713,17 +2717,17 @@ function handleNetData(d){
     var yes=document.createElement("button");yes.textContent="是";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;margin:0 8px";
     var no=document.createElement("button");no.textContent="否";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin:0 8px";
     yes.onclick=function(){cdiv.remove();broadcast({t:"accept_spectate"});};
-    no.onclick=function(){cdiv.remove();online=false;showMsg("已退出房間");};
+    no.onclick=function(){cdiv.remove();online=false;showMsg("已退出房間。");};
     box.appendChild(yes);box.appendChild(no);cdiv.appendChild(box);document.body.appendChild(cdiv);
     return;
   }
   if(d.t==="rejected_join"){
     var wa=document.getElementById("waitApproval");if(wa)wa.remove();
-    showMsg("房主拒絕你加入",5000);
+    showMsg("房主拒絕你加入。",5000);
     online=false;return;
   }
   if(d.t==="full"){
-    showMsg("房間已滿，請稍後再試",5000);
+    showMsg("房間已滿，請稍後再試。",5000);
     online=false;return;
   }
   if(d.t==="init"){
@@ -2787,7 +2791,7 @@ function handleNetData(d){
     }else{
       spectator=true;
       lockOnlineUI();
-      showMsg("旁觀模式",3000);
+      showMsg("旁觀模式。",3000);
     }
   }
   if(d.t==="do"){ actionLog.push(d.edge); tryPlaceFenceNet(d.edge); }
@@ -2805,14 +2809,16 @@ function handleNetData(d){
       ps.appendChild(o);
     }
   }
-  if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
+  if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束。",2000); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;document.getElementById("btnRestart").disabled=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
     spectator=false;document.getElementById("btnRestart").disabled=false;netApplying=true;resetGame();netApplying=false;
     if(d.turnOrder)turnOrder=d.turnOrder;
     updateSB();
-    var cdiv=document.createElement("div");
+    var cn2=document.getElementById("centerNotice");if(cn2)cn2.remove();
+    var oldHC=document.getElementById("hostChangedDlg");if(oldHC)oldHC.remove();
+    var cdiv=document.createElement("div");cdiv.id="hostChangedDlg";
     cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
     var box=document.createElement("div");
     box.style.cssText="background:#fff;border-radius:12px;padding:24px 32px;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
@@ -2825,7 +2831,7 @@ function handleNetData(d){
   }
   if(d.t==="left"){ showCenterNotice(d.name+"色離開房間了，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
-  if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
+  if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了。",4000); }
   if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;while(turnOrder.length<numP){var u={};for(var i=0;i<turnOrder.length;i++)u[turnOrder[i]]=1;for(var i=0;i<numP;i++){if(!u[i]){turnOrder.push(i);break;}}}updateSB();} }
   if(d.t==="host_migrating"){
     showPersistMsg(d.msg||"房主離開了，正在轉移房間...");
@@ -2864,14 +2870,14 @@ function handleNetData(d){
         });
       });
       c.on("error",function(){
-        hidePersistMsg();showMsg("無法連線到新房主",3000);
+        hidePersistMsg();showMsg("無法連線到新房主。",3000);
         if(peer)try{peer.destroy();}catch(e){}
         peer=null;online=false;conns=[];connHumans=[];unlockOnlineUI();
         numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
       });
     });
     peer.on("error",function(){
-      hidePersistMsg();showMsg("連線錯誤",3000);
+      hidePersistMsg();showMsg("連線錯誤。",3000);
       online=false;conns=[];unlockOnlineUI();
       numHuman=2;numAI=0;numP=2;syncCounts();resetGame();updateSB();
     });
@@ -2913,19 +2919,38 @@ function handleNetData(d){
         turnOrder=mig.turnOrder||[];
         lockOnlineUI();updateSB();
         window._pendingMigrants=(mig.otherClients||[]).length;
-        showCenterFade("現在你是新房主了",2000);
         document.getElementById("btnOnline").textContent="離開房間";
+        // Show new host lobby with room code
+        lobbyActive=true;
+        var old3=document.getElementById("lobbyOverlay");if(old3)old3.remove();
+        var ld=document.createElement("div");ld.id="lobbyOverlay";
+        ld.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
+        var lb=document.createElement("div");
+        lb.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:280px";
+        lb.innerHTML="<div style='font-size:17px;font-weight:bold;color:#333;margin-bottom:8px'>現在你是新房主了，房間號碼已改變。</div>"
+          +"<div style='font-size:28px;font-weight:bold;letter-spacing:4px;color:#333;margin:12px 0 8px;font-family:monospace'>"+roomCode+"</div>";
+        var cpB=document.createElement("button");cpB.textContent="複製房間號碼";
+        cpB.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
+        cpB.onclick=function(){navigator.clipboard.writeText(roomCode);cpB.textContent="已複製！";setTimeout(function(){cpB.textContent="複製房間號碼";},1500);};
+        lb.appendChild(cpB);
+        var sep3=document.createElement("div");sep3.style.cssText="border-top:1px solid #eee;margin-bottom:14px";lb.appendChild(sep3);
+        var msg3=document.createElement("div");msg3.style.cssText="font-size:14px;color:#333;line-height:1.6;margin-bottom:14px";
+        msg3.textContent="等每個人都進房間後，請按「開始遊戲」。";lb.appendChild(msg3);
+        var stB=document.createElement("button");stB.textContent="開始遊戲";
+        stB.style.cssText="padding:10px 28px;font-size:15px;border:none;border-radius:8px;background:#4CAF50;color:#fff;cursor:pointer;font-weight:bold";
+        stB.onclick=function(){hideLobbyOverlay();resetGame();};
+        lb.appendChild(stB);ld.appendChild(lb);document.body.appendChild(ld);
       });
       peer.on("connection",function(c){ hostHandleConn(c); });
       peer.on("error",function(e){ showMsg("連線錯誤: "+e.type,3000); });
     });
   }
   if(d.t==="waiting"){ showCenterNotice(d.msg,true); }
-  if(d.t==="approved"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
-  if(d.t==="rejected"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();showMsg(d.msg,3000); }
+  if(d.t==="approved"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();if(d.count)localHumans=d.count;showMsg(d.msg,3000); }
+  if(d.t==="rejected"){ hidePersistMsg();var cn=document.getElementById("centerNotice");if(cn)cn.remove();if(window._oldLocalHumans!==undefined){localHumans=window._oldLocalHumans;document.getElementById("psel").value=localHumans;}showMsg(d.msg,3000); }
   if(d.t==="approved_restart"){ var cn=document.getElementById("centerNotice");if(cn)cn.remove();showCenterFade("房主允許了，遊戲重新開始。",1000); }
   if(d.t==="rejected_restart"){ var cn=document.getElementById("centerNotice");if(cn)cn.remove();showCenterFade("房主拒絕了，遊戲繼續。",2000); }
-  if(d.t==="host_restart"){ hidePersistMsg();hideLobbyOverlay();showCenterFade("房主重新開始了遊戲",1000); }
+  if(d.t==="host_restart"){ hidePersistMsg();hideLobbyOverlay();showCenterFade("房主重新開始了遊戲。",1000); }
   if(d.t==="preview"){ showRemotePreview(d.edge,d.pci); }
   if(d.t==="hidepreview"){ hideRemotePreview(); }
 }
