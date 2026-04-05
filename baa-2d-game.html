@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.4.1</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.4.2</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -228,7 +228,9 @@ function renderHexAt(col,row){
     if(tileImgs["W2"]&&(tile==="W"||tile==="G"||tile==="B")){var sk=tileImgs["W3"]?["W","W2","W3","G","G2","G3","B","B2","B3"]:["W","W2","G","G2","B","B2"];imgKey=sk[((col*3571+row*7393+i*991)>>>0)%sk.length];}
     ctx.drawImage(tileImgs[imgKey],0,0,TW,TH);ctx.restore();
   }
-  ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1;
+  var gridColor=currentTheme==="sushi"?"#000":"rgba(255,255,255,0.5)";
+  var gridWidth=currentTheme==="sushi"?2.5:1;
+  ctx.strokeStyle=gridColor;ctx.lineWidth=gridWidth;
   for(var i=0;i<6;i++){ var a=i*Math.PI/3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(R*Math.cos(a),R*Math.sin(a));ctx.stroke(); }
   for(var i=0;i<6;i++){ var a1=i*Math.PI/3,a2=(i+1)*Math.PI/3;ctx.beginPath();ctx.moveTo(R*Math.cos(a1),R*Math.sin(a1));ctx.lineTo(R*Math.cos(a2),R*Math.sin(a2));ctx.stroke(); }
   hexCache[key]=cv.toDataURL('image/png');
@@ -541,7 +543,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.4.1");
+  lines.push("版本: v2.4.2");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
