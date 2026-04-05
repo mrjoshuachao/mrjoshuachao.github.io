@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.5</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.6</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -548,7 +548,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.5");
+  lines.push("版本: v2.6.6");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1784,6 +1784,39 @@ window.resetGame=function(){
   if(!online||isHost)scheduleAI();
   // Activate pending spectators as real players on game reset
   if(online&&isHost&&!netApplying){
+    // Purge dead connections before restarting
+    var purged=false;
+    for(var i=conns.length-1;i>=0;i--){
+      var c=conns[i],dead=false;
+      // Check PeerJS open state
+      if(!c.open)dead=true;
+      // Check WebRTC peerConnection state
+      if(!dead&&c.peerConnection){
+        var st=c.peerConnection.connectionState||c.peerConnection.iceConnectionState||"";
+        if(st==="disconnected"||st==="failed"||st==="closed")dead=true;
+      }
+      // Check dataChannel state
+      if(!dead){try{var ch=c._dc||c.dataChannel;if(ch&&(ch.readyState==="closed"||ch.readyState==="closing"))dead=true;}catch(e){}}
+      // Check heartbeat timeout
+      if(!dead&&c._lastData&&Date.now()-c._lastData>HB_TIMEOUT_MS)dead=true;
+      if(dead){
+        var pName=FNAMES[getConnPlayerIdx(i)]||"?";
+        if(c._hb)clearInterval(c._hb);
+        if(c._hbCheck)clearInterval(c._hbCheck);
+        if(c._dcTimer){clearTimeout(c._dcTimer);c._dcTimer=null;}
+        if(c._reconnToken)delete hostReconnSlots[c._reconnToken];
+        c._replaced=true;
+        try{c.close();}catch(e){}
+        conns.splice(i,1);connHumans.splice(i,1);
+        purged=true;
+        showMsg(pName+"色已斷線，自動移除",2000);
+      }
+    }
+    if(purged){
+      recalcNumP();
+      broadcastIdxUpdates();
+      updateRoomUI();
+    }
     var activated=false;
     for(var i=0;i<conns.length;i++){
       if(conns[i]._pendingPlayer){
