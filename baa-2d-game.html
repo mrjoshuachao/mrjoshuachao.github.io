@@ -1701,7 +1701,9 @@ window.resetGame=function(){
   var wo=document.getElementById("winOverlay");if(wo)wo.remove();
   hideLobbyOverlay();
   var cn=document.getElementById("centerNotice");if(cn)cn.remove();
-  commitView();fillView();updateSB();scheduleAI();
+  commitView();fillView();updateSB();
+  // AI scheduling: only run on host or offline
+  if(!online||isHost)scheduleAI();
   // Activate pending spectators as real players on game reset
   if(online&&isHost&&!netApplying){
     var activated=false;
@@ -1715,10 +1717,20 @@ window.resetGame=function(){
     if(activated){
       recalcNumP();
       shuffleTurnOrder();
-      broadcastIdxUpdates();
-      updateSB();
     }
+    // Send reset to existing active players
+    broadcastIdxUpdates();
     broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});
+    // Send fresh init to newly activated players (overrides the reset)
+    if(activated){
+      for(var i=0;i<conns.length;i++){
+        if(connHumans[i]===1){
+          var pIdx=getConnPlayerIdx(i);
+          try{conns[i].send({t:"init",idx:pIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:[],inProgress:false,lobby:false});}catch(e){}
+        }
+      }
+    }
+    updateSB();
   }
 };
 
@@ -2253,6 +2265,14 @@ function setupConnHandlers(c){
       return;
     }
     if(d.t==="do"){
+      // Validate: only accept if it's this connection's turn
+      var ci=conns.indexOf(c);
+      if(ci>=0&&connHumans[ci]>0){
+        var sStart=getConnPlayerIdx(ci);
+        var sEnd=sStart+connHumans[ci];
+        var cp=curP();
+        if(cp<sStart||cp>=sEnd){ return; } // not this player's turn
+      }
       actionLog.push(d.edge);
       tryPlaceFenceNet(d.edge);
       for(var i=0;i<conns.length;i++){ if(conns[i]!==c)try{conns[i].send(d);}catch(e){} }
