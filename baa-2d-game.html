@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -128,11 +128,21 @@ function loadPeerJS(cb){
   if(peerReady){cb();return;}
   if(peerLoading){setTimeout(function(){loadPeerJS(cb);},200);return;}
   peerLoading=true;
-  var s=document.createElement("script");
-  s.src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js";
-  s.onload=function(){peerReady=true;cb();};
-  s.onerror=function(){peerLoading=false;showMsg("連線功能無法載入",3000);};
-  document.head.appendChild(s);
+  var cdns=[
+    "https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js",
+    "https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js",
+    "https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"
+  ];
+  var ci=0;
+  function tryLoad(){
+    if(ci>=cdns.length){peerLoading=false;showMsg("連線功能無法載入，請檢查網路",3000);return;}
+    var s=document.createElement("script");
+    s.src=cdns[ci];
+    s.onload=function(){peerReady=true;cb();};
+    s.onerror=function(){ci++;tryLoad();};
+    document.head.appendChild(s);
+  }
+  tryLoad();
 }
 </script>
 <script>
@@ -548,7 +558,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.7.0");
+  lines.push("版本: v2.7.1");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1937,8 +1947,17 @@ var fallbackStun=[
 ];
 var iceNormal={iceServers:fallbackStun.slice()};
 var iceRelay={iceServers:[],iceTransportPolicy:"relay"};
-var peerOpts={config:iceNormal,pingInterval:5000};
-var peerRelayOpts={config:iceRelay,pingInterval:5000};
+// Multiple PeerJS signaling server configs to try
+var peerServers=[
+  {host:"0.peerjs.com",port:443,path:"/",secure:true},
+  {host:"0.peerjs.com",port:443,path:"/",secure:true}
+];
+var peerOpts={host:"0.peerjs.com",port:443,path:"/",secure:true,config:iceNormal,pingInterval:5000,debug:0};
+var peerRelayOpts={host:"0.peerjs.com",port:443,path:"/",secure:true,config:iceRelay,pingInterval:5000,debug:0};
+function makePeerOpts(si,relay){
+  var s=peerServers[si%peerServers.length];
+  return {host:s.host,port:s.port,path:s.path,secure:s.secure,config:relay?iceRelay:iceNormal,pingInterval:5000,debug:0};
+}
 var turnFetched=false;
 function fetchTurnServers(cb){
   if(turnFetched){cb();return;}
@@ -2521,6 +2540,7 @@ function joinRoom(code){
     +"<div style='width:36px;height:36px;border:4px solid #ddd;border-top:4px solid #4CAF50;border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite'></div>"
     +"<div style='font-size:16px;color:#333'>正在嘗試加入房間</div>"
     +"<div style='font-size:12px;color:#999;margin-top:8px'>請稍候...</div>"
+    +"<div id='joinStatus' style='font-size:11px;color:#aaa;margin-top:6px'></div>"
     +"<div style='margin-top:16px'><button id='joinCancel' style='padding:6px 20px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#666;cursor:pointer'>取消</button></div>"
     +"</div>";
   document.body.appendChild(spin);
@@ -2532,16 +2552,28 @@ function joinRoom(code){
   }
   function removeSpinner(){ var el=document.getElementById("joinSpin");if(el)el.remove(); }
   var attempt=0;
-  var maxAttempts=15;
-  var modes=[peerOpts,peerOpts,peerRelayOpts,peerOpts,peerRelayOpts];
-  var timeouts=[12000,12000,15000,15000,18000];
+  var maxAttempts=20;
+  var timeouts=[10000,10000,12000,12000,15000];
+  function updateStatus(msg){
+    var sp=document.getElementById("joinSpin");
+    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent=msg;}
+  }
+  function getOpts(){
+    // First 3: normal STUN, next 3: TURN relay, then alternate
+    if(attempt<3)return peerOpts;
+    if(attempt<6)return peerRelayOpts;
+    return (attempt%2===0)?peerOpts:peerRelayOpts;
+  }
   function tryConnect(){
     if(!online)return;
     if(peer)try{peer.destroy();}catch(e){}
-    var opts=modes[attempt%modes.length]||peerOpts;
+    peer=null; // clear reference before creating new one
+    var opts=getOpts();
+    var useRelay=(opts===peerRelayOpts);
+    if(attempt>0)updateStatus("正在繼續嘗試加入房間 (第"+(attempt+1)+"次)"+(useRelay?" [中繼模式]":""));
     peer=new Peer(opts);
-    if(attempt>0){var sp=document.getElementById("joinSpin");if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間 (第"+(attempt+1)+"次)";}}
     peer.on("open",function(){
+      updateStatus("已連上伺服器，正在尋找房間...");
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
       var connected=false;
       var timer=setTimeout(function(){
@@ -2585,21 +2617,23 @@ function joinRoom(code){
       c.on("error",function(err){
         if(!connected&&online){
           connected=true;clearTimeout(timer);
+          var js=document.getElementById("joinStatus");if(js)js.textContent="連線錯誤，切換模式重試...";
           attempt++;
-          if(attempt<maxAttempts)setTimeout(tryConnect,500);
+          if(attempt<maxAttempts)setTimeout(tryConnect,1000);
           else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
         }
       });
     });
     peer.on("error",function(e){
       if(e.type==="peer-unavailable"){
-        // Room might not be registered yet on signaling server — retry
+        var js=document.getElementById("joinStatus");if(js)js.textContent="找不到房間，等待房主上線...";
         attempt++;
         if(attempt<maxAttempts)setTimeout(tryConnect,2000);
         else{ removeSpinner();showMsg("找不到房間，請確認房號正確",5000);online=false; }
       }else if(online){
+        var js=document.getElementById("joinStatus");if(js)js.textContent="信令伺服器錯誤("+e.type+")，重試中...";
         attempt++;
-        if(attempt<maxAttempts)setTimeout(tryConnect,500);
+        if(attempt<maxAttempts)setTimeout(tryConnect,1500);
         else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
       }
     });
