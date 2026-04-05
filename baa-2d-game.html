@@ -36,7 +36,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #win p{font-size:14px;margin-bottom:8px}
 #win button{padding:6px 16px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer}
 .tbtn{background:#fff;color:#333;border:1px solid #333;border-radius:5px;padding:3px 7px;font-size:10px;cursor:pointer;font-family:'Segoe UI',sans-serif}
-.tbtn:active{background:#777}
+.tbtn:hover{background:#e0e0e0}
+.tbtn:active{background:#bbb}
 .tbtn:disabled{background:#333;color:#666;cursor:default;border-color:#555}
 #modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(0,0,0,0.3);justify-content:center;align-items:center}
 #modal>div{background:#fff;border-radius:14px;padding:18px 22px;text-align:center;font-family:'Segoe UI',sans-serif;min-width:220px;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
@@ -66,6 +67,8 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 #rules img{max-width:88%;max-height:50vh;object-fit:contain}
 #rules .rt{font-size:18px;font-weight:bold;color:#333;text-align:center;margin:16px 24px 20px;line-height:1.6;font-family:'Segoe UI',sans-serif}
 #rules .rn{padding:10px 32px;font-size:16px;border:none;border-radius:12px;background:#4CAF50;color:#fff;cursor:pointer;font-family:'Segoe UI',sans-serif}
+button:not(.tbtn):not(:disabled):hover{filter:brightness(0.88)}
+button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 #loading{position:fixed;inset:0;z-index:9999;background:#a3d65c;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif}
 #loading span{color:#fff;font-size:20px;font-weight:bold;letter-spacing:normal;text-shadow:0 1px 4px rgba(0,0,0,0.2)}
 </style></head><body>
@@ -84,7 +87,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.0.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.0.6</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -107,7 +110,7 @@ svg{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow:vi
 </div></div>
 <div id="msg"></div>
 <div id="confirm"><div>
-<p>改變人數會讓遊戲重新開始，確定嗎？</p>
+<p>修改人數就要重新開始遊戲，確定嗎？</p>
 <button id="cfYes" style="background:#e74c3c">確定</button>
 <button id="cfNo" style="background:#888">取消</button>
 </div></div>
@@ -145,15 +148,30 @@ var FCOLORS_BASE=["#e74c3c","#3498db","#ffe030","#ffffff","#888888","#2c2c2c"];
 var FNAMES_BASE=["紅","藍","黃","白","灰","黑"];
 var FCOLORS=FCOLORS_BASE.slice();
 var FNAMES=FNAMES_BASE.slice();
+var aiSlots=[false,false,false,false,false,false];
 function shuffleColors(){
-  var idx=[0,1,2,3,4,5];
+  // Build slots: numHuman humans then numAI AIs, then shuffle everything
+  var slots=[];
+  for(var i=0;i<6;i++)slots.push({ci:i,ai:i>=(numP-numAI)&&i<numP});
+  // Fisher-Yates shuffle using seed
   var rng=((seed*31+7)>>>0)%2147483647;
   for(var i=5;i>0;i--){
     rng=(rng*16807+0)%2147483647;
     var j=rng%(i+1);
-    var tmp=idx[i];idx[i]=idx[j];idx[j]=tmp;
+    var tmp=slots[i];slots[i]=slots[j];slots[j]=tmp;
   }
-  for(var i=0;i<6;i++){FCOLORS[i]=FCOLORS_BASE[idx[i]];FNAMES[i]=FNAMES_BASE[idx[i]];}
+  // Ensure AI is never in position 0 (first turn)
+  if(numAI>0&&numAI<numP&&slots[0].ai){
+    // Find a non-AI slot to swap with
+    for(var i=1;i<numP;i++){
+      if(!slots[i].ai){var tmp=slots[0];slots[0]=slots[i];slots[i]=tmp;break;}
+    }
+  }
+  for(var i=0;i<6;i++){
+    FCOLORS[i]=FCOLORS_BASE[slots[i].ci];
+    FNAMES[i]=FNAMES_BASE[slots[i].ci];
+    aiSlots[i]=slots[i].ai;
+  }
 }
 var fci=0,numHuman=2,numAI=0,numP=2,scores=[0,0,0,0,0,0],fences={},gameOver=false,advMode=false,winTarget=10;
 var seed=Date.now();var winDismissed=false;
@@ -203,15 +221,9 @@ function renderHexAt(col,row){
 var turnOrder=[0,1,2,3,4,5];
 function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
+  // Turn order is always sequential left-to-right
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
-  // Fisher-Yates shuffle for random turn order (seed-based for sync)
-  var rng=seed;
-  for(var i=turnOrder.length-1;i>0;i--){
-    rng=(rng*16807+0)%2147483647;
-    var j=rng%(i+1);
-    var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp;
-  }
-  // Shuffle colors too
+  // Shuffle colors so each position gets a random color
   shuffleColors();
 }
 var completedTris={};
@@ -394,11 +406,11 @@ function updateSB(){
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
     if(FCOLORS[i]==="#ffffff"||FCOLORS[i]==="#ffe030"){
-      s.style.webkitTextStroke="1.5px #000";s.style.textShadow="none";
+      s.style.textShadow="0 0 2px rgba(0,0,0,0.5), 0 0 2px rgba(0,0,0,0.5)";
     }else{
       s.style.webkitTextStroke="none";s.style.textShadow="none";
     }
-    var isAI=i>=(numP-numAI);
+    var isAI=aiSlots[i];
     var label=isAI?"ϟ":"";
     if(online&&isMyCircle(i))label="你";
     var isCur=(i===curP());
@@ -407,7 +419,7 @@ function updateSB(){
     h+=scores[i];
     if(isCur)h+="<span style='font-size:7px;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%)'>●</span>";
     s.innerHTML=h;
-    if(online&&isHost&&!isMyCircle(i)&&i<(numP-numAI)){
+    if(online&&isHost&&!isMyCircle(i)&&!aiSlots[i]){
       s.style.cursor="pointer";
       (function(pi){
         s.addEventListener("click",function(){
@@ -493,7 +505,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.0.0");
+  lines.push("版本: v2.0.6");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -507,7 +519,7 @@ function generateGameReport(){
   // Player list
   lines.push("--- 玩家列表 ---");
   for(var i=0;i<numP;i++){
-    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    var ptype=aiSlots[i]?"電腦":"人類";
     lines.push((i+1)+". "+FNAMES[i]+"色 ("+ptype+")");
   }
   lines.push("");
@@ -525,7 +537,7 @@ function generateGameReport(){
     var h=history[i];
     var playerIdx=turnOrder[h.fci%numP];
     var pname=FNAMES[playerIdx]+"色";
-    var ptype=playerIdx>=(numP-numAI)?"電腦":"人類";
+    var ptype=aiSlots[playerIdx]?"電腦":"人類";
     var step="第 "+(i+1)+" 步 (回合 "+(Math.floor(h.fci/numP)+1)+"): "+pname+"("+ptype+") 放置柵欄 ["+h.key+"]";
     // Score changes
     if(h.sc&&h.sc.length>0){
@@ -562,7 +574,7 @@ function generateGameReport(){
   var winners=[];
   for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
   for(var i=0;i<numP;i++){
-    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    var ptype=aiSlots[i]?"電腦":"人類";
     var marker=winners.indexOf(i)>=0?" ★ 獲勝":"";
     lines.push(FNAMES[i]+"色 ("+ptype+"): "+scores[i]+" 分"+marker);
   }
@@ -586,7 +598,7 @@ function generateGameReport(){
     }
   }
   for(var i=0;i<numP;i++){
-    var ptype=i>=(numP-numAI)?"電腦":"人類";
+    var ptype=aiSlots[i]?"電腦":"人類";
     lines.push(FNAMES[i]+"色 ("+ptype+"): 放了 "+playerFences[i]+" 個柵欄, "+playerScoringMoves[i]+" 次觸發得分, 最終 "+scores[i]+" 分");
   }
   lines.push("");
@@ -889,7 +901,7 @@ function undoLast(){
   // Undo AI moves first
   while(history.length>0){
     var lastFci=history[history.length-1].fci;
-    var wasAI=numAI>0&&(lastFci%numP)>=(numP-numAI);
+    var wasAI=numAI>0&&aiSlots[turnOrder[lastFci%numP]];
     if(!wasAI)break;
     undoOne();
   }
@@ -902,7 +914,7 @@ function undoLast(){
 
 // === AI ===
 var aiTimer=0;
-function isAITurn(){ return numAI>0&&curP()>=(numP-numAI); }
+function isAITurn(){ return numAI>0&&aiSlots[curP()]; }
 function scheduleAI(){ clearTimeout(aiTimer);if(isAITurn()&&!gameOver)aiTimer=setTimeout(aiMove,400); }
 
 function aiMove(){
@@ -1522,7 +1534,7 @@ var pendingChange=null,pendingCancel=null,prevHuman=2,prevAI=0;
 function confirmChange(fn,cancelFn,msg){
   if(history.length>0){
     pendingChange=fn;pendingCancel=cancelFn||null;
-    document.getElementById("confirm").querySelector("p").textContent=msg||"改變人數會讓遊戲重新開始，確定嗎？";
+    document.getElementById("confirm").querySelector("p").textContent=msg||"修改人數就要重新開始遊戲，確定嗎？";
     document.getElementById("confirm").style.display="flex";
   }else{ fn(); }
 }
@@ -1539,9 +1551,12 @@ document.getElementById("cfNo").addEventListener("click",function(){
 document.getElementById("psel").addEventListener("change",function(){
   var newVal=parseInt(this.value);
   if(online){
-    localHumans=newVal;
     if(isHost){
-      recalcOnlinePlayers();
+      var oldLocal=localHumans;
+      confirmChange(function(){
+        localHumans=newVal;
+        recalcOnlinePlayers();
+      },function(){ localHumans=oldLocal;document.getElementById("psel").value=oldLocal; },"修改人數就要重新開始遊戲，確定嗎？");
     }else{
       broadcast({t:"req_humans",count:newVal,name:FNAMES[myIdx]});
       showMsg("正在等待房主同意修改人數...",10000);
@@ -1550,33 +1565,33 @@ document.getElementById("psel").addEventListener("change",function(){
   }
   var oldH=numHuman,oldA=numAI;
   numHuman=newVal;syncCounts("human");
-  if(history.length>0){
-    pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
-    pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
-    document.getElementById("confirm").querySelector("p").textContent="改變人數會讓遊戲重新開始，確定嗎？";
-    document.getElementById("confirm").style.display="flex";
-  }else{ prevHuman=numHuman;prevAI=numAI;resetGame(); }
+  confirmChange(function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); },
+    function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); },
+    "修改人數就要重新開始遊戲，確定嗎？");
 });
 document.getElementById("aisel").addEventListener("change",function(){
   var oldH=numHuman,oldA=numAI;
-  numAI=parseInt(this.value);syncCounts("ai");
-  if(online&&isHost){ recalcOnlinePlayers();return; }
-  if(history.length>0){
-    pendingChange=function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); };
-    pendingCancel=function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); };
-    document.getElementById("confirm").querySelector("p").textContent="改變人數會讓遊戲重新開始，確定嗎？";
-    document.getElementById("confirm").style.display="flex";
-  }else{ prevHuman=numHuman;prevAI=numAI;resetGame(); }
+  var newAI=parseInt(this.value);
+  numAI=newAI;syncCounts("ai");
+  if(online&&isHost){
+    confirmChange(function(){ recalcOnlinePlayers(); },
+      function(){ numHuman=oldH;numAI=oldA;syncCounts();document.getElementById("aisel").value=oldA;updateSB(); },
+      "修改人數就要重新開始遊戲，確定嗎？");
+    return;
+  }
+  confirmChange(function(){ prevHuman=numHuman;prevAI=numAI;resetGame(); },
+    function(){ numHuman=oldH;numAI=oldA;syncCounts();updateSB(); },
+    "修改人數就要重新開始遊戲，確定嗎？");
 });
 document.getElementById("winsel").addEventListener("change",function(){
   var v=parseInt(this.value),prev=winTarget;
-  if(online&&isHost){
+  confirmChange(function(){
     winTarget=v;
-    broadcast({t:"winTarget",val:v});
-    showMsg("已更改為突破 "+v+" 分結束",2000);
-  }else{
-    confirmChange(function(){ winTarget=v;resetGame(); },function(){ winTarget=prev;document.getElementById("winsel").value=prev; },"改變結束分數會讓遊戲重新開始，確定嗎？");
-  }
+    if(online&&isHost){
+      broadcast({t:"winTarget",val:v});
+    }
+    resetGame();
+  },function(){ winTarget=prev;document.getElementById("winsel").value=prev; },"修改分數就要重新開始遊戲，確定嗎？");
 });
 document.getElementById("btnWinInfo").addEventListener("click",function(){
   var d=document.createElement("div");
@@ -2301,7 +2316,7 @@ function setupConnHandlers(c){
       document.getElementById("psel").value=localHumans;
       broadcastIdxUpdates();
       updateRoomUI();
-      showCenterNotice(pName+"色玩家離開房間，遊戲即將重新開始。");
+      showCenterNotice(pName+"色離開房間了，遊戲即將重新開始。");
       broadcast({t:"left",name:pName});
       setTimeout(function(){ resetGame();broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});checkAloneInRoom(); },2000);
     },HOST_GRACE_MS);
@@ -2555,7 +2570,7 @@ function handleNetData(d){
     btn.onclick=function(){cdiv.remove();};
     box.appendChild(btn);cdiv.appendChild(box);document.body.appendChild(cdiv);
   }
-  if(d.t==="left"){ showCenterNotice(d.name+"色玩家離開房間，遊戲即將重新開始。"); }
+  if(d.t==="left"){ showCenterNotice(d.name+"色離開房間了，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
   if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
