@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.4.5</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.4</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -232,7 +232,7 @@ function renderHexAt(col,row){
     ctx.drawImage(tileImgs[imgKey],0,0,TW,TH);ctx.restore();
   }
   var gridColor=currentTheme==="sushi"?"#999":"rgba(255,255,255,0.5)";
-  var gridWidth=currentTheme==="sushi"?1:1;
+  var gridWidth=1;
   ctx.strokeStyle=gridColor;ctx.lineWidth=gridWidth;
   for(var i=0;i<6;i++){ var a=i*Math.PI/3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(R*Math.cos(a),R*Math.sin(a));ctx.stroke(); }
   for(var i=0;i<6;i++){ var a1=i*Math.PI/3,a2=(i+1)*Math.PI/3;ctx.beginPath();ctx.moveTo(R*Math.cos(a1),R*Math.sin(a1));ctx.lineTo(R*Math.cos(a2),R*Math.sin(a2));ctx.stroke(); }
@@ -546,7 +546,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.4.5");
+  lines.push("版本: v2.5.4");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -853,14 +853,33 @@ function tryPlaceFence(e){
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
   var pci=curP();
   var fg=document.createElementNS(NS,"g");
-  var rc=document.createElementNS(NS,"rect"),fw=len*0.88,fh=12,ang2=Math.atan2(dy,dx)*180/Math.PI;
-  rc.setAttribute("x",(-fw/2).toFixed(2));rc.setAttribute("y",(-fh/2).toFixed(2));
-  rc.setAttribute("width",fw.toFixed(2));rc.setAttribute("height",fh.toFixed(2));
-  rc.setAttribute("rx","1.5");rc.setAttribute("ry","1.5");
-  rc.setAttribute("fill",FCOLORS[pci]);rc.setAttribute("stroke","#222");rc.setAttribute("stroke-width","1.8");
-  rc.setAttribute("class","fs");rc.style.transformOrigin="0 0";
+  var fw=len*0.88,ang2=Math.atan2(dy,dx)*180/Math.PI;
   fg.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang2.toFixed(2)+")");
-  fg.appendChild(rc);fenceLayer.appendChild(fg);
+  if(currentTheme==="sushi"){
+    // Chopsticks: two tapered sticks
+    var offT=5.6,offN=2.0,tw=7,nw=2.4,hw=fw/2;
+    for(var ci=0;ci<2;ci++){
+      var s=ci===0?-1:1;
+      var chop=document.createElementNS(NS,"polygon");
+      chop.setAttribute("points",
+        (-hw)+","+(s*(offT-tw/2)).toFixed(2)+" "+
+        (hw)+","+(s*(offN-nw/2)).toFixed(2)+" "+
+        (hw)+","+(s*(offN+nw/2)).toFixed(2)+" "+
+        (-hw)+","+(s*(offT+tw/2)).toFixed(2));
+      chop.setAttribute("fill",FCOLORS[pci]);chop.setAttribute("stroke","#5a3a1a");chop.setAttribute("stroke-width","0.6");
+      chop.setAttribute("class","fs");
+      fg.appendChild(chop);
+    }
+  }else{
+    var rc=document.createElementNS(NS,"rect"),fh=12;
+    rc.setAttribute("x",(-fw/2).toFixed(2));rc.setAttribute("y",(-fh/2).toFixed(2));
+    rc.setAttribute("width",fw.toFixed(2));rc.setAttribute("height",fh.toFixed(2));
+    rc.setAttribute("rx","1.5");rc.setAttribute("ry","1.5");
+    rc.setAttribute("fill",FCOLORS[pci]);rc.setAttribute("stroke","#222");rc.setAttribute("stroke-width","1.8");
+    rc.setAttribute("class","fs");rc.style.transformOrigin="0 0";
+    fg.appendChild(rc);
+  }
+  fenceLayer.appendChild(fg);
   // Glow effect: blurred white rect behind fence
   var glow=document.createElementNS(NS,"rect");
   var gw=len*0.95,gh=40;
