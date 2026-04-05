@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.4</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.5</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -231,7 +231,7 @@ function renderHexAt(col,row){
     if(((col*5231+row*9137+i*2741)>>>0)%2){ctx.translate(TW/2,0);ctx.scale(-1,1);ctx.translate(-TW/2,0);}
     ctx.drawImage(tileImgs[imgKey],0,0,TW,TH);ctx.restore();
   }
-  var gridColor=currentTheme==="sushi"?"#999":"rgba(255,255,255,0.5)";
+  var gridColor=currentTheme==="sushi"?"#ccc":"rgba(255,255,255,0.5)";
   var gridWidth=1;
   ctx.strokeStyle=gridColor;ctx.lineWidth=gridWidth;
   for(var i=0;i<6;i++){ var a=i*Math.PI/3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(R*Math.cos(a),R*Math.sin(a));ctx.stroke(); }
@@ -546,7 +546,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.5.4");
+  lines.push("版本: v2.5.5");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
