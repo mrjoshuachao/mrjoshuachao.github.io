@@ -182,7 +182,7 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;top:28px;left:28px;z-index:100;text-align:left;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.7.0</div>
+<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.7.1</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -1657,6 +1657,18 @@ function calcMoveDur(pathLen){
 }
 
 function startMoveAnim(sprite,blob,animPts,onDone){
+  // In background: skip animation, snap to end position
+  if(document.hidden&&(autoBattleActive||aiMode)){
+    const endPt=animPts[animPts.length-1];
+    sprite.position.copy(endPt);
+    orientPiece(sprite,endPt);
+    if(blob){
+      const bp=endPt.clone().normalize().multiplyScalar(R);
+      blob.position.copy(bp);orientPiece(blob,bp);
+    }
+    setTimeout(onDone,10);
+    return;
+  }
   let pathLen=0;
   for(let i=1;i<animPts.length;i++) pathLen+=animPts[i].distanceTo(animPts[i-1]);
   const dur=calcMoveDur(pathLen);
@@ -2417,6 +2429,8 @@ function rotateGlobeToFace(localDir,dur,onDone){
   if(worldDir.z>0.88){if(onDone)onDone();return;}
   const Qr=new THREE.Quaternion().setFromUnitVectors(worldDir,new THREE.Vector3(0,0,1));
   const endQ=new THREE.Quaternion().multiplyQuaternions(Qr,globe.quaternion);
+  // In background: skip animation, snap instantly
+  if(document.hidden){globe.quaternion.copy(endQ);if(onDone)onDone();return;}
   globeRotAnim={startQ:globe.quaternion.clone(),endQ,t:0,dur:dur||650,onDone};
 }
 
@@ -2741,6 +2755,43 @@ function animate(){
   } // end pause guard
   renderer.render(scene,camera);
 }
+
+// ── Background tab support ────────────────────────────────────────────────────
+// requestAnimationFrame stops when tab is hidden, blocking moveAnim/globeRotAnim
+// completion. This interval-based driver flushes stuck animations in background.
+setInterval(()=>{
+  if(!document.hidden)return;
+  if(!(autoBattleActive||aiMode))return;
+  // Complete globeRotAnim instantly
+  if(globeRotAnim){
+    globe.quaternion.copy(globeRotAnim.endQ);
+    const cb=globeRotAnim.onDone;
+    globeRotAnim=null;
+    if(cb)cb();
+  }
+  // Complete moveAnim instantly
+  if(moveAnim){
+    const endPt=moveAnim.pts[moveAnim.pts.length-1];
+    moveAnim.sprite.position.copy(endPt);
+    orientPiece(moveAnim.sprite,endPt);
+    if(moveAnim.blob){
+      const bp=endPt.clone().normalize().multiplyScalar(R);
+      moveAnim.blob.position.copy(bp);
+      orientPiece(moveAnim.blob,bp);
+    }
+    const cb=moveAnim.onDone;
+    moveAnim=null;
+    if(cb)cb();
+  }
+  // Complete capture fade instantly
+  captureFlyAnims.forEach(a=>{
+    a.sprite.traverse(c=>{
+      if((c.isMesh||c.isSprite)&&c.material)c.material.opacity=0;
+    });
+    globe.remove(a.sprite);
+  });
+  captureFlyAnims=[];
+},1500);
 
 const AUTO_DELAY = 300;        // ms between moves (AI thinking time is the main pacing now)
 const AUTO_MAX_MOVES = 250;    // draw if exceeded
