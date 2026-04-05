@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -426,7 +426,7 @@ function kickPlayer(pi){
   conns[ci]._replaced=true; // prevent close handler from processing
   conns[ci].send({t:"kicked",name:pName});
   setTimeout(function(){try{conns[ci].close();}catch(e){}},300);
-  if(conns[ci]._hb)clearInterval(conns[ci]._hb);
+  if(conns[ci]._hb)clearInterval(conns[ci]._hb);if(conns[ci]._hbCheck)clearInterval(conns[ci]._hbCheck);
   if(conns[ci]._reconnToken)delete hostReconnSlots[conns[ci]._reconnToken];
   conns.splice(ci,1);connHumans.splice(ci,1);
   recalcNumP();
@@ -442,7 +442,8 @@ function kickPlayer(pi){
 
 function updateSB(){
   var sa=document.getElementById("scoreArea");sa.innerHTML="";
-  for(var i=0;i<numP;i++){
+  for(var ti=0;ti<numP;ti++){
+    var i=turnOrder[ti];
     var s=document.createElement("span");s.className="ps";s.id="pd"+i;
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
@@ -546,7 +547,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.0");
+  lines.push("版本: v2.6.1");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1802,7 +1803,7 @@ window.resetGame=function(){
       for(var i=0;i<conns.length;i++){
         if(connHumans[i]===1){
           var pIdx=getConnPlayerIdx(i);
-          try{conns[i].send({t:"init",idx:pIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:[],inProgress:false,lobby:false});}catch(e){}
+          try{conns[i].send({t:"init",idx:pIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:[],inProgress:false,lobby:false,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
         }
       }
     }
@@ -1923,7 +1924,8 @@ function fetchTurnServers(cb){
 
 // === KEEPALIVE & RECONNECTION SYSTEM ===
 var HB_INTERVAL=8000;       // heartbeat every 8s
-var HOST_GRACE_MS=60000;     // host waits 60s before removing disconnected player
+var HOST_GRACE_MS=15000;     // host waits 15s before removing disconnected player
+var HB_TIMEOUT_MS=20000;     // if no data from client for 20s, consider dead
 var CLIENT_RECONN_MAX=5;     // client tries 5 reconnect attempts
 var CLIENT_RECONN_DELAY=3000;// 3s between reconnect attempts
 var reconnToken="";          // unique token for this client session
@@ -1989,7 +1991,7 @@ function initiateClientReconnect(){
   reconnAttempt=0;
   // Clean up old connection without destroying peer state fully
   for(var i=0;i<conns.length;i++){
-    if(conns[i]._hb)clearInterval(conns[i]._hb);
+    if(conns[i]._hb)clearInterval(conns[i]._hb);if(conns[i]._hbCheck)clearInterval(conns[i]._hbCheck);
     try{conns[i].close();}catch(e){}
   }
   conns=[];
@@ -2229,7 +2231,7 @@ function hostHandleConn(c){
         for(var i=conns.length-1;i>=0;i--){
           if(conns[i]._reconnToken===d.token&&conns[i]!==c){
             conns[i]._replaced=true;
-            if(conns[i]._hb)clearInterval(conns[i]._hb);
+            if(conns[i]._hb)clearInterval(conns[i]._hb);if(conns[i]._hbCheck)clearInterval(conns[i]._hbCheck);
             try{conns[i].close();}catch(e){}
             conns.splice(i,1);connHumans.splice(i,1);
           }
@@ -2255,7 +2257,7 @@ function hostHandleConn(c){
         var startIdx=localHumans;
         for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
         var gameInProgress=(fci>0||Object.keys(fences).length>0);
-        try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive});}catch(e){}
+        try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:gameInProgress,lobby:lobbyActive,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
         broadcastIdxUpdates();
         updateRoomUI();updateSB();
         setupConnHandlers(c);
@@ -2278,7 +2280,7 @@ function hostHandleConn(c){
         c.on("data",function(d2){
           if(d2.t==="accept_spectate"){
             conns.push(c);connHumans.push(0);
-            try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
+            try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
             setupConnHandlers(c);
           }
         });
@@ -2294,7 +2296,7 @@ function hostHandleConn(c){
           // Mid-game: join as spectator, activate on next game reset
           conns.push(c);connHumans.push(0);
           c._pendingPlayer=true; // will become active player on reset
-          try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true});}catch(e){}
+          try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
           setupConnHandlers(c);
           showMsg(cname+"色加入觀戰，下局開始時加入遊戲",3000);
         }else{
@@ -2304,7 +2306,7 @@ function hostHandleConn(c){
           var startIdx=localHumans;
           for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
           var pName=FNAMES[startIdx]||"新";
-          try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:false,lobby:lobbyActive});}catch(e){}
+          try{c.send({t:"init",idx:startIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:false,lobby:lobbyActive,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
           document.getElementById("psel").value=localHumans;
           broadcastIdxUpdates();
           updateRoomUI();updateSB();
@@ -2341,7 +2343,15 @@ function showHostApproval2(msg,onApprove,onReject){
 function setupConnHandlers(c){
   // Heartbeat to keep WebRTC alive
   c._hb=setInterval(function(){try{c.send({t:"ping"});}catch(e){}},HB_INTERVAL);
+  c._lastData=Date.now();
+  c._hbCheck=setInterval(function(){
+    if(Date.now()-c._lastData>HB_TIMEOUT_MS){
+      clearInterval(c._hbCheck);
+      try{c.close();}catch(e){}
+    }
+  },HB_INTERVAL);
   c.on("data",function(d){
+    c._lastData=Date.now();
     // Cancel pending disconnect on ANY data (including ping/pong)
     if(c._dcTimer){clearTimeout(c._dcTimer);c._dcTimer=null;}
     // Also remove reconnection slot if client is still alive
@@ -2401,6 +2411,7 @@ function setupConnHandlers(c){
   });
   c.on("close",function(){
     if(c._hb)clearInterval(c._hb);
+    if(c._hbCheck)clearInterval(c._hbCheck);
     // If this connection was replaced by a reconnection, do nothing
     if(c._replaced)return;
     var ci=conns.indexOf(c);
@@ -2604,12 +2615,13 @@ function handleNetData(d){
   if(d.t==="init"){
     var wa=document.getElementById("waitApproval");if(wa)wa.remove();
     myIdx=d.idx;seed=d.seed;numP=d.numP;advMode=d.advMode;winTarget=d.winTarget;
-    numHuman=numP;numAI=0;
+    numAI=d.numAI||0;numHuman=numP-numAI;
     document.getElementById("psel").value=localHumans;
     document.getElementById("aisel").value=0;
     document.getElementById("advToggle").checked=advMode;
     document.getElementById("winsel").value=winTarget;
     netApplying=true;resetGame();netApplying=false;
+    if(d.turnOrder)turnOrder=d.turnOrder;
     for(var i=0;i<d.log.length;i++){
       netApplying=true;
       var le=d.log[i],edge={x1:le.x1,y1:le.y1,x2:le.x2,y2:le.y2,key:le.key};
@@ -2697,7 +2709,7 @@ function handleNetData(d){
     var newPeerID=d.peerID;
     // Extract room code from peer ID (format: "baa-XXXXX")
     var newCode=newPeerID.replace("baa-","");
-    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);try{conns[i].close();}catch(e){}}
+    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);if(conns[i]._hbCheck)clearInterval(conns[i]._hbCheck);try{conns[i].close();}catch(e){}}
     conns=[];connHumans=[];
     if(peer)try{peer.destroy();}catch(e){}
     reconnToken=genReconnToken();
@@ -2742,7 +2754,7 @@ function handleNetData(d){
     showPersistMsg("你成為新房主，正在建立連線...");
     var mig=d;
     var oldConn=conns[0]; // keep alive to send confirmation
-    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);}
+    for(var i=0;i<conns.length;i++){if(conns[i]._hb)clearInterval(conns[i]._hb);if(conns[i]._hbCheck)clearInterval(conns[i]._hbCheck);}
     conns=[];connHumans=[];
     if(peer)try{peer.destroy();}catch(e){}
     isHost=true;myIdx=0;
