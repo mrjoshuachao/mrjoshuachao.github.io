@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.1</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.2</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -240,7 +240,7 @@ function renderHexAt(col,row){
   return hexCache[key];
 }
 var turnOrder=[0,1,2,3,4,5];
-function curP(){ return turnOrder[fci%numP]; }
+function curP(){ var p=turnOrder[fci%numP]; return (p!==undefined)?p:0; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
   if(online){
@@ -444,6 +444,7 @@ function updateSB(){
   var sa=document.getElementById("scoreArea");sa.innerHTML="";
   for(var ti=0;ti<numP;ti++){
     var i=turnOrder[ti];
+    if(i===undefined||i>=6)continue;
     var s=document.createElement("span");s.className="ps";s.id="pd"+i;
     s.style.color=FCOLORS[i];
     s.style.position="relative";s.style.display="inline-block";s.style.textAlign="center";
@@ -547,7 +548,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.1");
+  lines.push("版本: v2.6.2");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -2197,6 +2198,12 @@ function recalcNumP(){
   var total=localHumans+clientTotal+numAI;
   if(total>6)total=6;
   numHuman=total-numAI;numP=total;
+  // Ensure turnOrder matches numP
+  while(turnOrder.length<numP){
+    var used={};for(var i=0;i<turnOrder.length;i++)used[turnOrder[i]]=1;
+    for(var i=0;i<numP;i++){if(!used[i]){turnOrder.push(i);break;}}
+  }
+  if(turnOrder.length>numP)turnOrder=turnOrder.filter(function(x){return x<numP;}).slice(0,numP);
 }
 // Get the player index for connection ci (accounting for multi-human connections)
 function getConnPlayerIdx(ci){
@@ -2699,7 +2706,7 @@ function handleNetData(d){
   if(d.t==="left"){ showCenterNotice(d.name+"色離開房間了，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
   if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了",4000); }
-  if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
+  if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;while(turnOrder.length<numP){var u={};for(var i=0;i<turnOrder.length;i++)u[turnOrder[i]]=1;for(var i=0;i<numP;i++){if(!u[i]){turnOrder.push(i);break;}}}updateSB();} }
   if(d.t==="host_migrating"){
     showPersistMsg(d.msg||"房主離開了，正在轉移房間...");
   }
