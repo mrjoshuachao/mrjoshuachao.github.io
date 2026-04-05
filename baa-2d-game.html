@@ -87,7 +87,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div class="tgl" style="display:none"><label class="sw"><input type="checkbox" id="advToggle"><span class="sl"></span></label><label for="advToggle" id="advLabel" style="opacity:1">進階規則</label></div>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="tbtn" id="btnRules">觀看規則</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.0.9</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.0.7</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -223,11 +223,26 @@ function curP(){ return turnOrder[fci%numP]; }
 function shuffleTurnOrder(){
   turnOrder=[];for(var i=0;i<numP;i++)turnOrder.push(i);
   if(online){
-    // Online: colors stay fixed (host=red, 2nd=blue, etc.), turns left-to-right
+    // Online: colors stay fixed, shuffle TURN ORDER
+    // Reset colors to base (fixed: host=red, 2nd=blue, etc.)
     for(var i=0;i<6;i++){FCOLORS[i]=FCOLORS_BASE[i];FNAMES[i]=FNAMES_BASE[i];}
+    // Set aiSlots without shuffling
     for(var i=0;i<6;i++){aiSlots[i]=(i>=(numP-numAI)&&i<numP);}
+    // Fisher-Yates shuffle turn order using seed
+    var rng=seed;
+    for(var i=turnOrder.length-1;i>0;i--){
+      rng=(rng*16807+0)%2147483647;
+      var j=rng%(i+1);
+      var tmp=turnOrder[i];turnOrder[i]=turnOrder[j];turnOrder[j]=tmp;
+    }
+    // Ensure AI never goes first
+    if(numAI>0&&numAI<numP&&aiSlots[turnOrder[0]]){
+      for(var i=1;i<numP;i++){
+        if(!aiSlots[turnOrder[i]]){var tmp=turnOrder[0];turnOrder[0]=turnOrder[i];turnOrder[i]=tmp;break;}
+      }
+    }
   }else{
-    // Offline: shuffle colors, turns left-to-right
+    // Offline: shuffle COLORS (positions get random colors), turns stay left-to-right
     shuffleColors();
   }
 }
@@ -510,7 +525,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.0.9");
+  lines.push("版本: v2.0.7");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1711,26 +1726,28 @@ window.resetGame=function(){
   if(!online||isHost)scheduleAI();
   // Activate pending spectators as real players on game reset
   if(online&&isHost&&!netApplying){
-    var activatedConns=[];
+    var activated=false;
     for(var i=0;i<conns.length;i++){
       if(conns[i]._pendingPlayer){
         conns[i]._pendingPlayer=false;
         connHumans[i]=1;
-        activatedConns.push(conns[i]);
+        activated=true;
       }
     }
-    if(activatedConns.length>0){
+    if(activated){
       recalcNumP();
       shuffleTurnOrder();
     }
+    // Send reset to existing active players
     broadcastIdxUpdates();
     broadcast({t:"reset",seed:seed,numP:numP,numAI:numAI,turnOrder:turnOrder.slice()});
-    // Send fresh init ONLY to newly activated players (not all active players)
-    for(var i=0;i<activatedConns.length;i++){
-      var ci=conns.indexOf(activatedConns[i]);
-      if(ci>=0){
-        var pIdx=getConnPlayerIdx(ci);
-        try{activatedConns[i].send({t:"init",idx:pIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:[],inProgress:false,lobby:false});}catch(e){}
+    // Send fresh init to newly activated players (overrides the reset)
+    if(activated){
+      for(var i=0;i<conns.length;i++){
+        if(connHumans[i]===1){
+          var pIdx=getConnPlayerIdx(i);
+          try{conns[i].send({t:"init",idx:pIdx,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:[],inProgress:false,lobby:false});}catch(e){}
+        }
       }
     }
     updateSB();
