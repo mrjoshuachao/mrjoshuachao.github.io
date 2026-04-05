@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.5</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.6</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -546,7 +546,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.5.5");
+  lines.push("版本: v2.5.6");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -857,7 +857,7 @@ function tryPlaceFence(e){
   fg.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang2.toFixed(2)+")");
   if(currentTheme==="sushi"){
     // Chopsticks: two tapered sticks
-    var offT=5.6,offN=2.0,tw=7,nw=2.4,hw=fw/2;
+    var offT=3.5,offN=3.0,tw=7,nw=5.5,hw=fw/2;
     for(var ci=0;ci<2;ci++){
       var s=ci===0?-1:1;
       var chop=document.createElementNS(NS,"polygon");
