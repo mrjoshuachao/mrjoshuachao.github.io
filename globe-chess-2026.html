@@ -577,9 +577,10 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
+const _VERSION='v1.8.0';
 const _versionSprites=[];
 (function(){
-  const VER='v1.7.2';
+  const VER=_VERSION;
   const S=256;
   const cv=document.createElement('canvas'); cv.width=S; cv.height=S/2;
   const ctx=cv.getContext('2d');
@@ -3216,6 +3217,39 @@ function evaluate(){
         s+=(bk?1:-1)*pen;
       }
     }
+    // Endgame piece coordination: minor pieces should stay near own king
+    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+      const p=board[a][o];if(!p||p.type==='K'||p.type==='P')continue;
+      const bk=p.color==='black';
+      const kLat=bk?bKingLat:wKingLat, kLon=bk?bKingLon:wKingLon;
+      if(kLat<0)continue;
+      const dist=Math.max(Math.abs(a-kLat),_ld(o,kLon));
+      // Knight/bishop far from own king in endgame is bad (can't coordinate for mate)
+      if(p.type==='N'||p.type==='B'){
+        if(dist>3) s+=(bk?-1:1)*(dist-3)*12; // penalty for being far from own king
+      }
+      // Rook can operate from distance, but should still be somewhat coordinated
+      if(p.type==='R'&&dist>5) s+=(bk?-1:1)*(dist-5)*6;
+    }
+    // King should move toward own remaining pieces, not flee randomly
+    for(let side=0;side<2;side++){
+      const kLat=side===0?bKingLat:wKingLat;
+      const kLon=side===0?bKingLon:wKingLon;
+      if(kLat<0)continue;
+      const sgn=side===0?1:-1;
+      const col=side===0?'black':'white';
+      let totalDist=0,pieceCount=0;
+      for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+        const p=board[a][o];if(!p||p.color!==col||p.type==='K')continue;
+        totalDist+=Math.max(Math.abs(a-kLat),_ld(o,kLon));
+        pieceCount++;
+      }
+      if(pieceCount>0){
+        const avgDist=totalDist/pieceCount;
+        // Penalize king being far from its own army
+        if(avgDist>3) s-=sgn*Math.round((avgDist-3)*8);
+      }
+    }
   }
   // Middlegame: queen should stay near own king for defense when king is exposed
   if(!eg){
@@ -3732,7 +3766,7 @@ ${b}
 ${_autoBoardSnap()}
 SYSTEM INFO
 ${b}
-  Globe Chess Auto Battle  v2
+  Globe Chess Auto Battle  ${_VERSION}
   AI for both sides  : evaluate() + iterative deepening α-β + quiescence(4) + PST + pawn structure
   White strategy     : minimize evaluate()  (PST, development, polar-tactics, pawn structure)
   Black strategy     : maximize evaluate()  (PST, development, polar-tactics, pawn structure)
