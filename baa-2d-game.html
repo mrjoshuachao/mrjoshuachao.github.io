@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.1</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.2</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -558,7 +558,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.7.1");
+  lines.push("版本: v2.7.2");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1837,7 +1837,7 @@ window.resetGame=function(){
         }
       }
     }
-    updateSB();
+    updateRoomUI();updateSB();
   }
 };
 
@@ -1922,10 +1922,11 @@ var hostModalShown=false;
 var lobbyActive=false;
 function updateRoomUI(){
   if(!online||!isHost)return;
-  var aisel=document.getElementById("aisel");
   var clientTotal=0;
   for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
   var totalHumans=localHumans+clientTotal;
+  // Update AI selector: maxAI = 6 - totalHumans
+  var aisel=document.getElementById("aisel");
   var maxAI=6-totalHumans;
   if(maxAI<0)maxAI=0;
   var curAI=numAI;
@@ -1937,6 +1938,26 @@ function updateRoomUI(){
     aisel.appendChild(o);
   }
   if(numAI!==curAI){numAI=curAI;syncCounts();}
+  // Update host psel: maxLocal = 6 - clientTotal - numAI
+  var ps=document.getElementById("psel");
+  var maxLocal=6-clientTotal-numAI;
+  if(maxLocal<1)maxLocal=1;
+  if(localHumans>maxLocal)localHumans=maxLocal;
+  ps.innerHTML="";
+  for(var i=1;i<=maxLocal;i++){
+    var o=document.createElement("option");o.value=i;o.textContent=i;
+    if(i===localHumans)o.selected=true;
+    ps.appendChild(o);
+  }
+  // Broadcast max to each client so they can cap their own psel
+  for(var i=0;i<conns.length;i++){
+    if(connHumans[i]<=0)continue; // skip spectators
+    var otherHumans=localHumans+numAI;
+    for(var j=0;j<connHumans.length;j++){if(j!==i)otherHumans+=connHumans[j];}
+    var cMax=6-otherHumans;
+    if(cMax<1)cMax=1;
+    try{conns[i].send({t:"max_humans",max:cMax});}catch(e){}
+  }
 }
 
 var METERED_URL="https://baaboardgame.metered.live/api/v1/turn/credentials?apiKey=782a454ec61feed414f2ce771c1273595c91";
@@ -2242,7 +2263,7 @@ function recalcOnlinePlayers(){
   seed=newSeed;
   netApplying=true;resetGame();netApplying=false;
   broadcast({t:"host_changed",msg:msg,numP:numP,numAI:numAI,seed:newSeed,turnOrder:turnOrder.slice()});
-  updateSB();
+  updateRoomUI();updateSB();
 }
 
 function showHostApproval(onApprove,onReject){
@@ -2319,6 +2340,7 @@ function hostHandleConn(c){
         for(var i=0;i<conns.length-1;i++)startIdx+=connHumans[i];
         try{c.send({t:"reconn_ok",idx:startIdx});}catch(e){}
         broadcastIdxUpdates();
+        updateRoomUI();
         setupConnHandlers(c);
         return;
       }
@@ -2374,6 +2396,7 @@ function hostHandleConn(c){
           try{c.send({t:"init",idx:-1,seed:seed,numP:numP,advMode:advMode,winTarget:winTarget,scores:scores.slice(),fci:fci,log:actionLog,inProgress:true,spectateOnly:true,turnOrder:turnOrder.slice(),numAI:numAI});}catch(e){}
           setupConnHandlers(c);
           showMsg(cname+"色加入觀戰，下局開始時加入遊戲",3000);
+          updateRoomUI();
         }else{
           // Lobby or fresh game: join as active player
           conns.push(c);connHumans.push(1);
@@ -2771,6 +2794,17 @@ function handleNetData(d){
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
   if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
+  if(d.t==="max_humans"){
+    var ps=document.getElementById("psel");
+    var maxH=d.max||1;
+    if(localHumans>maxH)localHumans=maxH;
+    ps.innerHTML="";
+    for(var i=1;i<=maxH;i++){
+      var o=document.createElement("option");o.value=i;o.textContent=i;
+      if(i===localHumans)o.selected=true;
+      ps.appendChild(o);
+    }
+  }
   if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;document.getElementById("btnRestart").disabled=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
   if(d.t==="host_changed"){
