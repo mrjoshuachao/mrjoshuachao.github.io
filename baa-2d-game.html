@@ -896,7 +896,7 @@ function tryPlaceFence(e){
   }
   history.push({key:key,fci:fci-1,sc:scoreChanges,ct:newCompleted,edge:e});
   ilCache={};
-  updateSB();checkWin();scheduleAI();
+  updateSB();checkWin();if(!online||isHost)scheduleAI();
   if(online&&!netApplying){
     var act={x1:e.x1,y1:e.y1,x2:e.x2,y2:e.y2,key:key};
     actionLog.push(act);
@@ -1688,7 +1688,6 @@ document.getElementById("btnRestart").addEventListener("click",function(){
   if(spectator){showMsg("觀戰中，無法重新開始");return;}
   if(online&&!isHost){
     broadcast({t:"req_restart",name:FNAMES[myIdx]});
-    showCenterNotice("你按了想要重新開始，正在等待房主允許。",true);
     return;
   }
   var d=document.createElement("div");d.id="restartDlg";
@@ -2567,7 +2566,7 @@ function lockOnlineUI(){
   localHumans=1;
   ps.disabled=false;
   document.getElementById("winsel").disabled=!isHost;
-  document.getElementById("btnRestart").disabled=false;
+  document.getElementById("btnRestart").disabled=spectator;
   document.getElementById("btnUndo").style.display="none";
   var rcBtn=document.getElementById("btnRoomCode");
   rcBtn.style.display="";rcBtn.textContent="房間號碼";
@@ -2684,15 +2683,15 @@ function handleNetData(d){
       showMsg("旁觀模式",3000);
     }
   }
-  if(d.t==="do"){ tryPlaceFenceNet(d.edge); }
+  if(d.t==="do"){ actionLog.push(d.edge); tryPlaceFenceNet(d.edge); }
   if(d.t==="doundo"){ undoLast(); }
   if(d.t==="players"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;updateSB();} }
   if(d.t==="idx_update"){ myIdx=d.idx;savedMyIdx=d.idx;updateSB(); }
   if(d.t==="winTarget"){ winTarget=d.val;document.getElementById("winsel").value=d.val;showMsg("房主更改為突破 "+d.val+" 分結束",2000); }
-  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
+  if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;document.getElementById("btnRestart").disabled=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
-    spectator=false;netApplying=true;resetGame();netApplying=false;
+    spectator=false;document.getElementById("btnRestart").disabled=false;netApplying=true;resetGame();netApplying=false;
     if(d.turnOrder)turnOrder=d.turnOrder;
     updateSB();
     var cdiv=document.createElement("div");
