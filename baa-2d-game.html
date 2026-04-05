@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.8</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -548,7 +548,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.8");
+  lines.push("版本: v2.7.0");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -2533,40 +2533,40 @@ function joinRoom(code){
     +"<div style='margin-top:16px'><button id='joinCancel' style='padding:6px 20px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#666;cursor:pointer'>取消</button></div>"
     +"</div>";
   document.body.appendChild(spin);
-  document.getElementById("joinCancel").onclick=function(){var el=document.getElementById("joinSpin");if(el)el.remove();online=false;if(peer)try{peer.destroy();}catch(e){}peer=null;};
+  var attempt=0;
+  var gen=0; // generation counter — stale callbacks from old peers are ignored
+  document.getElementById("joinCancel").onclick=function(){var el=document.getElementById("joinSpin");if(el)el.remove();online=false;gen++;if(peer)try{peer.destroy();}catch(e){}peer=null;};
   // Add spin animation if not exists
   if(!document.getElementById("spinCSS")){
     var st=document.createElement("style");st.id="spinCSS";st.textContent="@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
     document.head.appendChild(st);
   }
   function removeSpinner(){ var el=document.getElementById("joinSpin");if(el)el.remove(); }
-  var attempt=0;
-  var retrying=false;
   function scheduleRetry(delay){
-    if(retrying||!online)return;
-    retrying=true;
+    if(!online)return;
     attempt++;
     var sp=document.getElementById("joinSpin");
     if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間 (第"+attempt+"次)";}
-    setTimeout(function(){ retrying=false; tryConnect(); },delay);
+    setTimeout(tryConnect,delay);
   }
   var modes=[peerOpts,peerOpts,peerRelayOpts,peerOpts,peerRelayOpts];
   var timeouts=[12000,12000,15000,15000,18000];
   function tryConnect(){
     if(!online)return;
+    gen++; // increment generation — all old callbacks become stale
+    var myGen=gen;
     if(peer)try{peer.destroy();}catch(e){}
     var opts=modes[attempt%modes.length]||peerOpts;
     peer=new Peer(opts);
-    var peerReady=false;
     peer.on("open",function(){
-      peerReady=true;
+      if(myGen!==gen)return; // stale
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
       var connected=false;
       var timer=setTimeout(function(){
-        if(!connected&&online) scheduleRetry(500);
+        if(!connected&&online&&myGen===gen) scheduleRetry(500);
       },timeouts[attempt%timeouts.length]||15000);
       c.on("open",function(){
-        if(connected)return;
+        if(connected||myGen!==gen)return;
         connected=true;clearTimeout(timer);
         conns=[c];
         removeSpinner();
@@ -2598,20 +2598,18 @@ function joinRoom(code){
         }
       } });
       c.on("error",function(err){
-        if(!connected&&online){
+        if(!connected&&online&&myGen===gen){
           connected=true;clearTimeout(timer);
           scheduleRetry(1000);
         }
       });
     });
     peer.on("error",function(e){
-      if(!peerReady&&online){
-        // Peer itself failed to connect to signaling server
-        scheduleRetry(2000);
-      }else if(e.type==="peer-unavailable"){
+      if(myGen!==gen)return; // stale peer — ignore
+      if(e.type==="peer-unavailable"){
         scheduleRetry(2000);
       }else if(online){
-        scheduleRetry(1000);
+        scheduleRetry(2000);
       }
     });
   }
