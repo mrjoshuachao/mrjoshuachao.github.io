@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.6</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.7</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -548,7 +548,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.6");
+  lines.push("版本: v2.6.7");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -2168,12 +2168,14 @@ function createRoom(){
   acquireWebLock();
   acquireWebLock();
   document.getElementById("aisel").value=0;
-  peer=new Peer("baa-"+roomCode,peerOpts);
-  peer.on("open",function(){
-    var el=document.getElementById("createSpin");if(el)el.remove();
-    lockOnlineUI();
-    updateRoomUI();
-    resetGame();
+  function createPeer(){
+    if(peer)try{peer.destroy();}catch(e2){}
+    peer=new Peer("baa-"+roomCode,peerOpts);
+    peer.on("open",function(){
+      var el=document.getElementById("createSpin");if(el)el.remove();
+      lockOnlineUI();
+      updateRoomUI();
+      resetGame();
     // Show combined lobby overlay for host
     lobbyActive=true;
     var old=document.getElementById("lobbyOverlay");if(old)old.remove();
@@ -2202,9 +2204,15 @@ function createRoom(){
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
   peer.on("error",function(e){
-    var el=document.getElementById("createSpin");if(el)el.remove();
-    showMsg("連線錯誤："+e.type,5000);
+    if(e.type==="unavailable-id"){
+      roomCode=genCode();savedRoomCode=roomCode;
+    }
+    var sp=document.getElementById("createSpin");
+    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在重新連線";}
+    setTimeout(createPeer,2000);
   });
+  }
+  createPeer();
   });
   });
 }
@@ -2533,13 +2541,12 @@ function joinRoom(code){
   }
   function removeSpinner(){ var el=document.getElementById("joinSpin");if(el)el.remove(); }
   var attempt=0;
-  var maxAttempts=5;
-  var modes=[peerOpts,peerOpts,peerRelayOpts,peerOpts,peerRelayOpts];
-  var timeouts=[12000,12000,15000,15000,18000];
   function tryConnect(){
     if(!online)return;
     if(peer)try{peer.destroy();}catch(e){}
-    var opts=modes[attempt]||peerOpts;
+    var modes=[peerOpts,peerOpts,peerRelayOpts,peerOpts,peerRelayOpts];
+    var timeouts=[12000,12000,15000,15000,18000];
+    var opts=modes[attempt%modes.length]||peerOpts;
     peer=new Peer(opts);
     peer.on("open",function(){
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
@@ -2547,10 +2554,9 @@ function joinRoom(code){
       var timer=setTimeout(function(){
         if(!connected&&online){
           attempt++;
-          if(attempt<maxAttempts)tryConnect();
-          else{ removeSpinner();showMsg("無法加入房間，請確認房號正確",5000);online=false; }
+          setTimeout(tryConnect,1000);
         }
-      },timeouts[attempt]||15000);
+      },timeouts[attempt%timeouts.length]||15000);
       c.on("open",function(){
         connected=true;clearTimeout(timer);
         conns=[c];
@@ -2586,21 +2592,21 @@ function joinRoom(code){
         if(!connected&&online){
           connected=true;clearTimeout(timer);
           attempt++;
-          if(attempt<maxAttempts)setTimeout(tryConnect,500);
-          else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
+          setTimeout(tryConnect,1000);
         }
       });
     });
     peer.on("error",function(e){
       if(e.type==="peer-unavailable"){
-        // Room might not be registered yet on signaling server — retry
         attempt++;
-        if(attempt<maxAttempts)setTimeout(tryConnect,2000);
-        else{ removeSpinner();showMsg("找不到房間，請確認房號正確",5000);online=false; }
+        var sp=document.getElementById("joinSpin");
+        if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間";}
+        setTimeout(tryConnect,2000);
       }else if(online){
         attempt++;
-        if(attempt<maxAttempts)setTimeout(tryConnect,500);
-        else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
+        var sp=document.getElementById("joinSpin");
+        if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間";}
+        setTimeout(tryConnect,1000);
       }
     });
   }
