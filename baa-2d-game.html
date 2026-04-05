@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.2.6</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.2.7</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -535,7 +535,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.2.6");
+  lines.push("版本: v2.2.7");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -834,7 +834,7 @@ function isTreeEdge(e){
 function tryPlaceFence(e){
   if(gameOver)return;
   var key=e.key;
-  if(fences[key]){ fences[key].el.remove();delete fences[key];updateSB();return; }
+  if(fences[key]){ if(netApplying)return; fences[key].el.remove();delete fences[key];updateSB();return; }
   if(isInsideCompleted(e)){ showMsg("已經完成的圈地裡面不能再放柵欄");return; }
   if(isTreeEdge(e)){ showMsg("大樹旁邊不能放柵欄");return; }
   var illegal=wouldBeIllegal(e); if(illegal){ showMsg(illegal);return; }
@@ -2747,12 +2747,18 @@ function handleNetData(d){
 
 function tryPlaceFenceNet(e){
   var edge={x1:e.x1,y1:e.y1,x2:e.x2,y2:e.y2,key:e.key};
-  // Pan to fence location first
+  // Place fence IMMEDIATELY so game state stays in sync
+  hideRemotePreview();
+  netApplying=true;
+  tryPlaceFence(edge);
+  netApplying=false;
+  // Then smoothly pan to show the placed fence
+  commitView();
   var mx=(edge.x1+edge.x2)/2,my=(edge.y1+edge.y2)/2;
   var vw=window.innerWidth,vh=window.innerHeight;
   var tgtX=mx-vw/2,tgtY=my-vh/2;
   var fromX=panX,fromY=panY;
-  var startT=0,dur=800;
+  var startT=0,dur=500;
   function animPan(ts){
     if(!startT)startT=ts;
     var p=Math.min((ts-startT)/dur,1);
@@ -2761,13 +2767,7 @@ function tryPlaceFenceNet(e){
     panY=fromY+(tgtY-fromY)*ease;
     applyPan();
     if(p<1){ requestAnimationFrame(animPan); }
-    else{
-      commitView();fillView();
-      hideRemotePreview();
-      netApplying=true;
-      tryPlaceFence(edge);
-      netApplying=false;
-    }
+    else{ commitView();fillView(); }
   }
   requestAnimationFrame(animPan);
 }
