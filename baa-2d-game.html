@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.2</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -548,7 +548,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.6.2");
+  lines.push("版本: v2.6.3");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -1685,6 +1685,7 @@ document.getElementById("btnWinInfo").addEventListener("click",function(){
   box.appendChild(btn);d.appendChild(box);document.body.appendChild(d);
 });
 document.getElementById("btnRestart").addEventListener("click",function(){
+  if(spectator){showMsg("觀戰中，無法重新開始");return;}
   if(online&&!isHost){
     broadcast({t:"req_restart",name:FNAMES[myIdx]});
     showCenterNotice("你按了想要重新開始，正在等待房主允許。",true);
@@ -2172,8 +2173,8 @@ function recalcOnlinePlayers(){
   var msg="房主把人類玩家人數改成 "+numHuman+" 人、電腦玩家人數改成 "+numAI+" 人，遊戲重新開始";
   var newSeed=Date.now();
   seed=newSeed;
-  broadcast({t:"host_changed",msg:msg,numP:numP,numAI:numAI,seed:newSeed});
   netApplying=true;resetGame();netApplying=false;
+  broadcast({t:"host_changed",msg:msg,numP:numP,numAI:numAI,seed:newSeed,turnOrder:turnOrder.slice()});
   updateSB();
 }
 
@@ -2691,7 +2692,9 @@ function handleNetData(d){
   if(d.t==="reset"){ seed=d.seed;if(d.numP!==undefined){numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;}if(d.turnOrder)turnOrder=d.turnOrder;spectator=false;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB(); }
   if(d.t==="host_changed"){
     seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;
-    spectator=false;netApplying=true;resetGame();netApplying=false;updateSB();
+    spectator=false;netApplying=true;resetGame();netApplying=false;
+    if(d.turnOrder)turnOrder=d.turnOrder;
+    updateSB();
     var cdiv=document.createElement("div");
     cdiv.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
     var box=document.createElement("div");
