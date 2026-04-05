@@ -70,7 +70,7 @@
   #aiSwitch { display:none; }
   /* ── New Game (top right) ── */
   #newGameBtn {
-    position:fixed; bottom:48px; left:50%; transform:translateX(-50%);
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
     z-index:100; pointer-events:auto; text-align:center;
   }
   /* ── Test Mode (bottom left) ── */
@@ -182,7 +182,6 @@
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
 <button id="pieceLetterBtn" class="ui-btn" style="position:fixed;top:28px;left:28px;z-index:100;text-align:left;" onclick="togglePieceLetters()">Piece letter on</button>
 <button id="newGameBtn" class="ui-btn" onclick="resetGame()">New game</button>
-<div id="versionLabel" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Times New Roman',Times,serif;font-size:9px;font-style:italic;color:#fff;opacity:0.5;pointer-events:none;z-index:100;">v1.7.1</div>
 <button id="testBtn" class="ui-btn" onclick="toggleTestMode()">Test move</button>
 
 <!-- Test piece selector panel -->
@@ -576,6 +575,34 @@ for(let lat=0;lat<8;lat++){
     cellLabels.push(sp);
   }
 }
+
+// ── Version label sprites on polar caps ──────────────────────────────────────
+const _versionSprites=[];
+(function(){
+  const VER='v1.7.2';
+  const S=256;
+  const cv=document.createElement('canvas'); cv.width=S; cv.height=S/2;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.font=`italic 300 ${Math.round(S*0.16)}px "Times New Roman",Times,serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(180,180,180,0.7)';
+  ctx.fillText(VER,cv.width/2,cv.height/2);
+  const tex=new THREE.CanvasTexture(cv);
+  const sz=R*0.32;
+  // North pole
+  const spN=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:true,depthWrite:false,sizeAttenuation:true}));
+  spN.raycast=()=>{};
+  spN.position.set(0,R*1.02,0);
+  spN.scale.set(sz,sz/2,1);
+  globe.add(spN); _versionSprites.push(spN);
+  // South pole
+  const spS=new THREE.Sprite(new THREE.SpriteMaterial({map:tex.clone(),transparent:true,depthTest:true,depthWrite:false,sizeAttenuation:true}));
+  spS.raycast=()=>{};
+  spS.position.set(0,-R*1.02,0);
+  spS.scale.set(sz,sz/2,1);
+  globe.add(spS); _versionSprites.push(spS);
+})();
 
 // ─── Move Rules ───────────────────────────────────────────────────────────────
 function wL(n){return((n%8)+8)%8;}
@@ -2621,6 +2648,8 @@ function togglePieceLetters(){
   allSprites.forEach(grp=>{
     grp.traverse(c=>{if(c.isSprite)c.visible=_pieceLettersVisible;});
   });
+  // Toggle version labels on poles
+  _versionSprites.forEach(sp=>sp.visible=_pieceLettersVisible);
 }
 
 // ─── Animate ──────────────────────────────────────────────────────────────────
