@@ -1788,35 +1788,21 @@ window.resetGame=function(){
     var purged=false;
     for(var i=conns.length-1;i>=0;i--){
       var c=conns[i],dead=false;
-      // Check PeerJS open state
       if(!c.open)dead=true;
-      // Check WebRTC peerConnection state
-      if(!dead&&c.peerConnection){
-        var st=c.peerConnection.connectionState||c.peerConnection.iceConnectionState||"";
-        if(st==="disconnected"||st==="failed"||st==="closed")dead=true;
-      }
-      // Check dataChannel state
+      if(!dead&&c.peerConnection){var st=c.peerConnection.connectionState||c.peerConnection.iceConnectionState||"";if(st==="disconnected"||st==="failed"||st==="closed")dead=true;}
       if(!dead){try{var ch=c._dc||c.dataChannel;if(ch&&(ch.readyState==="closed"||ch.readyState==="closing"))dead=true;}catch(e){}}
-      // Check heartbeat timeout
       if(!dead&&c._lastData&&Date.now()-c._lastData>HB_TIMEOUT_MS)dead=true;
       if(dead){
         var pName=FNAMES[getConnPlayerIdx(i)]||"?";
-        if(c._hb)clearInterval(c._hb);
-        if(c._hbCheck)clearInterval(c._hbCheck);
+        if(c._hb)clearInterval(c._hb);if(c._hbCheck)clearInterval(c._hbCheck);
         if(c._dcTimer){clearTimeout(c._dcTimer);c._dcTimer=null;}
         if(c._reconnToken)delete hostReconnSlots[c._reconnToken];
-        c._replaced=true;
-        try{c.close();}catch(e){}
+        c._replaced=true;try{c.close();}catch(e){}
         conns.splice(i,1);connHumans.splice(i,1);
-        purged=true;
-        showMsg(pName+"色已斷線，自動移除",2000);
+        purged=true;showMsg(pName+"色已斷線，自動移除",2000);
       }
     }
-    if(purged){
-      recalcNumP();
-      broadcastIdxUpdates();
-      updateRoomUI();
-    }
+    if(purged){recalcNumP();broadcastIdxUpdates();updateRoomUI();}
     var activated=false;
     for(var i=0;i<conns.length;i++){
       if(conns[i]._pendingPlayer){
@@ -1926,7 +1912,6 @@ var hostModalShown=false;
 var lobbyActive=false;
 function updateRoomUI(){
   if(!online||!isHost)return;
-  // Update AI selector: max AI = 6 - current human count
   var aisel=document.getElementById("aisel");
   var clientTotal=0;
   for(var i=0;i<connHumans.length;i++)clientTotal+=connHumans[i];
@@ -2168,14 +2153,12 @@ function createRoom(){
   acquireWebLock();
   acquireWebLock();
   document.getElementById("aisel").value=0;
-  function createPeer(){
-    if(peer)try{peer.destroy();}catch(e2){}
-    peer=new Peer("baa-"+roomCode,peerOpts);
-    peer.on("open",function(){
-      var el=document.getElementById("createSpin");if(el)el.remove();
-      lockOnlineUI();
-      updateRoomUI();
-      resetGame();
+  peer=new Peer("baa-"+roomCode,peerOpts);
+  peer.on("open",function(){
+    var el=document.getElementById("createSpin");if(el)el.remove();
+    lockOnlineUI();
+    updateRoomUI();
+    resetGame();
     // Show combined lobby overlay for host
     lobbyActive=true;
     var old=document.getElementById("lobbyOverlay");if(old)old.remove();
@@ -2203,16 +2186,24 @@ function createRoom(){
     d.appendChild(box);document.body.appendChild(d);
   });
   peer.on("connection",function(c){ hostHandleConn(c); });
-  peer.on("error",function(e){
-    if(e.type==="unavailable-id"){
-      roomCode=genCode();savedRoomCode=roomCode;
-    }
+  peer.on("error",function hostErr(e){
+    if(e.type==="unavailable-id"){roomCode=genCode();}
     var sp=document.getElementById("createSpin");
-    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在重新連線";}
-    setTimeout(createPeer,2000);
+    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在重新連線...";}
+    else showMsg("正在重新連線...",2000);
+    setTimeout(function(){
+      if(!online)return;
+      if(peer)try{peer.destroy();}catch(e2){}
+      peer=new Peer("baa-"+roomCode,peerOpts);
+      peer.on("open",function(){
+        var el=document.getElementById("createSpin");if(el)el.remove();
+        lockOnlineUI();updateRoomUI();resetGame();
+        lobbyActive=true;showMsg("房間已創建: "+roomCode,2000);
+      });
+      peer.on("connection",function(c2){ hostHandleConn(c2); });
+      peer.on("error",hostErr);
+    },3000);
   });
-  }
-  createPeer();
   });
   });
 }
@@ -2533,40 +2524,34 @@ function joinRoom(code){
     +"<div style='margin-top:16px'><button id='joinCancel' style='padding:6px 20px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#666;cursor:pointer'>取消</button></div>"
     +"</div>";
   document.body.appendChild(spin);
-  var attempt=0;
-  var gen=0; // generation counter — stale callbacks from old peers are ignored
-  document.getElementById("joinCancel").onclick=function(){var el=document.getElementById("joinSpin");if(el)el.remove();online=false;gen++;if(peer)try{peer.destroy();}catch(e){}peer=null;};
+  document.getElementById("joinCancel").onclick=function(){var el=document.getElementById("joinSpin");if(el)el.remove();online=false;};
   // Add spin animation if not exists
   if(!document.getElementById("spinCSS")){
     var st=document.createElement("style");st.id="spinCSS";st.textContent="@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}";
     document.head.appendChild(st);
   }
   function removeSpinner(){ var el=document.getElementById("joinSpin");if(el)el.remove(); }
-  function scheduleRetry(delay){
-    if(!online)return;
-    attempt++;
-    var sp=document.getElementById("joinSpin");
-    if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間 (第"+attempt+"次)";}
-    setTimeout(tryConnect,delay);
-  }
+  var attempt=0;
+  var maxAttempts=15;
   var modes=[peerOpts,peerOpts,peerRelayOpts,peerOpts,peerRelayOpts];
   var timeouts=[12000,12000,15000,15000,18000];
   function tryConnect(){
     if(!online)return;
-    gen++; // increment generation — all old callbacks become stale
-    var myGen=gen;
     if(peer)try{peer.destroy();}catch(e){}
     var opts=modes[attempt%modes.length]||peerOpts;
     peer=new Peer(opts);
+    if(attempt>0){var sp=document.getElementById("joinSpin");if(sp){var t=sp.querySelector("div > div:nth-child(2)");if(t)t.textContent="正在繼續嘗試加入房間 (第"+(attempt+1)+"次)";}}
     peer.on("open",function(){
-      if(myGen!==gen)return; // stale
       var c=peer.connect("baa-"+roomCode,{reliable:true,serialization:"json"});
       var connected=false;
       var timer=setTimeout(function(){
-        if(!connected&&online&&myGen===gen) scheduleRetry(500);
+        if(!connected&&online){
+          attempt++;
+          if(attempt<maxAttempts)tryConnect();
+          else{ removeSpinner();showMsg("無法加入房間，請確認房號正確",5000);online=false; }
+        }
       },timeouts[attempt%timeouts.length]||15000);
       c.on("open",function(){
-        if(connected||myGen!==gen)return;
         connected=true;clearTimeout(timer);
         conns=[c];
         removeSpinner();
@@ -2598,18 +2583,24 @@ function joinRoom(code){
         }
       } });
       c.on("error",function(err){
-        if(!connected&&online&&myGen===gen){
+        if(!connected&&online){
           connected=true;clearTimeout(timer);
-          scheduleRetry(1000);
+          attempt++;
+          if(attempt<maxAttempts)setTimeout(tryConnect,500);
+          else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
         }
       });
     });
     peer.on("error",function(e){
-      if(myGen!==gen)return; // stale peer — ignore
       if(e.type==="peer-unavailable"){
-        scheduleRetry(2000);
+        // Room might not be registered yet on signaling server — retry
+        attempt++;
+        if(attempt<maxAttempts)setTimeout(tryConnect,2000);
+        else{ removeSpinner();showMsg("找不到房間，請確認房號正確",5000);online=false; }
       }else if(online){
-        scheduleRetry(2000);
+        attempt++;
+        if(attempt<maxAttempts)setTimeout(tryConnect,500);
+        else{ removeSpinner();showMsg("無法加入房間",5000);online=false; }
       }
     });
   }
