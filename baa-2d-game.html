@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.5.8</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.6.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -546,7 +546,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.5.8");
+  lines.push("版本: v2.6.0");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -852,34 +852,11 @@ function tryPlaceFence(e){
   var tfk={};for(var k in fences)tfk[k]=1;tfk[key]=1;
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2,dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
   var pci=curP();
-  var fg=document.createElementNS(NS,"g");
-  var fw=len*0.88,ang2=Math.atan2(dy,dx)*180/Math.PI;
-  fg.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang2.toFixed(2)+")");
-  if(currentTheme==="sushi"){
-    // Chopsticks: two tapered sticks
-    var offT=3.5,offN=2.1,tw=7,nw=4.2,hw=fw/2;
-    for(var ci=0;ci<2;ci++){
-      var s=ci===0?-1:1;
-      var chop=document.createElementNS(NS,"polygon");
-      chop.setAttribute("points",
-        (-hw)+","+(s*(offT-tw/2)).toFixed(2)+" "+
-        (hw)+","+(s*(offN-nw/2)).toFixed(2)+" "+
-        (hw)+","+(s*(offN+nw/2)).toFixed(2)+" "+
-        (-hw)+","+(s*(offT+tw/2)).toFixed(2));
-      chop.setAttribute("fill",FCOLORS[pci]);chop.setAttribute("stroke","#5a3a1a");chop.setAttribute("stroke-width","0.6");
-      chop.setAttribute("class","fs");
-      fg.appendChild(chop);
-    }
-  }else{
-    var rc=document.createElementNS(NS,"rect"),fh=12;
-    rc.setAttribute("x",(-fw/2).toFixed(2));rc.setAttribute("y",(-fh/2).toFixed(2));
-    rc.setAttribute("width",fw.toFixed(2));rc.setAttribute("height",fh.toFixed(2));
-    rc.setAttribute("rx","1.5");rc.setAttribute("ry","1.5");
-    rc.setAttribute("fill",FCOLORS[pci]);rc.setAttribute("stroke","#222");rc.setAttribute("stroke-width","1.8");
-    rc.setAttribute("class","fs");rc.style.transformOrigin="0 0";
-    fg.appendChild(rc);
-  }
+  var dx=e.x2-e.x1,dy=e.y2-e.y1,len=Math.sqrt(dx*dx+dy*dy);
+  var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
+  var fg=buildFenceEl(e.x1,e.y1,e.x2,e.y2,pci);
   fenceLayer.appendChild(fg);
+  var ang2=Math.atan2(dy,dx)*180/Math.PI;
   // Glow effect: blurred white rect behind fence
   var glow=document.createElementNS(NS,"rect");
   var gw=len*0.95,gh=40;
@@ -892,7 +869,7 @@ function tryPlaceFence(e){
   glow.setAttribute("class","fg");
   glowLayer.appendChild(glow);
   setTimeout(function(){ glow.remove(); },1300);
-  fences[key]={el:fg,color:FCOLORS[pci]};
+  fences[key]={el:fg,color:FCOLORS[pci],pci:pci,x1:e.x1,y1:e.y1,x2:e.x2,y2:e.y2};
 
   fci++;
   // Score enclosures using algebraic triangle lookup
@@ -926,6 +903,45 @@ function tryPlaceFence(e){
 }
 
 // === ILLEGAL CHECK (algebraic, shared by preview + placement) ===
+function buildFenceEl(x1,y1,x2,y2,pci){
+  var mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  var fw=len*0.88,ang2=Math.atan2(dy,dx)*180/Math.PI;
+  var fg=document.createElementNS(NS,"g");
+  fg.setAttribute("transform","translate("+mx.toFixed(2)+","+my.toFixed(2)+") rotate("+ang2.toFixed(2)+")");
+  if(currentTheme==="sushi"){
+    var offT=3.5,offN=2.1,tw=7,nw=4.2,hw=fw/2;
+    for(var ci=0;ci<2;ci++){
+      var s=ci===0?-1:1;
+      var chop=document.createElementNS(NS,"polygon");
+      chop.setAttribute("points",
+        (-hw)+","+(s*(offT-tw/2)).toFixed(2)+" "+
+        (hw)+","+(s*(offN-nw/2)).toFixed(2)+" "+
+        (hw)+","+(s*(offN+nw/2)).toFixed(2)+" "+
+        (-hw)+","+(s*(offT+tw/2)).toFixed(2));
+      chop.setAttribute("fill",FCOLORS[pci]);chop.setAttribute("stroke","#5a3a1a");chop.setAttribute("stroke-width","0.6");
+      chop.setAttribute("class","fs");
+      fg.appendChild(chop);
+    }
+  }else{
+    var rc=document.createElementNS(NS,"rect"),fh=12;
+    rc.setAttribute("x",(-fw/2).toFixed(2));rc.setAttribute("y",(-fh/2).toFixed(2));
+    rc.setAttribute("width",fw.toFixed(2));rc.setAttribute("height",fh.toFixed(2));
+    rc.setAttribute("rx","1.5");rc.setAttribute("ry","1.5");
+    rc.setAttribute("fill",FCOLORS[pci]);rc.setAttribute("stroke","#222");rc.setAttribute("stroke-width","1.8");
+    rc.setAttribute("class","fs");rc.style.transformOrigin="0 0";
+    fg.appendChild(rc);
+  }
+  return fg;
+}
+function rebuildFences(){
+  for(var key in fences){
+    var f=fences[key];
+    f.el.remove();
+    var fg=buildFenceEl(f.x1,f.y1,f.x2,f.y2,f.pci);
+    fenceLayer.appendChild(fg);
+    f.el=fg;
+  }
+}
 var ilCache={};
 function wouldBeIllegal(e){
   var key=e.key;
@@ -3014,6 +3030,7 @@ document.getElementById("btnTheme").addEventListener("click",function(){
       var urls=(t.id==="mario")?TILE_URLS_MARIO:(t.id==="sushi")?TILE_URLS_SUSHI:TILE_URLS;
       loadTiles(urls,function(){
         for(var k in generated){generated[k].remove();}generated={};
+        rebuildFences();
         commitView();fillView();
       });
       d.remove();
