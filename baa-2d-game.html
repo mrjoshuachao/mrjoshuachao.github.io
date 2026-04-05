@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.4.3</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.4.5</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -226,6 +226,9 @@ function renderHexAt(col,row){
     ctx.save();ctx.rotate(ROTS[i]*Math.PI/180);ctx.translate(-AX,0);
     var imgKey=tile;
     if(tileImgs["W2"]&&(tile==="W"||tile==="G"||tile==="B")){var sk=tileImgs["W3"]?["W","W2","W3","G","G2","G3","B","B2","B3"]:["W","W2","G","G2","B","B2"];imgKey=sk[((col*3571+row*7393+i*991)>>>0)%sk.length];}
+    var rDeg=[0,120,240][((col*1277+row*8713+i*3571)>>>0)%3];
+    if(rDeg){ctx.translate(TW/2,TH*2/3);ctx.rotate(rDeg*Math.PI/180);ctx.translate(-TW/2,-TH*2/3);}
+    if(((col*5231+row*9137+i*2741)>>>0)%2){ctx.translate(TW/2,0);ctx.scale(-1,1);ctx.translate(-TW/2,0);}
     ctx.drawImage(tileImgs[imgKey],0,0,TW,TH);ctx.restore();
   }
   var gridColor=currentTheme==="sushi"?"#999":"rgba(255,255,255,0.5)";
@@ -543,7 +546,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.4.3");
+  lines.push("版本: v2.4.5");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
