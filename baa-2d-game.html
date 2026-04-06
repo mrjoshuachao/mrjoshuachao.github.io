@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.7.9</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.8.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -583,7 +583,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.7.9");
+  lines.push("版本: v2.8.1");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -2026,10 +2026,10 @@ function fetchTurnServers(cb){
 }
 
 // === KEEPALIVE & RECONNECTION SYSTEM ===
-var HB_INTERVAL=8000;       // heartbeat every 8s
-var HOST_GRACE_MS=60000;     // host waits 60s before removing disconnected player
-var HB_TIMEOUT_MS=20000;     // if no data from client for 20s, consider dead
-var CLIENT_RECONN_MAX=20;    // client tries 20 reconnect attempts (~60s)
+var HB_INTERVAL=5000;        // heartbeat every 5s
+var HOST_GRACE_MS=120000;    // host waits 120s before removing disconnected player
+var HB_TIMEOUT_MS=90000;     // if no data for 90s, consider dead (background tabs throttle timers)
+var CLIENT_RECONN_MAX=30;    // client tries 30 reconnect attempts
 var CLIENT_RECONN_DELAY=3000;// 3s between reconnect attempts
 var reconnToken="";          // unique token for this client session
 var clientReconnecting=false;
@@ -2049,14 +2049,56 @@ function acquireWebLock(){
     return new Promise(function(){}); // never resolves = lock held forever
   }).catch(function(){});
 }
-function releaseWebLock(){ webLockHeld=false; }
+function releaseWebLock(){ webLockHeld=false;releaseScreenWakeLock();stopBgHeartbeat(); }
+
+// Screen Wake Lock API: prevents device from sleeping
+var screenWakeLock=null;
+function acquireScreenWakeLock(){
+  if(!navigator.wakeLock)return;
+  navigator.wakeLock.request("screen").then(function(lock){
+    screenWakeLock=lock;
+    lock.addEventListener("release",function(){ screenWakeLock=null; });
+  }).catch(function(){});
+}
+function releaseScreenWakeLock(){
+  if(screenWakeLock){try{screenWakeLock.release();}catch(e){}screenWakeLock=null;}
+}
+
+// Background heartbeat: use a dedicated worker-like approach via setTimeout chain
+// setInterval is throttled in background tabs; setTimeout chain is slightly more reliable
+var bgHbTimer=null;
+function startBgHeartbeat(){
+  stopBgHeartbeat();
+  function tick(){
+    if(!online){bgHbTimer=null;return;}
+    for(var i=0;i<conns.length;i++){
+      try{conns[i].send({t:isHost?"ping":"pong"});}catch(e){}
+    }
+    bgHbTimer=setTimeout(tick,HB_INTERVAL);
+  }
+  bgHbTimer=setTimeout(tick,HB_INTERVAL);
+}
+function stopBgHeartbeat(){
+  if(bgHbTimer){clearTimeout(bgHbTimer);bgHbTimer=null;}
+}
 
 // Page Visibility: when page wakes up, immediately ping to prove we are alive
 document.addEventListener("visibilitychange",function(){
   if(document.visibilityState==="visible"&&online){
+    // Re-acquire screen wake lock (released on minimize)
+    if(!screenWakeLock)acquireScreenWakeLock();
     // Immediately send a ping burst on all connections
     for(var i=0;i<conns.length;i++){
-      try{conns[i].send({t:"pong"});}catch(e){}
+      try{conns[i].send({t:isHost?"ping":"pong"});}catch(e){}
+    }
+    // Restart background heartbeat (may have been throttled)
+    startBgHeartbeat();
+    // For host: refresh _lastData for connections that might have been
+    // unfairly timed out due to timer throttling in background
+    if(isHost){
+      for(var i=0;i<conns.length;i++){
+        if(conns[i].open)conns[i]._lastData=Date.now();
+      }
     }
     // For client: check if connection is still open
     if(!isHost&&conns.length>0){
@@ -2075,6 +2117,11 @@ document.addEventListener("visibilitychange",function(){
           initiateClientReconnect();
         }
       }catch(e){}
+    }
+  }else if(document.visibilityState==="hidden"&&online){
+    // Going to background: send a burst ping so the other side knows we're still alive
+    for(var i=0;i<conns.length;i++){
+      try{conns[i].send({t:isHost?"ping":"pong"});}catch(e){}
     }
   }
 });
@@ -2236,7 +2283,8 @@ function createRoom(){
   localHumans=1;connHumans=[];numAI=0;numHuman=1;numP=1;
   hostReconnSlots={};
   acquireWebLock();
-  acquireWebLock();
+  acquireScreenWakeLock();
+  startBgHeartbeat();
   document.getElementById("aisel").value=0;
   peer=new Peer("baa-"+roomCode,peerOpts);
   peer.on("open",function(){
@@ -2529,6 +2577,21 @@ function setupConnHandlers(c){
   c._lastData=Date.now();
   c._hbCheck=setInterval(function(){
     if(Date.now()-c._lastData>HB_TIMEOUT_MS){
+      // Double-check: is the WebRTC connection actually dead?
+      var pc=c.peerConnection;
+      var connState=pc?(pc.connectionState||pc.iceConnectionState||""):"closed";
+      if(connState==="connected"||connState==="completed"){
+        // WebRTC says it's still connected — the timeout is from timer throttling
+        // Send a ping to refresh, don't close
+        try{c.send({t:"ping"});}catch(e){}
+        return;
+      }
+      if(c.open){
+        // PeerJS says open but no data — try one last ping
+        try{c.send({t:"ping"});}catch(e){}
+        // Give it one more check cycle
+        if(Date.now()-c._lastData<HB_TIMEOUT_MS*2)return;
+      }
       clearInterval(c._hbCheck);
       try{c.close();}catch(e){}
     }
@@ -2644,6 +2707,8 @@ function joinRoom(code){
   clientReconnecting=false;
   reconnAttempt=0;
   acquireWebLock();
+  acquireScreenWakeLock();
+  startBgHeartbeat();
   document.getElementById("modal").style.display="none";
   // Show spinner overlay
   var spin=document.createElement("div");spin.id="joinSpin";
@@ -2983,6 +3048,8 @@ function handleNetData(d){
     roomCode=genCode();
     savedRoomCode=roomCode;
     acquireWebLock();
+    acquireScreenWakeLock();
+    startBgHeartbeat();
     loadPeerJS(function(){
       peer=new Peer("baa-"+roomCode,peerOpts);
       peer.on("open",function(){
@@ -3012,8 +3079,9 @@ function handleNetData(d){
         ld.style.cssText="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif";
         var lb=document.createElement("div");
         lb.style.cssText="background:#fff;border-radius:14px;padding:24px 32px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);max-width:280px";
-        lb.innerHTML="<div style='font-size:17px;font-weight:bold;color:#333;margin-bottom:8px'>現在你是新房主了，房間號碼已改變。</div>"
-          +"<div style='font-size:28px;font-weight:bold;letter-spacing:4px;color:#333;margin:12px 0 8px;font-family:monospace'>"+roomCode+"</div>";
+        lb.innerHTML="<div style='font-size:17px;font-weight:bold;color:#333;margin-bottom:8px'>原房主已離開</div>"
+          +"<div style='font-size:14px;color:#333;line-height:1.6;margin-bottom:14px'>你是新房主，請把房間號碼傳給別人。</div>"
+          +"<div style='font-size:28px;font-weight:bold;letter-spacing:4px;color:#333;margin:0 0 8px;font-family:monospace'>"+roomCode+"</div>";
         var cpB=document.createElement("button");cpB.textContent="複製房間號碼";
         cpB.style.cssText="padding:8px 20px;font-size:13px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin-bottom:18px;display:block;margin-left:auto;margin-right:auto";
         cpB.onclick=function(){navigator.clipboard.writeText(roomCode);cpB.textContent="已複製！";setTimeout(function(){cpB.textContent="複製房間號碼";},1500);};
