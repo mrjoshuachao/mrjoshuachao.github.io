@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.8.2</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.8.3</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -459,27 +459,42 @@ function checkAloneInRoom(){
 }
 
 function kickPlayer(pi){
-  var startIdx=localHumans,ci=-1;
+  var ci=-1;
   for(var i=0;i<conns.length;i++){
-    if(pi>=startIdx&&pi<startIdx+connHumans[i]){ ci=i;break; }
-    startIdx+=connHumans[i];
+    if(conns[i]._assignedIdx===pi||(conns[i]._assignedIdx!==undefined&&pi>=conns[i]._assignedIdx&&pi<conns[i]._assignedIdx+connHumans[i])){ ci=i;break; }
   }
   if(ci<0)return;
   var pName=FNAMES[pi];
-  conns[ci]._replaced=true; // prevent close handler from processing
-  conns[ci].send({t:"kicked",name:pName});
+  conns[ci]._replaced=true;
+  try{conns[ci].send({t:"kicked",name:pName});}catch(e){}
   setTimeout(function(){try{conns[ci].close();}catch(e){}},300);
   if(conns[ci]._hb)clearInterval(conns[ci]._hb);if(conns[ci]._hbCheck)clearInterval(conns[ci]._hbCheck);
   if(conns[ci]._reconnToken)delete hostReconnSlots[conns[ci]._reconnToken];
   conns.splice(ci,1);connHumans.splice(ci,1);
   recalcNumP();
+  // Remove kicked player from turnOrder and adjust fci
+  var oldLen=turnOrder.length;
+  turnOrder=turnOrder.filter(function(x){return x!==pi;});
+  if(turnOrder.length>0){
+    // If fci pointed at or past the removed entry, adjust
+    var curTurn=fci%oldLen;
+    var newTurn=0;
+    for(var i=0;i<turnOrder.length;i++){
+      if(i>=curTurn||turnOrder.length<=curTurn){newTurn=fci%turnOrder.length;break;}
+    }
+    // Keep fci in valid range for new turnOrder
+    if(fci%turnOrder.length!==fci%oldLen){
+      // fci was pointing at kicked player's slot — advance to next
+    }
+  }
+  numP=turnOrder.length;
   document.getElementById("psel").value=localHumans;
   broadcastIdxUpdates();
-  broadcast({t:"player_kicked",name:pName,numP:numP,numAI:numAI,seed:Date.now(),turnOrder:turnOrder.slice()});
-  seed=Date.now();
-  netApplying=true;resetGame();netApplying=false;
+  // Tell remaining clients to remove the kicked player (not full reset)
+  broadcast({t:"player_kicked",name:pName,numP:numP,numAI:numAI,turnOrder:turnOrder.slice(),fci:fci,scores:scores.slice()});
   updateRoomUI();updateSB();
-  showMsg("已將"+pName+"色玩家踢出房間",3000);
+  showMsg("已將"+pName+"色玩家踢出房間。",3000);
+  if(!online||isHost)scheduleAI();
   checkAloneInRoom();
 }
 
@@ -514,7 +529,7 @@ function updateSB(){
           d.style.cssText="position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);font-family:'Segoe UI',sans-serif";
           var box=document.createElement("div");
           box.style.cssText="background:#fff;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)";
-          box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>把"+pName+"色玩家踢出房間並且重新開始遊戲嗎？</p>";
+          box.innerHTML="<p style='margin-bottom:16px;font-size:16px'>把"+pName+"色玩家踢出房間嗎？</p>";
           var yes=document.createElement("button");yes.textContent="踢出";yes.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#e74c3c;color:#fff;cursor:pointer;margin:0 8px";
           var no=document.createElement("button");no.textContent="取消";no.style.cssText="padding:8px 24px;font-size:15px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;margin:0 8px";
           yes.onclick=function(){d.remove();kickPlayer(pi);};
@@ -591,7 +606,7 @@ var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊",
 function generateGameReport(){
   var lines=[];
   lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.8.2");
+  lines.push("版本: v2.8.3");
   lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
   lines.push("種子: "+seed);
   lines.push("");
@@ -3006,7 +3021,7 @@ function handleNetData(d){
   }
   if(d.t==="left"){ showCenterNotice(d.name+"色連線中斷了，遊戲即將重新開始。"); }
   if(d.t==="kicked"){ clientReconnecting=false;reconnToken="";releaseWebLock();if(peer)try{peer.destroy();}catch(e){}peer=null;online=false;spectator=false;conns=[];connHumans=[];hidePersistMsg();hideLobbyOverlay();unlockOnlineUI();updateSB();showDissolveDialog("你被房主踢出了房間。"); }
-  if(d.t==="player_kicked"){ seed=d.seed;numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;netApplying=true;resetGame();netApplying=false;if(d.turnOrder)turnOrder=d.turnOrder;updateSB();showMsg("房主把"+d.name+"色踢出房間並且重新開始了。",4000); }
+  if(d.t==="player_kicked"){ numP=d.numP;numAI=d.numAI||0;numHuman=numP-numAI;if(d.turnOrder)turnOrder=d.turnOrder;if(d.fci!==undefined)fci=d.fci;if(d.scores)scores=d.scores;updateSB();showMsg("房主把"+d.name+"色踢出房間了。",4000); }
   if(d.t==="player_joined"){ if(fci===0&&Object.keys(fences).length===0){numP=d.numP;numHuman=numP;numAI=0;while(turnOrder.length<numP){var u={};for(var i=0;i<turnOrder.length;i++)u[turnOrder[i]]=1;for(var i=0;i<numP;i++){if(!u[i]){turnOrder.push(i);break;}}}updateSB();} }
   if(d.t==="host_migrating"){
     showPersistMsg(d.msg||"房主離開了，正在轉移房間...");

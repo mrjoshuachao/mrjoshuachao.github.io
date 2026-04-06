@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.9.0';
+const _VERSION='v1.9.1';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3040,12 +3040,12 @@ function evaluate(){
     let v=_EV[p.type];
     // PST
     v+=(p.type==='K'?(eg?_PST.Ke:_PST.Km):_PST[p.type]||[])[lp]||0;
+    const pd=Math.min(a,7-a); // 0=pole edge, 3=equator
     // Knight on own back rank (lp=0) is extra bad
     if(p.type==='N'&&lp===0)v-=20;
-    // Opening: knight not in center rows (lat 2-5) gets extra penalty in first 10 moves
-    if(p.type==='N'&&moveNum<10&&(lp<=1))v-=30;
+    // Opening: knight near poles (lat 0-1 or 6-7) gets extra penalty in first 10 moves
+    if(p.type==='N'&&moveNum<10&&pd<=1)v-=35;
     // Polar bonus
-    const pd=Math.min(a,7-a);
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
     if(pd===0&&(p.type==='Q'||p.type==='R')){
       const op=board[a][wL(o+4)];
