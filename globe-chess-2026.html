@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.9.2';
+const _VERSION='v1.9.3';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3045,7 +3045,7 @@ function evaluate(){
     if(p.type==='N'&&lp===0)v-=20;
     // Opening: knight not near equator (pd<=2) gets penalty in first 10 moves
     // Only pd=3 (equator, lat 3-4) is good for knights in opening
-    if(p.type==='N'&&moveNum<10&&pd<=2)v-=(3-pd)*20; // pd=0:-60, pd=1:-40, pd=2:-20
+    if(p.type==='N'&&moveNum<10&&pd<=2)v-=(3-pd)*30; // pd=0:-90, pd=1:-60, pd=2:-30
     // Polar bonus
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
     if(pd===0&&(p.type==='Q'||p.type==='R')){
@@ -3125,6 +3125,21 @@ function evaluate(){
       const oppDist=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
       // Own king close to support passer; opponent king far = good
       s+=(bk?1:-1)*((7-ownDist)*6-(7-oppDist)*8);
+      // King escort: own king close to AND ahead of passer gets big bonus
+      // "ahead" = between pawn and promo square
+      const ownKingAhead=bk?(ownKLat>pp.lat):(ownKLat<pp.lat);
+      if(ownDist<=2&&ownKingAhead){
+        s+=(bk?1:-1)*(pp.dist<=2?100:pp.dist<=4?50:25); // huge bonus for escorting near-promo pawn
+      }
+      // K+P endgame: if own side has no non-pawn pieces, king MUST escort pawn
+      let ownPiecesCount=0;
+      for(let la2=0;la2<8;la2++)for(let lo2=0;lo2<8;lo2++){
+        const p2=board[la2][lo2];
+        if(p2&&p2.color===pp.color&&p2.type!=='K'&&p2.type!=='P')ownPiecesCount++;
+      }
+      if(ownPiecesCount===0&&ownDist>2){
+        s+=(bk?-1:1)*(ownDist-2)*18; // strong penalty: king far from pawn with no pieces to help
+      }
       // Urgent interception: opponent king distance to PROMO SQUARE matters most for dangerous passers
       if(pp.dist<=3){
         const oppToPromo=Math.max(Math.abs(oppKLat-promoLat),lonDist(oppKLon,pp.lon));
@@ -3204,14 +3219,19 @@ function evaluate(){
         else{bMajors++;bRooks.push({a,o});}
       }
     }
-    // Queen hunting enemy king
+    // Queen hunting enemy king (aggressive)
     if(wHasQ&&!bHasQ&&bKingLat>=0){
       const qd=Math.max(Math.abs(wQLat-bKingLat),_ld(wQLon,bKingLon));
-      s-=(7-qd)*18;
+      s-=(7-qd)*25; // stronger pull toward enemy king
+      // King should also approach to help queen deliver mate
+      const kkd=Math.max(Math.abs(wKingLat-bKingLat),_ld(wKingLon,bKingLon));
+      s-=(7-kkd)*10;
     }
     if(bHasQ&&!wHasQ&&wKingLat>=0){
       const qd=Math.max(Math.abs(bQLat-wKingLat),_ld(bQLon,wKingLon));
-      s+=(7-qd)*18;
+      s+=(7-qd)*25;
+      const kkd=Math.max(Math.abs(bKingLat-wKingLat),_ld(bKingLon,wKingLon));
+      s+=(7-kkd)*10;
     }
     // Rook hunting enemy king: reward rook proximity when opponent has no rook
     if(wRooks.length>0&&bRooks.length===0&&!bHasQ&&bKingLat>=0){
