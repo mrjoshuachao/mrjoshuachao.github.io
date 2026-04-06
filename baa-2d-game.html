@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.8.5</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.9.2</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -604,107 +604,103 @@ window.addEventListener("mousedown",function(){hideTurnBubble();},true);
 // === GAME REPORT ===
 var TILE_NAMES_ZH={"H":"羊舍","W":"白綿羊","G":"灰綿羊","B":"黑綿羊","E":"空地","T":"大樹","R":"漿果"};
 function generateGameReport(){
-  var lines=[];
-  lines.push("=== Baa! 遊戲紀錄 ===");
-  lines.push("版本: v2.8.5");
-  lines.push("日期: "+(new Date()).toLocaleString("zh-TW"));
-  lines.push("種子: "+seed);
-  lines.push("");
-  // Settings
-  var humanCount=numP-numAI;
-  lines.push("--- 遊戲設定 ---");
-  lines.push("玩家人數: "+numP+" (人類 "+humanCount+" 位, 電腦 "+numAI+" 位)");
-  lines.push("獲勝條件: 突破 "+winTarget+" 分時該回合結束，分數最高者獲勝");
-  lines.push("進階模式: "+(advMode?"是（白綿羊=3分, 灰綿羊=2分, 黑綿羊=1分）":"否（每隻綿羊=1分）"));
-  lines.push("");
-  // Player list
-  lines.push("--- 玩家列表 ---");
-  for(var i=0;i<numP;i++){
-    var ptype=aiSlots[i]?"電腦":"人類";
-    lines.push((i+1)+". "+FNAMES[i]+"色 ("+ptype+")");
-  }
-  lines.push("");
-  // Board config: list tiles around a reasonable viewport
-  // (The tile layout is deterministic from seed, so Claude can reconstruct)
-  lines.push("--- 棋盤配置 (部分) ---");
-  lines.push("（棋盤由種子 "+seed+" 決定，格子座標 (col,row,tri) 的地形 = TILE_TABLE[((col*7919+row*104729+tri*1301+seed*31)>>>0)%18]）");
-  lines.push("TILE_TABLE = [H,H,H,H,H,W,W,W,G,G,G,B,B,B,E,E,T,R]");
-  lines.push("H=羊舍, W=白綿羊, G=灰綿羊, B=黑綿羊, E=空地, T=大樹, R=漿果");
-  lines.push("");
-  // Turn-by-turn log
-  lines.push("--- 逐步紀錄 ---");
-  var runningScores=[0,0,0,0,0,0];
+  var L=[];
+  // Header
+  L.push("BAA! GAME LOG");
+  L.push("V=v2.9.2 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
+  L.push("P="+numP+" H="+(numP-numAI)+" AI="+numAI+" W="+winTarget+" ADV="+(advMode?1:0));
+  // Turn order and AI slots
+  var toStr=[];for(var i=0;i<numP;i++)toStr.push(turnOrder[i]);
+  var aiStr=[];for(var i=0;i<6;i++)if(aiSlots[i])aiStr.push(i);
+  L.push("TO=["+toStr.join(",")+"] AISLOTS=["+aiStr.join(",")+"]");
+  // Color names: 0=Red,1=Blue,2=Yellow,3=White,4=Grey,5=Black
+  L.push("C 0=Red 1=Blue 2=Yellow 3=White 4=Grey 5=Black");
+  L.push("T H=House W=WhiteSheep G=GreySheep B=BlackSheep E=Empty T=Tree R=Berry");
+  L.push("TILE_F((c*7919+r*104729+t*1301+S*31)>>>0)%18 TBL=[H,H,H,H,H,W,W,W,G,G,G,B,B,B,E,E,T,R]");
+  L.push("");
+
+  // Compute play area bounding box from all fences
+  var cMin=9999,cMax=-9999,rMin=9999,rMax=-9999;
   for(var i=0;i<history.length;i++){
-    var h=history[i];
-    var playerIdx=turnOrder[h.fci%numP];
-    var pname=FNAMES[playerIdx]+"色";
-    var ptype=aiSlots[playerIdx]?"電腦":"人類";
-    var step="第 "+(i+1)+" 步 (回合 "+(Math.floor(h.fci/numP)+1)+"): "+pname+"("+ptype+") 放置柵欄 ["+h.key+"]";
-    // Score changes
-    if(h.sc&&h.sc.length>0){
-      var parts=[];
-      for(var j=0;j<h.sc.length;j++){
-        var sc=h.sc[j];
-        runningScores[sc.p]+=sc.d;
-        parts.push(FNAMES[sc.p]+"色 +"+sc.d+"分");
-      }
-      step+=" → 完成圈地！ "+parts.join(", ");
-      // Enclosure details
-      if(h.ct&&h.ct.length>0){
-        var tileCount={"H":0,"W":0,"G":0,"B":0,"E":0,"T":0,"R":0};
-        for(var j=0;j<h.ct.length;j++){
-          var parts2=h.ct[j].split(",");
-          var tc=parseInt(parts2[0]),tr=parseInt(parts2[1]),tt=parseInt(parts2[2]);
-          var tile=getTile(tc,tr,tt);
-          tileCount[tile]++;
-        }
-        var tileDescs=[];
-        for(var tk in tileCount){
-          if(tileCount[tk]>0) tileDescs.push(TILE_NAMES_ZH[tk]+"×"+tileCount[tk]);
-        }
-        step+=" (圈地內容: "+tileDescs.join(", ")+", 共 "+h.ct.length+" 格)";
-      }
+    var parts=history[i].key.split(",");
+    var emx=parseFloat(parts[0]),emy=parseFloat(parts[1]);
+    var hc=Math.round(emx/(1.5*R)),hr=Math.round(emy/R3);
+    if(hc-2<cMin)cMin=hc-2;if(hc+2>cMax)cMax=hc+2;
+    if(hr-2<rMin)rMin=hr-2;if(hr+2>rMax)rMax=hr+2;
+  }
+  // Dump full tile map: each hex (col,row) has 6 triangles t0-t5
+  L.push("MAP c["+cMin+","+cMax+"] r["+rMin+","+rMax+"]");
+  L.push("FMT: col,row:t0t1t2t3t4t5");
+  var mapLines=[];
+  for(var c=cMin;c<=cMax;c++){
+    var rowParts=[];
+    for(var r=rMin;r<=rMax;r++){
+      var tiles="";
+      for(var t=0;t<6;t++)tiles+=getTile(c,r,t);
+      rowParts.push(c+","+r+":"+tiles);
     }
-    lines.push(step);
+    mapLines.push(rowParts.join(" "));
   }
-  lines.push("");
-  // Final scores
-  lines.push("--- 最終比分 ---");
-  var maxScore=0;
-  for(var i=0;i<numP;i++) if(scores[i]>maxScore) maxScore=scores[i];
-  var winners=[];
-  for(var i=0;i<numP;i++) if(scores[i]===maxScore) winners.push(i);
-  for(var i=0;i<numP;i++){
-    var ptype=aiSlots[i]?"電腦":"人類";
-    var marker=winners.indexOf(i)>=0?" ★ 獲勝":"";
-    lines.push(FNAMES[i]+"色 ("+ptype+"): "+scores[i]+" 分"+marker);
-  }
-  lines.push("");
-  // Summary statistics
-  lines.push("--- 分析摘要 ---");
-  lines.push("總共放置了 "+history.length+" 個柵欄");
-  // Per-player fence count and scoring events
-  var playerFences=[0,0,0,0,0,0];
-  var playerEnclosures=[0,0,0,0,0,0];
-  var playerScoringMoves=[0,0,0,0,0,0];
+  L.push(mapLines.join("\n"));
+  L.push("");
+
+  // Moves log: compressed
+  L.push("MOVES (step:player_idx edge_key side1_tile|side2_tile [+pts_info])");
+  var rsc=[0,0,0,0,0,0];
   for(var i=0;i<history.length;i++){
     var h=history[i];
     var pi=turnOrder[h.fci%numP];
-    playerFences[pi]++;
+    var rd=Math.floor(h.fci/numP)+1;
+    // Get tiles on both sides of this fence
+    var pair=findTriPair(h.key);
+    var t1="?",t2="?";
+    if(pair){
+      t1=getTile(pair[0].c,pair[0].r,pair[0].t);
+      t2=getTile(pair[1].c,pair[1].r,pair[1].t);
+    }
+    var s=(i+1)+":P"+pi+" R"+rd+" ["+h.key+"] "+t1+"|"+t2;
     if(h.sc&&h.sc.length>0){
-      playerScoringMoves[pi]++;
+      var sp=[];
       for(var j=0;j<h.sc.length;j++){
-        if(h.sc[j].p===pi) playerEnclosures[pi]++;
+        rsc[h.sc[j].p]+=h.sc[j].d;
+        sp.push("P"+h.sc[j].p+"+"+h.sc[j].d);
+      }
+      s+=" SCORE:"+sp.join(",");
+      if(h.ct&&h.ct.length>0){
+        var tc={"H":0,"W":0,"G":0,"B":0,"E":0,"T":0,"R":0};
+        for(var j=0;j<h.ct.length;j++){
+          var p2=h.ct[j].split(",");
+          tc[getTile(parseInt(p2[0]),parseInt(p2[1]),parseInt(p2[2]))]++;
+        }
+        var td=[];for(var tk in tc)if(tc[tk]>0)td.push(tk+tc[tk]);
+        s+=" ENC("+h.ct.length+"tri:"+td.join("")+")";
       }
     }
+    L.push(s);
   }
-  for(var i=0;i<numP;i++){
-    var ptype=aiSlots[i]?"電腦":"人類";
-    lines.push(FNAMES[i]+"色 ("+ptype+"): 放了 "+playerFences[i]+" 個柵欄, "+playerScoringMoves[i]+" 次觸發得分, 最終 "+scores[i]+" 分");
+  L.push("");
+
+  // Final scores
+  var mx=0;for(var i=0;i<numP;i++)if(scores[i]>mx)mx=scores[i];
+  var ws=[];for(var i=0;i<numP;i++)if(scores[i]===mx)ws.push(i);
+  var fs=[];for(var i=0;i<numP;i++){
+    var ai=aiSlots[i]?"AI":"HU";
+    var w=ws.indexOf(i)>=0?"*":"";
+    fs.push("P"+i+"("+ai+")="+scores[i]+w);
   }
-  lines.push("");
-  lines.push("--- 請把這份紀錄貼給 Claude 分析策略 ---");
-  return lines.join("\n");
+  L.push("FINAL "+fs.join(" "));
+
+  // Per-player stats
+  var pf=[0,0,0,0,0,0],ps2=[0,0,0,0,0,0];
+  for(var i=0;i<history.length;i++){
+    var pi=turnOrder[history[i].fci%numP];pf[pi]++;
+    if(history[i].sc&&history[i].sc.length>0)ps2[pi]++;
+  }
+  var st=[];for(var i=0;i<numP;i++)st.push("P"+i+":"+pf[i]+"f"+ps2[i]+"s");
+  L.push("STATS "+st.join(" "));
+  L.push("");
+  L.push("--- Paste this to Claude for strategy analysis ---");
+  return L.join("\n");
 }
 
 function showGameReport(){
@@ -785,9 +781,17 @@ function checkWin(){
   btn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;display:block;margin:0 auto 10px auto";
   btn.onclick=function(){d.remove();winDismissed=true;};
   box.appendChild(btn);
-  var repBtn=document.createElement("button");repBtn.textContent="觀看紀錄";
+  var repBtn=document.createElement("button");repBtn.textContent="複製紀錄";
   repBtn.style.cssText="padding:8px 24px;font-size:14px;border:none;border-radius:8px;background:#2196F3;color:#fff;cursor:pointer;display:block;margin:0 auto";
-  repBtn.onclick=function(){ showGameReport(); };
+  repBtn.onclick=function(){
+    var report=generateGameReport();
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(report).then(function(){repBtn.textContent="已複製！";setTimeout(function(){repBtn.textContent="複製紀錄";},2000);});
+    }else{
+      var ta=document.createElement("textarea");ta.value=report;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();
+      repBtn.textContent="已複製！";setTimeout(function(){repBtn.textContent="複製紀錄";},2000);
+    }
+  };
   box.appendChild(repBtn);
   d.appendChild(box);document.body.appendChild(d);
 }
@@ -1093,6 +1097,26 @@ function aiMove(){
   
   // === PASS 1: find immediate scoring moves ===
   var scoringMoves=[];
+  // === PRE-SCAN: detect opponent near-complete regions (1 edge away) ===
+  var oppThreatKeys={}; // keys that would complete big opponent enclosures
+  for(var i=0;i<cands.length;i++){
+    var e=cands[i];
+    var tfk2={};for(var k in fences)tfk2[k]=1;tfk2[e.key]=1;
+    var pair2=findTriPair(e.key);
+    if(!pair2)continue;
+    for(var si=0;si<2;si++){
+      var reg2=floodFill(pair2[si].c,pair2[si].r,pair2[si].t,tfk2);
+      if(!reg2||reg2.length<2)continue;
+      var a2=analyzeRegion(reg2,tfk2);
+      if(a2.sheep<=0||a2.house<=0)continue;
+      // This candidate completes an enclosure — check who benefits
+      var maxC2=0;for(var j=0;j<numP;j++)if(a2.colors[j]>maxC2)maxC2=a2.colors[j];
+      if(a2.colors[aiIdx]<maxC2&&a2.pts>=3){
+        // Opponent scores exclusively from this — it's a threat if left 1-open
+        oppThreatKeys[e.key]=(oppThreatKeys[e.key]||0)+a2.pts;
+      }
+    }
+  }
   for(var i=0;i<cands.length;i++){
     var e=cands[i];
     var tfk={};for(var k in fences)tfk[k]=1;tfk[e.key]=1;
@@ -1174,7 +1198,7 @@ function aiMove(){
   var best=null,bestS=-99999;
   for(var i=0;i<cands.length;i++){
     var e=cands[i];
-    var s=aiEvalStrategic(e,aiIdx,curFk);
+    var s=aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys);
     if(s>bestS){bestS=s;best=e;}
   }
   if(best)aiDoMove(best);
@@ -1198,7 +1222,8 @@ function aiDoMove(best){
   requestAnimationFrame(animPan);
 }
 
-function aiEvalStrategic(e,aiIdx,curFk){
+function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
+  oppThreatKeys=oppThreatKeys||{};
   var pair=findTriPair(e.key);
   if(!pair)return -99999;
   
@@ -1266,6 +1291,82 @@ function aiEvalStrategic(e,aiIdx,curFk){
     // 2 open edges = 2 turns away, still valuable
     if(regSheepT>0&&regHouseT>0&&openList.length===2&&aiFenceT>=1){
       if(aiFenceT>=oppFenceT)sc+=totalPtsT*15;
+    }
+  }
+  
+  // === ANTI-GIFTING: check if placing here leaves opponent 1 move from big score ===
+  var tfkAG={};for(var k in fences)tfkAG[k]=1;tfkAG[e.key]=1;
+  for(var i=0;i<2;i++){
+    var regAG=floodFill(pair[i].c,pair[i].r,pair[i].t,tfkAG);
+    if(!regAG||regAG.length<2)continue;
+    var regSetAG={};for(var j=0;j<regAG.length;j++)regSetAG[regAG[j].c+","+regAG[j].r+","+regAG[j].t]=1;
+    var openAG=[],aiFAG=0,oppFAG=0,ptsAG=0,sheepAG=0,houseAG=0;
+    for(var j=0;j<regAG.length;j++){
+      var te=triEdges(regAG[j].c,regAG[j].r,regAG[j].t);
+      var tile=getTile(regAG[j].c,regAG[j].r,regAG[j].t);
+      if(tile==="W"||tile==="G"||tile==="B"){sheepAG++;var b=advMode?(tile==="W"?3:tile==="G"?2:1):1;ptsAG+=hasBerryBonus(regAG[j].c,regAG[j].r,regAG[j].t,tfkAG)?b+1:b;}
+      else if(tile==="H")houseAG++;
+      for(var k2=0;k2<3;k2++){
+        var nb=te[k2].nb;
+        if(regSetAG[nb.c+","+nb.r+","+nb.t])continue;
+        if(tfkAG[te[k2].key]){
+          var f=fences[te[k2].key];
+          if(f){var ci=FCOLORS.indexOf(f.color);if(ci===aiIdx)aiFAG++;else oppFAG++;}
+          if(te[k2].key===e.key)aiFAG++;
+        }else openAG.push(te[k2].key);
+      }
+    }
+    // If this leaves exactly 1 open edge, opponent can close it next turn
+    if(sheepAG>0&&houseAG>0&&openAG.length===1&&oppFAG>aiFAG&&ptsAG>=2){
+      // Opponent dominates and will score exclusively — big penalty!
+      sc-=ptsAG*80;
+    }
+    // If 2 open edges and opponent dominates, still risky
+    if(sheepAG>0&&houseAG>0&&openAG.length===2&&oppFAG>aiFAG+1&&ptsAG>=3){
+      sc-=ptsAG*25;
+    }
+  }
+  
+  // === 2-STEP LOOKAHEAD: can AI complete a medium enclosure in 2 turns? ===
+  if(fci>=numP){ // skip round 1
+    var tfk2S={};for(var k in fences)tfk2S[k]=1;tfk2S[e.key]=1;
+    for(var i=0;i<2;i++){
+      var reg2S=floodFill(pair[i].c,pair[i].r,pair[i].t,tfk2S);
+      if(!reg2S||reg2S.length<3)continue;
+      var regSet2S={};for(var j=0;j<reg2S.length;j++)regSet2S[reg2S[j].c+","+reg2S[j].r+","+reg2S[j].t]=1;
+      var open2S=[],aiF2=0,oppF2=0,pts2S=0,sheep2S=0,house2S=0;
+      for(var j=0;j<reg2S.length;j++){
+        var te=triEdges(reg2S[j].c,reg2S[j].r,reg2S[j].t);
+        var tile=getTile(reg2S[j].c,reg2S[j].r,reg2S[j].t);
+        if(tile==="W"||tile==="G"||tile==="B"){sheep2S++;var b=advMode?(tile==="W"?3:tile==="G"?2:1):1;pts2S+=b;}
+        else if(tile==="H")house2S++;
+        for(var k2=0;k2<3;k2++){
+          var nb=te[k2].nb;
+          if(regSet2S[nb.c+","+nb.r+","+nb.t])continue;
+          if(tfk2S[te[k2].key]){
+            var f=fences[te[k2].key];
+            if(f){var ci=FCOLORS.indexOf(f.color);if(ci===aiIdx)aiF2++;else oppF2++;}
+            if(te[k2].key===e.key)aiF2++;
+          }else{
+            if(open2S.indexOf(te[k2].key)<0)open2S.push(te[k2].key);
+          }
+        }
+      }
+      // 2 open edges after placing this fence = AI can close in exactly 2 more turns
+      if(sheep2S>0&&house2S>0&&open2S.length===2&&pts2S>=3){
+        var ownership2=aiF2/(aiF2+oppF2+0.01);
+        if(ownership2>=0.4){
+          // Plan detected: medium enclosure closeable in 2 turns
+          sc+=pts2S*35*ownership2;
+          if(oppF2===0)sc+=pts2S*20; // exclusive!
+          if(reg2S.length>=6)sc+=pts2S*15; // big region bonus
+        }
+      }
+      // 3 open edges = 3 turns, still interesting for big regions
+      if(sheep2S>0&&house2S>0&&open2S.length===3&&pts2S>=4&&reg2S.length>=8){
+        var ownership3=aiF2/(aiF2+oppF2+0.01);
+        if(ownership3>=0.5)sc+=pts2S*12*ownership3;
+      }
     }
   }
   
@@ -1433,6 +1534,24 @@ function aiEvalStrategic(e,aiIdx,curFk){
   // Anti-wander: penalize going far from AI's own fences mid-late game
   if(minOwnDist<99999&&fci>=numP*3){
     if(minOwnDist>R*5)sc-=(minOwnDist/(R*2))*3;
+  }
+  
+  // === BLOCK OPPONENT THREATS: bonus for fences adjacent to opponent near-complete regions ===
+  for(var i=0;i<2;i++){
+    var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
+    for(var k2=0;k2<3;k2++){
+      if(oppThreatKeys[te[k2].key]){
+        // This edge borders a region where opponent is 1 fence from scoring big
+        // By placing here, we're near that region and can infiltrate
+        sc+=oppThreatKeys[te[k2].key]*8;
+      }
+    }
+  }
+  // Direct threat key: if THIS edge is a threat key, placing it means we complete
+  // the enclosure ourselves (already handled in PASS 1), but if we don't score,
+  // at least we infiltrated
+  if(oppThreatKeys[e.key]){
+    sc+=oppThreatKeys[e.key]*5;
   }
   
   sc+=Math.max(0,4-minDist/(R*2));

@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.9.4';
+const _VERSION='v2.0.1';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3043,9 +3043,8 @@ function evaluate(){
     const pd=Math.min(a,7-a); // 0=pole edge, 3=equator
     // Knight on own back rank (lp=0) is extra bad
     if(p.type==='N'&&lp===0)v-=20;
-    // Opening: knight not near equator (pd<=2) gets penalty in first 10 moves
-    // Only pd=3 (equator, lat 3-4) is good for knights in opening
-    if(p.type==='N'&&moveNum<10&&pd<=2)v-=(3-pd)*30; // pd=0:-90, pd=1:-60, pd=2:-30
+    // Opening: knight on pole edge (pd=0, lat 0 or 7) is genuinely bad — no escape routes
+    if(p.type==='N'&&moveNum<10&&pd===0)v-=50;
     // Polar bonus
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
     if(pd===0&&(p.type==='Q'||p.type==='R')){
@@ -3053,7 +3052,11 @@ function evaluate(){
       if(op&&op.color!==p.color)v+=Math.round(_EV[op.type]*0.09);
     }
     // Development: minor pieces still on starting square
-    if(!p.hasMoved&&(p.type==='N'||p.type==='B'))v-=25;
+    if(!p.hasMoved&&(p.type==='N'||p.type==='B')){
+      v-=25;
+      if(moveNum<10)v-=20; // extra penalty in opening: get pieces out!
+    }
+    if(p.hasMoved&&(p.type==='N'||p.type==='B')&&moveNum<10)v+=10; // reward developed pieces
     if(p.type==='R'&&p.hasMoved)v+=8;
     // Pawn tracking
     if(p.type==='P'){
@@ -3477,19 +3480,38 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
           const capVal=capT?_EV[capT]:0;
           const ownVal=pc?_EV[pc.type]:0;
-          const materialGain=capVal-ownVal; // positive = we're winning the exchange
-          // Current eval: positive = black ahead, negative = white ahead
+          const materialGain=capVal-ownVal;
           const curEval=evaluate();
-          const ourLead=isBlack?curEval:-curEval; // positive = we're leading
-          // Asymmetric bonus: reward winning exchanges (e.g., N takes R = +380)
+          const ourLead=isBlack?curEval:-curEval;
+          // Asymmetric bonus: reward winning exchanges
           if(materialGain>0){
             sc+=(isBlack?1:-1)*Math.min(Math.round(materialGain*0.3),300);
           }
+          // Safety check: high-value piece capturing low-value target
+          // If Q/R captures a pawn/minor and target square is attacked, penalize
+          if(ownVal>=1000&&capVal<650){
+            // Quick check: is target square attacked by opponent after our capture?
+            const opp2=color==='black'?'white':'black';
+            let sqAttacked=false;
+            const sv3=aiApply(m);
+            outer:for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+              const p2=board[la][lo];if(!p2||p2.color!==opp2)continue;
+              const mvs2=getValidMoves(la,lo);
+              for(const mv2 of mvs2){
+                if(mv2.lat===m.tLat&&mv2.lon===m.tLon){sqAttacked=true;break outer;}
+              }
+            }
+            aiUndo(m,pc,sv3);
+            if(sqAttacked){
+              // Piece is likely to be recaptured — penalize based on value at risk
+              sc+=(isBlack?-1:1)*Math.round((ownVal-capVal)*0.4);
+            }
+          }
           // Exchange strategy: when leading, avoid equal trades; when trailing, seek them
-          if(Math.abs(materialGain)<100){ // roughly equal trade
-            if(ourLead>150) sc+=(isBlack?-1:1)*(ourLead>400?80:60); // penalty: don't simplify when winning
-            else if(ourLead<-150) sc+=(isBlack?1:-1)*(ourLead<-400?80:60); // bonus: simplify when losing
-            else sc+=(isBlack?-1:1)*25; // slight penalty even at equilibrium: keep complexity
+          if(Math.abs(materialGain)<100){
+            if(ourLead>150) sc+=(isBlack?-1:1)*(ourLead>400?80:60);
+            else if(ourLead<-150) sc+=(isBlack?1:-1)*(ourLead<-400?80:60);
+            else sc+=(isBlack?-1:1)*25;
           }
           // Base capture bonus (still want aggressive play)
           if(captureBonus>0&&capT){
@@ -3683,8 +3705,8 @@ function _endAutoGame(result){
   // Show Report button (replace Pause), keep Reset and Quit
   const pauseBtn=document.getElementById('autoPauseBtn');
   if(_autoBattleLog&&_autoBattleLog.moves.length>0){
-    pauseBtn.textContent='Report';
-    pauseBtn.onclick=()=>_showAutoReport();
+    pauseBtn.textContent='Record';
+    pauseBtn.onclick=()=>_copyRecord();
   } else {
     // No moves — just restore UI
     document.getElementById('aiWrap').style.display='';
@@ -3755,122 +3777,85 @@ function stopAutoBattle(){
 
 
 
-// ── Report generation ─────────────────────────────────────────────────────────
-function _showAutoReport(){
-  const log=_autoBattleLog;if(!log)return;
+// ── Record generation ─────────────────────────────────────────────────────────
+function _genCompactRecord(){
+  const log=_autoBattleLog;if(!log)return'';
   const dur=log.endTime?Math.round((log.endTime-log.startTime)/1000):0;
-  const durStr=dur<60?dur+'s':Math.floor(dur/60)+'m '+(dur%60)+'s';
-
-  const LABELS={
-    BLACK_WINS_CHECKMATE:'⬛ BLACK WINS — Checkmate',
-    WHITE_WINS_CHECKMATE:'⬜ WHITE WINS — Checkmate',
-    WHITE_RESIGNS:       '⬛ BLACK WINS — White resigns',
-    BLACK_RESIGNS:       '⬜ WHITE WINS — Black resigns',
-    DRAW_AGREEMENT:      '½  DRAW — By mutual agreement',
-    DRAW_STALEMATE:      '½  DRAW — Stalemate',
-    DRAW_REPETITION:     '½  DRAW — 3-fold Repetition',
-    DRAW_MOVE_LIMIT:     `½  DRAW — ${AUTO_MAX_MOVES}-move Limit`,
-    DRAW_FIFTY_MOVE:     '½  DRAW — 50-move Rule',
-    DRAW_INSUF_MATERIAL: '½  DRAW — Insufficient Material (K/K+minor vs K/K+minor)',
-    ERROR_NO_MOVE:       '⚠  ERROR — AI returned null move',
-    ERROR_EMPTY_SQUARE:  '⚠  ERROR — Move from empty square',
-    STOPPED_BY_USER:     '⏹  Stopped by user'
+  const ds=dur<60?dur+'s':Math.floor(dur/60)+'m'+(dur%60)+'s';
+  const RES={
+    BLACK_WINS_CHECKMATE:'B_MATE',WHITE_WINS_CHECKMATE:'W_MATE',
+    WHITE_RESIGNS:'B_WIN_RES',BLACK_RESIGNS:'W_WIN_RES',
+    DRAW_AGREEMENT:'DRAW_AGR',DRAW_STALEMATE:'DRAW_STALE',
+    DRAW_REPETITION:'DRAW_REP',DRAW_MOVE_LIMIT:'DRAW_LIM',
+    DRAW_FIFTY_MOVE:'DRAW_50',DRAW_INSUF_MATERIAL:'DRAW_INSUF',
+    ERROR_NO_MOVE:'ERR_NULL',ERROR_EMPTY_SQUARE:'ERR_EMPTY',
+    STOPPED_BY_USER:'STOPPED'
   };
-  const resultLabel=LABELS[log.result]||log.result;
-
-  const capLine=(arr,label)=>{
-    if(!arr.length)return `${label}: — (nothing captured)`;
-    const grp={};arr.forEach(({t,v})=>{if(!grp[t])grp[t]={n:0,total:0,each:v};grp[t].n++;grp[t].total+=v;});
+  // Compact captures: P5+N2+B2+Q1+R1=3100
+  const capStr=arr=>{
+    if(!arr.length)return'-';
+    const g={};arr.forEach(({t,v})=>{if(!g[t])g[t]=0;g[t]++;});
     const total=arr.reduce((s,{v})=>s+v,0);
-    const parts=Object.entries(grp).map(([t,{n,total}])=>`${t}×${n} (${total}pts)`).join(' + ');
-    return `${label}: ${parts}  →  total ${total} pts`;
+    return Object.entries(g).map(([t,n])=>t+n).join('+')+`=${total}`;
   };
-
-  const pad=(s,w)=>{s=String(s);return s.length>=w?s:s+' '.repeat(w-s.length);};
-
-  // Header row
-  const hdr='  #  Color  Piece  From→To   Captured       Special    Think';
-  const moveLines=log.moves.map(m=>{
-    const capS=m.captured?`×${m.captured}[${m.captureVal}pts]`:'—';
-    const spec=m.special||'—';
-    const col=m.color==='white'?'White':'Black';
-    return `${pad(m.n,4)} ${pad(col,6)} ${pad(m.piece,6)} ${m.from}→${pad(m.to,4)}  ${pad(capS,14)} ${pad(spec,10)} ${m.thinkMs}ms`;
-  }).join('\n');
-
-  const anomLines=log.anomalies.length===0?'  (none detected)'
-    :log.anomalies.map(a=>[
-        `  [Move #${a.n}] TYPE: ${a.type}`,
-        `  DESC: ${a.desc}`,
-        Object.keys(a.extra).length?`  EXTRA: ${JSON.stringify(a.extra)}`:'',
-        `  TURN: ${a.turn}`,
-        `  BOARD:\n${a.snap.split('\n').map(l=>'    '+l).join('\n')}`
-      ].filter(Boolean).join('\n')).join('\n\n');
-
-  const B='═'.repeat(62);
-  const b='─'.repeat(62);
-  const report=
-`${B}
-  GLOBE CHESS — AI vs AI BATTLE REPORT  #${log.gameNum}
-${B}
-
-  Date      : ${new Date(log.startTime).toLocaleString()}
-  Duration  : ${durStr}
-  Result    : ${resultLabel}
-  Total moves: ${log.moves.length}  (limit: ${AUTO_MAX_MOVES})
-
-CAPTURES
-${b}
-  ${capLine(log.wCapt,'White captured')}
-  ${capLine(log.bCapt,'Black captured')}
-
-MOVE LOG
-${b}
-${hdr}
-${b}
-${moveLines||'  (no moves played)'}
-
-ANOMALIES  (${log.anomalies.length} detected)
-${b}
-${anomLines}
-
-BOARD STATE AT END
-${b}
-${_autoBoardSnap()}
-SYSTEM INFO
-${b}
-  Globe Chess Auto Battle  ${_VERSION}
-  AI for both sides  : evaluate() + iterative deepening α-β + quiescence(4) + PST + pawn structure
-  White strategy     : minimize evaluate()  (PST, development, polar-tactics, pawn structure)
-  Black strategy     : maximize evaluate()  (PST, development, polar-tactics, pawn structure)
-  Search             : iterative deepening depth 1→8, ${_AUTO_THINK_MS/1000}s limit, capture bonus 12%, globe spectacle bonus
-  Legal move filter  : getLegalMoves() — no illegal moves executed
-  Repetition rule    : 3× same position → draw
-  50-move rule       : 100 half-moves without capture or pawn advance → draw
-  Insuf. material    : K/K+minor vs K/K+minor → draw
-  Resignation        : eval ≥ ${RESIGN_THRESHOLD} pts for ${RESIGN_STREAK} consecutive half-moves
-  Draw by agreement  : |eval| ≤ ${DRAW_EVAL_RANGE} pts for ${DRAW_STREAK} consecutive half-moves (after move 40)
-  Move limit         : ${AUTO_MAX_MOVES} moves → draw
-${B}`;
-
-  document.getElementById('reportText').value=report;
-  document.getElementById('reportModal').classList.add('visible');
+  // Compact move: piece+from+cap?+to+special (e.g. "Nb1-a3" "Paxb5" "Ke1-a1castle")
+  const mvStr=m=>{
+    const c=m.captured?'x':'>';
+    let s=m.piece+m.from+c+m.to;
+    if(m.special)s+='.'+m.special;
+    s+='.'+m.thinkMs;
+    return s;
+  };
+  // Board: 8 ranks separated by /, pieces as FEN (uppercase=white, lowercase=black)
+  const fenRow=lat=>{
+    let r='',empty=0;
+    for(let lo=0;lo<8;lo++){
+      const p=board[lat][lo];
+      if(!p){empty++;continue;}
+      if(empty>0){r+=empty;empty=0;}
+      const ch=p.type==='N'?'N':p.type;
+      r+=p.color==='white'?ch:ch.toLowerCase();
+    }
+    if(empty>0)r+=empty;
+    return r;
+  };
+  const boardStr=[];for(let la=0;la<8;la++)boardStr.push(fenRow(la));
+  // Anomalies compact
+  const anomStr=log.anomalies.length===0?'':'\nA:'+log.anomalies.map(a=>`#${a.n}:${a.type}`).join(',');
+  const lines=[
+    `GLOBE_CHESS ${_VERSION} #${log.gameNum} ${new Date(log.startTime).toISOString()}`,
+    `R:${RES[log.result]||log.result} N:${log.moves.length} D:${ds}`,
+    `WC:${capStr(log.wCapt)} BC:${capStr(log.bCapt)}`,
+    `BD:${boardStr.join('/')}`,
+    `MV:${log.moves.map(mvStr).join(' ')}`
+  ];
+  if(anomStr)lines.push(anomStr);
+  return lines.join('\n');
 }
+
+function _copyRecord(){
+  const record=_genCompactRecord();
+  if(!record)return;
+  try{navigator.clipboard?.writeText(record);}catch(e){
+    // Fallback
+    const ta=document.createElement('textarea');
+    ta.value=record;document.body.appendChild(ta);
+    ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  const pauseBtn=document.getElementById('autoPauseBtn');
+  pauseBtn.textContent='Record copied';
+  setTimeout(()=>{pauseBtn.textContent='Record';},2000);
+}
+
+function _showAutoReport(){_copyRecord();}
 
 function closeReport(){
   document.getElementById('reportModal').classList.remove('visible');
   if(!autoBattleActive)turnEl.textContent=turnColor==='white'?'White to move':'Black to move';
 }
 
-function copyReport(){
-  const ta=document.getElementById('reportText');
-  ta.select();ta.setSelectionRange(0,99999);
-  try{navigator.clipboard?.writeText(ta.value);}catch(e){}
-  try{document.execCommand('copy');}catch(e){}
-  const btn=document.getElementById('copyReportBtn');
-  const orig=btn.textContent;
-  btn.textContent='Copied ✓';
-  setTimeout(()=>btn.textContent=orig,1800);
-}
+function copyReport(){_copyRecord();}
 
 animate();
 </script>
