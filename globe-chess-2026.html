@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.8.0';
+const _VERSION='v1.9.0';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3002,7 +3002,7 @@ function _autoInsufMaterial(){
 // ══════════════════════════════════════════════════════════════════════════════
 // ─── Enhanced AI Engine — positional evaluation + iterative deepening α-β ────
 const _AI_THINK_MS  = 8000;   // AI opponent: 8 s per move
-const _AUTO_THINK_MS= 1000;   // Auto-battle: 1 s per move (fast aggressive play)
+const _AUTO_THINK_MS= 1500;   // Auto-battle: 1.5 s per move (deeper search)
 
 // Piece-square tables (index = latForPST: 0=own back rank, 7=opponent back rank)
 const _PST={
@@ -3040,8 +3040,10 @@ function evaluate(){
     let v=_EV[p.type];
     // PST
     v+=(p.type==='K'?(eg?_PST.Ke:_PST.Km):_PST[p.type]||[])[lp]||0;
-    // Knight on own back rank (lp=0) is extra bad — trapped in corner of spherical board
+    // Knight on own back rank (lp=0) is extra bad
     if(p.type==='N'&&lp===0)v-=20;
+    // Opening: knight not in center rows (lat 2-5) gets extra penalty in first 10 moves
+    if(p.type==='N'&&moveNum<10&&(lp<=1))v-=30;
     // Polar bonus
     const pd=Math.min(a,7-a);
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
@@ -3053,7 +3055,20 @@ function evaluate(){
     if(!p.hasMoved&&(p.type==='N'||p.type==='B'))v-=25;
     if(p.type==='R'&&p.hasMoved)v+=8;
     // Pawn tracking
-    if(p.type==='P')pLon[bk?0:1][o]++;
+    if(p.type==='P'){
+      pLon[bk?0:1][o]++;
+      // Late endgame: pawns become critical (only path to promotion/winning)
+      if(eg){
+        // Count own non-pawn, non-king pieces
+        let ownPieces=0;
+        for(let la2=0;la2<8;la2++)for(let lo2=0;lo2<8;lo2++){
+          const p2=board[la2][lo2];
+          if(p2&&p2.color===p.color&&p2.type!=='K'&&p2.type!=='P')ownPieces++;
+        }
+        if(ownPieces===0)v+=120; // no pieces left → pawns are worth double
+        else if(ownPieces===1)v+=50; // only one piece → pawns are precious
+      }
+    }
     s+=bk?v:-v;
   }
   // Pawn structure penalties
@@ -3419,10 +3434,28 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
         }
         // Check bonus: giving check is aggressive and constrains opponent
         if(givesCheck)sc+=(isBlack?1:-1)*120;
-        // Capture incentive: bold captures even if slightly risky
-        if(captureBonus>0&&(sv.c||sv.epCap)){
+        // Capture incentive with exchange strategy
+        if(sv.c||sv.epCap){
           const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
-          if(capT)sc+=(isBlack?1:-1)*Math.min(Math.round(_EV[capT]*captureBonus),250);
+          const capVal=capT?_EV[capT]:0;
+          const ownVal=pc?_EV[pc.type]:0;
+          const materialGain=capVal-ownVal; // positive = we're winning the exchange
+          // Current eval: positive = black ahead, negative = white ahead
+          const curEval=evaluate();
+          const ourLead=isBlack?curEval:-curEval; // positive = we're leading
+          // Asymmetric bonus: reward winning exchanges (e.g., N takes R = +380)
+          if(materialGain>0){
+            sc+=(isBlack?1:-1)*Math.min(Math.round(materialGain*0.3),300);
+          }
+          // Exchange strategy: when leading, avoid equal trades; when trailing, seek them
+          if(Math.abs(materialGain)<100){ // roughly equal trade
+            if(ourLead>300) sc+=(isBlack?-1:1)*60; // penalty: don't simplify when winning
+            else if(ourLead<-300) sc+=(isBlack?1:-1)*60; // bonus: simplify when losing
+          }
+          // Base capture bonus (still want aggressive play)
+          if(captureBonus>0&&capT){
+            sc+=(isBlack?1:-1)*Math.min(Math.round(capVal*captureBonus),200);
+          }
         }
         // Forward aggression: reward pieces moving toward opponent's territory
         if(pc){
