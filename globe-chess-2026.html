@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.9.1';
+const _VERSION='v1.9.2';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3043,8 +3043,9 @@ function evaluate(){
     const pd=Math.min(a,7-a); // 0=pole edge, 3=equator
     // Knight on own back rank (lp=0) is extra bad
     if(p.type==='N'&&lp===0)v-=20;
-    // Opening: knight near poles (lat 0-1 or 6-7) gets extra penalty in first 10 moves
-    if(p.type==='N'&&moveNum<10&&pd<=1)v-=35;
+    // Opening: knight not near equator (pd<=2) gets penalty in first 10 moves
+    // Only pd=3 (equator, lat 3-4) is good for knights in opening
+    if(p.type==='N'&&moveNum<10&&pd<=2)v-=(3-pd)*20; // pd=0:-60, pd=1:-40, pd=2:-20
     // Polar bonus
     if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
     if(pd===0&&(p.type==='Q'||p.type==='R')){
@@ -3191,13 +3192,17 @@ function evaluate(){
     // Piece hunting enemy king (queen, rook, or any major piece)
     let wHasQ=false,bHasQ=false,wQLat=-1,wQLon=-1,bQLat=-1,bQLon=-1;
     let wMajors=0,bMajors=0;
+    const wRooks=[],bRooks=[];
     for(let a=0;a<8;a++)for(let o=0;o<8;o++){
       const p=board[a][o];if(!p)continue;
       if(p.type==='Q'){
         if(p.color==='white'){wHasQ=true;wQLat=a;wQLon=o;wMajors++;}
         else{bHasQ=true;bQLat=a;bQLon=o;bMajors++;}
       }
-      if(p.type==='R'){if(p.color==='white')wMajors++;else bMajors++;}
+      if(p.type==='R'){
+        if(p.color==='white'){wMajors++;wRooks.push({a,o});}
+        else{bMajors++;bRooks.push({a,o});}
+      }
     }
     // Queen hunting enemy king
     if(wHasQ&&!bHasQ&&bKingLat>=0){
@@ -3207,6 +3212,19 @@ function evaluate(){
     if(bHasQ&&!wHasQ&&wKingLat>=0){
       const qd=Math.max(Math.abs(bQLat-wKingLat),_ld(bQLon,wKingLon));
       s+=(7-qd)*18;
+    }
+    // Rook hunting enemy king: reward rook proximity when opponent has no rook
+    if(wRooks.length>0&&bRooks.length===0&&!bHasQ&&bKingLat>=0){
+      for(const r of wRooks){
+        const rd=Math.max(Math.abs(r.a-bKingLat),_ld(r.o,bKingLon));
+        s-=(7-rd)*12; // white rook close to black king → good for white
+      }
+    }
+    if(bRooks.length>0&&wRooks.length===0&&!wHasQ&&wKingLat>=0){
+      for(const r of bRooks){
+        const rd=Math.max(Math.abs(r.a-wKingLat),_ld(r.o,wKingLon));
+        s+=(7-rd)*12; // black rook close to white king → good for black
+      }
     }
     // Major pieces (R/Q) should approach enemy king in endgame
     if(wMajors>0&&!bHasQ&&bKingLat>=0){
