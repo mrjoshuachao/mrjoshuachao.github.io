@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v1.9.3';
+const _VERSION='v1.9.4';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3487,8 +3487,9 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           }
           // Exchange strategy: when leading, avoid equal trades; when trailing, seek them
           if(Math.abs(materialGain)<100){ // roughly equal trade
-            if(ourLead>300) sc+=(isBlack?-1:1)*60; // penalty: don't simplify when winning
-            else if(ourLead<-300) sc+=(isBlack?1:-1)*60; // bonus: simplify when losing
+            if(ourLead>150) sc+=(isBlack?-1:1)*(ourLead>400?80:60); // penalty: don't simplify when winning
+            else if(ourLead<-150) sc+=(isBlack?1:-1)*(ourLead<-400?80:60); // bonus: simplify when losing
+            else sc+=(isBlack?-1:1)*25; // slight penalty even at equilibrium: keep complexity
           }
           // Base capture bonus (still want aggressive play)
           if(captureBonus>0&&capT){
