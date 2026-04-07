@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v2.0.2';
+const _VERSION='v2.1.3';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -2825,10 +2825,10 @@ setInterval(()=>{
 
 const AUTO_DELAY = 300;        // ms between moves (AI thinking time is the main pacing now)
 const AUTO_MAX_MOVES = 250;    // draw if exceeded
-const RESIGN_THRESHOLD = 1200; // eval pts: losing by this much = hopeless → resign
-const RESIGN_STREAK    = 8;    // consecutive half-moves at that level to confirm
+const RESIGN_THRESHOLD = 1800; // eval pts: losing by this much = hopeless → resign (raised to allow more checkmates)
+const RESIGN_STREAK    = 10;   // consecutive half-moves at that level to confirm
 const DRAW_EVAL_RANGE  = 150;  // eval pts: both sides within this = "mutually equal"
-const DRAW_STREAK      = 30;   // consecutive half-moves both agree it's equal → draw
+const DRAW_STREAK      = 20;   // consecutive half-moves both agree it's equal → draw
 let autoBattleActive = false;
 let autoBattlePaused = false;
 let _autoBattleTimer = null;
@@ -3240,14 +3240,50 @@ function evaluate(){
     if(wRooks.length>0&&bRooks.length===0&&!bHasQ&&bKingLat>=0){
       for(const r of wRooks){
         const rd=Math.max(Math.abs(r.a-bKingLat),_ld(r.o,bKingLon));
-        s-=(7-rd)*12; // white rook close to black king → good for white
+        s-=(7-rd)*12;
       }
     }
     if(bRooks.length>0&&wRooks.length===0&&!wHasQ&&wKingLat>=0){
       for(const r of bRooks){
         const rd=Math.max(Math.abs(r.a-wKingLat),_ld(r.o,wKingLon));
-        s+=(7-rd)*12; // black rook close to white king → good for black
+        s+=(7-rd)*12;
       }
+    }
+    // R+K vs K mating pattern: specialized evaluation for rook + king vs lone king
+    // On the sphere, the "box method" = rook restricts enemy king's latitude band, own king closes in
+    for(let side=0;side<2;side++){
+      const atkCol=side===0?'white':'black';
+      const defCol=side===0?'black':'white';
+      const sgn=side===0?-1:1; // negative = good for white
+      const atkK=side===0?{la:wKingLat,lo:wKingLon}:{la:bKingLat,lo:bKingLon};
+      const defK=side===0?{la:bKingLat,lo:bKingLon}:{la:wKingLat,lo:wKingLon};
+      const rooks=side===0?wRooks:bRooks;
+      const oppRooks=side===0?bRooks:wRooks;
+      const oppQ=side===0?bHasQ:wHasQ;
+      if(rooks.length===0||oppRooks.length>0||oppQ)continue;
+      if(atkK.la<0||defK.la<0)continue;
+      // Count defender's non-king pieces
+      let defPieces=0;
+      for(let a=0;a<8;a++)for(let o=0;o<8;o++){
+        const p=board[a][o];if(p&&p.color===defCol&&p.type!=='K')defPieces++;
+      }
+      if(defPieces>0)continue; // only activate for R+K vs lone K
+      // Mating bonuses (much stronger than general hunting)
+      const r=rooks[0]; // use first rook
+      // 1. Enemy king pushed to edge: much stronger bonus
+      const defCenter=Math.min(defK.la,7-defK.la);
+      s+=sgn*(3-defCenter)*30; // 0=pole edge: +90, 3=center: 0
+      // 2. Rook on same lat as enemy king (cutting off escape) or adjacent lat
+      const rLatDist=Math.abs(r.a-defK.la);
+      if(rLatDist<=1&&_ld(r.o,defK.lo)>=2) s+=sgn*60; // rook cutting off enemy king
+      // 3. Own king close to enemy king (for coordinated mate)
+      const kkDist=Math.max(Math.abs(atkK.la-defK.la),_ld(atkK.lo,defK.lo));
+      s+=sgn*(7-kkDist)*20; // much stronger: up to +140
+      // 4. Own king on same lat as enemy king (opposition)
+      if(Math.abs(atkK.la-defK.la)<=1) s+=sgn*40;
+      // 5. Rook and king on same side of enemy king (coordinated)
+      const rkSameSide=(r.a<defK.la&&atkK.la<defK.la)||(r.a>defK.la&&atkK.la>defK.la);
+      if(!rkSameSide) s+=sgn*25; // bonus for flanking from opposite sides
     }
     // Major pieces (R/Q) should approach enemy king in endgame
     if(wMajors>0&&!bHasQ&&bKingLat>=0){
@@ -3322,6 +3358,8 @@ function evaluate(){
       }
     }
   }
+  // Tempo bonus: white has first-move advantage
+  s-=8; // s negative = good for white
   return s;
 }
 
@@ -3333,8 +3371,16 @@ function _abSearch(depth,alpha,beta,maxing,deadline){
   const mvs=allAIMoves(color);
   if(!mvs.length){
     // No moves: checkmate or stalemate
-    if(isInCheck(color))return maxing?(-90000+depth*100):(90000-depth*100); // checkmate (prefer faster mate)
-    return 0; // stalemate
+    if(isInCheck(color))return maxing?(-90000+depth*100):(90000-depth*100);
+    // Stalemate: penalize the winning side (drawing when ahead is terrible)
+    const stalEval=evaluate();
+    // If black is ahead (stalEval>0) and it's white's turn with no moves → white is stalemated
+    // Black caused the stalemate and should be penalized for drawing
+    if(Math.abs(stalEval)>200){
+      // Return a value bad for the side that was winning
+      return stalEval>0?-3000:3000; // heavy penalty for stalemating when winning
+    }
+    return 0; // truly equal position → stalemate is fine
   }
   mvs.sort((a,b)=>{
     const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
@@ -3417,26 +3463,36 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
   const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
   // Broader repetition: penalize moves that recreate ANY position we've seen before
   const posHist=autoBattleActive?_autoPosHist:{};
-  // Same-piece wandering detection: trace move chains to find pieces moved repeatedly without capturing
+  // Same-piece wandering detection: chain-based identity tracking
+  // Trace piece identity by linking move destinations to origins (handles pole crossings)
   const _pieceWanderCount={};
+  const _pieceTypeCount={};
   if(autoBattleActive){
-    const allRecent=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-8);
-    // Build chain: for each recent move, the piece that ends at (tLat,tLon) was the one that started at (fLat,fLon)
-    // Track how many non-capture moves each origin square has in recent history
-    // Also count by piece type (catches rook shuffling between different squares)
-    const typeCount={};
-    allRecent.forEach(m=>{
+    const allRecent=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-10);
+    // Build identity chains: a piece that moved FROM (fLat,fLon) TO (tLat,tLon)
+    // is the same piece that later moves FROM (tLat,tLon). Chain consecutive non-capture moves.
+    // Count consecutive non-capture moves per chain (reset on capture of significant piece ≥300).
+    const chains={}; // key = current position → {count, type}
+    for(let i=0;i<allRecent.length;i++){
+      const m=allRecent[i];
+      const fromKey=`${m.coords[0]},${m.coords[1]}`;
+      const toKey=`${m.coords[2]},${m.coords[3]}`;
+      const sigCapture=m.captured&&m.captureVal>=300;
+      // Find chain at fromKey (this piece was previously tracked here)
+      const prev=chains[fromKey];
+      const cnt=(!sigCapture&&prev)?prev.count+1:1;
+      delete chains[fromKey]; // piece left this square
+      chains[toKey]={count:cnt,type:m.piece};
+      // Type counting (non-capture moves only)
       if(!m.captured){
-        typeCount[m.piece]=(typeCount[m.piece]||0)+1;
+        _pieceTypeCount[m.piece]=(_pieceTypeCount[m.piece]||0)+1;
       }
+    }
+    // Map current positions to wander counts
+    Object.entries(chains).forEach(([key,{count,type}])=>{
+      _pieceWanderCount[key]=count;
     });
-    // For each legal move's origin, check if it was a recent destination (same piece)
-    allRecent.forEach(m=>{
-      const key=`${m.coords[2]},${m.coords[3]}`; // destination = current position
-      _pieceWanderCount[key]=(_pieceWanderCount[key]||0)+1;
-    });
-    // Also store type counts for piece-type-level detection
-    _pieceWanderCount._types=typeCount;
+    _pieceWanderCount._types=_pieceTypeCount;
   }
   let searchDepth=0;
 
@@ -3625,6 +3681,28 @@ function doAutoMove(){
   if(_autoInsufMaterial()){
     _autoLogAnomaly('INSUF_MATERIAL','Both sides have insufficient mating material (K/K+minor vs K/K+minor)');
     _endAutoGame('DRAW_INSUF_MATERIAL');return;
+  }
+
+  // Symmetric endgame detection: R+K vs R+K (with equal pawns) → draw quickly
+  // Also covers equal minor piece endgames that will never produce a winner
+  if(log.moves.length>=50){
+    let wPieces=[],bPieces=[],wPawns=0,bPawns=0;
+    for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+      const p=board[la][lo];if(!p||p.type==='K')continue;
+      if(p.type==='P'){if(p.color==='white')wPawns++;else bPawns++;continue;}
+      (p.color==='white'?wPieces:bPieces).push(p.type);
+    }
+    const wStr=wPieces.sort().join(''), bStr=bPieces.sort().join('');
+    // Symmetric: same pieces and same number of pawns
+    if(wStr===bStr&&wPawns===bPawns){
+      // R vs R, B vs B, N vs N, RB vs RB, etc. with equal pawns → draw after 8 half-moves of low eval
+      if(!log._symDrawStreak)log._symDrawStreak=0;
+      if(Math.abs(evaluate())<=300) log._symDrawStreak++;
+      else log._symDrawStreak=0;
+      if(log._symDrawStreak>=8){
+        _endAutoGame('DRAW_AGREEMENT');return;
+      }
+    } else { log._symDrawStreak=0; }
   }
 
   // 50-move rule — 100 half-moves without capture or pawn advance
