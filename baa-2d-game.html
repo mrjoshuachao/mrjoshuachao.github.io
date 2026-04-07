@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v2.9.2</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v3.1.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -607,7 +607,7 @@ function generateGameReport(){
   var L=[];
   // Header
   L.push("BAA! GAME LOG");
-  L.push("V=v2.9.2 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
+  L.push("V=v3.1.0 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
   L.push("P="+numP+" H="+(numP-numAI)+" AI="+numAI+" W="+winTarget+" ADV="+(advMode?1:0));
   // Turn order and AI slots
   var toStr=[];for(var i=0;i<numP;i++)toStr.push(turnOrder[i]);
@@ -674,6 +674,21 @@ function generateGameReport(){
         }
         var td=[];for(var tk in tc)if(tc[tk]>0)td.push(tk+tc[tk]);
         s+=" ENC("+h.ct.length+"tri:"+td.join("")+")";
+        // Fence ownership on enclosure boundary
+        var regSet3={};for(var j=0;j<h.ct.length;j++)regSet3[h.ct[j]]=1;
+        var wallOwner=[0,0,0,0,0,0];
+        for(var j=0;j<h.ct.length;j++){
+          var p3=h.ct[j].split(",");
+          var te3=triEdges(parseInt(p3[0]),parseInt(p3[1]),parseInt(p3[2]));
+          for(var k3=0;k3<3;k3++){
+            var nb3=te3[k3].nb;
+            if(regSet3[nb3.c+","+nb3.r+","+nb3.t])continue;
+            var f3=fences[te3[k3].key];
+            if(f3){var ci3=FCOLORS.indexOf(f3.color);if(ci3>=0&&ci3<numP)wallOwner[ci3]++;}
+          }
+        }
+        var wo=[];for(var j=0;j<numP;j++)if(wallOwner[j]>0)wo.push("P"+j+"="+wallOwner[j]);
+        if(wo.length>0)s+=" WALL("+wo.join(",")+")";
       }
     }
     L.push(s);
@@ -698,6 +713,41 @@ function generateGameReport(){
   }
   var st=[];for(var i=0;i<numP;i++)st.push("P"+i+":"+pf[i]+"f"+ps2[i]+"s");
   L.push("STATS "+st.join(" "));
+  L.push("");
+  
+  // Per-player fence positions
+  L.push("FENCES (player: list of edge_keys)");
+  var playerFenceKeys=[];for(var i=0;i<numP;i++)playerFenceKeys.push([]);
+  for(var i=0;i<history.length;i++){
+    var pi2=turnOrder[history[i].fci%numP];
+    playerFenceKeys[pi2].push(history[i].key);
+  }
+  for(var i=0;i<numP;i++){
+    if(playerFenceKeys[i].length>0){
+      L.push("P"+i+": "+playerFenceKeys[i].map(function(k){return"["+k+"]";}).join(" "));
+    }
+  }
+  L.push("");
+  
+  // Influence summary: bounding box and spread per player
+  L.push("INFLUENCE (player: centroid spread_radius fence_count)");
+  for(var i=0;i<numP;i++){
+    if(playerFenceKeys[i].length<2)continue;
+    var ix=0,iy=0;
+    var pts3=[];
+    for(var j=0;j<playerFenceKeys[i].length;j++){
+      var p4=playerFenceKeys[i][j].split(",");
+      var px=parseFloat(p4[0]),py=parseFloat(p4[1]);
+      ix+=px;iy+=py;pts3.push({x:px,y:py});
+    }
+    ix/=pts3.length;iy/=pts3.length;
+    var maxR2=0;
+    for(var j=0;j<pts3.length;j++){
+      var dd2=Math.sqrt((pts3[j].x-ix)*(pts3[j].x-ix)+(pts3[j].y-iy)*(pts3[j].y-iy));
+      if(dd2>maxR2)maxR2=dd2;
+    }
+    L.push("P"+i+": center=["+Math.round(ix)+","+Math.round(iy)+"] radius="+Math.round(maxR2)+" fences="+pts3.length);
+  }
   L.push("");
   L.push("--- Paste this to Claude for strategy analysis ---");
   return L.join("\n");
@@ -1099,6 +1149,7 @@ function aiMove(){
   var scoringMoves=[];
   // === PRE-SCAN: detect opponent near-complete regions (1 edge away) ===
   var oppThreatKeys={}; // keys that would complete big opponent enclosures
+  var giftBlacklist={}; // keys where placing = gifting opponents big points
   for(var i=0;i<cands.length;i++){
     var e=cands[i];
     var tfk2={};for(var k in fences)tfk2[k]=1;tfk2[e.key]=1;
@@ -1110,9 +1161,20 @@ function aiMove(){
       var a2=analyzeRegion(reg2,tfk2);
       if(a2.sheep<=0||a2.house<=0)continue;
       // This candidate completes an enclosure — check who benefits
-      var maxC2=0;for(var j=0;j<numP;j++)if(a2.colors[j]>maxC2)maxC2=a2.colors[j];
-      if(a2.colors[aiIdx]<maxC2&&a2.pts>=3){
-        // Opponent scores exclusively from this — it's a threat if left 1-open
+      var cc2=a2.colors.slice();cc2[aiIdx]++;
+      var maxC2=0;for(var j=0;j<numP;j++)if(cc2[j]>maxC2)maxC2=cc2[j];
+      var aiScores2=(cc2[aiIdx]>=maxC2);
+      var oppTotal2=0;
+      for(var j=0;j<numP;j++){if(j!==aiIdx&&cc2[j]>=maxC2)oppTotal2+=a2.pts;}
+      if(!aiScores2&&a2.pts>=2){
+        // AI gets 0 but opponents get points — BLACKLIST
+        giftBlacklist[e.key]=(giftBlacklist[e.key]||0)+a2.pts;
+      }
+      if(aiScores2&&oppTotal2>a2.pts*1.5&&a2.pts>=2){
+        // AI scores but opponents collectively gain much more — soft blacklist
+        giftBlacklist[e.key]=(giftBlacklist[e.key]||0)+Math.floor(oppTotal2*0.5);
+      }
+      if(!aiScores2&&a2.pts>=3){
         oppThreatKeys[e.key]=(oppThreatKeys[e.key]||0)+a2.pts;
       }
     }
@@ -1131,7 +1193,16 @@ function aiMove(){
       // This move completes an enclosure!
       var cc=a.colors.slice();cc[aiIdx]++;
       var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
-      if(cc[aiIdx]<maxC)continue; // AI doesn't score — skip
+      if(cc[aiIdx]<maxC){
+        // AI doesn't score but completes an enclosure for opponents!
+        var oppGain=0;for(var j=0;j<numP;j++){if(j!==aiIdx&&cc[j]>=maxC)oppGain+=a.pts;}
+        if(oppGain>=2){
+          // Actively penalize: the bigger the gift, the worse
+          var penalty=-oppGain*150;
+          if(!moveScore||penalty>moveScore)moveScore=penalty;
+        }
+        continue;
+      }
       var oppSharers=0;
       var oppSharerTotalAfter=0;
       for(var j=0;j<numP;j++){
@@ -1151,32 +1222,106 @@ function aiMove(){
       var val=0;
       if(triggersEnd&&aiAfter>=bestOppAfter) val=5000+a.pts*100; // WIN THE GAME
       else if(triggersEnd&&aiAfter<bestOppAfter) val=-5000; // LOSE THE GAME
-      else if(oppSharers===0) val=2000+a.pts*50; // exclusive — best!
-      else{
-        // SHARED: check if this actually helps AI or mostly helps opponents
-        // How many opponents benefit and how much they gain relative to AI
-        var oppTotalGain=oppSharers*a.pts;
-        var aiNetAdvantage=a.pts-oppTotalGain; // negative if opponents gain more total
-        
-        if(aiAfter>=bestOppAfter){
-          // AI still ahead after sharing — ok but discount by opponent count
-          val=800+a.pts*25-oppSharers*a.pts*8;
-        }else if(bestOppAfter-aiAfter<=2){
-          // Slightly behind — less attractive, scale by how many get helped
-          val=400+a.pts*15-oppSharers*a.pts*10;
-        }else{
-          // Would fall far behind — bad move, especially with many sharers
-          val=50+a.pts*5-oppSharers*a.pts*15;
+      else if(oppSharers===0){
+        val=2000+a.pts*50;
+        // Fence efficiency: count how many AI fences are on the wall
+        var aiWallCount=cc[aiIdx]; // includes the new fence being placed
+        if(aiWallCount>0){
+          var efficiency=a.pts/aiWallCount;
+          if(efficiency<0.5&&a.pts<=2) val=Math.floor(val*0.4); // terrible: 3+ fences for 1-2 pts
+          else if(efficiency>=1.5) val=Math.floor(val*1.3); // great: leveraging others' walls
         }
-        // If AI gains less than any single opponent gains, penalize heavily
-        // (e.g. opponent goes from 15→18 while AI goes from 5→8 — opponent still way ahead)
+      }
+      else{
+        // SHARED: distinguish AI-vs-AI sharing (good) from human sharing (bad)
+        var oppTotalGain=oppSharers*a.pts;
+        var humanSharers=0;
         for(var j=0;j<numP;j++){
-          if(j!==aiIdx&&cc[j]===maxC){
-            var oppBefore=scores[j],oppAfterJ=oppBefore+a.pts;
-            // If opponent is already ahead and stays ahead, this just helps them
-            if(oppBefore>aiScore&&oppAfterJ>aiAfter) val-=a.pts*20;
-            // If opponent would overtake AI, very bad
-            if(oppBefore<=aiScore&&oppAfterJ>aiAfter) val-=a.pts*30;
+          if(j!==aiIdx&&cc[j]===maxC&&!aiSlots[j])humanSharers++;
+        }
+        var aiSharers=oppSharers-humanSharers;
+        
+        if(humanSharers===0){
+          // Sharing with ONLY AI opponents — mutual benefit, much less penalty
+          if(aiAfter>=bestOppAfter){
+            val=1200+a.pts*40-aiSharers*a.pts*3; // light penalty for AI co-sharers
+          }else if(bestOppAfter-aiAfter<=3){
+            val=700+a.pts*25-aiSharers*a.pts*5;
+          }else{
+            val=200+a.pts*10-aiSharers*a.pts*8;
+          }
+        }else{
+          // Sharing with human(s) — be cautious
+          if(aiAfter>=bestOppAfter){
+            val=800+a.pts*25-oppSharers*a.pts*8;
+          }else if(bestOppAfter-aiAfter<=2){
+            val=400+a.pts*15-oppSharers*a.pts*10;
+          }else{
+            val=50+a.pts*5-oppSharers*a.pts*15;
+          }
+          for(var j=0;j<numP;j++){
+            if(j!==aiIdx&&!aiSlots[j]&&cc[j]===maxC){
+              var oppBefore=scores[j],oppAfterJ=oppBefore+a.pts;
+              if(oppBefore>aiScore&&oppAfterJ>aiAfter) val-=a.pts*20;
+              if(oppBefore<=aiScore&&oppAfterJ>aiAfter) val-=a.pts*30;
+            }
+          }
+        }
+      }
+      
+      // === SMALL ENCLOSURE DISCOUNT (scales with player count) ===
+      if(!triggersEnd&&val>0){
+        var roundNum=Math.floor(fci/numP)+1;
+        var minPtsThreshold=0;
+        if(numP>=5&&roundNum>=5) minPtsThreshold=3;
+        else if(numP>=5&&roundNum>=3) minPtsThreshold=2;
+        else if(numP===4&&roundNum>=4) minPtsThreshold=2;
+        else if(numP>=4&&roundNum>=2) minPtsThreshold=1;
+        
+        if(a.pts<minPtsThreshold){
+          val=Math.floor(val*0.15);
+        }else if(a.pts<=2&&numP>=4&&roundNum>=3){
+          val=Math.floor(val*0.5);
+        }
+        
+        // FENCE COST CHECK: how many AI fences on this enclosure's wall?
+        var aiOnWall=cc[aiIdx];
+        if(aiOnWall>=3&&a.pts<=2&&numP>=3){
+          // 3+ AI fences for 1-2 points = terrible efficiency
+          val=Math.floor(val*0.2);
+        }else if(aiOnWall>=4&&a.pts<=3&&numP>=4){
+          // 4+ fences for 3 points in big game = still bad
+          val=Math.floor(val*0.4);
+        }
+        
+        // === OPPORTUNITY COST: is there a bigger enclosure being built nearby? ===
+        if(a.pts<=2&&numP>=3){
+          // Check if AI has a region nearby with more potential
+          var hasBetterOption=false;
+          for(var ci2=0;ci2<2;ci2++){
+            // Check regions adjacent to this fence (current state, no new fence)
+            var regOC=floodFill(pair[ci2].c,pair[ci2].r,pair[ci2].t,curFk);
+            if(!regOC||regOC.length<4)continue;
+            var ocSheep=0,ocHouse=0,ocAi=0,ocOpen=0,ocPts=0;
+            var ocSet={};for(var oj=0;oj<regOC.length;oj++)ocSet[regOC[oj].c+","+regOC[oj].r+","+regOC[oj].t]=1;
+            for(var oj=0;oj<regOC.length;oj++){
+              var ot=getTile(regOC[oj].c,regOC[oj].r,regOC[oj].t);
+              if(ot==="W"||ot==="G"||ot==="B"){ocSheep++;ocPts+=advMode?(ot==="W"?3:ot==="G"?2:1):1;}
+              if(ot==="H")ocHouse++;
+              var ote=triEdges(regOC[oj].c,regOC[oj].r,regOC[oj].t);
+              for(var ok=0;ok<3;ok++){
+                if(ocSet[ote[ok].nb.c+","+ote[ok].nb.r+","+ote[ok].nb.t])continue;
+                if(curFk[ote[ok].key]){var of2=fences[ote[ok].key];if(of2&&FCOLORS.indexOf(of2.color)===aiIdx)ocAi++;}
+                else ocOpen++;
+              }
+            }
+            if(ocSheep>0&&ocHouse>0&&ocPts>a.pts&&ocAi>=1&&ocOpen<=6){
+              hasBetterOption=true;break;
+            }
+          }
+          if(hasBetterOption){
+            // There's a bigger enclosure being built — save this fence for that
+            val=Math.floor(val*0.3);
           }
         }
       }
@@ -1194,11 +1339,121 @@ function aiMove(){
     }
   }
   
+  // === GLOBAL INFLUENCE MAP: attract AI toward human territory ===
+  var humanInfluence={}; // key -> BONUS for contesting human territory (flipped from penalty)
+  var fkeys2=Object.keys(fences);
+  for(var hp=0;hp<numP;hp++){
+    if(hp===aiIdx||aiSlots[hp])continue;
+    var hfList=[];
+    for(var fi=0;fi<fkeys2.length;fi++){
+      var f=fences[fkeys2[fi]];
+      if(!f)continue;
+      if(FCOLORS.indexOf(f.color)===hp){
+        var pts=fkeys2[fi].split(",");
+        hfList.push({x:parseFloat(pts[0]),y:parseFloat(pts[1])});
+      }
+    }
+    if(hfList.length<3)continue;
+    var hcx=0,hcy=0;
+    for(var hi=0;hi<hfList.length;hi++){hcx+=hfList[hi].x;hcy+=hfList[hi].y;}
+    hcx/=hfList.length;hcy/=hfList.length;
+    var hMaxR=0;
+    for(var hi=0;hi<hfList.length;hi++){
+      var dd=Math.sqrt((hfList[hi].x-hcx)*(hfList[hi].x-hcx)+(hfList[hi].y-hcy)*(hfList[hi].y-hcy));
+      if(dd>hMaxR)hMaxR=dd;
+    }
+    for(var ci2=0;ci2<cands.length;ci2++){
+      var ce=cands[ci2];
+      var cmx=(ce.x1+ce.x2)/2,cmy=(ce.y1+ce.y2)/2;
+      var cdist=Math.sqrt((cmx-hcx)*(cmx-hcx)+(cmy-hcy)*(cmy-hcy));
+      if(cdist>hMaxR*1.2)continue;
+      // BONUS for being inside/near human territory (contesting it)
+      var contestB=hfList.length*5;
+      var depthRatio=Math.max(0,1-(cdist/(hMaxR+1)));
+      contestB=Math.floor(contestB*(0.3+depthRatio)*(numP>=5?1.5:numP>=4?1.0:0.4));
+      humanInfluence[ce.key]=(humanInfluence[ce.key]||0)+contestB;
+    }
+  }
+  
+  // === DISRUPTION TARGETS: find candidates that would SPLIT a large human territory ===
+  var disruptTargets={}; // key -> bonus for splitting human territory
+  for(var hp=0;hp<numP;hp++){
+    if(hp===aiIdx||aiSlots[hp])continue;
+    var hfList2=[];
+    for(var fi=0;fi<fkeys2.length;fi++){
+      var f=fences[fkeys2[fi]];
+      if(!f)continue;
+      if(FCOLORS.indexOf(f.color)===hp){
+        var pts=fkeys2[fi].split(",");
+        hfList2.push({x:parseFloat(pts[0]),y:parseFloat(pts[1])});
+      }
+    }
+    if(hfList2.length<6)continue; // need substantial fence network
+    var hcx2=0,hcy2=0;
+    for(var hi=0;hi<hfList2.length;hi++){hcx2+=hfList2[hi].x;hcy2+=hfList2[hi].y;}
+    hcx2/=hfList2.length;hcy2/=hfList2.length;
+    var hMaxR2=0;
+    for(var hi=0;hi<hfList2.length;hi++){
+      var dd=Math.sqrt((hfList2[hi].x-hcx2)*(hfList2[hi].x-hcx2)+(hfList2[hi].y-hcy2)*(hfList2[hi].y-hcy2));
+      if(dd>hMaxR2)hMaxR2=dd;
+    }
+    if(hMaxR2<R*3)continue; // territory too small to worry about
+    // Find candidates INSIDE human territory that connect to existing fences (= splitting walls)
+    for(var ci2=0;ci2<cands.length;ci2++){
+      var ce=cands[ci2];
+      var cmx=(ce.x1+ce.x2)/2,cmy=(ce.y1+ce.y2)/2;
+      var cdist=Math.sqrt((cmx-hcx2)*(cmx-hcx2)+(cmy-hcy2)*(cmy-hcy2));
+      if(cdist>hMaxR2*0.8)continue; // must be inside territory
+      // Check if this candidate touches or is very close to existing fences (= connects to walls)
+      var touchesFence=false;
+      var pair3=findTriPair(ce.key);
+      if(pair3){
+        for(var si=0;si<2;si++){
+          var te3=triEdges(pair3[si].c,pair3[si].r,pair3[si].t);
+          for(var k3=0;k3<3;k3++){
+            if(fences[te3[k3].key]){touchesFence=true;break;}
+          }
+          if(touchesFence)break;
+        }
+      }
+      if(!touchesFence)continue; // isolated fence won't split anything
+      // Count human fences in different directions
+      var quads2=[0,0,0,0];
+      for(var hi=0;hi<hfList2.length;hi++){
+        var dx=hfList2[hi].x-cmx,dy=hfList2[hi].y-cmy;
+        var qi=(dx>=0?0:1)+(dy>=0?2:0);
+        quads2[qi]++;
+      }
+      var fq=0;for(var qi=0;qi<4;qi++)if(quads2[qi]>=1)fq++;
+      if(fq>=2){
+        // This candidate is inside and touches walls = good splitting position
+        var dBonus=hfList2.length*8+fq*15;
+        var depthR=Math.max(0,1-(cdist/(hMaxR2+1)));
+        dBonus=Math.floor(dBonus*(0.5+depthR)*(numP>=5?2.0:numP>=4?1.2:0.6));
+        // More bonus if region has valuable tiles
+        if(pair3){
+          for(var si=0;si<2;si++){
+            var t3=getTile(pair3[si].c,pair3[si].r,pair3[si].t);
+            if(t3==="H"||t3==="W"||t3==="G"||t3==="B")dBonus+=15;
+          }
+        }
+        disruptTargets[ce.key]=(disruptTargets[ce.key]||0)+dBonus;
+      }
+    }
+  }
+  
   // === PASS 2: strategic moves (build toward scoring + block opponents) ===
   var best=null,bestS=-99999;
   for(var i=0;i<cands.length;i++){
     var e=cands[i];
-    var s=aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys);
+    var giftPenalty=0;
+    if(giftBlacklist[e.key]){
+      giftPenalty=giftBlacklist[e.key]*100;
+    }
+    // Apply global influence map as BONUS (contesting human territory)
+    var influenceBonus=humanInfluence[e.key]||0;
+    var disruptBonus=disruptTargets[e.key]||0;
+    var s=aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys,disruptTargets)-giftPenalty+influenceBonus+disruptBonus;
     if(s>bestS){bestS=s;best=e;}
   }
   if(best)aiDoMove(best);
@@ -1222,31 +1477,114 @@ function aiDoMove(best){
   requestAnimationFrame(animPan);
 }
 
-function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
+function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys,disruptTargets){
   oppThreatKeys=oppThreatKeys||{};
+  disruptTargets=disruptTargets||{};
   var pair=findTriPair(e.key);
   if(!pair)return -99999;
   
   var minDist=99999,mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
   var fkeys=Object.keys(fences);
-  // Track distance to AI's own fences
+  // Track distance to AI's own fences AND compute centroid
   var minOwnDist=99999;
+  var ownFenceCount=0;
+  var ownCx=0,ownCy=0,ownMaxR=0;
+  var ownFenceList=[];
   for(var fi=0;fi<fkeys.length;fi++){
     var parts=fkeys[fi].split(",");
     var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
     var dd=Math.abs(mx-fx)+Math.abs(my-fy);
     if(dd<minDist)minDist=dd;
     var f=fences[fkeys[fi]];
-    if(f&&FCOLORS.indexOf(f.color)===aiIdx&&dd<minOwnDist)minOwnDist=dd;
+    if(f&&FCOLORS.indexOf(f.color)===aiIdx){
+      if(dd<minOwnDist)minOwnDist=dd;
+      ownFenceCount++;
+      ownCx+=fx;ownCy+=fy;
+      ownFenceList.push({x:fx,y:fy});
+    }
   }
-  // Tighter distance as game progresses
-  // Round 1: max 1 triangle away from nearest fence (R*3)
-  // Early: R*6, Mid: R*5, Late: R*5
-  var maxR=R*(fci<numP?3:fci<numP*3?6:5);
-  if(fkeys.length>0&&minDist>maxR)return -99999;
+  if(ownFenceCount>0){
+    ownCx/=ownFenceCount;ownCy/=ownFenceCount;
+    for(var fi=0;fi<ownFenceList.length;fi++){
+      var dr=Math.sqrt((ownFenceList[fi].x-ownCx)*(ownFenceList[fi].x-ownCx)+(ownFenceList[fi].y-ownCy)*(ownFenceList[fi].y-ownCy));
+      if(dr>ownMaxR)ownMaxR=dr;
+    }
+  }
+  // Distance from candidate to AI's centroid
+  var distToCentroid=ownFenceCount>0?Math.sqrt((mx-ownCx)*(mx-ownCx)+(my-ownCy)*(my-ownCy)):0;
+  
+  // === HARD DISTANCE LIMITS ===
+  var isDisruptTarget=disruptTargets[e.key]&&disruptTargets[e.key]>30;
+  // Check if candidate is near a human fence (for centroid bypass)
+  var nearHumanForBypass=false;
+  for(var fi=0;fi<fkeys.length;fi++){
+    var fb=fences[fkeys[fi]];
+    if(!fb)continue;
+    var fbi=FCOLORS.indexOf(fb.color);
+    if(fbi>=0&&!aiSlots[fbi]&&fbi!==aiIdx){
+      var pb=fkeys[fi].split(",");
+      if(Math.abs(mx-parseFloat(pb[0]))+Math.abs(my-parseFloat(pb[1]))<R*2){nearHumanForBypass=true;break;}
+    }
+  }
+  var canBypass=isDisruptTarget||(nearHumanForBypass&&minDist<R*3);
+  if(fci<numP){
+    if(fkeys.length>0&&minDist>R*3)return -99999;
+  }else if(ownFenceCount>=3){
+    var maxFromCentroid=Math.max(ownMaxR+R*3, R*5);
+    if(distToCentroid>maxFromCentroid){
+      if(canBypass){/* contesting human territory */}
+      else return -99999;
+    }
+  }else if(ownFenceCount>=1){
+    if(minOwnDist>R*5&&!canBypass)return -99999;
+  }
+  if(fkeys.length>0&&minDist>R*6)return -99999;
   
   var sc=0;
   var aiScore=scores[aiIdx];
+  
+  // === CONTEST HUMAN TERRITORY: AI actively places fences near human fences ===
+  // Goal: cut/split human territory, create shared enclosures, cluster AIs together
+  var humanContestBonus=0;
+  var nearHumanFences=0;
+  var touchingHumanFence=false; // directly adjacent to a human fence
+  var minHumanDist=99999;
+  for(var fi=0;fi<fkeys.length;fi++){
+    var f=fences[fkeys[fi]];
+    if(!f)continue;
+    var fci2=FCOLORS.indexOf(f.color);
+    if(fci2<0||fci2===aiIdx||aiSlots[fci2])continue;
+    var parts=fkeys[fi].split(",");
+    var fx=parseFloat(parts[0]),fy=parseFloat(parts[1]);
+    var dd=Math.abs(mx-fx)+Math.abs(my-fy);
+    if(dd<R*5)nearHumanFences++;
+    if(dd<minHumanDist)minHumanDist=dd;
+  }
+  // Check if candidate directly shares a triangle with a human fence
+  for(var si=0;si<2;si++){
+    var te=triEdges(pair[si].c,pair[si].r,pair[si].t);
+    for(var k2=0;k2<3;k2++){
+      var hf=fences[te[k2].key];
+      if(hf){
+        var hci=FCOLORS.indexOf(hf.color);
+        if(hci>=0&&!aiSlots[hci]&&hci!==aiIdx)touchingHumanFence=true;
+      }
+    }
+  }
+  // Scale contest bonus by player count
+  var contestScale=numP>=5?1.0:numP>=4?0.7:numP>=3?0.4:0.15;
+  if(touchingHumanFence){
+    // DIRECTLY adjacent to human fence = excellent splitting position
+    humanContestBonus+=35*contestScale;
+    // Even more bonus if also near AI's own fences (connected wall)
+    if(minOwnDist<R*3)humanContestBonus+=25*contestScale;
+    // Bonus for each nearby human fence (more human fences = richer area to contest)
+    humanContestBonus+=nearHumanFences*8*contestScale;
+  }else if(minHumanDist<R*2.5){
+    // Very close to human fence but not touching — approach bonus
+    humanContestBonus+=15*contestScale;
+  }
+  sc+=humanContestBonus;
   
   // === 1-STEP LOOKAHEAD: would placing here enable scoring next turn? ===
   var tfk={};for(var k in fences)tfk[k]=1;tfk[e.key]=1;
@@ -1280,17 +1618,20 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
     // If placing this fence leaves only 1 open edge AND region has sheep+house
     // → next turn AI can complete it!
     if(regSheepT>0&&regHouseT>0&&openList.length===1){
-      // Check if AI would score (AI fence count including new one)
-      var newAi=aiFenceT+1; // AI will place the closing fence next turn
+      var newAi=aiFenceT+1;
       if(newAi>=oppFenceT){
-        // AI will score! Huge bonus proportional to points
+        // AI will score! Bonus proportional to points
         sc+=totalPtsT*60;
-        if(oppFenceT===0)sc+=totalPtsT*30; // exclusive!
+        if(oppFenceT===0)sc+=totalPtsT*30;
+        // Efficiency bonus: leverage others' walls
+        if(oppFenceT>=2)sc+=totalPtsT*15; // others built walls for us = efficient
       }
     }
-    // 2 open edges = 2 turns away, still valuable
+    // 2 open edges = 2 turns away
     if(regSheepT>0&&regHouseT>0&&openList.length===2&&aiFenceT>=1){
       if(aiFenceT>=oppFenceT)sc+=totalPtsT*15;
+      // Efficiency: large region with many opp fences = AI needs few to close
+      if(oppFenceT>=3&&totalPtsT>=3)sc+=totalPtsT*10;
     }
   }
   
@@ -1328,6 +1669,8 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
   }
   
   // === 2-STEP LOOKAHEAD: can AI complete a medium enclosure in 2 turns? ===
+  // More players = bigger enclosures are more important = boost planning bonus
+  var planBoost=numP>=5?2.0:numP>=4?1.5:numP>=3?1.2:1.0;
   if(fci>=numP){ // skip round 1
     var tfk2S={};for(var k in fences)tfk2S[k]=1;tfk2S[e.key]=1;
     for(var i=0;i<2;i++){
@@ -1357,15 +1700,15 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
         var ownership2=aiF2/(aiF2+oppF2+0.01);
         if(ownership2>=0.4){
           // Plan detected: medium enclosure closeable in 2 turns
-          sc+=pts2S*35*ownership2;
-          if(oppF2===0)sc+=pts2S*20; // exclusive!
-          if(reg2S.length>=6)sc+=pts2S*15; // big region bonus
+          sc+=pts2S*35*ownership2*planBoost;
+          if(oppF2===0)sc+=pts2S*20*planBoost; // exclusive!
+          if(reg2S.length>=6)sc+=pts2S*15*planBoost; // big region bonus
         }
       }
       // 3 open edges = 3 turns, still interesting for big regions
       if(sheep2S>0&&house2S>0&&open2S.length===3&&pts2S>=4&&reg2S.length>=8){
         var ownership3=aiF2/(aiF2+oppF2+0.01);
-        if(ownership3>=0.5)sc+=pts2S*12*ownership3;
+        if(ownership3>=0.5)sc+=pts2S*12*ownership3*planBoost;
       }
     }
   }
@@ -1411,28 +1754,103 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
     
     // === PRIORITY 1: CO-BUILD — join others' regions to score together ===
     // This is THE core strategy: piggyback on others' work
-    if(oppFence>=1&&aiFence===0){
-      // First fence in someone else's region — infiltrate!
-      var joinVal=totalPts*completeness*60; // boosted from 30
-      // Near-complete = URGENT to join before it closes without AI
-      if(openEdges<=2)joinVal+=totalPts*50; // boosted from 25
-      else if(openEdges<=3)joinVal+=totalPts*30; // boosted from 12
-      else if(openEdges<=5)joinVal+=totalPts*10;
-      // Can AI match the dominant builder with just 1 fence?
-      if(1>=maxOppF)joinVal*=2.0; // one fence = tied = shared! (boosted from 1.8)
-      else if(maxOppF===2)joinVal*=1.2; // need 2 to match but still worth joining
-      else joinVal*=0.6; // opponent dominates, harder to match
-      // Bigger region = bigger potential score = more worth joining
+    // BUT: detect if a HUMAN player is building a large enclosure
+    var humanDominates=false;
+    var humanIdx=-1;
+    var humanFenceCount=0;
+    for(var j=0;j<numP;j++){
+      if(j!==aiIdx&&!aiSlots[j]&&playerFences[j]>=2){
+        // Human player with 2+ fences on this region's border
+        if(playerFences[j]>humanFenceCount){
+          humanFenceCount=playerFences[j];
+          humanIdx=j;
+        }
+      }
+    }
+    if(humanIdx>=0&&humanFenceCount>=2&&reg.length>=5&&totalPts>=3){
+      humanDominates=true;
+    }
+    
+    if(humanDominates&&aiFence===0){
+      // Human has 2+ fences here — AI should CONTEST by joining
+      // This splits human territory and creates shared enclosures
+      if(humanFenceCount>=3){
+        // Human has 3+ fences — AI needs to infiltrate aggressively to share scoring
+        // Only bad if enclosure is almost done AND AI can't catch up
+        if(openEdges<=2&&humanFenceCount>=4){
+          // Almost closed, human will dominate — risky but still worth 1 fence to share
+          var contestVal=totalPts*completeness*10;
+          sc+=contestVal;
+        }else{
+          // Still open — great opportunity to contest
+          var contestVal2=totalPts*completeness*25;
+          if(openEdges<=4)contestVal2+=totalPts*15;
+          sc+=contestVal2;
+        }
+      }else if(humanFenceCount===2){
+        // Human has 2 — AI placing 1 could tie = share scoring!
+        var tieVal=totalPts*completeness*35;
+        if(openEdges<=3)tieVal+=totalPts*20;
+        sc+=tieVal;
+      }
+    }else if(humanDominates&&aiFence>=1){
+      // AI already contesting. Keep building to maintain scoring eligibility.
+      if(aiFence+1>=humanFenceCount){
+        var coHumanVal=totalPts*completeness*45;
+        if(openEdges<=2)coHumanVal+=totalPts*30;
+        sc+=coHumanVal;
+      }else{
+        // Behind but still worth building if gap is small
+        var gapToHuman=humanFenceCount-(aiFence+1);
+        if(gapToHuman<=1)sc+=totalPts*completeness*15;
+        else sc-=totalPts*5; // too far behind, diminishing returns
+      }
+    }else if(oppFence>=1&&aiFence===0){
+      // First fence in someone else's region
+      var dominantIsHuman=(maxOppIdx>=0&&!aiSlots[maxOppIdx]);
+      // Count how many distinct AI players have fences here (mutual AI co-build)
+      var aiPlayersInRegion=0;
+      for(var j=0;j<numP;j++){if(j!==aiIdx&&aiSlots[j]&&playerFences[j]>=1)aiPlayersInRegion++;}
+      
+      var joinVal=totalPts*completeness*35;
+      if(openEdges<=2)joinVal+=totalPts*25;
+      else if(openEdges<=3)joinVal+=totalPts*12;
+      // Can AI match?
+      if(1>=maxOppF)joinVal*=1.8;
+      else if(maxOppF===2)joinVal*=1.2;
+      else joinVal*=0.5;
       if(regSheep>=3)joinVal*=1.3;
-      if(regSheep>=5)joinVal*=1.6;
+      
+      if(dominantIsHuman){
+        // Against humans: cautious
+        if(numP>=5)joinVal*=0.3;
+        else if(numP>=4)joinVal*=0.5;
+        else joinVal*=0.7;
+      }else{
+        // Against AI opponents: ACTIVELY co-build!
+        // Multiple AIs in same region = mutual benefit = everyone scores
+        if(aiPlayersInRegion>=2)joinVal*=2.0; // hot zone: many AIs building here
+        else joinVal*=1.3;
+        // Near-complete AI regions are urgent to join
+        if(openEdges<=3&&totalPts>=3)joinVal*=1.5;
+      }
       sc+=joinVal;
     }else if(oppFence>=1&&aiFence>=1){
-      // Already joined — keep co-building to stay in the scoring
-      var coVal=totalPts*completeness*50; // boosted from 25
-      if(openEdges<=2)coVal+=totalPts*30; // boosted from 15
-      else if(openEdges<=3)coVal+=totalPts*15;
-      if(aiFence+1>=maxOppF)coVal*=1.5; // will match or beat
+      // Already joined — keep co-building
+      var dominantIsHuman2=(maxOppIdx>=0&&!aiSlots[maxOppIdx]);
+      var aiPlayersInRegion2=0;
+      for(var j=0;j<numP;j++){if(j!==aiIdx&&aiSlots[j]&&playerFences[j]>=1)aiPlayersInRegion2++;}
+      
+      var coVal=totalPts*completeness*35;
+      if(openEdges<=2)coVal+=totalPts*25;
+      else if(openEdges<=3)coVal+=totalPts*12;
+      if(aiFence+1>=maxOppF)coVal*=1.5;
+      else coVal*=0.6;
       if(regSheep>=4)coVal*=1.3;
+      // Mutual AI co-build bonus
+      if(!dominantIsHuman2&&aiPlayersInRegion2>=1)coVal*=1.5;
+      // Against humans: only continue if AI is winning fence count
+      if(dominantIsHuman2&&aiFence<humanFenceCount)coVal*=0.2;
       sc+=coVal;
     }
     
@@ -1440,46 +1858,77 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
     // Don't wait until it's almost done — intervene as soon as it's big
     if(aiFence===0&&maxOppF>=1&&openEdges>=1){
       var isExclusive=(maxOppF>=2&&oppFence===maxOppF); // one player building alone
+      var isHumanBuilder=(maxOppIdx>=0&&!aiSlots[maxOppIdx]); // human player
       var isBigThreat=(regSheep>=3||totalPts>=3);
       if(isExclusive&&isBigThreat){
-        // Someone is quietly building a big exclusive enclosure!
-        var blockVal=totalPts*30; // boosted base from 20
-        // Urgency by how close to completion
-        if(openEdges<=2)blockVal*=4.0; // boosted from 3
-        else if(openEdges<=3)blockVal*=2.5; // boosted from 2
+        var blockVal=totalPts*30;
+        if(openEdges<=2)blockVal*=4.0;
+        else if(openEdges<=3)blockVal*=2.5;
         else if(openEdges<=5)blockVal*=1.5;
-        // Bigger = more dangerous
         if(regSheep>=4)blockVal*=1.5;
         if(regSheep>=6)blockVal*=2.0;
-        // Blocking also means joining — double benefit
         blockVal*=1.5;
+        // EXTRA: human builders are much more dangerous (they plan ahead)
+        if(isHumanBuilder){
+          blockVal*=2.5;
+          // Even loosely fenced regions by humans are threats
+          if(openEdges<=8&&totalPts>=4)blockVal+=totalPts*40;
+        }
         sc+=blockVal;
       }
-      // Even if not exclusive, large regions with few AI fences deserve attention
       if(!isExclusive&&isBigThreat&&maxOppF>=2&&openEdges<=4){
         var threatVal=totalPts*15;
         if(openEdges<=2)threatVal*=2.0;
+        if(isHumanBuilder)threatVal*=2.0;
         sc+=threatVal;
+      }
+      // NEW: detect human building even when not yet "exclusive"
+      // (human has 2+ fences but other AIs also have 1 fence)
+      if(isHumanBuilder&&humanFenceCount>=2&&reg.length>=6&&totalPts>=3){
+        var humanThreat=totalPts*20;
+        if(openEdges<=5)humanThreat*=2.0;
+        if(openEdges<=3)humanThreat*=2.0;
+        // Only a bonus if this would actually infiltrate (AI has 0 fences)
+        sc+=humanThreat;
       }
     }
     
-    // === SECONDARY: Build AI's own enclosure (opportunistic) ===
+    // === PRIMARY: Build AI's own enclosure ===
+    // Key insight: EFFICIENT enclosures leverage existing fences (from anyone)
+    // Best: AI has few fences but total walls are high = less AI investment needed
     if(aiFence>=1){
-      var ownership=aiFence/(aiFence+oppFence+0.01);
-      var buildVal=totalPts*completeness*30*ownership; // reduced from 40
-      if(openEdges<=1)buildVal+=totalPts*80;
-      else if(openEdges<=2)buildVal+=totalPts*40;
-      else if(openEdges<=3)buildVal+=totalPts*20;
-      if(oppFence===0)buildVal*=1.5;
+      var totalWalls=aiFence+oppFence;
+      var ptsPerAiFence=totalPts/(aiFence+1); // how many pts per AI fence invested
+      var buildVal=totalPts*completeness*30;
+      // Efficiency bonus: more points per AI fence = better
+      buildVal+=ptsPerAiFence*15;
+      // Near completion bonuses (scaled by points, not ownership)
+      if(openEdges<=1)buildVal+=totalPts*120;
+      else if(openEdges<=2)buildVal+=totalPts*60;
+      else if(openEdges<=3)buildVal+=totalPts*30;
+      else if(openEdges<=5)buildVal+=totalPts*10;
+      // AI dominance still matters for scoring eligibility
+      if(aiFence+1>=maxOppF)buildVal*=1.8; // AI will score after placing
+      else if(aiFence>=maxOppF-1)buildVal*=1.2; // close to matching
+      else buildVal*=0.5; // AI won't score — less attractive
+      // Exclusive bonus (reduced — co-building is usually better)
+      if(oppFence===0)buildVal*=1.2;
+      // Size bonuses
       if(regSheep>=4)buildVal*=1.3;
       if(regSheep>=6)buildVal*=1.6;
+      // Leverage bonus: if others already built walls, AI needs fewer fences to close
+      if(oppFence>=2&&aiFence<=2)buildVal*=1.6; // piggyback efficiently
+      if(oppFence>=3&&aiFence<=2)buildVal*=1.3; // even more leverage
+      if(numP>=4)buildVal*=1.3;
       sc+=buildVal;
     }
     
-    // === LOW PRIORITY: Start in uncontested area ===
+    // === Start in uncontested area (only if no better co-build option nearby) ===
     if(aiFence===0&&oppFence===0&&totalPts>=2){
-      sc+=totalPts*2; // reduced from 3
-      if(regSheep>=3)sc+=totalPts*1;
+      sc+=totalPts*3;
+      if(regSheep>=3)sc+=totalPts*2;
+      if(regSheep>=5)sc+=totalPts*3;
+      if(minOwnDist<R*3)sc+=totalPts*3;
     }
   }
   
@@ -1487,12 +1936,28 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
   var isRound1=(fci<numP);
   var isEarly=(fci<numP*3);
   
-  // Proximity to existing fences (reduced in round 1 to avoid snowflake)
+  // STRONG proximity to AI's OWN fences — #1 clustering force
+  if(minOwnDist<99999){
+    if(minOwnDist<R*1.5) sc+=25; // touching own fence = excellent
+    else if(minOwnDist<R*2.5) sc+=15; // very close
+    else if(minOwnDist<R*3.5) sc+=5; // nearby
+    // Penalty for being far from own fences
+    if(!isRound1&&minOwnDist>R*3) sc-=(minOwnDist/R)*4;
+    if(!isRound1&&minOwnDist>R*5) sc-=(minOwnDist/R)*8;
+  }
+  // CENTROID GRAVITY: penalize distance from centroid (prevents drift chains)
+  if(ownFenceCount>=3&&!isRound1){
+    var centroidPenalty=(distToCentroid/(R))*2;
+    if(distToCentroid>ownMaxR)centroidPenalty+=(distToCentroid-ownMaxR)/R*6;
+    sc-=centroidPenalty;
+  }
+  
+  // Proximity to existing fences (any player - reduced importance)
   var nearFence=0;
   for(var i=0;i<2;i++){
     var te=triEdges(pair[i].c,pair[i].r,pair[i].t);
     for(var j=0;j<3;j++){
-      if(fences[te[j].key])nearFence+=(isRound1?0.5:2);
+      if(fences[te[j].key])nearFence+=(isRound1?0.5:1);
     }
   }
   sc+=nearFence;
@@ -1531,10 +1996,7 @@ function aiEvalStrategic(e,aiIdx,curFk,oppThreatKeys){
     if(isRound1)sc+=Math.random()*4;
   }
   
-  // Anti-wander: penalize going far from AI's own fences mid-late game
-  if(minOwnDist<99999&&fci>=numP*3){
-    if(minOwnDist>R*5)sc-=(minOwnDist/(R*2))*3;
-  }
+  // (Anti-wander now handled in PROXIMITY section above)
   
   // === BLOCK OPPONENT THREATS: bonus for fences adjacent to opponent near-complete regions ===
   for(var i=0;i<2;i++){

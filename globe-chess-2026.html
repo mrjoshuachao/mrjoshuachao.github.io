@@ -577,7 +577,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v2.0.1';
+const _VERSION='v2.0.2';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -3489,7 +3489,7 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           }
           // Safety check: high-value piece capturing low-value target
           // If Q/R captures a pawn/minor and target square is attacked, penalize
-          if(ownVal>=1000&&capVal<650){
+          if(ownVal>=600&&capVal<ownVal-150){
             // Quick check: is target square attacked by opponent after our capture?
             const opp2=color==='black'?'white':'black';
             let sqAttacked=false;
@@ -3516,6 +3516,37 @@ function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
           // Base capture bonus (still want aggressive play)
           if(captureBonus>0&&capT){
             sc+=(isBlack?1:-1)*Math.min(Math.round(capVal*captureBonus),200);
+          }
+        }
+        // Safety check: non-capture moves — penalize moving Q/R/N/B to an attacked square
+        if(!sv.c&&!sv.epCap&&pc&&pc.type!=='K'&&pc.type!=='P'){
+          const pieceVal=_EV[pc.type];
+          if(pieceVal>=600){
+            const opp3=color==='black'?'white':'black';
+            let cheapestAttacker=99999;
+            const sv4=aiApply(m);
+            for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
+              const p3=board[la][lo];if(!p3||p3.color!==opp3)continue;
+              const mvs3=getValidMoves(la,lo);
+              for(const mv3 of mvs3){
+                if(mv3.lat===m.tLat&&mv3.lon===m.tLon){
+                  const av=_EV[p3.type];
+                  if(av<cheapestAttacker)cheapestAttacker=av;
+                  break;
+                }
+              }
+            }
+            aiUndo(m,pc,sv4);
+            if(cheapestAttacker<99999){
+              // Square is attacked. Penalize based on how much we'd lose.
+              if(cheapestAttacker<pieceVal){
+                // Opponent can profit by capturing: heavy penalty
+                sc+=(isBlack?-1:1)*Math.round((pieceVal-cheapestAttacker)*0.5);
+              } else {
+                // Equal or losing trade for opponent, but still risky
+                sc+=(isBlack?-1:1)*40;
+              }
+            }
           }
         }
         // Forward aggression: reward pieces moving toward opponent's territory
