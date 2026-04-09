@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v3.4.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v3.5.0</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -620,7 +620,7 @@ function generateGameReport(){
   var L=[];
   // Header
   L.push("BAA! GAME LOG");
-  L.push("V=v3.4.0 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
+  L.push("V=v3.5.0 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
   L.push("P="+numP+" H="+(numP-numAI)+" AI="+numAI+" W="+winTarget+" ADV="+(advMode?1:0));
   // Turn order and AI slots
   var toStr=[];for(var i=0;i<numP;i++)toStr.push(turnOrder[i]);
@@ -1169,6 +1169,56 @@ function aiMove(){
   // 5. Opportunistic closing: if you CAN score 3+pts, DO IT immediately
   // 6. Late game: close everything before game ends
 
+  // === INVESTMENT SCAN: find AI's big projects in progress ===
+  // Scan all regions touching AI's existing fences to find "invested regions"
+  var investments=[]; // {pts, aiFence, maxOppF, openEdges, safe, closeable, regKey}
+  var investRegSeen={};
+  var aiFenceKeys=[];
+  for(var fi=0;fi<Object.keys(fences).length;fi++){
+    var fk=Object.keys(fences)[fi];
+    var ff=fences[fk];
+    if(!ff||FCOLORS.indexOf(ff.color)!==aiIdx)continue;
+    aiFenceKeys.push(fk);
+  }
+  for(var fi=0;fi<aiFenceKeys.length;fi++){
+    var pairI=findTriPair(aiFenceKeys[fi]);
+    if(!pairI)continue;
+    for(var si=0;si<2;si++){
+      var regI=floodFill(pairI[si].c,pairI[si].r,pairI[si].t,curFk);
+      if(!regI||regI.length<2)continue;
+      var rk=regI[0].c+","+regI[0].r+","+regI[0].t;
+      if(investRegSeen[rk])continue;investRegSeen[rk]=1;
+      var rSet={};for(var rj=0;rj<regI.length;rj++)rSet[regI[rj].c+","+regI[rj].r+","+regI[rj].t]=1;
+      var aiF=0,oppF=0,openE=0,pts=0,sheep=0,house=0,maxOF=0;
+      var pF=[];for(var j=0;j<numP;j++)pF.push(0);
+      for(var rj=0;rj<regI.length;rj++){
+        var t2=getTile(regI[rj].c,regI[rj].r,regI[rj].t);
+        if(t2==="W"||t2==="G"||t2==="B"){sheep++;pts+=advMode?(t2==="W"?3:t2==="G"?2:1):1;}
+        if(t2==="H")house++;
+        var te=triEdges(regI[rj].c,regI[rj].r,regI[rj].t);
+        for(var k=0;k<3;k++){
+          var nb=te[k].nb;
+          if(rSet[nb.c+","+nb.r+","+nb.t])continue;
+          if(curFk[te[k].key]){
+            var f2=fences[te[k].key];
+            if(f2){var ci2=FCOLORS.indexOf(f2.color);if(ci2>=0)pF[ci2]++;if(ci2===aiIdx)aiF++;else oppF++;}
+          }else openE++;
+        }
+      }
+      if(sheep<1||house<1||aiF<2||pts<4)continue;
+      for(var j=0;j<numP;j++)if(j!==aiIdx&&pF[j]>maxOF)maxOF=pF[j];
+      // "Safe" = AI has most fences AND enough open edges that others can't easily close
+      var safe=(aiF>=maxOF&&openE>=3);
+      var closeable=(openE<=2);
+      investments.push({pts:pts,aiF:aiF,maxOppF:maxOF,openE:openE,safe:safe,closeable:closeable});
+    }
+  }
+  // Find the best investment (highest pts, safe)
+  var bestInvest=null;
+  for(var ii=0;ii<investments.length;ii++){
+    if(!bestInvest||investments[ii].pts>bestInvest.pts)bestInvest=investments[ii];
+  }
+
   // === PRE-SCAN: gift blacklist (prevent giving free points to opponents) ===
   var giftBlacklist={};
   for(var i=0;i<cands.length;i++){
@@ -1206,7 +1256,6 @@ function aiMove(){
       var cc=a.colors.slice();cc[aiIdx]++;
       var maxC=0;for(var j=0;j<numP;j++)if(cc[j]>maxC)maxC=cc[j];
       if(cc[aiIdx]<maxC){
-        // AI doesn't score — penalize heavily
         var oppGain=0;for(var j=0;j<numP;j++){if(j!==aiIdx&&cc[j]>=maxC)oppGain+=a.pts;}
         if(oppGain>=2){var pen=-oppGain*150;if(!moveScore||pen>moveScore)moveScore=pen;}
         continue;
@@ -1220,25 +1269,35 @@ function aiMove(){
       var triggersEnd=false;
       for(var j=0;j<numP;j++){if(scores[j]+(cc[j]>=maxC?a.pts:0)>winTarget-1)triggersEnd=true;}
       var val=0;
-      if(triggersEnd&&aiAfter>=bestOppAfter) val=9999; // WIN
-      else if(triggersEnd&&aiAfter<bestOppAfter) val=-9999; // LOSE
+      if(triggersEnd&&aiAfter>=bestOppAfter) val=9999;
+      else if(triggersEnd&&aiAfter<bestOppAfter) val=-9999;
       else{
-        // Base value: points are king
         val=a.pts*100;
-        // Efficiency: pts per AI fence on wall
         var aiOnWall=cc[aiIdx];
         var efficiency=a.pts/(aiOnWall||1);
-        if(efficiency>=2) val+=a.pts*80; // amazing leverage
-        else if(efficiency>=1) val+=a.pts*30; // good
-        else if(efficiency<0.5&&a.pts<=2) val=Math.floor(val*0.3); // terrible
-        // Small enclosure discount — ruthless in big games
+        if(efficiency>=2) val+=a.pts*80;
+        else if(efficiency>=1) val+=a.pts*30;
+        else if(efficiency<0.5&&a.pts<=2) val=Math.floor(val*0.3);
+        // Small enclosure discount
         if(numP>=5){
-          if(a.pts<=1) val=-10; // NEVER close 1-pt in 5+ player games
-          else if(a.pts<=2) val=Math.floor(val*0.15); // almost never close 2-pt
-          else if(a.pts<=3) val=Math.floor(val*0.5); // discount 3-pt
+          if(a.pts<=1) val=-10;
+          else if(a.pts<=2) val=Math.floor(val*0.15);
+          else if(a.pts<=3) val=Math.floor(val*0.5);
         }else if(numP>=3){
           if(a.pts<=1) val=Math.floor(val*0.1);
           if(a.pts<=2) val=Math.floor(val*0.3);
+        }
+        // === DUAL-TRACK: delay closing safe big investments ===
+        // If this closure IS the big investment AND it's safe, delay it
+        // to go score elsewhere first (like Red does)
+        var isOwnBigClose=(cc[aiIdx]>=maxC&&a.pts>=4&&cc[aiIdx]>=3);
+        if(isOwnBigClose&&bestInvest&&bestInvest.safe&&gamePhase<0.6){
+          // Safe investment: no rush to close, go score elsewhere
+          val=Math.floor(val*0.4);
+        }
+        // But if game is ending or investment is threatened, close NOW
+        if(isOwnBigClose&&gamePhase>=0.6){
+          val=Math.floor(val*1.8); // endgame: cash in!
         }
       }
       if(!moveScore||val>moveScore)moveScore=val;
@@ -1259,7 +1318,7 @@ function aiMove(){
   for(var i=0;i<cands.length;i++){
     var e=cands[i];
     var penalty=giftBlacklist[e.key]?(giftBlacklist[e.key]*100):0;
-    var s=aiEvalStrategic(e,aiIdx,curFk,gamePhase)-penalty;
+    var s=aiEvalStrategic(e,aiIdx,curFk,gamePhase,bestInvest)-penalty;
     if(s>bestS){bestS=s;best=e;}
   }
   if(best)aiDoMove(best);
@@ -1294,10 +1353,11 @@ function aiDoMove(best){
   requestAnimationFrame(animPan);
 }
 
-function aiEvalStrategic(e,aiIdx,curFk,gamePhase){
+function aiEvalStrategic(e,aiIdx,curFk,gamePhase,bestInvest){
   var pair=findTriPair(e.key);
   if(!pair)return -99999;
   gamePhase=gamePhase||0;
+  bestInvest=bestInvest||null;
 
   // === SETUP: distances and own-fence centroid ===
   var mx=(e.x1+e.x2)/2,my=(e.y1+e.y2)/2;
@@ -1396,40 +1456,47 @@ function aiEvalStrategic(e,aiIdx,curFk,gamePhase){
     // Keep investing in shared regions — prefer BIGGER regions
     else if(aiFence>=1&&oppFence>=1){
       var coVal=totalPts*20;
-      // Near completion: close it!
       if(openEdges<=1) coVal+=totalPts*80;
       else if(openEdges<=2) coVal+=totalPts*40;
       else if(openEdges<=3) coVal+=totalPts*20;
-      // Leverage: more opponent fences = AI needs fewer = efficient
       var leverage=totalPts/(aiFence+1);
       coVal+=leverage*15;
-      // Can AI score?
       if(aiFence+1>=maxOppF) coVal*=1.5;
       else coVal*=0.6;
-      // Other AIs here
       if(otherAiF>=1) coVal*=1.3;
-      // Big region multiplier (same quadratic preference as join)
       if(totalPts>=5) coVal*=1.4;
       if(totalPts>=7) coVal*=1.3;
+      // INVESTMENT CONTINUATION: bonus for regions AI is already heavily invested in
+      if(aiFence>=2&&totalPts>=4&&openEdges<=6){
+        var investBonus=aiFence*totalPts*10;
+        // If NOT safe yet (opponent catching up), urgently continue
+        if(maxOppF>=aiFence) investBonus*=2.0;
+        // If safe but still needs walls, moderate bonus
+        else if(openEdges>=3) investBonus*=0.8;
+        coVal+=investBonus;
+      }
       sc+=coVal;
     }
     // --- C) SOLO BUILD: AI has fences, nobody else does ---
-    // Early game: avoid UNLESS building toward a big enclosure (4+ pts)
-    // Late game: cash in everything
     else if(aiFence>=1&&oppFence===0){
       var soloVal=totalPts*10;
       if(openEdges<=1) soloVal+=totalPts*60;
       else if(openEdges<=2) soloVal+=totalPts*25;
       if(gamePhase<0.4){
-        // Early: only continue solo if region is BIG and worth the investment
         if(totalPts>=5&&openEdges<=4){
-          // Big enclosure plan: worth continuing
-          soloVal*=1.0; // normal priority
-          if(openEdges<=2) soloVal*=1.5; // almost done!
-        }else if(aiFence>=3){
-          soloVal*=0.1; // too many fences in small solo region, stop
+          // BIG enclosure plan: worth continuing
+          // INVESTMENT CONTINUATION: the more AI has invested, the more it should continue
+          var investMult=1.0+aiFence*0.3; // 2 fences=1.6x, 3=1.9x, 4=2.2x
+          soloVal*=investMult;
+          if(openEdges<=2) soloVal*=1.5;
+          // DUAL-TRACK: if this investment is SAFE, discount slightly to let AI go score elsewhere
+          if(aiFence>=maxOppF&&openEdges>=3){
+            soloVal*=0.6; // safe: go score elsewhere, come back later
+          }
+        }else if(aiFence>=3&&totalPts<=3){
+          soloVal*=0.1;
         }else if(totalPts<=3){
-          soloVal*=0.2; // small region, not worth solo building
+          soloVal*=0.2;
         }else{
           soloVal*=0.4;
         }
@@ -1576,6 +1643,62 @@ function aiEvalStrategic(e,aiIdx,curFk,gamePhase){
     }
     sc+=rich*(fci<numP?1.0:0.4);
     if(fci<numP)sc+=Math.random()*3;
+  }
+
+  // === DUAL-TRACK: when AI has a safe big investment, boost scoring elsewhere ===
+  // Red's strategy: invest in big enclosure, then go score small points elsewhere
+  // while the big investment stays safe. Come back to close it later.
+  if(bestInvest&&bestInvest.safe&&bestInvest.pts>=4&&gamePhase<0.6){
+    // Check if this candidate is near a scoring opportunity (1-step lookahead found something)
+    // If so, give extra bonus for "going elsewhere to score while investment is safe"
+    var tfkDT={};for(var k in fences)tfkDT[k]=1;tfkDT[e.key]=1;
+    for(var si=0;si<2;si++){
+      var regDT=floodFill(pair[si].c,pair[si].r,pair[si].t,tfkDT);
+      if(!regDT||regDT.length<2)continue;
+      var rSetDT={};for(var rj=0;rj<regDT.length;rj++)rSetDT[regDT[rj].c+","+regDT[rj].r+","+regDT[rj].t]=1;
+      var openDT=0,aiFDT=0,oppFDT=0,ptsDT=0,sheepDT=0,houseDT=0;
+      for(var rj=0;rj<regDT.length;rj++){
+        var t3=getTile(regDT[rj].c,regDT[rj].r,regDT[rj].t);
+        if(t3==="W"||t3==="G"||t3==="B"){sheepDT++;ptsDT+=advMode?(t3==="W"?3:t3==="G"?2:1):1;}
+        if(t3==="H")houseDT++;
+        var te=triEdges(regDT[rj].c,regDT[rj].r,regDT[rj].t);
+        for(var k=0;k<3;k++){
+          var nb=te[k].nb;
+          if(rSetDT[nb.c+","+nb.r+","+nb.t])continue;
+          if(tfkDT[te[k].key]){
+            var ff=fences[te[k].key];
+            if(ff){var ci2=FCOLORS.indexOf(ff.color);if(ci2===aiIdx)aiFDT++;else oppFDT++;}
+            if(te[k].key===e.key)aiFDT++;
+          }else openDT++;
+        }
+      }
+      // This candidate opens a quick-score opportunity (closeable soon, AI can score)
+      if(sheepDT>0&&houseDT>0&&openDT<=3&&ptsDT>=2&&aiFDT<=2){
+        // "Elsewhere scoring" bonus: go grab quick points while big investment is safe
+        sc+=ptsDT*20;
+      }
+    }
+  }
+  // When investment is NOT safe (threatened), boost anything near the investment area
+  if(bestInvest&&!bestInvest.safe&&bestInvest.pts>=4){
+    // Check if this candidate helps defend the investment
+    for(var si=0;si<2;si++){
+      var regDef=floodFill(pair[si].c,pair[si].r,pair[si].t,curFk);
+      if(!regDef)continue;
+      var rSetDef={};for(var rj=0;rj<regDef.length;rj++)rSetDef[regDef[rj].c+","+regDef[rj].r+","+regDef[rj].t]=1;
+      var aiFDef=0;
+      for(var rj=0;rj<regDef.length;rj++){
+        var te=triEdges(regDef[rj].c,regDef[rj].r,regDef[rj].t);
+        for(var k=0;k<3;k++){
+          if(rSetDef[te[k].nb.c+","+te[k].nb.r+","+te[k].nb.t])continue;
+          if(curFk[te[k].key]){var ff=fences[te[k].key];if(ff&&FCOLORS.indexOf(ff.color)===aiIdx)aiFDef++;}
+        }
+      }
+      if(aiFDef>=2){
+        // This candidate is in the investment region — urgently defend!
+        sc+=bestInvest.pts*15;
+      }
+    }
   }
 
   return sc+Math.random()*0.2;
