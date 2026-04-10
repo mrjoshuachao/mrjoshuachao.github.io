@@ -88,7 +88,7 @@ button:not(.tbtn):not(:disabled):active{filter:brightness(0.75)}
 <div style="display:flex;align-items:center;gap:6px">
 <button class="tbtn" id="btnRules">規則</button>
 <button class="tbtn" id="btnTheme">主題</button>
-<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v3.5.0</span>
+<span style="font-size:10px;color:#333;font-family:'Segoe UI',sans-serif">v3.5.1</span>
 </div>
 <div style="display:flex;gap:6px;margin:0 auto">
 <button class="tbtn" id="btnUndo">還原</button>
@@ -620,7 +620,7 @@ function generateGameReport(){
   var L=[];
   // Header
   L.push("BAA! GAME LOG");
-  L.push("V=v3.5.0 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
+  L.push("V=v3.5.1 D="+(new Date()).toISOString().slice(0,19)+"Z S="+seed);
   L.push("P="+numP+" H="+(numP-numAI)+" AI="+numAI+" W="+winTarget+" ADV="+(advMode?1:0));
   // Turn order and AI slots
   var toStr=[];for(var i=0;i<numP;i++)toStr.push(turnOrder[i]);
@@ -1205,7 +1205,7 @@ function aiMove(){
           }else openE++;
         }
       }
-      if(sheep<1||house<1||aiF<2||pts<4)continue;
+      if(sheep<1||house<1||aiF<3||pts<6)continue;
       for(var j=0;j<numP;j++)if(j!==aiIdx&&pF[j]>maxOF)maxOF=pF[j];
       // "Safe" = AI has most fences AND enough open edges that others can't easily close
       var safe=(aiF>=maxOF&&openE>=3);
@@ -1290,7 +1290,7 @@ function aiMove(){
         // === DUAL-TRACK: delay closing safe big investments ===
         // If this closure IS the big investment AND it's safe, delay it
         // to go score elsewhere first (like Red does)
-        var isOwnBigClose=(cc[aiIdx]>=maxC&&a.pts>=4&&cc[aiIdx]>=3);
+        var isOwnBigClose=(cc[aiIdx]>=maxC&&a.pts>=6&&cc[aiIdx]>=3);
         if(isOwnBigClose&&bestInvest&&bestInvest.safe&&gamePhase<0.6){
           // Safe investment: no rush to close, go score elsewhere
           val=Math.floor(val*0.4);
@@ -1648,7 +1648,7 @@ function aiEvalStrategic(e,aiIdx,curFk,gamePhase,bestInvest){
   // === DUAL-TRACK: when AI has a safe big investment, boost scoring elsewhere ===
   // Red's strategy: invest in big enclosure, then go score small points elsewhere
   // while the big investment stays safe. Come back to close it later.
-  if(bestInvest&&bestInvest.safe&&bestInvest.pts>=4&&gamePhase<0.6){
+  if(bestInvest&&bestInvest.safe&&bestInvest.pts>=6&&gamePhase<0.6){
     // Check if this candidate is near a scoring opportunity (1-step lookahead found something)
     // If so, give extra bonus for "going elsewhere to score while investment is safe"
     var tfkDT={};for(var k in fences)tfkDT[k]=1;tfkDT[e.key]=1;
@@ -1680,7 +1680,7 @@ function aiEvalStrategic(e,aiIdx,curFk,gamePhase,bestInvest){
     }
   }
   // When investment is NOT safe (threatened), boost anything near the investment area
-  if(bestInvest&&!bestInvest.safe&&bestInvest.pts>=4){
+  if(bestInvest&&!bestInvest.safe&&bestInvest.pts>=6){
     // Check if this candidate helps defend the investment
     for(var si=0;si<2;si++){
       var regDef=floodFill(pair[si].c,pair[si].r,pair[si].t,curFk);
