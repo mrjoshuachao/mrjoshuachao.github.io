@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="shortcut icon" href="images/index-favicon.ico?crc=4078662745"/>
+<title>JC&amp;D</title>
+<script src="https://use.typekit.net/ik/6uoRmu2vIQfa1Cge5gXxkFrDpqGzrXS1M5KDYqRiulJfen9gfVK0hMwPH2SawDqkFQZLFhjojAwtZcF8FQZcZemywRyRjA4RFAJhwhbXw2w3wRS-PKG0dW47daFGiABR-eBzOciTieyujKoTdkUlScTzShyujAFGjAv0Zh8X-YmKOc8zOYiaikolScTzShyujAFGjAv0Zh8X-YmKOc8zJ6TlpW4TjAblSY4zH6qJU29bMg6eJMJ7fbR2FsMMeMb6MKG4fwIuIMMjMkMfP6sFiWF8qMY434Lbgb.js"></script>
+<script>try{Typekit.load();}catch(e){}</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#fff;color:#222;font-family:"proxima-nova","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.4}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%;height:auto}
+
+  /* Top nav */
+  .site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #eee}
+  .nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;max-width:1000px;margin:0 auto;padding:14px 20px}
+  .nav .brand{font-weight:700;letter-spacing:.5px;font-size:18px;margin-right:8px}
+  .nav a{font-size:14px;color:#333;padding:4px 2px;transition:color .15s}
+  .nav a:hover{color:#000;text-decoration:underline}
+
+  /* Main container */
+  main{max-width:1000px;margin:0 auto;padding:0 20px 40px}
+
+  /* Hero */
+  .hero{padding:60px 0 40px;text-align:left}
+  .hero h1{font-size:64px;font-weight:700;margin:0 0 10px;letter-spacing:1px}
+  .hero p{font-size:16px;color:#666;margin:0}
+
+  /* Section header (Award / Game / 2D / ...) */
+  .section-head{padding:48px 0 20px;border-top:1px solid #eee;margin-top:20px}
+  .section-head h2{font-size:36px;font-weight:700;margin:0 0 6px}
+  .section-head p{font-size:14px;color:#777;margin:0}
+
+  /* Awards icon row */
+  .awards-row{display:flex;flex-wrap:wrap;gap:20px;padding:16px 0 24px;justify-content:flex-start}
+  .awards-row a{display:block}
+  .awards-row img{width:70px;height:70px}
+
+  /* Bars grid */
+  .bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .bar{position:relative;display:block;overflow:hidden;border-radius:2px;background:#f4f4f4;min-height:108px;transition:transform .2s, box-shadow .2s}
+  .bar:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bar.full{grid-column:1 / -1}
+  .bar img{width:100%;height:108px;object-fit:cover;display:block}
+  .bar .label{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:12px 20px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55);background:linear-gradient(90deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 60%,rgba(0,0,0,0) 100%)}
+  .bar .title{font-size:18px;font-weight:700;margin:0 0 4px}
+  .bar .sub{font-size:13px;margin:0;opacity:.95}
+
+  /* Footer */
+  .site-footer{border-top:1px solid #eee;padding:20px;text-align:center;font-size:12px;color:#888}
+
+  /* Tablet */
+  @media (max-width:900px){
+    .hero{padding:40px 0 24px}
+    .hero h1{font-size:52px}
+    .section-head{padding:36px 0 16px}
+    .section-head h2{font-size:30px}
+  }
+
+  /* Mobile */
+  @media (max-width:640px){
+    .nav{gap:4px 12px;padding:12px 16px}
+    .nav .brand{width:100%;margin-bottom:4px;font-size:20px}
+    .nav a{font-size:13px}
+    main{padding:0 16px 32px}
+    .hero{padding:30px 0 18px}
+    .hero h1{font-size:42px}
+    .hero p{font-size:14px}
+    .section-head{padding:28px 0 12px}
+    .section-head h2{font-size:24px}
+    .section-head p{font-size:13px}
+    .awards-row{gap:14px}
+    .awards-row img{width:60px;height:60px}
+    .bars{grid-template-columns:1fr;gap:8px}
+    .bar img{height:96px}
+    .bar .title{font-size:16px}
+    .bar .sub{font-size:12px}
+  }
+
+  @media (max-width:380px){
+    .hero h1{font-size:36px}
+    .awards-row img{width:54px;height:54px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a class="brand" href="index.html">JC&amp;D</a>
+    <a href="award.html">Award</a>
+    <a href="game.html">Game</a>
+    <a href="2d.html">2D</a>
+    <a href="3d.html">3D</a>
+    <a href="video.html">Video</a>
+    <a href="app.html">App</a>
+    <a href="entity.html">Entity</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>JC&amp;D</h1>
+    <p>Mr. Joshua Chao multidisciplinary design archive.</p>
+  </section>
+
+  <!-- AWARD -->
+  <section>
+    <div class="section-head">
+      <h2><a href="award.html">Award</a></h2>
+    </div>
+    <div class="awards-row">
+      <a href="chacha.html"><img src="images/award-good-design-140x140.gif?crc=4008217043" alt="Good Design Award"/></a>
+      <a href="bud.html"><img src="images/award-if-140x140.gif?crc=3877182113" alt="iF Design Award"/></a>
+      <a href="dot.html"><img src="images/award-red-dot-140x140.gif?crc=4156393735" alt="Red Dot Award"/></a>
+      <a href="mad-evolution.html"><img src="images/award-siggraph-140x140.gif?crc=324688672" alt="ACM SIGGRAPH"/></a>
+    </div>
+    <div class="bars">
+      <a class="bar full" href="chacha.html"><img src="images/bar-chacha-01.jpg?crc=3871942204" alt=""/><div class="label"><p class="title">ChaCha</p><p class="sub">Good Design Award, Japan, Sept. 29<sup>th</sup>, 2015.</p></div></a>
+      <a class="bar" href="dot.html"><img src="images/bar-dot-02.jpg?crc=3824541309" alt=""/><div class="label"><p class="title">Dot</p><p class="sub">Red Dot Award, Germany, Oct. 23<sup>rd</sup>, 2010.</p></div></a>
+      <a class="bar" href="bud.html"><img src="images/bar-bud-02.jpg?crc=4064897857" alt=""/><div class="label"><p class="title">Bud</p><p class="sub">iF Design Award, Germany, Mar. 2<sup>nd</sup>, 2011.</p></div></a>
+      <a class="bar" href="the-beautiful-chinese-vase.html"><img src="images/bar-the-beautiful-chinese-vase-02.jpg?crc=3983908675" alt=""/><div class="label"><p class="title">The Beautiful Chinese Vase</p><p class="sub">ACM SIGGRAPH, USA, Sept. 18<sup>th</sup>, 2009.</p></div></a>
+      <a class="bar" href="mad-evolution.html"><img src="images/bar-mad-evolution-02.jpg?crc=3897962836" alt=""/><div class="label"><p class="title">Mad Evolution</p><p class="sub">ACM SIGGRAPH, USA, Sept. 18<sup>th</sup>, 2009.</p></div></a>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section>
+    <div class="section-head">
+      <h2><a href="game.html">Game</a></h2>
+      <p>Action, board, educational, casual, puzzle and simulation.</p>
+    </div>
+    <div class="bars">
+      <a class="bar full" href="probe.html"><img src="images/bar-probe-01.jpg?crc=138854328" alt=""/><div class="label"><p class="title">P.R.O.B.E.</p><p class="sub">Puzzle Game on iOS</p></div></a>
+      <a class="bar" href="dot-for-ios.html"><img src="images/bar-dot-for-ios-02.jpg?crc=238337860" alt=""/><div class="label"><p class="title">Dot for iOS</p><p class="sub">Board Game on iOS</p></div></a>
+      <a class="bar" href="turbo-snail.html"><img src="images/bar-turbo-snail-02.jpg?crc=19567263" alt=""/><div class="label"><p class="title">Turbo Snail</p><p class="sub">Action Game on iOS and Android</p></div></a>
+      <a class="bar" href="baa.html"><img src="images/bar-baa-02.jpg?crc=373341334" alt=""/><div class="label"><p class="title">Baa!</p><p class="sub">Tile-based Board Game</p></div></a>
+      <a class="bar" href="flashlight.html"><img src="images/bar-flashlight-02.jpg?crc=528965133" alt=""/><div class="label"><p class="title">Flashlight</p><p class="sub">Camera-based iOS Game</p></div></a>
+      <a class="bar" href="earth-tank.html"><img src="images/bar-earth-tank-02.jpg?crc=238678842" alt=""/><div class="label"><p class="title">Earth Tank</p><p class="sub">Digital Eco-sphere</p></div></a>
+      <a class="bar" href="go-to-go.html"><img src="images/bar-go-to-go-02.jpg?crc=50885153" alt=""/><div class="label"><p class="title">Go, To Go</p><p class="sub">Portable Game Set</p></div></a>
+      <a class="bar" href="syfy-chess.html"><img src="images/bar-syfy-chess-02.jpg?crc=276858009" alt=""/><div class="label"><p class="title">Syfy Chess</p><p class="sub">Nocturnal Board Game</p></div></a>
+      <a class="bar" href="globe-chess.html"><img src="images/bar-globe-chess-02.jpg?crc=3864949383" alt=""/><div class="label"><p class="title">Globe Chess</p><p class="sub">Game Prototype</p></div></a>
+    </div>
+  </section>
+
+  <!-- 2D -->
+  <section>
+    <div class="section-head">
+      <h2><a href="2d.html">2D</a></h2>
+      <p>Diagram, illustration, photography and poster.</p>
+    </div>
+    <div class="bars">
+      <a class="bar" href="flashlight-opening.html"><img src="images/bar-flashlight-opening-02.jpg?crc=60122287" alt=""/><div class="label"><p class="title">Flashlight Opening</p><p class="sub">Digital Images For Game</p></div></a>
+      <a class="bar" href="mosaics-from-probe.html"><img src="images/bar-mosaics-from-probe-02.jpg?crc=3997434887" alt=""/><div class="label"><p class="title">Mosaics From P.R.O.B.E.</p><p class="sub">Digital Images For Game</p></div></a>
+      <a class="bar" href="body-installation.html"><img src="images/bar-body-installation-02.jpg?crc=4109078771" alt=""/><div class="label"><p class="title">Body Installation</p><p class="sub">Digital Poster</p></div></a>
+      <a class="bar" href="loops-on-the-dot.html"><img src="images/bar-loops-on-the-dot-02.jpg?crc=530643913" alt=""/><div class="label"><p class="title">Loops On The Dot</p><p class="sub">Digital Diagram</p></div></a>
+      <a class="bar" href="climbing.html"><img src="images/bar-climbing-02.jpg?crc=25542100" alt=""/><div class="label"><p class="title">Climbing</p><p class="sub">Digital Photography</p></div></a>
+      <a class="bar" href="here-and-now.html"><img src="images/bar-here-and-now-02.jpg?crc=3996455431" alt=""/><div class="label"><p class="title">Here And Now</p><p class="sub">Digital Poster</p></div></a>
+      <a class="bar" href="shooted.html"><img src="images/bar-shooted-02.jpg?crc=66134059" alt=""/><div class="label"><p class="title">Shooted</p><p class="sub">Digital Photography</p></div></a>
+      <a class="bar" href="falling.html"><img src="images/bar-falling-02.jpg?crc=511524214" alt=""/><div class="label"><p class="title">Falling</p><p class="sub">Digital Photography</p></div></a>
+    </div>
+  </section>
+
+  <!-- 3D -->
+  <section>
+    <div class="section-head">
+      <h2><a href="3d.html">3D</a></h2>
+      <p>Animation scene, game and product concept art.</p>
+    </div>
+    <div class="bars">
+      <a class="bar full" href="render-diary.html"><img src="images/bar-the-beautiful-klein-bottle-01.jpg?crc=4117081252" alt=""/><div class="label"><p class="title">Render Diary</p><p class="sub">Klein Bottle / Physics / Pinecone / Numbers / infinity</p></div></a>
+      <a class="bar" href="alabibusta.html"><img src="images/bar-alabibusta-02.jpg?crc=513271881" alt=""/><div class="label"><p class="title">Alabibusta</p><p class="sub">Board Game Concept Art</p></div></a>
+      <a class="bar" href="globe-chess-art.html"><img src="images/bar-globe-chess-art-02.jpg?crc=3870576870" alt=""/><div class="label"><p class="title">Globe Chess</p><p class="sub">Game Set Concept Art</p></div></a>
+      <a class="bar" href="fantastic-plastic-garden.html"><img src="images/bar-fantastic-plastic-garden-02.jpg?crc=448619184" alt=""/><div class="label"><p class="title">Fantastic Plastic Garden</p><p class="sub">Animation Concept Art</p></div></a>
+      <a class="bar" href="cloudy-homeworld.html"><img src="images/bar-cloudy-homeworld-02.jpg?crc=4278292359" alt=""/><div class="label"><p class="title">Cloudy Homeworld</p><p class="sub">Digital Game Concept Art</p></div></a>
+      <a class="bar" href="ozupad-air.html"><img src="images/bar-ozupad-air-02.jpg?crc=374603194" alt=""/><div class="label"><p class="title">Ozupad Air</p><p class="sub">Electronic Device Concept Art</p></div></a>
+      <a class="bar" href="large-scale-globe-chess.html"><img src="images/bar-large-scale-globe-chess-02.jpg?crc=57275303" alt=""/><div class="label"><p class="title">Large Scale Globe Chess</p><p class="sub">Activity Concept Art</p></div></a>
+      <a class="bar" href="xmas-tree-ornament.html"><img src="images/bar-xmas-tree-ornament-02.jpg?crc=4088044815" alt=""/><div class="label"><p class="title">Xmas Tree Ornament</p><p class="sub">3D Printing</p></div></a>
+      <a class="bar" href="tabmouse.html"><img src="images/bar-tabmouse-02.jpg?crc=4222197999" alt=""/><div class="label"><p class="title">TabMouse</p><p class="sub">Electronic Device Concept Art</p></div></a>
+      <a class="bar" href="unidentified-furry-object.html"><img src="images/bar-unidentified-fury-object-02.jpg?crc=4202620149" alt=""/><div class="label"><p class="title">Unidentified Furry Object</p><p class="sub">Animation Concept Art</p></div></a>
+      <a class="bar" href="thinkers-glass.html"><img src="images/bar-thinkers-glass-02.jpg?crc=4207796096" alt=""/><div class="label"><p class="title">Thinker&rsquo;s Glass</p><p class="sub">Product Design Concept Art</p></div></a>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section>
+    <div class="section-head">
+      <h2><a href="video.html">Video</a></h2>
+      <p>Ad, game demo, product intro and YouTube project.</p>
+    </div>
+    <div class="bars">
+      <a class="bar" href="chacha-video.html"><img src="images/bar-chacha-02.jpg?crc=3999480807" alt=""/><div class="label"><p class="title">ChaCha</p><p class="sub">Natural Detergent Powder Cubes</p></div></a>
+      <a class="bar" href="iconbelieveit-video.html"><img src="images/bar-iconbelieveit-02.jpg?crc=4183741278" alt=""/><div class="label"><p class="title">Iconbelieveit</p><p class="sub">YouTube Channel</p></div></a>
+      <a class="bar" href="summer-taipei-video.html"><img src="images/bar-summer-taipei-02.jpg?crc=137659920" alt=""/><div class="label"><p class="title">Summer Taipei</p><p class="sub">Tilt-shift &amp; Time-lapse Photography</p></div></a>
+      <a class="bar" href="ink-brush-icon-video.html"><img src="images/bar-ink-brush-icon-02.jpg?crc=287329170" alt=""/><div class="label"><p class="title">Ink Brush Icon</p><p class="sub">YouTube Channel</p></div></a>
+      <a class="bar" href="icbc-hclub-iphone-app-video.html"><img src="images/bar-hclub-iphone-02.jpg?crc=4185687641" alt=""/><div class="label"><p class="title">ICBC H-club iPhone App</p><p class="sub">Bank Service App on iOS</p></div></a>
+      <a class="bar" href="plug-a-steak-video.html"><img src="images/bar-plug-a-steak-02.jpg?crc=3922276516" alt=""/><div class="label"><p class="title">Plug A Steak</p><p class="sub">Short Film</p></div></a>
+      <a class="bar" href="dot-for-ios-video.html"><img src="images/bar-dot-for-ios-02.jpg?crc=238337860" alt=""/><div class="label"><p class="title">Dot for iOS</p><p class="sub">Board Game on iOS</p></div></a>
+      <a class="bar" href="chess-on-the-dot-video.html"><img src="images/bar-chess-on-the-dot-02.jpg?crc=4044483724" alt=""/><div class="label"><p class="title">Chess on the Dot</p><p class="sub">Wooden Game Set</p></div></a>
+      <a class="bar" href="turbo-snail-video.html"><img src="images/bar-turbo-snail-02.jpg?crc=19567263" alt=""/><div class="label"><p class="title">Turbo Snail</p><p class="sub">Action Game on iOS and Android</p></div></a>
+      <a class="bar" href="probe-video.html"><img src="images/bar-probe-02.jpg?crc=25785649" alt=""/><div class="label"><p class="title">P.R.O.B.E.</p><p class="sub">Puzzle Game on iOS</p></div></a>
+      <a class="bar" href="baa-video.html"><img src="images/bar-baa-02.jpg?crc=373341334" alt=""/><div class="label"><p class="title">Baa!</p><p class="sub">Tile-based Board Game</p></div></a>
+      <a class="bar" href="flashlight-video.html"><img src="images/bar-flashlight-02.jpg?crc=528965133" alt=""/><div class="label"><p class="title">Flashlight</p><p class="sub">Camera-based Game on iOS</p></div></a>
+      <a class="bar" href="earth-tank-video.html"><img src="images/bar-earth-tank-02.jpg?crc=238678842" alt=""/><div class="label"><p class="title">Earth Tank</p><p class="sub">Digital Eco-sphere</p></div></a>
+      <a class="bar" href="dot-video.html"><img src="images/bar-dot-02.jpg?crc=3824541309" alt=""/><div class="label"><p class="title">Dot</p><p class="sub">Digital Board Game</p></div></a>
+      <a class="bar" href="globe-chess-video.html"><img src="images/bar-globe-chess-02.jpg?crc=3864949383" alt=""/><div class="label"><p class="title">Globe Chess</p><p class="sub">Game Prototype</p></div></a>
+      <a class="bar" href="mad-evolution-video.html"><img src="images/bar-mad-evolution-02.jpg?crc=3897962836" alt=""/><div class="label"><p class="title">Mad Evolution</p><p class="sub">Interactive Installation</p></div></a>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section>
+    <div class="section-head">
+      <h2><a href="app.html">App</a></h2>
+      <p>Action and puzzle game, bank VIP member mobile service.</p>
+    </div>
+    <div class="bars">
+      <a class="bar" href="turbo-snail-app.html"><img src="images/bar-turbo-snail-02.jpg?crc=19567263" alt=""/><div class="label"><p class="title">Turbo Snail</p><p class="sub">Action Game on iOS and Android</p></div></a>
+      <a class="bar" href="probe-app.html"><img src="images/bar-probe-02.jpg?crc=25785649" alt=""/><div class="label"><p class="title">P.R.O.B.E.</p><p class="sub">Puzzle Game on iOS</p></div></a>
+      <a class="bar" href="icbc-hclub-ipad-app.html"><img src="images/bar-hclub-ipad-02.jpg?crc=4249795898" alt=""/><div class="label"><p class="title">ICBC H-club iPad App</p><p class="sub">Bank Promo App on iOS</p></div></a>
+      <a class="bar" href="icbc-hclub-iphone-app.html"><img src="images/bar-hclub-iphone-02.jpg?crc=4185687641" alt=""/><div class="label"><p class="title">ICBC H-club iPhone App</p><p class="sub">Bank Service App on iOS</p></div></a>
+    </div>
+  </section>
+
+  <!-- ENTITY -->
+  <section>
+    <div class="section-head">
+      <h2><a href="entity.html">Entity</a></h2>
+      <p>Exhibition, game set, physical product and printing.</p>
+    </div>
+    <div class="bars">
+      <a class="bar full" href="chacha-entity.html"><img src="images/bar-chacha-01.jpg?crc=3871942204" alt=""/><div class="label"><p class="title">ChaCha</p><p class="sub">Natural Detergent Powder Cubes</p></div></a>
+      <a class="bar" href="library-of-study-hard.html"><img src="images/bar-library-of-study-hard-02.jpg?crc=3852990868" alt=""/><div class="label"><p class="title">Library of Study Hard</p><p class="sub">Portfolio Set</p></div></a>
+      <a class="bar" href="chess-on-the-dot.html"><img src="images/bar-chess-on-the-dot-02.jpg?crc=4044483724" alt=""/><div class="label"><p class="title">Chess on the Dot</p><p class="sub">Wooden Game Set</p></div></a>
+      <a class="bar" href="i-study-hard-and-you-have-fun.html"><img src="images/bar-i-study-hard-and-you-have-fun-02.jpg?crc=4113875187" alt=""/><div class="label"><p class="title">I Study Hard And You Have Fun</p><p class="sub">Printed Portfolio</p></div></a>
+      <a class="bar" href="library-of-study-hard-posters.html"><img src="images/bar-library-of-study-hard-posters-02.jpg?crc=418477513" alt=""/><div class="label"><p class="title">Library of Study Hard Posters</p><p class="sub">Printed Posters</p></div></a>
+      <a class="bar" href="globe-chess-entity.html"><img src="images/bar-globe-chess-02.jpg?crc=3864949383" alt=""/><div class="label"><p class="title">Globe Chess</p><p class="sub">Game Prototype</p></div></a>
+      <a class="bar" href="a-place-that-air-flows.html"><img src="images/bar-a-place-that-air-flows-02.jpg?crc=189432533" alt=""/><div class="label"><p class="title">A Place That Air Flows</p><p class="sub">Solo Exhibition</p></div></a>
+      <a class="bar" href="take-the-stairs-please.html"><img src="images/bar-take-the-stairs-please-02.jpg?crc=51066388" alt=""/><div class="label"><p class="title">Take The Stairs Please</p><p class="sub">Posters On Elevator Doors</p></div></a>
+      <a class="bar" href="table-tips.html"><img src="images/bar-table-tips-02.jpg?crc=495217426" alt=""/><div class="label"><p class="title">Table Tips</p><p class="sub">Utensil With Icon Design</p></div></a>
+      <a class="bar" href="bunnyian-space-adventure.html"><img src="images/bar-bunnyian-space-adventure-02.jpg?crc=4263338663" alt=""/><div class="label"><p class="title">Bunnyian Space Adventure</p><p class="sub">Laser Cutting Product</p></div></a>
+      <a class="bar" href="stone-soup-exhibition-posters.html"><img src="images/bar-stone-soup-exhibition-posters-02.jpg?crc=338010044" alt=""/><div class="label"><p class="title">Stone Soup Exhibition Posters</p><p class="sub">Printed Posters</p></div></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Copyright © 2026 JC&amp;D. All rights reserved.
+</footer>
+
+</body>
+</html>
