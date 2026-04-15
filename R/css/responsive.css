@@ -1,0 +1,264 @@
+/* JC&D Responsive — Mobile-only overrides.
+   Desktop (>768px) is left 100% untouched from Muse output.
+   On phones we: unwind absolute/float hacks, full-width images,
+   stack paired bars vertically, replace nav text list with a hamburger. */
+
+/* Hide hamburger on desktop */
+#mobile-nav-toggle { display: none; }
+#mobile-nav-backdrop { display: none; }
+
+@media (max-width: 768px) {
+
+  html, body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+
+  /* ---------- Page container ---------- */
+  #page {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+  }
+
+  /* Muse spacer hacks */
+  #pu75 {
+    width: auto !important;
+    height: auto !important;
+    padding-bottom: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* ---------- Top nav bar ---------- */
+  #u75, #u75-bw {
+    left: 0 !important; right: 0 !important;
+    width: 100% !important;
+    height: 48px !important;
+  }
+  #u75 { top: 0 !important; }
+
+  #u3396-32-bw { width: 100% !important; }
+
+  #u3396-32 {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    width: 100% !important;
+    padding: 14px 56px 14px 16px !important;
+    text-align: left !important;
+    font-size: 18px !important;
+    line-height: 20px !important;
+    letter-spacing: normal !important;
+    background: rgba(255,255,255,0.96);
+    box-sizing: border-box !important;
+  }
+  #u3396-32 p { margin: 0 !important; line-height: 20px !important; letter-spacing: normal !important; }
+  #u3396-32 a { letter-spacing: normal !important; }
+  #u3396-32 span { letter-spacing: normal !important; }
+
+  /* Closed state: show only brand (JC&D), hide everything else */
+  #u3396-32:not(.open) a:not(:first-of-type) { display: none !important; }
+  #u3396-32:not(.open) > p > span { display: none !important; }
+  #u3396-32:not(.open) #u3396 { display: inline !important; }
+
+  /* Open state: show all links stacked vertically */
+  #u3396-32.open {
+    background: #fff !important;
+    height: auto !important;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-top: 60px !important;
+    padding-bottom: 24px !important;
+    border-bottom: 1px solid #eee;
+  }
+  #u3396-32.open p {
+    display: block !important;
+    line-height: 1 !important;
+  }
+  #u3396-32.open a {
+    display: block !important;
+    padding: 14px 16px !important;
+    font-size: 17px !important;
+    border-top: 1px solid #eee;
+    color: #000 !important;
+  }
+  #u3396-32.open a:first-of-type {
+    position: absolute;
+    top: 12px; left: 16px;
+    padding: 0 !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    border-top: none !important;
+  }
+  #u3396-32.open > p > span { display: none !important; }
+
+  /* ---------- Hamburger button ---------- */
+  #mobile-nav-toggle {
+    display: block;
+    position: fixed;
+    top: 0; right: 0;
+    z-index: 1000;
+    width: 48px; height: 48px;
+    background: transparent;
+    border: 0;
+    padding: 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #mobile-nav-toggle span {
+    display: block;
+    width: 22px; height: 2px;
+    background: #000;
+    margin: 5px auto;
+    transition: transform .25s ease, opacity .2s ease;
+  }
+  #mobile-nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  #mobile-nav-toggle.open span:nth-child(2) { opacity: 0; }
+  #mobile-nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---------- Bottom copyright bar ---------- */
+  #u700, #u700-bw {
+    left: 0 !important; right: 0 !important;
+    width: 100% !important;
+  }
+  #u701-4, #u701-4-bw {
+    left: 0 !important; right: 0 !important;
+    width: 100% !important;
+  }
+  #u701-4 {
+    padding: 0 12px !important;
+    font-size: 11px !important;
+    line-height: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ---------- Main content column ---------- */
+  #u37091 {
+    width: 100% !important;
+    left: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 48px !important;
+    padding: 0 !important;
+  }
+  #u37091_position_content {
+    width: 100% !important;
+    padding: 14px 14px 60px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Unwind Muse's absolute/float hacks inside content */
+  #u37091 .colelem,
+  #u37091 .grpelem,
+  #u37091 .clip_frame,
+  #u37091 .browser_width {
+    position: static !important;
+    float: none !important;
+    left: auto !important; right: auto !important; top: auto !important; bottom: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Bars: image frames become full-width blocks */
+  #u37091 .clip_frame {
+    position: relative !important;
+    overflow: hidden;
+    height: auto !important;
+  }
+  #u37091 .clip_frame img,
+  #u37091 img.block {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  /* Paragraph captions under bars: give them readable spacing */
+  #u37091 .clearfix.grpelem[id$="-6"],
+  #u37091 .clearfix.grpelem[id$="-8"] {
+    padding: 10px 2px 18px !important;
+    text-align: left !important;
+  }
+  #u37091 .clearfix.grpelem[id$="-6"] p,
+  #u37091 .clearfix.grpelem[id$="-8"] p {
+    margin: 0 !important;
+    line-height: 1.35 !important;
+  }
+
+  /* First paragraph (title) a bit bigger */
+  #u37091 .clearfix.grpelem[id$="-6"] p:first-child,
+  #u37091 .clearfix.grpelem[id$="-8"] p:first-child {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    margin-bottom: 2px !important;
+  }
+  #u37091 .clearfix.grpelem[id$="-6"] p + p,
+  #u37091 .clearfix.grpelem[id$="-8"] p + p {
+    font-size: 13px !important;
+    color: #666 !important;
+  }
+
+  /* Section header blocks (JC&D hero, Game, 2D, 3D, Video, App, Entity titles) */
+  #u806-6, #u917-6, #u991-6, #u1073-6, #u1151-6, #u1221-6, #u1296-6 {
+    padding: 28px 0 8px !important;
+    text-align: left !important;
+    background: transparent !important;
+  }
+  #u806-6 { padding-top: 20px !important; }
+  #u806-2 { font-size: 44px !important; line-height: 1.1 !important; margin: 0 0 8px !important; font-weight: 600 !important; }
+  #u806-4 { font-size: 14px !important; color: #666 !important; margin: 0 !important; }
+
+  #u917-2, #u991-2, #u1073-2, #u1151-2, #u1221-2, #u1296-2 {
+    font-size: 28px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin: 0 0 4px !important;
+  }
+  #u917-4, #u991-4, #u1073-4, #u1151-4, #u1221-4, #u1296-4 {
+    font-size: 13px !important;
+    color: #666 !important;
+    margin: 0 !important;
+  }
+
+  /* Awards icon row (4 icons) */
+  #pu1593 {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    padding: 12px 0 16px !important;
+  }
+  #pu1593 > a {
+    width: auto !important;
+    flex: 0 0 auto;
+  }
+  #pu1593 > a img {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  /* Hide original transparent overlay anchors — we replace them via JS with wrappers */
+  #u37091 a.nonblock.nontext.grpelem:not(.clip_frame) {
+    display: none !important;
+  }
+
+  /* Wrapper anchors created by JS */
+  .mobile-bar-link {
+    display: block !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    margin: 0 0 18px !important;
+    transition: opacity .15s;
+  }
+  .mobile-bar-link:active { opacity: 0.7; }
+
+  /* Vertical spacer element should collapse */
+  .verticalspacer { display: none !important; }
+}
+
+@media (max-width: 380px) {
+  #u806-2 { font-size: 38px !important; }
+  #u917-2, #u991-2, #u1073-2, #u1151-2, #u1221-2, #u1296-2 { font-size: 24px !important; }
+  #pu1593 > a img { width: 56px !important; height: 56px !important; }
+}
