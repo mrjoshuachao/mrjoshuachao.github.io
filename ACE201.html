@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="en" zh-Hant>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrepreneurial Leadership Workshops — Level 1 Explorer | ACE</title>
+<meta name="description" content="Applied Creativity Engine — Entrepreneurial Leadership Workshops, Level 1 Explorer. Bilingual English / 繁體中文.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300;400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ======================================================
+   ACE — Entrepreneurial Leadership Workshops Level 1
+   Bilingual EN / 繁體中文 · Responsive
+====================================================== */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --ink:#0a0a0a;
+  --ink-soft:#2a2a2a;
+  --mute:#666;
+  --mute-2:#999;
+  --line:#e5e2dc;
+  --line-2:#ddd8cf;
+  --paper:#faf8f3;
+  --paper-2:#f2ede3;
+  --paper-3:#efe8db;
+  --accent:#c0603a;        /* sunset ember */
+  --accent-deep:#8b3e1f;
+  --accent-warm:#e8a87c;
+  --sage:#6b7a5a;
+  --gold:#d4a84a;
+
+  --font-display:"Geist","Noto Sans TC",system-ui,sans-serif;
+  --font-serif:"Fraunces","Noto Serif TC",Georgia,serif;
+  --font-body:"Geist","Noto Sans TC",system-ui,sans-serif;
+  --font-cn-serif:"Noto Serif TC",serif;
+  --font-cn-body:"Noto Sans TC",sans-serif;
+
+  --maxw:1340px;
+  --pad:clamp(20px,5vw,60px);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--paper);
+  line-height:1.55;
+  font-size:16px;
+  overflow-x:hidden;
+  font-feature-settings:"ss01","cv11";
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ==========================================================
+   NAV
+========================================================== */
+.nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  padding:16px var(--pad);
+  background:rgba(250,248,243,.85);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav-inner{
+  max-width:var(--maxw);margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:14px;letter-spacing:.01em;
+}
+.logo-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;
+  border:1.5px solid var(--ink);border-radius:6px;
+  font-weight:800;font-size:13px;
+  position:relative;
+}
+.logo-mark::after{
+  content:"®";position:absolute;top:-4px;right:-9px;
+  font-size:8px;font-weight:500;
+}
+.nav-links{display:flex;gap:28px;font-size:13.5px;font-weight:500}
+.nav-links a{position:relative;padding:4px 0;transition:color .25s}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;
+  width:0;height:1px;background:var(--ink);
+  transition:width .3s ease;
+}
+.nav-links a:hover::after{width:100%}
+.lang-toggle{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:600;
+  padding:7px 14px;
+  border:1px solid var(--ink);border-radius:100px;
+  transition:all .25s;
+}
+.lang-toggle:hover{background:var(--ink);color:var(--paper)}
+.lang-toggle .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+.burger{display:none;width:28px;height:20px;position:relative}
+.burger span{position:absolute;left:0;right:0;height:1.5px;background:var(--ink);transition:.3s}
+.burger span:nth-child(1){top:4px}
+.burger span:nth-child(2){top:50%;transform:translateY(-50%)}
+.burger span:nth-child(3){bottom:4px}
+
+@media (max-width:880px){
+  .nav-links{display:none}
+  .burger{display:block}
+}
+
+/* ==========================================================
+   HERO
+========================================================== */
+.hero{
+  min-height:100vh;
+  padding:120px var(--pad) 60px;
+  display:flex;flex-direction:column;
+  position:relative;
+  background:
+    radial-gradient(ellipse at 80% 10%,rgba(192,96,58,.06),transparent 50%),
+    linear-gradient(to bottom,var(--paper) 0%,var(--paper-2) 100%);
+}
+.hero-top{
+  max-width:var(--maxw);width:100%;margin:0 auto;
+  display:flex;flex-direction:column;gap:28px;
+  flex:1;justify-content:center;
+  padding:40px 0;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+.eyebrow .bar{width:24px;height:1px;background:var(--ink-soft)}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:clamp(54px,10vw,148px);
+  line-height:.92;
+  font-weight:800;
+  letter-spacing:-.03em;
+  margin:8px 0;
+}
+.hero h1 .serif{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.02em;
+}
+.hero-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(20px,3.5vw,34px);
+  font-weight:500;
+  color:var(--ink-soft);
+  letter-spacing:.04em;
+  margin-top:8px;
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;
+}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;
+  border:1px solid var(--ink);border-radius:100px;
+  font-size:13px;font-weight:600;
+}
+.pill .bullet{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+.hero-mountain{
+  position:relative;
+  height:clamp(280px,40vh,520px);
+  border-radius:12px;overflow:hidden;
+  margin-top:auto;
+  background:
+    radial-gradient(ellipse at 70% 30%,rgba(232,168,124,.4),transparent 50%),
+    linear-gradient(180deg,#2a1f1a 0%,#4a3324 35%,#6b4528 60%,#3d2817 100%);
+}
+.hero-mountain::before{
+  content:"";position:absolute;inset:0;
+  background:
+    /* Sky gradient */
+    linear-gradient(180deg,rgba(248,200,160,.3) 0%,rgba(192,96,58,.15) 40%,transparent 60%),
+    /* Mountain silhouettes */
+    conic-gradient(from 0deg at 50% 100%,transparent 180deg,#1a1210 200deg,transparent 220deg);
+}
+.hero-mountain::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(135deg,transparent 40%,#1a0f0a 70%,#0a0604 100%);
+  clip-path:polygon(0 100%,0 60%,15% 55%,25% 40%,35% 50%,45% 30%,55% 45%,65% 35%,75% 55%,85% 45%,100% 60%,100% 100%);
+}
+.mountain-overlay{
+  position:absolute;inset:0;display:flex;align-items:flex-end;
+  padding:40px;
+  background:linear-gradient(to top,rgba(0,0,0,.3),transparent 60%);
+}
+.mountain-caption{
+  color:#faf0e0;font-size:13px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:500;opacity:.8;
+}
+
+/* ==========================================================
+   REUSABLE
+========================================================== */
+section{padding:clamp(80px,10vw,140px) var(--pad);position:relative}
+.wrap{max-width:var(--maxw);margin:0 auto}
+.wrap-sm{max-width:1080px;margin:0 auto}
+.wrap-xs{max-width:820px;margin:0 auto}
+
+.section-label{
+  display:flex;align-items:center;gap:12px;
+  font-size:11px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mute);
+  margin-bottom:24px;
+}
+.section-label .num{
+  font-family:var(--font-serif);font-style:italic;
+  font-weight:500;font-size:13px;color:var(--accent);
+}
+
+h2.section-title{
+  font-family:var(--font-display);
+  font-size:clamp(36px,6vw,76px);
+  font-weight:700;line-height:1;
+  letter-spacing:-.025em;
+  margin-bottom:16px;
+}
+h2.section-title .italic{
+  font-family:var(--font-serif);font-style:italic;
+  font-weight:400;letter-spacing:-.01em;
+}
+.section-title-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(18px,2.4vw,28px);
+  font-weight:500;color:var(--ink-soft);
+  letter-spacing:.04em;
+  margin-bottom:40px;
+}
+
+/* Bilingual two-column block */
+.bilingual{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(30px,5vw,80px);
+}
+.bilingual .col{display:flex;flex-direction:column;gap:18px}
+.bilingual .col-lang{
+  font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mute-2);
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+  margin-bottom:8px;
+}
+.col.cn{font-family:var(--font-cn-body);line-height:1.85}
+.col.cn p{letter-spacing:.02em}
+.col.en p{font-family:var(--font-body);line-height:1.7}
+.col p{font-size:16px;color:var(--ink-soft)}
+.col strong{color:var(--ink);font-weight:700}
+.col h3{
+  font-size:clamp(22px,3vw,32px);
+  font-weight:700;line-height:1.15;
+  letter-spacing:-.015em;
+  margin-bottom:4px;
+}
+.col.cn h3{font-family:var(--font-cn-serif);font-weight:600}
+
+@media (max-width:780px){
+  .bilingual{grid-template-columns:1fr;gap:32px}
+  .bilingual .col{padding-bottom:20px}
+  .bilingual .col:not(:last-child){border-bottom:1px dashed var(--line)}
+}
+
+/* Einstein quote */
+.quote-section{
+  background:var(--paper);
+  padding:clamp(100px,14vw,180px) var(--pad);
+  text-align:center;
+}
+.quote-mark{
+  font-family:var(--font-serif);
+  font-size:120px;line-height:.6;
+  font-style:italic;
+  color:var(--accent);
+  margin-bottom:20px;
+}
+.quote-en{
+  font-family:var(--font-serif);font-style:italic;
+  font-weight:300;
+  font-size:clamp(36px,6vw,72px);
+  line-height:1.05;
+  letter-spacing:-.02em;
+  max-width:760px;margin:0 auto;
+}
+.quote-cn{
+  font-family:var(--font-cn-serif);
+  font-style:italic;
+  font-size:clamp(22px,3.5vw,40px);
+  font-weight:500;
+  color:var(--ink-soft);
+  margin-top:24px;
+  letter-spacing:.05em;
+}
+.quote-attr{
+  display:inline-flex;align-items:center;gap:14px;
+  margin-top:48px;
+  font-size:13px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:600;
+}
+.quote-attr .line{width:40px;height:1px;background:var(--ink)}
+
+/* Welcome */
+.welcome-hero{
+  position:relative;height:clamp(280px,50vh,520px);
+  border-radius:16px;overflow:hidden;
+  margin-bottom:50px;
+  background:
+    linear-gradient(180deg,#89a5bf 0%,#5a7891 30%,#3d5267 60%,#2a3845 100%);
+}
+.welcome-hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(255,200,150,.35),transparent 40%),
+    linear-gradient(to top,rgba(30,40,50,.6),transparent 50%);
+}
+.welcome-hero::after{
+  content:"";position:absolute;bottom:0;left:0;right:0;height:60%;
+  background:linear-gradient(135deg,#2c3e50 30%,#1a2530 60%,#0f1820 100%);
+  clip-path:polygon(0 100%,0 50%,20% 25%,35% 45%,50% 15%,65% 35%,80% 20%,100% 40%,100% 100%);
+}
+
+/* Cards */
+.learn-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:32px;
+  margin-top:56px;
+}
+@media (max-width:780px){.learn-grid{grid-template-columns:1fr}}
+.learn-card{
+  padding:32px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  transition:all .3s ease;
+  position:relative;overflow:hidden;
+}
+.learn-card::before{
+  content:"";position:absolute;top:0;left:0;
+  width:40px;height:3px;background:var(--accent);
+  transition:width .35s ease;
+}
+.learn-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -20px rgba(0,0,0,.12)}
+.learn-card:hover::before{width:100%}
+.learn-card .icon{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:36px;color:var(--accent);
+  margin-bottom:12px;font-weight:400;
+}
+.learn-card h4{
+  font-size:22px;font-weight:700;line-height:1.25;
+  margin-bottom:6px;letter-spacing:-.01em;
+}
+.learn-card h4.cn{
+  font-family:var(--font-cn-serif);font-weight:600;
+  font-size:19px;color:var(--ink-soft);
+  margin-bottom:16px;
+}
+.learn-card p{font-size:15px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px}
+.learn-card p.cn{font-family:var(--font-cn-body);font-size:14.5px;line-height:1.8}
+
+/* ==========================================================
+   THREE LAYERS — Survive, Function, Meaning
+========================================================== */
+.layers-section{
+  background:linear-gradient(to bottom,var(--paper) 0%,var(--paper-2) 100%);
+}
+.layers-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  margin:60px 0 40px;
+  border:1px solid var(--ink);
+  border-radius:18px;
+  overflow:hidden;
+}
+@media (max-width:780px){.layers-grid{grid-template-columns:1fr}}
+.layer{
+  padding:44px 32px;
+  text-align:center;
+  border-right:1px dashed var(--ink);
+  position:relative;
+}
+.layers-grid .layer:last-child{border-right:none}
+@media (max-width:780px){
+  .layer{border-right:none;border-bottom:1px dashed var(--ink)}
+  .layers-grid .layer:last-child{border-bottom:none}
+}
+.layer-icon{
+  width:64px;height:64px;margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;
+}
+.layer-num{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:15px;font-weight:500;color:var(--accent);
+  margin-bottom:8px;
+}
+.layer h3{font-size:28px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.layer h3.cn{
+  font-family:var(--font-cn-serif);font-weight:600;
+  font-size:20px;color:var(--ink-soft);margin-bottom:14px;
+}
+.layer p.en{font-size:14px;color:var(--mute);line-height:1.55;margin-bottom:6px}
+.layer p.cn{font-family:var(--font-cn-body);font-size:13.5px;color:var(--mute);line-height:1.75}
+
+.consequence-flow{display:flex;flex-direction:column;gap:20px;margin-top:50px}
+.consequence-box{
+  padding:32px 40px;
+  border:1.5px solid var(--ink);
+  border-radius:14px;
+  background:#fff;
+  position:relative;
+}
+.consequence-box.highlight{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.consequence-box.highlight p{color:var(--paper-2)}
+.arrow-down{
+  display:flex;justify-content:center;
+  font-size:22px;color:var(--mute-2);
+  margin:-8px 0;
+}
+
+/* Neon meaning */
+.neon-section{
+  background:#1a1814;
+  color:#faf0e0;
+  padding:clamp(140px,18vw,240px) var(--pad);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.neon-section::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 50%,rgba(245,180,90,.12),transparent 60%);
+}
+.neon{
+  position:relative;
+  font-family:var(--font-display);
+  font-size:clamp(60px,12vw,160px);
+  font-weight:700;line-height:.95;
+  letter-spacing:-.02em;
+  color:#ffd78b;
+  text-shadow:
+    0 0 8px rgba(255,190,110,.7),
+    0 0 24px rgba(255,170,90,.5),
+    0 0 56px rgba(255,140,60,.4),
+    0 0 100px rgba(255,120,40,.3);
+}
+.neon .italic{
+  font-family:var(--font-serif);font-style:italic;font-weight:300;
+}
+.neon-cn{
+  font-family:var(--font-cn-serif);
+  font-style:italic;
+  font-weight:500;
+  font-size:clamp(24px,4.5vw,44px);
+  color:rgba(255,215,139,.85);
+  text-shadow:0 0 20px rgba(255,170,90,.4);
+  margin-top:32px;
+  letter-spacing:.08em;
+  position:relative;
+}
+
+/* Capacities */
+.capacity-block{
+  display:grid;
+  grid-template-columns:minmax(280px,0.85fr) 1fr;
+  gap:clamp(30px,6vw,80px);
+  align-items:start;
+  padding:60px 0;
+  border-bottom:1px dashed var(--line-2);
+}
+.capacity-block:last-child{border-bottom:none}
+@media (max-width:780px){.capacity-block{grid-template-columns:1fr;gap:32px}}
+.capacity-visual{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 10px 30px -10px rgba(0,0,0,.2);
+}
+.capacity-visual .label{
+  position:absolute;bottom:16px;left:16px;right:16px;
+  color:#fff;font-weight:700;font-size:22px;
+  letter-spacing:-.01em;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
+}
+.cap-curiosity{background:linear-gradient(135deg,#2a5a7a 0%,#1a3d5a 60%,#0d2540 100%)}
+.cap-curiosity::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 40%,rgba(255,230,100,.15),transparent 40%),
+    radial-gradient(circle at 70% 60%,rgba(100,180,220,.2),transparent 45%);
+}
+.cap-freewill{background:linear-gradient(135deg,#c4967a 0%,#8b5a3c 60%,#4a2a18 100%)}
+.cap-freewill::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 60% 40%,rgba(255,200,150,.25),transparent 50%);
+}
+.cap-judgement{background:linear-gradient(135deg,#5a5a58 0%,#383836 60%,#1e1e1c 100%)}
+.cap-judgement::before{
+  content:"⚖";position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:100px;color:rgba(255,255,255,.08);
+}
+.cap-trust{background:linear-gradient(135deg,#2a2520 0%,#d4722a 50%,#1a1412 100%)}
+.cap-trust::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(212,114,42,.3),transparent 60%);
+}
+
+.capacity-content h3{
+  font-family:var(--font-display);
+  font-size:clamp(32px,5vw,56px);
+  font-weight:700;line-height:1;
+  letter-spacing:-.02em;
+  margin-bottom:4px;
+}
+.capacity-content h3.cn{
+  font-family:var(--font-cn-serif);
+  font-weight:700;
+  font-size:clamp(22px,3.2vw,34px);
+  color:var(--ink-soft);
+  margin-bottom:20px;
+}
+.capacity-subtitle{
+  font-family:var(--font-serif);font-style:italic;
+  font-weight:400;font-size:clamp(18px,2.2vw,24px);
+  color:var(--accent-deep);
+  margin-bottom:24px;line-height:1.3;
+}
+.capacity-subtitle-cn{
+  font-family:var(--font-cn-serif);font-style:italic;
+  font-size:15px;color:var(--mute);
+  margin-top:-18px;margin-bottom:32px;
+}
+
+/* Mental model */
+.model-section{
+  background:var(--paper-3);
+  background:
+    linear-gradient(135deg,#f5ecd9 0%,#e8d9b8 100%);
+}
+.capacities-row{
+  display:flex;flex-wrap:wrap;gap:10px;
+  justify-content:center;margin-bottom:40px;
+}
+.cap-tag{
+  padding:10px 22px;
+  border:1.5px solid var(--ink);border-radius:100px;
+  font-size:14px;font-weight:600;
+  background:rgba(255,255,255,.4);
+  backdrop-filter:blur(4px);
+}
+.cap-tag .cn{
+  font-family:var(--font-cn-body);font-weight:500;
+  font-size:12.5px;color:var(--mute);margin-left:8px;
+}
+.model-arrow{text-align:center;font-size:24px;margin:24px 0;color:var(--mute)}
+
+.model-steps{
+  display:grid;grid-template-columns:1fr;gap:20px;
+  max-width:820px;margin:0 auto;
+}
+.model-step{
+  display:grid;grid-template-columns:100px 1fr;
+  gap:28px;align-items:start;
+  padding:28px;
+  background:#fff;
+  border-radius:14px;
+  border:1px solid var(--line);
+}
+@media (max-width:600px){
+  .model-step{grid-template-columns:1fr;gap:16px}
+}
+.model-step-icon{
+  width:80px;height:80px;
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-style:italic;
+  font-size:40px;font-weight:500;
+  color:var(--ink);
+}
+.model-step h4{
+  font-size:22px;font-weight:700;margin-bottom:4px;
+  display:flex;align-items:baseline;gap:12px;
+  flex-wrap:wrap;
+}
+.model-step h4 .num{font-family:var(--font-serif);font-style:italic;color:var(--accent);font-weight:500;font-size:18px}
+.model-step h4 .cn{font-family:var(--font-cn-serif);font-weight:600;font-size:18px;color:var(--ink-soft)}
+.model-step p.en{font-size:14.5px;color:var(--ink-soft);line-height:1.65;margin-bottom:8px}
+.model-step p.cn{font-family:var(--font-cn-body);font-size:14px;color:var(--mute);line-height:1.8}
+
+/* ACE cycle */
+.cycle-visual{
+  width:min(380px,80vw);aspect-ratio:1/1;
+  margin:40px auto;
+  position:relative;
+  border-radius:50%;
+  background:
+    conic-gradient(
+      from 45deg,
+      #4ade80 0deg 90deg,
+      #fbbf24 90deg 180deg,
+      #fb923c 180deg 270deg,
+      #ef4444 270deg 360deg
+    );
+  padding:28px;
+  box-shadow:0 20px 60px -20px rgba(0,0,0,.25);
+}
+.cycle-inner{
+  width:100%;height:100%;
+  background:#fff;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  position:relative;
+}
+.cycle-center{
+  text-align:center;
+}
+.cycle-center h3{
+  font-family:var(--font-display);
+  font-size:clamp(22px,3vw,32px);
+  font-weight:800;line-height:1;
+  letter-spacing:-.01em;
+}
+.cycle-center .cn{
+  font-family:var(--font-cn-serif);
+  font-size:14px;color:var(--mute);
+  margin-top:8px;
+}
+.cycle-label{
+  position:absolute;
+  font-weight:800;color:#fff;
+  font-size:clamp(12px,1.5vw,15px);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.cycle-label.top{top:18px;left:50%;transform:translateX(-50%)}
+.cycle-label.right{right:14px;top:50%;transform:translateY(-50%)}
+.cycle-label.bottom{bottom:18px;left:50%;transform:translateX(-50%)}
+.cycle-label.left{left:14px;top:50%;transform:translateY(-50%)}
+
+.cycle-stages{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:24px;margin-top:40px;
+}
+@media (max-width:780px){.cycle-stages{grid-template-columns:1fr}}
+.stage-card{
+  padding:28px;
+  border-radius:14px;
+  background:#fff;
+  border-top:4px solid;
+  border:1px solid var(--line);
+  position:relative;
+}
+.stage-card::before{
+  content:"";position:absolute;top:-1px;left:-1px;right:-1px;
+  height:4px;border-radius:14px 14px 0 0;
+}
+.stage-card.curious::before{background:#4ade80}
+.stage-card.remix::before{background:#fbbf24}
+.stage-card.empathize::before{background:#fb923c}
+.stage-card.storycraft::before{background:#ef4444}
+
+.stage-name{
+  display:flex;align-items:baseline;gap:12px;
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.stage-name h4{font-size:22px;font-weight:800;letter-spacing:.02em}
+.stage-name .cn{
+  font-family:var(--font-cn-serif);
+  font-size:18px;font-weight:600;color:var(--ink-soft);
+}
+.stage-card p.en{font-size:14.5px;color:var(--ink-soft);line-height:1.65;margin-bottom:10px}
+.stage-card p.cn{font-family:var(--font-cn-body);font-size:14px;color:var(--mute);line-height:1.8}
+
+/* Workshop levels */
+.workshops-section{background:var(--paper)}
+.level-card{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:0;
+  margin-bottom:32px;
+  background:#fff;
+  border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow:0 4px 20px -8px rgba(0,0,0,.05);
+}
+@media (max-width:780px){.level-card{grid-template-columns:1fr}}
+.level-badge{
+  padding:44px 36px;
+  color:#fff;
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:280px;
+  position:relative;
+  overflow:hidden;
+}
+.level-badge::after{
+  content:"";position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.15),transparent 50%);
+}
+.level-badge > *{position:relative}
+.level-badge h3{
+  font-family:var(--font-display);
+  font-size:56px;font-weight:800;line-height:.95;
+  letter-spacing:-.02em;
+}
+.level-badge .stage{
+  font-size:22px;font-weight:500;margin-top:6px;
+  opacity:.92;
+}
+.level-badge .stage-cn{
+  font-family:var(--font-cn-serif);
+  font-size:18px;font-weight:500;
+  opacity:.85;margin-top:4px;
+}
+.level-badge .duration{
+  font-size:13px;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:500;
+  opacity:.75;
+}
+.bg-explorer{background:linear-gradient(135deg,#c47878 0%,#9b5555 100%)}
+.bg-innovator{background:linear-gradient(135deg,#6e9cc4 0%,#4a7aa5 100%)}
+.bg-wizard{background:linear-gradient(135deg,#4ade80 0%,#22a858 100%)}
+.bg-puppeteer{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%)}
+.bg-alchemist{background:linear-gradient(135deg,#ec4899 0%,#be185d 100%)}
+
+.level-content{padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:620px){.level-content{grid-template-columns:1fr}}
+.level-item h5{
+  font-size:16px;font-weight:700;margin-bottom:4px;
+  letter-spacing:-.005em;
+}
+.level-item h5.cn{
+  font-family:var(--font-cn-serif);font-weight:600;
+  font-size:15px;color:var(--ink-soft);margin-bottom:12px;
+}
+.level-item p{font-size:14px;color:var(--ink-soft);line-height:1.65;margin-bottom:6px}
+.level-item p.cn{font-family:var(--font-cn-body);font-size:13.5px;color:var(--mute);line-height:1.8}
+
+/* Divider */
+.divider-section{
+  padding:40px var(--pad);
+  text-align:center;
+  background:var(--paper);
+}
+.divider-line{
+  display:inline-flex;align-items:center;gap:20px;
+  color:var(--mute);font-size:12px;letter-spacing:.3em;
+  text-transform:uppercase;font-weight:600;
+}
+.divider-line::before,.divider-line::after{
+  content:"";width:80px;height:1px;background:var(--line-2);
+}
+
+/* Let's Go */
+.letsgo-section{
+  min-height:60vh;
+  display:flex;align-items:center;justify-content:center;
+  background:
+    linear-gradient(180deg,rgba(20,25,35,.5) 0%,rgba(40,50,70,.4) 100%),
+    linear-gradient(135deg,#3a4a5c 0%,#2a3544 60%,#161e28 100%);
+  color:#fff;
+  position:relative;overflow:hidden;
+}
+.letsgo-section::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,220,150,.15),transparent 50%),
+    linear-gradient(to bottom right,transparent 50%,rgba(0,0,0,.4) 100%);
+}
+.letsgo-content{text-align:center;padding:100px var(--pad);position:relative;z-index:2}
+.letsgo-content h2{
+  font-family:var(--font-display);
+  font-size:clamp(72px,14vw,180px);
+  font-weight:800;letter-spacing:-.03em;line-height:.9;
+}
+.letsgo-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(24px,4vw,42px);
+  font-weight:500;margin-top:16px;
+  letter-spacing:.08em;opacity:.9;
+}
+
+/* Agenda */
+.agenda-table{
+  display:grid;
+  grid-template-columns:180px 1fr 1fr;
+  gap:0;
+  border-top:1px solid var(--ink);
+  margin-top:40px;
+}
+@media (max-width:780px){.agenda-table{grid-template-columns:110px 1fr;font-size:14px}}
+@media (max-width:560px){.agenda-table{grid-template-columns:1fr}}
+.agenda-row{
+  display:contents;
+}
+.agenda-cell{
+  padding:20px 16px;
+  border-bottom:1px solid var(--line-2);
+}
+.agenda-cell.time{
+  font-family:var(--font-serif);font-style:italic;
+  color:var(--accent-deep);font-weight:500;font-size:15px;
+}
+.agenda-cell.en{font-weight:600;font-size:15px}
+.agenda-cell.cn{font-family:var(--font-cn-body);font-weight:500;font-size:14.5px;color:var(--ink-soft)}
+.agenda-row.sub .agenda-cell{padding:10px 16px 10px 32px;border-bottom:1px dashed var(--line-2)}
+.agenda-row.sub .agenda-cell.en{font-weight:400;font-size:14px;color:var(--mute)}
+.agenda-row.sub .agenda-cell.cn{font-weight:400;font-size:13.5px;color:var(--mute)}
+
+/* Core idea block */
+.core-block{
+  padding:clamp(60px,8vw,100px) var(--pad);
+  background:var(--paper);
+  border-top:1px solid var(--line);
+}
+.core-block.alt{background:var(--paper-2)}
+.concept-card{
+  background:#fff;
+  border:1.5px solid var(--ink);
+  border-radius:16px;
+  padding:clamp(32px,5vw,60px);
+  margin-bottom:40px;
+  text-align:center;
+}
+.concept-card .big{
+  font-family:var(--font-display);
+  font-size:clamp(28px,4.5vw,52px);
+  font-weight:800;line-height:1.08;
+  letter-spacing:-.02em;
+  margin-bottom:14px;
+}
+.concept-card .big .italic{
+  font-family:var(--font-serif);font-style:italic;
+  font-weight:400;
+}
+.concept-card .big-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(20px,3vw,30px);
+  font-weight:700;color:var(--ink-soft);
+  margin-bottom:18px;
+}
+.concept-card .sub{
+  font-size:16px;color:var(--mute);
+  max-width:620px;margin:0 auto;
+  font-weight:500;
+}
+.concept-card .sub-cn{
+  font-family:var(--font-cn-body);
+  font-size:15px;color:var(--mute);
+  margin-top:8px;
+}
+
+.core-title{
+  font-family:var(--font-display);
+  font-size:clamp(28px,4vw,40px);
+  font-weight:700;letter-spacing:-.015em;
+  margin-bottom:4px;
+}
+.core-title-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(18px,2.2vw,24px);font-weight:600;
+  color:var(--ink-soft);margin-bottom:28px;
+}
+
+.core-list{list-style:none;padding:0;margin:0}
+.core-list li{
+  padding:14px 0 14px 32px;
+  position:relative;
+  border-bottom:1px dashed var(--line-2);
+  font-size:15.5px;line-height:1.65;color:var(--ink-soft);
+}
+.core-list li::before{
+  content:"";position:absolute;left:0;top:22px;
+  width:14px;height:1.5px;background:var(--accent);
+}
+.core-list li.cn{font-family:var(--font-cn-body);line-height:1.85;font-size:15px}
+.core-list strong{color:var(--ink);font-weight:700;background:linear-gradient(to top,rgba(192,96,58,.12) 40%,transparent 40%);padding:0 2px}
+
+/* Think deeper */
+.think-deeper{
+  padding:clamp(60px,8vw,100px) var(--pad);
+  background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper-3) 100%);
+  border-top:1px solid var(--line);
+}
+.think-header{
+  display:flex;align-items:baseline;gap:16px;
+  margin-bottom:40px;flex-wrap:wrap;
+}
+.think-header h3{
+  font-family:var(--font-display);
+  font-size:clamp(28px,4vw,44px);
+  font-weight:700;letter-spacing:-.02em;
+}
+.think-header .cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(18px,2.2vw,26px);
+  font-weight:600;color:var(--ink-soft);
+}
+.think-header .icon{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:28px;color:var(--accent);
+}
+
+.think-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:28px;
+}
+@media (max-width:780px){.think-grid{grid-template-columns:1fr}}
+.think-q{
+  padding:28px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  transition:all .3s;
+  position:relative;
+}
+.think-q:hover{
+  border-color:var(--ink);
+  transform:translateY(-2px);
+}
+.think-q .q-num{
+  position:absolute;top:16px;right:20px;
+  font-family:var(--font-serif);font-style:italic;
+  font-size:32px;color:var(--accent);opacity:.3;
+  font-weight:400;line-height:1;
+}
+.think-q h5{
+  font-size:17px;font-weight:700;
+  margin-bottom:4px;line-height:1.3;
+  letter-spacing:-.005em;padding-right:40px;
+}
+.think-q h5.cn{
+  font-family:var(--font-cn-serif);font-weight:600;
+  font-size:15.5px;color:var(--ink-soft);
+  margin-bottom:12px;
+}
+.think-q p{font-size:14.5px;color:var(--mute);line-height:1.65;margin-bottom:6px}
+.think-q p.cn{font-family:var(--font-cn-body);font-size:14px;line-height:1.8}
+
+/* Steps */
+.step-header{
+  display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;
+  padding:12px 20px;
+  background:var(--ink);color:var(--paper);
+  border-radius:100px;
+  font-size:13px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;
+  width:fit-content;
+  margin-bottom:24px;
+}
+.step-header .sep{opacity:.4}
+
+/* SCAMPER grid */
+.scamper-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin:40px 0;
+}
+@media (max-width:780px){.scamper-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.scamper-grid{grid-template-columns:1fr}}
+.scamper-box{
+  padding:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.scamper-box .letter{
+  display:inline-block;
+  font-family:var(--font-display);font-weight:800;
+  font-size:18px;
+  padding:4px 10px;
+  background:var(--ink);color:var(--paper);
+  border-radius:6px;margin-bottom:10px;
+}
+.scamper-box h5{font-size:15px;font-weight:700;margin-bottom:2px}
+.scamper-box p{font-size:13px;color:var(--mute);line-height:1.5}
+.scamper-box .cn{font-family:var(--font-cn-body);font-size:12.5px;margin-top:4px;color:var(--mute-2)}
+
+/* Industry grid */
+.industry-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;margin:30px 0;
+}
+@media (max-width:780px){.industry-grid{grid-template-columns:repeat(2,1fr)}}
+.industry-tag{
+  padding:14px 18px;
+  border:1px solid var(--line-2);
+  border-radius:8px;
+  background:#fff;
+  font-size:14px;font-weight:600;
+  text-align:center;
+  transition:all .25s;
+}
+.industry-tag:hover{border-color:var(--ink);background:var(--paper)}
+.industry-tag .cn{
+  display:block;font-family:var(--font-cn-body);
+  font-size:12px;color:var(--mute);margin-top:2px;font-weight:500;
+}
+
+/* Characteristics */
+.char-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin:40px 0;
+}
+@media (max-width:780px){.char-grid{grid-template-columns:1fr}}
+.char-card{
+  padding:30px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  text-align:center;
+}
+.char-card .type{
+  display:inline-block;
+  padding:6px 16px;
+  border:1px solid var(--ink);
+  border-radius:100px;
+  font-size:12px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.char-card h4{font-size:20px;font-weight:700;margin-bottom:4px}
+.char-card h4.cn{
+  font-family:var(--font-cn-serif);font-weight:600;
+  font-size:17px;color:var(--ink-soft);margin-bottom:10px;
+}
+.char-card p{font-size:14px;color:var(--mute);line-height:1.6;margin-bottom:4px}
+.char-card p.cn{font-family:var(--font-cn-body);font-size:13.5px;line-height:1.75}
+
+/* Skills dots */
+.skills-dots{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
+  margin:30px 0;
+}
+.skill-dot{
+  padding:14px 24px;
+  border-radius:100px;
+  background:var(--ink);color:var(--paper);
+  font-weight:700;font-size:14px;
+  letter-spacing:.02em;
+}
+.skill-dot.tech{background:#15803d}
+.skill-dot.design{background:#b91c1c}
+.skill-dot.bizmodel{background:#a16207}
+.skill-dot.care{background:#1e40af}
+.skill-dot.eco{background:#7e22ce}
+.skill-dot .cn{font-family:var(--font-cn-body);font-weight:500;font-size:12px;margin-left:6px;opacity:.85}
+
+/* Picking ideas chart */
+.pick-chart{
+  position:relative;
+  width:100%;max-width:560px;margin:40px auto;
+  aspect-ratio:5/4;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:40px;
+}
+.pick-chart .axis{position:absolute;background:var(--ink-soft)}
+.pick-chart .axis-x{left:40px;right:40px;top:50%;height:1px;transform:translateY(-50%)}
+.pick-chart .axis-y{top:40px;bottom:40px;left:50%;width:1px;transform:translateX(-50%)}
+.axis-label{
+  position:absolute;font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+.axis-label.top{top:10px;left:50%;transform:translateX(-50%)}
+.axis-label.bottom{bottom:10px;left:50%;transform:translateX(-50%)}
+.axis-label.left{left:6px;top:50%;transform:translateY(-50%) rotate(-90deg)}
+.axis-label.right{right:10px;top:50%;transform:translateY(-50%)}
+.sweet-spot{
+  position:absolute;
+  top:18%;right:18%;
+  width:34%;height:28%;
+  background:rgba(96,165,250,.18);
+  border:1.5px dashed #60a5fa;
+  border-radius:8px;
+}
+.sweet-spot-label{
+  position:absolute;top:-14px;right:-120px;
+  background:#60a5fa;color:#fff;
+  padding:4px 12px;border-radius:6px;
+  font-size:11px;font-weight:700;letter-spacing:.05em;
+  white-space:nowrap;
+}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:.4}
+
+/* Story example */
+.story-example{
+  padding:32px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin:24px 0;
+}
+.story-example p{
+  font-size:15px;line-height:1.75;color:var(--ink-soft);
+  margin-bottom:14px;
+}
+.story-example p.cn{font-family:var(--font-cn-body);line-height:1.95}
+.story-example mark{
+  background:linear-gradient(to top,rgba(245,180,90,.4) 40%,transparent 40%);
+  color:var(--ink);padding:0 2px;
+  font-weight:500;
+}
+
+/* 3-part story */
+.story-parts{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin:30px 0;
+}
+@media (max-width:780px){.story-parts{grid-template-columns:1fr}}
+.story-part{
+  padding:24px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  border-top:3px solid var(--accent);
+}
+.story-part .pnum{
+  font-family:var(--font-serif);font-style:italic;
+  color:var(--accent);font-weight:500;font-size:14px;
+  margin-bottom:8px;
+}
+.story-part h5{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.story-part h5.cn{font-family:var(--font-cn-serif);font-weight:600;font-size:15px;color:var(--ink-soft);margin-bottom:10px}
+
+/* Ready for Level 2 */
+.ready-section{
+  background:linear-gradient(135deg,#5a7a98 0%,#3a5670 60%,#1f2f3f 100%);
+  color:#fff;
+  padding:clamp(100px,14vw,180px) var(--pad);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.ready-section::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 20%,rgba(255,220,180,.15),transparent 50%);
+}
+.ready-title{
+  font-family:var(--font-display);
+  font-size:clamp(48px,9vw,120px);
+  font-weight:800;letter-spacing:-.03em;line-height:.95;
+  position:relative;
+}
+.ready-title .arrow{
+  font-family:var(--font-serif);font-style:italic;font-weight:400;
+  color:#ffc79e;
+}
+.ready-cn{
+  font-family:var(--font-cn-serif);
+  font-size:clamp(22px,3.5vw,36px);font-weight:500;
+  margin-top:16px;opacity:.9;letter-spacing:.08em;
+}
+
+/* Quick glance */
+.glance-card{
+  display:grid;grid-template-columns:280px 1fr;gap:0;
+  background:#fff;border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);
+  margin-bottom:24px;
+}
+@media (max-width:780px){.glance-card{grid-template-columns:1fr}}
+.glance-tag{
+  padding:8px 12px;
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--ink);color:#fff;
+  border-radius:100px;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:16px;width:fit-content;
+}
+.glance-tag.current{background:var(--accent)}
+.glance-content{padding:32px}
+.glance-content h4{font-size:22px;font-weight:700;margin-bottom:4px}
+.glance-content h4.cn{font-family:var(--font-cn-serif);font-weight:600;font-size:18px;color:var(--ink-soft);margin-bottom:14px}
+.glance-list{display:grid;gap:10px}
+.glance-item{display:grid;grid-template-columns:110px 1fr;gap:14px;font-size:14px;line-height:1.55}
+@media (max-width:500px){.glance-item{grid-template-columns:1fr;gap:2px}}
+.glance-item strong{color:var(--ink);font-weight:700;font-size:13px;letter-spacing:.02em}
+.glance-item span{color:var(--ink-soft)}
+.glance-item .cn{font-family:var(--font-cn-body);font-size:13px;color:var(--mute)}
+
+/* Footer */
+footer{
+  padding:clamp(60px,8vw,100px) var(--pad) 40px;
+  background:#0a0a0a;color:#d0cec8;
+}
+.footer-grid{
+  max-width:var(--maxw);margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.1);
+}
+@media (max-width:780px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.footer-grid{grid-template-columns:1fr}}
+.footer-brand .logo{color:#fff;margin-bottom:16px}
+.footer-brand .logo-mark{border-color:#fff;color:#fff}
+.footer-brand p{font-size:13px;color:#888;line-height:1.7;max-width:340px}
+.footer-col h6{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:#999;padding:5px 0;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:var(--maxw);margin:0 auto;
+  padding-top:24px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  font-size:12px;color:#666;
+}
+.footer-bottom a{color:#999}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ Utility helpers ============ */
+.mt-lg{margin-top:48px}
+.center{text-align:center}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo">
+      <span class="logo-mark">ACE</span>
+      <span>Applied Creativity Engine</span>
+    </a>
+    <div class="nav-links">
+      <a href="#belief">Belief 信念</a>
+      <a href="#method">Method 方法</a>
+      <a href="#workshops">Workshops 工作坊</a>
+      <a href="#explorer">Explorer 探索者</a>
+      <a href="#levels">Levels 級別</a>
+    </div>
+    <button class="lang-toggle" aria-label="Bilingual">
+      <span class="dot"></span>
+      EN / 繁中
+    </button>
+    <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="top">
+  <div class="hero-top">
+    <div class="eyebrow reveal"><span class="bar"></span>Applied Creativity Engine <span>®</span></div>
+    <h1 class="reveal">
+      Entrepreneurial<br>
+      Leadership<br>
+      <span class="serif">Workshops</span>
+    </h1>
+    <p class="hero-cn reveal">創業領導力工作坊</p>
+    <div class="hero-meta reveal">
+      <span class="pill"><span class="bullet"></span>Level 1 — Explorer</span>
+      <span class="pill">第一級 · 探索者</span>
+      <span class="pill">7 hours · 7 小時</span>
+    </div>
+  </div>
+
+  <div class="hero-mountain reveal">
+    <div class="mountain-overlay">
+      <div class="mountain-caption">Discover hidden opportunities · 發掘隱藏的機會</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== EINSTEIN QUOTE ===== -->
+<section class="quote-section">
+  <div class="wrap-xs">
+    <div class="quote-mark">"</div>
+    <p class="quote-en reveal">I have no special talents.<br>I am only <em>passionately curious.</em></p>
+    <p class="quote-cn reveal">我沒有什麼特殊的天賦，<br>我只是有著滿腔的好奇心。</p>
+    <div class="quote-attr reveal">
+      <span class="line"></span>
+      Albert Einstein · 愛因斯坦
+      <span class="line"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WELCOME ===== -->
+<section>
+  <div class="wrap">
+    <div class="welcome-hero reveal"></div>
+
+    <div class="reveal" style="margin-bottom:24px">
+      <div class="section-label"><span class="num">01</span><span>Welcome · 歡迎</span></div>
+      <h2 class="section-title">So great to have <span class="italic">you</span> here.</h2>
+      <p class="section-title-cn">很高興能在這裡遇見你</p>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">English</div>
+        <p>We are the team behind <strong>Applied Creativity Engine®</strong> (ACE), a group of entrepreneurs, designers, and investors who came together from different backgrounds with one shared belief: in a world where AI is changing so much so quickly, what will always matter is the human ability to stay curious, discover meaningful opportunities, and create value for others.</p>
+        <p>ACE was founded in 2023 by three creative entrepreneurs — Joshua Chao, Chris Lin and Matt Cheng. It started with a simple experiment in creativity and AI, and it grew into something much bigger.</p>
+        <p>Along the way, we discovered that <strong>innovation is not a rare gift for just a few people</strong>. It is something that can be practiced, strengthened, and brought to life together.</p>
+        <p>In this <strong>Entrepreneurial Leadership Workshop</strong>, we hope to inspire you to think like an innovator with entrepreneurial spirit — someone who notices possibilities others miss and turns ideas into something meaningful and real.</p>
+        <p><strong>We're truly excited to meet you and create with you.</strong></p>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">繁體中文</div>
+        <p>我們是 <strong>Applied Creativity Engine®（ACE，應用創意引擎）</strong> 背後的團隊，一群來自不同背景的創業者、設計師與投資人，因為一個共同的信念而聚在一起：在 AI 快速改變一切的世界裡，真正恆常重要的，是人類保持好奇、發現有意義的機會、並為他人創造價值的能力。</p>
+        <p>ACE 由三位創意創業者 — Joshua Chao、Chris Lin 與 Matt Cheng — 在 2023 年共同創立。一切始於一個關於創意與 AI 的簡單實驗，後來長成了遠比當初更龐大的東西。</p>
+        <p>一路走來，我們發現<strong>創新從來不是少數人獨有的天賦</strong>。它是一種可以被練習、被強化、被一起帶進生活的能力。</p>
+        <p>在這場 <strong>創業領導力工作坊（Entrepreneurial Leadership Workshop）</strong>中，我們希望能激發你用一種帶著創業精神的創新者視角思考 — 一個能看見他人錯過的可能性，並把想法化為真實而有意義之物的人。</p>
+        <p><strong>我們真的很期待與你相遇，一起創造。</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT / WHAT YOU'LL LEARN ===== -->
+<section style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label"><span class="num">02</span><span>About · 關於工作坊</span></div>
+      <h2 class="section-title">About the <span class="italic">Workshops</span></h2>
+      <p class="section-title-cn">關於這場工作坊</p>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">English</div>
+        <p>In a time when AI is making execution faster and easier, this workshop is about sharpening the human ability to <strong>notice what truly matters and imagine what could exist next</strong>.</p>
+        <p>Built around the <strong>Applied Creativity Engine® (ACE) learning cycle</strong>, this experience guides you through exploring, testing, and shaping ideas around a real brand — turning insight into an innovation concept that is both bold and grounded.</p>
+        <p>More than anything, we want this experience to leave you feeling <strong>energized, expanded, and more ready to lead with imagination.</strong></p>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">繁體中文</div>
+        <p>在 AI 讓執行變得越來越快、越來越容易的時代，這場工作坊的重點在於鍛鍊一種人類獨有的能力 —— <strong>看見真正重要的事，並想像接下來可能出現的東西</strong>。</p>
+        <p>工作坊設計圍繞著 <strong>Applied Creativity Engine®（ACE）學習循環</strong>，帶領你環繞一個真實的品牌進行探索、驗證與塑形，將洞察轉化成一個兼具大膽與落地性的創新概念。</p>
+        <p>最重要的是，我們希望這段經驗能讓你感到 <strong>充滿能量、視野被打開，並更有底氣用想像力來領導。</strong></p>
+      </div>
+    </div>
+
+    <div class="reveal mt-lg" style="margin-top:80px">
+      <h3 style="font-family:var(--font-display);font-size:clamp(24px,3.5vw,36px);font-weight:700;letter-spacing:-.015em;margin-bottom:4px">What will you learn?</h3>
+      <p style="font-family:var(--font-cn-serif);font-size:20px;color:var(--ink-soft);font-weight:500">你會學到什麼？</p>
+    </div>
+
+    <div class="learn-grid">
+      <div class="learn-card reveal">
+        <div class="icon">i.</div>
+        <h4>Looking at Brands with Fresh Eyes</h4>
+        <h4 class="cn">用全新的眼光看品牌</h4>
+        <p>Look beyond the surface of a brand and notice the deeper patterns that shape its potential. By examining its skills, personality, and possibilities with curiosity, you may begin to see doors that others would normally walk past.</p>
+        <p class="cn">超越品牌的表層，察覺那些型塑它潛力的深層模式。用好奇心去檢視它的技能、個性與可能性，你會開始看見別人往往視而不見的門。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">ii.</div>
+        <h4>Discovering Hidden Opportunities</h4>
+        <h4 class="cn">發掘被忽略的機會</h4>
+        <p>Innovation often begins with noticing something others have overlooked. You will practice exploring industries and remixing capabilities — technology, design, and business models — to uncover meaningful opportunities worth pursuing.</p>
+        <p class="cn">創新常常始於注意到別人忽略的小事。你會練習跨產業探索，並混搭各種能力 — 科技、設計、商業模式 — 從中挖掘出值得追求、真正有意義的機會。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">iii.</div>
+        <h4>Turning Insight into Innovative Design</h4>
+        <h4 class="cn">把洞察轉化為創新設計</h4>
+        <p>Through Human-Centered Design, you will learn how to listen more closely to people, interpret real needs, and translate those insights into product design concepts that are both imaginative and grounded.</p>
+        <p class="cn">透過以人為本的設計（Human-Centered Design），你會學到如何更靠近地傾聽人、解讀真實需求，並把這些洞察轉化為既富想像力、又能落地的產品設計概念。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">iv.</div>
+        <h4>Storycrafting That Moves People</h4>
+        <h4 class="cn">能打動人的敘事工藝</h4>
+        <p>Learn how to present your ideas with clarity and impact so others can understand, believe in, and support what you create.</p>
+        <p class="cn">學習用清晰又有力的方式呈現你的想法，讓別人能理解它、相信它，並願意支持你正在創造的事物。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OUR BELIEF / 3 LAYERS ===== -->
+<section class="layers-section" id="belief">
+  <div class="wrap-sm">
+    <div class="reveal center" style="text-align:center;margin-bottom:16px">
+      <div class="section-label" style="justify-content:center"><span class="num">03</span><span>Our Belief · 我們的信念</span></div>
+      <h2 class="section-title">Why do humans <span class="italic">learn?</span></h2>
+      <p class="section-title-cn">人，為什麼要學習？</p>
+      <p style="font-size:15px;color:var(--mute);max-width:540px;margin:0 auto">Three layers of learning · 學習的三個層次</p>
+    </div>
+
+    <div class="layers-grid reveal">
+      <div class="layer">
+        <div class="layer-icon">✺</div>
+        <div class="layer-num">01</div>
+        <h3>Survive</h3>
+        <h3 class="cn">生存</h3>
+        <p class="en">Stay alive.<br>Adapt to world.</p>
+        <p class="cn">活下來。<br>適應世界。</p>
+      </div>
+      <div class="layer">
+        <div class="layer-icon">⚙</div>
+        <div class="layer-num">02</div>
+        <h3>Function</h3>
+        <h3 class="cn">功能</h3>
+        <p class="en">Reason. Execute.<br>Perform.</p>
+        <p class="cn">推理。執行。<br>表現。</p>
+      </div>
+      <div class="layer">
+        <div class="layer-icon">◎</div>
+        <div class="layer-num">03</div>
+        <h3>Meaning</h3>
+        <h3 class="cn">意義</h3>
+        <p class="en">Decide what<br>matters.</p>
+        <p class="cn">決定什麼事<br>是重要的。</p>
+      </div>
+    </div>
+
+    <div class="consequence-flow reveal">
+      <div class="consequence-box">
+        <p style="font-size:16px;color:var(--ink-soft);line-height:1.65">We trained humans to become <strong style="color:var(--ink)">reasoning machines</strong>. But AI agents are now a better one — Faster. Scalable. Tireless. <strong>If learning stays in the function layer, human value becomes compressible.</strong></p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.85;margin-top:14px">我們把人類訓練成 <strong style="color:var(--ink)">推理機器</strong>。但 AI 代理現在做得更好 — 更快、更可擴展、永不疲倦。<strong>如果學習停留在「功能」這一層，人的價值就會變得容易被壓縮。</strong></p>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="consequence-box">
+        <p style="font-size:16px;color:var(--ink-soft);line-height:1.65">When machines win the race of reasoning, <strong style="color:var(--ink)">human value shifts to meaning.</strong></p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.85;margin-top:10px">當機器贏得推理的競賽，<strong style="color:var(--ink)">人的價值便轉向意義。</strong></p>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="consequence-box highlight">
+        <p style="font-size:22px;font-weight:700;line-height:1.4">Meaning lives beyond reasoning.</p>
+        <p class="cn" style="font-family:var(--font-cn-serif);font-size:19px;font-weight:500;margin-top:8px;letter-spacing:.04em">意義，存在於推理之外。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEON ===== -->
+<section class="neon-section">
+  <div class="neon">Meaning lives<br>beyond <span class="italic">reasoning.</span></div>
+  <p class="neon-cn">意義 · 存在於推理之外</p>
+</section>
+
+<!-- ===== HUMAN CAPACITIES ===== -->
+<section style="background:var(--paper)">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="section-label"><span class="num">04</span><span>Human Capacities · 人的能力</span></div>
+      <h2 class="section-title">Beyond <span class="italic">reasoning</span></h2>
+      <p class="section-title-cn">推理之外的人性能力</p>
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:20px;color:var(--mute);max-width:640px">Meaning is not taught. It is lived.<br><span style="font-family:var(--font-cn-serif);font-style:italic;font-size:17px">意義，不是被教出來的。它是活出來的。</span></p>
+    </div>
+
+    <div class="capacity-block reveal">
+      <div class="capacity-visual cap-curiosity">
+        <div class="label">Curiosity · 好奇</div>
+      </div>
+      <div class="capacity-content">
+        <h3>Curiosity</h3>
+        <h3 class="cn">好奇心</h3>
+        <p class="capacity-subtitle">Asking questions when no one prompted.</p>
+        <p class="capacity-subtitle-cn">在沒人要求的時候，仍然主動提問。</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px">Curiosity is not just asking more questions. It is the habit of <strong>not killing an idea too early</strong> just because it looks a little odd at first. Children do this naturally — they combine things that don't seem to belong together, and sometimes that's exactly where fresh ideas come from. A sofa and a bed become a sofa bed. Milk tea and tapioca pearls become "Boba."</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7">The same is true at work. While everyone else is busy improving the existing plan, curiosity gently asks, "Are we solving the right problem?" That is the quiet strength of curiosity — it gives unusual ideas a little more breathing room, and that is often where real opportunity begins.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.9;margin-top:18px;padding-top:18px;border-top:1px dashed var(--line-2)">好奇心不只是問更多問題，而是一種 <strong style="color:var(--ink)">不會因為一個想法乍看怪怪的就太早殺掉它</strong> 的習慣。小孩很自然地就在做這件事 — 他們會把看起來不搭的東西組合起來，而新鮮的點子往往就是這樣誕生的。沙發加床 = 沙發床；奶茶加粉圓 = 珍珠奶茶。工作上也是一樣，當大家忙著優化既有方案時，好奇心會輕聲問：「我們有沒有在解對的問題？」這就是好奇心安靜的力量，它為那些不尋常的想法多留了一點呼吸的空間，而真正的機會，往往就從那裡開始。</p>
+      </div>
+    </div>
+
+    <div class="capacity-block reveal">
+      <div class="capacity-visual cap-freewill">
+        <div class="label">Free Will · 自由意志</div>
+      </div>
+      <div class="capacity-content">
+        <h3>Free Will</h3>
+        <h3 class="cn">自由意志</h3>
+        <p class="capacity-subtitle">Choosing passion over utility.</p>
+        <p class="capacity-subtitle-cn">選擇熱情，而非只是效益。</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px">Free will matters because people do not always choose the neatest, safest, or most efficient option. People choose paths that make less sense on paper but <strong>feel more true to who they are</strong>. They commit to hard things, or follow a calling that no spreadsheet can fully explain.</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7">It is not that reason disappears. It is that human beings do not live by optimization alone. Free will is the human ability to choose through <strong>conviction, identity, intuition, desire, and courage</strong> — not just efficiency.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.9;margin-top:18px;padding-top:18px;border-top:1px dashed var(--line-2)">自由意志之所以重要，是因為人不一定會選最乾淨、最安全、最有效率的選項。人們會選擇那些在紙上看起來沒什麼道理、卻 <strong style="color:var(--ink)">更貼近自己的路</strong>。他們願意為困難的事情投入，願意跟隨某種試算表算不清的召喚。這不代表理性消失了，而是因為人類從來不是只靠「最佳化」活著。自由意志是人類在 <strong style="color:var(--ink)">信念、身份、直覺、渴望、勇氣</strong> 中做選擇的能力 — 它不只是效率。</p>
+      </div>
+    </div>
+
+    <div class="capacity-block reveal">
+      <div class="capacity-visual cap-judgement">
+        <div class="label">Holistic Judgement · 整體判斷</div>
+      </div>
+      <div class="capacity-content">
+        <h3>Holistic Judgement</h3>
+        <h3 class="cn">整體判斷力</h3>
+        <p class="capacity-subtitle">Seeing the whole that logic alone cannot complete.</p>
+        <p class="capacity-subtitle-cn">看見那些光靠邏輯無法拼完的整體。</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px">Life's biggest decisions are rarely clean optimization problems. They are messy bundles of <strong>timing, emotion, trust, trade-offs, and consequences</strong> that refuse to behave like obedient variables.</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7">A client says they want A, but you can tell they really want B. The dashboard says cut costs, but your gut says you are about to damage trust. Holistic judgment is seeing when the answer that looks smartest on paper is <strong>not the one that is most right in reality</strong>.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.9;margin-top:18px;padding-top:18px;border-top:1px dashed var(--line-2)">人生中最重大的決定，很少是乾淨俐落的最佳化問題。它們是 <strong style="color:var(--ink)">時機、情緒、信任、取捨、後果</strong> 亂七八糟地綁在一起的包裹，永遠不肯乖乖地當變數。客戶說他想要 A，但你心裡知道他其實想要 B；儀表板叫你砍成本，但你的直覺說這樣做會毀掉信任。整體判斷力，就是看得出來 — 紙面上看起來最聰明的答案，<strong style="color:var(--ink)">不一定是現實中最對的那一個。</strong></p>
+      </div>
+    </div>
+
+    <div class="capacity-block reveal">
+      <div class="capacity-visual cap-trust">
+        <div class="label">Trust-Bonding · 信任連結</div>
+      </div>
+      <div class="capacity-content">
+        <h3>Trust-Bonding</h3>
+        <h3 class="cn">信任連結</h3>
+        <p class="capacity-subtitle">Valuing people beyond transactions.</p>
+        <p class="capacity-subtitle-cn">把人當成人看，不只是交易對象。</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px">Trust bonding may be one of our most underrated strengths. A lot of what works in life works because <strong>people feel safe with each other</strong>. You trust a teacher with your child because you sense real care. You open up to a friend because you know they will handle your vulnerability gently.</p>
+        <p style="font-size:15.5px;color:var(--ink-soft);line-height:1.7">Work is no different. Clients stay because they trust you, not just your slides. Teams follow because you are reliable, not just competent. <strong>Trust is never just practical — it is built on safety, sincerity, and alignment.</strong></p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:15px;color:var(--mute);line-height:1.9;margin-top:18px;padding-top:18px;border-top:1px dashed var(--line-2)">信任連結可能是我們被嚴重低估的能力之一。生活中很多事情之所以跑得動，是因為 <strong style="color:var(--ink)">人在彼此身邊覺得安全</strong>。你把孩子交給一位老師，因為你感覺得到真正的關心；你願意對一個朋友打開自己，因為你知道他會溫柔地對待你的脆弱。工作上也一樣 — 客戶留下來，是因為信任你，不是只信任你的簡報；團隊願意跟隨，是因為你可靠，不是只因為你聰明。<strong style="color:var(--ink)">信任從來都不只是務實而已，它建立在安全感、真誠、以及價值觀的一致上。</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MENTAL MODEL ===== -->
+<section class="model-section">
+  <div class="wrap-sm">
+    <div class="reveal center" style="text-align:center;margin-bottom:40px">
+      <div class="section-label" style="justify-content:center"><span class="num">05</span><span>A Simple Mental Model · 一套簡單的心智模型</span></div>
+      <h2 class="section-title">What kind of human<br>should <span class="italic">I become?</span></h2>
+      <p class="section-title-cn">我該成為什麼樣的人？</p>
+      <p style="font-size:15px;color:var(--mute);max-width:580px;margin:0 auto">So AI amplifies me, not replace me.<br><span style="font-family:var(--font-cn-body)">讓 AI 成為放大我的力量，而不是取代我。</span></p>
+    </div>
+
+    <div class="capacities-row reveal">
+      <span class="cap-tag">Curiosity<span class="cn">好奇</span></span>
+      <span class="cap-tag">Free Will<span class="cn">自由意志</span></span>
+      <span class="cap-tag">Holistic Judgement<span class="cn">整體判斷</span></span>
+      <span class="cap-tag">Trust-Bonding<span class="cn">信任連結</span></span>
+    </div>
+    <div class="model-arrow reveal">↓</div>
+
+    <div class="model-steps">
+      <div class="model-step reveal">
+        <div class="model-step-icon">1</div>
+        <div>
+          <h4>Be Curious <span class="num">·</span> <span class="cn">保持好奇</span></h4>
+          <p class="en">Curiosity is what keeps you from killing an idea too early just because it looks strange, small, or not obviously useful. It is the instinct that says, <em>"That's interesting… what if there's something here?"</em> and gives possibility a little room to breathe.</p>
+          <p class="cn">好奇心讓你不會因為一個想法看起來怪、小、或看不出明顯用處，就太早把它殺掉。它是一種本能的聲音 — 「這有趣喔，會不會其實有什麼東西？」— 給可能性一點呼吸的空間。</p>
+        </div>
+      </div>
+      <div class="model-step reveal">
+        <div class="model-step-icon">2</div>
+        <div>
+          <h4>Find Meaningful Problems <span class="num">·</span> <span class="cn">找到有意義的問題</span></h4>
+          <p class="en">Curiosity alone can send you in a hundred directions, so the next step is deciding which possibilities are actually worth chasing. Ask not just <em>"Is this interesting?"</em> but <em>"Does this solve a real problem or fulfill a desire people genuinely care about?"</em></p>
+          <p class="cn">光有好奇心會讓你同時往一百個方向跑，所以下一步是要判斷哪些可能性真的值得追。不只問「這件事有趣嗎？」，而是問 — 「這有解決一個真實的問題嗎？有回應一個被忽略的需求，或一個人們真的在乎的渴望嗎？」</p>
+        </div>
+      </div>
+      <div class="model-step reveal">
+        <div class="model-step-icon">3</div>
+        <div>
+          <h4>Solve Them Creatively <span class="num">·</span> <span class="cn">用創意解決它們</span></h4>
+          <p class="en">Creativity is what turns possibility into a real solution people can use. In the age of AI, this becomes even more powerful: AI can research, synthesize, simulate, draft, and expand ideas, but the human role is still to connect the dots into a meaningful path.</p>
+          <p class="cn">創造力，是把可能性變成人們真的能用的解法。在 AI 時代這更有力 — AI 可以幫你研究、整合、模擬、打草稿、擴展想法，但把這些點連成一條有意義的路徑，仍然是人類要做的事。</p>
+        </div>
+      </div>
+      <div class="model-step reveal">
+        <div class="model-step-icon">4</div>
+        <div>
+          <h4>Bring Value to Others <span class="num">·</span> <span class="cn">帶給他人價值</span></h4>
+          <p class="en">The real test is simple: does it actually help someone, make life better, reduce friction, or create something people will <strong>trust, adopt, and believe in?</strong></p>
+          <p class="cn">真正的檢驗其實很簡單 — 它有沒有真的幫到某個人？有沒有讓生活更好一點？有沒有減少摩擦？有沒有創造出人們願意 <strong>信任、使用、相信</strong> 的東西？</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACE LEARNING CYCLE ===== -->
+<section id="method" style="background:var(--paper)">
+  <div class="wrap-sm">
+    <div class="reveal center" style="text-align:center;margin-bottom:16px">
+      <div class="section-label" style="justify-content:center"><span class="num">06</span><span>Our Method · 我們的方法</span></div>
+      <h2 class="section-title">How should I <span class="italic">train myself?</span></h2>
+      <p class="section-title-cn">我該如何鍛鍊自己？</p>
+      <p style="font-size:15px;color:var(--mute)">The heart of ACE — A cyclical learning practice<br><span style="font-family:var(--font-cn-body)">ACE 的核心 — 一種循環的學習練習</span></p>
+    </div>
+
+    <div class="cycle-visual reveal">
+      <div class="cycle-inner">
+        <div class="cycle-center">
+          <h3>ACE<br>LEARNING<br>CYCLE</h3>
+          <div class="cn">ACE 學習循環</div>
+        </div>
+      </div>
+      <span class="cycle-label top">① Curious</span>
+      <span class="cycle-label right">② Remix</span>
+      <span class="cycle-label bottom">③ Empathize</span>
+      <span class="cycle-label left">④ Storycraft</span>
+    </div>
+
+    <div class="cycle-stages">
+      <div class="stage-card curious reveal">
+        <div class="stage-name"><h4>① CURIOUS</h4><span class="cn">好奇</span></div>
+        <p class="en">This is where everything begins. Give yourself permission to ask, explore, and imagine again — without needing the "right" answer right away. You notice what others overlook.</p>
+        <p class="cn">一切從這裡開始。允許自己重新提問、探索、想像 — 不急著要得到「正確答案」。你開始注意到別人忽略掉的東西。</p>
+      </div>
+      <div class="stage-card remix reveal">
+        <div class="stage-name"><h4>② REMIX</h4><span class="cn">混搭</span></div>
+        <p class="en">Creativity isn't about starting from nothing. It's about seeing connections. Combine ideas, industries, and experiences in ways that feel fresh and unexpected — ordinary things become original by how you connect them.</p>
+        <p class="cn">創意不是無中生有，而是看見連結。把想法、產業、經驗用新鮮又意外的方式組合起來 — 平凡的東西，會因為你連結的方式而變得原創。</p>
+      </div>
+      <div class="stage-card empathize reveal">
+        <div class="stage-name"><h4>③ EMPATHIZE</h4><span class="cn">同理</span></div>
+        <p class="en">Your ideas meet the real world. Instead of asking "Is this interesting?", start asking "Does this actually matter to someone?" See people more clearly and shape ideas around needs that are real, not imagined.</p>
+        <p class="cn">讓你的想法碰到真實世界。不只問「這有趣嗎？」，開始問「這對某個人來說，真的重要嗎？」— 更清楚地看見人，並圍繞真實的需求來塑造想法，而不是想像中的需求。</p>
+      </div>
+      <div class="stage-card storycraft reveal">
+        <div class="stage-name"><h4>④ STORYCRAFT</h4><span class="cn">敘事</span></div>
+        <p class="en">A great idea isn't enough if it stays in your head. Shape your thinking into something others can understand, feel, and believe in. Turn insight and creativity into a clear story.</p>
+        <p class="cn">一個很棒的想法，如果只留在你腦袋裡就不夠了。把你的思考塑造成別人能理解、感受、相信的東西。把洞察與創意，變成一個清楚的故事。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORKSHOPS OVERVIEW ===== -->
+<section class="workshops-section" id="workshops">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label"><span class="num">07</span><span>Our Workshops · 我們的工作坊</span></div>
+      <h2 class="section-title">Entrepreneurial<br>Leadership <span class="italic">Workshops</span></h2>
+      <p class="section-title-cn">創業領導力工作坊</p>
+    </div>
+
+    <div class="bilingual reveal" style="margin-bottom:60px">
+      <div class="col en">
+        <div class="col-lang">English</div>
+        <p>The Entrepreneurial Leadership Workshops are designed for <strong>founders, managers, and professionals</strong> who aspire to become leaders capable of discovering possibilities others overlook. As AI accelerates execution and lowers the cost of knowledge work, the real advantage shifts to those who can recognize meaningful possibilities and turn them into innovations that create value.</p>
+        <p>These workshops are built around the <strong>ACE Learning Cycle</strong>, the creative engine that trains you to repeatedly explore ideas, test insights, and shape them into innovation concepts.</p>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">繁體中文</div>
+        <p>這系列創業領導力工作坊，是為 <strong>創辦人、管理者、以及渴望成為領導者的專業工作者</strong> 而設計 — 那些想具備「看見別人忽略之可能性」能力的人。當 AI 加速執行、壓低知識工作的成本，真正的優勢開始轉移到一群能夠 <strong>辨識有意義的可能性、並把它變成能創造價值的創新</strong> 的人身上。</p>
+        <p>這些工作坊圍繞 <strong>ACE 學習循環</strong> 設計 — 一部創意引擎，訓練你反覆探索想法、驗證洞察，並把它們塑造成創新概念。</p>
+      </div>
+    </div>
+
+    <div class="level-card reveal" id="levels">
+      <div class="level-badge bg-explorer">
+        <div>
+          <h3>Level 1</h3>
+          <div class="stage">Explorer</div>
+          <div class="stage-cn">探索者</div>
+        </div>
+        <div class="duration">7 hours · 7 小時</div>
+      </div>
+      <div class="level-content">
+        <div class="level-item">
+          <h5>Looking at Brands with Fresh Eyes</h5>
+          <h5 class="cn">用全新眼光看品牌</h5>
+          <p>Look beyond the surface of a brand and notice the deeper patterns shaping its potential.</p>
+          <p class="cn">超越品牌的表層，看見型塑其潛力的深層模式。</p>
+        </div>
+        <div class="level-item">
+          <h5>Discovering Hidden Opportunities</h5>
+          <h5 class="cn">發掘被忽略的機會</h5>
+          <p>Explore industries and remix capabilities — technology, design, business models — to uncover meaningful opportunities.</p>
+          <p class="cn">跨產業探索、混搭科技、設計、商業模式等能力，發掘值得追求的機會。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-card reveal">
+      <div class="level-badge bg-innovator">
+        <div>
+          <h3>Level 2</h3>
+          <div class="stage">Innovator</div>
+          <div class="stage-cn">創新者</div>
+        </div>
+        <div class="duration">14 hours · 2 days · 兩天</div>
+      </div>
+      <div class="level-content">
+        <div class="level-item">
+          <h5>Turning Insight into Innovative Ideas</h5>
+          <h5 class="cn">把洞察化為創新點子</h5>
+          <p>Through Human-Centered Design, listen closely to people, interpret real needs, and turn those insights into creative, grounded ideas.</p>
+          <p class="cn">透過以人為本的設計，更靠近地傾聽人、解讀真實需求，把洞察轉化為富創意又落地的點子。</p>
+        </div>
+        <div class="level-item">
+          <h5>Story-Crafting That Moves People</h5>
+          <h5 class="cn">打動人的敘事工藝</h5>
+          <p>Shape and present your concept through reasoning, evidence, and narrative so others can understand, believe, and feel inspired to bring it to life.</p>
+          <p class="cn">用推理、證據與故事把你的概念塑形、呈現出來，讓人能理解、相信、並被激發起投入的意願。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LET'S GO TRANSITION ===== -->
+<section class="letsgo-section" id="explorer">
+  <div class="letsgo-content">
+    <h2>Let's Go!</h2>
+    <p class="letsgo-cn">出發吧！</p>
+    <p style="margin-top:32px;font-size:15px;letter-spacing:.2em;text-transform:uppercase;opacity:.75;font-weight:600">Level 1 · Explorer · 第一級 探索者</p>
+  </div>
+</section>
+
+<!-- ===== AGENDA ===== -->
+<section style="background:var(--paper)">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="section-label"><span class="num">08</span><span>Level 1 Agenda · 議程</span></div>
+      <h2 class="section-title">Agenda</h2>
+      <p class="section-title-cn">工作坊議程</p>
+    </div>
+
+    <div class="agenda-table reveal">
+      <div class="agenda-row">
+        <div class="agenda-cell time">09:00 – 09:30</div>
+        <div class="agenda-cell en">Opening Message</div>
+        <div class="agenda-cell cn">開場訊息</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">09:30 – 10:00</div>
+        <div class="agenda-cell en">Introduction to Mission &amp; Goals</div>
+        <div class="agenda-cell cn">任務與目標介紹</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Team Up · Pick your brand</div>
+        <div class="agenda-cell cn">組隊 · 選擇你的品牌</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">10:00 – 10:30</div>
+        <div class="agenda-cell en">The truth behind creativity and innovation</div>
+        <div class="agenda-cell cn">創意與創新背後的真相</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">10:30 – 12:00</div>
+        <div class="agenda-cell en">Goal 1 — Innovative Product Idea</div>
+        <div class="agenda-cell cn">目標 1 — 創新產品點子</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 1: Know the brand</div>
+        <div class="agenda-cell cn">步驟 1：了解品牌</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 2: Remix skills</div>
+        <div class="agenda-cell cn">步驟 2：混搭技能</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 3: Synthesize Idea</div>
+        <div class="agenda-cell cn">步驟 3：整合成點子</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">12:00 – 13:30</div>
+        <div class="agenda-cell en">Lunch break &amp; Discussion</div>
+        <div class="agenda-cell cn">午餐與討論</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">13:30 – 14:00</div>
+        <div class="agenda-cell en">Step 3 continued</div>
+        <div class="agenda-cell cn">步驟 3（續）</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">14:00 – 16:00</div>
+        <div class="agenda-cell en">Goal 2 — Concept Video</div>
+        <div class="agenda-cell cn">目標 2 — 概念影片</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 1: Drafting first-person view (FPV) user journey</div>
+        <div class="agenda-cell cn">步驟 1：撰寫第一人稱使用者旅程</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 2: Creating conceptual user journey images</div>
+        <div class="agenda-cell cn">步驟 2：產出概念性使用者旅程圖像</div>
+      </div>
+      <div class="agenda-row sub">
+        <div class="agenda-cell time">&nbsp;</div>
+        <div class="agenda-cell en">Step 3: Generating user journey short video</div>
+        <div class="agenda-cell cn">步驟 3：生成使用者旅程短影片</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">16:00 – 16:15</div>
+        <div class="agenda-cell en">Break / Buffer Time</div>
+        <div class="agenda-cell cn">休息 / 緩衝時間</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">16:15 – 17:00</div>
+        <div class="agenda-cell en">Sharing your innovation</div>
+        <div class="agenda-cell cn">分享你的創新成果</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-cell time">17:00 – 17:30</div>
+        <div class="agenda-cell en">Reflection</div>
+        <div class="agenda-cell cn">反思</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MISSION ===== -->
+<section class="core-block">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Mission · 任務</div>
+      <h3 class="core-title">Mission</h3>
+      <p class="core-title-cn">你的任務</p>
+    </div>
+
+    <div class="concept-card reveal">
+      <p style="font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--mute);margin-bottom:20px">From a spark to a story</p>
+      <div class="big"><span class="italic">An</span> Innovative Idea <span style="color:var(--accent);font-family:var(--font-serif);font-style:italic">→</span> A Concept Video</div>
+      <div class="big-cn">一個創新點子 → 一支概念影片</div>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">Core Ideas</div>
+        <ul class="core-list">
+          <li>This workshop has two important goals.</li>
+          <li>First, you will develop an <strong>innovative idea for a real brand</strong>, looking for a meaningful opportunity that others might overlook.</li>
+          <li>Second, you will turn that idea into a concept that people can quickly understand and believe in — brought to life through a <strong>concept video</strong>.</li>
+          <li>In the AI era, execution is becoming easier, so the real advantage is <strong>seeing meaningful possibilities</strong>.</li>
+          <li>Real impact comes from turning ideas into concepts that are clear, compelling, and valuable.</li>
+          <li>We will use the <strong>ACE Learning Cycle</strong> to shape your thinking into something real, visible, and powerful.</li>
+        </ul>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">核心概念</div>
+        <ul class="core-list">
+          <li class="cn">這場工作坊有兩個重要目標。</li>
+          <li class="cn">第一，你將為一個 <strong>真實的品牌</strong>，發展出一個 <strong>創新的點子</strong> — 去找一個別人可能忽略、但真正有意義的機會。</li>
+          <li class="cn">第二，你要把那個點子變成一個人們能很快理解並相信的概念 — 並用一支 <strong>概念影片</strong> 把它呈現出來。</li>
+          <li class="cn">在 AI 時代，執行變得越來越容易，所以真正的優勢在於 <strong>能看見有意義的可能性</strong>。</li>
+          <li class="cn">真正的影響力來自於 — 把想法變成 <strong>清楚、引人、具價值</strong> 的概念。</li>
+          <li class="cn">我們會用 <strong>ACE 學習循環</strong> 來把你的思考塑造成真實、可見、有力量的東西。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUTH BEHIND INNOVATION 1 — curious + remix ===== -->
+<section class="core-block alt">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Truth Behind Innovation · 創新的真相</div>
+      <h3 class="core-title">Innovation is a <em style="font-family:var(--font-serif)">method.</em></h3>
+      <p class="core-title-cn">創新，是一種「方法」。</p>
+    </div>
+
+    <div class="concept-card reveal">
+      <p style="font-size:14px;color:var(--mute);margin-bottom:20px;letter-spacing:.02em">Why innovation feels so far away? <span style="font-family:var(--font-cn-body)">— 為什麼創新感覺離我們很遠？</span></p>
+      <div class="big">Innovation is a <span class="italic" style="text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px">method.</span></div>
+      <div class="big-cn">創新，是一套「方法」</div>
+      <p class="sub">NOT just moments of sudden inspiration… but a method anyone can practice.</p>
+      <p class="sub-cn">不只是靈光乍現的瞬間 — 而是每個人都能練習的方法。</p>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">Core Ideas</div>
+        <ul class="core-list">
+          <li>Creativity is <strong>not something you lack</strong>, but something you have simply not been using.</li>
+          <li>Real innovation is practical and <strong>repeatable</strong>, not just a flash of inspiration.</li>
+          <li>Innovation works like <strong>building muscle</strong> — progress comes through method and consistent practice.</li>
+          <li>Most innovation comes from <strong>recombining what already exists</strong> rather than creating something from nothing.</li>
+          <li>The heart of creativity is not inventing from zero, but <strong>seeing connections that others do not see.</strong></li>
+          <li>If creativity follows a <strong>pattern</strong>, then it is something we can <strong>learn, practice, and strengthen</strong> together.</li>
+        </ul>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">核心概念</div>
+        <ul class="core-list">
+          <li class="cn">創意 <strong>不是你欠缺的東西</strong>，只是你太久沒用了。</li>
+          <li class="cn">真正的創新是務實、而且 <strong>可以重複發生</strong> 的，不只是某個靈感瞬間。</li>
+          <li class="cn">創新其實比較像 <strong>鍛鍊肌肉</strong> — 靠方法與持續練習累積。</li>
+          <li class="cn">大多數的創新，來自 <strong>把已經存在的東西重新組合</strong>，而不是無中生有。</li>
+          <li class="cn">創意的核心，不是從零開始發明，而是 <strong>看見別人沒看見的連結</strong>。</li>
+          <li class="cn">如果創意有 <strong>規律</strong>，那麼它就是一件我們可以一起 <strong>學習、練習、鍛鍊</strong> 的事。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Theoretical Trace -->
+    <div class="reveal" style="margin-top:60px">
+      <h4 style="font-family:var(--font-display);font-size:24px;font-weight:700;margin-bottom:4px">Remixing → Creativity → Innovation</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;color:var(--ink-soft);font-weight:600;margin-bottom:24px">混搭 → 創意 → 創新 · 理論脈絡</p>
+
+      <div class="scamper-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="scamper-box">
+          <div class="letter">1971</div>
+          <h5>Genealogy of Ideas</h5>
+          <p class="cn">思想的系譜</p>
+          <p style="margin-top:8px;font-size:12.5px">Michel Foucault — New invention is part of a genealogical chain, not a clean break.</p>
+        </div>
+        <div class="scamper-box">
+          <div class="letter">1990</div>
+          <h5>Combinatorial Creativity</h5>
+          <p class="cn">組合式創造力</p>
+          <p style="margin-top:8px;font-size:12.5px">Margaret Boden — Creativity = unfamiliar combinations of familiar elements.</p>
+        </div>
+        <div class="scamper-box">
+          <div class="letter">2002</div>
+          <h5>Conceptual Blending</h5>
+          <p class="cn">概念融合理論</p>
+          <p style="margin-top:8px;font-size:12.5px">Fauconnier &amp; Turner — The mind merges separate concepts into a new hybrid.</p>
+        </div>
+        <div class="scamper-box">
+          <div class="letter">2008</div>
+          <h5>Remix Culture</h5>
+          <p class="cn">混搭文化</p>
+          <p style="margin-top:8px;font-size:12.5px">Lessig &amp; Jenkins — Culture thrives on repurposing, reworking, and combining existing materials.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Think Deeper 1 ===== -->
+<section class="think-deeper">
+  <div class="wrap-sm">
+    <div class="think-header reveal">
+      <span class="icon">?</span>
+      <h3>Think Deeper</h3>
+      <span class="cn">深入思考</span>
+    </div>
+    <div class="think-grid">
+      <div class="think-q reveal">
+        <span class="q-num">01</span>
+        <h5>What everyday things around me are actually remixes?</h5>
+        <h5 class="cn">我身邊日常的東西，其實哪些是「混搭」？</h5>
+        <p>Do I see products and services as finished things, or as collections of elements that can be broken apart and recombined?</p>
+        <p class="cn">我把產品與服務當成「已經完成的東西」，還是「可以拆開、重新組合的元件集合」？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">02</span>
+        <h5>Am I limiting myself to my own industry?</h5>
+        <h5 class="cn">我是不是只把自己限制在自己的產業裡？</h5>
+        <p>Am I only drawing ideas from what I already know, instead of borrowing patterns from completely different domains?</p>
+        <p class="cn">我是否只從我已經知道的地方找靈感，而沒去跨不同領域借用模式與經驗？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">03</span>
+        <h5>Do I know how to deconstruct what I see?</h5>
+        <h5 class="cn">我會不會「拆解」眼前看到的東西？</h5>
+        <p>When I encounter a great product or idea, can I break it down into its components and understand what was actually combined?</p>
+        <p class="cn">遇到一個很棒的產品或想法，我能把它拆回元件，看出背後其實是什麼東西被組合起來嗎？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">04</span>
+        <h5>If creativity is a skill, not a talent — what does that mean for me?</h5>
+        <h5 class="cn">如果創意是技能而不是天賦，這對我意味著什麼？</h5>
+        <p>If I truly accept that I can learn this, what would I do differently starting today?</p>
+        <p class="cn">如果我真的相信創意可以學，那從今天開始，我會做什麼不一樣的事？</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IDENTITY — 3 Characteristics ===== -->
+<section class="core-block">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Innovation starts with Identity · 創新始於身份</div>
+      <h3 class="core-title">Characteristics define <em style="font-family:var(--font-serif)">who you are.</em></h3>
+      <p class="core-title-cn">特質，定義了你是誰。</p>
+    </div>
+
+    <div class="char-grid reveal">
+      <div class="char-card" style="border-top:4px solid var(--sage)">
+        <span class="type">Outer Expression · 外在表現</span>
+        <h4>Skills</h4>
+        <h4 class="cn">技能</h4>
+        <p>What you are really good at.</p>
+        <p class="cn">你真正擅長的事。</p>
+      </div>
+      <div class="char-card" style="border-top:4px solid var(--accent)">
+        <span class="type">Inner Core · 內在核心</span>
+        <h4>Personality</h4>
+        <h4 class="cn">個性</h4>
+        <p>How people feel when they see, hear and think of you.</p>
+        <p class="cn">人們看到、聽到、想到你時的感受。</p>
+      </div>
+      <div class="char-card" style="border-top:4px solid var(--gold)">
+        <span class="type">Inner Core · 內在核心</span>
+        <h4>Belief</h4>
+        <h4 class="cn">信念</h4>
+        <p>Why you exist.</p>
+        <p class="cn">你存在的理由。</p>
+      </div>
+    </div>
+
+    <!-- Skills breakdown -->
+    <div class="reveal" style="margin-top:40px">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">Skills · Building Blocks of Innovation</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:24px">技能 · 創新的建構基石</p>
+
+      <div class="skills-dots">
+        <span class="skill-dot tech">Technology<span class="cn">科技</span></span>
+        <span class="skill-dot design">Design<span class="cn">設計</span></span>
+        <span class="skill-dot bizmodel">Business Model<span class="cn">商業模式</span></span>
+        <span class="skill-dot care">Customer Care<span class="cn">客戶關懷</span></span>
+        <span class="skill-dot eco">Ecosystem<span class="cn">生態系</span></span>
+      </div>
+    </div>
+
+    <div class="bilingual reveal" style="margin-top:40px">
+      <div class="col en">
+        <div class="col-lang">Core Ideas</div>
+        <ul class="core-list">
+          <li>Strong innovation starts with <strong>understanding who the brand really is.</strong></li>
+          <li>Imagine the brand as a person: what is it good at, what is its personality, what does it believe in?</li>
+          <li>Without self-understanding, ideas may sound interesting but still <strong>lack grounding</strong>.</li>
+          <li><strong>Technology</strong> solves problems. <strong>Design</strong> shapes experience. <strong>Business model</strong> sustains growth. <strong>Customer care</strong> builds trust. <strong>Ecosystem</strong> expands reach.</li>
+          <li>Innovation becomes more concrete when we see these skills as <strong>building blocks that can be combined in new ways.</strong></li>
+        </ul>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">核心概念</div>
+        <ul class="core-list">
+          <li class="cn">強大的創新，來自於 <strong>真正理解這個品牌是誰</strong>。</li>
+          <li class="cn">把品牌想像成一個人 — 他擅長什麼？他的個性是什麼？他相信什麼？</li>
+          <li class="cn">如果缺乏自我理解，想法聽起來有趣，卻 <strong>沒有根</strong>。</li>
+          <li class="cn"><strong>科技</strong> 解決問題；<strong>設計</strong> 塑造體驗；<strong>商業模式</strong> 支撐成長；<strong>客戶關懷</strong> 建立信任；<strong>生態系</strong> 擴展影響力。</li>
+          <li class="cn">當我們把這些技能看成 <strong>可以重新組合的建構基石</strong>，創新就會變得更具體、更可行。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Personality -->
+    <div class="reveal" style="margin-top:60px;padding-top:40px;border-top:1px dashed var(--line)">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">Personality · 4–6 Distinct Adjectives</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:24px">個性 · 四到六個鮮明的形容詞</p>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px" class="personality-grid">
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Bold &amp; Energetic</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">大膽活力</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Rebellious · Avant-garde · Adventurous · Ambitious</p>
+        </div>
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Warm &amp; Human-Centered</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">溫暖以人為本</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Warm · Approachable · Thoughtful · Soothing</p>
+        </div>
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Minimal &amp; Rational</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">極簡理性</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Minimalist · Disciplined · Calm · Rational · Precise</p>
+        </div>
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Luxury &amp; Heritage</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">奢華傳承</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Luxurious · Premium · Refined · Meticulously Crafted</p>
+        </div>
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Trust &amp; Reliability</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">信任穩定</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Trustworthy · Steady · Grounded · Professional · Durable</p>
+        </div>
+        <div style="padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px">
+          <strong>Performance-Driven</strong><span style="font-family:var(--font-cn-body);color:var(--mute);font-size:13px;margin-left:8px">效能至上</span>
+          <p style="font-size:13px;color:var(--mute);margin-top:6px">Sharp · Fast · Agile · Adaptive · Sleek · Swift · Efficient</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Belief -->
+    <div class="reveal" style="margin-top:60px;padding:40px;background:var(--ink);color:var(--paper);border-radius:14px;text-align:center">
+      <p style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-warm);margin-bottom:16px;font-weight:700">Belief · 信念</p>
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:clamp(26px,4vw,40px);line-height:1.25;font-weight:300">"I believe the world would be better if<br><span style="border-bottom:2px dashed var(--accent-warm);padding:0 40px;opacity:.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>."</p>
+      <p class="cn" style="font-family:var(--font-cn-serif);font-style:italic;font-size:clamp(18px,2.6vw,26px);color:var(--paper-2);margin-top:18px;letter-spacing:.06em">「我相信，這個世界如果<span style="border-bottom:2px dashed var(--accent-warm);padding:0 30px;opacity:.6">　　　　　　</span>，會變得更好。」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GOAL 1 — KNOW THE BRAND ===== -->
+<section class="core-block alt">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Goal 1 · Step 1 · Know the Brand · 了解品牌</div>
+      <h3 class="core-title">Know the <em style="font-family:var(--font-serif)">Brand</em> first.</h3>
+      <p class="core-title-cn">先認識這個品牌。</p>
+    </div>
+
+    <div class="concept-card reveal">
+      <div class="big">What's the brand's <span class="italic">iconic</span><br>or best-selling products?</div>
+      <div class="big-cn">品牌的經典或暢銷產品是什麼？</div>
+      <p class="sub">What are they? Who uses them? Why they stand out from others? Show proof or reference.</p>
+      <p class="sub-cn">是什麼產品？誰在用？為什麼它特別？請提出實際證據或來源。</p>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">Core Ideas</div>
+        <ul class="core-list">
+          <li>Identify the brand's <strong>iconic or best-selling products</strong> — the ones people immediately associate with it.</li>
+          <li>Look closely at what they are, who uses them, and why they stand out.</li>
+          <li>Rely on <strong>real evidence</strong>: reviews, product pages, campaigns, screenshots, user feedback.</li>
+          <li>If the brand is too broad, <strong>narrow your focus</strong> to one product line or category.</li>
+          <li>This is not just about listing products, but seeing the brand clearly through evidence.</li>
+        </ul>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">核心概念</div>
+        <ul class="core-list">
+          <li class="cn">找出這個品牌的 <strong>經典或暢銷產品</strong> — 那些人們一想到它就會聯想到的東西。</li>
+          <li class="cn">仔細看：它是什麼？誰在用？為什麼它特別？</li>
+          <li class="cn">要有 <strong>真實的證據</strong>：評論、產品頁、廣告、截圖、使用者回饋。</li>
+          <li class="cn">如果品牌太大，就 <strong>縮小範圍</strong>，聚焦一個產品線或類別。</li>
+          <li class="cn">這不只是列清單，而是透過證據，把這個品牌看清楚。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Leaders said -->
+    <div class="reveal" style="margin-top:50px;padding:40px;background:#fff;border:1px solid var(--line);border-radius:14px">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">What its leaders said lately?</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:20px">領導人最近說了什麼？</p>
+      <p style="font-size:15px;color:var(--ink-soft);line-height:1.7;margin-bottom:10px">Listen to earnings calls, interviews, press releases. Identify the company's <strong>growth engines</strong> and the strategy behind each. Look for evidence — real statements, quotes, and actions.</p>
+      <p class="cn" style="font-family:var(--font-cn-body);font-size:14.5px;color:var(--mute);line-height:1.85">聆聽財報電話、訪談、新聞稿，找出這家公司的 <strong>成長引擎</strong>，以及每一個成長引擎背後的策略。要找到證據 — 真實的發言、引述、實際行動。</p>
+    </div>
+
+    <!-- AI as research partner -->
+    <div class="reveal" style="margin-top:30px">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:30px;background:var(--paper-2);border-radius:14px">
+        <div style="text-align:center;font-weight:700;width:100%;margin-bottom:8px">Use any AI to accelerate your guided research · 用任何 AI 工具加速你的引導式研究</div>
+        <span class="cap-tag">ChatGPT</span>
+        <span class="cap-tag">Gemini</span>
+        <span class="cap-tag">Claude</span>
+        <span class="cap-tag">Grok</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GOAL 1 — REMIX SKILLS (SCAMPER) ===== -->
+<section class="core-block">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Goal 1 · Step 2 · Remix Skills · 混搭技能</div>
+      <h3 class="core-title">Remix with <em style="font-family:var(--font-serif)">SCAMPER.</em></h3>
+      <p class="core-title-cn">用 SCAMPER 來混搭。</p>
+    </div>
+
+    <p style="font-size:15px;color:var(--ink-soft);line-height:1.7;max-width:700px;margin-bottom:20px">Explore crossover remixes of skills — both within and outside the brand's core industry — using the SCAMPER method.</p>
+    <p class="cn" style="font-family:var(--font-cn-body);font-size:14.5px;color:var(--mute);line-height:1.85;max-width:700px;margin-bottom:30px">運用 SCAMPER 方法，探索品牌在自身產業內、或跨產業之間的技能「混搭可能性」。</p>
+
+    <div class="scamper-grid reveal">
+      <div class="scamper-box">
+        <span class="letter">S</span>
+        <h5>Substitute</h5>
+        <p class="cn">替代</p>
+        <p>Replace a part, ingredient, or process.</p>
+      </div>
+      <div class="scamper-box">
+        <span class="letter">C</span>
+        <h5>Combine</h5>
+        <p class="cn">結合</p>
+        <p>Merge two things into one.</p>
+      </div>
+      <div class="scamper-box">
+        <span class="letter">A</span>
+        <h5>Adapt</h5>
+        <p class="cn">調整／適應</p>
+        <p>Borrow from elsewhere and fit it in.</p>
+      </div>
+      <div class="scamper-box">
+        <span class="letter">M</span>
+        <h5>Magnify / Minify / Modify</h5>
+        <p class="cn">放大／縮小／修改</p>
+        <p>Change scale, form, or feature.</p>
+      </div>
+      <div class="scamper-box">
+        <span class="letter">P</span>
+        <h5>Put to Another Use</h5>
+        <p class="cn">挪作他用</p>
+        <p>Apply to a different context.</p>
+      </div>
+      <div class="scamper-box">
+        <span class="letter">E</span>
+        <h5>Eliminate</h5>
+        <p class="cn">消除</p>
+        <p>Remove the unnecessary.</p>
+      </div>
+      <div class="scamper-box" style="grid-column:span 1">
+        <span class="letter">R</span>
+        <h5>Reverse / Rearrange</h5>
+        <p class="cn">反轉／重組</p>
+        <p>Flip the order or direction.</p>
+      </div>
+    </div>
+
+    <!-- Industry Verticals -->
+    <div class="reveal" style="margin-top:40px">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">Crossover with different industry verticals</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:20px">跨足不同的產業垂直領域</p>
+
+      <div class="industry-grid">
+        <div class="industry-tag">Food &amp; Beverage<span class="cn">餐飲</span></div>
+        <div class="industry-tag">Apparels<span class="cn">服飾</span></div>
+        <div class="industry-tag">Living / Lifestyle<span class="cn">居家／生活</span></div>
+        <div class="industry-tag">Travel &amp; Hospitality<span class="cn">旅遊款待</span></div>
+        <div class="industry-tag">Education<span class="cn">教育</span></div>
+        <div class="industry-tag">Media &amp; Communication<span class="cn">媒體傳播</span></div>
+        <div class="industry-tag">Healthcare<span class="cn">健康醫療</span></div>
+        <div class="industry-tag">Arts &amp; Culture<span class="cn">藝文</span></div>
+        <div class="industry-tag">Entertainment<span class="cn">娛樂</span></div>
+        <div class="industry-tag">Sports<span class="cn">運動</span></div>
+        <div class="industry-tag">Info-Tech<span class="cn">資訊科技</span></div>
+        <div class="industry-tag">… and more<span class="cn">更多</span></div>
+      </div>
+    </div>
+
+    <!-- Picking ideas chart -->
+    <div class="reveal" style="margin-top:50px">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">Picking Ideas · 挑選點子</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:20px">尋找「令人驚喜又合理」的甜蜜點</p>
+
+      <div class="pick-chart">
+        <span class="axis axis-x"></span>
+        <span class="axis axis-y"></span>
+        <span class="axis-label top">Acceptable · 可接受</span>
+        <span class="axis-label bottom">Unacceptable · 不可接受</span>
+        <span class="axis-label left">Conservative · 保守</span>
+        <span class="axis-label right">Progressive · 前衛</span>
+        <div class="sweet-spot">
+          <div class="sweet-spot-label">Pleasantly Surprising · 令人驚喜</div>
+        </div>
+        <span class="dot" style="top:30%;left:20%"></span>
+        <span class="dot" style="top:35%;left:45%;opacity:.9"></span>
+        <span class="dot" style="top:25%;left:55%;opacity:.9"></span>
+        <span class="dot" style="top:40%;left:65%;opacity:.9"></span>
+        <span class="dot" style="top:30%;left:70%;opacity:.9"></span>
+        <span class="dot" style="top:60%;left:30%"></span>
+        <span class="dot" style="top:70%;left:50%"></span>
+        <span class="dot" style="top:65%;left:60%"></span>
+        <span class="dot" style="top:75%;left:70%"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GOAL 1 — SYNTHESIZE IDEA ===== -->
+<section class="core-block alt">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Goal 1 · Step 3 · Synthesize · 整合點子</div>
+      <h3 class="core-title">Document your <em style="font-family:var(--font-serif)">Innovative Idea.</em></h3>
+      <p class="core-title-cn">把你的創新點子寫下來。</p>
+    </div>
+
+    <div class="concept-card reveal" style="text-align:left">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;text-align:left">
+        <div style="padding:18px;background:var(--paper-2);border-radius:8px">
+          <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px">01</p>
+          <h5 style="font-size:17px;font-weight:700;margin-bottom:4px">Name of Innovation</h5>
+          <p style="font-family:var(--font-cn-body);font-size:14px;color:var(--mute)">創新的名稱</p>
+        </div>
+        <div style="padding:18px;background:var(--paper-2);border-radius:8px">
+          <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px">02</p>
+          <h5 style="font-size:17px;font-weight:700;margin-bottom:4px">Idea Introduction</h5>
+          <p style="font-family:var(--font-cn-body);font-size:14px;color:var(--mute)">點子簡介</p>
+        </div>
+        <div style="padding:18px;background:var(--paper-2);border-radius:8px">
+          <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px">03</p>
+          <h5 style="font-size:17px;font-weight:700;margin-bottom:4px">Key Features</h5>
+          <p style="font-family:var(--font-cn-body);font-size:14px;color:var(--mute)">關鍵特色</p>
+        </div>
+        <div style="padding:18px;background:var(--paper-2);border-radius:8px">
+          <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px">04</p>
+          <h5 style="font-size:17px;font-weight:700;margin-bottom:4px">Who It's For</h5>
+          <p style="font-family:var(--font-cn-body);font-size:14px;color:var(--mute)">目標使用者</p>
+        </div>
+        <div style="padding:18px;background:var(--paper-2);border-radius:8px">
+          <p style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px">05</p>
+          <h5 style="font-size:17px;font-weight:700;margin-bottom:4px">Example User Journey</h5>
+          <p style="font-family:var(--font-cn-body);font-size:14px;color:var(--mute)">示範使用者旅程</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">Core Ideas</div>
+        <ul class="core-list">
+          <li>Stop exploring. <strong>Commit to one idea.</strong></li>
+          <li>Give it a strong name and a clear introduction — what it is, how it works, why it exists.</li>
+          <li>Write a <strong>first-person user journey</strong> so you can experience the idea from the user's point of view.</li>
+          <li>As you write, you'll notice what feels natural, what feels unclear, what needs to improve.</li>
+          <li>Documenting is not just recording — it's <strong>synthesizing, validating, and improving</strong> at the same time.</li>
+        </ul>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">核心概念</div>
+        <ul class="core-list">
+          <li class="cn">停止探索，<strong>選定一個點子</strong>。</li>
+          <li class="cn">給它一個有力的名字與清楚的簡介 — 它是什麼、怎麼運作、為什麼存在。</li>
+          <li class="cn">寫一段 <strong>第一人稱的使用者旅程</strong>，用使用者的視角去體驗這個點子。</li>
+          <li class="cn">在寫的過程中，你會發現什麼地方感覺自然、什麼地方不清楚、什麼地方需要調整。</li>
+          <li class="cn">寫下來不只是記錄，而是同時在 <strong>整合、驗證、改良</strong> 這個點子。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GOAL 2 — CONCEPT VIDEO ===== -->
+<section class="core-block">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="step-header">Goal 2 · Concept Video · 概念影片</div>
+      <h3 class="core-title">Bring the idea to <em style="font-family:var(--font-serif)">life.</em></h3>
+      <p class="core-title-cn">把點子變成活起來的畫面。</p>
+    </div>
+
+    <div class="story-parts reveal">
+      <div class="story-part">
+        <div class="pnum">Part 01 · 第一段</div>
+        <h5>Who &amp; Why — First Impression</h5>
+        <h5 class="cn">誰、為什麼 — 第一印象</h5>
+        <p style="font-size:14px;color:var(--mute);line-height:1.7">Portray who the person is and why they want to try it. Their first impression and experience.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:13.5px;color:var(--mute);line-height:1.85;margin-top:8px">描繪這個人是誰，為什麼他想試這個產品；以及他的第一印象與體驗。</p>
+      </div>
+      <div class="story-part">
+        <div class="pnum">Part 02 · 第二段</div>
+        <h5>Detailed Experiences</h5>
+        <h5 class="cn">更細緻的體驗</h5>
+        <p style="font-size:14px;color:var(--mute);line-height:1.7">Portray more detailed experiences the user went through. Small details build realism and immersion.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:13.5px;color:var(--mute);line-height:1.85;margin-top:8px">描繪使用者經歷到的細節 — 小地方堆疊，才會有真實感與沉浸感。</p>
+      </div>
+      <div class="story-part">
+        <div class="pnum">Part 03 · 第三段</div>
+        <h5>Pleasant Surprise &amp; Final Thoughts</h5>
+        <h5 class="cn">驚喜與最後的感想</h5>
+        <p style="font-size:14px;color:var(--mute);line-height:1.7">A pleasant surprise and final thoughts. End with impact and memory.</p>
+        <p class="cn" style="font-family:var(--font-cn-body);font-size:13.5px;color:var(--mute);line-height:1.85;margin-top:8px">安排一個令人驚喜的橋段，並以餘韻作結，留下印象。</p>
+      </div>
+    </div>
+
+    <!-- Example story -->
+    <div class="reveal" style="margin-top:40px">
+      <h4 style="font-size:22px;font-weight:700;margin-bottom:4px">Story Example · 故事範例</h4>
+      <p style="font-family:var(--font-cn-serif);font-size:17px;font-weight:600;color:var(--ink-soft);margin-bottom:20px">McDonald's × ANA Airlines Crossover · 麥當勞 × 全日空航空聯名</p>
+
+      <div class="story-example">
+        <p>A <mark>dad</mark> takes his <mark>child</mark> on a special flight, a collaboration between McDonald's and Japan's ANA airline, <mark>because the kid loves McDonald's</mark>. The whole plane looks like McDonald's packaging, with a white base and orange and green lines. As they step inside, they're amazed: <mark>the seats look like sesame burger buns, the blankets look like lettuce</mark>, and the pillows are shaped like Chicken McNuggets.</p>
+        <p>After takeoff, the dad wraps the lettuce blanket around them and quietly asks a flight attendant <mark>why everything looks like burger ingredients. She smiles and softly says, "Because you're the meat inside the burger."</mark> They giggle. Then the child notices the seatback screen can be used to order food, and the interface looks <mark>exactly like a McDonald's self-order kiosk</mark>.</p>
+        <p>When it's time for the in-flight meal, the crew serves McDonald's value meals and Happy Meals. The captain announces that this is <mark>the world's only "McDonald's Sky Kitchen," where everything is freshly cooked onboard, not reheated.</mark> The whole cabin bursts into applause.</p>
+      </div>
+
+      <div class="story-example">
+        <p class="cn">有一個<mark>爸爸</mark>呀，他帶<mark>小孩</mark>搭飛機，他們搭的是特別的航班，就是麥當勞跟日本 ANA 航空公司聯名合作的航班，<mark>因為小朋友很喜歡麥當勞</mark>。那整台麥當勞飛機的外觀呀，看起來就是麥當勞的食物包裝紙的顏色，就是白底然後橘色綠色圖案線條。他們一走進麥當勞飛機裡面就發現，哇！所有的<mark>飛機座椅都是漢堡那個芝麻麵包的造型</mark>，然後飛機上的<mark>毛毯居然是漢堡裡面那種生菜的圖案跟顏色</mark>，還有枕頭，居然是麥克雞塊造型的。</p>
+        <p class="cn">然後飛機起飛之後，爸爸就把生菜毛毯打開來蓋在自己和小身孩上，然後有一個空服員經過的時候，他就小聲問那個空服員說：<mark>為什麼座位是麵包、毛毯是生菜呀？那個空服員就跟他說：因為你就是漢堡裡面那塊肉呀！</mark> 然後他們兩個人就小聲竊笑。然後小孩發現他們面前的那個飛機椅背的螢幕可以點餐，而且整個點餐的螢幕畫面居然<mark>就跟一般麥當勞餐廳裡面那個自助點餐機的螢幕畫面看起來一模一樣</mark>。</p>
+        <p class="cn">發放機上餐點的時間到了，空服員端來的居然是麥當勞的超值全餐和快樂兒童餐！爸爸跟小孩都覺得很驚訝，因為吃起來跟陸地上的麥當勞味道一樣。這時候機長廣播：這是<mark>全世界唯一的一台「麥當勞空中廚房」蓋在飛機上</mark>，<mark>大家現在吃到的不是預冷加熱的，是剛剛在廚房現場做出來的！</mark> 全機乘客一聽到都鼓掌了。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL THINK DEEPER ===== -->
+<section class="think-deeper">
+  <div class="wrap-sm">
+    <div class="think-header reveal">
+      <span class="icon">?</span>
+      <h3>Think Deeper</h3>
+      <span class="cn">深入思考 · 關於故事與 AI</span>
+    </div>
+    <div class="think-grid">
+      <div class="think-q reveal">
+        <span class="q-num">05</span>
+        <h5>Why write a story in the early stages of an innovation?</h5>
+        <h5 class="cn">為什麼在創新產品的早期階段要寫一個故事？</h5>
+        <p>Before the product exists, how does imagining and crafting a user journey help in actually building it?</p>
+        <p class="cn">在產品還不存在時，想像並雕琢一個使用者旅程，怎麼幫助你真的把它做出來？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">06</span>
+        <h5>Why do stories endure for thousands of years?</h5>
+        <h5 class="cn">為什麼有些故事能流傳千年？</h5>
+        <p>Are the lasting stories complex or simple? Explaining or storytelling? Or both?</p>
+        <p class="cn">那些流傳千年的故事，是複雜還是簡單？是解釋還是敘事？還是兩者皆是？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">07</span>
+        <h5>What's the best way to talk to a large language model?</h5>
+        <h5 class="cn">和大型語言模型對話最好的方式是什麼？</h5>
+        <p>Talk to it like you would to a real person, or use a structured, bullet-point style?</p>
+        <p class="cn">該像對真人一樣自然地說話，還是用結構化、條列式的方式下指令？</p>
+      </div>
+      <div class="think-q reveal">
+        <span class="q-num">08</span>
+        <h5>Why is your video worth watching and sharing?</h5>
+        <h5 class="cn">為什麼你的影片值得別人看，值得別人分享？</h5>
+        <p>Is it because the visuals are beautifully made, or because it delivers unique and fresh ideas?</p>
+        <p class="cn">是因為畫面漂亮？還是因為它帶來了獨特、新鮮的想法？</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== READY FOR LEVEL 2 ===== -->
+<section class="ready-section">
+  <div class="wrap-sm">
+    <div class="ready-title">Ready for <span class="italic">Level 2?</span> →</div>
+    <p class="ready-cn">準備好進入第二級了嗎？</p>
+  </div>
+</section>
+
+<!-- ===== LEVEL 2 DETAIL ===== -->
+<section class="core-block">
+  <div class="wrap-sm">
+    <div class="reveal">
+      <div class="section-label"><span class="num">09</span><span>Level 2 · Innovator · 創新者</span></div>
+      <h2 class="section-title">From ideas to <span class="italic">innovation.</span></h2>
+      <p class="section-title-cn">從點子，到真正的創新。</p>
+    </div>
+
+    <div class="bilingual reveal">
+      <div class="col en">
+        <div class="col-lang">English</div>
+        <p>You've explored boldly in Level 1. Now it's time to turn promising ideas into innovations that can actually go somewhere.</p>
+        <p><strong>Innovator</strong> is where curiosity becomes momentum. You will push beyond discovery and learn how to shape raw possibilities into opportunities with real value. You will challenge assumptions, sharpen your judgment, and design solutions that are <strong>credible, practical, and worth believing in.</strong></p>
+        <p>If Explorer helped you see more, Innovator helps you <strong>build what others still cannot see.</strong></p>
+      </div>
+      <div class="col cn">
+        <div class="col-lang">繁體中文</div>
+        <p>你已經在第一級（Explorer）中大膽探索過。現在是時候把那些充滿潛力的點子，變成能真的往前走的創新。</p>
+        <p><strong>創新者（Innovator）</strong> 是好奇心變成動能的地方。你會走出探索，學會怎麼把原始的可能性塑造成 <strong>有真實價值的機會</strong>。你將挑戰假設、磨練判斷力，並設計出 <strong>可信、實際、值得被相信</strong> 的解法。</p>
+        <p>如果 Explorer 是幫你「看見更多」，Innovator 是幫你 <strong>打造出別人還看不見的東西</strong>。</p>
+      </div>
+    </div>
+
+    <div class="learn-grid" style="margin-top:40px">
+      <div class="learn-card reveal">
+        <div class="icon">i.</div>
+        <h4>Develop with Human-Centered Design</h4>
+        <h4 class="cn">用以人為本設計深化點子</h4>
+        <p>Take your Level 1 idea and push it further through Human-Centered Design. Shape it into something more relevant, thoughtful, and valuable.</p>
+        <p class="cn">把你在 Level 1 發想的點子，用以人為本的設計繼續推進 — 讓它變得更貼近人、更有思考、更有價值。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">ii.</div>
+        <h4>Decode User Behavior &amp; Unmet Needs</h4>
+        <h4 class="cn">解碼使用者行為與未被滿足的需求</h4>
+        <p>Understand user behavior, motivations, and tensions. Refine your original idea into a concept that solves something people actually care about.</p>
+        <p class="cn">去理解使用者的行為、動機與張力，把原本的點子琢磨成一個「解決人們真的在乎的問題」的概念。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">iii.</div>
+        <h4>Refine Concept via Design Sprints</h4>
+        <h4 class="cn">用 Design Sprint 雕出 MVP</h4>
+        <p>Use Design Sprint thinking to quickly develop, challenge, and improve your concept into a focused, credible, pitch-ready MVP.</p>
+        <p class="cn">運用 Design Sprint 的思維，快速發展、挑戰、改良你的概念，做成一個聚焦、可信、隨時可以提案的 MVP。</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="icon">iv.</div>
+        <h4>Turn Possibility into a Persuasive Pitch</h4>
+        <h4 class="cn">把可能性變成打動人的提案</h4>
+        <p>Present your concept as a real opportunity others can understand and believe in. Connect user insight, product logic, and clear storytelling.</p>
+        <p class="cn">把你的概念呈現為一個別人能理解、也願意相信的真實機會。把使用者洞察、產品邏輯、清晰敘事串在一起。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUICK GLANCE — BOTH WORKSHOPS ===== -->
+<section style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label"><span class="num">10</span><span>Quick Glance · 一覽</span></div>
+      <h2 class="section-title">All <span class="italic">workshops</span> at a glance</h2>
+      <p class="section-title-cn">所有工作坊 — 一目了然</p>
+    </div>
+
+    <h3 style="font-family:var(--font-display);font-size:26px;font-weight:700;margin:40px 0 20px">Entrepreneurial Leadership Workshops · 創業領導力工作坊</h3>
+
+    <div class="glance-card reveal">
+      <div class="level-badge bg-explorer">
+        <div>
+          <span class="glance-tag current">✓ Current · 當前</span>
+          <h3>Level 1</h3>
+          <div class="stage">Explorer · 探索者</div>
+        </div>
+        <div class="duration">7 hours</div>
+      </div>
+      <div class="glance-content">
+        <h4>Discover Hidden Opportunities</h4>
+        <h4 class="cn">發掘隱藏的機會</h4>
+        <div class="glance-list">
+          <div class="glance-item"><strong>Who is it for?</strong><span>Curious professionals aspiring to become leaders.<span class="cn"> · 渴望成為領導者的好奇專業工作者。</span></span></div>
+          <div class="glance-item"><strong>What will I learn?</strong><span>Spot hidden opportunities and generate bold ideas.<span class="cn"> · 發現被忽略的機會，生成大膽點子。</span></span></div>
+          <div class="glance-item"><strong>What is it like?</strong><span>Fast-paced, hands-on exploration using real brands and AI.<span class="cn"> · 快節奏、實作式探索，用真實品牌與 AI。</span></span></div>
+          <div class="glance-item"><strong>Certification:</strong><span>ACE Explorer</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glance-card reveal">
+      <div class="level-badge bg-innovator">
+        <div>
+          <h3>Level 2</h3>
+          <div class="stage">Innovator · 創新者</div>
+        </div>
+        <div class="duration">14 hours · 2 days</div>
+      </div>
+      <div class="glance-content">
+        <h4>Transform Ideas into Innovations</h4>
+        <h4 class="cn">把點子，變成真正的創新</h4>
+        <div class="glance-list">
+          <div class="glance-item"><strong>Who is it for?</strong><span>ACE Explorers.<span class="cn"> · 已完成 Explorer 的學員。</span></span></div>
+          <div class="glance-item"><strong>What will I learn?</strong><span>Refine ideas into MVP-ready innovations.<span class="cn"> · 把點子琢磨成可以變 MVP 的創新。</span></span></div>
+          <div class="glance-item"><strong>What is it like?</strong><span>Structured, practical, and focused on building your own concept.<span class="cn"> · 有結構、可實踐、聚焦於打磨你自己的概念。</span></span></div>
+          <div class="glance-item"><strong>Certification:</strong><span>ACE Innovator</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--font-display);font-size:26px;font-weight:700;margin:60px 0 20px">Creative Communication Workshops · 創意溝通工作坊</h3>
+
+    <div class="glance-card reveal">
+      <div class="level-badge bg-wizard">
+        <div>
+          <h3>Level 1</h3>
+          <div class="stage">Wizard · 巫師</div>
+        </div>
+        <div class="duration">7 hours</div>
+      </div>
+      <div class="glance-content">
+        <h4>Remix any idea &amp; any concept</h4>
+        <h4 class="cn">混搭任何點子與任何概念</h4>
+        <div class="glance-list">
+          <div class="glance-item"><strong>Who is it for?</strong><span>Creative thinkers who want to ignite imagination.<span class="cn"> · 想點燃想像力的創意思考者。</span></span></div>
+          <div class="glance-item"><strong>What will I learn?</strong><span>Generate imaginative ideas through creative remixing.<span class="cn"> · 透過創意混搭產出充滿想像力的點子。</span></span></div>
+          <div class="glance-item"><strong>What is it like?</strong><span>Playful, surprising, full of unexpected creative leaps.<span class="cn"> · 頑皮、充滿驚喜、意想不到的創意跳躍。</span></span></div>
+          <div class="glance-item"><strong>Certification:</strong><span>ACE Wizard</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glance-card reveal">
+      <div class="level-badge bg-puppeteer">
+        <div>
+          <h3>Level 2</h3>
+          <div class="stage">Puppeteer · 操偶師</div>
+        </div>
+        <div class="duration">7 hours</div>
+      </div>
+      <div class="glance-content">
+        <h4>Remix any character &amp; any product</h4>
+        <h4 class="cn">混搭任何角色與任何產品</h4>
+        <div class="glance-list">
+          <div class="glance-item"><strong>Who is it for?</strong><span>Creative thinkers who want to bring ideas to life through character and story.<span class="cn"> · 想用角色與故事把點子活化的人。</span></span></div>
+          <div class="glance-item"><strong>What will I learn?</strong><span>Use character and story to sell an idea in commercial style.<span class="cn"> · 用角色與故事以廣告的方式推銷點子。</span></span></div>
+          <div class="glance-item"><strong>What is it like?</strong><span>Playful, cinematic and hands-on with concept building.<span class="cn"> · 頑皮、電影感、雙手打磨概念。</span></span></div>
+          <div class="glance-item"><strong>Certification:</strong><span>ACE Puppeteer</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glance-card reveal">
+      <div class="level-badge bg-alchemist">
+        <div>
+          <h3>Level 3</h3>
+          <div class="stage">Alchemist · 煉金術士</div>
+        </div>
+        <div class="duration">7 hours</div>
+      </div>
+      <div class="glance-content">
+        <h4>Remix any company &amp; any campaign</h4>
+        <h4 class="cn">混搭任何公司與任何行銷戰役</h4>
+        <div class="glance-list">
+          <div class="glance-item"><strong>Who is it for?</strong><span>Creative thinkers who want to turn bold crossovers into compelling campaigns.<span class="cn"> · 想把大膽聯名變成動人行銷戰役的人。</span></span></div>
+          <div class="glance-item"><strong>What will I learn?</strong><span>Build crossover concepts &amp; shape persuasive campaign stories.<span class="cn"> · 打造聯名概念並塑造有說服力的戰役故事。</span></span></div>
+          <div class="glance-item"><strong>What is it like?</strong><span>Structured, practical, and focused on building your own concept.<span class="cn"> · 有結構、可實踐、聚焦於打磨你自己的概念。</span></span></div>
+          <div class="glance-item"><strong>Certification:</strong><span>ACE Alchemist</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <span class="logo-mark">ACE</span>
+        <span>Applied Creativity Engine</span>
+      </div>
+      <p>A cyclical learning practice to help humans stay curious, create meaningfully, and lead with imagination in the age of AI.</p>
+      <p style="margin-top:14px">在 AI 時代，幫助人保持好奇、有意義地創造，並以想像力領導。</p>
+    </div>
+    <div class="footer-col">
+      <h6>Workshops</h6>
+      <a href="#explorer">Level 1 · Explorer</a>
+      <a href="#levels">Level 2 · Innovator</a>
+      <a href="#">Wizard · Puppeteer · Alchemist</a>
+    </div>
+    <div class="footer-col">
+      <h6>Method</h6>
+      <a href="#belief">Our Belief</a>
+      <a href="#method">ACE Learning Cycle</a>
+      <a href="#workshops">Workshops</a>
+    </div>
+    <div class="footer-col">
+      <h6>Connect</h6>
+      <a href="https://www.appliedcreativity.ai" target="_blank" rel="noopener">www.appliedcreativity.ai</a>
+      <a href="#">Contact</a>
+      <a href="#">Newsletter</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Applied Creativity Engine ®. All rights reserved.<br>版權所有。未經授權，不得以任何方式複製、改作、再製、翻譯、散佈、傳輸或拆解。</div>
+    <div>ACE-EL1-EN/TC-V2</div>
+  </div>
+</footer>
+
+<script>
+/* ---- Scroll reveal ---- */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+},{threshold:.12,rootMargin:"0px 0px -60px 0px"});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---- Nav shadow on scroll ---- */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>20);
+},{passive:true});
+
+/* ---- Language toggle (visual only — toggles emphasis) ---- */
+const langBtn=document.querySelector('.lang-toggle');
+let mode='both'; // 'both' | 'en' | 'cn'
+langBtn.addEventListener('click',()=>{
+  mode = mode==='both' ? 'en' : mode==='en' ? 'cn' : 'both';
+  document.body.dataset.lang=mode;
+  const dot=langBtn.querySelector('.dot');
+  if(mode==='en'){ langBtn.childNodes[2].nodeValue=' EN only '; }
+  else if(mode==='cn'){ langBtn.childNodes[2].nodeValue=' 繁中 only '; }
+  else { langBtn.childNodes[2].nodeValue=' EN / 繁中 '; }
+});
+
+/* Styling hook for language-only modes */
+const langStyle=document.createElement('style');
+langStyle.textContent=`
+body[data-lang="en"] .col.cn,
+body[data-lang="en"] .hero-cn,
+body[data-lang="en"] .section-title-cn,
+body[data-lang="en"] .core-title-cn,
+body[data-lang="en"] h3.cn,
+body[data-lang="en"] h4.cn,
+body[data-lang="en"] h5.cn,
+body[data-lang="en"] p.cn,
+body[data-lang="en"] li.cn,
+body[data-lang="en"] .quote-cn,
+body[data-lang="en"] .neon-cn,
+body[data-lang="en"] .letsgo-cn,
+body[data-lang="en"] .ready-cn,
+body[data-lang="en"] .stage-cn,
+body[data-lang="en"] .agenda-cell.cn,
+body[data-lang="en"] .capacity-subtitle-cn,
+body[data-lang="en"] .big-cn,
+body[data-lang="en"] .sub-cn,
+body[data-lang="en"] .cycle-center .cn,
+body[data-lang="en"] .col-lang[data-lang="cn"],
+body[data-lang="en"] .think-header .cn,
+body[data-lang="en"] .cap-tag .cn,
+body[data-lang="en"] .industry-tag .cn,
+body[data-lang="en"] .skill-dot .cn,
+body[data-lang="en"] .scamper-box p.cn,
+body[data-lang="en"] .story-example p.cn,
+body[data-lang="en"] .glance-item .cn,
+body[data-lang="en"] .stage-name .cn,
+body[data-lang="en"] .char-card .type:has(+ h4) { opacity:.25; }
+body[data-lang="cn"] .col.en,
+body[data-lang="cn"] .hero h1,
+body[data-lang="cn"] h2.section-title,
+body[data-lang="cn"] .core-title,
+body[data-lang="cn"] .big:not(.big-cn),
+body[data-lang="cn"] .quote-en,
+body[data-lang="cn"] .neon,
+body[data-lang="cn"] .ready-title,
+body[data-lang="cn"] .letsgo-content h2 { opacity:.35; }
+`;
+document.head.appendChild(langStyle);
+
+/* ---- Burger (basic toggle) ---- */
+const burger=document.querySelector('.burger');
+burger?.addEventListener('click',()=>{
+  const links=document.querySelector('.nav-links');
+  if(!links) return;
+  const open=links.style.display==='flex';
+  links.style.display=open?'none':'flex';
+  if(!open){
+    links.style.position='absolute';
+    links.style.top='100%';
+    links.style.left='0';
+    links.style.right='0';
+    links.style.flexDirection='column';
+    links.style.background='var(--paper)';
+    links.style.padding='20px';
+    links.style.borderBottom='1px solid var(--line)';
+    links.style.gap='14px';
+  }
+});
+</script>
+
+</body>
+</html>
