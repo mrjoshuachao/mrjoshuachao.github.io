@@ -1,0 +1,42 @@
+[
+  {
+    "text": "a",
+    "confidence": 97.023125,
+    "x": 595,
+    "y": 133,
+    "width": 36,
+    "height": 41
+  },
+  {
+    "text": "Only",
+    "confidence": 96.04464,
+    "x": 896,
+    "y": 119,
+    "width": 146,
+    "height": 70
+  },
+  {
+    "text": "opens",
+    "confidence": 96.2733,
+    "x": 1064,
+    "y": 133,
+    "width": 211,
+    "height": 55
+  },
+  {
+    "text": "and",
+    "confidence": 56.347488,
+    "x": 1300,
+    "y": 69,
+    "width": 113,
+    "height": 105
+  },
+  {
+    "text": "closes",
+    "confidence": 56.347488,
+    "x": 1447,
+    "y": 88,
+    "width": 221,
+    "height": 113
+  }
+]

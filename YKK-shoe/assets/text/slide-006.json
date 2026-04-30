@@ -1,0 +1,34 @@
+[
+  {
+    "text": "i",
+    "confidence": 64.193825,
+    "x": 241,
+    "y": 487,
+    "width": 12,
+    "height": 8
+  },
+  {
+    "text": "mE",
+    "confidence": 53.197041,
+    "x": 320,
+    "y": 507,
+    "width": 53,
+    "height": 28
+  },
+  {
+    "text": "i",
+    "confidence": 53.269314,
+    "x": 258,
+    "y": 578,
+    "width": 9,
+    "height": 14
+  },
+  {
+    "text": "ot",
+    "confidence": 42.722221,
+    "x": 364,
+    "y": 588,
+    "width": 27,
+    "height": 47
+  }
+]

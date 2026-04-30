@@ -1,0 +1,1617 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YKK (ACE 20251114 final pitch)</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --fg: #f7f7f4;
+      --muted: rgba(247, 247, 244, 0.68);
+      --line: rgba(247, 247, 244, 0.18);
+      --control: rgba(20, 22, 24, 0.72);
+      --control-hover: rgba(42, 45, 49, 0.86);
+      --accent: #f0c84b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button {
+      border: 0;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .deck {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,0.06), transparent 34%),
+        linear-gradient(135deg, #050505 0%, #121212 52%, #060606 100%);
+    }
+
+    .stage {
+      position: relative;
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.55);
+      touch-action: pan-y;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .slide.active {
+      display: block;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .slide-bg,
+    .text-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide-bg {
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .text-layer {
+      z-index: 3;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ocr-text {
+      position: absolute;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      color: transparent;
+      opacity: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0;
+      user-select: text;
+    }
+
+    .hud {
+      position: fixed;
+      left: 50%;
+      bottom: clamp(14px, 2.6vh, 28px);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(-50%);
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--control);
+      backdrop-filter: blur(16px);
+      opacity: 0.22;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    body:hover .hud,
+    .hud:focus-within,
+    .hud.pinned {
+      opacity: 1;
+    }
+
+    .icon-button {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible,
+    .media-button:hover,
+    .media-button:focus-visible {
+      background: var(--control-hover);
+      outline: none;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .counter {
+      min-width: 70px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 11;
+      height: 3px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .edge {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      z-index: 9;
+      width: min(18vw, 180px);
+      background: transparent;
+    }
+
+    .edge.prev { left: 0; }
+    .edge.next { right: 0; }
+
+    .edge::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--control);
+      opacity: 0;
+      transform: translateY(-50%);
+      transition: opacity 160ms ease, background 160ms ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .edge.prev::before { left: 22px; }
+    .edge.next::before { right: 22px; }
+
+    .edge:hover::before,
+    .edge:focus-visible::before {
+      opacity: 1;
+      background: var(--control-hover);
+    }
+
+    .media-button {
+      min-width: 38px;
+      height: 38px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 38px;
+      white-space: nowrap;
+    }
+
+    .slide-video-button {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(240, 200, 75, 0.16);
+      color: var(--fg);
+    }
+
+    .slide-video-button[hidden] {
+      display: none;
+    }
+
+    .slide-video-button:hover,
+    .slide-video-button:focus-visible {
+      background: rgba(240, 200, 75, 0.28);
+      outline: none;
+    }
+
+    .media-panel {
+      position: fixed;
+      right: clamp(12px, 2.5vw, 28px);
+      bottom: clamp(72px, 9vh, 100px);
+      z-index: 15;
+      display: none;
+      width: min(540px, calc(100vw - 24px));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(12, 14, 16, 0.92);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .media-panel.open { display: block; }
+
+    .media-list {
+      display: grid;
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .media-item {
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(16, 18, 20, 0.96);
+      color: var(--fg);
+      text-align: left;
+    }
+
+    .media-item img {
+      width: 128px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #222;
+    }
+
+    .media-item strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .media-item span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .media-item em {
+      display: inline-block;
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      background: #000;
+    }
+
+    .video-modal.open { display: block; }
+
+    .video-modal.armed,
+    .video-modal.playing {
+      cursor: pointer;
+    }
+
+    .video-shell {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-shell video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .video-cue {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff;
+      transform: translate(-50%, -50%);
+      backdrop-filter: blur(14px);
+      pointer-events: none;
+    }
+
+    .video-modal.playing .video-cue {
+      display: none;
+    }
+
+    .video-cue .icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 720px) {
+      .hud {
+        bottom: 12px;
+        gap: 4px;
+        padding: 6px;
+      }
+
+      .icon-button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .counter {
+        min-width: 62px;
+        font-size: 12px;
+      }
+
+      .media-button {
+        width: 36px;
+        min-width: 36px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .media-button::before {
+        content: "▶";
+        font-size: 13px;
+      }
+
+      .edge::before {
+        display: none;
+      }
+
+      .media-item {
+        grid-template-columns: 104px 1fr;
+      }
+
+      .media-item img {
+        width: 104px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide,
+      .progress span,
+      .hud,
+      .edge::before {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="YKK presentation deck">
+    <div class="stage" id="stage">
+      <section class="slide active" aria-label="Slide 1">
+        <img class="slide-bg" src="assets/slides/slide-001.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 1 text">
+          <span class="ocr-text" style="left:23.3333%;top:36.7593%;width:56.1458%;height:26.2963%;font-size:249.92px;">YKK</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 2">
+        <img class="slide-bg" src="assets/slides/slide-002.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 2 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 3">
+        <img class="slide-bg" src="assets/slides/slide-003.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 3 text">
+          <span class="ocr-text" style="left:30.9896%;top:12.3148%;width:1.8750%;height:3.7963%;font-size:36.08px;">a</span>
+          <span class="ocr-text" style="left:46.6667%;top:11.0185%;width:7.6042%;height:6.4815%;font-size:61.60px;">Only</span>
+          <span class="ocr-text" style="left:55.4167%;top:12.3148%;width:10.9896%;height:5.0926%;font-size:48.40px;">opens</span>
+          <span class="ocr-text" style="left:67.7083%;top:6.3889%;width:5.8854%;height:9.7222%;font-size:92.40px;">and</span>
+          <span class="ocr-text" style="left:75.3646%;top:8.1481%;width:11.5104%;height:10.4630%;font-size:99.44px;">closes</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 4">
+        <img class="slide-bg" src="assets/slides/slide-004.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 4 text">
+          <span class="ocr-text" style="left:9.3229%;top:60.4630%;width:13.6979%;height:9.3519%;font-size:88.88px;">Little</span>
+          <span class="ocr-text" style="left:24.6354%;top:61.2037%;width:14.7396%;height:8.6111%;font-size:81.84px;">Parts.</span>
+          <span class="ocr-text" style="left:41.9271%;top:61.2037%;width:8.4375%;height:11.2963%;font-size:107.36px;">Big</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 5">
+        <img class="slide-bg" src="assets/slides/slide-005.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 5 text">
+          <span class="ocr-text" style="left:13.3333%;top:2.3148%;width:1.9792%;height:1.5741%;font-size:14.96px;">me</span>
+          <span class="ocr-text" style="left:5.3646%;top:21.9444%;width:1.5625%;height:0.8333%;font-size:9.00px;">2</span>
+          <span class="ocr-text" style="left:15.2083%;top:18.5185%;width:24.4792%;height:5.3704%;font-size:51.04px;">WATERPROO</span>
+          <span class="ocr-text" style="left:50.7813%;top:53.0556%;width:2.0833%;height:3.7037%;font-size:35.20px;">Fy:</span>
+          <span class="ocr-text" style="left:41.5104%;top:64.8148%;width:0.9375%;height:1.9444%;font-size:18.48px;">a</span>
+          <span class="ocr-text" style="left:35.0000%;top:91.1111%;width:2.5000%;height:2.1296%;font-size:20.24px;">See</span>
+          <span class="ocr-text" style="left:61.6146%;top:91.8519%;width:13.1771%;height:1.8519%;font-size:17.60px;">ae</span>
+          <span class="ocr-text" style="left:0.0000%;top:96.6667%;width:3.3333%;height:2.9630%;font-size:28.16px;">he</span>
+          <span class="ocr-text" style="left:97.2396%;top:97.3148%;width:0.4167%;height:0.6481%;font-size:9.00px;">8</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 6">
+        <img class="slide-bg" src="assets/slides/slide-006.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 6 text">
+          <span class="ocr-text" style="left:12.5521%;top:45.0926%;width:0.6250%;height:0.7407%;font-size:9.00px;">i</span>
+          <span class="ocr-text" style="left:16.6667%;top:46.9444%;width:2.7604%;height:2.5926%;font-size:24.64px;">mE</span>
+          <span class="ocr-text" style="left:13.4375%;top:53.5185%;width:0.4688%;height:1.2963%;font-size:12.32px;">i</span>
+          <span class="ocr-text" style="left:18.9583%;top:54.4444%;width:1.4063%;height:4.3519%;font-size:41.36px;">ot</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 7">
+        <img class="slide-bg" src="assets/slides/slide-007.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 7 text">
+          <span class="ocr-text" style="left:68.6979%;top:0.0000%;width:10.5208%;height:21.9444%;font-size:208.56px;">AM</span>
+          <span class="ocr-text" style="left:78.4896%;top:16.4815%;width:0.9896%;height:1.5741%;font-size:14.96px;">6</span>
+          <span class="ocr-text" style="left:38.9063%;top:25.5556%;width:3.5937%;height:6.1111%;font-size:58.08px;">AN</span>
+          <span class="ocr-text" style="left:54.5833%;top:26.1111%;width:1.5625%;height:2.8704%;font-size:27.28px;">A</span>
+          <span class="ocr-text" style="left:25.2604%;top:33.3333%;width:1.0417%;height:2.6852%;font-size:25.52px;">4</span>
+          <span class="ocr-text" style="left:39.8438%;top:28.9815%;width:2.4479%;height:6.8519%;font-size:65.12px;">ty</span>
+          <span class="ocr-text" style="left:52.7604%;top:25.4630%;width:4.2708%;height:8.8889%;font-size:84.48px;">in</span>
+          <span class="ocr-text" style="left:64.4792%;top:18.9815%;width:5.6771%;height:17.8704%;font-size:169.84px;">iy</span>
+          <span class="ocr-text" style="left:75.8854%;top:28.2407%;width:4.1667%;height:4.8148%;font-size:45.76px;">NI</span>
+          <span class="ocr-text" style="left:82.1354%;top:28.7037%;width:1.5625%;height:3.1481%;font-size:29.92px;">Sh</span>
+          <span class="ocr-text" style="left:57.2917%;top:33.7037%;width:11.4583%;height:8.3333%;font-size:79.20px;">RE</span>
+          <span class="ocr-text" style="left:49.0625%;top:41.3889%;width:2.2917%;height:9.8148%;font-size:93.28px;">fy</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 8">
+        <img class="slide-bg" src="assets/slides/slide-008.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 8 text">
+          <span class="ocr-text" style="left:41.8750%;top:23.6111%;width:0.4688%;height:2.9630%;font-size:28.16px;">rf</span>
+          <span class="ocr-text" style="left:45.8333%;top:20.9259%;width:3.1250%;height:4.2593%;font-size:40.48px;">@g</span>
+          <span class="ocr-text" style="left:83.8542%;top:82.3148%;width:1.0417%;height:6.4815%;font-size:61.60px;">ta</span>
+          <span class="ocr-text" style="left:85.0521%;top:95.2778%;width:0.4167%;height:1.5741%;font-size:14.96px;">1</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 9">
+        <img class="slide-bg" src="assets/slides/slide-009.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 9 text">
+          <span class="ocr-text" style="left:40.0000%;top:24.4444%;width:2.9688%;height:6.1111%;font-size:58.08px;">A</span>
+          <span class="ocr-text" style="left:54.6875%;top:27.7778%;width:5.5208%;height:6.2963%;font-size:59.84px;">UY</span>
+          <span class="ocr-text" style="left:61.8750%;top:27.5926%;width:23.3854%;height:6.7593%;font-size:64.24px;">RESISTANT</span>
+          <span class="ocr-text" style="left:52.5000%;top:31.8519%;width:8.6979%;height:5.3704%;font-size:51.04px;">SAS</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 10">
+        <img class="slide-bg" src="assets/slides/slide-010.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 10 text">
+          <span class="ocr-text" style="left:22.2917%;top:23.6111%;width:21.1979%;height:13.1481%;font-size:124.96px;">YKK</span>
+          <span class="ocr-text" style="left:45.9375%;top:22.6852%;width:31.8229%;height:17.2222%;font-size:163.68px;">Zipper</span>
+          <span class="ocr-text" style="left:22.0833%;top:43.4259%;width:55.8854%;height:16.4815%;font-size:156.64px;">technology</span>
+          <span class="ocr-text" style="left:20.6250%;top:62.3148%;width:7.7083%;height:14.2593%;font-size:135.52px;">Is</span>
+          <span class="ocr-text" style="left:30.9896%;top:62.3148%;width:48.4896%;height:14.2593%;font-size:135.52px;">incredible</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 11">
+        <img class="slide-bg" src="assets/slides/slide-011.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 11 text">
+          <span class="ocr-text" style="left:51.9271%;top:86.3889%;width:7.9167%;height:12.4074%;font-size:117.92px;">TB</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 12">
+        <img class="slide-bg" src="assets/slides/slide-012.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 12 text">
+          <span class="ocr-text" style="left:41.4063%;top:59.4444%;width:4.0104%;height:2.3148%;font-size:22.00px;">ei</span>
+          <span class="ocr-text" style="left:46.6667%;top:58.4259%;width:0.4688%;height:3.2407%;font-size:30.80px;">i</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 13">
+        <img class="slide-bg" src="assets/slides/slide-013.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 13 text">
+          <span class="ocr-text" style="left:41.1458%;top:6.7593%;width:1.6667%;height:2.6852%;font-size:25.52px;">an</span>
+          <span class="ocr-text" style="left:29.5833%;top:35.8333%;width:0.4688%;height:0.9259%;font-size:9.00px;">A</span>
+          <span class="ocr-text" style="left:44.1667%;top:35.2778%;width:0.4688%;height:1.7593%;font-size:16.72px;">f</span>
+          <span class="ocr-text" style="left:28.6458%;top:48.6111%;width:0.4167%;height:1.3889%;font-size:13.20px;">f</span>
+          <span class="ocr-text" style="left:32.3958%;top:49.3519%;width:0.4688%;height:1.2037%;font-size:11.44px;">H</span>
+          <span class="ocr-text" style="left:48.8542%;top:49.4444%;width:0.4688%;height:0.9259%;font-size:9.00px;">a</span>
+          <span class="ocr-text" style="left:80.0521%;top:59.6296%;width:1.4583%;height:1.1111%;font-size:10.56px;">Pas</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 14">
+        <img class="slide-bg" src="assets/slides/slide-014.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 14 text">
+          <span class="ocr-text" style="left:18.8542%;top:39.9074%;width:62.1875%;height:20.3704%;font-size:193.60px;">3D</span>
+          <span class="ocr-text" style="left:61.5625%;top:39.9074%;width:19.0104%;height:20.3704%;font-size:193.60px;">2D</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 15">
+        <img class="slide-bg" src="assets/slides/slide-015.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 15 text">
+          <span class="ocr-text" style="left:18.8542%;top:39.9074%;width:62.1875%;height:20.3704%;font-size:193.60px;">3D</span>
+          <span class="ocr-text" style="left:62.8125%;top:39.9074%;width:17.7604%;height:20.3704%;font-size:193.60px;">2D</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 16">
+        <img class="slide-bg" src="assets/slides/slide-016.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 16 text">
+          <span class="ocr-text" style="left:41.4063%;top:59.4444%;width:4.0104%;height:2.3148%;font-size:22.00px;">ei</span>
+          <span class="ocr-text" style="left:46.6667%;top:58.4259%;width:0.4688%;height:3.2407%;font-size:30.80px;">i</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 17">
+        <img class="slide-bg" src="assets/slides/slide-017.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 17 text">
+          <span class="ocr-text" style="left:41.1458%;top:6.7593%;width:1.6667%;height:2.6852%;font-size:25.52px;">an</span>
+          <span class="ocr-text" style="left:29.5833%;top:35.8333%;width:0.4688%;height:0.9259%;font-size:9.00px;">A</span>
+          <span class="ocr-text" style="left:44.1667%;top:35.2778%;width:0.4688%;height:1.7593%;font-size:16.72px;">f</span>
+          <span class="ocr-text" style="left:28.6458%;top:48.6111%;width:0.4167%;height:1.3889%;font-size:13.20px;">f</span>
+          <span class="ocr-text" style="left:32.3958%;top:49.3519%;width:0.4688%;height:1.2037%;font-size:11.44px;">H</span>
+          <span class="ocr-text" style="left:48.8542%;top:49.4444%;width:0.4688%;height:0.9259%;font-size:9.00px;">a</span>
+          <span class="ocr-text" style="left:80.0521%;top:59.6296%;width:1.4583%;height:1.1111%;font-size:10.56px;">Pas</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 18">
+        <img class="slide-bg" src="assets/slides/slide-018.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 18 text">
+          <span class="ocr-text" style="left:64.3229%;top:46.5741%;width:2.5000%;height:2.5926%;font-size:24.64px;">ey</span>
+          <span class="ocr-text" style="left:12.2396%;top:77.4074%;width:4.0104%;height:5.2778%;font-size:50.16px;">ee</span>
+          <span class="ocr-text" style="left:55.4167%;top:80.0000%;width:0.7292%;height:1.7593%;font-size:16.72px;">A</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 19">
+        <img class="slide-bg" src="assets/slides/slide-019.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 19 text">
+          <span class="ocr-text" style="left:18.8021%;top:17.1296%;width:35.0521%;height:12.2222%;font-size:116.16px;">Outdoor</span>
+          <span class="ocr-text" style="left:56.2500%;top:17.3148%;width:25.0000%;height:12.0370%;font-size:114.40px;">lovers</span>
+          <span class="ocr-text" style="left:18.6458%;top:38.0556%;width:23.0729%;height:9.1667%;font-size:87.12px;">crave</span>
+          <span class="ocr-text" style="left:43.9063%;top:35.0000%;width:37.7083%;height:14.5370%;font-size:138.16px;">freedom,</span>
+          <span class="ocr-text" style="left:18.7500%;top:52.9630%;width:13.5417%;height:12.0370%;font-size:114.40px;">but</span>
+          <span class="ocr-text" style="left:34.5313%;top:52.4074%;width:19.5313%;height:12.5926%;font-size:119.68px;">their</span>
+          <span class="ocr-text" style="left:56.1979%;top:53.0556%;width:25.3125%;height:11.9444%;font-size:113.52px;">shoes</span>
+          <span class="ocr-text" style="left:16.6146%;top:70.9259%;width:17.8125%;height:11.9444%;font-size:113.52px;">hold</span>
+          <span class="ocr-text" style="left:36.8229%;top:70.9259%;width:21.6146%;height:11.9444%;font-size:113.52px;">them</span>
+          <span class="ocr-text" style="left:61.1458%;top:70.9259%;width:22.2917%;height:11.9444%;font-size:113.52px;">back.</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 20">
+        <img class="slide-bg" src="assets/slides/slide-020.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 20 text">
+          <span class="ocr-text" style="left:5.9896%;top:20.4630%;width:17.5521%;height:12.2222%;font-size:116.16px;">They</span>
+          <span class="ocr-text" style="left:25.3646%;top:20.4630%;width:17.1875%;height:10.0000%;font-size:95.04px;">need</span>
+          <span class="ocr-text" style="left:44.5833%;top:20.4630%;width:21.0938%;height:10.0000%;font-size:95.04px;">shoes</span>
+          <span class="ocr-text" style="left:67.4479%;top:20.4630%;width:14.1146%;height:10.0000%;font-size:95.04px;">that</span>
+          <span class="ocr-text" style="left:83.6458%;top:19.9074%;width:10.6250%;height:10.5556%;font-size:100.32px;">is...</span>
+          <span class="ocr-text" style="left:26.0417%;top:36.0185%;width:16.5625%;height:12.2222%;font-size:116.16px;">Easy</span>
+          <span class="ocr-text" style="left:44.1667%;top:36.7593%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.1771%;top:35.4630%;width:30.1563%;height:10.5556%;font-size:100.32px;">maintain</span>
+          <span class="ocr-text" style="left:25.7813%;top:51.9444%;width:57.6563%;height:10.5556%;font-size:100.32px;">Omni-functional</span>
+          <span class="ocr-text" style="left:27.1875%;top:68.4259%;width:54.9479%;height:12.6852%;font-size:120.56px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 21">
+        <img class="slide-bg" src="assets/slides/slide-021.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 21 text">
+          <span class="ocr-text" style="left:20.5729%;top:17.3148%;width:13.9583%;height:12.0370%;font-size:114.40px;">But</span>
+          <span class="ocr-text" style="left:37.0313%;top:16.7593%;width:6.8750%;height:12.4074%;font-size:117.92px;">in</span>
+          <span class="ocr-text" style="left:46.2500%;top:17.3148%;width:13.6979%;height:12.0370%;font-size:114.40px;">the</span>
+          <span class="ocr-text" style="left:62.2917%;top:17.3148%;width:17.7083%;height:14.3519%;font-size:136.40px;">end,</span>
+          <span class="ocr-text" style="left:14.7917%;top:35.1852%;width:28.4375%;height:12.0370%;font-size:114.40px;">there's</span>
+          <span class="ocr-text" style="left:45.3125%;top:36.1111%;width:13.7500%;height:11.1111%;font-size:105.60px;">too</span>
+          <span class="ocr-text" style="left:61.5104%;top:35.1852%;width:23.3333%;height:12.0370%;font-size:114.40px;">much</span>
+          <span class="ocr-text" style="left:18.1771%;top:55.8333%;width:20.3125%;height:12.0370%;font-size:114.40px;">gear,</span>
+          <span class="ocr-text" style="left:40.5208%;top:52.9630%;width:15.4167%;height:12.0370%;font-size:114.40px;">and</span>
+          <span class="ocr-text" style="left:58.6458%;top:55.8333%;width:23.3333%;height:9.1667%;font-size:87.12px;">never</span>
+          <span class="ocr-text" style="left:19.0625%;top:70.9259%;width:31.7188%;height:14.8148%;font-size:140.80px;">enough</span>
+          <span class="ocr-text" style="left:53.2813%;top:73.7037%;width:27.5000%;height:11.8519%;font-size:112.64px;">space.</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 22">
+        <img class="slide-bg" src="assets/slides/slide-022.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 22 text">
+          <span class="ocr-text" style="left:37.8125%;top:12.3148%;width:24.4271%;height:12.5926%;font-size:119.68px;">Pains:</span>
+          <span class="ocr-text" style="left:26.9792%;top:30.1852%;width:16.4583%;height:10.0000%;font-size:95.04px;">Hard</span>
+          <span class="ocr-text" style="left:45.4167%;top:30.9259%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:54.3229%;top:30.1852%;width:18.7500%;height:10.0000%;font-size:95.04px;">clean</span>
+          <span class="ocr-text" style="left:26.3021%;top:45.0926%;width:16.4583%;height:10.0000%;font-size:95.04px;">Hard</span>
+          <span class="ocr-text" style="left:44.7396%;top:45.8333%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.6458%;top:45.0926%;width:20.2083%;height:12.2222%;font-size:116.16px;">adapt</span>
+          <span class="ocr-text" style="left:26.3021%;top:60.0000%;width:16.4583%;height:10.0000%;font-size:95.04px;">Hard</span>
+          <span class="ocr-text" style="left:44.7396%;top:60.7407%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.7500%;top:59.5370%;width:20.2604%;height:12.6852%;font-size:120.56px;">repair</span>
+          <span class="ocr-text" style="left:19.4271%;top:74.9074%;width:12.3958%;height:10.0000%;font-size:95.04px;">Too</span>
+          <span class="ocr-text" style="left:33.9063%;top:74.9074%;width:19.1146%;height:12.2222%;font-size:116.16px;">bulky</span>
+          <span class="ocr-text" style="left:54.6354%;top:75.6481%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:63.6458%;top:74.9074%;width:17.0833%;height:12.2222%;font-size:116.16px;">pack</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 23">
+        <img class="slide-bg" src="assets/slides/slide-023.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 23 text">
+          <span class="ocr-text" style="left:33.2813%;top:12.3148%;width:33.4896%;height:12.5926%;font-size:119.68px;">Desires:</span>
+          <span class="ocr-text" style="left:15.3125%;top:30.1852%;width:14.5313%;height:10.0000%;font-size:95.04px;">Fast</span>
+          <span class="ocr-text" style="left:38.8542%;top:32.5000%;width:16.6146%;height:9.9074%;font-size:94.16px;">easy</span>
+          <span class="ocr-text" style="left:57.0833%;top:30.9259%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:65.9896%;top:30.1852%;width:18.6979%;height:10.0000%;font-size:95.04px;">clean</span>
+          <span class="ocr-text" style="left:14.6354%;top:45.0926%;width:14.5313%;height:10.0000%;font-size:95.04px;">Fast</span>
+          <span class="ocr-text" style="left:38.1771%;top:47.4074%;width:16.6146%;height:9.9074%;font-size:94.16px;">easy</span>
+          <span class="ocr-text" style="left:56.4063%;top:45.8333%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:65.3125%;top:45.0926%;width:20.1563%;height:12.2222%;font-size:116.16px;">adapt</span>
+          <span class="ocr-text" style="left:14.6354%;top:60.0000%;width:14.5313%;height:10.0000%;font-size:95.04px;">Fast</span>
+          <span class="ocr-text" style="left:38.1771%;top:62.3148%;width:16.6146%;height:9.9074%;font-size:94.16px;">easy</span>
+          <span class="ocr-text" style="left:56.3542%;top:60.7407%;width:6.9792%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:65.4167%;top:59.5370%;width:20.2604%;height:12.6852%;font-size:120.56px;">repair</span>
+          <span class="ocr-text" style="left:13.7500%;top:74.9074%;width:16.5104%;height:10.0000%;font-size:95.04px;">Ultra</span>
+          <span class="ocr-text" style="left:32.2396%;top:74.4444%;width:54.1667%;height:12.6852%;font-size:120.56px;">space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 24">
+        <img class="slide-bg" src="assets/slides/slide-024.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 24 text">
+          <span class="ocr-text" style="left:8.7500%;top:13.6111%;width:24.2188%;height:6.6667%;font-size:63.36px;">Frustrated</span>
+          <span class="ocr-text" style="left:34.4792%;top:13.6111%;width:5.5729%;height:8.1481%;font-size:77.44px;">by</span>
+          <span class="ocr-text" style="left:41.3021%;top:13.6111%;width:34.7396%;height:8.1481%;font-size:77.44px;">non-adaptable</span>
+          <span class="ocr-text" style="left:77.3438%;top:13.6111%;width:14.0104%;height:6.6667%;font-size:63.36px;">shoes</span>
+          <span class="ocr-text" style="left:19.4792%;top:68.4259%;width:19.0104%;height:8.5185%;font-size:80.96px;">Majority</span>
+          <span class="ocr-text" style="left:39.5833%;top:70.3704%;width:8.2292%;height:5.0926%;font-size:48.40px;">see</span>
+          <span class="ocr-text" style="left:49.1667%;top:68.4259%;width:31.4583%;height:7.0370%;font-size:66.88px;">“multi-terrain</span>
+          <span class="ocr-text" style="left:17.7083%;top:79.4444%;width:30.0000%;height:8.5185%;font-size:80.96px;">adaptability”</span>
+          <span class="ocr-text" style="left:49.0625%;top:81.3889%;width:5.2604%;height:5.0926%;font-size:48.40px;">as</span>
+          <span class="ocr-text" style="left:55.5208%;top:80.2778%;width:7.7604%;height:7.6852%;font-size:73.04px;">top</span>
+          <span class="ocr-text" style="left:64.6354%;top:79.4444%;width:17.5000%;height:8.5185%;font-size:80.96px;">priority.</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 25">
+        <img class="slide-bg" src="assets/slides/slide-025.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 25 text">
+          <span class="ocr-text" style="left:8.9583%;top:13.6111%;width:25.0521%;height:8.1481%;font-size:77.44px;">Attempted</span>
+          <span class="ocr-text" style="left:35.4167%;top:13.2407%;width:24.5833%;height:8.5185%;font-size:80.96px;">self-repair</span>
+          <span class="ocr-text" style="left:61.1458%;top:14.0741%;width:4.4792%;height:6.2037%;font-size:58.96px;">at</span>
+          <span class="ocr-text" style="left:67.0313%;top:13.6111%;width:11.1458%;height:6.6667%;font-size:63.36px;">least</span>
+          <span class="ocr-text" style="left:79.4792%;top:15.1852%;width:11.4583%;height:5.0926%;font-size:48.40px;">once</span>
+          <span class="ocr-text" style="left:15.5208%;top:68.7037%;width:15.7813%;height:6.7593%;font-size:64.24px;">Shows</span>
+          <span class="ocr-text" style="left:32.5000%;top:68.4259%;width:26.3021%;height:8.6111%;font-size:81.84px;">willingness</span>
+          <span class="ocr-text" style="left:60.2604%;top:68.7963%;width:7.5521%;height:6.6667%;font-size:63.36px;">but</span>
+          <span class="ocr-text" style="left:69.2188%;top:68.7963%;width:9.5833%;height:6.6667%;font-size:63.36px;">lack</span>
+          <span class="ocr-text" style="left:79.8438%;top:68.7037%;width:4.6354%;height:6.7593%;font-size:64.24px;">of</span>
+          <span class="ocr-text" style="left:18.0208%;top:79.4444%;width:25.0521%;height:7.0370%;font-size:66.88px;">accessible</span>
+          <span class="ocr-text" style="left:44.4271%;top:79.4444%;width:13.5937%;height:8.5185%;font-size:80.96px;">repair</span>
+          <span class="ocr-text" style="left:59.1667%;top:79.4444%;width:22.6042%;height:7.0370%;font-size:66.88px;">solutions.</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 26">
+        <img class="slide-bg" src="assets/slides/slide-026.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 26 text">
+          <span class="ocr-text" style="left:16.6667%;top:8.1481%;width:23.7500%;height:6.6667%;font-size:63.36px;">Interested</span>
+          <span class="ocr-text" style="left:41.8750%;top:7.7778%;width:3.8542%;height:6.9444%;font-size:66.00px;">in</span>
+          <span class="ocr-text" style="left:47.1354%;top:8.1481%;width:19.3750%;height:6.6667%;font-size:63.36px;">modular</span>
+          <span class="ocr-text" style="left:67.6563%;top:7.7778%;width:15.7292%;height:8.6111%;font-size:81.84px;">design</span>
+          <span class="ocr-text" style="left:28.4375%;top:19.0741%;width:12.7604%;height:8.2407%;font-size:78.32px;">(after</span>
+          <span class="ocr-text" style="left:42.3958%;top:18.7963%;width:29.1667%;height:8.5185%;font-size:80.96px;">explanation)</span>
+          <span class="ocr-text" style="left:12.8646%;top:74.2593%;width:12.3438%;height:6.7593%;font-size:64.24px;">Once</span>
+          <span class="ocr-text" style="left:26.4583%;top:74.3519%;width:23.3854%;height:7.9630%;font-size:75.68px;">educated,</span>
+          <span class="ocr-text" style="left:51.0417%;top:74.8148%;width:11.6667%;height:6.2037%;font-size:58.96px;">most</span>
+          <span class="ocr-text" style="left:64.0625%;top:75.9259%;width:12.8125%;height:5.0926%;font-size:48.40px;">users</span>
+          <span class="ocr-text" style="left:78.1250%;top:73.9815%;width:8.9063%;height:7.0370%;font-size:66.88px;">find</span>
+          <span class="ocr-text" style="left:13.5937%;top:85.0000%;width:25.3125%;height:8.5185%;font-size:80.96px;">modularity</span>
+          <span class="ocr-text" style="left:40.0000%;top:85.0000%;width:18.4896%;height:8.6111%;font-size:81.84px;">exciting</span>
+          <span class="ocr-text" style="left:59.8437%;top:85.3704%;width:8.6458%;height:6.6667%;font-size:63.36px;">and</span>
+          <span class="ocr-text" style="left:70.0000%;top:85.0000%;width:16.3021%;height:8.6111%;font-size:81.84px;">logical.</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 27">
+        <img class="slide-bg" src="assets/slides/slide-027.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 27 text">
+          <span class="ocr-text" style="left:4.2708%;top:19.1667%;width:10.4688%;height:6.6667%;font-size:63.36px;">How</span>
+          <span class="ocr-text" style="left:16.0417%;top:18.7963%;width:13.3854%;height:8.6111%;font-size:81.84px;">might</span>
+          <span class="ocr-text" style="left:30.6771%;top:20.7407%;width:6.7708%;height:5.0926%;font-size:48.40px;">we</span>
+          <span class="ocr-text" style="left:38.6979%;top:20.7407%;width:22.1875%;height:6.5741%;font-size:62.48px;">empower</span>
+          <span class="ocr-text" style="left:62.0313%;top:19.1667%;width:18.5938%;height:6.6667%;font-size:63.36px;">outdoor</span>
+          <span class="ocr-text" style="left:81.9792%;top:19.1667%;width:13.9063%;height:6.6667%;font-size:63.36px;">lovers</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 28">
+        <img class="slide-bg" src="assets/slides/slide-028.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 28 text">
+          <span class="ocr-text" style="left:4.2708%;top:19.1667%;width:10.4688%;height:6.6667%;font-size:63.36px;">How</span>
+          <span class="ocr-text" style="left:16.0417%;top:18.7963%;width:13.3854%;height:8.6111%;font-size:81.84px;">might</span>
+          <span class="ocr-text" style="left:30.6771%;top:20.7407%;width:6.7708%;height:5.0926%;font-size:48.40px;">we</span>
+          <span class="ocr-text" style="left:38.6979%;top:20.7407%;width:22.1875%;height:6.5741%;font-size:62.48px;">empower</span>
+          <span class="ocr-text" style="left:62.0313%;top:19.1667%;width:18.5938%;height:6.6667%;font-size:63.36px;">outdoor</span>
+          <span class="ocr-text" style="left:81.9792%;top:19.1667%;width:13.9063%;height:6.6667%;font-size:63.36px;">lovers</span>
+          <span class="ocr-text" style="left:13.4375%;top:30.6481%;width:4.6354%;height:6.2037%;font-size:58.96px;">to</span>
+          <span class="ocr-text" style="left:19.3229%;top:30.1852%;width:13.6979%;height:7.9630%;font-size:75.68px;">clean,</span>
+          <span class="ocr-text" style="left:34.1146%;top:30.1852%;width:14.6354%;height:8.1481%;font-size:77.44px;">adapt,</span>
+          <span class="ocr-text" style="left:49.9479%;top:29.9074%;width:14.3229%;height:8.4259%;font-size:80.08px;">repair,</span>
+          <span class="ocr-text" style="left:65.3646%;top:30.1852%;width:8.5938%;height:6.6667%;font-size:63.36px;">and</span>
+          <span class="ocr-text" style="left:75.3125%;top:31.7593%;width:11.0417%;height:5.0926%;font-size:48.40px;">even</span>
+          <span class="ocr-text" style="left:2.5000%;top:40.9259%;width:27.0313%;height:8.4259%;font-size:80.08px;">personalize</span>
+          <span class="ocr-text" style="left:30.7292%;top:40.8333%;width:10.8854%;height:7.0370%;font-size:66.88px;">their</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 29">
+        <img class="slide-bg" src="assets/slides/slide-029.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 29 text">
+          <span class="ocr-text" style="left:4.2188%;top:19.1667%;width:10.5208%;height:6.6667%;font-size:63.36px;">How</span>
+          <span class="ocr-text" style="left:16.0417%;top:18.7963%;width:13.3854%;height:8.6111%;font-size:81.84px;">might</span>
+          <span class="ocr-text" style="left:30.6771%;top:20.7407%;width:6.7708%;height:5.0926%;font-size:48.40px;">we</span>
+          <span class="ocr-text" style="left:38.6979%;top:20.7407%;width:22.1875%;height:6.5741%;font-size:62.48px;">empower</span>
+          <span class="ocr-text" style="left:62.0313%;top:19.1667%;width:18.6458%;height:6.6667%;font-size:63.36px;">outdoor</span>
+          <span class="ocr-text" style="left:81.9792%;top:19.1667%;width:13.9063%;height:6.6667%;font-size:63.36px;">lovers</span>
+          <span class="ocr-text" style="left:13.4375%;top:30.6481%;width:4.6354%;height:6.2037%;font-size:58.96px;">to</span>
+          <span class="ocr-text" style="left:19.3229%;top:30.1852%;width:13.6979%;height:7.9630%;font-size:75.68px;">clean,</span>
+          <span class="ocr-text" style="left:34.1146%;top:30.1852%;width:14.6354%;height:8.1481%;font-size:77.44px;">adapt,</span>
+          <span class="ocr-text" style="left:49.9479%;top:29.8148%;width:14.3229%;height:8.5185%;font-size:80.96px;">repair,</span>
+          <span class="ocr-text" style="left:65.3646%;top:30.1852%;width:8.5938%;height:6.6667%;font-size:63.36px;">and</span>
+          <span class="ocr-text" style="left:75.3125%;top:31.7593%;width:11.0417%;height:5.0926%;font-size:48.40px;">even</span>
+          <span class="ocr-text" style="left:2.5000%;top:40.8333%;width:27.0313%;height:8.5185%;font-size:80.96px;">personalize</span>
+          <span class="ocr-text" style="left:30.7292%;top:40.8333%;width:10.8854%;height:7.0370%;font-size:66.88px;">their</span>
+          <span class="ocr-text" style="left:42.7083%;top:41.1111%;width:21.0938%;height:6.7593%;font-size:64.24px;">footwear</span>
+          <span class="ocr-text" style="left:64.9479%;top:41.1111%;width:6.4062%;height:6.7593%;font-size:64.24px;">for</span>
+          <span class="ocr-text" style="left:72.5521%;top:42.7778%;width:8.5417%;height:6.5741%;font-size:62.48px;">any</span>
+          <span class="ocr-text" style="left:82.1875%;top:40.9259%;width:15.2604%;height:6.9444%;font-size:66.00px;">terrain</span>
+          <span class="ocr-text" style="left:8.3854%;top:53.7963%;width:4.6875%;height:5.0926%;font-size:48.40px;">or</span>
+          <span class="ocr-text" style="left:14.2708%;top:51.9444%;width:21.9271%;height:6.9444%;font-size:66.00px;">condition</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 30">
+        <img class="slide-bg" src="assets/slides/slide-030.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 30 text">
+          <span class="ocr-text" style="left:4.2188%;top:19.1667%;width:10.5208%;height:6.6667%;font-size:63.36px;">How</span>
+          <span class="ocr-text" style="left:16.0417%;top:18.7963%;width:13.3854%;height:8.6111%;font-size:81.84px;">might</span>
+          <span class="ocr-text" style="left:30.6771%;top:20.7407%;width:6.7708%;height:5.0926%;font-size:48.40px;">we</span>
+          <span class="ocr-text" style="left:38.6979%;top:20.7407%;width:22.1875%;height:6.5741%;font-size:62.48px;">empower</span>
+          <span class="ocr-text" style="left:62.0313%;top:19.1667%;width:18.6458%;height:6.6667%;font-size:63.36px;">outdoor</span>
+          <span class="ocr-text" style="left:81.9792%;top:19.1667%;width:13.9063%;height:6.6667%;font-size:63.36px;">lovers</span>
+          <span class="ocr-text" style="left:13.4375%;top:30.6481%;width:4.6354%;height:6.2037%;font-size:58.96px;">to</span>
+          <span class="ocr-text" style="left:19.3229%;top:30.1852%;width:13.6979%;height:7.9630%;font-size:75.68px;">clean,</span>
+          <span class="ocr-text" style="left:34.1146%;top:30.1852%;width:14.6354%;height:8.1481%;font-size:77.44px;">adapt,</span>
+          <span class="ocr-text" style="left:49.9479%;top:29.8148%;width:14.3229%;height:8.5185%;font-size:80.96px;">repair,</span>
+          <span class="ocr-text" style="left:65.3646%;top:30.1852%;width:8.5938%;height:6.6667%;font-size:63.36px;">and</span>
+          <span class="ocr-text" style="left:75.3125%;top:31.7593%;width:11.0417%;height:5.0926%;font-size:48.40px;">even</span>
+          <span class="ocr-text" style="left:2.5000%;top:40.8333%;width:27.0313%;height:8.5185%;font-size:80.96px;">personalize</span>
+          <span class="ocr-text" style="left:30.7292%;top:40.8333%;width:10.8854%;height:7.0370%;font-size:66.88px;">their</span>
+          <span class="ocr-text" style="left:42.7083%;top:41.1111%;width:21.0938%;height:6.7593%;font-size:64.24px;">footwear</span>
+          <span class="ocr-text" style="left:64.9479%;top:41.1111%;width:6.4062%;height:6.7593%;font-size:64.24px;">for</span>
+          <span class="ocr-text" style="left:72.5521%;top:42.7778%;width:8.5417%;height:6.5741%;font-size:62.48px;">any</span>
+          <span class="ocr-text" style="left:82.1875%;top:40.9259%;width:15.3125%;height:6.9444%;font-size:66.00px;">terrain</span>
+          <span class="ocr-text" style="left:8.3854%;top:53.7963%;width:4.6875%;height:5.0926%;font-size:48.40px;">or</span>
+          <span class="ocr-text" style="left:14.2708%;top:51.9444%;width:21.9792%;height:6.9444%;font-size:66.00px;">condition</span>
+          <span class="ocr-text" style="left:43.0729%;top:51.8519%;width:19.2708%;height:8.6111%;font-size:81.84px;">creating</span>
+          <span class="ocr-text" style="left:63.6979%;top:53.7963%;width:8.6458%;height:5.0926%;font-size:48.40px;">one</span>
+          <span class="ocr-text" style="left:73.5417%;top:52.2222%;width:18.1771%;height:7.9630%;font-size:75.68px;">trusted,</span>
+          <span class="ocr-text" style="left:3.3854%;top:63.2407%;width:19.3750%;height:6.6667%;font-size:63.36px;">modular</span>
+          <span class="ocr-text" style="left:23.9063%;top:63.7037%;width:17.0313%;height:7.6852%;font-size:73.04px;">system</span>
+          <span class="ocr-text" style="left:42.2396%;top:63.2407%;width:9.4271%;height:6.6667%;font-size:63.36px;">that</span>
+          <span class="ocr-text" style="left:52.9167%;top:64.8148%;width:13.5417%;height:5.0926%;font-size:48.40px;">saves</span>
+          <span class="ocr-text" style="left:67.6563%;top:63.2407%;width:11.9792%;height:6.6667%;font-size:63.36px;">them</span>
+          <span class="ocr-text" style="left:80.2083%;top:62.7778%;width:1.7188%;height:8.9815%;font-size:85.36px;">a</span>
+          <span class="ocr-text" style="left:85.0521%;top:63.2407%;width:5.6771%;height:6.6667%;font-size:63.36px;">lot</span>
+          <span class="ocr-text" style="left:92.0313%;top:63.1481%;width:4.5833%;height:6.7593%;font-size:64.24px;">of</span>
+          <span class="ocr-text" style="left:18.6458%;top:73.8889%;width:10.2604%;height:7.0370%;font-size:66.88px;">time</span>
+          <span class="ocr-text" style="left:30.2083%;top:74.2593%;width:8.5938%;height:6.6667%;font-size:63.36px;">and</span>
+          <span class="ocr-text" style="left:40.3125%;top:74.2593%;width:23.0208%;height:8.1481%;font-size:77.44px;">backpack</span>
+          <span class="ocr-text" style="left:64.3750%;top:74.1667%;width:16.8229%;height:8.2407%;font-size:78.32px;">space?</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 31">
+        <img class="slide-bg" src="assets/slides/slide-031.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 31 text">
+          <span class="ocr-text" style="left:3.3854%;top:63.2407%;width:19.3750%;height:6.6667%;font-size:63.36px;">modular</span>
+          <span class="ocr-text" style="left:23.9063%;top:63.7037%;width:17.0313%;height:7.6852%;font-size:73.04px;">system</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 32">
+        <img class="slide-bg" src="assets/slides/slide-032.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 32 text">
+          <span class="ocr-text" style="left:14.6354%;top:12.8704%;width:34.6354%;height:12.0370%;font-size:114.40px;">Modular</span>
+          <span class="ocr-text" style="left:51.4583%;top:12.6852%;width:33.9583%;height:14.9074%;font-size:141.68px;">System:</span>
+          <span class="ocr-text" style="left:11.2500%;top:30.0926%;width:57.5000%;height:12.4074%;font-size:117.92px;">Interchangeable</span>
+          <span class="ocr-text" style="left:70.8854%;top:30.0926%;width:18.0729%;height:10.0926%;font-size:95.92px;">Parts</span>
+          <span class="ocr-text" style="left:8.8542%;top:44.6296%;width:37.3438%;height:12.5926%;font-size:119.68px;">Repairable</span>
+          <span class="ocr-text" style="left:52.1354%;top:44.9074%;width:39.1667%;height:12.3148%;font-size:117.04px;">Swappable</span>
+          <span class="ocr-text" style="left:25.7292%;top:59.5370%;width:48.5417%;height:10.4630%;font-size:99.44px;">Customizable</span>
+          <span class="ocr-text" style="left:24.4271%;top:74.4444%;width:51.3542%;height:10.3704%;font-size:98.56px;">Personalizable</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 33">
+        <img class="slide-bg" src="assets/slides/slide-033.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 33 text">
+          <span class="ocr-text" style="left:4.8958%;top:42.7778%;width:4.0104%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:9.6875%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:86.6146%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:3.2813%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:82.8646%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:7.2396%;top:53.8889%;width:5.9896%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:86.8229%;top:53.8889%;width:6.0417%;height:3.4259%;font-size:32.56px;">Parts</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 34">
+        <img class="slide-bg" src="assets/slides/slide-034.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 34 text">
+          <span class="ocr-text" style="left:40.7813%;top:6.2037%;width:18.3333%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+          <span class="ocr-text" style="left:4.8958%;top:42.7778%;width:4.0104%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:9.6875%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:86.6146%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:3.2813%;top:47.9630%;width:13.8021%;height:5.0000%;font-size:47.52px;">changeable</span>
+          <span class="ocr-text" style="left:82.8646%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:7.2396%;top:53.8889%;width:5.9896%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:86.8229%;top:53.8889%;width:6.0417%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:38.4375%;top:90.5556%;width:4.0104%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:43.1250%;top:90.3704%;width:18.3333%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 35">
+        <img class="slide-bg" src="assets/slides/slide-035.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 35 text">
+          <span class="ocr-text" style="left:40.7813%;top:6.2037%;width:18.3854%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+          <span class="ocr-text" style="left:4.8958%;top:42.7778%;width:4.0625%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:9.6875%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:86.6146%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:3.2813%;top:47.9630%;width:13.8021%;height:5.0000%;font-size:47.52px;">changeable</span>
+          <span class="ocr-text" style="left:82.8646%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:7.2396%;top:53.8889%;width:5.9896%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:86.8229%;top:53.8889%;width:6.0417%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:20.9896%;top:57.5000%;width:2.0833%;height:2.6852%;font-size:25.52px;">La</span>
+          <span class="ocr-text" style="left:18.0729%;top:60.8333%;width:7.8646%;height:5.0000%;font-size:47.52px;">Sportiva</span>
+          <span class="ocr-text" style="left:50.0000%;top:61.9444%;width:6.7708%;height:2.6852%;font-size:25.52px;">Danner</span>
+          <span class="ocr-text" style="left:51.3542%;top:66.3889%;width:4.0104%;height:2.6852%;font-size:25.52px;">N45</span>
+          <span class="ocr-text" style="left:25.5208%;top:72.9630%;width:3.4896%;height:2.6852%;font-size:25.52px;">The</span>
+          <span class="ocr-text" style="left:24.6875%;top:76.6667%;width:5.2604%;height:2.6852%;font-size:25.52px;">North</span>
+          <span class="ocr-text" style="left:35.7292%;top:70.4630%;width:10.1042%;height:18.6111%;font-size:176.88px;">S</span>
+          <span class="ocr-text" style="left:38.4375%;top:90.5556%;width:4.0625%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:43.1250%;top:90.3704%;width:18.3854%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 36">
+        <img class="slide-bg" src="assets/slides/slide-036.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 36 text">
+          <span class="ocr-text" style="left:40.7813%;top:5.5556%;width:18.3854%;height:5.3704%;font-size:51.04px;">Space-efficient</span>
+          <span class="ocr-text" style="left:4.8958%;top:42.7778%;width:4.0625%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:9.6875%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:86.6146%;top:42.7778%;width:6.3021%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:3.2813%;top:47.9630%;width:13.8021%;height:5.0000%;font-size:47.52px;">changeable</span>
+          <span class="ocr-text" style="left:82.8646%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:7.2396%;top:53.8889%;width:5.9896%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:86.8229%;top:53.8889%;width:6.0417%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:20.9896%;top:57.5000%;width:2.0833%;height:2.6852%;font-size:25.52px;">La</span>
+          <span class="ocr-text" style="left:18.0729%;top:60.8333%;width:7.8646%;height:5.0000%;font-size:47.52px;">Sportiva</span>
+          <span class="ocr-text" style="left:50.0000%;top:61.9444%;width:6.7708%;height:2.6852%;font-size:25.52px;">Danner</span>
+          <span class="ocr-text" style="left:51.3542%;top:66.3889%;width:4.0104%;height:2.6852%;font-size:25.52px;">N45</span>
+          <span class="ocr-text" style="left:25.5208%;top:72.9630%;width:3.4896%;height:2.6852%;font-size:25.52px;">The</span>
+          <span class="ocr-text" style="left:24.6875%;top:76.6667%;width:5.2604%;height:2.6852%;font-size:25.52px;">North</span>
+          <span class="ocr-text" style="left:35.7292%;top:70.4630%;width:10.1042%;height:18.6111%;font-size:176.88px;">S</span>
+          <span class="ocr-text" style="left:38.4375%;top:90.5556%;width:4.0625%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:43.1250%;top:90.3704%;width:18.3854%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 37">
+        <img class="slide-bg" src="assets/slides/slide-037.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 37 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 38">
+        <img class="slide-bg" src="assets/slides/slide-038.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 38 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 39">
+        <img class="slide-bg" src="assets/slides/slide-039.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 39 text">
+          <span class="ocr-text" style="left:50.5208%;top:19.1667%;width:0.7292%;height:2.2222%;font-size:21.12px;">ny</span>
+          <span class="ocr-text" style="left:49.0104%;top:29.2593%;width:1.9271%;height:1.5741%;font-size:14.96px;">ARS</span>
+          <span class="ocr-text" style="left:50.4687%;top:31.0185%;width:0.5729%;height:1.9444%;font-size:18.48px;">3</span>
+          <span class="ocr-text" style="left:50.4167%;top:34.4444%;width:0.5729%;height:0.8333%;font-size:9.00px;">8</span>
+          <span class="ocr-text" style="left:50.2083%;top:35.3704%;width:0.7813%;height:1.5741%;font-size:14.96px;">8</span>
+          <span class="ocr-text" style="left:47.5000%;top:46.7593%;width:2.0833%;height:2.0370%;font-size:19.36px;">fs</span>
+          <span class="ocr-text" style="left:65.6250%;top:53.3333%;width:1.1979%;height:2.2222%;font-size:21.12px;">A</span>
+          <span class="ocr-text" style="left:64.7917%;top:55.2778%;width:1.0938%;height:1.6667%;font-size:15.84px;">an</span>
+          <span class="ocr-text" style="left:63.3854%;top:56.6667%;width:1.4583%;height:2.7778%;font-size:26.40px;">we</span>
+          <span class="ocr-text" style="left:41.5104%;top:58.7963%;width:1.4583%;height:0.8333%;font-size:9.00px;">es</span>
+          <span class="ocr-text" style="left:63.1250%;top:58.8889%;width:0.4167%;height:0.6481%;font-size:9.00px;">is</span>
+          <span class="ocr-text" style="left:62.0833%;top:59.2593%;width:1.3542%;height:1.7593%;font-size:16.72px;">see</span>
+          <span class="ocr-text" style="left:31.9792%;top:64.4444%;width:5.5729%;height:0.8333%;font-size:9.00px;">gfe</span>
+          <span class="ocr-text" style="left:59.2708%;top:64.2593%;width:0.9375%;height:1.2963%;font-size:12.32px;">i</span>
+          <span class="ocr-text" style="left:31.0417%;top:65.4630%;width:0.5729%;height:0.8333%;font-size:9.00px;">y</span>
+          <span class="ocr-text" style="left:35.6250%;top:65.1852%;width:1.5104%;height:0.9259%;font-size:9.00px;">soy</span>
+          <span class="ocr-text" style="left:58.9063%;top:65.2778%;width:0.6771%;height:1.0185%;font-size:9.68px;">4</span>
+          <span class="ocr-text" style="left:57.9688%;top:67.1296%;width:0.6250%;height:0.8333%;font-size:9.00px;">if</span>
+          <span class="ocr-text" style="left:33.4375%;top:68.1481%;width:1.5104%;height:0.9259%;font-size:9.00px;">as</span>
+          <span class="ocr-text" style="left:29.1146%;top:68.7963%;width:0.4167%;height:1.0185%;font-size:9.68px;">y</span>
+          <span class="ocr-text" style="left:56.7187%;top:68.6111%;width:0.9896%;height:1.4815%;font-size:14.08px;">is</span>
+          <span class="ocr-text" style="left:32.3438%;top:69.9074%;width:1.5104%;height:1.3889%;font-size:13.20px;">Ce?</span>
+          <span class="ocr-text" style="left:54.3229%;top:72.1296%;width:1.1979%;height:1.5741%;font-size:14.96px;">oy)</span>
+          <span class="ocr-text" style="left:53.5937%;top:73.0556%;width:1.2500%;height:1.5741%;font-size:14.96px;">i</span>
+          <span class="ocr-text" style="left:52.9167%;top:74.0741%;width:1.5104%;height:1.4815%;font-size:14.08px;">ude</span>
+          <span class="ocr-text" style="left:30.7813%;top:75.3704%;width:0.9896%;height:0.6481%;font-size:9.00px;">a</span>
+          <span class="ocr-text" style="left:28.4896%;top:78.3333%;width:1.1979%;height:2.0370%;font-size:19.36px;">Rey</span>
+          <span class="ocr-text" style="left:46.6146%;top:79.1667%;width:1.1458%;height:1.1111%;font-size:10.56px;">ra</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 40">
+        <img class="slide-bg" src="assets/slides/slide-040.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 40 text">
+          <span class="ocr-text" style="left:66.9792%;top:23.4259%;width:0.5729%;height:1.4815%;font-size:14.08px;">%</span>
+          <span class="ocr-text" style="left:13.5937%;top:38.5185%;width:1.6667%;height:1.4815%;font-size:14.08px;">a</span>
+          <span class="ocr-text" style="left:10.6771%;top:41.2963%;width:0.7813%;height:1.2963%;font-size:12.32px;">6</span>
+          <span class="ocr-text" style="left:87.1875%;top:41.2963%;width:0.4167%;height:0.7407%;font-size:9.00px;">3</span>
+          <span class="ocr-text" style="left:8.9063%;top:47.5000%;width:0.5208%;height:1.4815%;font-size:14.08px;">i</span>
+          <span class="ocr-text" style="left:88.8021%;top:45.2778%;width:0.5208%;height:1.4815%;font-size:14.08px;">%</span>
+          <span class="ocr-text" style="left:8.7500%;top:49.7222%;width:0.8333%;height:2.4074%;font-size:22.88px;">i</span>
+          <span class="ocr-text" style="left:30.3125%;top:48.6111%;width:4.6875%;height:2.3148%;font-size:22.00px;">ae</span>
+          <span class="ocr-text" style="left:89.1667%;top:47.5000%;width:0.4688%;height:1.4815%;font-size:14.08px;">4</span>
+          <span class="ocr-text" style="left:88.0729%;top:49.7222%;width:1.7188%;height:2.6852%;font-size:25.52px;">wd</span>
+          <span class="ocr-text" style="left:34.6875%;top:63.5185%;width:2.1875%;height:1.5741%;font-size:14.96px;">KE</span>
+          <span class="ocr-text" style="left:33.6458%;top:64.8148%;width:1.0417%;height:1.2037%;font-size:11.44px;">oo</span>
+          <span class="ocr-text" style="left:32.7083%;top:65.8333%;width:0.9375%;height:1.2963%;font-size:12.32px;">rs</span>
+          <span class="ocr-text" style="left:55.5729%;top:66.1111%;width:1.8229%;height:1.1111%;font-size:10.56px;">ee</span>
+          <span class="ocr-text" style="left:31.0937%;top:69.7222%;width:0.4688%;height:1.1111%;font-size:10.56px;">A</span>
+          <span class="ocr-text" style="left:30.8333%;top:70.9259%;width:0.4167%;height:1.1111%;font-size:10.56px;">A</span>
+          <span class="ocr-text" style="left:31.8229%;top:79.1667%;width:0.9375%;height:1.6667%;font-size:15.84px;">SS</span>
+          <span class="ocr-text" style="left:67.7083%;top:77.7778%;width:0.9375%;height:2.9630%;font-size:28.16px;">Si</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 41">
+        <img class="slide-bg" src="assets/slides/slide-041.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 41 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 42">
+        <img class="slide-bg" src="assets/slides/slide-042.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 42 text">
+          <span class="ocr-text" style="left:66.9792%;top:23.4259%;width:0.5729%;height:1.4815%;font-size:14.08px;">%</span>
+          <span class="ocr-text" style="left:13.5937%;top:38.5185%;width:1.6667%;height:1.4815%;font-size:14.08px;">a</span>
+          <span class="ocr-text" style="left:10.6771%;top:41.2963%;width:0.7813%;height:1.2963%;font-size:12.32px;">6</span>
+          <span class="ocr-text" style="left:87.1875%;top:41.2963%;width:0.4167%;height:0.7407%;font-size:9.00px;">3</span>
+          <span class="ocr-text" style="left:8.9063%;top:47.5000%;width:0.5208%;height:1.4815%;font-size:14.08px;">i</span>
+          <span class="ocr-text" style="left:88.8021%;top:45.2778%;width:0.5208%;height:1.4815%;font-size:14.08px;">%</span>
+          <span class="ocr-text" style="left:8.7500%;top:49.7222%;width:0.8333%;height:2.4074%;font-size:22.88px;">i</span>
+          <span class="ocr-text" style="left:30.3125%;top:48.6111%;width:4.6875%;height:2.3148%;font-size:22.00px;">ae</span>
+          <span class="ocr-text" style="left:89.1667%;top:47.5000%;width:0.4688%;height:1.4815%;font-size:14.08px;">4</span>
+          <span class="ocr-text" style="left:88.0729%;top:49.7222%;width:1.7188%;height:2.6852%;font-size:25.52px;">wd</span>
+          <span class="ocr-text" style="left:34.6875%;top:63.5185%;width:2.1875%;height:1.5741%;font-size:14.96px;">KE</span>
+          <span class="ocr-text" style="left:33.6458%;top:64.8148%;width:1.0417%;height:1.2037%;font-size:11.44px;">oo</span>
+          <span class="ocr-text" style="left:32.7083%;top:65.8333%;width:0.9375%;height:1.2963%;font-size:12.32px;">rs</span>
+          <span class="ocr-text" style="left:55.5729%;top:66.1111%;width:1.8229%;height:1.1111%;font-size:10.56px;">ee</span>
+          <span class="ocr-text" style="left:31.0937%;top:69.7222%;width:0.4688%;height:1.1111%;font-size:10.56px;">A</span>
+          <span class="ocr-text" style="left:30.8333%;top:70.9259%;width:0.4167%;height:1.1111%;font-size:10.56px;">A</span>
+          <span class="ocr-text" style="left:31.8229%;top:79.1667%;width:0.9375%;height:1.6667%;font-size:15.84px;">SS</span>
+          <span class="ocr-text" style="left:67.7083%;top:77.7778%;width:0.9375%;height:2.9630%;font-size:28.16px;">Si</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 43">
+        <img class="slide-bg" src="assets/slides/slide-043.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 43 text">
+          <span class="ocr-text" style="left:14.3750%;top:43.4259%;width:38.5938%;height:13.3333%;font-size:126.72px;">Product</span>
+          <span class="ocr-text" style="left:55.4688%;top:42.5000%;width:30.2083%;height:14.2593%;font-size:135.52px;">Vision</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 44">
+        <img class="slide-bg" src="assets/slides/slide-044.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 44 text">
+          <span class="ocr-text" style="left:44.7396%;top:20.9259%;width:41.1979%;height:29.2593%;font-size:278.08px;">AstroFit</span>
+          <span class="ocr-text" style="left:22.1354%;top:49.2593%;width:23.8542%;height:13.0556%;font-size:124.08px;">Zipper</span>
+          <span class="ocr-text" style="left:47.9688%;top:50.0926%;width:30.1042%;height:10.0000%;font-size:95.04px;">Modular</span>
+          <span class="ocr-text" style="left:11.6667%;top:65.0000%;width:34.5313%;height:10.0000%;font-size:95.04px;">Footwear</span>
+          <span class="ocr-text" style="left:48.1771%;top:65.0000%;width:40.2604%;height:12.2222%;font-size:116.16px;">Ecosystem</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 45">
+        <img class="slide-bg" src="assets/slides/slide-045.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 45 text">
+          <span class="ocr-text" style="left:40.7813%;top:5.8333%;width:18.3854%;height:5.0926%;font-size:48.40px;">Space-efficient</span>
+          <span class="ocr-text" style="left:75.3125%;top:6.3889%;width:7.3438%;height:3.4259%;font-size:32.56px;">Shoes</span>
+          <span class="ocr-text" style="left:73.3854%;top:10.9259%;width:5.4167%;height:3.6111%;font-size:34.32px;">With</span>
+          <span class="ocr-text" style="left:79.5313%;top:11.1111%;width:5.0521%;height:3.3333%;font-size:31.68px;">YKK</span>
+          <span class="ocr-text" style="left:74.2708%;top:15.6481%;width:9.3750%;height:3.6111%;font-size:34.32px;">AstroFit</span>
+          <span class="ocr-text" style="left:4.8438%;top:42.7778%;width:4.1146%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:9.6354%;top:42.7778%;width:6.3542%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:86.5625%;top:42.7778%;width:6.3542%;height:3.4259%;font-size:32.56px;">Inter-</span>
+          <span class="ocr-text" style="left:3.2813%;top:47.9630%;width:13.8021%;height:5.0000%;font-size:47.52px;">changeable</span>
+          <span class="ocr-text" style="left:82.8646%;top:48.3333%;width:13.8021%;height:4.1667%;font-size:39.60px;">changeable</span>
+          <span class="ocr-text" style="left:7.1875%;top:53.8889%;width:6.0417%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:86.7708%;top:53.8889%;width:6.0938%;height:3.4259%;font-size:32.56px;">Parts</span>
+          <span class="ocr-text" style="left:20.9896%;top:57.5000%;width:2.0833%;height:2.6852%;font-size:25.52px;">La</span>
+          <span class="ocr-text" style="left:18.0729%;top:60.8333%;width:7.8646%;height:4.1667%;font-size:39.60px;">Sportiva</span>
+          <span class="ocr-text" style="left:50.0000%;top:61.9444%;width:6.7708%;height:2.6852%;font-size:25.52px;">Danner</span>
+          <span class="ocr-text" style="left:51.3542%;top:66.3889%;width:4.0104%;height:2.6852%;font-size:25.52px;">N45</span>
+          <span class="ocr-text" style="left:25.5208%;top:72.9630%;width:3.4896%;height:2.6852%;font-size:25.52px;">The</span>
+          <span class="ocr-text" style="left:24.6875%;top:76.6667%;width:5.2604%;height:2.6852%;font-size:25.52px;">North</span>
+          <span class="ocr-text" style="left:25.1042%;top:80.4630%;width:4.3750%;height:2.6852%;font-size:25.52px;">Face</span>
+          <span class="ocr-text" style="left:38.3854%;top:90.5556%;width:4.1146%;height:3.4259%;font-size:32.56px;">Not</span>
+          <span class="ocr-text" style="left:43.1250%;top:90.3704%;width:18.3854%;height:4.3519%;font-size:41.36px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 46">
+        <img class="slide-bg" src="assets/slides/slide-046.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 46 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 47">
+        <img class="slide-bg" src="assets/slides/slide-047.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 47 text">
+          <span class="ocr-text" style="left:77.8125%;top:6.2037%;width:7.7083%;height:4.4444%;font-size:42.24px;">CGE</span>
+          <span class="ocr-text" style="left:86.5625%;top:8.7963%;width:0.7813%;height:1.2037%;font-size:11.44px;">atl</span>
+          <span class="ocr-text" style="left:77.2396%;top:24.4444%;width:0.5208%;height:0.9259%;font-size:9.00px;">LS</span>
+          <span class="ocr-text" style="left:10.2083%;top:34.1667%;width:1.8750%;height:1.6667%;font-size:15.84px;">Ly</span>
+          <span class="ocr-text" style="left:42.9167%;top:33.8889%;width:1.2500%;height:1.5741%;font-size:14.96px;">CS</span>
+          <span class="ocr-text" style="left:70.8333%;top:33.5185%;width:2.3438%;height:1.6667%;font-size:15.84px;">LES</span>
+          <span class="ocr-text" style="left:79.2708%;top:33.4259%;width:2.9167%;height:1.7593%;font-size:16.72px;">WY</span>
+          <span class="ocr-text" style="left:7.8646%;top:41.2037%;width:12.1354%;height:1.8519%;font-size:17.60px;">SiO</span>
+          <span class="ocr-text" style="left:50.0000%;top:41.8519%;width:6.9792%;height:1.4815%;font-size:14.08px;">EEE</span>
+          <span class="ocr-text" style="left:17.0313%;top:53.5185%;width:1.9271%;height:7.9630%;font-size:75.68px;">lf</span>
+          <span class="ocr-text" style="left:57.1354%;top:53.7037%;width:0.5729%;height:1.0185%;font-size:9.68px;">r</span>
+          <span class="ocr-text" style="left:17.8125%;top:61.4815%;width:0.5729%;height:0.9259%;font-size:9.00px;">E</span>
+          <span class="ocr-text" style="left:37.8646%;top:61.0185%;width:1.4583%;height:1.3889%;font-size:13.20px;">Bh</span>
+          <span class="ocr-text" style="left:57.7604%;top:60.8333%;width:0.6250%;height:1.3889%;font-size:13.20px;">re</span>
+          <span class="ocr-text" style="left:38.4375%;top:86.3889%;width:2.6042%;height:2.6852%;font-size:25.52px;">ge</span>
+          <span class="ocr-text" style="left:33.6979%;top:91.4815%;width:0.9375%;height:1.2963%;font-size:12.32px;">eC</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 48">
+        <img class="slide-bg" src="assets/slides/slide-048.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 48 text">
+          <span class="ocr-text" style="left:52.9167%;top:16.2963%;width:0.7813%;height:3.8889%;font-size:36.96px;">k</span>
+          <span class="ocr-text" style="left:54.1667%;top:16.8519%;width:0.6771%;height:0.9259%;font-size:9.00px;">py</span>
+          <span class="ocr-text" style="left:51.8229%;top:32.5000%;width:1.0938%;height:1.2963%;font-size:12.32px;">ar</span>
+          <span class="ocr-text" style="left:47.0833%;top:47.3148%;width:1.2500%;height:1.8519%;font-size:17.60px;">ay</span>
+          <span class="ocr-text" style="left:46.4583%;top:49.0741%;width:0.9896%;height:1.3889%;font-size:13.20px;">at</span>
+          <span class="ocr-text" style="left:31.1458%;top:67.3148%;width:2.7604%;height:1.9444%;font-size:18.48px;">cP</span>
+          <span class="ocr-text" style="left:60.0000%;top:67.3148%;width:1.8229%;height:1.8519%;font-size:17.60px;">gy</span>
+          <span class="ocr-text" style="left:27.3958%;top:74.3519%;width:2.0833%;height:2.5926%;font-size:24.64px;">a</span>
+          <span class="ocr-text" style="left:66.2500%;top:75.5556%;width:1.2500%;height:0.8333%;font-size:9.00px;">gt</span>
+          <span class="ocr-text" style="left:29.1146%;top:76.2963%;width:0.6771%;height:0.7407%;font-size:9.00px;">un</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 49">
+        <img class="slide-bg" src="assets/slides/slide-049.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 49 text">
+          <span class="ocr-text" style="left:50.6771%;top:27.5926%;width:1.4063%;height:1.2963%;font-size:12.32px;">a</span>
+          <span class="ocr-text" style="left:54.9479%;top:28.0556%;width:0.4167%;height:0.6481%;font-size:9.00px;">i</span>
+          <span class="ocr-text" style="left:47.2917%;top:50.5556%;width:0.6250%;height:1.2963%;font-size:12.32px;">Sa</span>
+          <span class="ocr-text" style="left:48.9583%;top:50.1852%;width:0.9375%;height:2.9630%;font-size:28.16px;">ff</span>
+          <span class="ocr-text" style="left:59.2188%;top:50.9259%;width:0.8854%;height:1.5741%;font-size:14.96px;">a</span>
+          <span class="ocr-text" style="left:30.0521%;top:76.8519%;width:0.9896%;height:2.1296%;font-size:20.24px;">a</span>
+          <span class="ocr-text" style="left:46.0938%;top:76.8519%;width:4.6875%;height:2.5926%;font-size:24.64px;">fh</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 50">
+        <img class="slide-bg" src="assets/slides/slide-050.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 50 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 51">
+        <img class="slide-bg" src="assets/slides/slide-051.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 51 text">
+          <span class="ocr-text" style="left:16.7188%;top:43.4259%;width:22.3438%;height:13.1481%;font-size:124.96px;">MVP</span>
+          <span class="ocr-text" style="left:41.6667%;top:43.2407%;width:41.7708%;height:16.4815%;font-size:156.64px;">Concept</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 52">
+        <img class="slide-bg" src="assets/slides/slide-052.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 52 text">
+          <span class="ocr-text" style="left:7.4479%;top:40.7407%;width:17.0313%;height:12.5000%;font-size:118.80px;">HOKA</span>
+          <span class="ocr-text" style="left:76.5625%;top:40.9259%;width:17.0833%;height:15.4630%;font-size:146.96px;">Gye</span>
+          <span class="ocr-text" style="left:32.5521%;top:51.1111%;width:2.9688%;height:4.4444%;font-size:42.24px;">FE</span>
+          <span class="ocr-text" style="left:35.2604%;top:51.0185%;width:7.8646%;height:4.6296%;font-size:44.00px;">ACER</span>
+          <span class="ocr-text" style="left:55.9375%;top:50.1852%;width:12.5000%;height:9.1667%;font-size:87.12px;">wry)</span>
+          <span class="ocr-text" style="left:85.8854%;top:52.0370%;width:3.8021%;height:2.1296%;font-size:20.24px;">SINCE</span>
+          <span class="ocr-text" style="left:90.2604%;top:52.0370%;width:2.8646%;height:2.1296%;font-size:20.24px;">1932</span>
+          <span class="ocr-text" style="left:30.1563%;top:69.4444%;width:10.4688%;height:12.3148%;font-size:117.04px;">—4</span>
+          <span class="ocr-text" style="left:51.3542%;top:71.2963%;width:33.0208%;height:9.0741%;font-size:86.24px;">MERRELL@®</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 53">
+        <img class="slide-bg" src="assets/slides/slide-053.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 53 text">
+          <span class="ocr-text" style="left:51.8750%;top:13.7037%;width:6.6667%;height:5.7407%;font-size:54.56px;">ND</span>
+          <span class="ocr-text" style="left:58.9583%;top:17.5926%;width:5.7292%;height:9.5370%;font-size:90.64px;">Ce</span>
+          <span class="ocr-text" style="left:33.3333%;top:44.4444%;width:33.2813%;height:11.1111%;font-size:105.60px;">patagonia</span>
+          <span class="ocr-text" style="left:52.6563%;top:79.7222%;width:6.8229%;height:6.5741%;font-size:62.48px;">191°</span>
+          <span class="ocr-text" style="left:60.4688%;top:57.7778%;width:8.3333%;height:21.8519%;font-size:207.68px;">J</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 54">
+        <img class="slide-bg" src="assets/slides/slide-054.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 54 text">
+          <span class="ocr-text" style="left:59.3229%;top:26.4815%;width:5.6250%;height:5.2778%;font-size:50.16px;">paiag™</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 55">
+        <img class="slide-bg" src="assets/slides/slide-055.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 55 text">
+          <span class="ocr-text" style="left:33.0729%;top:18.1481%;width:0.7292%;height:2.4074%;font-size:22.88px;">Sj</span>
+          <span class="ocr-text" style="left:32.8125%;top:18.2407%;width:0.7292%;height:3.7963%;font-size:36.08px;">is</span>
+          <span class="ocr-text" style="left:32.4479%;top:21.7593%;width:0.5729%;height:1.4815%;font-size:14.08px;">i</span>
+          <span class="ocr-text" style="left:32.2396%;top:23.4259%;width:0.4167%;height:0.6481%;font-size:9.00px;">5</span>
+          <span class="ocr-text" style="left:45.7813%;top:22.2222%;width:0.4688%;height:2.8704%;font-size:27.28px;">i.</span>
+          <span class="ocr-text" style="left:39.6354%;top:23.0556%;width:7.3438%;height:2.3148%;font-size:22.00px;">patagonia</span>
+          <span class="ocr-text" style="left:68.1250%;top:27.1296%;width:0.6771%;height:1.3889%;font-size:13.20px;">x</span>
+          <span class="ocr-text" style="left:26.5625%;top:32.2222%;width:1.6146%;height:2.4074%;font-size:22.88px;">‘398</span>
+          <span class="ocr-text" style="left:71.3021%;top:32.2222%;width:1.1979%;height:2.1296%;font-size:20.24px;">ey,</span>
+          <span class="ocr-text" style="left:73.4896%;top:34.0741%;width:1.9792%;height:2.4074%;font-size:22.88px;">&quot;any,</span>
+          <span class="ocr-text" style="left:8.8542%;top:47.5000%;width:0.5729%;height:2.2222%;font-size:21.12px;">f</span>
+          <span class="ocr-text" style="left:28.3854%;top:50.4630%;width:1.7708%;height:1.2963%;font-size:12.32px;">gat</span>
+          <span class="ocr-text" style="left:89.2188%;top:48.2407%;width:0.4167%;height:0.7407%;font-size:9.00px;">j</span>
+          <span class="ocr-text" style="left:27.0833%;top:51.2037%;width:1.0938%;height:1.2037%;font-size:11.44px;">be</span>
+          <span class="ocr-text" style="left:52.9167%;top:49.7222%;width:1.0417%;height:2.3148%;font-size:22.00px;">es</span>
+          <span class="ocr-text" style="left:89.0104%;top:49.7222%;width:0.7813%;height:2.4074%;font-size:22.88px;">J</span>
+          <span class="ocr-text" style="left:33.3333%;top:64.8148%;width:1.3021%;height:1.5741%;font-size:14.96px;">EE</span>
+          <span class="ocr-text" style="left:30.8854%;top:69.3519%;width:0.6771%;height:2.1296%;font-size:20.24px;">by</span>
+          <span class="ocr-text" style="left:67.7083%;top:78.7037%;width:0.5208%;height:1.1111%;font-size:10.56px;">J</span>
+          <span class="ocr-text" style="left:33.7500%;top:82.2222%;width:1.8229%;height:1.9444%;font-size:18.48px;">SoS</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 56">
+        <img class="slide-bg" src="assets/slides/slide-056.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 56 text">
+          <span class="ocr-text" style="left:30.7813%;top:33.5185%;width:38.5938%;height:13.3333%;font-size:126.72px;">Product</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 57">
+        <img class="slide-bg" src="assets/slides/slide-057.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 57 text">
+          <span class="ocr-text" style="left:26.0417%;top:28.6111%;width:16.5625%;height:12.2222%;font-size:116.16px;">Easy</span>
+          <span class="ocr-text" style="left:44.1667%;top:29.3519%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.1771%;top:28.0556%;width:30.1563%;height:10.5556%;font-size:100.32px;">maintain</span>
+          <span class="ocr-text" style="left:25.7813%;top:44.4444%;width:57.6563%;height:10.5556%;font-size:100.32px;">Omni-functional</span>
+          <span class="ocr-text" style="left:27.1875%;top:60.8333%;width:54.9479%;height:12.7778%;font-size:121.44px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 58">
+        <img class="slide-bg" src="assets/slides/slide-058.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 58 text">
+          <span class="ocr-text" style="left:59.3229%;top:26.4815%;width:5.6250%;height:5.2778%;font-size:50.16px;">paiag™</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 59">
+        <img class="slide-bg" src="assets/slides/slide-059.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 59 text">
+          <span class="ocr-text" style="left:33.0729%;top:18.1481%;width:0.7292%;height:2.4074%;font-size:22.88px;">Sj</span>
+          <span class="ocr-text" style="left:32.8125%;top:18.2407%;width:0.7292%;height:3.7963%;font-size:36.08px;">is</span>
+          <span class="ocr-text" style="left:32.4479%;top:21.7593%;width:0.5729%;height:1.4815%;font-size:14.08px;">i</span>
+          <span class="ocr-text" style="left:32.2396%;top:23.4259%;width:0.4167%;height:0.6481%;font-size:9.00px;">5</span>
+          <span class="ocr-text" style="left:45.7813%;top:22.2222%;width:0.4688%;height:2.8704%;font-size:27.28px;">i.</span>
+          <span class="ocr-text" style="left:39.6354%;top:23.0556%;width:7.3438%;height:2.3148%;font-size:22.00px;">patagonia</span>
+          <span class="ocr-text" style="left:68.1250%;top:27.1296%;width:0.6771%;height:1.3889%;font-size:13.20px;">x</span>
+          <span class="ocr-text" style="left:26.5625%;top:32.2222%;width:1.6146%;height:2.4074%;font-size:22.88px;">‘398</span>
+          <span class="ocr-text" style="left:71.3021%;top:32.2222%;width:1.1979%;height:2.1296%;font-size:20.24px;">ey,</span>
+          <span class="ocr-text" style="left:73.4896%;top:34.0741%;width:1.9792%;height:2.4074%;font-size:22.88px;">&quot;any,</span>
+          <span class="ocr-text" style="left:8.8542%;top:47.5000%;width:0.5729%;height:2.2222%;font-size:21.12px;">f</span>
+          <span class="ocr-text" style="left:28.3854%;top:50.4630%;width:1.7708%;height:1.2963%;font-size:12.32px;">gat</span>
+          <span class="ocr-text" style="left:89.2188%;top:48.2407%;width:0.4167%;height:0.7407%;font-size:9.00px;">j</span>
+          <span class="ocr-text" style="left:27.0833%;top:51.2037%;width:1.0938%;height:1.2037%;font-size:11.44px;">be</span>
+          <span class="ocr-text" style="left:52.9167%;top:49.7222%;width:1.0417%;height:2.3148%;font-size:22.00px;">es</span>
+          <span class="ocr-text" style="left:89.0104%;top:49.7222%;width:0.7813%;height:2.4074%;font-size:22.88px;">J</span>
+          <span class="ocr-text" style="left:33.3333%;top:64.8148%;width:1.3021%;height:1.5741%;font-size:14.96px;">EE</span>
+          <span class="ocr-text" style="left:30.8854%;top:69.3519%;width:0.6771%;height:2.1296%;font-size:20.24px;">by</span>
+          <span class="ocr-text" style="left:67.7083%;top:78.7037%;width:0.5208%;height:1.1111%;font-size:10.56px;">J</span>
+          <span class="ocr-text" style="left:33.7500%;top:82.2222%;width:1.8229%;height:1.9444%;font-size:18.48px;">SoS</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 60">
+        <img class="slide-bg" src="assets/slides/slide-060.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 60 text">
+          <span class="ocr-text" style="left:26.0417%;top:28.6111%;width:16.5625%;height:12.2222%;font-size:116.16px;">Easy</span>
+          <span class="ocr-text" style="left:44.1667%;top:29.3519%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.1771%;top:28.0556%;width:30.1563%;height:10.5556%;font-size:100.32px;">maintain</span>
+          <span class="ocr-text" style="left:25.7813%;top:44.4444%;width:57.6563%;height:10.5556%;font-size:100.32px;">Omni-functional</span>
+          <span class="ocr-text" style="left:27.1875%;top:60.8333%;width:54.9479%;height:12.7778%;font-size:121.44px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 61">
+        <img class="slide-bg" src="assets/slides/slide-061.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 61 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 62">
+        <img class="slide-bg" src="assets/slides/slide-062.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 62 text">
+          <span class="ocr-text" style="left:26.0417%;top:28.6111%;width:16.5625%;height:12.2222%;font-size:116.16px;">Easy</span>
+          <span class="ocr-text" style="left:44.1667%;top:29.3519%;width:6.9271%;height:9.2593%;font-size:88.00px;">to</span>
+          <span class="ocr-text" style="left:53.1771%;top:28.0556%;width:30.1563%;height:10.5556%;font-size:100.32px;">maintain</span>
+          <span class="ocr-text" style="left:25.7813%;top:44.4444%;width:57.6563%;height:10.5556%;font-size:100.32px;">Omni-functional</span>
+          <span class="ocr-text" style="left:27.1875%;top:60.8333%;width:54.9479%;height:12.7778%;font-size:121.44px;">Space-efficient</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 63">
+        <img class="slide-bg" src="assets/slides/slide-063.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 63 text">
+          <span class="ocr-text" style="left:73.3333%;top:36.5741%;width:2.1354%;height:2.0370%;font-size:19.36px;">NSS,</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 64">
+        <img class="slide-bg" src="assets/slides/slide-064.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 64 text">
+          <span class="ocr-text" style="left:15.7813%;top:33.3333%;width:68.3854%;height:13.6111%;font-size:129.36px;">Go-To-Market</span>
+          <span class="ocr-text" style="left:28.8021%;top:53.1481%;width:42.7083%;height:16.6667%;font-size:158.40px;">Strategy</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 65">
+        <img class="slide-bg" src="assets/slides/slide-065.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 65 text">
+          <span class="ocr-text" style="left:51.8750%;top:13.7037%;width:6.6667%;height:5.7407%;font-size:54.56px;">ND</span>
+          <span class="ocr-text" style="left:58.9583%;top:17.5926%;width:5.7292%;height:9.5370%;font-size:90.64px;">Ce</span>
+          <span class="ocr-text" style="left:33.3333%;top:44.4444%;width:33.2813%;height:11.1111%;font-size:105.60px;">patagonia</span>
+          <span class="ocr-text" style="left:52.6563%;top:79.7222%;width:6.8229%;height:6.5741%;font-size:62.48px;">191°</span>
+          <span class="ocr-text" style="left:60.4688%;top:57.7778%;width:8.3333%;height:21.8519%;font-size:207.68px;">J</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 66">
+        <img class="slide-bg" src="assets/slides/slide-066.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 66 text">
+          <span class="ocr-text" style="left:14.5833%;top:76.9444%;width:36.0938%;height:8.7037%;font-size:82.72px;">Modularized</span>
+          <span class="ocr-text" style="left:52.6042%;top:77.3148%;width:6.9271%;height:10.1852%;font-size:96.80px;">by</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 67">
+        <img class="slide-bg" src="assets/slides/slide-067.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 67 text">
+          <span class="ocr-text" style="left:6.8229%;top:72.4074%;width:39.5313%;height:14.8148%;font-size:140.80px;">Designer</span>
+          <span class="ocr-text" style="left:48.4375%;top:72.4074%;width:44.9479%;height:14.6296%;font-size:139.04px;">Workshop</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 68">
+        <img class="slide-bg" src="assets/slides/slide-068.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 68 text">
+          
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 69">
+        <img class="slide-bg" src="assets/slides/slide-069.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 69 text">
+          <span class="ocr-text" style="left:77.8125%;top:6.2037%;width:7.7083%;height:4.4444%;font-size:42.24px;">CGE</span>
+          <span class="ocr-text" style="left:86.5625%;top:8.7963%;width:0.7813%;height:1.2037%;font-size:11.44px;">atl</span>
+          <span class="ocr-text" style="left:77.2396%;top:24.4444%;width:0.5208%;height:0.9259%;font-size:9.00px;">LS</span>
+          <span class="ocr-text" style="left:10.2083%;top:34.1667%;width:1.8750%;height:1.6667%;font-size:15.84px;">Ly</span>
+          <span class="ocr-text" style="left:42.9167%;top:33.8889%;width:1.2500%;height:1.5741%;font-size:14.96px;">CS</span>
+          <span class="ocr-text" style="left:70.8333%;top:33.5185%;width:2.3438%;height:1.6667%;font-size:15.84px;">LES</span>
+          <span class="ocr-text" style="left:79.2708%;top:33.4259%;width:2.9167%;height:1.7593%;font-size:16.72px;">WY</span>
+          <span class="ocr-text" style="left:7.8646%;top:41.2037%;width:12.1354%;height:1.8519%;font-size:17.60px;">SiO</span>
+          <span class="ocr-text" style="left:50.0000%;top:41.8519%;width:6.9792%;height:1.4815%;font-size:14.08px;">EEE</span>
+          <span class="ocr-text" style="left:17.0313%;top:53.5185%;width:1.9271%;height:7.9630%;font-size:75.68px;">lf</span>
+          <span class="ocr-text" style="left:57.1354%;top:53.7037%;width:0.5729%;height:1.0185%;font-size:9.68px;">r</span>
+          <span class="ocr-text" style="left:17.8125%;top:61.4815%;width:0.5729%;height:0.9259%;font-size:9.00px;">E</span>
+          <span class="ocr-text" style="left:37.8646%;top:61.0185%;width:1.4583%;height:1.3889%;font-size:13.20px;">Bh</span>
+          <span class="ocr-text" style="left:57.7604%;top:60.8333%;width:0.6250%;height:1.3889%;font-size:13.20px;">re</span>
+          <span class="ocr-text" style="left:38.4375%;top:86.3889%;width:2.6042%;height:2.6852%;font-size:25.52px;">ge</span>
+          <span class="ocr-text" style="left:33.6979%;top:91.4815%;width:0.9375%;height:1.2963%;font-size:12.32px;">eC</span>
+        </div>
+      </section>
+      <section class="slide" aria-label="Slide 70">
+        <img class="slide-bg" src="assets/slides/slide-070.png" alt="" draggable="false">
+        <div class="text-layer" aria-label="Slide 70 text">
+          <span class="ocr-text" style="left:60.0521%;top:7.6852%;width:39.9479%;height:14.2593%;font-size:135.52px;">Om</span>
+          <span class="ocr-text" style="left:80.0521%;top:45.4630%;width:1.8750%;height:4.2593%;font-size:40.48px;">9</span>
+          <span class="ocr-text" style="left:24.3229%;top:78.3333%;width:1.6667%;height:2.2222%;font-size:21.12px;">a</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <button class="edge prev" id="edgePrev" type="button" aria-label="上一頁"></button>
+  <button class="edge next" id="edgeNext" type="button" aria-label="下一頁"></button>
+
+  <nav class="hud pinned" aria-label="播放控制">
+    <button class="icon-button" id="prevBtn" type="button" aria-label="上一頁" title="上一頁">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.7 5.3a1 1 0 0 1 0 1.4L10.4 12l5.3 5.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z"/></svg>
+    </button>
+    <div class="counter" id="counter" aria-live="polite">1 / 70</div>
+    <button class="icon-button" id="nextBtn" type="button" aria-label="下一頁" title="下一頁">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 18.7a1 1 0 0 1 0-1.4l5.3-5.3-5.3-5.3a1 1 0 0 1 1.4-1.4l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 0 1-1.4 0z"/></svg>
+    </button>
+    <button class="icon-button" id="fullscreenBtn" type="button" aria-label="全螢幕" title="全螢幕">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h5a1 1 0 1 1 0 2H7v3a1 1 0 1 1-2 0V5zm9 1a1 1 0 0 1 1-1h4v5a1 1 0 1 1-2 0V7h-3a1 1 0 0 1-1-1zM6 13a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2H5v-5a1 1 0 0 1 1-1zm12 0a1 1 0 0 1 1 1v5h-5a1 1 0 1 1 0-2h3v-3a1 1 0 0 1 1-1z"/></svg>
+    </button>
+    <button class="slide-video-button" id="slideVideoBtn" type="button" aria-label="播放本頁影片" title="播放本頁影片" hidden>
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.8c0-.9 1-1.5 1.8-1l8.2 5.2a1.2 1.2 0 0 1 0 2l-8.2 5.2A1.2 1.2 0 0 1 8 16.2V5.8z"/></svg>
+    </button>
+    <button class="media-button" id="mediaBtn" type="button" aria-expanded="false" aria-controls="mediaPanel">影片</button>
+  </nav>
+
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+  <aside class="media-panel" id="mediaPanel" aria-label="簡報內嵌影片">
+    <div class="media-list">
+      <button class="media-item" type="button" data-video="0">
+        <img src="assets/media/video-02-poster.png" alt="">
+        <span><em>Slide 3</em><strong>Slide 3 embedded video</strong><span>copy_C770A171-80C9-4A14-B81F-6554C86F32F4-9135.mov</span></span>
+      </button>
+      <button class="media-item" type="button" data-video="1">
+        <img src="assets/media/video-01-poster.png" alt="">
+        <span><em>Slide 5</em><strong>Slide 5 embedded video</strong><span>ScreenRecording_11-14-2025 04-48-10_1-8830.mov</span></span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-label="影片播放">
+    <div class="video-shell" id="videoSurface">
+      <video id="videoPlayer" playsinline preload="metadata"></video>
+      <div class="video-cue" id="videoCue" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M8 5.8c0-.9 1-1.5 1.8-1l8.2 5.2a1.2 1.2 0 0 1 0 2l-8.2 5.2A1.2 1.2 0 0 1 8 16.2V5.8z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const counter = document.getElementById("counter");
+    const progress = document.getElementById("progress");
+    const media = [{"label":"Slide 3 embedded video","file":"assets/media/video-02.mp4","poster":"assets/media/video-02-poster.png","original":"copy_C770A171-80C9-4A14-B81F-6554C86F32F4-9135.mov","slide":3},{"label":"Slide 5 embedded video","file":"assets/media/video-01.mp4","poster":"assets/media/video-01-poster.png","original":"ScreenRecording_11-14-2025 04-48-10_1-8830.mov","slide":5}];
+    let current = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let activeVideoIndex = -1;
+    let videoState = "closed";
+
+    function update(options = {}) {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === current);
+      });
+      counter.textContent = (current + 1) + " / " + slides.length;
+      progress.style.width = (((current + 1) / slides.length) * 100).toFixed(3) + "%";
+      history.replaceState(null, "", "#" + (current + 1));
+      updateSlideVideoButton();
+      syncVideoForCurrentSlide(options);
+    }
+
+    function goTo(index, options = {}) {
+      const next = Math.max(0, Math.min(slides.length - 1, index));
+      if (next === current) return;
+      current = next;
+      update(options);
+    }
+
+    function next(options = {}) { goTo(current + 1, options); }
+    function prev(options = {}) { goTo(current - 1, options); }
+    function goToHash() {
+      const hashIndex = Number.parseInt(location.hash.slice(1), 10);
+      if (Number.isFinite(hashIndex) && hashIndex >= 1 && hashIndex <= slides.length) {
+        goTo(hashIndex - 1);
+      }
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", () => next({ userGesture: true }));
+    document.getElementById("prevBtn").addEventListener("click", () => prev({ userGesture: true }));
+    document.getElementById("edgeNext").addEventListener("click", () => next({ userGesture: true }));
+    document.getElementById("edgePrev").addEventListener("click", () => prev({ userGesture: true }));
+    document.getElementById("fullscreenBtn").addEventListener("click", async () => {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen?.();
+      } else {
+        await document.exitFullscreen?.();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (videoModal?.classList.contains("open")) {
+        if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          if (videoState === "armed") {
+            startVideo();
+          } else {
+            advanceFromVideo();
+          }
+        } else if (event.key === "ArrowLeft" || event.key === "PageUp" || event.key === "Backspace") {
+          event.preventDefault();
+          closeVideo();
+          prev({ userGesture: true });
+        } else if (event.key === "Escape") {
+          event.preventDefault();
+          closeVideo();
+        }
+        return;
+      }
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        next({ userGesture: true });
+      } else if (event.key === "ArrowLeft" || event.key === "PageUp" || event.key === "Backspace") {
+        event.preventDefault();
+        prev({ userGesture: true });
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        goTo(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        goTo(slides.length - 1);
+      } else if (event.key === "Escape") {
+        closeVideo();
+        closeMediaPanel();
+      }
+    });
+
+    document.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+      touchStartY = event.changedTouches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (event) => {
+      const dx = event.changedTouches[0].clientX - touchStartX;
+      const dy = event.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 52 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        dx < 0 ? next({ userGesture: true }) : prev({ userGesture: true });
+      }
+    }, { passive: true });
+
+    window.addEventListener("hashchange", goToHash);
+
+    const mediaBtn = document.getElementById("mediaBtn");
+    const slideVideoBtn = document.getElementById("slideVideoBtn");
+    const mediaPanel = document.getElementById("mediaPanel");
+    const videoModal = document.getElementById("videoModal");
+    const videoSurface = document.getElementById("videoSurface");
+    const videoPlayer = document.getElementById("videoPlayer");
+
+    function currentMediaIndex() {
+      return media.findIndex((item) => item.slide === current + 1);
+    }
+
+    function updateSlideVideoButton() {
+      if (!slideVideoBtn) return;
+      const mediaIndex = currentMediaIndex();
+      slideVideoBtn.hidden = mediaIndex < 0;
+    }
+
+    function closeMediaPanel() {
+      if (!mediaPanel || !mediaBtn) return;
+      mediaPanel.classList.remove("open");
+      mediaBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function syncVideoForCurrentSlide(options = {}) {
+      const mediaIndex = currentMediaIndex();
+      if (mediaIndex >= 0) {
+        openVideo(mediaIndex, { requestFullscreen: Boolean(options.userGesture) });
+      } else if (videoModal?.classList.contains("open")) {
+        closeVideo();
+      }
+    }
+
+    async function tryVideoFullscreen() {
+      if (!videoModal || document.fullscreenElement) return;
+      try {
+        await videoModal.requestFullscreen?.();
+      } catch {
+        // Browser fullscreen requires a trusted user gesture; the modal still fills the viewport.
+      }
+    }
+
+    function openVideo(index, options = {}) {
+      if (!videoModal || !videoPlayer || !media[index]) return;
+      if (activeVideoIndex === index && videoModal.classList.contains("open")) return;
+      activeVideoIndex = index;
+      videoState = "armed";
+      videoPlayer.pause();
+      videoPlayer.src = media[index].file;
+      if (media[index].poster) {
+        videoPlayer.poster = media[index].poster;
+      } else {
+        videoPlayer.removeAttribute("poster");
+      }
+      videoModal.classList.add("open", "armed");
+      videoModal.classList.remove("playing");
+      closeMediaPanel();
+      videoPlayer.load();
+      if (options.requestFullscreen) {
+        tryVideoFullscreen();
+      }
+    }
+
+    function closeVideo() {
+      if (!videoModal || !videoPlayer) return;
+      const shouldExitVideoFullscreen = document.fullscreenElement === videoModal;
+      videoPlayer.pause();
+      videoPlayer.removeAttribute("src");
+      videoPlayer.removeAttribute("poster");
+      videoPlayer.load();
+      videoModal.classList.remove("open", "armed", "playing");
+      activeVideoIndex = -1;
+      videoState = "closed";
+      if (shouldExitVideoFullscreen) {
+        document.exitFullscreen?.().catch(() => {});
+      }
+    }
+
+    function startVideo() {
+      if (!videoPlayer || videoState !== "armed") return;
+      videoState = "playing";
+      videoModal.classList.remove("armed");
+      videoModal.classList.add("playing");
+      videoPlayer.play().catch(() => {
+        videoState = "armed";
+        videoModal.classList.add("armed");
+        videoModal.classList.remove("playing");
+      });
+    }
+
+    function advanceFromVideo() {
+      closeVideo();
+      next({ userGesture: true });
+    }
+
+    mediaBtn?.addEventListener("click", () => {
+      const open = mediaPanel.classList.toggle("open");
+      mediaBtn.setAttribute("aria-expanded", String(open));
+    });
+
+    slideVideoBtn?.addEventListener("click", () => {
+      const mediaIndex = currentMediaIndex();
+      if (mediaIndex >= 0) openVideo(mediaIndex, { requestFullscreen: true });
+    });
+
+    document.querySelectorAll("[data-video]").forEach((button) => {
+      button.addEventListener("click", () => openVideo(Number(button.dataset.video), { requestFullscreen: true }));
+    });
+
+    videoSurface?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (videoState === "armed") {
+        startVideo();
+      } else if (videoState === "playing" || videoState === "finished") {
+        advanceFromVideo();
+      }
+    });
+
+    videoPlayer?.addEventListener("ended", () => {
+      videoState = "finished";
+      videoModal?.classList.add("playing");
+    });
+
+    const hashIndex = Number.parseInt(location.hash.slice(1), 10);
+    if (Number.isFinite(hashIndex) && hashIndex >= 1 && hashIndex <= slides.length) {
+      current = hashIndex - 1;
+    }
+    update();
+  </script>
+</body>
+</html>

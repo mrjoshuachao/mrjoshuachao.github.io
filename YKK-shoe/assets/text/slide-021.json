@@ -1,0 +1,98 @@
+[
+  {
+    "text": "But",
+    "confidence": 96.095894,
+    "x": 395,
+    "y": 187,
+    "width": 268,
+    "height": 130
+  },
+  {
+    "text": "in",
+    "confidence": 93.614334,
+    "x": 711,
+    "y": 181,
+    "width": 132,
+    "height": 134
+  },
+  {
+    "text": "the",
+    "confidence": 96.277435,
+    "x": 888,
+    "y": 187,
+    "width": 263,
+    "height": 130
+  },
+  {
+    "text": "end,",
+    "confidence": 96.140778,
+    "x": 1196,
+    "y": 187,
+    "width": 340,
+    "height": 155
+  },
+  {
+    "text": "there's",
+    "confidence": 75.060318,
+    "x": 284,
+    "y": 380,
+    "width": 546,
+    "height": 130
+  },
+  {
+    "text": "too",
+    "confidence": 96.431053,
+    "x": 870,
+    "y": 390,
+    "width": 264,
+    "height": 120
+  },
+  {
+    "text": "much",
+    "confidence": 96.308495,
+    "x": 1181,
+    "y": 380,
+    "width": 448,
+    "height": 130
+  },
+  {
+    "text": "gear,",
+    "confidence": 96.586128,
+    "x": 349,
+    "y": 603,
+    "width": 390,
+    "height": 130
+  },
+  {
+    "text": "and",
+    "confidence": 96.512733,
+    "x": 778,
+    "y": 572,
+    "width": 296,
+    "height": 130
+  },
+  {
+    "text": "never",
+    "confidence": 96.539772,
+    "x": 1126,
+    "y": 603,
+    "width": 448,
+    "height": 99
+  },
+  {
+    "text": "enough",
+    "confidence": 95.910492,
+    "x": 366,
+    "y": 766,
+    "width": 609,
+    "height": 160
+  },
+  {
+    "text": "space.",
+    "confidence": 95.910492,
+    "x": 1023,
+    "y": 796,
+    "width": 528,
+    "height": 128
+  }
+]

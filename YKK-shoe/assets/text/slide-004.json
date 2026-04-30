@@ -1,0 +1,26 @@
+[
+  {
+    "text": "Little",
+    "confidence": 95.847618,
+    "x": 179,
+    "y": 653,
+    "width": 263,
+    "height": 101
+  },
+  {
+    "text": "Parts.",
+    "confidence": 96.620804,
+    "x": 473,
+    "y": 661,
+    "width": 283,
+    "height": 93
+  },
+  {
+    "text": "Big",
+    "confidence": 96.361717,
+    "x": 805,
+    "y": 661,
+    "width": 162,
+    "height": 122
+  }
+]
