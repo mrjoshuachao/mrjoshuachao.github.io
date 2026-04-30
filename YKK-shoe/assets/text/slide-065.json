@@ -1,0 +1,42 @@
+[
+  {
+    "text": "ND",
+    "confidence": 69.611549,
+    "x": 996,
+    "y": 148,
+    "width": 128,
+    "height": 62
+  },
+  {
+    "text": "Ce",
+    "confidence": 56.394714,
+    "x": 1132,
+    "y": 190,
+    "width": 110,
+    "height": 103
+  },
+  {
+    "text": "patagonia",
+    "confidence": 92.716125,
+    "x": 640,
+    "y": 480,
+    "width": 639,
+    "height": 120
+  },
+  {
+    "text": "191°",
+    "confidence": 79.787399,
+    "x": 1011,
+    "y": 861,
+    "width": 131,
+    "height": 71
+  },
+  {
+    "text": "J",
+    "confidence": 47.870003,
+    "x": 1161,
+    "y": 624,
+    "width": 160,
+    "height": 236
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "text": "Pains:",
+    "confidence": 96.281845,
+    "x": 726,
+    "y": 133,
+    "width": 469,
+    "height": 136
+  },
+  {
+    "text": "Hard",
+    "confidence": 96.225212,
+    "x": 518,
+    "y": 326,
+    "width": 316,
+    "height": 108
+  },
+  {
+    "text": "to",
+    "confidence": 94.096153,
+    "x": 872,
+    "y": 334,
+    "width": 133,
+    "height": 100
+  },
+  {
+    "text": "clean",
+    "confidence": 94.096153,
+    "x": 1043,
+    "y": 326,
+    "width": 360,
+    "height": 108
+  },
+  {
+    "text": "Hard",
+    "confidence": 95.822021,
+    "x": 505,
+    "y": 487,
+    "width": 316,
+    "height": 108
+  },
+  {
+    "text": "to",
+    "confidence": 96.225388,
+    "x": 859,
+    "y": 495,
+    "width": 133,
+    "height": 100
+  },
+  {
+    "text": "adapt",
+    "confidence": 96.459122,
+    "x": 1030,
+    "y": 487,
+    "width": 388,
+    "height": 132
+  },
+  {
+    "text": "Hard",
+    "confidence": 96.716309,
+    "x": 505,
+    "y": 648,
+    "width": 316,
+    "height": 108
+  },
+  {
+    "text": "to",
+    "confidence": 95.866142,
+    "x": 859,
+    "y": 656,
+    "width": 133,
+    "height": 100
+  },
+  {
+    "text": "repair",
+    "confidence": 96.540665,
+    "x": 1032,
+    "y": 643,
+    "width": 389,
+    "height": 137
+  },
+  {
+    "text": "Too",
+    "confidence": 96.76339,
+    "x": 373,
+    "y": 809,
+    "width": 238,
+    "height": 108
+  },
+  {
+    "text": "bulky",
+    "confidence": 96.612823,
+    "x": 651,
+    "y": 809,
+    "width": 367,
+    "height": 132
+  },
+  {
+    "text": "to",
+    "confidence": 96.271523,
+    "x": 1049,
+    "y": 817,
+    "width": 133,
+    "height": 100
+  },
+  {
+    "text": "pack",
+    "confidence": 96.858978,
+    "x": 1222,
+    "y": 809,
+    "width": 328,
+    "height": 132
+  }
+]

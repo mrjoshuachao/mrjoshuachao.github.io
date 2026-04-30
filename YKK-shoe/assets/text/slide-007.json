@@ -1,0 +1,98 @@
+[
+  {
+    "text": "AM",
+    "confidence": 39.68409,
+    "x": 1319,
+    "y": 0,
+    "width": 202,
+    "height": 237
+  },
+  {
+    "text": "6",
+    "confidence": 56.117096,
+    "x": 1507,
+    "y": 178,
+    "width": 19,
+    "height": 17
+  },
+  {
+    "text": "AN",
+    "confidence": 65.442818,
+    "x": 747,
+    "y": 276,
+    "width": 69,
+    "height": 66
+  },
+  {
+    "text": "A",
+    "confidence": 62.522579,
+    "x": 1048,
+    "y": 282,
+    "width": 30,
+    "height": 31
+  },
+  {
+    "text": "4",
+    "confidence": 77.017258,
+    "x": 485,
+    "y": 360,
+    "width": 20,
+    "height": 29
+  },
+  {
+    "text": "ty",
+    "confidence": 41.973869,
+    "x": 765,
+    "y": 313,
+    "width": 47,
+    "height": 74
+  },
+  {
+    "text": "in",
+    "confidence": 59.380745,
+    "x": 1013,
+    "y": 275,
+    "width": 82,
+    "height": 96
+  },
+  {
+    "text": "iy",
+    "confidence": 47.911957,
+    "x": 1238,
+    "y": 205,
+    "width": 109,
+    "height": 193
+  },
+  {
+    "text": "NI",
+    "confidence": 42.223759,
+    "x": 1457,
+    "y": 305,
+    "width": 80,
+    "height": 52
+  },
+  {
+    "text": "Sh",
+    "confidence": 40.933777,
+    "x": 1577,
+    "y": 310,
+    "width": 30,
+    "height": 34
+  },
+  {
+    "text": "RE",
+    "confidence": 46.568268,
+    "x": 1100,
+    "y": 364,
+    "width": 220,
+    "height": 90
+  },
+  {
+    "text": "fy",
+    "confidence": 45.504955,
+    "x": 942,
+    "y": 447,
+    "width": 44,
+    "height": 106
+  }
+]

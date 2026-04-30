@@ -1,0 +1,82 @@
+[
+  {
+    "text": "They",
+    "confidence": 96.070633,
+    "x": 115,
+    "y": 221,
+    "width": 337,
+    "height": 132
+  },
+  {
+    "text": "need",
+    "confidence": 95.443855,
+    "x": 487,
+    "y": 221,
+    "width": 330,
+    "height": 108
+  },
+  {
+    "text": "shoes",
+    "confidence": 96.292908,
+    "x": 856,
+    "y": 221,
+    "width": 405,
+    "height": 108
+  },
+  {
+    "text": "that",
+    "confidence": 84.294022,
+    "x": 1295,
+    "y": 221,
+    "width": 271,
+    "height": 108
+  },
+  {
+    "text": "is...",
+    "confidence": 84.294022,
+    "x": 1606,
+    "y": 215,
+    "width": 204,
+    "height": 114
+  },
+  {
+    "text": "Easy",
+    "confidence": 95.091377,
+    "x": 500,
+    "y": 389,
+    "width": 318,
+    "height": 132
+  },
+  {
+    "text": "to",
+    "confidence": 95.091377,
+    "x": 848,
+    "y": 397,
+    "width": 133,
+    "height": 100
+  },
+  {
+    "text": "maintain",
+    "confidence": 96.15107,
+    "x": 1021,
+    "y": 383,
+    "width": 579,
+    "height": 114
+  },
+  {
+    "text": "Omni-functional",
+    "confidence": 86.260857,
+    "x": 495,
+    "y": 561,
+    "width": 1107,
+    "height": 114
+  },
+  {
+    "text": "Space-efficient",
+    "confidence": 86.592941,
+    "x": 522,
+    "y": 739,
+    "width": 1055,
+    "height": 137
+  }
+]
