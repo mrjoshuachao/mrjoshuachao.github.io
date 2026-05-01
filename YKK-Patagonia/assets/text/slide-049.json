@@ -1,0 +1,58 @@
+[
+  {
+    "text": "a",
+    "confidence": 52.027428,
+    "x": 973,
+    "y": 298,
+    "width": 27,
+    "height": 14
+  },
+  {
+    "text": "i",
+    "confidence": 47.223965,
+    "x": 1055,
+    "y": 303,
+    "width": 8,
+    "height": 7
+  },
+  {
+    "text": "Sa",
+    "confidence": 47.890648,
+    "x": 908,
+    "y": 546,
+    "width": 12,
+    "height": 14
+  },
+  {
+    "text": "ff",
+    "confidence": 68.939369,
+    "x": 940,
+    "y": 542,
+    "width": 18,
+    "height": 32
+  },
+  {
+    "text": "a",
+    "confidence": 40.287533,
+    "x": 1137,
+    "y": 550,
+    "width": 17,
+    "height": 17
+  },
+  {
+    "text": "a",
+    "confidence": 43.780548,
+    "x": 577,
+    "y": 830,
+    "width": 19,
+    "height": 23
+  },
+  {
+    "text": "fh",
+    "confidence": 57.387432,
+    "x": 885,
+    "y": 830,
+    "width": 90,
+    "height": 28
+  }
+]

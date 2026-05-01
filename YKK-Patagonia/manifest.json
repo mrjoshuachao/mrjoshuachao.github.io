@@ -1,0 +1,378 @@
+{
+  "title": "YKK (ACE 20251114 final pitch)",
+  "slideCount": 70,
+  "slides": [
+    {
+      "index": 1,
+      "file": "assets/slides/slide-001.png",
+      "source": "Attachment8.pdf"
+    },
+    {
+      "index": 2,
+      "file": "assets/slides/slide-002.png",
+      "source": "Attachment46.pdf"
+    },
+    {
+      "index": 3,
+      "file": "assets/slides/slide-003.png",
+      "source": "Attachment33.pdf"
+    },
+    {
+      "index": 4,
+      "file": "assets/slides/slide-004.png",
+      "source": "Attachment6.pdf"
+    },
+    {
+      "index": 5,
+      "file": "assets/slides/slide-005.png",
+      "source": "Attachment22.pdf"
+    },
+    {
+      "index": 6,
+      "file": "assets/slides/slide-006.png",
+      "source": "Attachment70.pdf"
+    },
+    {
+      "index": 7,
+      "file": "assets/slides/slide-007.png",
+      "source": "Attachment18.pdf"
+    },
+    {
+      "index": 8,
+      "file": "assets/slides/slide-008.png",
+      "source": "Attachment58.pdf"
+    },
+    {
+      "index": 9,
+      "file": "assets/slides/slide-009.png",
+      "source": "Attachment7.pdf"
+    },
+    {
+      "index": 10,
+      "file": "assets/slides/slide-010.png",
+      "source": "Attachment71.pdf"
+    },
+    {
+      "index": 11,
+      "file": "assets/slides/slide-011.png",
+      "source": "Attachment12.pdf"
+    },
+    {
+      "index": 12,
+      "file": "assets/slides/slide-012.png",
+      "source": "Attachment67.pdf"
+    },
+    {
+      "index": 13,
+      "file": "assets/slides/slide-013.png",
+      "source": "Attachment19.pdf"
+    },
+    {
+      "index": 14,
+      "file": "assets/slides/slide-014.png",
+      "source": "Attachment60.pdf"
+    },
+    {
+      "index": 15,
+      "file": "assets/slides/slide-015.png",
+      "source": "Attachment64.pdf"
+    },
+    {
+      "index": 16,
+      "file": "assets/slides/slide-016.png",
+      "source": "Attachment69.pdf"
+    },
+    {
+      "index": 17,
+      "file": "assets/slides/slide-017.png",
+      "source": "Attachment25.pdf"
+    },
+    {
+      "index": 18,
+      "file": "assets/slides/slide-018.png",
+      "source": "Attachment2.pdf"
+    },
+    {
+      "index": 19,
+      "file": "assets/slides/slide-019.png",
+      "source": "Attachment10.pdf"
+    },
+    {
+      "index": 20,
+      "file": "assets/slides/slide-020.png",
+      "source": "Attachment61.pdf"
+    },
+    {
+      "index": 21,
+      "file": "assets/slides/slide-021.png",
+      "source": "Attachment39.pdf"
+    },
+    {
+      "index": 22,
+      "file": "assets/slides/slide-022.png",
+      "source": "Attachment14.pdf"
+    },
+    {
+      "index": 23,
+      "file": "assets/slides/slide-023.png",
+      "source": "Attachment44.pdf"
+    },
+    {
+      "index": 24,
+      "file": "assets/slides/slide-024.png",
+      "source": "Attachment62.pdf"
+    },
+    {
+      "index": 25,
+      "file": "assets/slides/slide-025.png",
+      "source": "Attachment9.pdf"
+    },
+    {
+      "index": 26,
+      "file": "assets/slides/slide-026.png",
+      "source": "Attachment5.pdf"
+    },
+    {
+      "index": 27,
+      "file": "assets/slides/slide-027.png",
+      "source": "Attachment50.pdf"
+    },
+    {
+      "index": 28,
+      "file": "assets/slides/slide-028.png",
+      "source": "Attachment31.pdf"
+    },
+    {
+      "index": 29,
+      "file": "assets/slides/slide-029.png",
+      "source": "Attachment51.pdf"
+    },
+    {
+      "index": 30,
+      "file": "assets/slides/slide-030.png",
+      "source": "Attachment63.pdf"
+    },
+    {
+      "index": 31,
+      "file": "assets/slides/slide-031.png",
+      "source": "Attachment36.pdf"
+    },
+    {
+      "index": 32,
+      "file": "assets/slides/slide-032.png",
+      "source": "Attachment45.pdf"
+    },
+    {
+      "index": 33,
+      "file": "assets/slides/slide-033.png",
+      "source": "Attachment32.pdf"
+    },
+    {
+      "index": 34,
+      "file": "assets/slides/slide-034.png",
+      "source": "Attachment29.pdf"
+    },
+    {
+      "index": 35,
+      "file": "assets/slides/slide-035.png",
+      "source": "Attachment30.pdf"
+    },
+    {
+      "index": 36,
+      "file": "assets/slides/slide-036.png",
+      "source": "Attachment41.pdf"
+    },
+    {
+      "index": 37,
+      "file": "assets/slides/slide-037.png",
+      "source": "Attachment16.pdf"
+    },
+    {
+      "index": 38,
+      "file": "assets/slides/slide-038.png",
+      "source": "Attachment52.pdf"
+    },
+    {
+      "index": 39,
+      "file": "assets/slides/slide-039.png",
+      "source": "Attachment65.pdf"
+    },
+    {
+      "index": 40,
+      "file": "assets/slides/slide-040.png",
+      "source": "Attachment54.pdf"
+    },
+    {
+      "index": 41,
+      "file": "assets/slides/slide-041.png",
+      "source": "Attachment17.pdf"
+    },
+    {
+      "index": 42,
+      "file": "assets/slides/slide-042.png",
+      "source": "Attachment23.pdf"
+    },
+    {
+      "index": 43,
+      "file": "assets/slides/slide-043.png",
+      "source": "Attachment20.pdf"
+    },
+    {
+      "index": 44,
+      "file": "assets/slides/slide-044.png",
+      "source": "Attachment53.pdf"
+    },
+    {
+      "index": 45,
+      "file": "assets/slides/slide-045.png",
+      "source": "Attachment48.pdf"
+    },
+    {
+      "index": 46,
+      "file": "assets/slides/slide-046.png",
+      "source": "Attachment55.pdf"
+    },
+    {
+      "index": 47,
+      "file": "assets/slides/slide-047.png",
+      "source": "Attachment49.pdf"
+    },
+    {
+      "index": 48,
+      "file": "assets/slides/slide-048.png",
+      "source": "Attachment68.pdf"
+    },
+    {
+      "index": 49,
+      "file": "assets/slides/slide-049.png",
+      "source": "Attachment11.pdf"
+    },
+    {
+      "index": 50,
+      "file": "assets/slides/slide-050.png",
+      "source": "Attachment24.pdf"
+    },
+    {
+      "index": 51,
+      "file": "assets/slides/slide-051.png",
+      "source": "Attachment13.pdf"
+    },
+    {
+      "index": 52,
+      "file": "assets/slides/slide-052.png",
+      "source": "Attachment59.pdf"
+    },
+    {
+      "index": 53,
+      "file": "assets/slides/slide-053.png",
+      "source": "Attachment37.pdf"
+    },
+    {
+      "index": 54,
+      "file": "assets/slides/slide-054.png",
+      "source": "Attachment47.pdf"
+    },
+    {
+      "index": 55,
+      "file": "assets/slides/slide-055.png",
+      "source": "Attachment43.pdf"
+    },
+    {
+      "index": 56,
+      "file": "assets/slides/slide-056.png",
+      "source": "Attachment26.pdf"
+    },
+    {
+      "index": 57,
+      "file": "assets/slides/slide-057.png",
+      "source": "Attachment34.pdf"
+    },
+    {
+      "index": 58,
+      "file": "assets/slides/slide-058.png",
+      "source": "Attachment35.pdf"
+    },
+    {
+      "index": 59,
+      "file": "assets/slides/slide-059.png",
+      "source": "Attachment57.pdf"
+    },
+    {
+      "index": 60,
+      "file": "assets/slides/slide-060.png",
+      "source": "Attachment40.pdf"
+    },
+    {
+      "index": 61,
+      "file": "assets/slides/slide-061.png",
+      "source": "Attachment21.pdf"
+    },
+    {
+      "index": 62,
+      "file": "assets/slides/slide-062.png",
+      "source": "Attachment15.pdf"
+    },
+    {
+      "index": 63,
+      "file": "assets/slides/slide-063.png",
+      "source": "Attachment4.pdf"
+    },
+    {
+      "index": 64,
+      "file": "assets/slides/slide-064.png",
+      "source": "Attachment28.pdf"
+    },
+    {
+      "index": 65,
+      "file": "assets/slides/slide-065.png",
+      "source": "Attachment38.pdf"
+    },
+    {
+      "index": 66,
+      "file": "assets/slides/slide-066.png",
+      "source": "Attachment1.pdf"
+    },
+    {
+      "index": 67,
+      "file": "assets/slides/slide-067.png",
+      "source": "Attachment66.pdf"
+    },
+    {
+      "index": 68,
+      "file": "assets/slides/slide-068.png",
+      "source": "Attachment3.pdf"
+    },
+    {
+      "index": 69,
+      "file": "assets/slides/slide-069.png",
+      "source": "Attachment56.pdf"
+    },
+    {
+      "index": 70,
+      "file": "assets/slides/slide-070.png",
+      "source": "Attachment42.pdf"
+    }
+  ],
+  "textLayer": {
+    "engine": "tesseract",
+    "itemCount": 539,
+    "files": "assets/text/slide-###.json"
+  },
+  "media": [
+    {
+      "label": "Slide 3 embedded video",
+      "file": "assets/media/video-02.mp4",
+      "poster": "assets/media/video-02-poster.png",
+      "original": "copy_C770A171-80C9-4A14-B81F-6554C86F32F4-9135.mov",
+      "slide": 3
+    },
+    {
+      "label": "Slide 5 embedded video",
+      "file": "assets/media/video-01.mp4",
+      "poster": "assets/media/video-01-poster.png",
+      "original": "ScreenRecording_11-14-2025 04-48-10_1-8830.mov",
+      "slide": 5
+    }
+  ],
+  "generatedFrom": "YKK (ACE 20251114 final pitch).key"
+}

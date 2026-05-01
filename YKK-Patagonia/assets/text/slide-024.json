@@ -1,0 +1,90 @@
+[
+  {
+    "text": "Frustrated",
+    "confidence": 96.23671,
+    "x": 168,
+    "y": 147,
+    "width": 465,
+    "height": 72
+  },
+  {
+    "text": "by",
+    "confidence": 89.156906,
+    "x": 662,
+    "y": 147,
+    "width": 107,
+    "height": 88
+  },
+  {
+    "text": "non-adaptable",
+    "confidence": 89.156906,
+    "x": 793,
+    "y": 147,
+    "width": 667,
+    "height": 88
+  },
+  {
+    "text": "shoes",
+    "confidence": 96.740677,
+    "x": 1485,
+    "y": 147,
+    "width": 269,
+    "height": 72
+  },
+  {
+    "text": "Majority",
+    "confidence": 96.368263,
+    "x": 374,
+    "y": 739,
+    "width": 365,
+    "height": 92
+  },
+  {
+    "text": "see",
+    "confidence": 93.279915,
+    "x": 760,
+    "y": 760,
+    "width": 158,
+    "height": 55
+  },
+  {
+    "text": "“multi-terrain",
+    "confidence": 90.440033,
+    "x": 944,
+    "y": 739,
+    "width": 604,
+    "height": 76
+  },
+  {
+    "text": "adaptability”",
+    "confidence": 91.101181,
+    "x": 340,
+    "y": 858,
+    "width": 576,
+    "height": 92
+  },
+  {
+    "text": "as",
+    "confidence": 96.904976,
+    "x": 942,
+    "y": 879,
+    "width": 101,
+    "height": 55
+  },
+  {
+    "text": "top",
+    "confidence": 95.9963,
+    "x": 1066,
+    "y": 867,
+    "width": 149,
+    "height": 83
+  },
+  {
+    "text": "priority.",
+    "confidence": 96.101028,
+    "x": 1241,
+    "y": 858,
+    "width": 336,
+    "height": 92
+  }
+]

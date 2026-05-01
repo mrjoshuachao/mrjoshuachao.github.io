@@ -1,0 +1,58 @@
+[
+  {
+    "text": "an",
+    "confidence": 50.107735,
+    "x": 790,
+    "y": 73,
+    "width": 32,
+    "height": 29
+  },
+  {
+    "text": "A",
+    "confidence": 79.692902,
+    "x": 568,
+    "y": 387,
+    "width": 9,
+    "height": 10
+  },
+  {
+    "text": "f",
+    "confidence": 66.048332,
+    "x": 848,
+    "y": 381,
+    "width": 9,
+    "height": 19
+  },
+  {
+    "text": "f",
+    "confidence": 83.108017,
+    "x": 550,
+    "y": 525,
+    "width": 8,
+    "height": 15
+  },
+  {
+    "text": "H",
+    "confidence": 40.887562,
+    "x": 622,
+    "y": 533,
+    "width": 9,
+    "height": 13
+  },
+  {
+    "text": "a",
+    "confidence": 52.295654,
+    "x": 938,
+    "y": 534,
+    "width": 9,
+    "height": 10
+  },
+  {
+    "text": "Pas",
+    "confidence": 49.353901,
+    "x": 1537,
+    "y": 644,
+    "width": 28,
+    "height": 12
+  }
+]
