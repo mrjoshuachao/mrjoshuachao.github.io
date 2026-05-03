@@ -1248,6 +1248,198 @@
     .splash .tip{ font-size:11px !important; margin-top:20px !important; line-height:1.8 !important; }
     .splash .tip kbd{ font-size:10px !important; padding:2px 6px !important; }
   }
+
+
+  /* ================================================================
+                  手機排版修正（依使用者實機截圖）
+     ================================================================ */
+  @media (max-width: 760px){
+
+    /* (1) 全部投影片：底部留白，避免 pager 蓋住內容 */
+    .slide-inner{ padding:18px 18px 78px !important; }
+
+    /* (2) 開場（s-hook）：恢復 上 / 中 / 下 三段佈局，中段垂直置中 */
+    .s-hook .slide-inner{
+      grid-template-rows: auto 1fr auto !important;
+      align-items: stretch !important;
+      justify-items: stretch !important;
+      padding: 22px 22px 78px !important;
+      gap: 12px !important;
+    }
+    .s-hook .top,
+    .s-hook .bottom{ width:100% !important; }
+    .s-hook .center{
+      display:flex !important;
+      flex-direction:column !important;
+      justify-content:center !important;
+      align-self:stretch !important;
+    }
+
+    /* (3) 殺句頁（s-quote）：垂直 + 水平置中 */
+    .s-quote .slide-inner{
+      grid-template-rows: 1fr !important;
+      align-items: center !important;
+      justify-items: center !important;
+      text-align: center !important;
+      padding: 30px 20px 78px !important;
+    }
+
+    /* (4) 願景頁（s-vision）：標籤在上、大標置中 */
+    .s-vision .slide-inner{
+      grid-template-rows: auto 1fr !important;
+      align-items: center !important;
+      justify-items: center !important;
+      text-align: center !important;
+      padding: 24px 20px 78px !important;
+      gap: 18px !important;
+    }
+    .s-vision .slide-inner > div{ text-align:center !important; width:100% !important; }
+
+    /* (5) 結尾頁（s-close）：中間置中、底部 © 在最下 */
+    .s-close .slide-inner{
+      grid-template-rows: 1fr auto !important;
+      align-items: center !important;
+      justify-items: center !important;
+      text-align: center !important;
+      padding: 24px 20px 56px !important;
+    }
+    .s-close .center{ width:100%; }
+
+    /* (6) FPV 時間軸：說明文字必須與時間 h4 對齊在右欄 */
+    .s-fpv .step{
+      display: grid !important;
+      grid-template-columns: 50px 1fr !important;
+      grid-template-rows: auto auto !important;
+      column-gap: 14px !important;
+      row-gap: 4px !important;
+      padding: 4px 0 !important;
+      text-align: left !important;
+      align-items: start !important;
+    }
+    .s-fpv .step .dot{
+      grid-row: 1 !important;
+      grid-column: 1 !important;
+      margin: 0 !important;
+      align-self: center !important;
+    }
+    .s-fpv .step h4{
+      grid-row: 1 !important;
+      grid-column: 2 !important;
+      align-self: center !important;
+      text-align: left !important;
+    }
+    .s-fpv .step p{
+      grid-row: 2 !important;
+      grid-column: 2 !important;   /* 對齊到 h4 下方，不要塞回左邊小欄 */
+      text-align: left !important;
+      margin: 0 !important;
+      width: 100%;
+    }
+
+    /* (7) 目標族群左圖：強化遮罩，白色標題清晰可見 */
+    .s-target .left-photo::after{
+      inset: 0 !important;
+      height: 100% !important;
+      background: linear-gradient(135deg, rgba(127,0,25,.55) 0%, rgba(0,0,0,.5) 100%) !important;
+    }
+    .s-target .left-photo .caption{
+      text-shadow: 0 2px 12px rgba(0,0,0,.55);
+    }
+    .s-target .left-photo .caption .lab{
+      display: inline-block;
+      background: rgba(0,0,0,.3);
+      padding: 3px 10px;
+      border-radius: 30px;
+      margin-bottom: 8px !important;
+    }
+
+    /* (8) 感知圖 / 風險：視窗超過時內容仍可滾動到 pager 上方 */
+    .s-pmap .slide-inner,
+    .s-risk .slide-inner{
+      padding: 22px 18px 78px !important;
+      align-items: start !important;
+    }
+  }
+
+
+  /* === 使用 dvh 確保 iOS Safari 不會因為網址列高度而切到內容 === */
+  @supports (height: 100dvh){
+    @media (max-width: 760px){
+      .deck, .slide{ height: 100dvh !important; }
+      .splash{ height: 100dvh !important; }
+    }
+  }
+
+
+  /* === 手機 / 觸控裝置：每頁底部的上下頁按鈕 === */
+  .slide-nav{ display:none; }
+
+  @media (max-width: 760px){
+    .slide-nav{
+      display:flex;
+      gap:10px;
+      width:100% !important;
+      align-self:end;
+      justify-self:stretch !important;
+      padding-top:24px;
+      margin-top:10px;
+      border-top:1px solid var(--border);
+    }
+    .snav-btn{
+      flex:1;
+      padding:14px 14px;
+      font-family:inherit;
+      font-size:14px;
+      letter-spacing:3px;
+      border:1px solid var(--maroon);
+      border-radius:4px;
+      background:var(--maroon);
+      color:#fff;
+      cursor:pointer;
+      transition:opacity .2s, transform .15s, background .2s;
+      -webkit-tap-highlight-color:transparent;
+      font-weight:500;
+    }
+    .snav-btn.snav-prev{
+      background:#fff;
+      color:var(--maroon);
+    }
+    .snav-btn:disabled{
+      opacity:.22;
+      cursor:not-allowed;
+      pointer-events:none;
+    }
+    .snav-btn:active{ transform:scale(.97); }
+
+    /* 暗底投影片（hook / quote / vision / close）→ 反白配色 */
+    .s-hook .slide-nav,
+    .s-quote .slide-nav,
+    .s-vision .slide-nav,
+    .s-close .slide-nav{
+      border-top-color:rgba(255,255,255,.28);
+    }
+    .s-hook .snav-btn.snav-prev,
+    .s-quote .snav-btn.snav-prev,
+    .s-vision .snav-btn.snav-prev,
+    .s-close .snav-btn.snav-prev{
+      background:transparent;
+      color:#fff;
+      border-color:rgba(255,255,255,.55);
+    }
+    .s-hook .snav-btn.snav-next,
+    .s-quote .snav-btn.snav-next,
+    .s-vision .snav-btn.snav-next,
+    .s-close .snav-btn.snav-next{
+      background:#fff;
+      color:var(--maroon);
+      border-color:#fff;
+    }
+
+    /* nav 按鈕的進場動畫，避免被裁掉 */
+    .slide.active .slide-nav{
+      animation: revealUp .8s cubic-bezier(.16,.84,.32,1) .65s both !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1872,6 +2064,9 @@
     if(n === idx) return;
     slides[idx].classList.remove('active');
     slides[n].classList.add('active');
+    // 切換投影片時，新投影片捲回頂部（避免承接上一張的滾動位置）
+    const newInner = slides[n].querySelector('.slide-inner');
+    if(newInner) newInner.scrollTop = 0;
     idx = n;
     update();
   }
@@ -1970,6 +2165,45 @@
   // 視窗尺寸變化時重新計算（旋轉手機/平板）
   window.addEventListener('resize', update);
   window.addEventListener('orientationchange', update);
+
+  // 手機底部「上一頁 / 下一頁」按鈕：自動注入每張投影片
+  slides.forEach((slide, i)=>{
+    const inner = slide.querySelector('.slide-inner');
+    if(!inner) return;
+    const nav = document.createElement('div');
+    nav.className = 'slide-nav';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'snav-btn snav-prev';
+    prevBtn.type = 'button';
+    prevBtn.textContent = '← 上一頁';
+    prevBtn.disabled = (i === 0);
+    prevBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      prev();
+    });
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'snav-btn snav-next';
+    nextBtn.type = 'button';
+    if(i === slides.length - 1){
+      nextBtn.textContent = '回到首頁 ↻';
+    } else {
+      nextBtn.textContent = '下一頁 →';
+    }
+    nextBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if(i === slides.length - 1){
+        show(0);
+      } else {
+        next();
+      }
+    });
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(nextBtn);
+    inner.appendChild(nav);
+  });
 
   update();
 })();
