@@ -100,6 +100,11 @@
   .splash .start-btn small{display:block;font-size:11px;opacity:.85;font-family:'Noto Sans JP',sans-serif;letter-spacing:2px;margin-top:6px;}
   .splash .tip{margin-top:30px;font-size:12px;color:var(--text-light);letter-spacing:1px;line-height:1.9;}
   .splash .tip kbd{display:inline-block;border:1px solid var(--border);background:#fff;padding:2px 8px;border-radius:3px;font-size:11px;color:var(--maroon);margin:0 2px;font-family:inherit;}
+  .splash .mobile-hint{display:none;}
+  @media (hover:none) and (pointer:coarse){
+    .splash .desktop-hint{display:none;}
+    .splash .mobile-hint{display:inline;}
+  }
 
   /* 共用標題 */
   h2.heading{font-family:'Noto Serif TC',serif;font-size:clamp(34px,4.8vw,60px);color:var(--maroon);font-weight:500;line-height:1.25;margin-bottom:14px;}
@@ -940,6 +945,309 @@
     from{ transform:translateY(0); }
     to{ transform:translateY(-6px); }
   }
+
+
+  /* ================================================================
+                    響應式：平板 / 手機 / 直橫向
+     ================================================================ */
+
+  /* === 平板與小視窗（≤ 1100px） === */
+  @media (max-width: 1100px){
+    .slide-inner{ padding: clamp(20px,3vw,36px) clamp(24px,3.5vw,48px) !important; }
+
+    /* 內容若超過視窗高度，允許在投影片內滾動 */
+    .slide-inner{ overflow-y:auto !important; max-height:100vh !important; }
+    .slide-inner::-webkit-scrollbar{ width:6px; }
+    .slide-inner::-webkit-scrollbar-thumb{ background:rgba(127,0,25,.25); border-radius:6px; }
+
+    /* 關鍵 grid 全部變單欄 */
+    .s-challenge .slide-inner,
+    .s-philosophy .slide-inner,
+    .s-detail .slide-inner,
+    .s-voice .slide-inner,
+    .s-pmap .slide-inner,
+    .s-risk .slide-inner{
+      grid-template-columns:1fr !important;
+      gap:24px !important;
+      align-items:start !important;
+    }
+    .s-target.three .slide-inner{
+      grid-template-columns:1fr !important;
+      gap:20px !important;
+    }
+    /* 圖片高度限縮 */
+    .s-philosophy .img,
+    .s-detail .img,
+    .s-voice .img,
+    .s-target .left-photo,
+    .s-challenge .right-photo{ min-height:30vh !important; max-height:38vh; }
+
+    /* 4 欄 KPI 在平板變 2 欄 */
+    .s-kpi .grid{ grid-template-columns:repeat(2,1fr) !important; }
+
+    /* MVP / 商機 / 痛點 / Roadmap 三欄改兩欄 */
+    .s-opportunity .grid,
+    .s-pains .grid,
+    .s-mvp .grid,
+    .s-roadmap .grid,
+    .s-three .grid{ grid-template-columns:repeat(2,1fr) !important; }
+  }
+
+
+  /* === 手機（≤ 760px，一般直立） === */
+  @media (max-width: 760px){
+    /* 全部投影片：單欄、頂部對齊、可滾動 */
+    .slide-inner{
+      padding:18px 18px !important;
+      gap:14px !important;
+      grid-template-columns:1fr !important;
+      grid-template-rows:auto !important;
+      align-items:start !important;
+      justify-items:stretch !important;
+      overflow-y:auto !important;
+    }
+
+    /* 字級壓縮（手機老闆也看得清，但不爆版） */
+    .label{ font-size:11px !important; letter-spacing:3px !important; margin-bottom:10px !important; }
+    .chip{ font-size:11px !important; padding:5px 12px !important; margin-bottom:14px !important; }
+    .lead{ font-size:15px !important; line-height:1.75 !important; }
+    .punch{ font-size:17px !important; padding-left:14px !important; }
+    h2.heading{ font-size:26px !important; line-height:1.3 !important; }
+
+    .pager{ font-size:11px !important; padding:5px 10px !important; right:14px !important; bottom:14px !important; }
+    .hint{ display:none !important; }
+    .progress{ height:2px !important; }
+
+    /* 開場 */
+    .s-hook .slide-inner{ padding:24px 22px !important; }
+    .s-hook .top svg{ height:24px !important; }
+    .s-hook .top .topline{ font-size:11px !important; }
+    .s-hook h1{ font-size:32px !important; line-height:1.3 !important; }
+    .s-hook .sub{ font-size:13px !important; line-height:1.7 !important; margin-top:22px !important; }
+    .s-hook .bottom{ font-size:10px !important; }
+
+    /* 業界挑戰 */
+    .s-challenge h2{ font-size:26px !important; line-height:1.3 !important; margin-bottom:14px !important; }
+    .s-challenge .keywords{ gap:8px !important; margin:14px 0 18px !important; }
+    .s-challenge .kw{ font-size:13px !important; padding:8px 14px !important; }
+    .s-challenge .right-stack{ grid-template-rows:auto auto !important; gap:12px !important; }
+    .s-challenge .right-photo{ min-height:22vh !important; max-height:24vh !important; }
+    .s-challenge .stats-row{ grid-template-columns:1fr !important; gap:10px !important; }
+    .s-challenge .stat-card{ padding:18px !important; }
+    .s-challenge .stat-card .big{ font-size:36px !important; }
+    .s-challenge .stat-card h4{ font-size:15px !important; }
+    .s-challenge .stat-card p{ font-size:13px !important; }
+
+    /* 三系統 */
+    .s-fragment .head h2{ font-size:24px !important; line-height:1.3 !important; }
+    .s-fragment .head p{ font-size:14px !important; }
+    .s-fragment .triple{ display:grid !important; grid-template-columns:1fr !important; gap:12px !important; }
+    .s-fragment .gap{ display:none !important; }
+    .s-fragment .col{ padding:18px 16px !important; }
+    .s-fragment .col .pic{ height:90px !important; margin-bottom:12px !important; }
+    .s-fragment .col .ic{ width:42px !important; height:42px !important; font-size:18px !important; margin-bottom:10px !important; }
+    .s-fragment .col h4{ font-size:18px !important; }
+    .s-fragment .col p{ font-size:13px !important; }
+
+    /* 商業機會 */
+    .s-opportunity .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-opportunity .grid{ grid-template-columns:1fr !important; gap:12px !important; }
+    .s-opportunity .biz{ padding:20px !important; }
+    .s-opportunity .biz .pic{ height:100px !important; }
+    .s-opportunity .biz .num{ font-size:36px !important; }
+    .s-opportunity .biz h3{ font-size:20px !important; }
+    .s-opportunity .biz p{ font-size:13px !important; }
+    .s-opportunity .closing{ font-size:17px !important; }
+
+    /* 殺句 */
+    .s-quote h1{ font-size:28px !important; line-height:1.45 !important; padding:0 8px !important; }
+    .s-quote .quote-mark{ font-size:80px !important; margin-bottom:16px !important; }
+    .s-quote .attribution{ font-size:11px !important; margin-top:18px !important; }
+
+    /* 目標族群（左圖 + 文 + 表，全部疊一起） */
+    .s-target.three .slide-inner{ grid-template-columns:1fr !important; gap:14px !important; }
+    .s-target .left-photo{ min-height:24vh !important; max-height:26vh !important; }
+    .s-target .left-photo .caption h4{ font-size:18px !important; }
+    .s-target .text h2{ font-size:24px !important; line-height:1.3 !important; }
+    .s-target .text p{ font-size:14px !important; }
+    .s-target .persona{ padding:18px !important; }
+    .s-target .persona .row{ grid-template-columns:1fr !important; gap:4px !important; padding:10px 0 !important; }
+    .s-target .persona .k{ font-size:11px !important; }
+    .s-target .persona .v{ font-size:14px !important; }
+    .s-target .persona .v strong{ font-size:16px !important; }
+    .s-target .persona .v small{ font-size:12px !important; }
+
+    /* 三大痛點 */
+    .s-pains .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-pains .head p{ font-size:14px !important; }
+    .s-pains .grid{ grid-template-columns:1fr !important; gap:12px !important; }
+    .s-pains .pain .pic{ height:120px !important; }
+    .s-pains .pain .pad{ padding:18px !important; gap:8px !important; }
+    .s-pains .pain .ix{ font-size:36px !important; }
+    .s-pains .pain h3{ font-size:18px !important; }
+    .s-pains .pain p{ font-size:13px !important; }
+
+    /* FPV 時間軸 → 直式列表 */
+    .s-fpv .head h2{ font-size:24px !important; line-height:1.3 !important; }
+    .s-fpv .head p{ font-size:13px !important; }
+    .s-fpv .banner{ height:90px !important; }
+    .s-fpv .banner .tag{ font-size:13px !important; left:16px !important; }
+    .s-fpv .banner .tag small{ font-size:9px !important; letter-spacing:2px !important; }
+    .s-fpv .timeline{
+      grid-template-columns:1fr !important; gap:10px !important;
+    }
+    .s-fpv .timeline::before{ display:none !important; }
+    .s-fpv .step{
+      display:grid !important;
+      grid-template-columns:50px 1fr !important;
+      gap:14px !important; padding:0 !important;
+      text-align:left !important; align-items:start !important;
+    }
+    .s-fpv .step .dot{ width:44px !important; height:44px !important; font-size:13px !important; margin:0 !important; }
+    .s-fpv .step h4{ text-align:left !important; font-size:14px !important; margin-bottom:2px !important; }
+    .s-fpv .step h4 small{ font-size:10px !important; }
+    .s-fpv .step p{ font-size:12.5px !important; line-height:1.6 !important; }
+    .s-fpv .insight{ font-size:15px !important; padding:14px 18px !important; }
+
+    /* 願景 */
+    .s-vision h1{ font-size:24px !important; line-height:1.55 !important; padding:0 8px !important; }
+
+    /* MVP */
+    .s-mvp .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-mvp .head p{ font-size:14px !important; }
+    .s-mvp .grid{ grid-template-columns:1fr !important; gap:12px !important; }
+    .s-mvp .unit .pic{ height:140px !important; }
+    .s-mvp .unit .body{ padding:18px !important; }
+    .s-mvp .unit .qty{ font-size:36px !important; }
+    .s-mvp .unit h3{ font-size:18px !important; }
+    .s-mvp .unit p{ font-size:13px !important; }
+
+    /* 對應表 */
+    .s-feature .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-feature.with-photo .table-row{ display:flex !important; flex-direction:column !important; gap:14px !important; }
+    .s-feature .side-photo{ min-height:14vh !important; max-height:18vh !important; }
+    .s-feature .side-photo .caption{ font-size:12px !important; }
+    .s-feature table{ font-size:12px !important; }
+    .s-feature thead th{ padding:10px 8px !important; font-size:.95em !important; }
+    .s-feature tbody td{ padding:10px 8px !important; }
+    .s-feature tbody td:first-child{ font-size:1em !important; }
+    .s-feature tbody td:nth-child(3){ font-size:.85em !important; }
+    .s-feature tbody td:first-child .ja{ font-size:.65em !important; }
+
+    /* 差異化 */
+    .s-diff .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-diff .banner{ height:80px !important; }
+    .s-diff .banner .tag{ font-size:12px !important; left:16px !important; }
+    .s-diff .compare{ grid-template-columns:1fr !important; gap:14px !important; }
+    .s-diff .col{ padding:18px !important; }
+    .s-diff .col h3{ font-size:18px !important; margin-bottom:10px !important; }
+    .s-diff .col.market .item{ font-size:13.5px !important; padding:12px 0 !important; }
+    .s-diff .col.us .item{ font-size:14px !important; padding:12px 0 !important; }
+
+    /* 感知圖 */
+    .s-pmap .slide-inner{ grid-template-columns:1fr !important; gap:16px !important; }
+    .s-pmap h2{ font-size:24px !important; line-height:1.3 !important; }
+    .s-pmap .lead{ font-size:13.5px !important; }
+    .s-pmap .img-wrap{ padding:10px !important; }
+    .s-pmap .img-wrap img{ max-height:38vh !important; }
+    .s-pmap .img-wrap .cap{ font-size:9px !important; padding:3px 8px !important; }
+
+    /* Roadmap */
+    .s-roadmap .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-roadmap .grid{ grid-template-columns:1fr !important; gap:12px !important; }
+    .s-roadmap .phase .pic{ height:120px !important; }
+    .s-roadmap .phase .pad{ padding:18px !important; gap:8px !important; }
+    .s-roadmap .phase .stage{ font-size:11px !important; letter-spacing:3px !important; }
+    .s-roadmap .phase h3{ font-size:18px !important; }
+    .s-roadmap .phase ul li{ font-size:13px !important; padding:7px 0 !important; }
+    .s-roadmap .phase .goal{ font-size:12px !important; padding-top:10px !important; }
+
+    /* KPI */
+    .s-kpi .head h2{ font-size:26px !important; line-height:1.3 !important; }
+    .s-kpi .banner{ height:80px !important; }
+    .s-kpi .banner .tag{ font-size:12px !important; left:16px !important; }
+    .s-kpi .grid{ grid-template-columns:repeat(2,1fr) !important; gap:10px !important; }
+    .s-kpi .kpi{ padding:18px 16px !important; gap:6px !important; }
+    .s-kpi .kpi .ic{ font-size:24px !important; }
+    .s-kpi .kpi h4{ font-size:16px !important; }
+    .s-kpi .kpi p{ font-size:12px !important; line-height:1.65 !important; }
+    .s-kpi .kpi .target{ font-size:11px !important; padding-top:8px !important; }
+    .s-kpi .closing{ font-size:14px !important; padding:14px 18px !important; }
+
+    /* 風險 */
+    .s-risk .slide-inner{ grid-template-columns:1fr !important; gap:16px !important; }
+    .s-risk h2{ font-size:24px !important; line-height:1.3 !important; }
+    .s-risk .lead{ font-size:13.5px !important; }
+    .s-risk .img-wrap{ padding:10px !important; max-height:none !important; }
+    .s-risk .img-wrap img{ max-height:46vh !important; }
+
+    /* 結尾 */
+    .s-close .center .en{ font-size:11px !important; }
+    .s-close .center h1{ font-size:28px !important; line-height:1.4 !important; padding:0 8px !important; }
+    .s-close .center .lead{ font-size:13.5px !important; }
+    .s-close .bottom{ font-size:10px !important; }
+
+    /* 卡片網格的 stagger 動畫在手機上同時觸發，避免逐張等太久 */
+    .slide.active .grid > *,
+    .slide.active .triple > *,
+    .slide.active .s-fpv .step,
+    .slide.active .s-feature tbody tr,
+    .slide.active .s-target .persona .row,
+    .slide.active .s-diff .col .item{
+      animation-delay:.2s !important;
+    }
+  }
+
+
+  /* === 小手機（≤ 380px） === */
+  @media (max-width: 380px){
+    .slide-inner{ padding:14px 14px !important; }
+    .s-hook h1{ font-size:26px !important; }
+    h2.heading{ font-size:22px !important; }
+  }
+
+
+  /* === 橫式手機（高度很矮） === */
+  @media (max-height: 480px) and (orientation: landscape){
+    .slide-inner{
+      padding:14px 22px !important;
+      gap:12px !important;
+      overflow-y:auto !important;
+    }
+    .s-hook h1{ font-size:32px !important; line-height:1.25 !important; }
+    .s-hook .sub{ font-size:12px !important; margin-top:14px !important; }
+    h2.heading{ font-size:22px !important; }
+    .s-quote h1{ font-size:24px !important; }
+    .s-vision h1{ font-size:22px !important; }
+    .s-close .center h1{ font-size:24px !important; }
+    .lead{ font-size:13px !important; }
+    .punch{ font-size:14px !important; }
+
+    /* 大圖區塊壓縮 */
+    .s-philosophy .img,
+    .s-detail .img,
+    .s-voice .img,
+    .s-target .left-photo,
+    .s-challenge .right-photo{ min-height:30vh !important; max-height:50vh !important; }
+
+    /* 啟動畫面也壓縮 */
+    .splash svg{ height:32px !important; margin-bottom:18px !important; }
+    .splash h1{ font-size:22px !important; }
+    .splash p{ font-size:12px !important; margin-bottom:18px !important; }
+    .splash .tip{ font-size:10px !important; margin-top:16px !important; }
+  }
+
+
+  /* === 啟動畫面在小螢幕也要好看 === */
+  @media (max-width: 760px){
+    .splash{ padding:24px !important; }
+    .splash svg{ height:36px !important; margin-bottom:24px !important; }
+    .splash h1{ font-size:22px !important; }
+    .splash p{ font-size:12px !important; letter-spacing:1.5px !important; margin-bottom:24px !important; }
+    .splash .start-btn{ padding:14px 36px !important; font-size:14px !important; letter-spacing:3px !important; }
+    .splash .tip{ font-size:11px !important; margin-top:20px !important; line-height:1.8 !important; }
+    .splash .tip kbd{ font-size:10px !important; padding:2px 6px !important; }
+  }
 </style>
 </head>
 <body>
@@ -958,8 +1266,9 @@
     開始播放<small>プレゼンを開始</small>
   </button>
   <div class="tip">
-    <kbd>→</kbd> 下一頁　<kbd>←</kbd> 上一頁　<kbd>右鍵</kbd> 上一頁　<kbd>Esc</kbd> 退出全螢幕<br>
-    <span style="opacity:.7">點擊開始後將自動進入全螢幕</span>
+    <span class="desktop-hint"><kbd>→</kbd> 下一頁　<kbd>←</kbd> 上一頁　<kbd>右鍵</kbd> 上一頁　<kbd>Esc</kbd> 退出全螢幕<br></span>
+    <span class="mobile-hint">手機 ・ 平板：左右滑動切換投影片<br></span>
+    <span style="opacity:.7">點擊開始後將自動進入全螢幕（部分裝置不支援）</span>
   </div>
 </div>
 
@@ -1611,8 +1920,37 @@
     }
   });
 
+  // 觸控：水平滑動切換、垂直滑動則交給內容捲動
+  let touchStartX = 0, touchStartY = 0, touchStartT = 0, touchMoved = false;
+  deck.addEventListener('touchstart', (e)=>{
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchStartT = Date.now();
+    touchMoved = false;
+  }, {passive:true});
+  deck.addEventListener('touchmove', (e)=>{
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - touchStartX);
+    const dy = Math.abs(t.clientY - touchStartY);
+    if(dx > 6 || dy > 6) touchMoved = true;
+  }, {passive:true});
+  deck.addEventListener('touchend', (e)=>{
+    if(!started) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    const dt = Date.now() - touchStartT;
+    // 水平滑動主導，且夠快、夠長：判定為翻頁
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 800){
+      if(dx < 0) next(); else prev();
+    }
+  }, {passive:true});
+
+  // 點擊：在桌機是「下一頁」，在手機要避免捲動時誤觸
   deck.addEventListener('click', (e)=>{
     if(!started) return;
+    if(touchMoved){ touchMoved = false; return; }
     next();
   });
   deck.addEventListener('contextmenu', (e)=>{
@@ -1628,6 +1966,10 @@
     if(e.deltaY > 0) next(); else prev();
     setTimeout(()=>{ wheelLock = false; }, 600);
   }, {passive:true});
+
+  // 視窗尺寸變化時重新計算（旋轉手機/平板）
+  window.addEventListener('resize', update);
+  window.addEventListener('orientationchange', update);
 
   update();
 })();
