@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>みんなのビオトープ｜日本の学校ビオトープ・ネットワーク</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#2f5d2a;
+    --green-700:#4a7d3a;
+    --green-600:#5b8b3e;
+    --green-500:#7aa84a;
+    --green-100:#e9f1dc;
+    --green-50:#f3f7ea;
+    --cream:#fbf8ef;
+    --paper:#fffdf6;
+    --ink:#2c2a26;
+    --ink-soft:#5b5a52;
+    --line:#e6e2d3;
+    --accent:#d8a13a;
+    --shadow-sm:0 2px 6px rgba(60,70,40,.08);
+    --shadow-md:0 8px 24px rgba(60,70,40,.10);
+    --shadow-lg:0 16px 36px rgba(60,70,40,.18);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Zen Maru Gothic","Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.7;
+    font-feature-settings:"palt";
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;transition:color .25s var(--ease)}
+  img{display:block;max-width:100%}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:saturate(150%) blur(6px);
+  }
+  .topbar-inner{
+    max-width:1320px;margin:0 auto;
+    display:flex;align-items:center;gap:24px;
+    padding:12px 24px;
+  }
+  .brand{display:flex;align-items:center;flex:0 0 auto;transition:transform .3s var(--ease)}
+  .brand:hover{transform:translateY(-1px)}
+  .brand img{height:54px;width:auto;transition:filter .3s var(--ease)}
+  .brand:hover img{filter:drop-shadow(0 4px 8px rgba(74,125,58,.25))}
+
+  nav.main-nav{display:flex;gap:22px;margin-left:auto;align-items:center}
+  nav.main-nav a{
+    position:relative;
+    font-size:14px;font-weight:500;color:var(--ink);
+    padding:6px 2px;
+  }
+  nav.main-nav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:-2px;
+    height:2px;background:var(--green-500);border-radius:2px;
+    transform:scaleX(0);transform-origin:center;
+    transition:transform .35s var(--ease);
+  }
+  nav.main-nav a:hover{color:var(--green-700)}
+  nav.main-nav a:hover::after,nav.main-nav a.active::after{transform:scaleX(1)}
+  nav.main-nav a.active{color:var(--green-700);font-weight:700}
+
+  .contact-btn{
+    background:var(--green-700);color:#fff !important;
+    padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;
+    display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 4px 0 #355a25;transition:.2s var(--ease);
+  }
+  .contact-btn:hover{transform:translateY(2px);box-shadow:0 2px 0 #355a25}
+  .contact-btn:active{transform:translateY(4px);box-shadow:none}
+
+  /* MS&AD sponsor badge */
+  .sponsor{
+    position:fixed;top:14px;right:18px;z-index:100;
+    display:flex;align-items:center;gap:10px;
+    background:#ffffffee;
+    padding:6px 14px 6px 10px;border-radius:999px;
+    border:1px solid #d8e4d2;
+    box-shadow:var(--shadow-md);
+    font-size:11px;color:var(--ink-soft);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+    backdrop-filter:blur(6px);
+  }
+  .sponsor:hover{transform:translateY(-2px) scale(1.03);box-shadow:var(--shadow-lg)}
+  .sponsor .label{font-size:10px;letter-spacing:.05em;line-height:1}
+  .sponsor .logo{
+    display:inline-flex;align-items:center;gap:4px;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:900;font-size:14px;letter-spacing:.02em;
+    color:#003a70;
+  }
+  .sponsor .logo .amp{color:#e60012;font-weight:900}
+  .sponsor .swoosh{
+    width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(135deg,#003a70 0%,#0066b3 100%);
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:900;font-size:10px;
+    box-shadow:inset 0 -2px 4px rgba(0,0,0,.2);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(1200px 400px at 80% -20%,#dbe8c0 0%,transparent 60%),
+      linear-gradient(180deg,#f3f7ea 0%,#fbf8ef 100%);
+    padding:48px 0 32px;
+  }
+  .hero-inner{
+    max-width:1320px;margin:0 auto;padding:0 24px;
+    display:grid;grid-template-columns:1.05fr 1.5fr;gap:36px;align-items:center;
+  }
+  .hero-copy h1{
+    font-family:"Zen Maru Gothic",serif;
+    font-size:54px;line-height:1.25;margin:14px 0 18px;
+    color:var(--green-900);letter-spacing:.02em;font-weight:900;
+  }
+  .hero-copy h1 .accent{color:var(--green-700);position:relative;display:inline-block}
+  .hero-copy h1 .accent::after{
+    content:"";position:absolute;left:0;right:0;bottom:6px;height:8px;
+    background:#e9d77a;opacity:.55;z-index:-1;border-radius:4px;
+  }
+  .hero-copy .lede{font-size:15px;color:var(--ink-soft);max-width:440px;margin-bottom:28px}
+  .pill-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--green-100);
+    color:var(--green-700);font-size:12px;font-weight:700;
+    padding:6px 14px;border-radius:999px;
+    transition:transform .3s var(--ease);
+  }
+  .pill-tag:hover{transform:translateY(-1px)}
+  .pill-tag::before{content:"🌿"}
+  .hero-cta{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#fff;border:2px solid var(--green-700);color:var(--green-700);
+    padding:12px 28px;border-radius:999px;font-weight:700;font-size:14px;
+    transition:all .3s var(--ease);position:relative;overflow:hidden;
+  }
+  .hero-cta::after{content:"→";transition:transform .3s var(--ease)}
+  .hero-cta:hover{background:var(--green-700);color:#fff;box-shadow:0 6px 18px rgba(74,125,58,.3)}
+  .hero-cta:hover::after{transform:translateX(6px)}
+
+  .hero-visual{
+    position:relative;border-radius:18px;overflow:hidden;
+    aspect-ratio:16/7;box-shadow:var(--shadow-md);
+    transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+  }
+  .hero-visual:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .hero-visual img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform 1.2s var(--ease);
+  }
+  .hero-visual:hover img{transform:scale(1.04)}
+
+  .deco-dragon{position:absolute;right:32%;top:30px;font-size:28px;animation:float 4s ease-in-out infinite;pointer-events:none;opacity:.7}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+
+  /* ---------- main grid ---------- */
+  main{max-width:1320px;margin:48px auto;padding:0 24px}
+  .grid-2{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+
+  section.schools h2,aside.news h2{
+    display:flex;align-items:center;gap:12px;
+    font-size:22px;font-weight:900;color:var(--green-900);
+    margin:0 0 18px;
+  }
+  section.schools h2::before{
+    content:"";width:6px;height:24px;background:var(--green-500);border-radius:3px;
+  }
+  .schools-h-wrap{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:12px}
+
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{
+    background:#fff;border:1px solid var(--line);color:var(--ink-soft);
+    padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;
+    transition:all .25s var(--ease);
+    font-family:inherit;
+  }
+  .tab:hover{border-color:var(--green-500);color:var(--green-700);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  .tab.active{background:var(--green-700);color:#fff;border-color:var(--green-700);box-shadow:0 4px 10px rgba(74,125,58,.3)}
+
+  .schools-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .school-card{
+    background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:var(--shadow-sm);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+    cursor:pointer;display:flex;flex-direction:column;
+    animation:fadeUp .5s var(--ease) backwards;
+  }
+  .school-card:nth-child(1){animation-delay:.05s}
+  .school-card:nth-child(2){animation-delay:.10s}
+  .school-card:nth-child(3){animation-delay:.15s}
+  .school-card:nth-child(4){animation-delay:.20s}
+  .school-card:nth-child(5){animation-delay:.25s}
+  .school-card:nth-child(6){animation-delay:.30s}
+  .school-card:nth-child(7){animation-delay:.35s}
+  .school-card:nth-child(8){animation-delay:.40s}
+  .school-card:nth-child(9){animation-delay:.45s}
+  .school-card:nth-child(10){animation-delay:.50s}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .school-card:hover{transform:translateY(-6px) rotate(-.3deg);box-shadow:var(--shadow-lg)}
+  .school-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#eee}
+  .school-thumb img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .8s var(--ease), filter .4s var(--ease);
+  }
+  .school-card:hover .school-thumb img{transform:scale(1.08);filter:saturate(1.1)}
+  .school-thumb::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.15));
+    opacity:0;transition:opacity .35s var(--ease);
+  }
+  .school-card:hover .school-thumb::after{opacity:1}
+
+  .school-info{padding:12px 14px 14px}
+  .school-region{font-size:10px;color:var(--green-700);font-weight:700;letter-spacing:.1em}
+  .school-name{
+    font-size:13px;font-weight:700;line-height:1.4;margin:4px 0 0;color:var(--ink);
+    transition:color .25s var(--ease);
+  }
+  .school-card:hover .school-name{color:var(--green-700)}
+
+  /* ---------- news sidebar ---------- */
+  aside.news h2{font-size:20px}
+  aside.news h2::before{
+    content:"";width:6px;height:22px;background:var(--accent);border-radius:3px;
+  }
+  .news-list{background:#fff;border-radius:14px;padding:8px 18px;box-shadow:var(--shadow-sm)}
+  .news-item{
+    padding:14px 0;border-bottom:1px dashed var(--line);
+    display:flex;flex-direction:column;gap:4px;cursor:pointer;
+    transition:transform .25s var(--ease);
+  }
+  .news-item:hover{transform:translateX(3px)}
+  .news-item:last-child{border-bottom:none}
+  .news-meta{display:flex;align-items:center;gap:10px;font-size:11px}
+  .news-date{color:var(--ink-soft)}
+  .news-cat{
+    display:inline-block;font-size:10px;font-weight:700;
+    padding:2px 8px;border-radius:4px;letter-spacing:.05em;
+  }
+  .cat-event{background:#fde9c3;color:#a36a14}
+  .cat-info{background:#dbeac3;color:#4a7d3a}
+  .cat-report{background:#cfe1ee;color:#356a8a}
+  .news-title{
+    font-size:13px;line-height:1.55;color:var(--ink);font-weight:500;
+    transition:color .25s var(--ease);
+  }
+  .news-item:hover .news-title{color:var(--green-700)}
+  .news-more{
+    display:inline-flex;align-items:center;gap:6px;margin:14px 0 0;
+    font-size:12px;color:var(--green-700);font-weight:700;
+  }
+  .news-more::after{content:"›";font-size:18px;transition:transform .25s var(--ease)}
+  .news-more:hover::after{transform:translateX(4px)}
+
+  .ig-card{
+    margin-top:20px;background:#fff;border-radius:14px;padding:16px;
+    display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);
+    cursor:pointer;transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .ig-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+  .ig-icon{
+    width:42px;height:42px;border-radius:12px;
+    background:linear-gradient(135deg,#feda77,#f58529 30%,#dd2a7b 60%,#8134af 100%);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;
+    box-shadow:0 4px 12px rgba(221,42,123,.35);
+  }
+  .ig-card .t{font-weight:700;font-size:14px}
+  .ig-card .h{font-size:11px;color:var(--ink-soft)}
+
+  /* ---------- footer panels ---------- */
+  .panels{
+    background:linear-gradient(180deg,transparent 0%,#eef3df 50%,#eef3df 100%);
+    margin-top:48px;padding:48px 0 64px;position:relative;overflow:hidden;
+  }
+  .panels-inner{
+    max-width:1320px;margin:0 auto;padding:0 24px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+    position:relative;z-index:1;
+  }
+  .panel{
+    background:#fff;border-radius:16px;padding:22px 20px 24px;
+    text-align:left;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    cursor:pointer;border:1px solid #e1e8cf;
+    display:flex;gap:14px;align-items:flex-start;
+  }
+  .panel:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+  .panel .ic-img{
+    flex:0 0 auto;width:54px;height:54px;
+    transition:transform .4s var(--ease);
+    filter:drop-shadow(0 2px 4px rgba(74,125,58,.15));
+  }
+  .panel:hover .ic-img{transform:rotate(-6deg) scale(1.08)}
+  .panel-text h3{
+    font-size:15px;font-weight:900;color:var(--green-900);margin:2px 0 4px;
+    transition:color .25s var(--ease);
+  }
+  .panel:hover h3{color:var(--green-700)}
+  .panel-text p{font-size:12px;color:var(--ink-soft);margin:0;line-height:1.6}
+
+  .kids-img{
+    position:absolute;right:0;bottom:-4px;width:240px;max-width:18%;
+    pointer-events:none;user-select:none;
+    animation:gentleSway 6s ease-in-out infinite;
+  }
+  @keyframes gentleSway{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--green-900);color:#dde6cf;padding:28px 24px;
+    font-size:12px;
+  }
+  .footer-inner{max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;align-items:center}
+  footer a{position:relative}
+  footer a:hover{color:#fff}
+  footer .creds{font-size:10px;opacity:.6}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1180px){
+    .schools-grid{grid-template-columns:repeat(4,1fr)}
+    .grid-2{grid-template-columns:1fr 320px}
+  }
+  @media (max-width:980px){
+    .topbar-inner{padding:10px 18px;gap:14px}
+    nav.main-nav{display:none}
+    .hero-inner{grid-template-columns:1fr;gap:24px}
+    .hero-copy h1{font-size:42px}
+    .grid-2{grid-template-columns:1fr;gap:24px}
+    .schools-grid{grid-template-columns:repeat(3,1fr)}
+    .panels-inner{grid-template-columns:repeat(2,1fr)}
+    .kids-img{width:160px}
+  }
+  @media (max-width:640px){
+    .topbar-inner{padding:8px 14px}
+    .brand img{height:42px}
+    .contact-btn{padding:8px 14px;font-size:12px}
+    .sponsor{top:auto;bottom:14px;right:14px;padding:5px 12px 5px 8px}
+    .sponsor .label{display:none}
+    main{margin:28px auto;padding:0 14px}
+    .panels-inner{padding:0 14px}
+    .hero{padding:32px 0 20px}
+    .hero-inner{padding:0 14px}
+    .hero-copy h1{font-size:32px;margin:10px 0 14px}
+    .hero-copy .lede{font-size:14px}
+    .schools-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .school-info{padding:10px}
+    .school-name{font-size:12px}
+    .panels{padding:32px 0 40px}
+    .panels-inner{grid-template-columns:1fr;gap:12px}
+    .panel{padding:16px 14px}
+    .panel .ic-img{width:44px;height:44px}
+    .kids-img{width:120px;opacity:.7}
+    .footer-inner{flex-direction:column;text-align:center;gap:8px}
+  }
+
+  /* honor reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- SPONSOR BADGE (fixed, top-right) -->
+<a href="https://www.ms-ad-hd.com/" target="_blank" rel="noopener" class="sponsor" title="Sponsored by MS&AD Insurance Group">
+  <span class="swoosh">M</span>
+  <span>
+    <div class="label">Sponsored by</div>
+    <div class="logo">MS<span class="amp">&amp;</span>AD</div>
+  </span>
+</a>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#"><img src="assets/logo.png" alt="みんなのビオトープ" /></a>
+    <nav class="main-nav">
+      <a href="#" class="active">ホーム</a>
+      <a href="#">ビオトープとは</a>
+      <a href="#schools">学校一覧</a>
+      <a href="#news">お知らせ</a>
+      <a href="#">活動レポート</a>
+      <a href="#">資料・リンク</a>
+    </nav>
+    <a href="#" class="contact-btn">✉ お問い合わせ</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="deco-dragon">🌾</div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="pill-tag">School Biotope Network</span>
+      <h1>つくる、まもる、つなぐ。<br><span class="accent">学校</span>のビオトープ</h1>
+      <p class="lede">
+        全国の学校がつくる、たくさんのいのち。<br>
+        10校の取り組みを通して、自然とともにある学校の今を伝えます。
+      </p>
+      <a href="#about" class="hero-cta">ビオトープとは</a>
+    </div>
+
+    <div class="hero-visual">
+      <img src="assets/hero.jpg" alt="校庭のビオトープで生きものを観察する子どもたち" />
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+  <div class="grid-2">
+
+    <!-- SCHOOLS -->
+    <section class="schools" id="schools">
+      <div class="schools-h-wrap">
+        <h2>10校のビオトープ</h2>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-cat="all">すべて</button>
+        <button class="tab" data-cat="elem">小学校</button>
+        <button class="tab" data-cat="mid">中学校</button>
+        <button class="tab" data-cat="high">高等学校</button>
+        <button class="tab" data-cat="local">地域で取り組む</button>
+      </div>
+
+      <div class="schools-grid" id="schoolsGrid"></div>
+    </section>
+
+    <!-- NEWS -->
+    <aside class="news" id="news">
+      <h2>お知らせ <span style="margin-left:auto;font-size:11px;color:var(--ink-soft);font-weight:500">一覧を見る ›</span></h2>
+      <div class="news-list">
+        <div class="news-item">
+          <div class="news-meta"><span class="news-date">2026.04.21</span><span class="news-cat cat-event">イベント</span></div>
+          <div class="news-title">全国ビオトープ交流会2026 のお知らせ（5月開催・申込受付中）</div>
+        </div>
+        <div class="news-item">
+          <div class="news-meta"><span class="news-date">2026.04.10</span><span class="news-cat cat-info">お知らせ</span></div>
+          <div class="news-title">新たに茅ヶ崎市立汐見台小学校が加盟しました</div>
+        </div>
+        <div class="news-item">
+          <div class="news-meta"><span class="news-date">2026.04.05</span><span class="news-cat cat-report">レポート</span></div>
+          <div class="news-title">春の生きもの調査レポートを公開しました</div>
+        </div>
+        <div class="news-item">
+          <div class="news-meta"><span class="news-date">2026.03.28</span><span class="news-cat cat-info">お知らせ</span></div>
+          <div class="news-title">「ビオトープづくり 入門ガイド 2026年版」配布開始</div>
+        </div>
+        <div class="news-item">
+          <div class="news-meta"><span class="news-date">2026.03.15</span><span class="news-cat cat-event">イベント</span></div>
+          <div class="news-title">学校間オンライン勉強会のアーカイブ動画を公開</div>
+        </div>
+        <a class="news-more" href="#">お知らせ一覧へ</a>
+      </div>
+
+      <a class="ig-card" href="#">
+        <div class="ig-icon">IG</div>
+        <div>
+          <div class="t">@minna_no_biotope</div>
+          <div class="h">最新の活動を Instagram でお届け中</div>
+        </div>
+      </a>
+    </aside>
+  </div>
+</main>
+
+<!-- BOTTOM PANELS -->
+<section class="panels">
+  <div class="panels-inner">
+    <a href="#" class="panel">
+      <img class="ic-img" src="assets/icon-1.png" alt="" />
+      <div class="panel-text">
+        <h3>ビオトープとは？</h3>
+        <p>ビオトープの意味や、学校でつくる意義、管理のポイントを紹介します。</p>
+      </div>
+    </a>
+    <a href="#" class="panel">
+      <img class="ic-img" src="assets/icon-2.png" alt="" />
+      <div class="panel-text">
+        <h3>活動レポート</h3>
+        <p>各校の活動の様子や、季節ごとの生きものの記録をレポートで紹介します。</p>
+      </div>
+    </a>
+    <a href="#" class="panel">
+      <img class="ic-img" src="assets/icon-3.png" alt="" />
+      <div class="panel-text">
+        <h3>つながる・学ぶ</h3>
+        <p>学校同士の交流や、イベント・研修会などの情報をお届けします。</p>
+      </div>
+    </a>
+    <a href="#" class="panel">
+      <img class="ic-img" src="assets/icon-4.png" alt="" />
+      <div class="panel-text">
+        <h3>資料・リンク集</h3>
+        <p>ビオトープづくりに役立つ資料やリンクをダウンロードできます。</p>
+      </div>
+    </a>
+  </div>
+  <img class="kids-img" src="assets/kids.png" alt="" />
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 みんなのビオトープ｜日本の学校ビオトープ・ネットワーク</div>
+    <div>
+      <a href="#">プライバシーポリシー</a> ・
+      <a href="#">サイトマップ</a> ・
+      <a href="#">お問い合わせ</a>
+    </div>
+    <div class="creds">Sponsored by MS&amp;AD Insurance Group Holdings, Inc.</div>
+  </div>
+</footer>
+
+<script>
+  // 10 schools — region / name / category / image filename
+  const SCHOOLS = [
+    { region:"北海道・札幌市", name:"札幌市立北郷小学校",     cat:"elem",  img:"school-01.jpg", tags:["小学校","池ビオ","水生昆虫","生き物観察"] },
+    { region:"宮城県・仙台市", name:"仙台市北仙台中学校",     cat:"mid",   img:"school-02.jpg", tags:["中学校","湿地","植物","在来種"] },
+    { region:"東京都・世田谷区", name:"世田谷区立祖師谷小学校", cat:"elem", img:"school-03.jpg", tags:["小学校","水辺","メダカ","通年観察"] },
+    { region:"愛知県・豊橋市", name:"豊橋市立旭小学校",       cat:"elem",  img:"school-04.jpg", tags:["小学校","田んぼ","稲作","地域連携"] },
+    { region:"愛知県・名古屋市", name:"名古屋市立植田小学校", cat:"elem",  img:"school-05.jpg", tags:["小学校","樹林","昆虫","落ち葉"] },
+    { region:"大阪府・高槻市",  name:"高槻市立五領中学校",     cat:"mid",   img:"school-06.jpg", tags:["中学校","湿地","水生植物","環境学習"] },
+    { region:"兵庫県・宝塚市",  name:"宝塚市立末広小学校",     cat:"elem",  img:"school-07.jpg", tags:["小学校","ビオトープ池","観察","継続活動"] },
+    { region:"広島県・広島市",  name:"広島市立観音中学校",     cat:"mid",   img:"school-08.jpg", tags:["中学校","ビオトープ池","スイレン","生き物観察"] },
+    { region:"福岡県・福岡市",  name:"福岡市立香住丘小学校",   cat:"elem",  img:"school-09.jpg", tags:["小学校","カニ","地域協働"] },
+    { region:"沖縄県・那覇市",  name:"那覇市立緑中学校",       cat:"mid",   img:"school-10.jpg", tags:["中学校","湿地","ホタル","地域連携"] },
+  ];
+
+  const grid = document.getElementById("schoolsGrid");
+  function render(filter="all"){
+    grid.innerHTML = "";
+    let n=0;
+    SCHOOLS.forEach((s,i)=>{
+      if(filter!=="all" && s.cat!==filter) return;
+      n++;
+      const num = String(i+1).padStart(2,"0");
+      grid.insertAdjacentHTML("beforeend", `
+        <article class="school-card">
+          <div class="school-thumb">
+            <img loading="lazy" alt="${s.name}" src="assets/${s.img}">
+          </div>
+          <div class="school-info">
+            <div class="school-region">${s.region}</div>
+            <div class="school-name">${s.name}</div>
+          </div>
+        </article>
+      `);
+    });
+    if(!n){
+      grid.innerHTML = `<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--ink-soft);background:#fff;border-radius:14px">該当する学校がまだ登録されていません。</div>`;
+    }
+  }
+  render();
+  document.querySelectorAll(".tab").forEach(b=>{
+    b.addEventListener("click",()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      render(b.dataset.cat);
+    });
+  });
+</script>
+
+</body>
+</html>
