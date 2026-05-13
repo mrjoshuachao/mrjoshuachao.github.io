@@ -14,7 +14,10 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { overflow: hidden; }
   body {
-    background: radial-gradient(circle at center, #c8c8c8 0%, #a0a0a0 40%, #707070 75%, #404040 100%);
+    /* All four gradient stops brightened by 125% (×1.25 on each channel
+       value): #c8→#fa, #a0→#c8, #70→#8c, #40→#50. Keeps the same dark-
+       vignette shape but the whole field reads lighter. */
+    background: radial-gradient(circle at center, #fafafa 0%, #c8c8c8 40%, #8c8c8c 75%, #505050 100%);
     overflow: hidden;
     cursor: grab; user-select: none;
     touch-action: none;
@@ -174,6 +177,189 @@
     border:none; outline:none; resize:none; cursor:pointer;
     overflow-y:auto; color:#1a1a1a; -webkit-overflow-scrolling:touch;
   }
+  /* ── Side panels: clocks (left) + hemisphere disks (right) ─────────── */
+  /* Hidden by default; only revealed on viewports that are large AND
+     landscape, so the panels never crowd the central globe on:
+       • phones (always too narrow / too short),
+       • small tablets like the iPad mini (landscape height 744–768
+         px — below the 800 px floor),
+       • any device held in portrait — `(orientation: portrait)` flips
+         a tablet's height/width so the landscape rule below fails as
+         soon as the user rotates the device 90°.
+     iPad standard 10.2" / Air / Pro all sit at ≥ 810 px landscape
+     height and ≥ 1080 px landscape width, so they unlock the panels. */
+  #clocksWrap, #disksWrap { display:none; }
+  @media (orientation: landscape) and (min-width: 1000px) and (min-height: 800px) {
+    #clocksWrap, #disksWrap { display:flex; }
+  }
+  #clocksWrap{
+    position:fixed; left:28px; top:50%; transform:translateY(-50%);
+    flex-direction:column; gap:0;
+    z-index:50; pointer-events:none; user-select:none;
+    overflow:visible;
+    /* One shadow for the combined silhouette of BOTH clocks. Doing this at
+       the wrap (rather than on each SVG individually) avoids the two
+       drop-shadows clipping each other at the tangent join. */
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.55));
+  }
+  /* Pull the second clock up so the two circular faces touch edge-to-edge.
+     SVG viewBox is 100 units mapped to 256px (1u = 2.56px); the face circle has
+     radius 46u = 117.76px, leaving 10.24px of empty padding above/below the
+     circle in each SVG. Overlapping the two SVGs by 20.48px makes them tangent. */
+  #clocksWrap .gc-clock + .gc-clock{ margin-top:-20.48px; }
+  #disksWrap{
+    position:fixed; right:28px; top:50%; transform:translateY(-50%);
+    flex-direction:column; gap:0;
+    z-index:50; pointer-events:none; user-select:none;
+    overflow:visible;
+    /* One shadow for the combined silhouette of BOTH disks. Doing this at
+       the wrap (rather than on each SVG individually) avoids the two
+       drop-shadows clipping each other at the tangent join. */
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.55));
+  }
+  /* Same idea for the hemisphere disks: 200-unit viewBox → 256px (1u = 1.28px),
+     outer ring radius 92u = 117.76px, so each SVG has 10.24px of empty padding
+     above and below the disk. Overlap by 20.48px to make the two disks tangent. */
+  #disksWrap .gc-disk + .gc-disk{ margin-top:-20.48px; }
+  .gc-clock{
+    width:256px; height:256px; display:block; opacity:1;
+    /* Opacity is locked at 1 so the black face's #1a doesn't get bleached
+       by the gray background underneath. overflow:visible lets the inner
+       halo filters render fully even if their bounds peek over the SVG
+       viewBox. The disk shadow itself is now drawn by #clocksWrap so the
+       two faces share ONE shadow silhouette. */
+    overflow:visible;
+  }
+  /* Side-panel palette: softened "near-white" #d0 and "near-black" #40.
+     Less stark than pure piece tones but still a clear two-tone contrast
+     on the gray game background. */
+  .gc-clock .face-w{ fill:#c4c4c4; stroke:#a4a4a4; stroke-width:0.6; }
+  .gc-clock .face-b{ fill:#404040; stroke:#5a5a5a; stroke-width:0.6; }
+  /* Contrast elements use the OTHER clock's face colour so the two clocks
+     share one palette: dark elements on the white clock are the black face's
+     #404040; light elements on the black clock are the white face's #c4c4c4.
+     The white clock's second hand uses #404040, the black clock's uses pure
+     white (Swiss-railway style — see _buildClock for the disc tip). */
+  .gc-clock .tick-w{ stroke:#404040; }
+  .gc-clock .tick-b{ stroke:#c4c4c4; }
+  .gc-clock .num-w{ fill:#404040; }
+  .gc-clock .num-b{ fill:#c4c4c4; }
+  /* Digital readout — sits below the centre pin and above the "6" numeral.
+     Inherits the same Times New Roman italic face as the rest of the
+     clock numerals so the analog and digital text feel like one family.
+     Sized slightly larger than the hour numerals (7u vs 4.5u) so the
+     readout reads cleanly without crowding the hands.
+     The digital is painted in WHITE with mix-blend-mode:difference so
+     every pixel renders as the inverse of whatever sits underneath:
+       • over the face → reads as ~#3b3b3b (white clock) / ~#bfbfbf (black
+         clock) — visually identical to the original #404040 / #c4c4c4
+         numerals (within ~2% lightness).
+       • where any hand sweeps over the digit → reads as the hand colour
+         inverted (light over the dark hand, dark over the light hand) —
+         giving the requested "反白/反黑 at overlap" effect.
+     Both theme classes use the same rule because the difference blend
+     auto-derives the correct theme colour from the face/hand backdrop. */
+  .gc-clock .digital-w,
+  .gc-clock .digital-b{
+    font-size:7px; letter-spacing:0.4px;
+    fill:#ffffff;
+    mix-blend-mode:difference;
+    /* Override the .gc-clock text default of dominant-baseline:central.
+       With "alphabetic", the y= attribute pins the alphabetic baseline
+       (= bottom of the cap glyphs) rather than the cap-height centre,
+       so the inner <tspan> for the centiseconds inherits the same
+       baseline and its bottoms line up with the SS digits' bottoms.
+       This is the cleanest way to bottom-align differently-sized
+       glyphs inside one <text>; baseline-shift on the tspan is
+       inconsistently rendered across browsers under mix-blend-mode. */
+    dominant-baseline:alphabetic;
+  }
+  /* Centisecond readout — two tiny digits glued directly to the SS digits
+     (no decimal point separator) at 60% of the parent font-size
+     (7 × 0.6 = 4.2 CSS px). Inherits fill, mix-blend-mode AND the parent's
+     alphabetic baseline, so its bottoms line up with the SS digits' bottoms
+     automatically — no per-tspan baseline math needed. */
+  .gc-clock .digital-cs{
+    font-size:4.2px; letter-spacing:0.2px;
+  }
+  .gc-clock .hand-w{ stroke:#404040; fill:#404040; stroke-linecap:round; }
+  .gc-clock .hand-b{ stroke:#c4c4c4; fill:#c4c4c4; stroke-linecap:round; }
+  .gc-clock .sec-w{ stroke:#404040; fill:#404040; stroke-linecap:butt; }
+  .gc-clock .sec-b{ stroke:#ffffff; fill:#ffffff; stroke-linecap:butt; }
+  .gc-clock text{
+    font-family:'Times New Roman',Times,serif; font-style:italic;
+    /* Clock viewBox is 100u → 256px (1u = 2.56px). 4.5u ≈ 11.5px on screen,
+       matching the corner UI labels (font-size:11px). */
+    font-size:4.5px; text-anchor:middle; dominant-baseline:central;
+  }
+  .gc-disk{
+    width:256px; height:256px; display:block;
+    cursor:grab; pointer-events:auto; touch-action:none;
+    opacity:1;
+    /* Opacity locked at 1 so the dark cells match the black clock face
+       exactly. overflow:visible lets inner SVG filters render without
+       being clipped at the viewBox. The disk's outer shadow is now drawn
+       by #disksWrap so the two disks share ONE shadow silhouette and
+       don't clip each other at the tangent join. */
+    overflow:visible;
+  }
+  .gc-disk.dragging{ cursor:grabbing; }
+  /* Disk cells use the same softened palette as the clocks: near-white #d0
+     and near-black #40 — a clear but not stark two-tone. pole-cap sits at
+     the midpoint #888888. */
+  .gc-disk .cell-light{ fill:#c4c4c4; stroke:#a4a4a4; stroke-width:0.25; }
+  .gc-disk .cell-dark { fill:#404040; stroke:#5a5a5a; stroke-width:0.25; }
+  .gc-disk .pole-cap{ fill:#888888; stroke:#6a6a6a; stroke-width:0.4; }
+  .gc-disk text{
+    font-family:'Times New Roman',Times,serif;
+    /* 80% of the previous 14u font-size — pieces read clearly but no
+       longer crowd their cells. No hard stroke outline: pc-white and
+       pc-black supply a soft drop-shadow halo instead (see below) so the
+       glyph edges are gently faded rather than sharp. */
+    font-weight:700; font-style:italic; font-size:11.2px;
+    text-anchor:middle; dominant-baseline:central;
+    pointer-events:none; user-select:none;
+  }
+  /* Letter fills. The halo is supplied by an SVG native filter (see
+     _addHaloFilters in the IIFE), referenced per-element via the
+     `filter="url(#...-halo-…)"` attribute — pc-white gets the black halo,
+     pc-black gets the white.
+     Optical-weight balance: white text always reads slightly bolder than
+     black text at the same geometric width (the white expands into the
+     visual field), so we give ONLY the black glyph a same-colour stroke
+     to thicken it; the white glyph stays as a plain fill. Net effect:
+     both read at the same thickness. */
+  .gc-disk .pc-white{ fill:#ffffff; stroke:none; }
+  .gc-disk .pc-black{
+    fill:#000000; stroke:#000000; stroke-width:0.4; paint-order:stroke;
+  }
+  /* Knight-move overlay — a separate SVG layered on top of both disks so
+     the knight's letter can slide smoothly across the hemisphere boundary
+     without the usual cross-disk snap. The selectors mirror .gc-disk so
+     the overlay text reads exactly the same as the resident cell letters. */
+  #disksKnightOverlay{
+    position:absolute; top:0; left:0; width:256px; height:491.52px;
+    pointer-events:none; overflow:visible;
+  }
+  #disksKnightOverlay text{
+    font-family:'Times New Roman',Times,serif;
+    font-weight:700; font-style:italic; font-size:11.2px;
+    text-anchor:middle; dominant-baseline:central;
+    pointer-events:none; user-select:none;
+  }
+  #disksKnightOverlay .pc-white{ fill:#ffffff; stroke:none; }
+  #disksKnightOverlay .pc-black{
+    fill:#000000; stroke:#000000; stroke-width:0.4; paint-order:stroke;
+  }
+  .gc-disk .pole-label{
+    fill:rgba(255,255,255,0.55); stroke:none; font-size:6.5px;
+    letter-spacing:1px;
+  }
+  /* Move-path halo is wired up through the same SVG <filter> pipeline as
+     the letters (see _addHaloFilters / _moveLayer.setAttribute('filter',
+     …) in the IIFE). No CSS filter here for the same reason as the
+     letters — nested CSS filters inside a CSS-filtered SVG render
+     unreliably in practice. */
 </style>
 </head>
 <body>
@@ -237,6 +423,16 @@
 <div id="aiWrap" onclick="toggleAI()">
   <input type="checkbox" id="aiToggle" style="display:none">
   <span id="aiLabel">AI opponent off</span>
+</div>
+<!-- Player thinking-time clocks (left, desktop/tablet only) -->
+<div id="clocksWrap">
+  <svg id="clockWhite" class="gc-clock" viewBox="-50 -50 100 100" aria-label="White thinking time"></svg>
+  <svg id="clockBlack" class="gc-clock" viewBox="-50 -50 100 100" aria-label="Black thinking time"></svg>
+</div>
+<!-- Hemisphere disks (right, desktop/tablet only) -->
+<div id="disksWrap">
+  <svg id="diskNorth" class="gc-disk" viewBox="-100 -100 200 200" aria-label="North hemisphere"></svg>
+  <svg id="diskSouth" class="gc-disk" viewBox="-100 -100 200 200" aria-label="South hemisphere"></svg>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -577,7 +773,7 @@ for(let lat=0;lat<8;lat++){
 }
 
 // ── Version label sprites on polar caps ──────────────────────────────────────
-const _VERSION='v2.1.3';
+const _VERSION='v2.2.0';
 const _versionSprites=[];
 (function(){
   const VER=_VERSION;
@@ -2471,6 +2667,10 @@ function doAiMove(){
     (m)=>{
       if(!m){aiThinking=false;turnEl.textContent='Black has no moves.';return;}
       const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+      // Rotate the disks in parallel with the globe so an equator-crossing
+      // path renders as one continuous line across both disks.
+      if(typeof window._alignDisksForMove==='function')
+        window._alignDisksForMove(m.fLat,m.fLon,m.tLat,m.tLon,650);
       rotateGlobeToFace(localDir,650,()=>{
         showMoves(m.fLat,m.fLon);
         setTimeout(()=>{aiThinking=false;execMove(m.fLat,m.fLon,m.tLat,m.tLon);},480);
@@ -3782,8 +3982,12 @@ function doAutoMove(){
       // Chess notation status
       const _an=_moveNotation(piece,m.fLat,m.fLon,m.tLat,m.tLon,!!cap||!!m.isEnPassant,m,false,false);
       turnEl.textContent=(color==='white'?'White':'Black')+': '+_an;
-      // Rotate globe to face the piece, show move dots briefly, execute
+      // Rotate globe to face the piece, show move dots briefly, execute.
+      // Rotate the disks in parallel so an equator-crossing move's path
+      // renders as one continuous line across the two disks.
       const localDir=cellPos(m.fLat,m.fLon,R).normalize();
+      if(typeof window._alignDisksForMove==='function')
+        window._alignDisksForMove(m.fLat,m.fLon,m.tLat,m.tLon,460);
       rotateGlobeToFace(localDir,460,()=>{
         showMoves(m.fLat,m.fLon,m.tLat,m.tLon);
         setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
@@ -3965,6 +4169,1599 @@ function closeReport(){
 }
 
 function copyReport(){_copyRecord();}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── Side UI: player clocks + hemisphere disks (tablet/desktop only) ─────────
+// ══════════════════════════════════════════════════════════════════════════════
+(function(){
+  const SVG_NS='http://www.w3.org/2000/svg';
+  const _pieceLetter={K:'K',Q:'Q',R:'R',B:'B',N:'N',P:'P'};
+
+  // ── Clock construction ───────────────────────────────────────────────────
+  function _buildClock(svg,isWhite){
+    const theme=isWhite?'-w':'-b';
+    const faceCls=isWhite?'face-w':'face-b';
+    // Face
+    const face=document.createElementNS(SVG_NS,'circle');
+    face.setAttribute('cx',0); face.setAttribute('cy',0);
+    face.setAttribute('r',46); face.setAttribute('class',faceCls);
+    svg.appendChild(face);
+    // Tick marks (12 hours + 60 minutes). Pulled close to the face edge
+    // (face r=46, tick outer r=45.5) and made thin: major ticks are 2.5u
+    // long, minor ticks are 1.5u long.
+    for(let i=0;i<60;i++){
+      const a=i*6*Math.PI/180 - Math.PI/2;
+      const rOut=45.5;
+      const rIn=(i%5===0)?43:44;
+      const x1=rOut*Math.cos(a), y1=rOut*Math.sin(a);
+      const x2=rIn*Math.cos(a), y2=rIn*Math.sin(a);
+      const ln=document.createElementNS(SVG_NS,'line');
+      ln.setAttribute('x1',x1.toFixed(2)); ln.setAttribute('y1',y1.toFixed(2));
+      ln.setAttribute('x2',x2.toFixed(2)); ln.setAttribute('y2',y2.toFixed(2));
+      ln.setAttribute('class','tick'+theme);
+      ln.setAttribute('stroke-width',(i%5===0)?0.5:0.25);
+      svg.appendChild(ln);
+    }
+    // Numerals 1..12 — placed at r=39, just inside the tick ring.
+    for(let h=1;h<=12;h++){
+      const a=h*30*Math.PI/180 - Math.PI/2;
+      const r=39;
+      const t=document.createElementNS(SVG_NS,'text');
+      t.setAttribute('x',(r*Math.cos(a)).toFixed(2));
+      t.setAttribute('y',(r*Math.sin(a)).toFixed(2));
+      t.setAttribute('class','num'+theme);
+      t.textContent=String(h);
+      svg.appendChild(t);
+    }
+    // Hands — stored back on the svg element. All three hands are slimmed
+    // down (hour 1.3u, minute 0.8u, second 0.4u) for a finer look.
+    const hHour=document.createElementNS(SVG_NS,'line');
+    hHour.setAttribute('x1',0); hHour.setAttribute('y1',0);
+    hHour.setAttribute('x2',0); hHour.setAttribute('y2',-22);
+    hHour.setAttribute('class','hand'+theme);
+    hHour.setAttribute('stroke-width',1.3);
+    svg.appendChild(hHour);
+    const hMin=document.createElementNS(SVG_NS,'line');
+    hMin.setAttribute('x1',0); hMin.setAttribute('y1',0);
+    hMin.setAttribute('x2',0); hMin.setAttribute('y2',-32);
+    hMin.setAttribute('class','hand'+theme);
+    hMin.setAttribute('stroke-width',0.8);
+    svg.appendChild(hMin);
+    // Second hand: Swiss-railway style — a thin straight line topped with a
+    // small filled disc at the tip. Line and disc share the `sec` class so
+    // they pick up the same colour, and they're wrapped in a <g> so the
+    // _setHand() rotate transform spins them as one unit.
+    const hSecGrp=document.createElementNS(SVG_NS,'g');
+    const hSec=document.createElementNS(SVG_NS,'line');
+    hSec.setAttribute('x1',0); hSec.setAttribute('y1',6);
+    hSec.setAttribute('x2',0); hSec.setAttribute('y2',-32);
+    hSec.setAttribute('class','sec'+theme);
+    hSec.setAttribute('stroke-width',0.45);
+    hSecGrp.appendChild(hSec);
+    const hSecTip=document.createElementNS(SVG_NS,'circle');
+    hSecTip.setAttribute('cx',0); hSecTip.setAttribute('cy',-33);
+    // r=1.7 → 85% of the previous r=2 disc tip per user request.
+    hSecTip.setAttribute('r',1.7);
+    hSecTip.setAttribute('class','sec'+theme);
+    hSecGrp.appendChild(hSecTip);
+    svg.appendChild(hSecGrp);
+    // Center pin (smaller to match the thinner hands).
+    const pin=document.createElementNS(SVG_NS,'circle');
+    pin.setAttribute('cx',0); pin.setAttribute('cy',0);
+    pin.setAttribute('r',0.9); pin.setAttribute('class','hand'+theme);
+    svg.appendChild(pin);
+    // Digital time readout — sits between the centre pin and the "6"
+    // numeral (numerals are at r=39). The main MM:SS (or H:MM:SS once
+    // past one hour) is followed by a smaller two-digit centisecond
+    // readout, glued directly to the seconds with no decimal separator.
+    // text-anchor:middle (inherited from .gc-clock text) keeps the whole
+    // composite centred horizontally as its width grows.
+    //
+    // y=20.9 places the alphabetic baseline (= bottom of the SS glyphs)
+    // at exactly the same screen position the previous cap-centre
+    // anchoring used at y=20 — the 0.9-unit drop equals half the parent
+    // cap-height in viewBox units (7 CSS px × 0.66 / 2.56 ≈ 1.80 u; half =
+    // 0.90 u). The .digital-w/.digital-b CSS sets dominant-baseline to
+    // alphabetic so this y pins the baseline, and the inner centisecond
+    // tspan inherits the same baseline → its bottom aligns with SS's.
+    const digital=document.createElementNS(SVG_NS,'text');
+    digital.setAttribute('x',0);
+    digital.setAttribute('y',20.9);
+    digital.setAttribute('class','digital'+theme);
+    // Main MM:SS as a plain text node so we can update via nodeValue
+    // without touching the centisecond <tspan> child.
+    const digMain=document.createTextNode('00:00');
+    digital.appendChild(digMain);
+    const digCs=document.createElementNS(SVG_NS,'tspan');
+    digCs.setAttribute('class','digital-cs');
+    digCs.textContent='00';
+    digital.appendChild(digCs);
+    svg.appendChild(digital);
+    svg._hands={hour:hHour,min:hMin,sec:hSecGrp,digital,digMain,digCs};
+  }
+
+  const clkW=document.getElementById('clockWhite');
+  const clkB=document.getElementById('clockBlack');
+  _buildClock(clkW,true);
+  _buildClock(clkB,false);
+
+  // ── Clock state & ticking ────────────────────────────────────────────────
+  let _whiteMs=0, _blackMs=0, _clkPrev=null;
+
+  function _gameIsOver(){
+    const t=turnEl?.textContent||'';
+    return /wins|draw|Stalemate/i.test(t);
+  }
+  function _shouldTickClock(){
+    if(!introAnim?.done) return false;
+    if(typeof testModeActive!=='undefined'&&testModeActive) return false;
+    if(typeof moveAnim!=='undefined'&&moveAnim) return false;
+    if(typeof globeRotAnim!=='undefined'&&globeRotAnim) return false;
+    if(typeof autoBattlePaused!=='undefined'&&autoBattlePaused) return false;
+    if(_gameIsOver()) return false;
+    return true;
+  }
+  function _setHand(el,angleDeg){ el.setAttribute('transform',`rotate(${angleDeg.toFixed(3)})`); }
+  function _fmtClockTime(ms){
+    // Format elapsed milliseconds as MM:SS, or H:MM:SS once past one hour.
+    const totalSec=Math.max(0,Math.floor(ms/1000));
+    const h=Math.floor(totalSec/3600);
+    const mm=Math.floor((totalSec%3600)/60);
+    const ss=totalSec%60;
+    const p2=n=>(n<10?'0':'')+n;
+    return h>0 ? `${h}:${p2(mm)}:${p2(ss)}` : `${p2(mm)}:${p2(ss)}`;
+  }
+  function _renderClock(svg,ms){
+    const s=ms/1000;
+    const secA=(s%60)*6;
+    const minA=(s/60)*6;            // 6° per minute elapsed
+    const hrA =(s/3600)*30;         // 30° per hour elapsed
+    _setHand(svg._hands.sec,secA);
+    _setHand(svg._hands.min,minA);
+    _setHand(svg._hands.hour,hrA);
+    // Main MM:SS (or H:MM:SS past 1h) goes in the leading text node.
+    if(svg._hands.digMain){
+      const txt=_fmtClockTime(ms);
+      if(svg._hands.digMain.nodeValue!==txt) svg._hands.digMain.nodeValue=txt;
+    }
+    // Centiseconds (00–99) go in the trailing <tspan> rendered at 60%
+    // size. We floor to a hundredth-of-a-second to keep the digits
+    // stable per frame instead of jittering through every value.
+    if(svg._hands.digCs){
+      const cs=Math.max(0,Math.floor((ms%1000)/10));
+      const csTxt=(cs<10?'0':'')+cs;
+      if(svg._hands.digCs.textContent!==csTxt) svg._hands.digCs.textContent=csTxt;
+    }
+  }
+  function _tickClocks(){
+    const now=performance.now();
+    if(_clkPrev!==null && _shouldTickClock()){
+      const dt=now-_clkPrev;
+      if(turnColor==='white') _whiteMs+=dt; else _blackMs+=dt;
+    }
+    _clkPrev=now;
+    _renderClock(clkW,_whiteMs);
+    _renderClock(clkB,_blackMs);
+    // Dim the clock that isn't currently counting
+    const act=_shouldTickClock();
+    clkW.classList.toggle('idle',!(act&&turnColor==='white'));
+    clkB.classList.toggle('idle',!(act&&turnColor==='black'));
+  }
+  function _resetClocks(){
+    _whiteMs=0; _blackMs=0; _clkPrev=null;
+    _renderClock(clkW,0); _renderClock(clkB,0);
+  }
+  _resetClocks();
+
+  // ── Disk construction ────────────────────────────────────────────────────
+  // Layout: annular sector cells on each disk.
+  //   North disk rings (inner→outer) correspond to board lat 0,1,2,3 (equator is outermost)
+  //   South disk rings (inner→outer) correspond to board lat 7,6,5,4 (equator is outermost)
+  //   Both disks have 8 sectors (longitudes 0..7).
+  //   SVG angle 0 points right (+X). Sector s (before disk rotation) is centered
+  //   at (s+0.5)*45° - 90° (so sector 0 centers near the "12 o'clock" position).
+  //   For the south disk the sector→lon mapping is mirrored so that a single
+  //   globe yaw causes the two disks to rotate in opposite screen directions.
+  // R_OUT is the equator radius of the disk; R_IN is set to R_OUT / 9 so the
+  // gray pole cap's diameter (= 2·R_IN) exactly equals the radial width of
+  // one cell band (RING_W = (R_OUT − R_IN) / 4 = 2·R_OUT/9 = 2·R_IN), and
+  // the pole cap occupies exactly 1/9 of the whole disk diameter.
+  const R_OUT=92;
+  const R_IN=R_OUT/9;
+  const RINGS=4, SECTORS=8;
+  const RING_W=(R_OUT-R_IN)/RINGS;
+
+  function _diskRingToLat(isNorth,ring){ return isNorth?ring:(7-ring); }
+  // Both disks share the same longitude→sector mapping (lon 0 at the top,
+  // increasing clockwise). This keeps the same longitude at the same SVG
+  // angle on both disks, so move paths visually align across the equator.
+  function _diskSectorToLon(isNorth,sector){ return sector; }
+
+  function _sectorPath(rIn,rOut,degStart,degEnd){
+    const toR=d=>d*Math.PI/180;
+    const p0={x:rOut*Math.cos(toR(degStart)),y:rOut*Math.sin(toR(degStart))};
+    const p1={x:rOut*Math.cos(toR(degEnd  )),y:rOut*Math.sin(toR(degEnd  ))};
+    const p2={x:rIn *Math.cos(toR(degEnd  )),y:rIn *Math.sin(toR(degEnd  ))};
+    const p3={x:rIn *Math.cos(toR(degStart)),y:rIn *Math.sin(toR(degStart))};
+    return `M ${p0.x.toFixed(3)} ${p0.y.toFixed(3)} `+
+           `A ${rOut} ${rOut} 0 0 1 ${p1.x.toFixed(3)} ${p1.y.toFixed(3)} `+
+           `L ${p2.x.toFixed(3)} ${p2.y.toFixed(3)} `+
+           `A ${rIn} ${rIn} 0 0 0 ${p3.x.toFixed(3)} ${p3.y.toFixed(3)} Z`;
+  }
+
+  function _buildDisk(svg,isNorth){
+    // <defs> with a clipPath that contains the union of all light cells.
+    // The boost shadow layer (built later in _orgMoveLayer) uses this as
+    // its clip-path so the extra "+35% darkness" halo only paints where
+    // the move-path crosses a light cell. Defs is non-rendering, so order
+    // among the SVG's children doesn't matter — but we put it first to
+    // keep the document tidy.
+    const defs=document.createElementNS(SVG_NS,'defs');
+    const lightClip=document.createElementNS(SVG_NS,'clipPath');
+    lightClip.setAttribute('id', svg.id+'-light-clip');
+    // The clipPath lives in user-space (default 'userSpaceOnUse') so the
+    // cell paths inside it line up with the move-layer geometry that
+    // gets clipped. We populate it as each light cell is built below.
+    defs.appendChild(lightClip);
+    svg.appendChild(defs);
+    svg._lightClip=lightClip;
+    // Gray polar cap goes in FIRST so it renders BEHIND everything else.
+    // (Previously the cap was appended last and rendered on top, which hid
+    // any move-path / check-path segments passing through the polar region.)
+    // The cap has no 'N'/'S' label inside, and its radius is R_IN exactly
+    // so the diameter ratio stays a clean 1/9 of the disk.
+    const cap=document.createElementNS(SVG_NS,'circle');
+    cap.setAttribute('cx',0); cap.setAttribute('cy',0);
+    cap.setAttribute('r',R_IN);
+    cap.setAttribute('class','pole-cap');
+    svg.appendChild(cap);
+    // Outer rotating group holds all cells & letters
+    const g=document.createElementNS(SVG_NS,'g');
+    g.setAttribute('class','disk-rot');
+    svg.appendChild(g);
+    svg._rotGroup=g;
+
+    for(let ring=0;ring<RINGS;ring++){
+      const rIn =R_IN+ring*RING_W;
+      const rOut=R_IN+(ring+1)*RING_W;
+      for(let sector=0;sector<SECTORS;sector++){
+        const lat=_diskRingToLat(isNorth,ring);
+        const lon=_diskSectorToLon(isNorth,sector);
+        // Sector center deg: sector*45 - 90 + 22.5
+        const aStart=sector*45 - 90 - 22.5;
+        const aEnd  =sector*45 - 90 + 22.5;
+        const path=document.createElementNS(SVG_NS,'path');
+        path.setAttribute('d',_sectorPath(rIn,rOut,aStart,aEnd));
+        // Inverted parity from the globe's: with the chess starting layout
+        // (white K at lat 7 lon 3, white Q at lat 7 lon 4, etc.), the
+        // (lat+lon) parity convention used on the sphere ends up putting
+        // the white queen on a dark cell. Standard chess has "queen on her
+        // own colour", so we flip light↔dark on the disks to make the
+        // white queen sit on a light cell and the black queen on a dark one.
+        const isLight=((lat+lon)%2!==0);
+        path.setAttribute('class',isLight?'cell-light':'cell-dark');
+        g.appendChild(path);
+        // Mirror light cells into the light-clip clipPath so the boost
+        // shadow layer paints only where move paths cross a light cell.
+        // We clone just the d attribute (no class/fill/stroke needed —
+        // clipPath only cares about geometry).
+        if(isLight && svg._lightClip){
+          const clipCell=document.createElementNS(SVG_NS,'path');
+          clipCell.setAttribute('d', path.getAttribute('d'));
+          svg._lightClip.appendChild(clipCell);
+        }
+        // Letter text at cell center
+        const rMid=(rIn+rOut)/2;
+        const aMid=(aStart+aEnd)/2*Math.PI/180;
+        const t=document.createElementNS(SVG_NS,'text');
+        t.setAttribute('x',(rMid*Math.cos(aMid)).toFixed(2));
+        t.setAttribute('y',(rMid*Math.sin(aMid)).toFixed(2));
+        t.dataset.lat=lat; t.dataset.lon=lon;
+        // Counter-rotate letters so they always read upright (see _updateDisks)
+        t.setAttribute('class','disk-letter');
+        g.appendChild(t);
+      }
+    }
+  }
+
+  const diskN=document.getElementById('diskNorth');
+  const diskS=document.getElementById('diskSouth');
+  _buildDisk(diskN,true);
+  _buildDisk(diskS,false);
+
+  // ── Disk move-path overlay ──────────────────────────────────────────────
+  // Mirrors the orange/red move visualization that showMoves paints on the
+  // globe (orange path, orange→deep-red gradient on captures, dashed L for
+  // knights, origin ring, destination dots, capture rings). Each disk gets
+  // a "_moveLayer" group sitting between the cell tiles and the letter
+  // labels inside the rotation group — so paths rotate with the disk, render
+  // above the cells, and stay below the (counter-rotated) letters.
+  function _orgMoveLayer(svg){
+    const g=svg._rotGroup;
+    const letters=Array.from(g.querySelectorAll('text.disk-letter'));
+    // Boost layers — sit BELOW the regular move/check layers so their
+    // "halo-only" output appears as extra shadow UNDER the orange/red
+    // strokes, never on top of them. Clipped to the union of light cells
+    // so they only contribute extra darkness where the path crosses a
+    // light cell. The filter refs are id-based; the actual filter and
+    // clipPath elements are added later by _addHaloFilters / _buildDisk
+    // and resolve lazily at render time.
+    const moveLayerBoost=document.createElementNS(SVG_NS,'g');
+    moveLayerBoost.setAttribute('class','disk-move-layer-boost');
+    moveLayerBoost.setAttribute('clip-path','url(#'+svg.id+'-light-clip)');
+    moveLayerBoost.setAttribute('filter','url(#'+svg.id+'-halo-light-boost)');
+    g.appendChild(moveLayerBoost);
+    const checkLayerBoost=document.createElementNS(SVG_NS,'g');
+    checkLayerBoost.setAttribute('class','disk-check-layer-boost');
+    checkLayerBoost.setAttribute('clip-path','url(#'+svg.id+'-light-clip)');
+    checkLayerBoost.setAttribute('filter','url(#'+svg.id+'-halo-light-boost)');
+    g.appendChild(checkLayerBoost);
+    // disk-move-layer — orange/red selected piece's move visualization.
+    const moveLayer=document.createElementNS(SVG_NS,'g');
+    moveLayer.setAttribute('class','disk-move-layer');
+    g.appendChild(moveLayer);
+    // disk-check-layer — red king-in-check ring + threat attack paths.
+    // Kept separate from the move layer so clearVis() doesn't wipe it,
+    // and so check threats render above move paths if both are visible.
+    const checkLayer=document.createElementNS(SVG_NS,'g');
+    checkLayer.setAttribute('class','disk-check-layer');
+    g.appendChild(checkLayer);
+    // Letters last so they sit on top of both visualization layers.
+    letters.forEach(t=>g.appendChild(t));
+    svg._moveLayer=moveLayer;
+    svg._checkLayer=checkLayer;
+    svg._moveLayerBoost=moveLayerBoost;
+    svg._checkLayerBoost=checkLayerBoost;
+    // Wrap appendChild on each layer so every move-path / check-path
+    // element added is also mirrored (as a deep clone) into the boost
+    // layer below it. The clone inherits the boost layer's clip + filter
+    // and contributes only the extra +35% black shadow on light cells.
+    function patchMirror(primary, boost){
+      const origAppend=primary.appendChild.bind(primary);
+      primary.appendChild=function(node){
+        const ret=origAppend(node);
+        try { boost.appendChild(node.cloneNode(true)); } catch(_){}
+        return ret;
+      };
+      const origRemove=primary.removeChild.bind(primary);
+      primary.removeChild=function(node){
+        // Drop the mirrored clone at the same index. We simply clear the
+        // boost layer when the primary is emptied (the only caller is
+        // the clearing loop), so this just removes the first boost child
+        // to stay in sync.
+        if(boost.firstChild) boost.removeChild(boost.firstChild);
+        return origRemove(node);
+      };
+    }
+    patchMirror(moveLayer, moveLayerBoost);
+    patchMirror(checkLayer, checkLayerBoost);
+  }
+  _orgMoveLayer(diskN);
+  _orgMoveLayer(diskS);
+
+  // ── Halo filters (letters + move paths) ─────────────────────────────────
+  // Each disk gets a <defs> with two SVG <filter> pipelines:
+  //
+  //   {svg.id}-halo-black  — black fluffy halo (for white letters, move paths)
+  //   {svg.id}-halo-white  — white fluffy halo (for black letters)
+  //
+  // Pipeline: feMorphology dilates the source α (thickens the silhouette),
+  // feGaussianBlur softens that into a fog, feFlood + feComposite recolour
+  // the fog to pure black or white, then feMerge stacks three copies for
+  // density and paints the source graphic on top. This is far more reliable
+  // than nested CSS drop-shadow chains inside a CSS-filtered SVG.
+  function _addHaloFilters(svg){
+    const defs=document.createElementNS(SVG_NS,'defs');
+    // `opacity` controls the flood α (1 = fully solid halo colour); `copies`
+    // is how many times the halo is stacked in feMerge before painting the
+    // source on top. Three copies at opacity 1 gives a thick, fully-opaque
+    // halo around the source (used for letters). One copy at opacity 0.5
+    // gives a much lighter "50%" halo (used for the move paths).
+    function makeHalo(id, color, opacity, copies, morphR, blurStd, noSource){
+      // morphR / blurStd control the halo WIDTH (how far the shadow
+      // spreads from the source). Default to the original letter-halo
+      // values (0.6 / 1.4); the path halo overrides both to 1.5× for a
+      // wider shadow under move strokes.
+      // noSource: when true, the feMerge omits SourceGraphic so the
+      // filter emits ONLY the halo (used by the light-cell boost layer,
+      // which only contributes extra shadow, never re-paints the stroke).
+      if(morphR==null) morphR=0.6;
+      if(blurStd==null) blurStd=1.4;
+      const f=document.createElementNS(SVG_NS,'filter');
+      f.setAttribute('id', id);
+      // Roomy region so the halo isn't clipped at the filter boundary.
+      f.setAttribute('x','-50%'); f.setAttribute('y','-50%');
+      f.setAttribute('width','200%'); f.setAttribute('height','200%');
+      // 1. dilate the source α — gives the halo a thicker base before blur
+      const morph=document.createElementNS(SVG_NS,'feMorphology');
+      morph.setAttribute('operator','dilate');
+      morph.setAttribute('radius',String(morphR));
+      morph.setAttribute('in','SourceAlpha');
+      morph.setAttribute('result','dilated');
+      f.appendChild(morph);
+      // 2. blur it into a fog
+      const blur=document.createElementNS(SVG_NS,'feGaussianBlur');
+      blur.setAttribute('in','dilated');
+      blur.setAttribute('stdDeviation',String(blurStd));
+      blur.setAttribute('result','blurred');
+      f.appendChild(blur);
+      // 3. flood with the halo colour, masked by the blurred α
+      const flood=document.createElementNS(SVG_NS,'feFlood');
+      flood.setAttribute('flood-color', color);
+      flood.setAttribute('flood-opacity', String(opacity));
+      flood.setAttribute('result','flooded');
+      f.appendChild(flood);
+      const compose=document.createElementNS(SVG_NS,'feComposite');
+      compose.setAttribute('in','flooded');
+      compose.setAttribute('in2','blurred');
+      compose.setAttribute('operator','in');
+      compose.setAttribute('result','halo');
+      f.appendChild(compose);
+      // 4. merge the requested number of halo copies, then the source on top
+      const merge=document.createElementNS(SVG_NS,'feMerge');
+      for(let i=0;i<copies;i++){
+        const mn=document.createElementNS(SVG_NS,'feMergeNode');
+        mn.setAttribute('in','halo');
+        merge.appendChild(mn);
+      }
+      if(!noSource){
+        const mnSrc=document.createElementNS(SVG_NS,'feMergeNode');
+        mnSrc.setAttribute('in','SourceGraphic');
+        merge.appendChild(mnSrc);
+      }
+      f.appendChild(merge);
+      defs.appendChild(f);
+    }
+    // Letter halos — full strength (3 stacked copies at opacity 1).
+    makeHalo(svg.id+'-halo-black', '#000', 1, 3);
+    makeHalo(svg.id+'-halo-white', '#fff', 1, 3);
+    // Move-path halo — depth kept at 150% (two stacked copies at 1.0
+    // opacity), width scaled to 75% of the previous 150% setting per
+    // user request: dilate 0.9 → 0.675, blur 2.1 → 1.575. Net width is
+    // 1.5 × 0.75 = 1.125× the original baseline.
+    makeHalo(svg.id+'-halo-path',  '#000', 1.0, 2, 0.675, 1.575);
+    // Light-cell boost halo — adds +35% extra black shadow ONLY where
+    // the move path crosses a light cell. Applied to a separate boost
+    // layer (built in _orgMoveLayer) that's clip-path'd to the union of
+    // light cells. noSource=true so this filter emits only the halo,
+    // never re-paints the orange/red stroke on top. Width matches the
+    // main path halo so the extra darkness sits exactly under it.
+    makeHalo(svg.id+'-halo-light-boost', '#000', 0.35, 1, 0.675, 1.575, true);
+    svg.insertBefore(defs, svg.firstChild);
+    svg._haloBlack    ='url(#'+svg.id+'-halo-black)';
+    svg._haloWhite    ='url(#'+svg.id+'-halo-white)';
+    svg._haloPath     ='url(#'+svg.id+'-halo-path)';
+    svg._haloLightBoost='url(#'+svg.id+'-halo-light-boost)';
+    svg._lightClipUrl ='url(#'+svg.id+'-light-clip)';
+  }
+  _addHaloFilters(diskN);
+  _addHaloFilters(diskS);
+  // Hook the move-path and check-threat groups to the half-strength path
+  // halo filter so the orange/red strokes get a soft black shadow that's
+  // roughly 50% of the letter halo's depth — visible but not heavy.
+  diskN._moveLayer.setAttribute('filter', diskN._haloPath);
+  diskS._moveLayer.setAttribute('filter', diskS._haloPath);
+  diskN._checkLayer.setAttribute('filter', diskN._haloPath);
+  diskS._checkLayer.setAttribute('filter', diskS._haloPath);
+
+  // ── Knight cross-hemisphere overlay ──────────────────────────────────────
+  // A third SVG layered on top of both disks. It's used exclusively to
+  // animate KNIGHT moves that cross the equator — knights hop (unlike
+  // sliders, which trace a great-circle path on the surface), so we render
+  // the knight letter on a single straight line from source-cell to
+  // destination-cell, even if those cells live on different disks. Without
+  // this, the per-disk flying letter has to switch disks mid-animation and
+  // visibly jumps when the equator crossing longitude doesn't match the
+  // disk tangent point.
+  //
+  // The overlay's viewBox combines both disks into one coordinate system:
+  // 200×384 units (= 256×491.52 px). North disk cells live in y ∈ [−100,
+  // +100]; south disk cells are translated by +184 in y, so they live in
+  // y ∈ [+84, +284]. The two ranges overlap by 16u (the 20.48 px tangent
+  // overlap), so cells just on either side of the equator land at very
+  // close overlay-y values and the interpolation reads as a single smooth
+  // path across the hemisphere boundary.
+  const _disksWrapEl=document.getElementById('disksWrap');
+  const knightOverlay=document.createElementNS(SVG_NS,'svg');
+  knightOverlay.setAttribute('id','disksKnightOverlay');
+  knightOverlay.setAttribute('viewBox','-100 -100 200 384');
+  knightOverlay.setAttribute('preserveAspectRatio','xMidYMin meet');
+  knightOverlay.setAttribute('aria-hidden','true');
+  _addHaloFilters(knightOverlay);
+  // Append AFTER both disk SVGs so the overlay's content renders on top
+  // (DOM order = paint order within #disksWrap).
+  _disksWrapEl.appendChild(knightOverlay);
+  // Offset used to translate south-disk local coords into the overlay's
+  // combined viewBox y. Equals (south_top_px / disk_height_px) * 200 −
+  // (−100) → (235.52 / 256) * 200 + 100 − 100 = 184. Hoisted as a const so
+  // both the source/dest position calc and any future helpers can reuse it.
+  const _SOUTH_OVERLAY_DY=184;
+  function _cellOverlayPos(lat, lon){
+    const c=_diskCellXY(lat, lon);
+    const yawDeg=_diskYaw*180/Math.PI;
+    if(c.isN){
+      // North group: rotate(-yawDeg + 22.5)
+      const a=(-yawDeg + 22.5)*Math.PI/180;
+      const ca=Math.cos(a), sa=Math.sin(a);
+      return { x: c.x*ca - c.y*sa, y: c.x*sa + c.y*ca };
+    } else {
+      // South group: rotate(yawDeg + 157.5) scale(-1, 1).
+      // SVG applies transforms right-to-left for points: scale first,
+      // then rotate.
+      const a=(yawDeg + 157.5)*Math.PI/180;
+      const ca=Math.cos(a), sa=Math.sin(a);
+      const sx=-c.x, sy=c.y;
+      return {
+        x: sx*ca - sy*sa,
+        y: sx*sa + sy*ca + _SOUTH_OVERLAY_DY
+      };
+    }
+  }
+
+  // Tone-mapped equivalents of the globe's raw 0xff6600 / 0x880000. The globe
+  // pushes those source colors through ACES Filmic tone mapping (exposure
+  // 1.05) and sRGB encoding, which shifts the orange toward an amber-yellow
+  // and lightens the deep red. The SVG disks don't tone-map, so we use these
+  // post-pipeline values directly so the disk path matches the sphere.
+  const _CLR_ORANGE='#e9c600';
+  const _CLR_DEEPRED='#d52414';
+  const _ORANGE_INT=0xe9c600;
+  const _DEEPRED_INT=0xd52414;
+  function _lerpHex(a,b,t){
+    const ar=(a>>16)&255, ag=(a>>8)&255, ab=a&255;
+    const br=(b>>16)&255, bg=(b>>8)&255, bb=b&255;
+    const r=Math.round(ar+(br-ar)*t);
+    const g=Math.round(ag+(bg-ag)*t);
+    const c=Math.round(ab+(bb-ab)*t);
+    return '#'+((r<<16)|(g<<8)|c).toString(16).padStart(6,'0');
+  }
+
+  // (theta, phi) → projected (x, y) on whichever disk (theta < π/2 = north).
+  // Inside the polar cap region (theta < CAP_THETA) we let r shrink linearly
+  // toward 0 so pole-crossing paths visibly enter the disk centre; outside,
+  // r is interpolated so cell centres land on their ring midlines.
+  function _proj(theta,phi){
+    const isN=theta<Math.PI/2;
+    const tp=isN?theta:(Math.PI-theta);
+    let r;
+    if(tp<CAP_THETA) r=R_IN*tp/CAP_THETA;
+    else r=R_IN+Math.min(4,(tp-CAP_THETA)/BAND_THETA)*RING_W;
+    r=Math.min(r,R_OUT);
+    const phiDeg=phi*180/Math.PI;
+    // Both disks share the same longitude orientation: lon 0 (phi=22.5°) sits
+    // at SVG angle −90° (top of disk). Equator crossings at the same longitude
+    // therefore land at the same SVG angle on both disks.
+    const aDeg=phiDeg-112.5;
+    const aRad=aDeg*Math.PI/180;
+    return{isN, x:r*Math.cos(aRad), y:r*Math.sin(aRad)};
+  }
+  function _diskCellXY(lat,lon){
+    return _proj(CAP_THETA+(lat+0.5)*BAND_THETA, (lon+0.5)/NUM_LON*2*Math.PI);
+  }
+  function _v3ToTP(v){
+    const L=Math.hypot(v.x,v.y,v.z)||1;
+    return{theta:Math.acos(Math.max(-1,Math.min(1,v.y/L))), phi:Math.atan2(v.z,v.x)};
+  }
+  // Unwrap phi so consecutive samples never jump across the ±π boundary.
+  function _unwrapTPs(tps){
+    for(let i=1;i<tps.length;i++){
+      while(tps[i].phi-tps[i-1].phi>Math.PI) tps[i].phi-=2*Math.PI;
+      while(tps[i].phi-tps[i-1].phi<-Math.PI) tps[i].phi+=2*Math.PI;
+    }
+    return tps;
+  }
+  // Split a (theta, phi) sample sequence at equator crossings, projecting
+  // each piece onto its hemisphere's disk. Returns [{isN, pts:[{x,y},...]}].
+  function _splitEqProj(tps){
+    const out=[];
+    let cur=null;
+    for(let i=0;i<tps.length;i++){
+      const s=tps[i];
+      const isN=s.theta<Math.PI/2;
+      const pr=_proj(s.theta,s.phi);
+      if(cur && cur.isN!==isN){
+        const prev=tps[i-1];
+        const t=(Math.PI/2-prev.theta)/(s.theta-prev.theta);
+        const phiE=prev.phi+(s.phi-prev.phi)*t;
+        const eps=1e-4;
+        const ePrev=_proj(Math.PI/2-(cur.isN?eps:-eps),phiE);
+        cur.pts.push({x:ePrev.x,y:ePrev.y});
+        out.push(cur);
+        const eNew=_proj(Math.PI/2-(isN?eps:-eps),phiE);
+        cur={isN, pts:[{x:eNew.x,y:eNew.y},{x:pr.x,y:pr.y}]};
+      } else {
+        if(!cur) cur={isN, pts:[]};
+        cur.pts.push({x:pr.x,y:pr.y});
+      }
+    }
+    if(cur && cur.pts.length>=1) out.push(cur);
+    return out.filter(s=>s.pts.length>=2);
+  }
+  // Build a sequence of (theta, phi) samples for the path that corresponds
+  // to a single move object. Uses the same primitives (geodesicPts,
+  // latRingArc, cellPos, poleRef) the globe-side path renderer uses, so the
+  // disk path follows the same geometric intent as the tube on the sphere.
+  function _movePathTPs(originLat, originLon, m){
+    const r=R;
+    const orig3d=cellPos(originLat,originLon,r);
+    let pts3d;
+    if(m.isKnight){
+      let eL=m.elbowLat, eN=m.elbowLon;
+      let polePt=null;
+      if(eL<0){polePt=new THREE.Vector3(0,r,0); const ref=poleRef(eL,eN); eL=ref.l; eN=ref.n;}
+      else if(eL>7){polePt=new THREE.Vector3(0,-r,0); const ref=poleRef(eL,eN); eL=ref.l; eN=ref.n;}
+      let seg1;
+      if(polePt){
+        seg1=[...geodesicPts(orig3d,polePt,16), ...geodesicPts(polePt,cellPos(eL,eN,r),16).slice(1)];
+      } else if(m.longLat){
+        seg1=geodesicPts(orig3d, cellPos(eL,eN,r), 24);
+      } else {
+        seg1=latRingArc(originLat, originLon, eN, 32, r);
+      }
+      let seg2;
+      if(m.longLat){
+        seg2=latRingArc(eL, eN, m.lon, 32, r);
+      } else {
+        seg2=geodesicPts(cellPos(eL,eN,r), cellPos(m.lat,m.lon,r), 24);
+      }
+      pts3d=[...seg1, ...seg2.slice(1)];
+    } else if(m.pole){
+      const poleVec=new THREE.Vector3(0,(m.pole==='N'?1:-1)*r,0);
+      pts3d=[...geodesicPts(orig3d, poleVec, 24), ...geodesicPts(poleVec, cellPos(m.lat,m.lon,r), 24).slice(1)];
+    } else if(m.diagKey){
+      // Mirror the globe's diagonal renderer (showMoves's diagGroup branch):
+      // reconstruct the cell-by-cell path the globe traces, then for each
+      // consecutive (c0, c1) pair, sample either:
+      //   • a loxodromic figure-8 spiral through the pole (when c0.lat ===
+      //     c1.lat and the lon difference is 4) — same algorithm the globe
+      //     uses for `isPole` segments; produces the smooth ∞-shape pole
+      //     wrap visible on the sphere, or
+      //   • a linear (θ, φ) loxodrome between the two cells otherwise.
+      // The globe's diag() bounces off the pole and keeps stepping with
+      // mirrored (cDl, cDn) — we replicate that loop here so multi-step
+      // queen diagonals that wrap past the pole produce the same cell
+      // chain the globe shows.
+      const parts=m.diagKey.split(',');
+      const initDl=parseInt(parts[0]);
+      const initDn=parseInt(parts[1]);
+      const wpLen=m.diagWP?m.diagWP.length:1;
+      const cells=[{lat:originLat, lon:originLon}];
+      let cl=originLat, cn=originLon, cDl=initDl, cDn=initDn;
+      for(let i=0;i<wpLen;i++){
+        const nb=cn;
+        cl+=cDl; cn=wL(cn+cDn);
+        if(cl<0){ cl=0; cn=wL(nb+4); cDl=1; cDn=-cDn; }
+        else if(cl>7){ cl=7; cn=wL(nb+4); cDl=-1; cDn=-cDn; }
+        cells.push({lat:cl, lon:cn});
+      }
+      pts3d=[];
+      let poleCrossCount=0;
+      for(let i=0;i<cells.length-1;i++){
+        const c0=cells[i], c1=cells[i+1];
+        const th0=CAP_THETA+(c0.lat+0.5)*BAND_THETA;
+        const th1=CAP_THETA+(c1.lat+0.5)*BAND_THETA;
+        const ph0=(c0.lon+0.5)/NUM_LON*2*Math.PI;
+        const ph1r=(c1.lon+0.5)/NUM_LON*2*Math.PI;
+        let dph=((ph1r-ph0+3*Math.PI)%(2*Math.PI))-Math.PI;
+        const lDiff=Math.min(((c1.lon-c0.lon+8)%8), ((c0.lon-c1.lon+8)%8));
+        const isPole=c0.lat===c1.lat && lDiff===4;
+        const skip=(i===0)?0:1;
+        if(isPole){
+          const dn_cur=initDn*(poleCrossCount%2===0?1:-1);
+          const dph_step=(2*Math.PI/NUM_LON)*dn_cur;
+          const isNorth=c0.lat<4;
+          const poleTheta=isNorth?0:Math.PI;
+          const dl_sign=isNorth?-1:1;
+          const distToPole=isNorth?th0:(Math.PI-th0);
+          const t_half=distToPole/BAND_THETA;
+          const phi_pole=ph0+dph_step*t_half;
+          const N=64;
+          for(let s=skip;s<=N;s++){
+            const t=(s/N)*2*t_half;
+            let theta, phi;
+            if(t<=t_half){
+              theta=th0+dl_sign*BAND_THETA*t;
+              phi=ph0+dph_step*t;
+            } else {
+              const dt=t-t_half;
+              theta=poleTheta-dl_sign*BAND_THETA*dt;
+              phi=phi_pole+Math.PI-dph_step*dt;
+            }
+            pts3d.push(new THREE.Vector3(
+              r*Math.sin(theta)*Math.cos(phi),
+              r*Math.cos(theta),
+              r*Math.sin(theta)*Math.sin(phi)));
+          }
+          poleCrossCount++;
+        } else {
+          const N=16;
+          for(let s=skip;s<=N;s++){
+            const t=s/N;
+            const theta=th0+(th1-th0)*t;
+            const phi=ph0+dph*t;
+            pts3d.push(new THREE.Vector3(
+              r*Math.sin(theta)*Math.cos(phi),
+              r*Math.cos(theta),
+              r*Math.sin(theta)*Math.sin(phi)));
+          }
+        }
+      }
+    } else if(m.straightKey && m.straightDl===0){
+      // 64 samples along a rook/queen horizontal arc — a 7-cell move (315°)
+      // gets a sample every ~5° so the projected disk arc reads as smooth.
+      pts3d=latRingArc(originLat, originLon, m.lon, 64, r, m.straightDn);
+    } else {
+      pts3d=geodesicPts(orig3d, cellPos(m.lat,m.lon,r), 32);
+    }
+    const tps=pts3d.map(_v3ToTP);
+    _unwrapTPs(tps);
+    return tps;
+  }
+  function _drawSvgPath(svg, pts, attrs){
+    if(pts.length<2) return;
+    const p=document.createElementNS(SVG_NS,'path');
+    let d='';
+    for(let i=0;i<pts.length;i++) d+=(i===0?'M':'L')+pts[i].x.toFixed(2)+' '+pts[i].y.toFixed(2)+' ';
+    p.setAttribute('d',d);
+    p.setAttribute('fill','none');
+    for(const k in attrs) p.setAttribute(k,attrs[k]);
+    svg._moveLayer.appendChild(p);
+    return p;
+  }
+  // ── Polyline trim helpers ───────────────────────────────────────────────
+  // The move-path / threat-path polylines run all the way to the cell
+  // centres, but on each end there's a marker circle (origin ring, dest
+  // dot, capture ring, king check ring, attacker red dot). The line
+  // shouldn't pierce those circles — it should stop exactly at the
+  // circumference. _trimStart / _trimEnd walk the polyline from one end,
+  // drop the points inside `radius` of `center`, and replace the first
+  // crossing with an interpolated boundary point so the trim is exact.
+  function _dist2D(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+  function _trimStart(pts, center, radius){
+    if(!pts || pts.length<2 || !center || !(radius>0)) return pts;
+    let i=0;
+    while(i<pts.length-1 && _dist2D(pts[i], center)<radius) i++;
+    if(i===0) return pts.slice();
+    const p0=pts[i-1], p1=pts[i];
+    const d0=_dist2D(p0,center), d1=_dist2D(p1,center);
+    if(Math.abs(d1-d0)<1e-4) return pts.slice(i);
+    const t=(radius-d0)/(d1-d0);
+    const bp={ x:p0.x+(p1.x-p0.x)*t, y:p0.y+(p1.y-p0.y)*t };
+    return [bp, ...pts.slice(i)];
+  }
+  function _trimEnd(pts, center, radius){
+    if(!pts || pts.length<2 || !center || !(radius>0)) return pts;
+    let i=pts.length-1;
+    while(i>0 && _dist2D(pts[i], center)<radius) i--;
+    if(i===pts.length-1) return pts.slice();
+    const p0=pts[i], p1=pts[i+1];
+    const d0=_dist2D(p0,center), d1=_dist2D(p1,center);
+    if(Math.abs(d0-d1)<1e-4) return pts.slice(0,i+1);
+    const t=(d0-radius)/(d0-d1);
+    const bp={ x:p0.x+(p1.x-p0.x)*t, y:p0.y+(p1.y-p0.y)*t };
+    return [...pts.slice(0,i+1), bp];
+  }
+  // Apply trim to the two ends of the hemisphere-split segments list.
+  // `startTrim` / `endTrim` are optional {center:{x,y,isN}, radius}.
+  // Trim only applies to the segment whose hemisphere matches the
+  // marker's, so a path that crosses the equator gets trimmed correctly
+  // on whichever disk holds the marker.
+  function _trimSegments(segs, startTrim, endTrim){
+    if(!segs.length) return segs;
+    if(startTrim && startTrim.center){
+      const first=segs[0];
+      if(first.isN===startTrim.center.isN)
+        first.pts=_trimStart(first.pts, startTrim.center, startTrim.radius);
+    }
+    if(endTrim && endTrim.center){
+      const last=segs[segs.length-1];
+      if(last.isN===endTrim.center.isN)
+        last.pts=_trimEnd(last.pts, endTrim.center, endTrim.radius);
+    }
+    return segs.filter(s=>s.pts && s.pts.length>=2);
+  }
+  // Stroke the path with a capture gradient on the last ~1 cell of arc length
+  // (orange → deep red) and the rest in orange. Dashed style for knight Ls.
+  //
+  // Important: each hemisphere segment is drawn as a SINGLE <path> for the
+  // orange portion (and another single <path> for any dashed knight stroke),
+  // not one tiny <path> per sample. Splitting per sample would reset the
+  // dash pattern on every fragment, hiding the knight dashes entirely.
+  function _drawPathColored(tps, isCapture, dashed, startTrim, endTrim){
+    let segs=_splitEqProj(tps);
+    if(!segs.length) return;
+    segs=_trimSegments(segs, startTrim, endTrim);
+    if(!segs.length) return;
+    const lens=segs.map(seg=>{
+      let L=0;
+      for(let i=1;i<seg.pts.length;i++)
+        L+=Math.hypot(seg.pts[i].x-seg.pts[i-1].x, seg.pts[i].y-seg.pts[i-1].y);
+      return L;
+    });
+    const total=lens.reduce((a,b)=>a+b,0);
+    const gradLen=isCapture?Math.min(total, RING_W*1.2):0;
+    const gradStart=total-gradLen;
+    // Solid and dashed move-path strokes share the same 1.56 width so the
+    // path lines, the yellow origin ring, and the red rings all read at
+    // matching thickness.
+    const SW=1.56;
+    function _solidAttrs(stroke){
+      return {stroke, 'stroke-width':SW, 'stroke-linecap':'round', 'stroke-linejoin':'round'};
+    }
+    function _dashedAttrs(stroke){
+      // Dash pattern sized in SVG units (1u ≈ 1.28 px at the current disk
+      // size). 4u dash + 3u gap → easily readable on screen.
+      return {stroke, 'stroke-width':SW, 'stroke-linecap':'butt',
+              'stroke-linejoin':'round', 'stroke-dasharray':'4 3'};
+    }
+    // Dashed (knight) path: one path per hemisphere segment, single dash
+    // pattern across the whole leg. Capture gradient is skipped here — the
+    // red capture ring on the target already signals the capture.
+    if(dashed){
+      for(const seg of segs){
+        if(seg.pts.length<2) continue;
+        _drawSvgPath(seg.isN?diskN:diskS, seg.pts, _dashedAttrs(_CLR_ORANGE));
+      }
+      return;
+    }
+    // Solid path: walk hemisphere segments, splitting at the gradient
+    // boundary so the orange portion remains a single <path> element.
+    let cumPos=0;
+    for(let si=0;si<segs.length;si++){
+      const seg=segs[si];
+      const svg=seg.isN?diskN:diskS;
+      const pts=seg.pts;
+      if(pts.length<2){ cumPos+=lens[si]; continue; }
+      if(gradLen===0 || cumPos+lens[si]<=gradStart){
+        // Whole segment is in the orange zone.
+        _drawSvgPath(svg, pts, _solidAttrs(_CLR_ORANGE));
+        cumPos+=lens[si];
+        continue;
+      }
+      if(cumPos>=gradStart){
+        // Whole segment is in the gradient zone — slice into N pieces.
+        _drawGradientSegment(svg, pts, lens[si], cumPos-gradStart, gradLen);
+        cumPos+=lens[si];
+        continue;
+      }
+      // Segment straddles the gradient boundary. Find the split point.
+      let segCum=0, splitIdx=-1, splitPt=null;
+      for(let i=1;i<pts.length;i++){
+        const segLen=Math.hypot(pts[i].x-pts[i-1].x, pts[i].y-pts[i-1].y);
+        const arcStart=cumPos+segCum, arcEnd=arcStart+segLen;
+        if(arcEnd>=gradStart){
+          const t=segLen>0?(gradStart-arcStart)/segLen:0;
+          splitIdx=i;
+          splitPt={x:pts[i-1].x+(pts[i].x-pts[i-1].x)*t,
+                   y:pts[i-1].y+(pts[i].y-pts[i-1].y)*t};
+          break;
+        }
+        segCum+=segLen;
+      }
+      if(splitIdx===-1){
+        _drawSvgPath(svg, pts, _solidAttrs(_CLR_ORANGE));
+      } else {
+        const orangePts=[...pts.slice(0, splitIdx), splitPt];
+        if(orangePts.length>=2) _drawSvgPath(svg, orangePts, _solidAttrs(_CLR_ORANGE));
+        const gradPts=[splitPt, ...pts.slice(splitIdx)];
+        const gradPartLen=lens[si]-(gradStart-cumPos);
+        _drawGradientSegment(svg, gradPts, gradPartLen, 0, gradLen);
+      }
+      cumPos+=lens[si];
+    }
+    function _drawGradientSegment(svg, pts, segArcLen, segOffset, gradLen){
+      // Colour each ORIGINAL segment of the polyline (between consecutive
+      // sample points) according to its midpoint's arc-length position in
+      // the gradient zone. This keeps the path's geometry exactly as the
+      // sampler produced it — important for diagonal spirals where any
+      // resampling collapses the curve into straight chords.
+      if(pts.length<2 || segArcLen<=0) return;
+      let arc=0;
+      for(let i=1;i<pts.length;i++){
+        const dx=pts[i].x-pts[i-1].x, dy=pts[i].y-pts[i-1].y;
+        const segLen=Math.hypot(dx,dy);
+        if(segLen<1e-3) continue;
+        const midArc=arc+segLen/2;
+        const cFrac=Math.min(1, Math.max(0, (segOffset+midArc)/gradLen));
+        _drawSvgPath(svg, [pts[i-1], pts[i]],
+          _solidAttrs(_lerpHex(_ORANGE_INT,_DEEPRED_INT,cFrac)));
+        arc+=segLen;
+      }
+    }
+  }
+  function _diskMarker(lat,lon,kind){
+    const c=_diskCellXY(lat,lon);
+    const svg=c.isN?diskN:diskS;
+    const el=document.createElementNS(SVG_NS,'circle');
+    el.setAttribute('cx',c.x.toFixed(2));
+    el.setAttribute('cy',c.y.toFixed(2));
+    // Marker geometry: dots match their same-coloured rings in radius so
+    // yellow dot/origin ring read at one size and red dot/capture ring at
+    // another. All ring strokes share the path-line width (1.56) for a
+    // single uniform line weight across the visualization.
+    if(kind==='origin'){
+      el.setAttribute('r',3.75);
+      el.setAttribute('fill','none');
+      el.setAttribute('stroke',_CLR_ORANGE);
+      el.setAttribute('stroke-width',1.56);
+    } else if(kind==='dot'){
+      el.setAttribute('r',3.75);            // match origin ring radius
+      el.setAttribute('fill',_CLR_ORANGE);
+    } else if(kind==='capture'){
+      el.setAttribute('r',4.5);
+      el.setAttribute('fill','none');
+      el.setAttribute('stroke',_CLR_DEEPRED);
+      el.setAttribute('stroke-width',1.56);
+    }
+    svg._moveLayer.appendChild(el);
+  }
+  function _diskClearMoves(){
+    [diskN,diskS].forEach(svg=>{
+      while(svg._moveLayer.firstChild) svg._moveLayer.removeChild(svg._moveLayer.firstChild);
+      // Belt-and-braces drain of the boost layer in case the mirror got
+      // out of sync (e.g., a cloneNode failure swallowed by the try-catch
+      // in the patched appendChild). Normally already empty after the
+      // primary loop, since each removeChild drains one boost child too.
+      if(svg._moveLayerBoost){
+        while(svg._moveLayerBoost.firstChild)
+          svg._moveLayerBoost.removeChild(svg._moveLayerBoost.firstChild);
+      }
+    });
+  }
+  function _diskShowMovesFor(originLat, originLon, autoOnlyLat, autoOnlyLon){
+    _diskClearMoves();
+    if(originLat==null || originLon==null) return;
+    if(!board[originLat] || !board[originLat][originLon]) return;
+    let moves;
+    try {
+      moves=(typeof testModeActive!=='undefined'&&testModeActive)
+        ?(typeof getValidMoves==='function'?getValidMoves(originLat,originLon):[])
+        :getLegalMoves(originLat,originLon);
+    } catch(e){ return; }
+    if(!moves||!moves.length) return;
+    _diskMarker(originLat,originLon,'origin');
+    const sp=board[originLat][originLon];
+    const isCap=(lat,lon)=>{
+      const t=board[lat]?.[lon];
+      return !!(t&&sp&&t.color!==sp.color);
+    };
+    const passAuto=(m)=> (autoOnlyLat==null) || (m.lat===autoOnlyLat&&m.lon===autoOnlyLon);
+    // Dedup grouped types (straight, diagonal) so each direction draws ONE
+    // full path through every reachable cell — not N overlapping copies.
+    let toDraw;
+    if(autoOnlyLat!=null){
+      toDraw=moves.filter(passAuto);
+    } else {
+      const farthest=new Map();
+      const singles=[];
+      for(const m of moves){
+        let key=null;
+        if(m.straightKey) key='S|'+m.straightKey;
+        else if(m.diagKey) key='D|'+m.diagKey;
+        if(!key){ singles.push(m); continue; }
+        const score=(m.step||0) + (m.diagWP?m.diagWP.length:0);
+        const prev=farthest.get(key);
+        if(!prev || score>prev.score) farthest.set(key,{m,score});
+      }
+      toDraw=[...singles, ...Array.from(farthest.values()).map(v=>v.m)];
+    }
+    // Trim the polyline against the markers so the line stops at the
+    // circumference of each ring/dot rather than piercing the centre.
+    // Dots now match their same-coloured rings (yellow dot/ring r=3.75,
+    // red ring r=4.5). +0.3u visual gap so the line clears the marker.
+    const ORIGIN_TRIM=3.75+0.3;
+    const DOT_TRIM=3.75+0.3;
+    const CAPTURE_TRIM=4.5+0.3;
+    const originPos=_diskCellXY(originLat, originLon);
+    for(const m of toDraw){
+      const tps=_movePathTPs(originLat, originLon, m);
+      const cap=isCap(m.lat,m.lon);
+      const targetPos=_diskCellXY(m.lat, m.lon);
+      _drawPathColored(tps, cap, !!m.isKnight,
+        { center:originPos, radius:ORIGIN_TRIM },
+        { center:targetPos, radius: cap ? CAPTURE_TRIM : DOT_TRIM });
+    }
+    // Destination markers — drawn for every reachable cell.
+    for(const m of moves){
+      if(!passAuto(m)) continue;
+      if(m.isEnPassant){
+        _diskMarker(m.lat,m.lon,'dot');
+        _diskMarker(m.capturedLat,m.capturedLon,'capture');
+      } else if(isCap(m.lat,m.lon)){
+        _diskMarker(m.lat,m.lon,'capture');
+      } else {
+        _diskMarker(m.lat,m.lon,'dot');
+      }
+    }
+  }
+  // Wrap globe-side functions so the disk overlay stays in sync.
+  const _origShowMoves=window.showMoves;
+  window.showMoves=function(lat,lon,autoOnlyLat,autoOnlyLon){
+    const r=_origShowMoves.apply(this,arguments);
+    try { _diskShowMovesFor(lat,lon, autoOnlyLat==null?null:autoOnlyLat, autoOnlyLon==null?null:autoOnlyLon); } catch(e){ /* keep globe even if disk fails */ }
+    return r;
+  };
+  const _origClearVis=window.clearVis;
+  window.clearVis=function(){
+    const r=_origClearVis.apply(this,arguments);
+    try { _diskClearMoves(); } catch(e){}
+    return r;
+  };
+
+  // ── Flying letter (disk-side move animation) ────────────────────────────
+  // While the globe runs its piece-move animation (moveAnim is non-null),
+  // the disk normally would just snap-refresh because the board state
+  // updates immediately. To get the SAME smooth animation on the disks,
+  // we (1) capture the move's from/to/piece info at execMove time,
+  // (2) suppress the disk letter refresh while moveAnim is running, and
+  // (3) draw a temporary "flying" letter that tracks the moving sprite's
+  // projected position on whichever disk it currently belongs to.
+  let _diskMoveAnim=null;        // {fromLat, fromLon, toLat, toLon, type, color}
+  let _flyingLetterN=null;       // temp <text> on north disk (or null)
+  let _flyingLetterS=null;       // temp <text> on south disk (or null)
+  let _flyingLetterK=null;       // temp <text> on the knight overlay (or null)
+
+  const _origExecMove=window.execMove;
+  if(typeof _origExecMove==='function'){
+    window.execMove=function(fromLat,fromLon,toLat,toLon){
+      const piece=board[fromLat]&&board[fromLat][fromLon];
+      if(piece){
+        _diskMoveAnim={
+          fromLat, fromLon, toLat, toLon,
+          type: piece.type, color: piece.color
+        };
+      } else {
+        _diskMoveAnim=null;
+      }
+      return _origExecMove.apply(this,arguments);
+    };
+  }
+
+  function _removeFlyingLetter(slot){
+    const t=slot==='N'?_flyingLetterN:_flyingLetterS;
+    if(t && t.parentNode) t.parentNode.removeChild(t);
+    if(slot==='N') _flyingLetterN=null; else _flyingLetterS=null;
+  }
+  function _removeKnightLetter(){
+    if(_flyingLetterK && _flyingLetterK.parentNode){
+      _flyingLetterK.parentNode.removeChild(_flyingLetterK);
+    }
+    _flyingLetterK=null;
+  }
+  function _ensureKnightLetter(type, color){
+    if(_flyingLetterK) return _flyingLetterK;
+    const t=document.createElementNS(SVG_NS,'text');
+    t.setAttribute('class','disk-letter '+(color==='white'?'pc-white':'pc-black'));
+    t.textContent=_pieceLetter[type]||'';
+    t.setAttribute('filter', color==='white'?knightOverlay._haloBlack:knightOverlay._haloWhite);
+    knightOverlay.appendChild(t);
+    _flyingLetterK=t;
+    return t;
+  }
+  function _ensureFlyingLetter(isN, type, color){
+    const slot=isN?'N':'S';
+    let t=isN?_flyingLetterN:_flyingLetterS;
+    if(t) return t;
+    t=document.createElementNS(SVG_NS,'text');
+    t.setAttribute('class','disk-letter '+(color==='white'?'pc-white':'pc-black'));
+    t.textContent=_pieceLetter[type]||'';
+    // Same SVG halo filter that the resident cell letters use, picked by
+    // piece colour: white piece → black halo, black piece → white halo.
+    const host=isN?diskN:diskS;
+    t.setAttribute('filter', color==='white'?host._haloBlack:host._haloWhite);
+    host._rotGroup.appendChild(t);
+    if(isN) _flyingLetterN=t; else _flyingLetterS=t;
+    return t;
+  }
+  function _hideFromCellLetter(){
+    if(!_diskMoveAnim) return;
+    const {fromLat, fromLon}=_diskMoveAnim;
+    [diskN,diskS].forEach(svg=>{
+      const t=svg._rotGroup.querySelector(
+        'text.disk-letter[data-lat="'+fromLat+'"][data-lon="'+fromLon+'"]');
+      if(t && t.textContent){
+        t.textContent='';
+      }
+    });
+  }
+  function _updateFlyingLetter(){
+    if(!moveAnim || !_diskMoveAnim){
+      // Animation finished (or never started): drop ALL flying letters
+      // (per-disk + knight overlay) and clear pending state so the next
+      // sig-change repaint runs.
+      if(_flyingLetterN) _removeFlyingLetter('N');
+      if(_flyingLetterS) _removeFlyingLetter('S');
+      if(_flyingLetterK) _removeKnightLetter();
+      if(_diskMoveAnim){
+        _diskMoveAnim=null;
+        _lastBoardSig='';                       // force the post-move refresh
+      }
+      return;
+    }
+    // Keep the FROM-cell letter erased every frame — the source state is
+    // "pre-move" because we gate _refreshDiskLetters on !moveAnim, but
+    // _refreshDiskLetters may still have repainted FROM with the OLD piece
+    // once at animation start. Cheap to keep clearing it.
+    _hideFromCellLetter();
+    // KNIGHT: render in the cross-hemisphere overlay with a straight-line
+    // interpolation from source-cell to destination-cell, so the letter
+    // moves smoothly even across the equator. (Sliding pieces still use
+    // the 3D-position projection below — they trace surface paths and
+    // their flying-letter motion already aligns with the move-path.)
+    if(_diskMoveAnim.type==='N'){
+      if(_flyingLetterN) _removeFlyingLetter('N');
+      if(_flyingLetterS) _removeFlyingLetter('S');
+      const src=_cellOverlayPos(_diskMoveAnim.fromLat, _diskMoveAnim.fromLon);
+      const dst=_cellOverlayPos(_diskMoveAnim.toLat,   _diskMoveAnim.toLon);
+      const te=(typeof easeInOut==='function')
+        ? easeInOut(moveAnim.t)
+        : moveAnim.t;
+      const x=src.x + (dst.x - src.x) * te;
+      const y=src.y + (dst.y - src.y) * te;
+      const letter=_ensureKnightLetter(_diskMoveAnim.type, _diskMoveAnim.color);
+      letter.setAttribute('x', x.toFixed(2));
+      letter.setAttribute('y', y.toFixed(2));
+      return;
+    }
+    // Non-knight: drop any leftover knight overlay letter, then continue
+    // with the original per-disk 3D-projection flying letter.
+    if(_flyingLetterK) _removeKnightLetter();
+    // Read the moving sprite's globe-local position and project onto the
+    // disk corresponding to its current hemisphere.
+    const sp=moveAnim.sprite;
+    if(!sp || !sp.position) return;
+    const pos=sp.position;
+    const len=Math.hypot(pos.x, pos.y, pos.z);
+    if(len<1e-4) return;
+    const theta=Math.acos(Math.max(-1, Math.min(1, pos.y/len)));
+    const phi=Math.atan2(pos.z, pos.x);
+    const proj=_proj(theta, phi);
+    // Drop the flying letter from the other hemisphere if the piece crossed
+    // the equator mid-animation.
+    if(proj.isN){
+      if(_flyingLetterS) _removeFlyingLetter('S');
+    } else {
+      if(_flyingLetterN) _removeFlyingLetter('N');
+    }
+    const letter=_ensureFlyingLetter(proj.isN, _diskMoveAnim.type, _diskMoveAnim.color);
+    letter.setAttribute('x', proj.x.toFixed(2));
+    letter.setAttribute('y', proj.y.toFixed(2));
+    // The per-frame _updateDisks() picks the flying letter up via the
+    // `text.disk-letter` selector and applies the same counter-rotation
+    // (and mirror, on south) used for the static cell labels, so the
+    // flying letter stays upright the whole way.
+  }
+
+  // ── Board-state reflection ───────────────────────────────────────────────
+  let _lastBoardSig='';
+  function _boardSig(){
+    let s='';
+    for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+      const p=board[la][lo];
+      s += p?(p.color[0]+p.type):'--';
+    }
+    return s;
+  }
+  function _refreshDiskLetters(){
+    [diskN,diskS].forEach(svg=>{
+      svg._rotGroup.querySelectorAll('text.disk-letter').forEach(t=>{
+        const lat=+t.dataset.lat, lon=+t.dataset.lon;
+        const p=board[lat]?.[lon];
+        if(p){
+          t.textContent=_pieceLetter[p.type]||'';
+          t.setAttribute('class','disk-letter '+(p.color==='white'?'pc-white':'pc-black'));
+          // Pick the matching halo filter so white glyphs sit on a black
+          // halo and black glyphs on a white one.
+          t.setAttribute('filter', p.color==='white'?svg._haloBlack:svg._haloWhite);
+        }else{
+          t.textContent='';
+          t.setAttribute('class','disk-letter');
+          t.removeAttribute('filter');
+        }
+      });
+    });
+  }
+
+  // ── Disk rotation (independent of globe) ─────────────────────────────────
+  // The disks keep their OWN yaw state, decoupled from globe.quaternion.
+  // Rotating the globe never rotates the disks, and rotating a disk (via
+  // its drag handler below) never rotates the globe. Only the chess board
+  // state (lat/lon of pieces) is shared between the two views; their
+  // visual orientations are now independent.
+  let _diskYaw=0;
+  function _updateDisks(){
+    const deg=_diskYaw*180/Math.PI;
+    // The two disks rotate in OPPOSITE directions with disk yaw. Baselines
+    // place the K–Q pair symmetrically about the centre of each disk's
+    // facing edge: on north, Q (lon 4) lower-left and K (lon 3) lower-right
+    // around SVG 90° (the bottom, facing south); on south, white K and Q
+    // sit symmetrically around SVG −90° (the top, facing north). With these
+    // baselines, page-load (disk yaw = 0) shows the user's expected
+    // chess-board face-off layout.
+    //
+    // Geometry: the K–Q midpoint is at sector 3.5 (group SVG 67.5°). For
+    // that midpoint to land at SVG 90° on north, baseline = 22.5°. For the
+    // same midpoint to land at SVG −90° on south (after scale-x mirror
+    // sends group SVG 67.5° → 112.5°), baseline = 157.5°.
+    diskN._rotGroup.setAttribute('transform',`rotate(${(-deg+22.5).toFixed(3)})`);
+    diskS._rotGroup.setAttribute('transform',`rotate(${(deg+157.5).toFixed(3)}) scale(-1,1)`);
+    // Counter-rotate letters so glyphs stay upright on each disk. On south,
+    // additionally flip the glyph horizontally around its own position so
+    // it reads forwards after the disk's scale(-1, 1).
+    const negN=(-(-deg+22.5)).toFixed(3);  // = (deg − 22.5)
+    const negS=(-(deg+157.5)).toFixed(3);
+    diskN._rotGroup.querySelectorAll('text.disk-letter').forEach(t=>{
+      t.setAttribute('transform',`rotate(${negN} ${t.getAttribute('x')} ${t.getAttribute('y')})`);
+    });
+    diskS._rotGroup.querySelectorAll('text.disk-letter').forEach(t=>{
+      const x=parseFloat(t.getAttribute('x'))||0;
+      const y=parseFloat(t.getAttribute('y'))||0;
+      t.setAttribute('transform',
+        `translate(${(2*x).toFixed(3)},0) scale(-1,1) `+
+        `rotate(${negS} ${x.toFixed(3)} ${y.toFixed(3)})`);
+    });
+  }
+
+  // ── Disk drag interaction (rotates only the disks, NOT the globe) ────────
+  // Also: a near-stationary tap on a cell that holds a piece selects that
+  // piece. The selection auto-rotates the globe to centre the piece in the
+  // camera view (via rotateGlobeToFace) and then shows its legal moves.
+  function _attachDiskDrag(svg,isNorth){
+    let prev=0, pid=null, downX=0, downY=0, totalRot=0;
+    function angleAt(e){
+      const r=svg.getBoundingClientRect();
+      return Math.atan2(e.clientY-(r.top+r.height/2), e.clientX-(r.left+r.width/2));
+    }
+    svg.addEventListener('pointerdown',e=>{
+      e.preventDefault();
+      svg.setPointerCapture(e.pointerId);
+      pid=e.pointerId; prev=angleAt(e);
+      downX=e.clientX; downY=e.clientY; totalRot=0;
+      svg.classList.add('dragging');
+    });
+    svg.addEventListener('pointermove',e=>{
+      if(e.pointerId!==pid)return;
+      e.preventDefault();
+      const a=angleAt(e);
+      let da=a-prev; if(da>Math.PI)da-=2*Math.PI; if(da<-Math.PI)da+=2*Math.PI;
+      prev=a;
+      // The two disks rotate in opposite directions: south's transform uses
+      // (+_diskYaw), north's uses (−_diskYaw). For a CW drag on either disk
+      // to spin THAT disk CW visually, north drags must invert the sign of
+      // the diskYaw delta.
+      _diskYaw += isNorth ? -da : da;
+      totalRot += Math.abs(da);
+    });
+    function end(e){
+      if(e.pointerId!==pid)return;
+      try{svg.releasePointerCapture(pid);}catch(_){}
+      pid=null; svg.classList.remove('dragging');
+      // If the pointer barely moved (small angular rotation + small pixel
+      // displacement), treat as a click and try to select a piece on the disk.
+      const dx=e.clientX-downX, dy=e.clientY-downY;
+      const pixDist=Math.hypot(dx,dy);
+      if(totalRot<0.04 && pixDist<6){
+        _handleDiskClick(svg, isNorth, e);
+      }
+    }
+    svg.addEventListener('pointerup',end);
+    svg.addEventListener('pointercancel',end);
+    svg.addEventListener('pointerleave',end);
+  }
+  _attachDiskDrag(diskN,true);
+  _attachDiskDrag(diskS,false);
+
+  // Translate a pointer event on a disk into a (lat, lon) cell and, if it
+  // holds a piece, rotate the globe to face that piece then trigger the
+  // normal showMoves selection.
+  function _handleDiskClick(svg, isNorth, e){
+    // Guard: ignore disk clicks while animations / AI turns / autoplay are
+    // running, to match the main globe click handler's behaviour.
+    if(typeof autoBattleActive!=='undefined' && autoBattleActive) return;
+    if(typeof globeRotAnim!=='undefined' && globeRotAnim) return;
+    if(typeof moveAnim!=='undefined' && moveAnim) return;
+    if(typeof aiThinking!=='undefined' && aiThinking) return;
+    if(typeof autoBattlePaused!=='undefined' && autoBattlePaused) return;
+    // Screen pixel → disk SVG-viewport coords (viewBox is 200 units mapped
+    // to the element's CSS width; subtract centre to get coords centred at 0).
+    const rect=svg.getBoundingClientRect();
+    if(rect.width<=0 || rect.height<=0) return;
+    const scale=200/rect.width;                       // 200u viewBox → element px
+    const sx=(e.clientX-rect.left-rect.width/2)*scale;
+    const sy=(e.clientY-rect.top-rect.height/2)*scale;
+    // Apply inverse of this disk's rotation-group transform to get group-
+    // local coords (where cells/letters were originally placed).
+    const yawDeg=_diskYaw*180/Math.PI;
+    let gx, gy;
+    if(isNorth){
+      // North group: rotate(−yawDeg + 22.5). Inverse: rotate by (yawDeg − 22.5).
+      const a=(yawDeg-22.5)*Math.PI/180;
+      const c=Math.cos(a), s=Math.sin(a);
+      gx=sx*c - sy*s;
+      gy=sx*s + sy*c;
+    } else {
+      // South group: rotate(yawDeg + 157.5) scale(-1, 1).
+      // Inverse: invert rotation, then invert scale (scale(-1,1)⁻¹ = scale(-1,1)).
+      const a=-(yawDeg+157.5)*Math.PI/180;
+      const c=Math.cos(a), s=Math.sin(a);
+      const ix=sx*c - sy*s;
+      const iy=sx*s + sy*c;
+      gx=-ix; gy=iy;
+    }
+    // Convert (gx, gy) to (ring, sector) → (lat, lon).
+    const gr=Math.hypot(gx, gy);
+    if(gr<R_IN || gr>R_OUT) return;                   // pole cap or outside
+    const ring=Math.floor((gr-R_IN)/RING_W);
+    if(ring<0 || ring>3) return;
+    const lat=isNorth?ring:(7-ring);
+    let angDeg=Math.atan2(gy, gx)*180/Math.PI;        // (−180, 180]
+    let secAng=angDeg+90+22.5;                        // shift so sector 0 starts at 0
+    secAng=((secAng%360)+360)%360;
+    const lon=Math.floor(secAng/45)%8;
+    // Tapping the already-selected piece deselects (mirrors globe click).
+    // The globe is already centred on it, so no rotation needed.
+    if(typeof selectedCell!=='undefined' && selectedCell &&
+       selectedCell.lat===lat && selectedCell.lon===lon){
+      try { clearVis(); } catch(_){}
+      return;
+    }
+    // ALWAYS rotate the globe to bring the tapped cell to screen-centre,
+    // regardless of whether it holds a piece or whether that piece is
+    // currently selectable. Selection eligibility is enforced separately
+    // and only gates the showMoves() call that runs after the rotation.
+    const piece=board[lat] && board[lat][lon];
+    const inTest=(typeof testModeActive!=='undefined' && testModeActive);
+    let selectable=!!piece;
+    if(selectable && typeof turnColor!=='undefined' &&
+       piece.color!==turnColor && !inTest) selectable=false;
+    // Block the human from selecting AI-owned pieces when AI mode is on.
+    if(selectable && typeof aiMode!=='undefined' && aiMode &&
+       typeof AI_COLOR!=='undefined' && piece && piece.color===AI_COLOR &&
+       !inTest) selectable=false;
+    const localDir=cellPos(lat, lon, R).normalize();
+    if(typeof rotateGlobeToFace==='function'){
+      rotateGlobeToFace(localDir, 650, ()=>{
+        if(selectable){ try { showMoves(lat, lon); } catch(_){} }
+      });
+    } else if(selectable){
+      try { showMoves(lat, lon); } catch(_){}
+    }
+  }
+
+  // ── Disk-side check visualisation ───────────────────────────────────────
+  // Mirrors the globe's red check ring on the king + red attack paths from
+  // the threatening pieces. Drawn into svg._checkLayer, which is a separate
+  // group from the orange/red move layer so clearVis() doesn't wipe it.
+  function _diskClearCheck(){
+    [diskN,diskS].forEach(svg=>{
+      if(svg._checkLayer){
+        while(svg._checkLayer.firstChild)
+          svg._checkLayer.removeChild(svg._checkLayer.firstChild);
+      }
+      // Mirror drain for the boost layer (see _diskClearMoves above).
+      if(svg._checkLayerBoost){
+        while(svg._checkLayerBoost.firstChild)
+          svg._checkLayerBoost.removeChild(svg._checkLayerBoost.firstChild);
+      }
+    });
+  }
+  function _diskShowCheckRing(lat, lon){
+    const c=_diskCellXY(lat, lon);
+    const svg=c.isN?diskN:diskS;
+    if(!svg._checkLayer) return;
+    // Double ring around the king's cell. Radii kept at the 75% scale
+    // (5.5→4.125, 7.2→5.4) but stroke unified to 1.56 to match the path
+    // and other ring widths.
+    for(let i=0;i<2;i++){
+      const ring=document.createElementNS(SVG_NS,'circle');
+      ring.setAttribute('cx',c.x.toFixed(2));
+      ring.setAttribute('cy',c.y.toFixed(2));
+      ring.setAttribute('r',(4.125+i*1.275).toFixed(3));
+      ring.setAttribute('fill','none');
+      ring.setAttribute('stroke',_CLR_DEEPRED);
+      ring.setAttribute('stroke-width',1.56);
+      svg._checkLayer.appendChild(ring);
+    }
+  }
+  function _diskShowCheckThreats(color){
+    // Identical attacker-finding logic to the globe's showCheckThreats().
+    let kLat=-1, kLon=-1;
+    for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
+      if(board[la][lo]?.type==='K' && board[la][lo]?.color===color){
+        kLat=la; kLon=lo;
+      }
+    if(kLat===-1) return;
+    const opp=color==='white'?'black':'white';
+    for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
+      const p=board[la][lo]; if(!p || p.color!==opp) continue;
+      let attacks=false;
+      if(p.type==='P'){
+        const dir=p.color==='black'?1:-1;
+        attacks=(la+dir===kLat && (wL(lo-1)===kLon || wL(lo+1)===kLon));
+      } else {
+        attacks=aiMoves(la,lo).some(m=>m.tLat===kLat && m.tLon===kLon);
+      }
+      if(!attacks) continue;
+      const allMvs=getValidMoves(la,lo).filter(m=>m.lat===kLat && m.lon===kLon);
+      if(!allMvs.length) continue;
+      // Trim radii for the check-threat polyline: attacker's red dot now
+      // matches the capture ring at r=4.5 (+0.3 visual gap). King's outer
+      // red ring stays around r=5.4 (+0.3 gap).
+      const attackerPos=_diskCellXY(la, lo);
+      const kingPos=_diskCellXY(kLat, kLon);
+      const ATTACKER_TRIM=4.5+0.3;
+      const KING_TRIM=5.4+0.3;
+      for(const mv of allMvs){
+        let tps;
+        try { tps=_movePathTPs(la, lo, mv); } catch(_){ continue; }
+        if(!tps || tps.length<2) continue;
+        let segs=_splitEqProj(tps);
+        segs=_trimSegments(segs,
+          { center:attackerPos, radius:ATTACKER_TRIM },
+          { center:kingPos,     radius:KING_TRIM });
+        for(const seg of segs){
+          if(seg.pts.length<2) continue;
+          const svg=seg.isN?diskN:diskS;
+          if(!svg._checkLayer) continue;
+          const path=document.createElementNS(SVG_NS,'path');
+          let d='';
+          for(let i=0;i<seg.pts.length;i++)
+            d+=(i===0?'M':'L')+seg.pts[i].x.toFixed(2)+' '+seg.pts[i].y.toFixed(2)+' ';
+          path.setAttribute('d',d);
+          path.setAttribute('fill','none');
+          path.setAttribute('stroke',_CLR_DEEPRED);
+          path.setAttribute('stroke-width',1.56);
+          path.setAttribute('stroke-linecap', mv.isKnight?'butt':'round');
+          path.setAttribute('stroke-linejoin','round');
+          if(mv.isKnight) path.setAttribute('stroke-dasharray','4 3');
+          svg._checkLayer.appendChild(path);
+        }
+      }
+      // Red dot at attacker's cell. Radius matches the red capture ring
+      // (r=4.5) so red dots and red rings on the disk all read at the same
+      // size as their colour counterparts.
+      const c=_diskCellXY(la, lo);
+      const svg=c.isN?diskN:diskS;
+      if(svg._checkLayer){
+        const dot=document.createElementNS(SVG_NS,'circle');
+        dot.setAttribute('cx',c.x.toFixed(2));
+        dot.setAttribute('cy',c.y.toFixed(2));
+        dot.setAttribute('r',4.5);
+        dot.setAttribute('fill',_CLR_DEEPRED);
+        svg._checkLayer.appendChild(dot);
+      }
+    }
+  }
+  // Wrap the globe-side check functions so the disks stay in sync.
+  if(typeof window.clearCheckRing==='function'){
+    const _origClearCheckRing=window.clearCheckRing;
+    window.clearCheckRing=function(){
+      const r=_origClearCheckRing.apply(this,arguments);
+      try { _diskClearCheck(); } catch(e){}
+      return r;
+    };
+  }
+  if(typeof window.showCheckRing==='function'){
+    const _origShowCheckRing=window.showCheckRing;
+    window.showCheckRing=function(lat,lon){
+      const r=_origShowCheckRing.apply(this,arguments);
+      try { _diskShowCheckRing(lat,lon); } catch(e){}
+      return r;
+    };
+  }
+  if(typeof window.showCheckThreats==='function'){
+    const _origShowCheckThreats=window.showCheckThreats;
+    window.showCheckThreats=function(color){
+      const r=_origShowCheckThreats.apply(this,arguments);
+      try { _diskShowCheckThreats(color); } catch(e){}
+      return r;
+    };
+  }
+
+  // ── Disk yaw animation (auto-align for AI / auto-battle moves) ──────────
+  // When the AI is about to move (single-AI or auto-battle), rotate the
+  // disks so the incoming move's equator crossing lands at the tangent
+  // join — that way the move path renders as one continuous line across
+  // the two disks instead of being split.
+  let _diskYawAnim=null;
+  function _animateDiskYawTo(target, dur){
+    // Choose the shortest signed delta so the animation never wraps the
+    // long way around.
+    while(target - _diskYaw >  Math.PI) target -= 2*Math.PI;
+    while(target - _diskYaw < -Math.PI) target += 2*Math.PI;
+    _diskYawAnim={
+      fromYaw: _diskYaw, toYaw: target,
+      startTime: performance.now(), dur: dur || 460
+    };
+  }
+  function _stepDiskYawAnim(){
+    if(!_diskYawAnim) return;
+    const elapsed=performance.now()-_diskYawAnim.startTime;
+    const u=Math.min(1, elapsed/_diskYawAnim.dur);
+    // ease-in-out cubic
+    const te=u<0.5 ? 4*u*u*u : 1 - Math.pow(-2*u+2, 3)/2;
+    _diskYaw=_diskYawAnim.fromYaw + (_diskYawAnim.toYaw - _diskYawAnim.fromYaw)*te;
+    if(u>=1) _diskYawAnim=null;
+  }
+  // Find the equator-crossing φ of the move that will be displayed (if any).
+  function _moveCrossingPhi(fromLat, fromLon, toLat, toLon){
+    const moves=getLegalMoves(fromLat, fromLon);
+    const m=moves.find(mv=>mv.lat===toLat && mv.lon===toLon);
+    if(!m) return null;
+    let tps;
+    try { tps=_movePathTPs(fromLat, fromLon, m); } catch(_){ return null; }
+    if(!tps || tps.length<2) return null;
+    for(let i=1;i<tps.length;i++){
+      const prevN=tps[i-1].theta<Math.PI/2, currN=tps[i].theta<Math.PI/2;
+      if(prevN!==currN){
+        const t=(Math.PI/2 - tps[i-1].theta) / (tps[i].theta - tps[i-1].theta);
+        return tps[i-1].phi + (tps[i].phi - tps[i-1].phi)*t;
+      }
+    }
+    return null;
+  }
+  // Public hook: the AI/auto-battle code calls this just before
+  // rotateGlobeToFace() so the disks and the globe rotate in parallel.
+  window._alignDisksForMove=function(fromLat, fromLon, toLat, toLon, dur){
+    // Only auto-align when the human isn't driving — drags shouldn't fight
+    // an animation, and a single-player human turn shouldn't have its
+    // disks repositioned.
+    const isAuto=(typeof autoBattleActive!=='undefined' && autoBattleActive) ||
+                 (typeof aiMode!=='undefined' && aiMode);
+    if(!isAuto) return;
+    // Tangent corresponds to lon 3.5 (φ = π) at disk yaw = 0, so the disk
+    // yaw needed to put any specific φ at the tangent is (φ − π).
+    const crossPhi=_moveCrossingPhi(fromLat, fromLon, toLat, toLon);
+    let targetPhi;
+    if(crossPhi!==null){
+      // Equator-crossing move: align the actual crossing longitude to the
+      // tangent so the path's two halves meet seamlessly across the disks.
+      targetPhi=crossPhi;
+    } else {
+      // Non-crossing move (stays in one hemisphere): align the move's
+      // *centre longitude* to the tangent — that puts the lon column the
+      // piece is moving along at the disk edge that faces the OPPONENT'S
+      // hemisphere, so white pieces on the south disk visibly attack
+      // "upward" toward the north tangent and black pieces on the north
+      // disk attack "downward" toward the south tangent.
+      const phiFrom=(fromLon+0.5)/NUM_LON*2*Math.PI;
+      const phiTo  =(toLon  +0.5)/NUM_LON*2*Math.PI;
+      // Shortest signed arc between the two phis (handles wraparound).
+      let diff=phiTo-phiFrom;
+      while(diff> Math.PI) diff-=2*Math.PI;
+      while(diff<-Math.PI) diff+=2*Math.PI;
+      targetPhi=phiFrom + diff/2;
+    }
+    _animateDiskYawTo(targetPhi - Math.PI, dur || 460);
+  };
+
+  // ── Per-frame update driver ──────────────────────────────────────────────
+  function _sideUIFrame(){
+    // Refresh letters only when the board actually changed AND no move
+    // animation is in flight — during a move we keep the pre-move letter
+    // state and let _updateFlyingLetter render the moving piece.
+    const sig=_boardSig();
+    if(sig!==_lastBoardSig && !moveAnim){
+      _lastBoardSig=sig;
+      _refreshDiskLetters();
+    }
+    _tickClocks();
+    _updateFlyingLetter();
+    _stepDiskYawAnim();
+    _updateDisks();
+    requestAnimationFrame(_sideUIFrame);
+  }
+  requestAnimationFrame(_sideUIFrame);
+
+  // ── Reset hook: restart clocks whenever a new game starts ────────────────
+  const _origResetGame=window.resetGame;
+  window.resetGame=function(){
+    const r=_origResetGame.apply(this,arguments);
+    _resetClocks();
+    _lastBoardSig='';      // force letter refresh on next frame
+    return r;
+  };
+})();
 
 animate();
 </script>
