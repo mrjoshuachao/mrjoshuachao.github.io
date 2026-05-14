@@ -227,20 +227,20 @@
   .pill h4 { font-size: 12px; font-weight: 900; letter-spacing: .3px; color: var(--mc-text); }
   .pill p { font-size: 9px; color: #777; margin-top: 1px; }
 
-  /* right ticket overlay — clean layout, fills full height */
+  /* right ticket overlay — BIG TYPE, fills full height */
   .ticket-overlay {
     position: absolute;
     right: 2vw; top: 18px; bottom: 18px;
-    width: 36%;
-    min-width: 340px;
-    max-width: 460px;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,.22);
+    width: 40%;
+    min-width: 380px;
+    max-width: 540px;
+    border-radius: 16px;
+    box-shadow: 0 14px 36px rgba(0,0,0,.24);
     z-index: 3;
     overflow: hidden;
     transition: transform .3s var(--ease);
     background: linear-gradient(180deg, #FFFBEC 0%, #FFE9A8 100%);
-    border: 2px solid var(--mc-yellow-deep);
+    border: 3px solid var(--mc-yellow-deep);
     display: flex; flex-direction: column;
   }
   .ticket-overlay:hover { transform: scale(1.01); }
@@ -248,85 +248,97 @@
     text-align: center;
     background: var(--mc-red);
     color: #fff;
-    padding: 10px 14px;
+    padding: 18px 18px 16px;
     flex-shrink: 0;
   }
   .ticket-overlay .t-head h2 {
     color: #fff;
-    font-size: 17px; font-weight: 900;
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 900;
     letter-spacing: .3px;
+    line-height: 1.05;
   }
   .ticket-overlay .t-head .jp {
-    font-size: 11px; color: var(--mc-yellow);
-    margin-top: 2px; font-weight: 700;
+    font-size: clamp(14px, 1.15vw, 17px);
+    color: var(--mc-yellow);
+    margin-top: 8px; font-weight: 800;
+    letter-spacing: 1px;
   }
   .ticket-overlay .step-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
-    gap: 8px;
-    padding: 10px;
+    gap: 10px;
+    padding: 12px;
     flex: 1;
     min-height: 0;
   }
   .ticket-overlay .step {
-    display: flex; gap: 8px; align-items: flex-start;
-    padding: 10px 10px;
-    border-radius: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 16px 14px;
+    border-radius: 12px;
     cursor: pointer;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,.10);
-    border: 1px solid rgba(218, 41, 28, 0.18);
+    border: 1.5px solid rgba(218, 41, 28, 0.22);
     transition: transform .25s var(--ease), box-shadow .25s var(--ease);
   }
   .ticket-overlay .step:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 14px rgba(0,0,0,.16);
+    box-shadow: 0 6px 16px rgba(0,0,0,.18);
   }
   .ticket-overlay .step .num {
-    width: 24px; height: 24px;
+    width: 38px; height: 38px;
     background: var(--mc-red);
     color: #fff;
     border-radius: 50%;
     display: grid; place-items: center;
-    font-size: 12px; font-weight: 900;
+    font-size: 20px; font-weight: 900;
     flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(218, 41, 28, .35);
+    box-shadow: 0 2px 6px rgba(218, 41, 28, .42);
   }
   .ticket-overlay .step .txt {
-    min-width: 0;
+    min-width: 0; flex: 1;
   }
   .ticket-overlay .step .txt h4 {
-    font-size: 10px; font-weight: 900;
+    font-size: clamp(14px, 1.15vw, 17px);
+    font-weight: 900;
     color: var(--mc-red);
     letter-spacing: .2px;
-    line-height: 1.2;
+    line-height: 1.15;
   }
   .ticket-overlay .step .txt p {
-    font-size: 9px; color: #5b3b1a;
-    margin-top: 4px; line-height: 1.35;
+    font-size: clamp(12px, .95vw, 14px);
+    color: #5b3b1a;
+    margin-top: 8px; line-height: 1.4;
+    font-weight: 600;
   }
   .ticket-overlay .t-foot {
     background: var(--mc-yellow);
-    padding: 10px 14px 12px;
+    padding: 16px 18px 18px;
     text-align: center;
     flex-shrink: 0;
-    border-top: 1px dashed rgba(218, 41, 28, .4);
+    border-top: 2px dashed rgba(218, 41, 28, .45);
   }
   .ticket-overlay .t-foot p {
-    font-size: 10px; color: #4a2d10;
+    font-size: clamp(13px, 1.05vw, 16px);
+    color: #4a2d10;
     line-height: 1.4;
-    margin-bottom: 4px;
-    font-weight: 700;
+    margin-bottom: 8px;
+    font-weight: 800;
   }
   .ticket-overlay .t-foot small {
-    font-size: 8px; color: #6b4318;
-    display: block; margin-bottom: 8px;
+    font-size: clamp(11px, .85vw, 13px);
+    color: #6b4318;
+    display: block; margin-bottom: 14px;
+    font-weight: 600;
   }
   .ticket-overlay .t-foot .btn {
     background: var(--mc-red); color: #fff;
-    padding: 9px 14px; font-size: 11px;
+    padding: 14px 20px;
+    font-size: clamp(14px, 1.1vw, 16px);
     width: 100%; justify-content: center;
+    letter-spacing: .8px;
   }
   .ticket-overlay .t-foot .btn:hover { background: var(--mc-red-dark); }
 
