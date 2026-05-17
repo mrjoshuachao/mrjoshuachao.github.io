@@ -114,7 +114,7 @@
     opacity: 1;
   }
   #lineA {        /* top-left slot — holds EVEN-indexed lines (0, 2, 4, ...) */
-    bottom: 180px;
+    bottom: 150px;
     left: 48px;
     right: auto;
     text-align: left;
@@ -333,30 +333,113 @@
   .overlay-icon { font-size: 64px; margin-bottom: 16px; }
   .overlay-text { font-size: 18px; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; }
 
-  /* =========== Mobile landscape (typical phone in landscape) =========== */
-  @media (orientation: landscape) and (max-height: 500px) {
-    #lineA, #lineB { font-size: 38px; }
-    #lineA { bottom: 110px; left: 28px; }
-    #lineB { bottom: 30px;  right: 28px; }
-    .top { padding: 10px 16px; gap: 8px; }
-    .icon-btn { width: 36px; height: 36px; }
-    .icon-btn svg { width: 19px; height: 19px; }
-    .icon-btn.primary svg { width: 17px; height: 17px; }
-    .time { font-size: 11px; min-width: 84px; }
-    .slider { height: 5px; }
-    .slider::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -4.5px; }
-    .slider::-moz-range-thumb     { width: 14px; height: 14px; }
+  /* =========== Centered title overlay (intro + interlude) =========== */
+  .title-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 6;             /* above bgVideo (0), below top controls (10) */
+    pointer-events: none;
+    padding: 24px;
+    font-family: "Yuanti TC", "Tuanti TC", "PingFang TC", "Noto Sans TC", sans-serif;
   }
-  /* Very compact phones in landscape (e.g. iPhone SE landscape) */
+  .title-overlay.show { display: flex; }
+  .title-main {
+    color: #fff;
+    font-size: 92px;
+    line-height: 1.15;
+    letter-spacing: 0.08em;
+    margin-bottom: 22px;
+    /* Same rounded black outline as the lyric base layer */
+    text-shadow:
+      5.500px 0.000px 0 #000, 5.453px 0.718px 0 #000, 5.313px 1.424px 0 #000,
+      5.081px 2.105px 0 #000, 4.763px 2.750px 0 #000, 4.363px 3.348px 0 #000,
+      3.889px 3.889px 0 #000, 3.348px 4.363px 0 #000, 2.750px 4.763px 0 #000,
+      2.105px 5.081px 0 #000, 1.424px 5.313px 0 #000, 0.718px 5.453px 0 #000,
+      0.000px 5.500px 0 #000, -0.718px 5.453px 0 #000, -1.424px 5.313px 0 #000,
+      -2.105px 5.081px 0 #000, -2.750px 4.763px 0 #000, -3.348px 4.363px 0 #000,
+      -3.889px 3.889px 0 #000, -4.363px 3.348px 0 #000, -4.763px 2.750px 0 #000,
+      -5.081px 2.105px 0 #000, -5.313px 1.424px 0 #000, -5.453px 0.718px 0 #000,
+      -5.500px 0.000px 0 #000, -5.453px -0.718px 0 #000, -5.313px -1.424px 0 #000,
+      -5.081px -2.105px 0 #000, -4.763px -2.750px 0 #000, -4.363px -3.348px 0 #000,
+      -3.889px -3.889px 0 #000, -3.348px -4.363px 0 #000, -2.750px -4.763px 0 #000,
+      -2.105px -5.081px 0 #000, -1.424px -5.313px 0 #000, -0.718px -5.453px 0 #000,
+      0.000px -5.500px 0 #000, 0.718px -5.453px 0 #000, 1.424px -5.313px 0 #000,
+      2.105px -5.081px 0 #000, 2.750px -4.763px 0 #000, 3.348px -4.363px 0 #000,
+      3.889px -3.889px 0 #000, 4.363px -3.348px 0 #000, 4.763px -2.750px 0 #000,
+      5.081px -2.105px 0 #000, 5.313px -1.424px 0 #000, 5.453px -0.718px 0 #000,
+      2.750px 0.000px 0 #000, 2.541px 1.052px 0 #000, 1.945px 1.945px 0 #000,
+      1.052px 2.541px 0 #000, 0.000px 2.750px 0 #000, -1.052px 2.541px 0 #000,
+      -1.945px 1.945px 0 #000, -2.541px 1.052px 0 #000, -2.750px 0.000px 0 #000,
+      -2.541px -1.052px 0 #000, -1.945px -1.945px 0 #000, -1.052px -2.541px 0 #000,
+      0.000px -2.750px 0 #000, 1.052px -2.541px 0 #000, 1.945px -1.945px 0 #000,
+      2.541px -1.052px 0 #000;
+  }
+  .title-sub {
+    color: #fff;
+    font-size: 28px;
+    letter-spacing: 0.14em;
+    text-shadow:
+      3px 0 0 #000, 2.77px 1.15px 0 #000, 2.12px 2.12px 0 #000,
+      1.15px 2.77px 0 #000, 0 3px 0 #000, -1.15px 2.77px 0 #000,
+      -2.12px 2.12px 0 #000, -2.77px 1.15px 0 #000, -3px 0 0 #000,
+      -2.77px -1.15px 0 #000, -2.12px -2.12px 0 #000, -1.15px -2.77px 0 #000,
+      0 -3px 0 #000, 1.15px -2.77px 0 #000, 2.12px -2.12px 0 #000,
+      2.77px -1.15px 0 #000, 1.5px 0 0 #000, 0 1.5px 0 #000,
+      -1.5px 0 0 #000, 0 -1.5px 0 #000;
+  }
+  @media (orientation: landscape) and (max-height: 500px) {
+    .title-main { font-size: 60px; margin-bottom: 14px; }
+    .title-sub  { font-size: 20px; }
+  }
   @media (orientation: landscape) and (max-height: 400px) {
-    #lineA, #lineB { font-size: 32px; }
-    #lineA { bottom: 86px;  left: 20px; }
-    #lineB { bottom: 22px;  right: 20px; }
-    .top { padding: 8px 12px; gap: 6px; }
-    .icon-btn { width: 32px; height: 32px; }
-    .icon-btn svg { width: 17px; height: 17px; }
-    .icon-btn.primary svg { width: 15px; height: 15px; }
-    .time { font-size: 10px; min-width: 76px; }
+    .title-main { font-size: 48px; margin-bottom: 10px; }
+    .title-sub  { font-size: 16px; }
+  }
+
+  /* =========== Mobile landscape (typical phone in landscape) ===========
+     Targets ~390-450px viewport height (iPhone 12-15 in landscape).
+     Apple HIG / Material recommend 44px minimum tap targets — go larger. */
+  @media (orientation: landscape) and (max-height: 500px) {
+    #lineA, #lineB { font-size: 46px; }
+    #lineA { bottom: 96px;  left: 32px; }
+    #lineB { bottom: 32px;  right: 32px; }
+
+    .top { padding: 14px 18px; gap: 12px; }
+    .icon-btn { width: 50px; height: 50px; border-width: 1.5px; }
+    .icon-btn svg { width: 28px; height: 28px; }
+    .icon-btn.primary svg { width: 24px; height: 24px; }
+
+    .time { font-size: 14px; min-width: 100px; }
+
+    .slider { height: 10px; }
+    .slider::-webkit-slider-runnable-track { height: 10px; }
+    .slider::-moz-range-track              { height: 10px; }
+    .slider::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -7px; }
+    .slider::-moz-range-thumb     { width: 24px; height: 24px; }
+  }
+  /* Very compact phones (e.g. iPhone SE landscape ≈ 667×375 ⇒ height 375) */
+  @media (orientation: landscape) and (max-height: 400px) {
+    #lineA, #lineB { font-size: 38px; }
+    #lineA { bottom: 80px; left: 24px; }
+    #lineB { bottom: 28px; right: 24px; }
+
+    .top { padding: 12px 14px; gap: 10px; }
+    .icon-btn { width: 44px; height: 44px; }
+    .icon-btn svg { width: 24px; height: 24px; }
+    .icon-btn.primary svg { width: 20px; height: 20px; }
+
+    .time { font-size: 12px; min-width: 88px; }
+
+    .slider { height: 8px; }
+    .slider::-webkit-slider-runnable-track { height: 8px; }
+    .slider::-moz-range-track              { height: 8px; }
+    .slider::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -6px; }
+    .slider::-moz-range-thumb     { width: 20px; height: 20px; }
   }
 
   /* =========== Rotate-to-landscape prompt =========== */
@@ -463,6 +546,11 @@
   <div class="line" id="lineB"></div>
 </div>
 
+<div class="title-overlay" id="titleOverlay">
+  <div class="title-main" id="titleMain"></div>
+  <div class="title-sub"  id="titleSub"></div>
+</div>
+
 <div class="overlay" id="overlay">
   <div class="overlay-content">
     <div class="overlay-icon">▶</div>
@@ -526,6 +614,22 @@ const LINE_CHARS = (() => {
 const audio = document.getElementById('audio');
 const lineA = document.getElementById('lineA');
 const lineB = document.getElementById('lineB');
+const titleOverlay = document.getElementById('titleOverlay');
+const titleMain    = document.getElementById('titleMain');
+const titleSub     = document.getElementById('titleSub');
+
+// Time windows where lyrics are HIDDEN and a centred title is shown instead.
+// [startSec, endSec, mainText, subText (empty = no subtitle line)]
+const TITLE_WINDOWS = [
+  [  0,  16, '閃亮亮的妳',     '（彰女儀隊主題曲）'],
+  [ 83, 113, '彰女儀隊 影音傳情', ''],
+];
+function pickTitle(t) {
+  for (const w of TITLE_WINDOWS) {
+    if (t >= w[0] && t < w[1]) return w;
+  }
+  return null;
+}
 const playBtn = document.getElementById('playpause');
 const backBtn = document.getElementById('back');
 const fwdBtn = document.getElementById('forward');
@@ -590,6 +694,23 @@ function update() {
     seekSlider.value = Math.min(10000, Math.round((t / dur) * 10000));
   }
 
+  // -------- Title-overlay windows (hide lyrics, show centred title) --------
+  const tw = pickTitle(t);
+  if (tw) {
+    if (titleMain.textContent !== tw[2]) titleMain.textContent = tw[2];
+    if (titleSub.textContent !== tw[3]) titleSub.textContent = tw[3];
+    titleSub.style.display = tw[3] ? '' : 'none';
+    titleOverlay.classList.add('show');
+    lineA.style.visibility = 'hidden';
+    lineB.style.visibility = 'hidden';
+  } else {
+    if (titleOverlay.classList.contains('show')) {
+      titleOverlay.classList.remove('show');
+      lineA.style.visibility = '';
+      lineB.style.visibility = '';
+    }
+  }
+
   // Wipe logic runs WIPE_LEAD seconds ahead of audio — so each char turns
   // blue 0.2 s before its recorded time.
   const wT = t + WIPE_LEAD;
@@ -643,6 +764,16 @@ backBtn.addEventListener('click', () => audio.currentTime = Math.max(0, audio.cu
 fwdBtn .addEventListener('click', () => audio.currentTime = Math.min(audio.duration||0, audio.currentTime + 5));
 audio.addEventListener('play',  syncPlayIcon);
 audio.addEventListener('pause', syncPlayIcon);
+
+// Pause / resume the background video together with the music
+audio.addEventListener('pause', () => {
+  const bv = document.getElementById('bgVideo');
+  if (bv) bv.pause();
+});
+audio.addEventListener('play', () => {
+  const bv = document.getElementById('bgVideo');
+  if (bv) { const p = bv.play(); if (p && p.catch) p.catch(() => {}); }
+});
 
 // Draggable seek slider
 seekSlider.addEventListener('pointerdown', () => { isDraggingSeek = true; });
@@ -733,9 +864,12 @@ const BG_CLIPS_B64 = [
   });
   setSrc(0);
 
-  // Kick play() on any user gesture (covers cases where autoplay was blocked)
+  // Kick play() on any user gesture (covers cases where autoplay was blocked).
+  // But: don't override an explicit pause by the user via the pause button.
   function kick() {
     bg.muted = true;
+    const a = document.getElementById('audio');
+    if (a && a.paused) return;            // respect paused state
     bg.play().catch(() => {});
   }
   document.addEventListener('click',    kick, { once: false, passive: true });
