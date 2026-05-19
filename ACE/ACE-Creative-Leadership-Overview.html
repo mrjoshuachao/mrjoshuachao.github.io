@@ -2132,8 +2132,38 @@
   let fontScale = parseFloat(localStorage.getItem(FONT_SCALE_KEY)) || 1;
   fontScale = Math.max(Z_MIN, Math.min(Z_MAX, fontScale));
 
-  function applyFontScale(){
+  /* Selector for content elements we can re-anchor on after a zoom change */
+  const ANCHOR_SEL = 'article.chapter, section.hero, .chapter h2, .chapter h3, .chapter h4, .chapter .sublead, .chapter p, .chapter li, .chapter blockquote, .chapter figure';
+
+  function applyFontScale(opts){
+    const preserveAnchor = !opts || opts.preserveAnchor !== false;
+
+    /* 1) Before zoom: find an anchor element nearest the viewport centre
+          and remember its current top offset relative to the viewport. */
+    let anchor = null, anchorOffsetBefore = 0;
+    if(preserveAnchor){
+      const viewportH = window.innerHeight;
+      const mid = viewportH / 2;
+      let best = Infinity;
+      document.querySelectorAll(ANCHOR_SEL).forEach(el=>{
+        const r = el.getBoundingClientRect();
+        if(r.bottom < 0 || r.top > viewportH) return;   /* off-screen */
+        const elMid = r.top + r.height / 2;
+        const d = Math.abs(elMid - mid);
+        if(d < best){ best = d; anchor = el; anchorOffsetBefore = r.top; }
+      });
+    }
+
+    /* 2) Apply the new zoom */
     ZOOM_TARGETS.forEach(el => { el.style.zoom = fontScale; });
+
+    /* 3) After zoom: re-measure the anchor and scroll so it sits at the
+          same viewport-relative position the user was reading before. */
+    if(anchor){
+      const newTop = anchor.getBoundingClientRect().top;
+      window.scrollBy(0, newTop - anchorOffsetBefore);
+    }
+
     try{ localStorage.setItem(FONT_SCALE_KEY, fontScale.toString()); }catch(e){}
   }
   fontBigger.addEventListener('click', ()=>{
