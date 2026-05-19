@@ -2032,9 +2032,22 @@
     if(e.key === 'Escape') closeDrawer();
   });
 
-  /* close drawer when clicking a ToC link */
+  /* When a TOC link is tapped: close drawer synchronously (releases body overflow
+     so iOS Safari can scroll), then manually scroll to the chapter on next frame. */
   document.querySelectorAll('#toc a').forEach(a=>{
-    a.addEventListener('click', ()=>{ setTimeout(closeDrawer, 120); });
+    a.addEventListener('click', (e)=>{
+      const targetId = a.getAttribute('href').slice(1);
+      const target = document.getElementById(targetId);
+      closeDrawer();
+      if(target){
+        e.preventDefault();
+        requestAnimationFrame(()=>{
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // update the address bar hash without re-triggering navigation
+          if(history.replaceState) history.replaceState(null, '', '#' + targetId);
+        });
+      }
+    });
   });
 
   /* ===== Progress bar ===== */
@@ -2048,6 +2061,47 @@
   }
   window.addEventListener('scroll', updateProgress, {passive:true});
   updateProgress();
+
+  /* ===== Keep the tab alive in background ===== */
+  /* Screen Wake Lock prevents the screen from dimming while the page is foreground;
+     a silent AudioContext keeps the tab from being throttled when backgrounded. */
+  let wakeLock = null;
+  async function requestWakeLock(){
+    if(!('wakeLock' in navigator)) return;
+    try{
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', ()=>{ wakeLock = null; });
+    }catch(e){ /* not supported or denied — fail silently */ }
+  }
+  let silentCtx = null;
+  function startSilentAudio(){
+    if(silentCtx) return;
+    try{
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      silentCtx = new Ctx();
+      const osc  = silentCtx.createOscillator();
+      const gain = silentCtx.createGain();
+      gain.gain.value = 0.0001;    /* effectively silent */
+      osc.connect(gain).connect(silentCtx.destination);
+      osc.start();
+    }catch(e){ /* fail silently */ }
+  }
+  function activateKeepalive(){
+    requestWakeLock();
+    startSilentAudio();
+  }
+  /* Start on first user interaction (avoids autoplay restrictions) */
+  ['click','keydown','touchstart'].forEach(evt=>{
+    document.addEventListener(evt, activateKeepalive, { once: true, passive: true });
+  });
+  /* Re-acquire wake lock + resume audio when page becomes visible again */
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState === 'visible'){
+      if(!wakeLock) requestWakeLock();
+      if(silentCtx && silentCtx.state === 'suspended') silentCtx.resume();
+    }
+  });
 
   /* ===== Scroll spy ===== */
   const sections = document.querySelectorAll('article.chapter, section.hero');
