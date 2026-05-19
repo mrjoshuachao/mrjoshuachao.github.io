@@ -13,8 +13,8 @@
      ============================================================ */
 
   :root{
-    --paper:        #f6efe1;
-    --paper-deep:   #efe6d2;
+    --paper:        #f7f3ec;   /* softer off-white, less yellow */
+    --paper-deep:   #ede7da;
     --card:         #fffdf6;
     --ink:          #2a241c;
     --ink-soft:     #4a4234;
@@ -114,8 +114,8 @@
     line-height: 1.78;
     color: var(--ink);
     background:
-      radial-gradient(circle at 20% 0%, rgba(255,247,224,.55), transparent 55%),
-      radial-gradient(circle at 80% 100%, rgba(213,194,150,.35), transparent 60%),
+      radial-gradient(circle at 20% 0%, rgba(255,252,245,.35), transparent 55%),
+      radial-gradient(circle at 80% 100%, rgba(220,210,195,.18), transparent 60%),
       var(--paper);
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
@@ -672,6 +672,29 @@
     padding-bottom: 4px;
   }
   footer.colophon .top-link:hover{ color: var(--gold); border-color: var(--gold); }
+
+  /* ---------- Font-size controls (bottom-left) ---------- */
+  .font-size-fab{
+    position: fixed; bottom: 22px; left: 22px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 100;
+  }
+  .font-size-fab button{
+    width: 46px; height: 46px; border-radius: 999px;
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--rule);
+    box-shadow: 0 10px 26px -10px rgba(60,46,18,.32);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .18s ease, background .18s ease;
+    padding: 0; line-height: 1;
+    font-family: "Cormorant Garamond", "Times New Roman", serif !important;
+    font-weight: 700;
+  }
+  .font-size-fab button:hover{ transform: translateY(-1px); background: #fffaef; }
+  .font-size-fab button:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .font-size-fab .bigger{ font-size: 23px; }
+  .font-size-fab .smaller{ font-size: 14px; }
 
   /* ---------- Floating action buttons (FAB cluster) ---------- */
   .fab-stack{
@@ -1950,6 +1973,12 @@
   <span class="fab-badge hidden" id="listBadge">0</span>
 </button>
 
+<!-- Bottom-left: Font size controls -->
+<div class="font-size-fab">
+  <button class="bigger" id="fontBigger" aria-label="Increase font size">A</button>
+  <button class="smaller" id="fontSmaller" aria-label="Decrease font size">A</button>
+</div>
+
 <!-- Bottom-right: Add bookmark (primary) + Back to top -->
 <div class="fab-stack">
   <button class="fab-btn primary" id="addBtn" aria-label="Add bookmark at current position">
@@ -2039,6 +2068,29 @@
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
   sections.forEach(s=> spy.observe(s));
 
+
+  /* ----- Font-size zoom (bottom-left A buttons) ----- */
+  const FONT_SCALE_KEY = 'ace-font-scale-v1';
+  const fontBigger  = document.getElementById('fontBigger');
+  const fontSmaller = document.getElementById('fontSmaller');
+  const ZOOM_TARGETS = document.querySelectorAll('article.chapter, section.hero');
+  const Z_MIN = 0.75, Z_MAX = 1.6, Z_STEP = 0.1;
+  let fontScale = parseFloat(localStorage.getItem(FONT_SCALE_KEY)) || 1;
+  fontScale = Math.max(Z_MIN, Math.min(Z_MAX, fontScale));
+
+  function applyFontScale(){
+    ZOOM_TARGETS.forEach(el => { el.style.zoom = fontScale; });
+    try{ localStorage.setItem(FONT_SCALE_KEY, fontScale.toString()); }catch(e){}
+  }
+  fontBigger.addEventListener('click', ()=>{
+    fontScale = Math.min(+(fontScale + Z_STEP).toFixed(2), Z_MAX);
+    applyFontScale();
+  });
+  fontSmaller.addEventListener('click', ()=>{
+    fontScale = Math.max(+(fontScale - Z_STEP).toFixed(2), Z_MIN);
+    applyFontScale();
+  });
+  applyFontScale();   /* restore saved scale on load */
 
   /* ----- Sticky chapter bar ----- */
   const stickyBar  = document.getElementById('stickyBar');
