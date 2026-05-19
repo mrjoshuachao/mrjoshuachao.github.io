@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>黑白西洋棋 — 對戰 AI</title>
+<title>2D Chess infinity</title>
 <style>
   * { box-sizing: border-box; }
   html, body {
@@ -1427,7 +1427,9 @@ function evaluate(s) {
       const attackedBy = white ? 'b' : 'w';
       const defendedBy = white ? 'w' : 'b';
       if (squareAttacked(s, r, c, attackedBy) && !squareAttacked(s, r, c, defendedBy)) {
-        score += (white ? -1 : 1) * Math.floor(val * 0.6);
+        // 掛子 (主教以上、被攻擊且無防禦) → 視作即將損失 95% 子力值
+        // 原本 60% 不夠重 (KQ vs K 的「敵王腿被綁死」累積獎勵可能 +200~+500，會反過來支持送子)
+        score += (white ? -1 : 1) * Math.floor(val * 0.95);
       }
     }
   }
@@ -1439,6 +1441,22 @@ function evaluate(s) {
   }
 
   return score;
+}
+
+// 偵測「三次重複局面」— 同一個位置 (board + turn + castling + ep) 在歷史中出現 ≥ 3 次
+// posKey 已涵蓋這些欄位，所以 history 比對直接 ok。FIDE 規則：3 次重複自動和棋
+function threefoldRepetition(s) {
+  if (s.history.length === 0) return false;
+  const currentKey = s.history[s.history.length - 1].posKey;
+  if (!currentKey) return false;
+  let count = 0;
+  for (const h of s.history) {
+    if (h.posKey === currentKey) {
+      count++;
+      if (count >= 3) return true;
+    }
+  }
+  return false;
 }
 
 // 偵測「子力不足無法將死」的死局
@@ -1628,6 +1646,25 @@ function searchAtDepth(s, depth, color, pvMove) {
     }
   }
 
+  // === Hanging-check pattern 重罰 ===
+  // 對每個招數模擬走一步、看對手下一步能不能直接 capture 剛走的子
+  // 若被 capture 且 mvVal ≥ 500 (車 / 后) → 該招扣 mvVal × 0.9，直接從 root 擋掉「Qd7+ Qxd7」這種愚行
+  for (const e of entries) {
+    const undo = makeMove(s, e.m, true);
+    const [tr, tc] = e.m.to;
+    const movedPiece = s.board[tr][tc];
+    const mvVal = movedPiece && movedPiece !== '.' ? PIECE_VAL[movedPiece.toLowerCase()] : 0;
+    if (mvVal >= 500) {
+      const oppMoves = generateMoves(s, enemy(color));
+      const willBeCaptured = oppMoves.some(om => om.to[0] === tr && om.to[1] === tc);
+      if (willBeCaptured) {
+        if (color === 'w') e.score -= Math.floor(mvVal * 0.9);
+        else               e.score += Math.floor(mvVal * 0.9);
+      }
+    }
+    unmakeMove(s, e.m, undo);
+  }
+
   // === 棋子回到自己最近 4 拍內 from 過的格子懲罰 ===
   // 防止 Ng4 → Nh6 → Ng4 那種雙拍振盪 (每方輪流走，自己的步在 history[len-2], len-4, len-6, len-8]
   if (histLen >= 2) {
@@ -1683,7 +1720,7 @@ function alphabeta(s, depth, alpha, beta, color, ply) {
     }
   }
 
-  if (depth <= 0) return quiesce(s, alpha, beta, color, 5);
+  if (depth <= 0) return quiesce(s, alpha, beta, color, 8);
 
   const moves = orderMoves(s, generateMoves(s, color), ttMove, ply);
   if (moves.length === 0) {
@@ -1751,6 +1788,36 @@ function recordKiller(m, ply) {
 // 靜態搜尋：只走吃子 (含升變)，避免戰術上的水平面盲點
 function quiesce(s, alpha, beta, color, maxPly) {
   if (searchStop) return color === 'w' ? alpha : beta;
+
+  // 被將軍時不能 stand pat：必須走任何合法招 (check escape) 而不是只看 capture
+  // 否則「Qd7+」之類的 hung check 在 leaf 會被誤判
+  const checked = inCheck(s, color);
+  if (checked) {
+    if (maxPly <= 0) return evaluate(s);
+    const allMoves = generateMoves(s, color);
+    if (allMoves.length === 0) {
+      // 被將死 — 距 root 越遠越不好 (這裡無 ply 可用，就用一個保守的固定極端值)
+      return color === 'w' ? -100000 : 100000;
+    }
+    orderMoves(s, allMoves, null, 0);
+    let best = color === 'w' ? -Infinity : Infinity;
+    for (const m of allMoves) {
+      const undo = makeMove(s, m, true);
+      const score = quiesce(s, alpha, beta, enemy(color), maxPly - 1);
+      unmakeMove(s, m, undo);
+      if (searchStop) return color === 'w' ? alpha : beta;
+      if (color === 'w') {
+        if (score > best) best = score;
+        if (best > alpha) alpha = best;
+      } else {
+        if (score < best) best = score;
+        if (best < beta) beta = best;
+      }
+      if (alpha >= beta) break;
+    }
+    return best;
+  }
+
   const standPat = evaluate(s);
   if (maxPly <= 0) return standPat;
   if (color === 'w') {
@@ -2906,6 +2973,9 @@ function updateStatus() {
   } else if (insufficientMaterial(state)) {
     txt = `<span class="alert">和棋（子力不足無法將死）。</span>`;
     endReason = '和棋（子力不足無法將死）。';
+  } else if (threefoldRepetition(state)) {
+    txt = `<span class="alert">和棋（三次重複局面）。</span>`;
+    endReason = '和棋（三次重複局面）。';
   } else {
     const turnName = state.turn === 'w' ? '白方' : '黑方';
     let who;
@@ -2935,6 +3005,7 @@ function endResultCodes(reason) {
   if (reason.includes('黑方獲勝')) return { result: '0-1',    code: 'mate' };
   if (reason.includes('50 步'))    return { result: '1/2-1/2', code: '50mv' };
   if (reason.includes('子力不足')) return { result: '1/2-1/2', code: 'mat0' };
+  if (reason.includes('三次重複')) return { result: '1/2-1/2', code: '3rep' };
   return                              { result: '1/2-1/2', code: 'stale' };
 }
 
@@ -3124,10 +3195,12 @@ function aiTurn() {
       state.moveLog.push(san);
       lastMove = move;
       render();
-      // spectator 模式 → 還有合法走法、且不是子力不足死局時繼續排下一手
+      // spectator 模式 → 還有合法走法、且不是「子力不足 / 三次重複」死局時繼續排下一手
       if (gameMode === 'spectator') {
         const next = generateMoves(state, state.turn);
-        if (next.length > 0 && !insufficientMaterial(state)) setTimeout(aiTurn, 80);
+        if (next.length > 0 && !insufficientMaterial(state) && !threefoldRepetition(state)) {
+          setTimeout(aiTurn, 80);
+        }
       }
     }, AI_ANIM_MS);
   }, 50);
@@ -3483,13 +3556,15 @@ function handleTestSquareClick(r, c) {
   }
 }
 
-// ---- 觸控板 2D pan + pinch 縮放 + 滑鼠拖曳 2D pan ----
+// ---- 滑鼠滾輪 → zoom；游標拖曳 → pan ----
+// 滾輪一律縮放 (以游標位置為錨點)，往上滾放大、往下滾縮小。
+// 若有水平滾動分量 (大多是觸控板二指側滑) 仍可順便當水平 pan
 viewportEl.addEventListener('wheel', (e) => {
-  if (e.ctrlKey) {
-    // pinch zoom (以游標位置為錨點，雙軸都鎖)
-    e.preventDefault();
+  e.preventDefault();
+  // 滾輪垂直分量 → 縮放
+  if (e.deltaY !== 0) {
     const oldZoom = zoom;
-    const factor = Math.exp(-e.deltaY * 0.012);
+    const factor = Math.exp(-e.deltaY * 0.0035);   // 一般滑鼠滾輪 deltaY ~100；0.0035 → 每 tick ~30% 縮放感
     zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom * factor));
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;
@@ -3497,14 +3572,10 @@ viewportEl.addEventListener('wheel', (e) => {
     const coy = e.clientY - screenCenterY;
     panX = cox - (cox - panX) * (zoom / oldZoom);
     panY = coy - (coy - panY) * (zoom / oldZoom);
-    relayout();
-  } else {
-    // 二指滾動 → 雙軸 pan
-    e.preventDefault();
-    panX -= e.deltaX;
-    panY -= e.deltaY;
-    relayout();
   }
+  // 水平分量 → 水平 pan (留給觸控板側滑用)
+  if (e.deltaX !== 0) panX -= e.deltaX;
+  relayout();
 }, { passive: false });
 
 // 滑鼠拖曳 pan：可從任意位置 (含棋盤格子) 開始拖曳；用閾值區分點擊 vs 拖曳
