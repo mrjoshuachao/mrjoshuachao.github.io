@@ -7,8 +7,10 @@
 <title>發票拆帳筆記</title>
 <style>
   :root {
-    --bg: #ececec;        /* 頁面：淺灰 */
-    --panel: #ffffff;     /* 卡片：純白（凸顯於灰底） */
+    /* 三層明度：頁面（最暗）→ 單筆框（中等）→ 商品品項（最亮 #fff，直接寫死） */
+    --bg: #b8b8b8;        /* 頁面：深灰 */
+    --panel: #ffffff;     /* 給按鈕、彈出選單等（保持白） */
+    --card-bg: #dcdcdc;   /* 單筆框內部：中等灰 */
     --ink: #000000;
     --muted: #6b7280;
     --line: #000000;          /* 純黑框線 */
@@ -49,7 +51,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(236, 236, 236, 0.92);   /* 跟 --bg 一致 */
+    background: rgba(184, 184, 184, 0.92);   /* 跟 --bg 一致 */
     backdrop-filter: saturate(160%) blur(8px);
     -webkit-backdrop-filter: saturate(160%) blur(8px);
     border-bottom: 3px solid var(--line);
@@ -309,17 +311,17 @@
     flex-shrink: 0;
   }
 
-  /* tag color palette */
-  .tc-0 { background: #ef4444; }
-  .tc-1 { background: #0ea5e9; }
-  .tc-2 { background: #14b8a6; }
-  .tc-3 { background: #a855f7; }
-  .tc-4 { background: #f59e0b; }
-  .tc-5 { background: #ec4899; }
-  .tc-6 { background: #65a30d; }
-  .tc-7 { background: #7c3aed; }
-  .tc-8 { background: #f97316; }
-  .tc-9 { background: #06b6d4; }
+  /* tag color palette — 日本傳統色（nipponcolors.com 取色，10 色高辨識度、皆適合白字） */
+  .tc-0 { background: #d3381c; } /* 緋色 hi-iro 鮮紅 */
+  .tc-1 { background: #eb6101; } /* 朱色 shu-iro 橙紅 */
+  .tc-2 { background: #b8862f; } /* 山吹茶 yamabuki-cha 金茶 */
+  .tc-3 { background: #6b8e23; } /* 萌黄 moegi 草綠 */
+  .tc-4 { background: #00736e; } /* 浅葱色 asagi-iro 青綠 */
+  .tc-5 { background: #002f71; } /* 紺青 konjou 深藍 */
+  .tc-6 { background: #5b287b; } /* 紫紺 shikon 深紫 */
+  .tc-7 { background: #c94093; } /* 牡丹 botan 牡丹粉 */
+  .tc-8 { background: #6a5c3e; } /* 鶯茶 uguisu-cha 鶯茶 */
+  .tc-9 { background: #545e5f; } /* 鼠色 nezumi-iro 鼠灰 */
 
   /* 長按彈出選單 — 蓋上半透明黑色背景讓其他畫面變暗 */
   .tag-menu-backdrop {
@@ -361,9 +363,17 @@
     pointer-events: none;
     z-index: 999;
     transform: translate(-50%, -50%);
-    opacity: 0.85;
+    opacity: 0.92;
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   }
+  /* 觸控拖曳：放大、且文字位置往上偏，避免被手指擋住 */
+  .tag-ghost.touch {
+    font-size: 22px;
+    padding: 14px 22px;
+    transform: translate(-50%, calc(-100% - 30px));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .tag-ghost.touch .tag-chip-x { display: none; }
 
   /* item card highlighted as drop target */
   .item.drop-target {
@@ -488,7 +498,7 @@
     font-size: 13px;
   }
   .card {
-    background: var(--panel);
+    background: var(--card-bg);
     border: 3px solid var(--line);
     border-radius: 22px;
     padding: 16px;
@@ -496,9 +506,17 @@
   }
   .card.entry {
     position: relative;
-    /* squircle 由 SVG 背景繪製；移除原本的實線框與背景 */
-    background: transparent !important;
-    border: none !important;
+    /* fallback：JS squircle 套上前用普通圓角邊框；套上後由 _squircled class 覆蓋 */
+    background: var(--card-bg);
+    border: 3px solid var(--ink);
+  }
+  .card.entry._squircled {
+    background: transparent;
+    border: none;
+  }
+  /* 上/下箭頭捲動到單筆框時，預留 sticky 標籤列高度避免被遮 */
+  .card.entry {
+    scroll-margin-top: 80px;
   }
   /* SVG squircle 背景填入 .card.entry 內、做為「連續曲率」邊框與底色 */
   .squircle-bg {
@@ -510,9 +528,9 @@
     z-index: 0;
   }
   .squircle-bg path {
-    fill: var(--panel);
+    fill: var(--card-bg);
     stroke: var(--ink);
-    stroke-width: 3;
+    stroke-width: 4;                 /* 行動裝置上 3px 看起來偏細，加粗到 4px */
     vector-effect: non-scaling-stroke;
   }
   /* 卡片內所有非 SVG 子元素疊在 SVG 之上 */
@@ -917,7 +935,7 @@
     background: var(--accent-soft);
     padding: 8px 12px;
     border-bottom: 3px solid var(--line);
-    vertical-align: top;
+    vertical-align: middle;          /* 標題垂直置中 cell */
     width: 84px;
     white-space: nowrap;
   }
@@ -1500,6 +1518,7 @@
         moved = true;
         ghost = startEl.cloneNode(true);
         ghost.classList.add('tag-ghost');
+        if (e.pointerType === 'touch') ghost.classList.add('touch');   // 觸控放大＋上偏
         document.body.appendChild(ghost);
       }
       if (dragging) {
@@ -1626,6 +1645,7 @@
     el.insertBefore(svg, el.firstChild);
     el._squircleSvg = svg;
     el._squirclePath = path;
+    el.classList.add('_squircled');     // 告知 CSS 移除 fallback 邊框
     const update = () => {
       const rect = el.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) return;
