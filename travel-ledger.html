@@ -8,7 +8,7 @@
 <style>
   :root {
     /* 三層明度：頁面（最暗）→ 單筆框（中等）→ 商品品項（最亮 #fff，直接寫死） */
-    --bg: #b8b8b8;        /* 頁面：深灰 */
+    --bg: #dcdcdc;        /* 頁面背景：與單筆框背景同色 */
     --panel: #ffffff;     /* 給按鈕、彈出選單等（保持白） */
     --card-bg: #dcdcdc;   /* 單筆框內部：中等灰 */
     --ink: #000000;
@@ -51,10 +51,10 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(184, 184, 184, 0.92);   /* 跟 --bg 一致 */
+    background: rgba(220, 220, 220, 0.92);   /* 跟 --bg 一致 */
     backdrop-filter: saturate(160%) blur(8px);
     -webkit-backdrop-filter: saturate(160%) blur(8px);
-    border-bottom: 3px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
   .tag-bar {
     max-width: 720px;
@@ -85,7 +85,7 @@
     flex-shrink: 0;
     align-self: stretch;
     width: 46px;
-    border: 3px solid var(--ink);
+    border: 1px solid var(--ink);
     border-radius: 16px;
     overflow: hidden;
     background: var(--panel);
@@ -105,7 +105,7 @@
     min-height: unset;
     font-family: inherit;
   }
-  .nav-arrows button:first-child { border-bottom: 3px solid var(--ink); }
+  .nav-arrows button:first-child { border-bottom: 1px solid var(--ink); }
   .nav-arrows button:hover { background: var(--accent-soft); }
   .nav-arrows button:active { background: var(--ink); color: var(--panel); }
   .nav-arrows button svg { width: 18px; height: 18px; display: block; }
@@ -115,7 +115,7 @@
     width: 48px;
     align-self: stretch;
     padding: 0;
-    border: 3px solid var(--ink);
+    border: 1px solid var(--ink);
     background: var(--panel);
     color: var(--ink);
     border-radius: 16px;
@@ -139,6 +139,28 @@
     display: none;
   }
   .entries-menu.visible { display: block; }
+
+  /* 螢幕正中央的小提示視窗（複製金鑰等）— 預設透明，由 JS 控制顯示 + 1 秒後淡出 */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    white-space: nowrap;
+  }
+  .toast.visible { opacity: 1; }
   .menu-overlay {
     position: absolute;
     inset: 0;
@@ -162,7 +184,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 18px;
-    border-bottom: 3px solid var(--line);
+    border-bottom: 1px solid var(--line);
     position: sticky;
     top: 0;
     background: var(--panel);
@@ -200,7 +222,7 @@
   .menu-list { list-style: none; margin: 0; padding: 0; }
   .menu-list li {
     padding: 12px 18px;
-    border-bottom: 3px solid var(--line);
+    border-bottom: 1px solid var(--line);
     cursor: pointer;
     font-size: 14px;
     color: var(--ink);
@@ -242,9 +264,9 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 6px 12px;
+    padding: 4px 9px;              /* 縮窄：標籤更小，每行能多塞幾個 */
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     background: var(--accent);
@@ -254,7 +276,7 @@
     -webkit-touch-callout: none;   /* 阻止 iOS Safari 長按出系統選單 */
     touch-action: none;
     flex-shrink: 0;
-    border: 3px solid transparent;
+    border: 1px solid #ffffff;     /* 細白框線（跟其他框線一致細） */
     transition: transform 0.1s, box-shadow 0.15s, border-color 0.15s;
     line-height: 1.2;
     max-width: 160px;
@@ -285,15 +307,15 @@
   .tag-chip-x:hover { background: rgba(255,255,255,0.45); }
   .tag-add {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;                 /* 跟縮窄後的 tag-chip 視覺高度接近 */
     padding: 0;
     border-radius: 50%;
-    border: 3px solid var(--ink);
+    border: 1px solid var(--ink);
     background: var(--panel);
     color: var(--ink);
     cursor: pointer;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 400;
     line-height: 1;
     font-family: inherit;
@@ -311,17 +333,17 @@
     flex-shrink: 0;
   }
 
-  /* tag color palette — 日本傳統色（nipponcolors.com 取色，10 色高辨識度、皆適合白字） */
-  .tc-0 { background: #d3381c; } /* 緋色 hi-iro 鮮紅 */
-  .tc-1 { background: #eb6101; } /* 朱色 shu-iro 橙紅 */
-  .tc-2 { background: #b8862f; } /* 山吹茶 yamabuki-cha 金茶 */
-  .tc-3 { background: #6b8e23; } /* 萌黄 moegi 草綠 */
-  .tc-4 { background: #00736e; } /* 浅葱色 asagi-iro 青綠 */
-  .tc-5 { background: #002f71; } /* 紺青 konjou 深藍 */
-  .tc-6 { background: #5b287b; } /* 紫紺 shikon 深紫 */
-  .tc-7 { background: #c94093; } /* 牡丹 botan 牡丹粉 */
-  .tc-8 { background: #6a5c3e; } /* 鶯茶 uguisu-cha 鶯茶 */
-  .tc-9 { background: #545e5f; } /* 鼠色 nezumi-iro 鼠灰 */
+  /* tag color palette — 莫蘭迪 / 馬卡龍 低飽和度色系，10 色（皆適合白字） */
+  .tc-0 { background: #c08b8b; } /* 玫瑰 dusty rose */
+  .tc-1 { background: #c89679; } /* 蜜桃 muted peach */
+  .tc-2 { background: #b29568; } /* 杏色 dusty gold */
+  .tc-3 { background: #87926a; } /* 橄欖綠 olive */
+  .tc-4 { background: #6e9088; } /* 鼠尾草 sage */
+  .tc-5 { background: #6e8aa5; } /* 霧藍 dusty blue */
+  .tc-6 { background: #8678a0; } /* 薰衣草 lavender */
+  .tc-7 { background: #a07e95; } /* 丁香紫 dusty mauve */
+  .tc-8 { background: #9a8e72; } /* 燕麥 oat */
+  .tc-9 { background: #807870; } /* 石灰 stone gray */
 
   /* 長按彈出選單 — 蓋上半透明黑色背景讓其他畫面變暗 */
   .tag-menu-backdrop {
@@ -333,7 +355,7 @@
   .tag-menu {
     position: fixed;
     background: #fff;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 14px;
     padding: 4px;
     z-index: 601;
@@ -375,22 +397,22 @@
   }
   .tag-ghost.touch .tag-chip-x { display: none; }
 
-  /* item card highlighted as drop target */
+  /* item card highlighted as drop target （無獨立 border，改用背景色強調） */
   .item.drop-target {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-    transform: translateY(-1px);
+    background: var(--accent-soft);
   }
   .item.assignable { cursor: pointer; }
-  .item.assignable:hover { border-color: var(--accent); }
+  .item.assignable:hover { background: rgba(0,0,0,0.03); }
 
   /* 商品右側「購買人」虛線框 */
   .item-buyer {
     display: flex;
     flex-direction: column;
+    align-items: center;          /* 內容水平置中 */
+    justify-content: center;      /* 內容垂直置中 */
     gap: 6px;
     padding: 8px 10px;
-    border: 3px dashed var(--line);
+    border: 1px dashed var(--line);
     border-radius: 16px;
     background: #fafafa;
     min-width: 108px;
@@ -398,6 +420,11 @@
     flex-shrink: 0;
     align-self: stretch;
   }
+  .item-buyer .payer-label { text-align: center; }
+  /* 有標籤之後：隱藏「購買人」label，只顯示標籤 */
+  .item-buyer.has-tags .payer-label { display: none; }
+  /* 還沒有標籤之前：item-tags 區域不要佔位 */
+  .item-buyer:not(.has-tags) .item-tags { display: none; }
   /* 框內標籤垂直排列 */
   .item-tags {
     display: flex;
@@ -410,13 +437,14 @@
   .item-tag {
     display: inline-flex;
     align-items: center;
-    gap: 6px;                   /* 名字與 X 之間留空 */
-    padding: 7px 5px 7px 13px;  /* 右側收窄，讓 X 靠近右邊緣 */
+    gap: 4px;                   /* 名字與 X 之間留空 */
+    padding: 3px 2px 3px 9px;
     border-radius: 999px;
-    font-size: 14px;            /* 頂部 13px → 這裡 14px */
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     line-height: 1.2;
+    border: 1px solid #ffffff;  /* 細白框線 */
   }
   .item-tag .x {
     display: inline-flex;
@@ -436,11 +464,12 @@
   .payer-row {
     display: flex;
     align-items: center;
+    justify-content: center;       /* label / slot 整列水平置中 */
     gap: 10px;
     padding: 12px 14px;
-    border: 3px dashed var(--line);
+    border: 1px dashed var(--line);
     border-radius: 18px;
-    margin: 14px 0;
+    margin: 8px 0;                  /* 縮小上下空白 */
     background: #fafafa;
     min-height: 56px;
     transition: border-color 0.15s, background 0.15s, transform 0.15s;
@@ -460,16 +489,21 @@
     text-transform: uppercase;
     letter-spacing: 1.2px;
     flex-shrink: 0;
+    text-align: center;
   }
   .payer-slot {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
-    flex: 1;
     min-height: 24px;
     align-items: center;
+    justify-content: center;       /* 標籤在 slot 內置中 */
   }
   .payer-empty { display: none; }
+  /* 有標籤之後：隱藏「付款人」label，只顯示標籤 */
+  .payer-row.has-tags .payer-label { display: none; }
+  /* 還沒有標籤之前：slot 不要佔位（裡面只有 display:none 的 empty hint） */
+  .payer-row:not(.has-tags) .payer-slot { display: none; }
 
   /* selected-tag hint at top of result card */
   .assign-hint {
@@ -499,7 +533,7 @@
   }
   .card {
     background: var(--card-bg);
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 22px;
     padding: 16px;
     margin-bottom: 14px;
@@ -508,7 +542,7 @@
     position: relative;
     /* fallback：JS squircle 套上前用普通圓角邊框；套上後由 _squircled class 覆蓋 */
     background: var(--card-bg);
-    border: 3px solid var(--ink);
+    border: 1px solid var(--ink);
   }
   .card.entry._squircled {
     background: transparent;
@@ -526,20 +560,19 @@
     height: 100%;
     pointer-events: none;
     z-index: 0;
+    overflow: visible;               /* path 貼著 SVG 邊，stroke 才不會被裁；視覺中心對齊 card box 邊緣 */
   }
   .squircle-bg path {
     fill: var(--card-bg);
     stroke: var(--ink);
-    stroke-width: 4;                 /* 行動裝置上 3px 看起來偏細，加粗到 4px */
-    vector-effect: non-scaling-stroke;
+    stroke-width: 1;                 /* 與其他 CSS 1px 框線同寬 */
+    shape-rendering: geometricPrecision;   /* 讓細曲線描邊不會看起來像虛線/斷掉 */
   }
   /* 卡片內所有非 SVG 子元素疊在 SVG 之上 */
   .card.entry > *:not(.squircle-bg) {
     position: relative;
     z-index: 1;
   }
-  /* 收縮按鈕需更高 z-index，避免被內容蓋住 */
-  .card.entry .entry-collapse-btn { z-index: 2; }
   /* 空單筆框（還沒上傳）不畫 squircle 邊框 */
   .card.entry.empty .squircle-bg path { display: none; }
   /* 未辨識的單筆框：移除外框，讓內部 .drop 虛線框獨自呈現
@@ -549,40 +582,24 @@
     border: none;
     padding: 0;
   }
-  /* 未辨識的單筆框不顯示 header、付款人、收縮按鈕 */
+  /* 未辨識的單筆框不顯示 header、付款人 */
   .card.entry.empty .entry-header,
-  .card.entry.empty .payer-row,
-  .card.entry.empty .entry-collapse-btn { display: none !important; }
+  .card.entry.empty .payer-row { display: none !important; }
 
-  /* 頂部收縮按鈕（橫貼在卡片頂緣的小圓角長方塊） */
-  .entry-collapse-btn {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 56px;
-    height: 18px;
-    padding: 0;
-    border: 3px solid var(--ink);
-    border-radius: 16px;
-    background: var(--panel);
-    color: var(--ink);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    min-height: unset;
-    font-family: inherit;
-    flex: 0 0 auto;
-  }
-  .entry-collapse-btn:hover { background: var(--accent-soft); }
-  .entry-collapse-btn:active { background: var(--ink); color: var(--panel); }
-  .entry-collapse-btn svg { display: block; }
+  /* 點店名大字 → 收縮/展開 */
+  .entry-merchant { cursor: pointer; }
+  .entry-merchant:hover { opacity: 0.7; }
 
   /* 收縮狀態：只顯示「編號 + 繁中店家大標題」，連垃圾桶都隱藏 */
   .card.entry.collapsed {
-    padding: 14px 16px 12px;
+    padding: 8px 16px;            /* 上下對稱，編號/店家名稱垂直置中 */
+  }
+  .card.entry.collapsed .entry-header {
+    min-height: 32px;             /* 縮一點，line-height 32 對應 22px 字級的視覺中心 */
+  }
+  .card.entry.collapsed .entry-number,
+  .card.entry.collapsed .entry-merchant {
+    line-height: 32px;
   }
   .card.entry.collapsed .entry-delete,
   .card.entry.collapsed .entry-merchant-original,
@@ -604,7 +621,7 @@
   }
   .entry-number {
     position: absolute;
-    left: 0;
+    left: 6px;                    /* 稍微往右移，不要太靠卡片邊 */
     top: 0;
     font-size: 22px;
     font-weight: 700;
@@ -641,6 +658,25 @@
     white-space: nowrap;
   }
   .entry-merchant-original:empty { display: none; }
+  /* 收縮版：右側顯示「簡短版日期與時間」（M/D HH:MM），預設隱藏 */
+  .entry-short-date {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+    line-height: 36px;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;          /* 不擋住點擊店名收縮 */
+    white-space: nowrap;
+  }
+  .card.entry.collapsed .entry-short-date {
+    display: block;
+    line-height: 32px;             /* 與 collapsed 狀態的編號 / 店名 line-height 一致 */
+  }
+  .card.entry.collapsed .entry-short-date:empty { display: none; }
   .entry-delete {
     position: absolute;
     right: 0;
@@ -684,7 +720,7 @@
   input[type="text"], select {
     width: 100%;
     padding: 12px 12px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 16px;
     font-size: 16px;
     background: #fff;
@@ -718,18 +754,29 @@
   .key-input::placeholder { color: var(--muted); font-weight: 600; opacity: 1; }
   /* 已輸入金鑰時的顯示（點一下可重新編輯） */
   .key-display {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--muted);
     text-align: center;
-    padding: 32px 16px;
+    padding: 10px 16px;            /* 大幅縮短上下空白，整個框變矮 */
     cursor: pointer;
-    word-break: break-all;
-    line-height: 1.4;
+    line-height: 1.3;
     border-radius: var(--radius-sm);
     transition: background 0.15s;
   }
-  .key-display:hover { background: var(--accent-soft); }
+  /* 點下去不要有任何視覺變化（hover 背景去掉） */
+  .key-display-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .key-display-code {
+    margin-top: 6px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 500;
+    white-space: nowrap;     /* 整串放一行 */
+    overflow: hidden;        /* 配合 JS 量測 scrollWidth */
+    /* font-size 由 JS 依容器寬度動態調整，預設先給一個值避免閃爍 */
+    font-size: 12px;
+  }
   .hint {
     font-size: 12px;
     color: var(--muted);
@@ -737,7 +784,7 @@
     line-height: 1.5;
   }
   .drop {
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 22px;
     padding: 24px 16px;
     text-align: center;
@@ -755,7 +802,7 @@
     width: 100%;
     margin: 0 0 16px 0;
     padding: 32px 16px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 22px;
     background: var(--panel);
     color: var(--ink);
@@ -780,7 +827,7 @@
     max-width: 100%;
     max-height: 320px;
     border-radius: 16px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     cursor: pointer;          /* 點圖可更換 */
   }
   .actions {
@@ -796,7 +843,7 @@
     font-size: 15px;
     padding: 12px 16px;
     border-radius: 16px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     background: #fff;
     color: var(--ink);
     cursor: pointer;
@@ -862,7 +909,7 @@
     border-radius: 999px;
     background: var(--accent-soft);
     color: var(--ink);
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     font-weight: 600;
   }
   .badge.inc { background: var(--tag-inc-bg); color: var(--tag-inc-ink); border-color: var(--tag-inc-bg); }
@@ -872,7 +919,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 8px;             /* 「簡述」下面的空白縮小 */
   }
   .meta-row .meta-table {
     flex: 1;
@@ -891,7 +938,7 @@
     max-height: 140px;
     object-fit: cover;
     border-radius: 14px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     cursor: zoom-in;
     display: block;
   }
@@ -921,7 +968,7 @@
     border-collapse: collapse;
     font-size: 13px;
     margin-bottom: 14px;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 14px;
     overflow: hidden;
   }
@@ -932,33 +979,48 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
-    background: var(--accent-soft);
-    padding: 8px 12px;
-    border-bottom: 3px solid var(--line);
+    background: transparent;         /* 不要淺色色塊，直接用單筆框底色 */
+    padding: 8px 4px 8px 4px;        /* 左右都縮小，標籤靠左、與資料距離也小 */
+    border-bottom: 1px solid var(--line);
     vertical-align: middle;          /* 標題垂直置中 cell */
-    width: 84px;
+    width: 1%;                       /* 寬度收成 min-content，不再撐到 84px */
     white-space: nowrap;
   }
   .meta-table td {
-    padding: 8px 12px;
+    padding: 8px 12px 8px 4px;       /* 左側 padding 縮小，配合上面 */
     color: var(--ink);
     font-weight: 600;
     font-size: 14px;
-    border-bottom: 3px solid var(--line);
+    border-bottom: 1px solid var(--line);
     word-break: break-word;
   }
   .meta-table tr:last-child th,
   .meta-table tr:last-child td { border-bottom: none; }
-  .items { display: flex; flex-direction: column; gap: 10px; }
-  .item {
-    border: 3px solid var(--line);
+  /* 所有商品品項全部包在一個大圓角矩形框內，每一條之間用一條實線隔開
+     （實線左右兩端跟大框框邊連在一起 → 用 .item + .item 的 border-top + overflow:hidden） */
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 12px 14px;
     background: #fff;
+    overflow: hidden;            /* 切掉子元素的角，配合外框圓角 */
+  }
+  .item {
+    border: none;
+    border-radius: 0;
+    padding: 12px 14px;
+    background: transparent;     /* 由 .items 外框提供白底 */
     /* 左右兩欄：主資訊 + 標籤 */
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    transition: background 0.15s;
+  }
+  /* 兩條品項之間的分隔線（左右貼齊大框邊緣） */
+  .item + .item {
+    border-top: 1px solid var(--line);
   }
   .item-main {
     flex: 1;
@@ -1024,8 +1086,8 @@
   }
   .item [contenteditable="true"]:hover { background: var(--accent-soft); }
   .item [contenteditable="true"]:focus {
-    background: var(--accent-soft);
-    box-shadow: inset 0 0 0 1px var(--ink);
+    background: #ffffff;            /* 純白底，沒有黑細框 */
+    box-shadow: none;
   }
   .totals {
     margin-top: 8px;
@@ -1053,12 +1115,17 @@
   .total-row.grand .v-twd { font-size: 14px; }
   .reasoning {
     margin-top: 10px;
-    font-size: 12px;
+    /* 字級 / 顏色 / 字距 / 字重：與 .meta-table th（日期、匯率、簡述）一致 */
+    font-size: 11px;
     color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     line-height: 1.5;
-    background: #fafafa;
-    border-radius: 14px;
-    padding: 10px 12px;
+    background: transparent;
+    /* 左 padding：對齊 meta-table 內 th 文字起點（card padding 16 + table border 3 + th padding-left 4 = 23，
+       這裡相對於 result-block 已從 card padding-left 16 起算，所以再加 7px 即可對齊） */
+    padding: 4px 0 4px 7px;
   }
   details { margin-top: 12px; }
   details summary {
@@ -1069,7 +1136,7 @@
   }
   details pre {
     background: #fafafa;
-    border: 3px solid var(--line);
+    border: 1px solid var(--line);
     border-radius: 14px;
     padding: 12px;
     overflow: auto;
@@ -1090,7 +1157,7 @@
     display: inline-block;
     width: 12px;
     height: 12px;
-    border: 3px solid var(--soft-gray);
+    border: 1px solid var(--soft-gray);
     border-top-color: var(--ink);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -1102,7 +1169,7 @@
     font-size: 12px;
     color: var(--warn);
     background: #fff7ed;
-    border: 3px solid #fed7aa;
+    border: 1px solid #fed7aa;
     border-radius: 14px;
     padding: 10px 12px;
     margin-bottom: 14px;
@@ -1255,20 +1322,14 @@
   <!-- 單筆框 template（由 JS 複製產生） -->
   <template id="entryTemplate">
     <section class="card entry empty">
-      <!-- 單筆框頭列：左上編號 + 右上刪除（辨識完成後才顯示） -->
-      <button class="entry-collapse-btn" type="button" aria-label="收合/展開單筆" title="收合/展開">
-        <svg viewBox="0 0 24 6" width="22" height="6" aria-hidden="true">
-          <circle cx="4" cy="3" r="2" fill="currentColor"/>
-          <circle cx="12" cy="3" r="2" fill="currentColor"/>
-          <circle cx="20" cy="3" r="2" fill="currentColor"/>
-        </svg>
-      </button>
+      <!-- 單筆框頭列：左上編號 + 中央店名（點一下可收縮/展開）+ 右上刪除（辨識完成後才顯示） -->
       <div class="entry-header" style="display:none">
         <span class="entry-number">1</span>
         <div class="entry-merchant-wrap">
           <div class="entry-merchant"></div>
           <div class="entry-merchant-original"></div>
         </div>
+        <span class="entry-short-date" aria-hidden="true"></span>
         <button class="entry-delete" type="button" aria-label="刪除此單筆" title="刪除此單筆">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="3 6 5 6 21 6"></polyline>
@@ -1362,8 +1423,9 @@
 
   // ===== Name-tag system =====
   const TAG_COLORS = 10; // matches CSS .tc-0 ~ .tc-9
-  const DEFAULT_TAGS = ['金英', '佳柔', '阿嬤', '阿惠', '鴻蘭', '姍玟', '佩慈', '華軍', '九號'];
+  const DEFAULT_TAGS = ['金英', '佳柔', '阿嬤', '美惠', '鴻蘭', '姍玟', '珮慈', '華軍', '宜儒', '俞翔'];
   const SEED_FLAG_KEY = 'name_tags_seeded_v1';
+  const TAG_MIGRATIONS_KEY = 'name_tags_migrations_v1';
   let tags = [];                  // persistent: [{id, name, color}]
   let selectedTagId = null;       // 全域：當前選定要指派的標籤 id
 
@@ -1384,6 +1446,36 @@
     });
     saveTags();
     localStorage.setItem(SEED_FLAG_KEY, '1');
+  }
+  // 已 seed 過的舊使用者：把舊名字改成新名字、補上漏掉的新標籤。
+  // 每個 migration 只跑一次（用 TAG_MIGRATIONS_KEY 記錄）。
+  function migrateTagsIfNeeded() {
+    if (!localStorage.getItem(SEED_FLAG_KEY)) return;   // 新使用者：跳過，由 seed 用最新名單
+    let done = [];
+    try { done = JSON.parse(localStorage.getItem(TAG_MIGRATIONS_KEY) || '[]'); } catch (e) {}
+    if (!Array.isArray(done)) done = [];
+    const migrations = [
+      { id: 'rename-and-add-2026-05',
+        run: () => {
+          const renames = { '佩慈': '珮慈', '阿惠': '美惠', '九號': '宜儒' };
+          let changed = false;
+          tags.forEach(t => {
+            if (renames[t.name]) { t.name = renames[t.name]; changed = true; }
+          });
+          // 新增「俞翔」（若使用者還沒有同名標籤）
+          if (!tags.some(t => t.name === '俞翔')) {
+            tags.push({ id: newTagId(), name: '俞翔', color: 9 });
+            changed = true;
+          }
+          if (changed) saveTags();
+        }
+      }
+    ];
+    let updated = false;
+    migrations.forEach(m => {
+      if (!done.includes(m.id)) { m.run(); done.push(m.id); updated = true; }
+    });
+    if (updated) localStorage.setItem(TAG_MIGRATIONS_KEY, JSON.stringify(done));
   }
   function saveTags() {
     localStorage.setItem('name_tags', JSON.stringify(tags));
@@ -1615,20 +1707,25 @@
   // iOS 的轉角是基於 superellipse（超橢圓）曲線，曲率連續變化、視覺更順。
   // 純 CSS 沒辦法做到（corner-shape 還是實驗中），所以用 SVG 路徑當背景模擬。
   // 公式參考 figma-squircle (https://github.com/phamfoo/figma-squircle)，smoothing ≈ 0.6。
-  function makeSquirclePath(w, h, r) {
+  function makeSquirclePath(w, h, r, strokeW) {
+    // strokeW：把整條 path 往內縮 strokeW/2，
+    // 否則 stroke 有一半超出 SVG 邊界會被裁掉（顯得「線變細了」）。
+    const o = (strokeW || 0) / 2;
+    w -= (strokeW || 0);
+    h -= (strokeW || 0);
     r = Math.max(0, Math.min(r, w / 2, h / 2));
     const a = Math.min(r * 1.528, w / 2, h / 2);   // 曲線起點離轉角的距離
     const c = a * 0.4;                              // 貝茲控制點距離（小一點 → 較平滑）
     return (
-      'M' + a + ' 0' +
-      'L' + (w - a) + ' 0' +
-      'C' + (w - c) + ' 0,' + w + ' ' + c + ',' + w + ' ' + a +
-      'L' + w + ' ' + (h - a) +
-      'C' + w + ' ' + (h - c) + ',' + (w - c) + ' ' + h + ',' + (w - a) + ' ' + h +
-      'L' + a + ' ' + h +
-      'C' + c + ' ' + h + ',0 ' + (h - c) + ',0 ' + (h - a) +
-      'L0 ' + a +
-      'C0 ' + c + ',' + c + ' 0,' + a + ' 0' +
+      'M' + (o + a) + ' ' + o +
+      'L' + (o + w - a) + ' ' + o +
+      'C' + (o + w - c) + ' ' + o + ',' + (o + w) + ' ' + (o + c) + ',' + (o + w) + ' ' + (o + a) +
+      'L' + (o + w) + ' ' + (o + h - a) +
+      'C' + (o + w) + ' ' + (o + h - c) + ',' + (o + w - c) + ' ' + (o + h) + ',' + (o + w - a) + ' ' + (o + h) +
+      'L' + (o + a) + ' ' + (o + h) +
+      'C' + (o + c) + ' ' + (o + h) + ',' + o + ' ' + (o + h - c) + ',' + o + ' ' + (o + h - a) +
+      'L' + o + ' ' + (o + a) +
+      'C' + o + ' ' + (o + c) + ',' + (o + c) + ' ' + o + ',' + (o + a) + ' ' + o +
       'Z'
     );
   }
@@ -1650,7 +1747,8 @@
       const rect = el.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) return;
       svg.setAttribute('viewBox', '0 0 ' + rect.width + ' ' + rect.height);
-      path.setAttribute('d', makeSquirclePath(rect.width, rect.height, radius));
+      // strokeW=0 → path 貼著 SVG 邊緣，stroke 中心 = card box 邊緣（上下各 1.5px 凸出，由 overflow:visible 不裁切）
+      path.setAttribute('d', makeSquirclePath(rect.width, rect.height, radius, 0));
     };
     el._squircleUpdate = update;
     update();
@@ -1771,7 +1869,8 @@
 
   // init tags on load
   loadTags();
-  seedDefaultTagsIfNeeded();
+  migrateTagsIfNeeded();           // 舊使用者：佩慈→珮慈、阿惠→美惠、九號→宜儒，補「俞翔」
+  seedDefaultTagsIfNeeded();       // 新使用者：用最新預設名單
   renderTagBar();
 
   // ---- preferences ----
@@ -1794,25 +1893,86 @@
   groqKeyEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') { e.preventDefault(); groqKeyEl.blur(); }
   });
-  // 點已輸入的金鑰文字 → 切回 input 編輯
+  // 點已輸入的金鑰文字 → 複製金鑰到剪貼簿，顯示置中小提示後淡出
   keyDisplayEl.addEventListener('click', () => {
-    keyDisplayEl.style.display = 'none';
-    groqKeyEl.style.display = '';
-    groqKeyEl.focus();
-    // 選取現有內容方便整個改掉
-    setTimeout(() => { try { groqKeyEl.select(); } catch(e){} }, 0);
+    const k = groqKeyEl.value.trim();
+    if (!k) return;
+    copyToClipboard(k).then(() => showToast('金鑰已複製'));
   });
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  // 螢幕正中央小提示（一秒後自動淡出）
+  let _toastEl = null, _toastHideTimer = null, _toastRemoveTimer = null;
+  function showToast(msg) {
+    if (!_toastEl) {
+      _toastEl = document.createElement('div');
+      _toastEl.className = 'toast';
+      document.body.appendChild(_toastEl);
+    }
+    _toastEl.textContent = msg;
+    // 先強制重排確保 transition 生效
+    void _toastEl.offsetWidth;
+    _toastEl.classList.add('visible');
+    if (_toastHideTimer) clearTimeout(_toastHideTimer);
+    if (_toastRemoveTimer) clearTimeout(_toastRemoveTimer);
+    _toastHideTimer = setTimeout(() => {
+      if (_toastEl) _toastEl.classList.remove('visible');
+    }, 1000);
+  }
 
   function updateKeyDisplay() {
     const k = groqKeyEl.value.trim();
     if (k) {
-      keyDisplayEl.textContent = '已輸入金鑰：' + k;
+      // 兩行：上方「已輸入金鑰」標題、下方金鑰本體（縮成一行可顯示完的大小）
+      keyDisplayEl.innerHTML = '';
+      const label = document.createElement('div');
+      label.className = 'key-display-label';
+      label.textContent = '已輸入金鑰';
+      const code = document.createElement('div');
+      code.className = 'key-display-code';
+      code.textContent = k;
+      keyDisplayEl.appendChild(label);
+      keyDisplayEl.appendChild(code);
       keyDisplayEl.style.display = '';
       groqKeyEl.style.display = 'none';
+      fitKeyCodeToOneLine(code);
     } else {
       keyDisplayEl.style.display = 'none';
       groqKeyEl.style.display = '';
     }
+  }
+  // 動態縮小字級讓整串金鑰剛好一行顯示完
+  let _keyFitResize = null;
+  function fitKeyCodeToOneLine(el) {
+    const fit = () => {
+      if (!el.isConnected) return;
+      let size = 14;
+      el.style.fontSize = size + 'px';
+      // scrollWidth > clientWidth 代表文字超出容器、需要縮字
+      let guard = 60;     // 最多 60 次（14 → 4）
+      while (el.scrollWidth > el.clientWidth && size > 4 && guard-- > 0) {
+        size -= 0.5;
+        el.style.fontSize = size + 'px';
+      }
+    };
+    // 等下一幀，避免 display 剛切回來時 clientWidth 還是 0
+    requestAnimationFrame(fit);
+    if (_keyFitResize) window.removeEventListener('resize', _keyFitResize);
+    _keyFitResize = () => requestAnimationFrame(fit);
+    window.addEventListener('resize', _keyFitResize);
   }
 
   function hasAnyApiKey() {
@@ -2315,7 +2475,7 @@
     const week = ['日','一','二','三','四','五','六'][dt.getDay()];
     const mm = String(mo).padStart(2, '0');
     const dd = String(d).padStart(2, '0');
-    let out = y + '年' + mm + '月' + dd + '日（' + week + '）';
+    let out = y + ' 年 ' + mm + ' 月 ' + dd + ' 日（' + week + '）';
     if (time) {
       const tm = String(time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
       if (tm) {
@@ -2323,6 +2483,26 @@
         let mi = parseInt(tm[2], 10);
         if (!isNaN(hh) && !isNaN(mi) && hh >= 0 && hh <= 23 && mi >= 0 && mi <= 59) {
           out += String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+        }
+      }
+    }
+    return out;
+  }
+  // 簡短版日期 + 時間：'2026-05-21' / '14:32' → 'M/D HH:MM' 或 'M/D'
+  function fmtShortDate(iso, time) {
+    if (!iso) return '';
+    const m = String(iso).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (!m) return '';
+    const mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+    if (isNaN(mo) || isNaN(d)) return '';
+    let out = mo + '/' + d;
+    if (time) {
+      const tm = String(time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
+      if (tm) {
+        const hh = parseInt(tm[1], 10);
+        const mi = parseInt(tm[2], 10);
+        if (!isNaN(hh) && !isNaN(mi) && hh >= 0 && hh <= 23 && mi >= 0 && mi <= 59) {
+          out += ' ' + String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
         }
       }
     }
@@ -2349,7 +2529,7 @@
       numEl: root.querySelector('.entry-number'),
       merchantEl: root.querySelector('.entry-merchant'),
       merchantOriginalEl: root.querySelector('.entry-merchant-original'),
-      collapseBtn: root.querySelector('.entry-collapse-btn'),
+      shortDateEl: root.querySelector('.entry-short-date'),
       deleteBtn: root.querySelector('.entry-delete'),
       dropEl: root.querySelector('.drop'),
       fileEl: root.querySelector('.file-input'),
@@ -2443,6 +2623,7 @@
       refs.dropEl.style.display = '';
       refs.merchantEl.textContent = '';
       refs.merchantOriginalEl.textContent = '';
+      if (refs.shortDateEl) refs.shortDateEl.textContent = '';
       refs.root.classList.remove('collapsed');
       refs.runBtn.disabled = true;
       refs.clearBtn.disabled = true;
@@ -2550,6 +2731,8 @@
       const merchantOrig = parsed.merchant || '';
       refs.merchantEl.textContent = merchantZh;
       refs.merchantOriginalEl.textContent = (merchantOrig && merchantOrig !== merchantZh) ? merchantOrig : '';
+      // 收縮時右側顯示的「簡短版日期 + 時間」（M/D HH:MM）
+      if (refs.shortDateEl) refs.shortDateEl.textContent = fmtShortDate(parsed.date, parsed.time);
 
       // 預計算（簡述列要用）
       const taxRate = extractTaxRate(parsed.tax_label);
@@ -2634,7 +2817,7 @@
             '</div>' +
           '</div>' +
           '<div class="item-buyer">' +
-            '<div class="payer-label">購買人</div>' +
+            '<div class="payer-label">實際購買人</div>' +
             '<div class="item-tags"></div>' +
           '</div>';
         refs.itemsEl.appendChild(div);
@@ -2702,17 +2885,18 @@
         if (!t) return;
         area.appendChild(buildAssignedChip(t, tid, itemIdx, '從這個商品移除', () => unassignTag(tid, itemIdx)));
       });
+      // 切換 has-tags：有標籤就隱藏「購買人」label
+      const buyer = itemEl.querySelector('.item-buyer');
+      if (buyer) buyer.classList.toggle('has-tags', ids.length > 0);
     }
     function renderPayerTags() {
       refs.payerSlotEl.innerHTML = '';
       const ids = state.assignments['payer'] || [];
       if (ids.length === 0) {
-        const hint = document.createElement('span');
-        hint.className = 'payer-empty';
-        hint.textContent = '← 拖曳名字標籤到這裡';
-        refs.payerSlotEl.appendChild(hint);
+        refs.payerRowEl.classList.remove('has-tags');
         return;
       }
+      refs.payerRowEl.classList.add('has-tags');
       ids.forEach(tid => {
         const t = tagById(tid);
         if (!t) return;
@@ -2829,8 +3013,17 @@
         : '要刪除這一筆嗎？';
       if (confirm(msg)) deleteSelf();
     });
-    refs.collapseBtn.addEventListener('click', () => {
+    // 點店名大字 → 收縮/展開（stopPropagation 避免再被卡片層的展開 handler 抵消）
+    refs.merchantEl.addEventListener('click', (e) => {
       refs.root.classList.toggle('collapsed');
+      e.stopPropagation();
+    });
+    // 收縮狀態下：點卡片任何地方都會展開（不僅限於中央店名大字）
+    refs.root.addEventListener('click', (e) => {
+      if (!refs.root.classList.contains('collapsed')) return;
+      // 排除可編輯元素或其他互動元素的點擊（其實在 collapsed 狀態下它們已 display:none）
+      if (e.target.closest('[contenteditable="true"]')) return;
+      refs.root.classList.remove('collapsed');
     });
 
     const api = {
