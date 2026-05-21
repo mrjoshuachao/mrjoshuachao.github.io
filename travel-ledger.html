@@ -1,0 +1,3028 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#c2410c" />
+<title>發票拆帳筆記</title>
+<style>
+  :root {
+    --bg: #ececec;        /* 頁面：淺灰 */
+    --panel: #ffffff;     /* 卡片：純白（凸顯於灰底） */
+    --ink: #000000;
+    --muted: #6b7280;
+    --line: #000000;          /* 純黑框線 */
+    --accent: #000000;        /* 黑色強調 */
+    --accent-soft: #f3f3f3;   /* 淺灰點綴 */
+    --ok: #000000;
+    --warn: #000000;
+    --err: #000000;
+    --tag-inc-bg: #000000;    /* 已含稅：黑底白字 */
+    --tag-inc-ink: #ffffff;
+    --tag-exc-bg: #ffffff;    /* 未含稅：白底黑框（border 另設） */
+    --tag-exc-ink: #000000;
+    --soft-gray: #d1d5db;     /* progress/spinner 等需要中淺灰對比 */
+    --twd-red: #991b1b;       /* 新台幣顯示色 */
+    /* iOS 風格圓角：用較大的 radius + 平緩過渡，視覺接近 squircle */
+    --radius-xs: 10px;
+    --radius-sm: 14px;
+    --radius-md: 18px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* ===== Sticky name-tag banner ===== */
+  .tag-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(236, 236, 236, 0.92);   /* 跟 --bg 一致 */
+    backdrop-filter: saturate(160%) blur(8px);
+    -webkit-backdrop-filter: saturate(160%) blur(8px);
+    border-bottom: 3px solid var(--line);
+  }
+  .tag-bar {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 12px;
+    display: flex;
+    align-items: stretch;     /* 讓 nav-arrows / menu-btn 自動撐滿整列高度 */
+    gap: 10px;
+    flex-wrap: nowrap;        /* 整列保持 nav-arrows + chips-area + menu-btn 三段式 */
+    min-height: 64px;         /* 給左右按鈕足夠高度 */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .chips-area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: center;       /* chips 在中央，不被整列拉高 */
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  /* 左側「上一筆／下一筆」整塊大按鈕，中間用一條線分上下 */
+  .nav-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex-shrink: 0;
+    align-self: stretch;
+    width: 46px;
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  .nav-arrows button {
+    width: 100%;
+    flex: 1 1 0;
+    padding: 0;
+    border: none;
+    background: var(--panel);
+    color: var(--ink);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-height: unset;
+    font-family: inherit;
+  }
+  .nav-arrows button:first-child { border-bottom: 3px solid var(--ink); }
+  .nav-arrows button:hover { background: var(--accent-soft); }
+  .nav-arrows button:active { background: var(--ink); color: var(--panel); }
+  .nav-arrows button svg { width: 18px; height: 18px; display: block; }
+
+  /* 右側選單按鈕，整高同列 */
+  .menu-btn {
+    width: 48px;
+    align-self: stretch;
+    padding: 0;
+    border: 3px solid var(--ink);
+    background: var(--panel);
+    color: var(--ink);
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-height: unset;
+    flex: 0 0 auto;
+    font-family: inherit;
+  }
+  .menu-btn:hover { background: var(--accent-soft); }
+  .menu-btn:active { background: var(--ink); color: var(--panel); }
+  .menu-btn svg { width: 26px; height: 26px; display: block; }
+
+  /* 「全部單筆」抽屜 */
+  .entries-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: none;
+  }
+  .entries-menu.visible { display: block; }
+  .menu-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+  }
+  .menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(380px, 92vw);
+    height: 100%;
+    background: var(--panel);
+    box-shadow: -4px 0 18px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 3px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 1;
+  }
+  .menu-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .menu-close {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    min-height: unset;
+    flex: 0 0 auto;
+    line-height: 1;
+  }
+  .menu-close:hover { color: var(--ink); }
+  .menu-section h4 {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 0;
+    padding: 14px 18px 6px;
+    font-weight: 700;
+  }
+  .menu-list { list-style: none; margin: 0; padding: 0; }
+  .menu-list li {
+    padding: 12px 18px;
+    border-bottom: 3px solid var(--line);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .menu-list li:hover { background: var(--accent-soft); }
+  .menu-list li .li-num {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .menu-list li .li-title { font-weight: 600; }
+  .menu-list li.deleted .li-title { color: var(--muted); text-decoration: line-through; }
+  .menu-list li.deleted .restore-hint {
+    font-size: 11px;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .menu-empty {
+    padding: 14px 18px;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+  .tag-bar::-webkit-scrollbar { height: 4px; }
+  .tag-bar::-webkit-scrollbar-thumb { background: var(--soft-gray); border-radius: 2px; }
+  .tag-bar-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;   /* 阻止 iOS Safari 長按出系統選單 */
+    touch-action: none;
+    flex-shrink: 0;
+    border: 3px solid transparent;
+    transition: transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+    line-height: 1.2;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tag-chip:active { cursor: grabbing; }
+  .tag-chip.selected {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(31,41,55,0.15);
+    transform: scale(1.05);
+  }
+  .tag-chip-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    font-size: 12px;
+    margin-left: 2px;
+    margin-right: -4px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .tag-chip-x:hover { background: rgba(255,255,255,0.45); }
+  .tag-add {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    font-family: inherit;
+    min-height: unset;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tag-add:hover { background: var(--accent-soft); }
+  .tag-add:active { background: var(--ink); color: var(--panel); }
+  .tag-empty {
+    font-size: 12px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* tag color palette */
+  .tc-0 { background: #ef4444; }
+  .tc-1 { background: #0ea5e9; }
+  .tc-2 { background: #14b8a6; }
+  .tc-3 { background: #a855f7; }
+  .tc-4 { background: #f59e0b; }
+  .tc-5 { background: #ec4899; }
+  .tc-6 { background: #65a30d; }
+  .tc-7 { background: #7c3aed; }
+  .tc-8 { background: #f97316; }
+  .tc-9 { background: #06b6d4; }
+
+  /* 長按彈出選單 — 蓋上半透明黑色背景讓其他畫面變暗 */
+  .tag-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 600;
+  }
+  .tag-menu {
+    position: fixed;
+    background: #fff;
+    border: 3px solid var(--line);
+    border-radius: 14px;
+    padding: 4px;
+    z-index: 601;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    min-width: 140px;
+  }
+  .tag-menu button {
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    min-height: 40px;
+    flex: 1;
+  }
+  .tag-menu button:hover { background: var(--accent-soft); }
+
+  /* drag ghost (follows pointer) */
+  .tag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    transform: translate(-50%, -50%);
+    opacity: 0.85;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+
+  /* item card highlighted as drop target */
+  .item.drop-target {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    transform: translateY(-1px);
+  }
+  .item.assignable { cursor: pointer; }
+  .item.assignable:hover { border-color: var(--accent); }
+
+  /* 商品右側「購買人」虛線框 */
+  .item-buyer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 3px dashed var(--line);
+    border-radius: 16px;
+    background: #fafafa;
+    min-width: 108px;
+    max-width: 44%;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+  /* 框內標籤垂直排列 */
+  .item-tags {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 4px;
+    align-items: flex-start;
+    margin: 0;
+  }
+  .item-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;                   /* 名字與 X 之間留空 */
+    padding: 7px 5px 7px 13px;  /* 右側收窄，讓 X 靠近右邊緣 */
+    border-radius: 999px;
+    font-size: 14px;            /* 頂部 13px → 這裡 14px */
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .item-tag .x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 0;             /* gap 已負責空隙 */
+  }
+  .item-tag .x:hover { background: rgba(255,255,255,0.5); }
+
+  /* payer slot */
+  .payer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 3px dashed var(--line);
+    border-radius: 18px;
+    margin: 14px 0;
+    background: #fafafa;
+    min-height: 56px;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    cursor: default;
+  }
+  .payer-row.assignable { cursor: pointer; }
+  .payer-row.assignable:hover { border-color: var(--accent); }
+  .payer-row.drop-target {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+  }
+  .payer-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    flex-shrink: 0;
+  }
+  .payer-slot {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-height: 24px;
+    align-items: center;
+  }
+  .payer-empty { display: none; }
+
+  /* selected-tag hint at top of result card */
+  .assign-hint {
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 14px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    display: none;
+  }
+  .assign-hint.visible { display: block; }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 18px 16px 48px;
+  }
+  header h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    letter-spacing: 0.3px;
+  }
+  header p {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .card {
+    background: var(--panel);
+    border: 3px solid var(--line);
+    border-radius: 22px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .card.entry {
+    position: relative;
+    /* squircle 由 SVG 背景繪製；移除原本的實線框與背景 */
+    background: transparent !important;
+    border: none !important;
+  }
+  /* SVG squircle 背景填入 .card.entry 內、做為「連續曲率」邊框與底色 */
+  .squircle-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .squircle-bg path {
+    fill: var(--panel);
+    stroke: var(--ink);
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+  }
+  /* 卡片內所有非 SVG 子元素疊在 SVG 之上 */
+  .card.entry > *:not(.squircle-bg) {
+    position: relative;
+    z-index: 1;
+  }
+  /* 收縮按鈕需更高 z-index，避免被內容蓋住 */
+  .card.entry .entry-collapse-btn { z-index: 2; }
+  /* 空單筆框（還沒上傳）不畫 squircle 邊框 */
+  .card.entry.empty .squircle-bg path { display: none; }
+  /* 未辨識的單筆框：移除外框，讓內部 .drop 虛線框獨自呈現
+     ——跟底部「點此加入發票照片」按鈕視覺一致 */
+  .card.entry.empty {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  /* 未辨識的單筆框不顯示 header、付款人、收縮按鈕 */
+  .card.entry.empty .entry-header,
+  .card.entry.empty .payer-row,
+  .card.entry.empty .entry-collapse-btn { display: none !important; }
+
+  /* 頂部收縮按鈕（橫貼在卡片頂緣的小圓角長方塊） */
+  .entry-collapse-btn {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 18px;
+    padding: 0;
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    min-height: unset;
+    font-family: inherit;
+    flex: 0 0 auto;
+  }
+  .entry-collapse-btn:hover { background: var(--accent-soft); }
+  .entry-collapse-btn:active { background: var(--ink); color: var(--panel); }
+  .entry-collapse-btn svg { display: block; }
+
+  /* 收縮狀態：只顯示「編號 + 繁中店家大標題」，連垃圾桶都隱藏 */
+  .card.entry.collapsed {
+    padding: 14px 16px 12px;
+  }
+  .card.entry.collapsed .entry-delete,
+  .card.entry.collapsed .entry-merchant-original,
+  .card.entry.collapsed .payer-row,
+  .card.entry.collapsed .drop,
+  .card.entry.collapsed .preview-wrap,
+  .card.entry.collapsed .actions,
+  .card.entry.collapsed .progress-bar,
+  .card.entry.collapsed .result-block { display: none !important; }
+  .card.entry.collapsed .entry-header { margin: 0; }
+  /* 單筆框最頂部：編號（左）／店家名稱（真正螢幕中央，含原文小字）／垃圾桶（右）
+     編號與垃圾桶用 absolute 定位釘在兩側，讓店家名永遠對齊整個卡片中央 */
+  .entry-header {
+    position: relative;
+    text-align: center;
+    margin-top: -6px;
+    margin-bottom: 4px;
+    min-height: 36px;
+  }
+  .entry-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 36px;            /* 跟垃圾桶 36px 同高 */
+    font-variant-numeric: tabular-nums;
+  }
+  .entry-merchant-wrap {
+    display: inline-block;
+    max-width: calc(100% - 120px);  /* 留兩側給編號 + 垃圾桶 */
+    text-align: center;
+    line-height: 1.15;
+    vertical-align: top;
+  }
+  .entry-merchant {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 36px;            /* 跟編號／垃圾桶同高、不更高 */
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entry-merchant-original {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 0;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entry-merchant-original:empty { display: none; }
+  .entry-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0;
+    min-height: unset;
+    flex: 0 0 auto;
+    transition: color 0.15s, background 0.15s;
+  }
+  .entry-delete:hover {
+    color: var(--twd-red);
+    background: var(--accent-soft);
+  }
+  .entry-delete svg { display: block; }
+
+  .card h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--muted);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  label.row {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field + .field { margin-top: 12px; }
+  input[type="text"], select {
+    width: 100%;
+    padding: 12px 12px;
+    border: 3px solid var(--line);
+    border-radius: 16px;
+    font-size: 16px;
+    background: #fff;
+    color: var(--ink);
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236b7280' d='M6 8L0 0h12z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  /* 初次使用的 API key 輸入：純文字呈現、無外框、置中、字級同「點此加入發票照片」 */
+  .key-input {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    padding: 32px 16px !important;
+    text-align: center;
+    color: var(--muted) !important;
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+  }
+  .key-input:focus {
+    background: var(--accent-soft) !important;
+    border-radius: var(--radius-sm);
+  }
+  .key-input::placeholder { color: var(--muted); font-weight: 600; opacity: 1; }
+  /* 已輸入金鑰時的顯示（點一下可重新編輯） */
+  .key-display {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: center;
+    padding: 32px 16px;
+    cursor: pointer;
+    word-break: break-all;
+    line-height: 1.4;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s;
+  }
+  .key-display:hover { background: var(--accent-soft); }
+  .hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .drop {
+    border: 3px solid var(--line);
+    border-radius: 22px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    background: #fafafa;
+  }
+  .drop.dragging { border-color: var(--accent); background: var(--accent-soft); }
+  .drop p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .drop strong { color: var(--ink); font-size: 15px; }
+  .file-input { display: none; }
+  /* 「點此加入發票照片」全寬按鈕 — 樣式同 drop zone */
+  .add-entry-btn {
+    display: block;
+    width: 100%;
+    margin: 0 0 16px 0;
+    padding: 32px 16px;
+    border: 3px solid var(--line);
+    border-radius: 22px;
+    background: var(--panel);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: unset;
+    flex: 0 0 auto;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .add-entry-btn:hover {
+    background: var(--accent-soft);
+  }
+  .preview-wrap {
+    margin-top: 12px;
+    display: none;
+    text-align: center;
+  }
+  .preview-wrap img {
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 16px;
+    border: 3px solid var(--line);
+    cursor: pointer;          /* 點圖可更換 */
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    justify-content: center;     /* 中央對齊（清除按鈕已隱藏） */
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    font-size: 15px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 3px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    min-height: 44px;
+    flex: 1;
+  }
+  button:hover:not(:disabled) { background: #f3f4f6; }
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    flex: 2;
+  }
+  button.primary:hover:not(:disabled) { background: #333333; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status {
+    font-size: 13px;
+    color: var(--muted);
+    min-height: 0;
+    width: 100%;
+    margin-top: 0;
+    text-align: center;
+  }
+  /* 空 status 不占垂直空間 */
+  .status:empty { display: none; }
+  .status.ok { color: var(--ok); }
+  .status.warn { color: var(--warn); }
+  .status.err { color: var(--err); }
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--soft-gray);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+    display: none;
+  }
+  .progress-bar.visible { display: block; }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.25s ease;
+    width: 0%;
+  }
+  .result { display: none; }
+  /* 結果區內嵌在同一張卡片內，緊接著預覽下方 */
+  .result-block {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--ink);
+    border: 3px solid var(--line);
+    font-weight: 600;
+  }
+  .badge.inc { background: var(--tag-inc-bg); color: var(--tag-inc-ink); border-color: var(--tag-inc-bg); }
+  .badge.exc { background: var(--tag-exc-bg); color: var(--tag-exc-ink); border-color: var(--ink); }
+  /* meta 表格 + 右側照片縮圖：水平排列、表格垂直置中對齊縮圖高度 */
+  .meta-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .meta-row .meta-table {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+  }
+  .meta-photo-slot {
+    width: 92px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: stretch;
+  }
+  .meta-photo-slot img.thumb-img {
+    width: 100%;
+    height: auto;
+    max-height: 140px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 3px solid var(--line);
+    cursor: zoom-in;
+    display: block;
+  }
+
+  /* 全螢幕照片檢視 */
+  .photo-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .photo-lightbox.visible { display: flex; }
+  .photo-lightbox img {
+    max-width: 96vw;
+    max-height: 96vh;
+    object-fit: contain;
+  }
+
+  /* meta as a single bordered table */
+  .meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 14px;
+    border: 3px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .meta-table th {
+    text-align: left;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    background: var(--accent-soft);
+    padding: 8px 12px;
+    border-bottom: 3px solid var(--line);
+    vertical-align: top;
+    width: 84px;
+    white-space: nowrap;
+  }
+  .meta-table td {
+    padding: 8px 12px;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 3px solid var(--line);
+    word-break: break-word;
+  }
+  .meta-table tr:last-child th,
+  .meta-table tr:last-child td { border-bottom: none; }
+  .items { display: flex; flex-direction: column; gap: 10px; }
+  .item {
+    border: 3px solid var(--line);
+    border-radius: 18px;
+    padding: 12px 14px;
+    background: #fff;
+    /* 左右兩欄：主資訊 + 標籤 */
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .item-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .item .name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  .item .orig {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+    word-break: break-word;
+  }
+  .item .prices {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;            /* 三欄之間緊湊一點 */
+    margin-top: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .item .price-cell {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .item .price-sep {
+    font-size: 22px;
+    color: var(--muted);
+    font-weight: 200;
+    line-height: 1;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .item .price-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .item .price-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .item .price-cell.twd-cell .price-label { color: var(--twd-red); }
+  .item .price-cell.twd-cell .price-val { color: var(--twd-red); }
+
+  /* 可編輯欄位（修錯字） */
+  .item [contenteditable="true"] {
+    border-radius: 14px;
+    padding: 0 3px;
+    outline: none;
+    cursor: text;
+    transition: background 0.1s, box-shadow 0.1s;
+  }
+  .item [contenteditable="true"]:hover { background: var(--accent-soft); }
+  .item [contenteditable="true"]:focus {
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .totals {
+    margin-top: 8px;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 4px;
+    font-variant-numeric: tabular-nums;
+    gap: 12px;
+  }
+  .total-row .label { font-size: 13px; color: var(--muted); }
+  .total-row .values { text-align: right; }
+  .total-row .v-orig { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .total-row .v-twd { font-size: 12px; color: var(--twd-red); display: block; margin-top: 2px; }
+  .total-row.grand {
+    margin-top: 4px;
+    padding: 10px;
+    background: var(--accent-soft);
+    border-radius: 16px;
+  }
+  .total-row.grand .label { color: var(--ink); font-weight: 700; font-size: 15px; }
+  .total-row.grand .v-orig { font-size: 17px; }
+  .total-row.grand .v-twd { font-size: 14px; }
+  .reasoning {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    background: #fafafa;
+    border-radius: 14px;
+    padding: 10px 12px;
+  }
+  details { margin-top: 12px; }
+  details summary {
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    padding: 6px 0;
+  }
+  details pre {
+    background: #fafafa;
+    border: 3px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    overflow: auto;
+    font-size: 12px;
+    color: var(--ink);
+    max-height: 320px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .footer-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 18px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 3px solid var(--soft-gray);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .notice {
+    font-size: 12px;
+    color: var(--warn);
+    background: #fff7ed;
+    border: 3px solid #fed7aa;
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  @media (min-width: 600px) {
+    .wrap { padding: 28px 24px 60px; }
+    header h1 { font-size: 24px; }
+    .card { padding: 20px 22px; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field + .field { margin-top: 0; }
+    /* meta-table 在桌機自然撐滿，不需要額外規則 */
+    button { flex: 0 0 auto; }
+    button.primary { flex: 0 0 auto; min-width: 140px; }
+    .status { width: auto; margin-top: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="tag-bar-wrap">
+  <div class="tag-bar" id="tagBar">
+    <div class="nav-arrows">
+      <button id="navUpBtn" type="button" title="上一筆單筆框" aria-label="上一筆">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5 L4 17 L20 17 Z" fill="currentColor"/></svg>
+      </button>
+      <button id="navDownBtn" type="button" title="下一筆單筆框" aria-label="下一筆">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 19 L4 7 L20 7 Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="chips-area" id="chipsArea">
+      <span class="tag-bar-label" style="display:none">買家標籤</span>
+      <!-- chips inserted here -->
+    </div>
+    <button id="menuBtn" class="menu-btn" type="button" title="所有單筆清單" aria-label="所有單筆">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- 全螢幕照片檢視 -->
+<div class="photo-lightbox" id="photoLightbox">
+  <img id="lightboxImg" alt="" />
+</div>
+
+<!-- 全部單筆抽屜 -->
+<div class="entries-menu" id="entriesMenu" aria-hidden="true">
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <aside class="menu-panel" role="dialog" aria-label="所有單筆">
+    <header class="menu-header">
+      <h3>所有單筆</h3>
+      <button class="menu-close" id="menuCloseBtn" type="button" aria-label="關閉">×</button>
+    </header>
+    <section class="menu-section">
+      <h4>進行中</h4>
+      <ul class="menu-list" id="menuActiveList"></ul>
+    </section>
+    <section class="menu-section">
+      <h4>已刪除</h4>
+      <ul class="menu-list" id="menuDeletedList"></ul>
+    </section>
+  </aside>
+</div>
+<div class="wrap">
+  <header style="display:none">
+    <h1>國外旅遊購物發票辨識</h1>
+    <p>填入 Google Gemini 免費 key 享受高品質智慧辨識；不填則使用純本機 Tesseract OCR。</p>
+  </header>
+
+  <div class="notice" style="display:none">
+    <b>Gemini key 已內建到此頁面</b>，可直接上傳發票辨識。Gemini 會看圖直接辨識+翻譯+判斷含稅，並會根據店家名稱聰明猜測冷僻品項的中文翻譯，品質遠勝純 OCR。
+    <br/>
+    ⚠️ 此 HTML 檔含有你的 API key，<b>請勿分享或上傳到公開位置</b>。若不慎外流，請到 <a href="https://aistudio.google.com/apikey" target="_blank" style="color:inherit">aistudio.google.com/apikey</a> 撤銷舊 key 並重發。
+  </div>
+
+  <!-- 1. Groq API Key 設定 -->
+  <section class="card" id="setupCard">
+    <div class="field">
+      <label class="row" for="groqKey" style="display:none">Groq API Key</label>
+      <input type="password" id="groqKey" class="key-input" placeholder="初次使用請輸入金鑰" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <div id="keyDisplay" class="key-display" style="display:none" title="點此修改金鑰"></div>
+      <p class="hint" style="display:none">
+        免費取得：到 <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">console.groq.com</a> 用 Google／GitHub 登入 → 左側「API Keys」→「Create API Key」→ 複製 <code>gsk_…</code> 貼上。金鑰只存在你瀏覽器 localStorage、不會外傳；沒填則用本機 Tesseract OCR 備援（品質較差）。
+      </p>
+    </div>
+  </section>
+  <!-- Gemini 區已停用，欄位仍在 DOM 供向下相容 -->
+  <section class="card" style="display:none">
+    <div class="field"><input type="password" id="geminiKey" /></div>
+    <div class="field"><select id="geminiModel"><option value="gemini-2.5-flash">Gemini 2.5 Flash</option></select></div>
+  </section>
+
+  <!-- 2. Tesseract 設定（已停用，Groq 不需要；欄位仍在 DOM 供 fallback 使用） -->
+  <section class="card" style="display:none">
+    <h2 style="display:none">發票語言設定</h2>
+    <div class="grid-2">
+      <div class="field">
+        <label class="row" for="langSelect">主要文字語言</label>
+        <select id="langSelect">
+          <option value="jpn">日文（日本）</option>
+          <option value="eng">英文（美國／加拿大／澳洲）</option>
+          <option value="kor">韓文（韓國）</option>
+          <option value="chi_tra">繁體中文（港澳台）</option>
+          <option value="chi_sim">簡體中文（中國大陸／新加坡）</option>
+          <option value="tha">泰文（泰國）</option>
+          <option value="fra">法文（法國）</option>
+          <option value="deu">德文（德國／奧地利）</option>
+          <option value="ita">義大利文</option>
+          <option value="spa">西班牙文</option>
+          <option value="vie">越南文</option>
+          <option value="jpn+eng">日文 + 英文（混合）</option>
+          <option value="kor+eng">韓文 + 英文（混合）</option>
+          <option value="chi_sim+eng">簡中 + 英文（混合）</option>
+        </select>
+        <p class="hint">挑越接近發票實際語言越準確。混合選項較慢但對中英混雜收據較友善。</p>
+      </div>
+      <div class="field">
+        <label class="row" for="currencyHint">幣別（可選，自動偵測失敗時用）</label>
+        <select id="currencyHint">
+          <option value="">自動偵測</option>
+          <option value="JPY">日圓 JPY</option>
+          <option value="USD">美元 USD</option>
+          <option value="EUR">歐元 EUR</option>
+          <option value="KRW">韓元 KRW</option>
+          <option value="THB">泰銖 THB</option>
+          <option value="HKD">港幣 HKD</option>
+          <option value="SGD">新加坡幣 SGD</option>
+          <option value="CNY">人民幣 CNY</option>
+          <option value="GBP">英鎊 GBP</option>
+          <option value="AUD">澳幣 AUD</option>
+          <option value="CAD">加幣 CAD</option>
+          <option value="TWD">新台幣 TWD</option>
+        </select>
+        <p class="hint">「自動」會從 ¥ / $ / € / ₩ 等符號猜，猜不到時請手動指定。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Upload -->
+  <!-- 全域：選定標籤時的提示 -->
+  <div class="assign-hint" id="assignHint"></div>
+
+  <!-- 單筆框 template（由 JS 複製產生） -->
+  <template id="entryTemplate">
+    <section class="card entry empty">
+      <!-- 單筆框頭列：左上編號 + 右上刪除（辨識完成後才顯示） -->
+      <button class="entry-collapse-btn" type="button" aria-label="收合/展開單筆" title="收合/展開">
+        <svg viewBox="0 0 24 6" width="22" height="6" aria-hidden="true">
+          <circle cx="4" cy="3" r="2" fill="currentColor"/>
+          <circle cx="12" cy="3" r="2" fill="currentColor"/>
+          <circle cx="20" cy="3" r="2" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="entry-header" style="display:none">
+        <span class="entry-number">1</span>
+        <div class="entry-merchant-wrap">
+          <div class="entry-merchant"></div>
+          <div class="entry-merchant-original"></div>
+        </div>
+        <button class="entry-delete" type="button" aria-label="刪除此單筆" title="刪除此單筆">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1.5 14a2 2 0 0 1-2 2H8.5a2 2 0 0 1-2-2L5 6"></path>
+            <path d="M10 11v6"></path>
+            <path d="M14 11v6"></path>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- 付款人欄位（緊接 header 下方） -->
+      <div class="payer-row" data-payer-slot="1">
+        <div class="payer-label">付款人</div>
+        <div class="payer-slot"></div>
+      </div>
+      <h2 style="display:none">上傳發票照片</h2>
+      <div class="drop">
+        <strong>點此加入發票照片</strong>
+        <p style="display:none">JPG / PNG / WebP，建議 ≤ 5 MB；拍正面、光線充足效果最好</p>
+      </div>
+      <input type="file" class="file-input" accept="image/jpeg,image/png,image/webp" />
+      <div class="preview-wrap">
+        <img class="preview-img" alt="發票預覽" title="點此更換照片" />
+      </div>
+      <div class="actions">
+        <button class="primary run-btn" type="button" disabled style="display:none">開始辨識</button>
+        <button class="clear-btn" type="button" disabled style="display:none">清除</button>
+        <div class="status"></div>
+      </div>
+      <div class="progress-bar"><div class="fill progress-fill"></div></div>
+
+      <!-- 結果（內嵌） -->
+      <div class="result-block result">
+        <h2 style="display:none">辨識結果</h2>
+        <div class="badges" style="display:none"></div>
+        <div class="meta-row">
+          <table class="meta-table"><tbody></tbody></table>
+          <div class="meta-photo-slot">
+            <img class="thumb-img" alt="發票縮圖" title="點此放大" />
+          </div>
+        </div>
+        <div class="items"></div>
+        <div class="totals"></div>
+        <div class="reasoning" style="display:none;"></div>
+      </div>
+    </section>
+  </template>
+
+  <!-- 已建立的單筆框容器 -->
+  <div id="entriesContainer"></div>
+
+  <!-- 加入下一筆 -->
+  <button id="addEntryBtn" class="add-entry-btn" type="button">點此加入發票照片</button>
+
+  <p class="footer-note" style="display:none">
+    Gemini 模式：圖片直接傳至 <a href="https://ai.google.dev" style="color:inherit" target="_blank">Google Generative Language API</a>，由 Gemini 一次完成辨識+翻譯+含稅判斷。<br/>
+    Tesseract 模式：OCR 由 <a href="https://github.com/naptha/tesseract.js" style="color:inherit" target="_blank">Tesseract.js</a> 在本機完成；翻譯由 <a href="https://mymemory.translated.net" style="color:inherit" target="_blank">MyMemory</a> 提供。<br/>
+    匯率由 <a href="https://www.exchangerate-api.com" style="color:inherit" target="_blank">Open ER-API</a> 提供。圖片不經任何第三方伺服器。
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  // 全域 UI 元素（設定區、標籤橫幅、單筆容器等）
+  const tagBarEl = $('tagBar');
+  const chipsAreaEl = $('chipsArea');
+  const navUpBtn = $('navUpBtn');
+  const navDownBtn = $('navDownBtn');
+  const menuBtn = $('menuBtn');
+  const entriesMenuEl = $('entriesMenu');
+  const menuOverlayEl = $('menuOverlay');
+  const menuCloseBtn = $('menuCloseBtn');
+  const menuActiveList = $('menuActiveList');
+  const menuDeletedList = $('menuDeletedList');
+  const photoLightbox = $('photoLightbox');
+  const lightboxImg = $('lightboxImg');
+  const assignHintEl = $('assignHint');
+  const geminiKeyEl = $('geminiKey');
+  const geminiModelEl = $('geminiModel');
+  const langEl = $('langSelect');
+  const curHintEl = $('currencyHint');
+  const entriesContainer = $('entriesContainer');
+  const addEntryBtn = $('addEntryBtn');
+  const entryTemplate = $('entryTemplate');
+
+  // ===== 全部單筆框 =====
+  const entries = [];           // 進行中（顯示）
+  const deletedEntries = [];    // 已軟刪除（藏在抽屜中可還原）
+
+  // ===== Name-tag system =====
+  const TAG_COLORS = 10; // matches CSS .tc-0 ~ .tc-9
+  const DEFAULT_TAGS = ['金英', '佳柔', '阿嬤', '阿惠', '鴻蘭', '姍玟', '佩慈', '華軍', '九號'];
+  const SEED_FLAG_KEY = 'name_tags_seeded_v1';
+  let tags = [];                  // persistent: [{id, name, color}]
+  let selectedTagId = null;       // 全域：當前選定要指派的標籤 id
+
+  function loadTags() {
+    try { tags = JSON.parse(localStorage.getItem('name_tags') || '[]'); }
+    catch (e) { tags = []; }
+    if (!Array.isArray(tags)) tags = [];
+  }
+  function seedDefaultTagsIfNeeded() {
+    // 只在第一次開啟此頁面（沒有 seed 旗標）時塞入預設名單；之後即使使用者
+    // 刪光所有預設、加自己的標籤，reload 也不會重複塞回來
+    if (localStorage.getItem(SEED_FLAG_KEY)) return;
+    const existingNames = new Set(tags.map(t => t.name));
+    DEFAULT_TAGS.forEach((name, i) => {
+      if (!existingNames.has(name)) {
+        tags.push({ id: newTagId(), name, color: i % TAG_COLORS });
+      }
+    });
+    saveTags();
+    localStorage.setItem(SEED_FLAG_KEY, '1');
+  }
+  function saveTags() {
+    localStorage.setItem('name_tags', JSON.stringify(tags));
+  }
+  function newTagId() {
+    return 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+  function addTag(name) {
+    const usedColors = tags.map(t => t.color);
+    let color = 0;
+    for (let i = 0; i < TAG_COLORS; i++) {
+      if (!usedColors.includes(i)) { color = i; break; }
+      color = tags.length % TAG_COLORS;
+    }
+    tags.push({ id: newTagId(), name: name.slice(0, 16), color });
+    saveTags();
+    renderTagBar();
+  }
+  function editTag(id, newName) {
+    const t = tags.find(t => t.id === id);
+    if (t) { t.name = newName.slice(0, 16); saveTags(); renderTagBar(); refreshAllItemTags(); }
+  }
+  function deleteTag(id) {
+    tags = tags.filter(t => t.id !== id);
+    saveTags();
+    // 把這個標籤從所有單筆框的指派中移除
+    entries.forEach(e => e.removeTagFromAllAssignments(id));
+    if (selectedTagId === id) selectedTagId = null;
+    renderTagBar();
+    updateAssignHint();
+  }
+  function tagById(id) { return tags.find(t => t.id === id); }
+
+  function renderTagBar() {
+    // 只重新渲染中間的 chips-area；nav-arrows 與 menu-btn 保留不動
+    const label = chipsAreaEl.querySelector('.tag-bar-label');
+    chipsAreaEl.innerHTML = '';
+    if (label) chipsAreaEl.appendChild(label);
+
+    if (tags.length === 0) {
+      const empty = document.createElement('span');
+      empty.className = 'tag-empty';
+      empty.textContent = '尚無標籤 →';
+      chipsAreaEl.appendChild(empty);
+    }
+
+    tags.forEach(tag => chipsAreaEl.appendChild(makeChip(tag)));
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'tag-add';
+    addBtn.textContent = '＋';
+    addBtn.title = '新增名字標籤';
+    addBtn.setAttribute('aria-label', '新增名字標籤');
+    addBtn.onclick = () => {
+      const name = prompt('輸入名字標籤（最多 16 字）：');
+      if (name && name.trim()) addTag(name.trim());
+    };
+    chipsAreaEl.appendChild(addBtn);
+  }
+
+  function makeChip(tag) {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip tc-' + (tag.color % TAG_COLORS);
+    if (selectedTagId === tag.id) chip.classList.add('selected');
+    chip.dataset.tagId = tag.id;
+    chip.title = '點：選定／拖曳到商品指派／長按 1 秒：修改或刪除';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = tag.name;
+    chip.appendChild(nameSpan);
+
+    // 單擊：選定（toggleSelectedTag）。被長按或拖曳已先 set _suppressClick 就略過。
+    chip.addEventListener('click', e => {
+      if (chip._suppressClick) { chip._suppressClick = false; return; }
+      toggleSelectedTag(tag.id);
+    });
+
+    // pointer-based drag + long-press
+    chip.addEventListener('pointerdown', e => onChipPointerDown(e, tag.id));
+    return chip;
+  }
+
+  function toggleSelectedTag(id) {
+    selectedTagId = (selectedTagId === id) ? null : id;
+    renderTagBar();
+    entries.forEach(e => e.refreshAssignableState());
+    updateAssignHint();
+  }
+
+  function updateAssignHint() {
+    if (selectedTagId) {
+      const t = tagById(selectedTagId);
+      if (t) {
+        assignHintEl.innerHTML = '已選定「<b>' + escapeHtml(t.name) + '</b>」→ 點任一個商品即可指派；再點一次標籤可取消選定。';
+        assignHintEl.classList.add('visible');
+        return;
+      }
+    }
+    assignHintEl.classList.remove('visible');
+  }
+
+  // ===== Drag (pointer-events based, works on touch + mouse) =====
+  // ===== + Long-press (1s) → 顯示修改/刪除選單 =====
+  function onChipPointerDown(e, tagId) {
+    if (e.button != null && e.button !== 0) return;
+    e.preventDefault();
+    const startX = e.clientX, startY = e.clientY;
+    const startEl = e.currentTarget;
+    let dragging = false;
+    let ghost = null;
+    let lastTarget = null;
+    let moved = false;
+    let longPressTriggered = false;
+
+    // 1 秒沒移動沒鬆手 → 開選單
+    const longPressTimer = setTimeout(() => {
+      if (moved) return;
+      longPressTriggered = true;
+      startEl._suppressClick = true;
+      if (navigator.vibrate) { try { navigator.vibrate(40); } catch(e){} }
+      showTagMenu(startEl, tagId);
+    }, 1000);
+
+    const onMove = (ev) => {
+      if (longPressTriggered) return;
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      if (!dragging && Math.hypot(dx, dy) > 8) {
+        clearTimeout(longPressTimer);   // 開始拖曳 → 取消長按
+        dragging = true;
+        moved = true;
+        ghost = startEl.cloneNode(true);
+        ghost.classList.add('tag-ghost');
+        document.body.appendChild(ghost);
+      }
+      if (dragging) {
+        ghost.style.left = ev.clientX + 'px';
+        ghost.style.top = ev.clientY + 'px';
+        const under = document.elementFromPoint(ev.clientX, ev.clientY);
+        const dropEl = under && under.closest && under.closest('.item[data-item-idx], .payer-row[data-payer-slot]');
+        if (dropEl !== lastTarget) {
+          if (lastTarget) lastTarget.classList.remove('drop-target');
+          if (dropEl) dropEl.classList.add('drop-target');
+          lastTarget = dropEl || null;
+        }
+        ev.preventDefault();
+      }
+    };
+    const onUp = (ev) => {
+      clearTimeout(longPressTimer);
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+      if (ghost) ghost.remove();
+      if (longPressTriggered) return;   // 長按已處理完，後續略過
+      if (moved) startEl._suppressClick = true;
+      if (lastTarget) {
+        lastTarget.classList.remove('drop-target');
+        // 找出 target 所屬的單筆框
+        const entryEl = lastTarget.closest('.card.entry');
+        const entry = entries.find(en => en.element === entryEl);
+        if (!entry) return;
+        const key = lastTarget.dataset.payerSlot
+          ? 'payer'
+          : parseInt(lastTarget.dataset.itemIdx, 10);
+        if (key === 'payer' || !isNaN(key)) entry.assignTag(tagId, key);
+      }
+    };
+    document.addEventListener('pointermove', onMove, { passive: false });
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onUp);
+  }
+
+  // ----- 長按彈出選單（含半透明背景） -----
+  let _activeTagMenu = null;
+  let _activeTagBackdrop = null;
+  function closeTagMenu() {
+    if (_activeTagMenu) { _activeTagMenu.remove(); _activeTagMenu = null; }
+    if (_activeTagBackdrop) { _activeTagBackdrop.remove(); _activeTagBackdrop = null; }
+  }
+  function showTagMenu(chipEl, tagId) {
+    closeTagMenu();
+    const tag = tagById(tagId);
+    if (!tag) return;
+
+    // 半透明黑色背景，蓋住其他畫面；點背景就關閉
+    const backdrop = document.createElement('div');
+    backdrop.className = 'tag-menu-backdrop';
+    // 用 pointerdown 而非 click，避免「長按釋放」的 click 同步關閉剛打開的選單
+    backdrop.addEventListener('pointerdown', (e) => { e.preventDefault(); closeTagMenu(); });
+    document.body.appendChild(backdrop);
+    _activeTagBackdrop = backdrop;
+
+    const menu = document.createElement('div');
+    menu.className = 'tag-menu';
+    menu.innerHTML =
+      '<button type="button" data-act="rename">修改名稱</button>' +
+      '<button type="button" data-act="delete">刪除</button>';
+    document.body.appendChild(menu);
+    _activeTagMenu = menu;
+
+    // 定位：chip 下方；超出視窗則往上翻
+    const rect = chipEl.getBoundingClientRect();
+    const menuW = 160, menuH = 90;
+    let left = Math.max(8, Math.min(window.innerWidth - menuW - 8, rect.left));
+    let top = rect.bottom + 6;
+    if (top + menuH > window.innerHeight - 8) top = Math.max(8, rect.top - menuH - 6);
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+
+    menu.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const act = btn.dataset.act;
+      closeTagMenu();
+      if (act === 'rename') {
+        const newName = prompt('改名（留空取消）：', tag.name);
+        if (newName && newName.trim()) editTag(tag.id, newName.trim());
+      } else if (act === 'delete') {
+        if (confirm('刪除名字標籤「' + tag.name + '」？該標籤在所有發票上的指派也會清除。')) deleteTag(tag.id);
+      }
+    });
+  }
+
+  // ===== iOS 連續曲率轉角（squircle）=====
+  // 標準 border-radius 用四分之一圓，轉角曲率有「啪」一聲的突變。
+  // iOS 的轉角是基於 superellipse（超橢圓）曲線，曲率連續變化、視覺更順。
+  // 純 CSS 沒辦法做到（corner-shape 還是實驗中），所以用 SVG 路徑當背景模擬。
+  // 公式參考 figma-squircle (https://github.com/phamfoo/figma-squircle)，smoothing ≈ 0.6。
+  function makeSquirclePath(w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    const a = Math.min(r * 1.528, w / 2, h / 2);   // 曲線起點離轉角的距離
+    const c = a * 0.4;                              // 貝茲控制點距離（小一點 → 較平滑）
+    return (
+      'M' + a + ' 0' +
+      'L' + (w - a) + ' 0' +
+      'C' + (w - c) + ' 0,' + w + ' ' + c + ',' + w + ' ' + a +
+      'L' + w + ' ' + (h - a) +
+      'C' + w + ' ' + (h - c) + ',' + (w - c) + ' ' + h + ',' + (w - a) + ' ' + h +
+      'L' + a + ' ' + h +
+      'C' + c + ' ' + h + ',0 ' + (h - c) + ',0 ' + (h - a) +
+      'L0 ' + a +
+      'C0 ' + c + ',' + c + ' 0,' + a + ' 0' +
+      'Z'
+    );
+  }
+  function attachSquircleBg(el, radius) {
+    if (el._squircleSvg) return;
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'squircle-bg');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(SVG_NS, 'path');
+    svg.appendChild(path);
+    el.insertBefore(svg, el.firstChild);
+    el._squircleSvg = svg;
+    el._squirclePath = path;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      svg.setAttribute('viewBox', '0 0 ' + rect.width + ' ' + rect.height);
+      path.setAttribute('d', makeSquirclePath(rect.width, rect.height, radius));
+    };
+    el._squircleUpdate = update;
+    update();
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(update);
+      ro.observe(el);
+      el._squircleRo = ro;
+    }
+    // class 切換（empty ↔ 正常）也要重畫
+    const mo = new MutationObserver(update);
+    mo.observe(el, { attributes: true, attributeFilter: ['class'] });
+    el._squircleMo = mo;
+  }
+
+  // ===== 圖片壓縮（給 localStorage 用，避免單張幾 MB 直接撐爆配額）=====
+  function compressImageDataUrl(dataUrl, maxDim, quality) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+          else       { w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        try { resolve(canvas.toDataURL('image/jpeg', quality)); }
+        catch (e) { reject(e); }
+      };
+      img.onerror = reject;
+      img.src = dataUrl;
+    });
+  }
+
+  // ===== 跨 session 儲存：把所有單筆框序列化到 localStorage =====
+  const ENTRIES_STORAGE_KEY = 'travel_ledger_entries_v1';
+  let _saveDebounceTimer = null;
+  function scheduleSave() {
+    if (_saveDebounceTimer) clearTimeout(_saveDebounceTimer);
+    _saveDebounceTimer = setTimeout(saveAllEntries, 300);
+  }
+  function serializeEntry(api) {
+    const s = api.state;
+    return {
+      parsed: s.parsed,
+      rate: s.rate,
+      assignments: s.assignments,
+      locked: !!s.locked,
+      createdAt: s.createdAt ? s.createdAt.toISOString() : null,
+      recognizedAt: s.recognizedAt ? s.recognizedAt.toISOString() : null,
+      dataUrl: s.dataUrl,    // 已經是壓縮過的版本
+      mime: s.mime
+    };
+  }
+  function saveAllEntries() {
+    const data = {
+      version: 1,
+      entries: entries
+        .filter(e => e.state.parsed)         // 只存已辨識完成的（空的、處理中的不存）
+        .map(serializeEntry),
+      deletedEntries: deletedEntries
+        .filter(e => e.state.parsed)
+        .map(serializeEntry)
+    };
+    try {
+      localStorage.setItem(ENTRIES_STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn('儲存失敗（可能超過 localStorage 容量）：', e);
+    }
+  }
+  function loadStoredEntries() {
+    let data;
+    try {
+      const raw = localStorage.getItem(ENTRIES_STORAGE_KEY);
+      if (!raw) return null;
+      data = JSON.parse(raw);
+    } catch (e) { console.warn('讀取存檔失敗', e); return null; }
+    if (!data || !Array.isArray(data.entries)) return null;
+    return data;
+  }
+  function hydrateEntry(api, data) {
+    const s = api.state;
+    s.parsed = data.parsed;
+    s.rate = data.rate;
+    s.assignments = data.assignments || {};
+    s.locked = !!data.locked;
+    s.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
+    s.recognizedAt = data.recognizedAt ? new Date(data.recognizedAt) : null;
+    s.dataUrl = data.dataUrl || null;
+    s.mime = data.mime || 'image/jpeg';
+    if (s.dataUrl) {
+      api.refs.previewEl.src = s.dataUrl;
+      api.refs.thumbImg.src = s.dataUrl;
+      api.refs.dropEl.style.display = 'none';
+      api.element.classList.remove('empty');
+    }
+    if (s.parsed) {
+      api.render(s.parsed, s.rate);
+    }
+  }
+
+  // ===== 共用：已指派標籤 chip 的 DOM 結構 =====
+  function buildAssignedChip(tag, tagId, key, removeTitle, onRemove) {
+    const chip = document.createElement('span');
+    chip.className = 'item-tag tc-' + (tag.color % TAG_COLORS);
+    const n = document.createElement('span');
+    n.textContent = tag.name;
+    chip.appendChild(n);
+    const x = document.createElement('span');
+    x.className = 'x';
+    x.textContent = '×';
+    x.title = removeTitle;
+    x.addEventListener('click', e => { e.stopPropagation(); onRemove(); });
+    chip.appendChild(x);
+    return chip;
+  }
+
+  // init tags on load
+  loadTags();
+  seedDefaultTagsIfNeeded();
+  renderTagBar();
+
+  // ---- preferences ----
+  // 主辨識引擎：Groq + Llama Vision（OpenAI 相容 API、免費配額大）
+  // GitHub 公開版：每位使用者自己貼 key，存於各自瀏覽器 localStorage、跨 session 保留
+  const EMBEDDED_GROQ_KEY = '';
+  const GROQ_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+  const groqKeyEl = $('groqKey');
+  const keyDisplayEl = $('keyDisplay');
+  const savedGroqKey = localStorage.getItem('groq_api_key');
+  if (savedGroqKey) groqKeyEl.value = savedGroqKey;
+
+  // input 事件即時存、即時更新「點此加入照片」入口
+  groqKeyEl.addEventListener('input', () => {
+    localStorage.setItem('groq_api_key', groqKeyEl.value.trim());
+    updateKeyDependentUI();
+  });
+  // 失焦或按 Enter → 切換成「已輸入金鑰：...」顯示
+  groqKeyEl.addEventListener('blur', updateKeyDisplay);
+  groqKeyEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); groqKeyEl.blur(); }
+  });
+  // 點已輸入的金鑰文字 → 切回 input 編輯
+  keyDisplayEl.addEventListener('click', () => {
+    keyDisplayEl.style.display = 'none';
+    groqKeyEl.style.display = '';
+    groqKeyEl.focus();
+    // 選取現有內容方便整個改掉
+    setTimeout(() => { try { groqKeyEl.select(); } catch(e){} }, 0);
+  });
+
+  function updateKeyDisplay() {
+    const k = groqKeyEl.value.trim();
+    if (k) {
+      keyDisplayEl.textContent = '已輸入金鑰：' + k;
+      keyDisplayEl.style.display = '';
+      groqKeyEl.style.display = 'none';
+    } else {
+      keyDisplayEl.style.display = 'none';
+      groqKeyEl.style.display = '';
+    }
+  }
+
+  function hasAnyApiKey() {
+    return !!(groqKeyEl.value.trim() || geminiKeyEl.value.trim() || EMBEDDED_GROQ_KEY);
+  }
+  // 沒金鑰時隱藏所有「點此加入發票照片」入口（包括空單筆框的 drop 區與底部新增鈕）
+  function updateKeyDependentUI() {
+    const hasKey = hasAnyApiKey();
+    document.querySelectorAll('.card.entry.empty .drop').forEach(el => {
+      el.style.display = hasKey ? '' : 'none';
+    });
+    updateAddBtnVisibility();
+  }
+
+  // Gemini 已停用：清空 embedded、清除 localStorage 殘留
+  const EMBEDDED_GEMINI_KEY = '';
+  try { localStorage.removeItem('gemini_api_key'); } catch(e) {}
+  geminiKeyEl.value = '';
+  geminiKeyEl.addEventListener('change', () => localStorage.setItem('gemini_api_key', geminiKeyEl.value.trim()));
+  const savedGeminiModel = localStorage.getItem('gemini_model');
+  if (savedGeminiModel) geminiModelEl.value = savedGeminiModel;
+  geminiModelEl.addEventListener('change', () => localStorage.setItem('gemini_model', geminiModelEl.value));
+  const savedLang = localStorage.getItem('ocr_lang');
+  if (savedLang) langEl.value = savedLang;
+  langEl.addEventListener('change', () => localStorage.setItem('ocr_lang', langEl.value));
+  const savedCur = localStorage.getItem('ocr_currency_hint');
+  if (savedCur) curHintEl.value = savedCur;
+  curHintEl.addEventListener('change', () => localStorage.setItem('ocr_currency_hint', curHintEl.value));
+
+  // ---- Tesseract worker (cached per language) ----
+  let _worker = null;
+  let _workerLangs = null;
+  let _activeProgress = null;   // 由當前正在跑的單筆框設定，讓 worker 進度能回報到正確的 UI
+  async function getWorker(langs) {
+    if (_worker && _workerLangs === langs) return _worker;
+    if (_worker) { try { await _worker.terminate(); } catch(e){} }
+    const langArr = langs.split('+');
+    _worker = await Tesseract.createWorker(langArr, 1, {
+      logger: m => {
+        if (m.progress != null && _activeProgress) _activeProgress(m.progress * 100);
+      }
+    });
+    _workerLangs = langs;
+    return _worker;
+  }
+
+  // ---- Gemini Vision call ----
+  async function callGemini(apiKey, model, base64, mime, signal) {
+    const prompt = [
+      '你是一位專精台灣繁體中文的購物發票辨識助手。我會給你一張國外旅遊購物發票照片。',
+      '請完成下列工作：',
+      '1) 辨識發票上的所有「實際購買商品」品項（不要把小計、稅金、總計、找零、付款、會員點數列為品項）。',
+      '2) 把每個品項翻譯成台灣慣用的繁體中文，要清楚易懂、一目了然。',
+      '3) 翻譯規則（非常重要！）：',
+      '   - 若商品名稱是縮寫、簡寫、品牌特殊用語、或無法直接逐字翻譯，請「根據發票的店家名稱與商品上下文聰明猜測」，給出最合理的繁中翻譯。',
+      '   - 例如：在 LAWSON / 7-11 等便利商店出現「ﾅﾅｺ」應翻為「nanaco 點數儲值」、「ｵﾆｷﾞﾘ 鮭」應翻為「鮭魚飯糰」。',
+      '   - 例如：在松本清 / 鶴羽藥妝出現「のど飴」應翻為「喉糖」、「BBｸﾘｰﾑ」應翻為「BB 霜」。',
+      '   - 例如：在 Starbucks 出現「Tall LAT」應翻為「中杯拿鐵」。',
+      '   - 寧可大膽猜一個最合理的台灣慣用譯名，也不要照字面翻得讓人看不懂；如果你完全沒把握，可在譯名後加註「(?)」。',
+      '   - 一律使用台灣用語（草莓不是士多啤梨、馬鈴薯不是土豆、義大利麵不是意粉等）。',
+      '4) 判斷整張發票的「品項金額是否已含稅」，並抓出獨立列出的稅金欄位（如果有）。',
+      '5) 抓出店家名稱、發票日期、發票時間（24 小時制 HH:MM）、幣別、發票最終實付總額。',
+      '',
+      '請只回傳純 JSON（不要 markdown code fence、不要任何說明文字），格式為：',
+      '{',
+      '  "currency": "ISO 4217 三碼（JPY/USD/EUR/KRW/THB/HKD/SGD/CNY/GBP/AUD/CAD/TWD…）",',
+      '  "merchant": "店家名稱原文（保留發票上的原始寫法，看不到填 null）",',
+      '  "merchant_zh": "店家名稱繁中翻譯（台灣慣用名稱，例如「セブンイレブン」→「7-ELEVEN」、「ローソン」→「LAWSON」、「マツモトキヨシ」→「松本清」；若原文已是中文則直接同 merchant；看不到填 null）",',
+      '  "date": "發票日期 YYYY-MM-DD（看不到填 null）",',
+      '  "time": "發票時間 24 小時制 HH:MM（看不到填 null）",',
+      '  "price_includes_tax": true 或 false,',
+      '  "tax_amount": 獨立列出的稅金數字（若已含稅或沒列稅則填 null）,',
+      '  "tax_label": "稅金名稱（如「消費稅 10%」、「VAT 19%」、「Sales Tax 8.25%」，若無填 null）",',
+      '  "grand_total": 發票最終實付總額（看得到填數字，否則 null）,',
+      '  "tax_reasoning": "用一兩句繁中說明你怎麼判斷含稅／未稅，例如「發票最後另列 Sales Tax $1.23，所以品項為未稅價」",',
+      '  "items": [',
+      '    {',
+      '      "zh_name": "繁中翻譯（依上述規則，可大膽猜）",',
+      '      "original_name": "發票上的原始文字",',
+      '      "quantity": 數量（看不到填 1）,',
+      '      "unit_price": 單價數字（看不到填 null）,',
+      '      "line_total": 該品項小計數字（依發票實際印的數字）',
+      '    }',
+      '  ]',
+      '}',
+      '',
+      '判斷 price_includes_tax 的依據：',
+      '- 發票另列 Tax / VAT / GST / 消費税 / 服務費 等且與品項小計分開 → false',
+      '- 品項旁或發票標示「税込 / Tax Included / Inc. VAT / 含稅」→ true',
+      '- 若所有 line_total 加總 ≈ 總計 → true；若 line_total 加總 + 稅金 = 總計 → false',
+      '- 不確定時：日／韓／歐盟通常 true；美／加通常 false',
+      '',
+      '金額一律阿拉伯數字，不要貨幣符號與千分位逗號。'
+    ].join('\n');
+
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
+                encodeURIComponent(model) + ':generateContent?key=' + encodeURIComponent(apiKey);
+    const body = {
+      contents: [{
+        parts: [
+          { inline_data: { mime_type: mime, data: base64 } },
+          { text: prompt }
+        ]
+      }],
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: 'application/json'
+      }
+    };
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: signal
+    });
+    if (!resp.ok) {
+      let detail = '';
+      try { detail = (await resp.text()).slice(0, 400); } catch(e){}
+      throw new Error('Gemini API ' + resp.status + '：' + detail);
+    }
+    const data = await resp.json();
+    const text = (data.candidates && data.candidates[0] && data.candidates[0].content &&
+                  data.candidates[0].content.parts && data.candidates[0].content.parts[0] &&
+                  data.candidates[0].content.parts[0].text) || '';
+    if (!text) throw new Error('Gemini 沒有回傳內容');
+    const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+    let parsed;
+    try { parsed = JSON.parse(cleaned); }
+    catch(e) { throw new Error('Gemini 回傳不是合法 JSON：' + cleaned.slice(0, 300)); }
+    if (!parsed.items || !Array.isArray(parsed.items)) {
+      throw new Error('Gemini 回傳缺少 items 陣列。');
+    }
+    return parsed;
+  }
+
+  // ---- Groq Llama Vision call（OpenAI 相容 API）----
+  async function callGroq(apiKey, model, base64, mime, signal) {
+    const prompt = [
+      '你是一位專精台灣繁體中文的購物發票辨識助手。看這張國外旅遊購物發票照片，把所有商品逐項列出。',
+      '',
+      '請完成下列工作：',
+      '1) 辨識所有「實際購買商品」品項（不要把小計、稅金、總計、找零、付款方式、會員點數列為品項）。',
+      '2) 把每個品項翻譯成台灣慣用的繁體中文，清楚易懂；遇到縮寫/簡寫/品牌特殊用語，請根據店家上下文聰明猜測。例如：LAWSON / 7-11 的「ﾅﾅｺ」翻為「nanaco 點數儲值」；松本清的「BBｸﾘｰﾑ」翻為「BB 霜」；Starbucks「Tall LAT」翻為「中杯拿鐵」。不確定的猜法在譯名後加「(?)」。一律用台灣用語。',
+      '3) 判斷整張發票「品項金額是否已含稅」。',
+      '4) 抓店家名稱（原文＋繁中翻譯）、發票日期、發票時間、幣別、最終實付總額。',
+      '',
+      '**只回傳純 JSON，不要任何說明文字、不要 markdown 程式碼框**。格式：',
+      '{',
+      '  "currency": "ISO 4217 三碼（JPY/USD/EUR/KRW/THB/HKD/SGD/CNY/GBP/AUD/CAD/TWD…）",',
+      '  "merchant": "店家名稱原文（看不到填 null）",',
+      '  "merchant_zh": "店家名稱繁中翻譯（台灣慣用名稱，例如「セブンイレブン」→「7-ELEVEN」、「ローソン」→「LAWSON」、「マツモトキヨシ」→「松本清」；原文已是中文則同 merchant）",',
+      '  "date": "發票日期 YYYY-MM-DD（看不到填 null）",',
+      '  "time": "發票時間 24 小時制 HH:MM（看不到填 null）",',
+      '  "price_includes_tax": true 或 false,',
+      '  "tax_amount": 獨立列出的稅金數字（若已含稅或沒列稅則填 null）,',
+      '  "tax_label": "稅金名稱（如「消費稅 10%」、「VAT 19%」、「Sales Tax 8.25%」；無則 null）",',
+      '  "grand_total": 發票最終實付總額數字（看得到填，否則 null）,',
+      '  "tax_reasoning": "用一兩句繁中說明你怎麼判斷含稅／未稅",',
+      '  "items": [',
+      '    {',
+      '      "zh_name": "繁中翻譯（可大膽猜，加 (?) 標註不確定）",',
+      '      "original_name": "發票上的原始文字",',
+      '      "quantity": 數量（看不到填 1）,',
+      '      "unit_price": 單價（看不到填 null）,',
+      '      "line_total": 該品項小計（依發票印出的數字）',
+      '    }',
+      '  ]',
+      '}',
+      '',
+      '判斷 price_includes_tax 的依據：發票另列 Tax/VAT/GST/消費税 → false；標示「税込/Tax Included/含稅」→ true；line_total 加總 ≈ 總計 → true；line_total + 稅金 = 總計 → false；日韓歐通常 true；美加通常 false。',
+      '金額一律阿拉伯數字，不含貨幣符號與千分位逗號。'
+    ].join('\n');
+
+    const body = {
+      model: model,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: prompt },
+          { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + base64 } }
+        ]
+      }],
+      temperature: 0.2,
+      max_tokens: 4096,
+      response_format: { type: 'json_object' }
+    };
+
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify(body),
+      signal: signal
+    });
+
+    if (!resp.ok) {
+      let detail = '';
+      try { detail = (await resp.text()).slice(0, 400); } catch(e){}
+      throw new Error('Groq API ' + resp.status + '：' + detail);
+    }
+    const data = await resp.json();
+    const text = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+    if (!text) throw new Error('Groq 沒有回傳內容');
+    const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+    let parsed;
+    try { parsed = JSON.parse(cleaned); }
+    catch(e) { throw new Error('Groq 回傳不是合法 JSON：' + cleaned.slice(0, 300)); }
+    if (!parsed.items || !Array.isArray(parsed.items)) {
+      throw new Error('Groq 回傳缺少 items 陣列');
+    }
+    return parsed;
+  }
+
+  // ---- currency detection ----
+  function detectCurrency(text) {
+    const t = text;
+    if (/HK\$|HKD|港[幣元]/i.test(t)) return 'HKD';
+    if (/NT\$|新[台臺]幣|TWD/i.test(t)) return 'TWD';
+    if (/S\$\b|SGD|新加坡[幣元]/i.test(t)) return 'SGD';
+    if (/A\$|AUD|澳[幣元]/i.test(t)) return 'AUD';
+    if (/C\$|CAD|加[幣元]/i.test(t)) return 'CAD';
+    if (/US\$|USD|美[元金]/i.test(t)) return 'USD';
+    if (/RMB|人民幣|CNY/i.test(t)) return 'CNY';
+    if (/¥|円|yen|JPY/i.test(t)) return 'JPY';
+    if (/₩|원|won|KRW/i.test(t)) return 'KRW';
+    if (/€|EUR|euro/i.test(t)) return 'EUR';
+    if (/£|GBP|pound/i.test(t)) return 'GBP';
+    if (/฿|baht|บาท|THB/i.test(t)) return 'THB';
+    if (/\bVND|đồng|dong\b/i.test(t)) return 'VND';
+    if (/\$/.test(t)) return 'USD';
+    return null;
+  }
+
+  // ---- receipt parser ----
+  function parseReceipt(rawText, currency) {
+    const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const items = [];
+    let totalAmount = null;
+    let taxAmount = null;
+    let taxLabel = null;
+    let priceIncludesTax = null;
+    let merchant = null;
+    let date = null;
+
+    // detect merchant: first non-numeric line (within top 4 lines)
+    let merchantLineIdx = -1;
+    for (let i = 0; i < Math.min(4, lines.length); i++) {
+      const l = lines[i];
+      if (l.length >= 2 && !/^[\d\s.,:/\-]+$/.test(l) && !/^(tel|電話|住所|address)/i.test(l)) {
+        merchant = l;
+        merchantLineIdx = i;
+        break;
+      }
+    }
+
+    // detect date: look for YYYY-MM-DD or DD/MM/YYYY etc.
+    const dateRe = /(20\d{2})[年./\-]\s*(\d{1,2})[月./\-]\s*(\d{1,2})|(\d{1,2})[./\-](\d{1,2})[./\-](20\d{2}|\d{2})/;
+    for (const l of lines) {
+      const m = l.match(dateRe);
+      if (m) {
+        if (m[1]) date = m[1] + '-' + String(m[2]).padStart(2,'0') + '-' + String(m[3]).padStart(2,'0');
+        else {
+          const yr = m[6].length === 2 ? '20' + m[6] : m[6];
+          date = yr + '-' + String(m[5]).padStart(2,'0') + '-' + String(m[4]).padStart(2,'0');
+        }
+        break;
+      }
+    }
+
+    // noise lines we should never treat as items
+    const noiseRe = /^(receipt|invoice|cash|change|tender(ed)?|paid|visa|master(card)?|amex|credit|debit|card|approval|auth|reference|trans|term|merchant|cust|customer|thank|welcome|お預り|お預かり|おつり|お釣り|お釣|お返し|現金|找零|信用卡|刷卡|簽帳|金融卡|ご来店|レジ|店員|店名|電話|tel\b|fax\b|住所|address|date|time|日時|店\b|store|host|table|guest|server|order\s*#|check\s*#|invoice\s*#|您的|歡迎|謝謝|多謝|感謝|saved|loyalty|points|member|會員|points\s*earned|earn(ed)?\s*points)/i;
+    // lines that mean subtotal/total/tax
+    const taxLineRe = /(消費税|消費稅|\btax\b|\bvat\b|\bgst\b|\btva\b|\biva\b|\bmwst\b|service\s*charge|サービス料|消費\s*税|sales\s*tax)/i;
+    // date-looking lines (so we don't treat them as items)
+    const datelyRe = /^\s*\d{1,4}\s*[年\/\-\.]\s*\d{1,2}\s*[月\/\-\.]\s*\d{1,2}|^\s*\d{1,2}\s*[\/\-\.]\s*\d{1,2}\s*[\/\-\.]\s*\d{2,4}|^\s*\d{1,2}\s*:\s*\d{2}/;
+    const subtotalRe = /(sub[\s\-]*total|小計|sub\b)/i;
+    const totalRe = /(grand\s*total|^total\b|合\s*計|総\s*額|総\s*計|amount\s*due|balance\s*due|お買上|お支払|お会計|ご請求|合\s*算|應[付收][金額]|합\s*계|합\s*산|총\s*액|รวม|ยอดรวม)/i;
+    // tax-inclusive markers
+    const incTaxRe = /(税込|tax\s*incl|incl[\s.]*tax|含\s*税|含\s*稅|inc\.?\s*vat|vat\s*incl)/i;
+    const excTaxRe = /(税抜|tax\s*excl|excl[\s.]*tax|未\s*税|ex\.?\s*vat|vat\s*excl)/i;
+
+    // price pattern: at end of line, optional currency prefix
+    // accepts: 1234, 1,234, 1.234,56, 1,234.56, ¥1,500
+    const priceTailRe = /([\$¥€₩£฿]?)\s*(\d{1,3}(?:[,\.\s]\d{3})+(?:[\.,]\d{1,2})?|\d+(?:[\.,]\d{1,2})?)\s*(円|원|元|圆|baht|บาท)?\s*$/i;
+
+    function parseNum(s) {
+      if (!s) return null;
+      s = s.replace(/\s/g, '');
+      // if contains both , and . — last one is decimal
+      const lastDot = s.lastIndexOf('.');
+      const lastCom = s.lastIndexOf(',');
+      if (lastDot >= 0 && lastCom >= 0) {
+        if (lastDot > lastCom) {
+          s = s.replace(/,/g, '');
+        } else {
+          s = s.replace(/\./g, '').replace(',', '.');
+        }
+      } else if (lastCom >= 0 && lastDot < 0) {
+        // ambiguous: is "1,234" thousand sep or decimal?
+        const afterCom = s.length - 1 - lastCom;
+        if (afterCom === 3 && s.split(',').every((p,i) => i === 0 || p.length === 3)) {
+          s = s.replace(/,/g, ''); // thousand
+        } else {
+          s = s.replace(',', '.'); // decimal
+        }
+      }
+      const n = parseFloat(s);
+      return isNaN(n) ? null : n;
+    }
+
+    for (const raw of lines) {
+      if (incTaxRe.test(raw)) priceIncludesTax = true;
+      if (excTaxRe.test(raw)) priceIncludesTax = false;
+    }
+
+    for (let li = 0; li < lines.length; li++) {
+      const line = lines[li];
+      if (li === merchantLineIdx) continue; // 不要把店家名再當品項
+      const m = line.match(priceTailRe);
+      if (!m) continue;
+      const price = parseNum(m[2]);
+      if (price == null) continue;
+      // 跳過「年份單獨被當價格」的狀況（例：行尾就是 2025）
+      if (Number.isInteger(price) && price >= 1900 && price <= 2099 &&
+          /\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[年\/\-]\d{1,2}[月\/\-]\d{1,2}/.test(line)) {
+        continue;
+      }
+      const namePart = line.slice(0, line.length - m[0].length).trim().replace(/[:：\-—]+$/, '').trim();
+
+      // classify
+      if (taxLineRe.test(line)) {
+        // accumulate (some receipts have multiple tax rows)
+        taxAmount = (taxAmount || 0) + price;
+        if (!taxLabel) {
+          const lm = line.match(/(消費税|消費稅|tax|vat|gst|service\s*charge|サービス料)[^0-9]*?(\d{1,3}\s*%)?/i);
+          taxLabel = lm ? lm[0].trim().replace(/\s+/g,' ') : 'Tax';
+        }
+        continue;
+      }
+      if (totalRe.test(line) || /balance|due|payment/i.test(line)) {
+        // pick largest total seen
+        if (totalAmount == null || price > totalAmount) totalAmount = price;
+        continue;
+      }
+      if (subtotalRe.test(line)) continue; // skip subtotal lines
+
+      if (noiseRe.test(line)) continue;
+      if (datelyRe.test(line)) continue; // skip date / time lines
+      if (!namePart || namePart.length < 1) continue;
+      if (/^[\d\s.,\-:/年月日時分秒]+$/.test(namePart)) continue; // pure numeric / date-y
+
+      // strip leading qty: "2x", "2 ×", "2 @"
+      let qty = 1;
+      const qtyM = namePart.match(/^(\d+)\s*[x×*X@]\s*(.+)$/);
+      let nameOut = namePart;
+      if (qtyM) {
+        qty = parseInt(qtyM[1], 10) || 1;
+        nameOut = qtyM[2].trim();
+      }
+
+      // sanity: skip absurdly large prices that are likely barcodes etc.
+      if (price > 99999999) continue;
+
+      items.push({
+        original_name: nameOut,
+        zh_name: nameOut, // placeholder, will be translated
+        quantity: qty,
+        unit_price: (qty && qty !== 1) ? +(price / qty).toFixed(2) : price,
+        line_total: price
+      });
+    }
+
+    // Decide tax inclusivity heuristically if not explicitly marked
+    const sumLines = items.reduce((s, it) => s + (it.line_total || 0), 0);
+    let reasoning;
+    if (priceIncludesTax === true) {
+      reasoning = '發票上出現「税込／含稅／Tax Incl.」等字樣，判斷為已含稅。';
+    } else if (priceIncludesTax === false) {
+      reasoning = '發票上出現「税抜／未稅／Tax Excl.」等字樣，判斷為未含稅。';
+    } else if (taxAmount != null && totalAmount != null) {
+      if (Math.abs(sumLines + taxAmount - totalAmount) < Math.max(1, totalAmount * 0.01)) {
+        priceIncludesTax = false;
+        reasoning = '品項小計 (' + fmtMoney(sumLines) + ') + 稅金 (' + fmtMoney(taxAmount) + ') ≈ 發票總計 (' + fmtMoney(totalAmount) + ')，判斷品項為未含稅價。';
+      } else if (Math.abs(sumLines - totalAmount) < Math.max(1, totalAmount * 0.01)) {
+        priceIncludesTax = true;
+        reasoning = '品項小計 ≈ 發票總計，且稅金已另列，判斷品項為含稅價，稅金為內含明細。';
+      } else {
+        // 不一致，採用「最後總計減去品項小計」當稅，可能 OCR 有誤
+        priceIncludesTax = false;
+        reasoning = '品項小計 (' + fmtMoney(sumLines) + ')、稅金 (' + fmtMoney(taxAmount) + ')、總計 (' + fmtMoney(totalAmount) + ') 三者對不起來，可能 OCR 有漏／多抓行；仍以「未含稅」處理。';
+      }
+    } else if (taxAmount != null && totalAmount == null) {
+      priceIncludesTax = false;
+      reasoning = '發票最後另列稅金欄位 (' + fmtMoney(taxAmount) + ')，判斷品項為未含稅價。';
+    } else if (totalAmount != null && Math.abs(sumLines - totalAmount) < Math.max(1, totalAmount * 0.01)) {
+      priceIncludesTax = true;
+      reasoning = '品項小計 ≈ 發票總計，且未見獨立稅金欄位，判斷為含稅價。';
+    } else if (totalAmount != null && sumLines < totalAmount) {
+      priceIncludesTax = false;
+      taxAmount = +(totalAmount - sumLines).toFixed(2);
+      taxLabel = taxLabel || '稅 / 服務費（推算）';
+      reasoning = '品項小計 (' + fmtMoney(sumLines) + ') 比發票總計 (' + fmtMoney(totalAmount) + ') 少，差額視為稅／服務費。';
+    } else {
+      // default: assume tax included if no signal
+      if (currency === 'USD' || currency === 'CAD') {
+        priceIncludesTax = false;
+        reasoning = '無明確標示；幣別為 ' + currency + '，美加慣例為未含稅。';
+      } else {
+        priceIncludesTax = true;
+        reasoning = '無明確標示；以多數國家慣例假設為含稅價。';
+      }
+    }
+
+    return {
+      currency: currency,
+      merchant: merchant,
+      date: date,
+      price_includes_tax: priceIncludesTax,
+      tax_amount: taxAmount,
+      tax_label: taxLabel,
+      grand_total: totalAmount,
+      tax_reasoning: reasoning,
+      items: items
+    };
+  }
+
+  // ---- translation ----
+  function mmLang(tessCode) {
+    return {
+      eng: 'en', jpn: 'ja', kor: 'ko',
+      chi_sim: 'zh-CN', chi_tra: 'zh-TW',
+      tha: 'th', fra: 'fr', deu: 'de',
+      ita: 'it', spa: 'es', vie: 'vi'
+    }[tessCode] || 'en';
+  }
+
+  async function translateOne(text, from) {
+    const to = 'zh-TW';
+    if (from === 'zh-TW') return text;
+    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '|' + to;
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('translate http ' + r.status);
+    const j = await r.json();
+    let txt = (j.responseData && j.responseData.translatedText) || '';
+    // MyMemory sometimes returns error message in translatedText
+    if (/MYMEMORY WARNING|INVALID|QUOTA/i.test(txt)) throw new Error(txt);
+    // If from zh-CN, do simple Simplified→Traditional? MyMemory zh-CN→zh-TW often returns Simplified.
+    // Skip — user can interpret OK.
+    return txt || text;
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function translateItems(items, fromLang) {
+    if (!items.length) return;
+    if (fromLang === 'zh-TW') {
+      items.forEach(it => it.zh_name = it.original_name);
+      return;
+    }
+    for (let i = 0; i < items.length; i++) {
+      try {
+        const t = await translateOne(items[i].original_name, fromLang);
+        items[i].zh_name = t;
+      } catch (e) {
+        items[i].zh_name = items[i].original_name + '（翻譯失敗）';
+      }
+      await sleep(120); // be polite to free API
+    }
+  }
+
+  async function fetchTwdRate(currency) {
+    const r = await fetch('https://open.er-api.com/v6/latest/' + encodeURIComponent(currency.toUpperCase()));
+    if (!r.ok) throw new Error('匯率查詢失敗 ' + r.status);
+    const j = await r.json();
+    if (j.result !== 'success' || !j.rates || !j.rates.TWD) throw new Error('匯率回傳格式異常');
+    return j.rates.TWD;
+  }
+
+  // ---- formatting ----
+  function fmtMoney(n, decimals) {
+    if (n == null || isNaN(n)) return '—';
+    if (decimals == null) decimals = (Math.abs(n) >= 100 ? 0 : 2);
+    return Number(n).toLocaleString('zh-Hant', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  }
+  // 統一金額顯示：'123 JPY'、'1,234 TWD'
+  function fmtAmount(n, currency, decimals) {
+    if (n == null || isNaN(n)) return '—';
+    return fmtMoney(n, decimals) + ' ' + (currency || '?');
+  }
+  // 日期格式化：'2026-05-21' → '2026年05月21日（四）'，若有 time 補 24 小時制 HH:MM
+  function fmtDate(iso, time) {
+    if (!iso) return '';
+    const m = String(iso).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (!m) return iso; // 解析不出來就原樣顯示
+    const y = parseInt(m[1], 10), mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+    const dt = new Date(y, mo - 1, d);
+    if (isNaN(dt.getTime())) return iso;
+    const week = ['日','一','二','三','四','五','六'][dt.getDay()];
+    const mm = String(mo).padStart(2, '0');
+    const dd = String(d).padStart(2, '0');
+    let out = y + '年' + mm + '月' + dd + '日（' + week + '）';
+    if (time) {
+      const tm = String(time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
+      if (tm) {
+        let hh = parseInt(tm[1], 10);
+        let mi = parseInt(tm[2], 10);
+        if (!isNaN(hh) && !isNaN(mi) && hh >= 0 && hh <= 23 && mi >= 0 && mi <= 59) {
+          out += String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+        }
+      }
+    }
+    return out;
+  }
+  // 從 tax_label（如「消費稅 10%」「VAT 19%」）抽出稅率，回傳 0~1 的小數，找不到則 null
+  function extractTaxRate(label) {
+    if (!label) return null;
+    const m = String(label).match(/(\d{1,2}(?:\.\d{1,2})?)\s*%/);
+    return m ? parseFloat(m[1]) / 100 : null;
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ===== 單筆框工廠 =====
+  function createEntry() {
+    const root = entryTemplate.content.cloneNode(true).querySelector('.card.entry');
+    const refs = {
+      root: root,
+      headerEl: root.querySelector('.entry-header'),
+      numEl: root.querySelector('.entry-number'),
+      merchantEl: root.querySelector('.entry-merchant'),
+      merchantOriginalEl: root.querySelector('.entry-merchant-original'),
+      collapseBtn: root.querySelector('.entry-collapse-btn'),
+      deleteBtn: root.querySelector('.entry-delete'),
+      dropEl: root.querySelector('.drop'),
+      fileEl: root.querySelector('.file-input'),
+      previewWrap: root.querySelector('.preview-wrap'),
+      previewEl: root.querySelector('.preview-img'),
+      thumbImg: root.querySelector('.thumb-img'),
+      metaPhotoSlot: root.querySelector('.meta-photo-slot'),
+      runBtn: root.querySelector('.run-btn'),
+      clearBtn: root.querySelector('.clear-btn'),
+      statusEl: root.querySelector('.status'),
+      progressBar: root.querySelector('.progress-bar'),
+      progressFill: root.querySelector('.progress-fill'),
+      resultCard: root.querySelector('.result-block'),
+      badgesEl: root.querySelector('.badges'),
+      metaEl: root.querySelector('.meta-table'),
+      itemsEl: root.querySelector('.items'),
+      totalsEl: root.querySelector('.totals'),
+      payerRowEl: root.querySelector('.payer-row'),
+      payerSlotEl: root.querySelector('.payer-slot'),
+      reasoningEl: root.querySelector('.reasoning')
+    };
+    const state = {
+      file: null, base64: null, mime: null,
+      parsed: null, rate: null,
+      assignments: {},  // key: itemIdx 或 'payer' → [tagId]
+      locked: false,    // 辨識完成後鎖定，禁止換照片
+      processing: false,// 辨識進行中（用於中止）
+      abortController: null,
+      createdAt: new Date(),
+      recognizedAt: null,
+      dataUrl: null     // 完整 data URL（給 lightbox 用）
+    };
+
+    function setStatus(msg, kind) {
+      refs.statusEl.textContent = msg || '';
+      refs.statusEl.className = 'status' + (kind ? ' ' + kind : '');
+    }
+    function setBusy() {
+      refs.statusEl.innerHTML = '<span class="spinner"></span>處理中';
+      refs.statusEl.className = 'status';
+    }
+    function showProgress(pct) {
+      refs.progressBar.classList.add('visible');
+      refs.progressFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    }
+    function hideProgress() {
+      refs.progressBar.classList.remove('visible');
+      refs.progressFill.style.width = '0%';
+    }
+
+    function handleFile(file) {
+      if (state.locked) return;     // 鎖定後不能換照片
+      if (!file.type.startsWith('image/')) { setStatus('請選擇圖片檔案。', 'err'); return; }
+      if (file.size > 8 * 1024 * 1024) { setStatus('檔案超過 8 MB，請壓縮後再試。', 'err'); return; }
+      state.file = file;
+      state.mime = file.type;
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        const rawDataUrl = evt.target.result;
+        // 壓縮到 1024px JPEG q=0.75，傳給 API 較快、存 localStorage 也不會撐爆
+        let dataUrl = rawDataUrl;
+        try { dataUrl = await compressImageDataUrl(rawDataUrl, 1024, 0.75); }
+        catch (e) { console.warn('圖片壓縮失敗，沿用原圖', e); }
+        state.dataUrl = dataUrl;
+        state.mime = 'image/jpeg';
+        refs.previewEl.src = dataUrl;
+        refs.thumbImg.src = dataUrl;
+        refs.previewWrap.style.display = 'block';
+        refs.dropEl.style.display = 'none';
+        refs.root.classList.remove('empty');
+        refs.headerEl.style.display = '';
+        state.base64 = dataUrl.split(',')[1];
+        refs.runBtn.disabled = false;
+        refs.clearBtn.disabled = false;
+        updateAddBtnVisibility();
+        setTimeout(() => entryRun(), 50);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function reset() {
+      state.file = null; state.base64 = null; state.mime = null;
+      state.parsed = null; state.rate = null;
+      state.assignments = {};
+      state.locked = false;
+      state.recognizedAt = null;
+      state.dataUrl = null;
+      refs.fileEl.value = '';
+      refs.previewWrap.style.display = 'none';
+      refs.thumbImg.src = '';
+      refs.dropEl.style.display = '';
+      refs.merchantEl.textContent = '';
+      refs.merchantOriginalEl.textContent = '';
+      refs.root.classList.remove('collapsed');
+      refs.runBtn.disabled = true;
+      refs.clearBtn.disabled = true;
+      refs.resultCard.style.display = 'none';
+      refs.headerEl.style.display = 'none';   // 重置時隱藏編號+垃圾桶
+      refs.root.classList.add('empty');        // 還原為「無外框」狀態
+      setStatus(''); hideProgress();
+      updateAddBtnVisibility();
+    }
+
+    async function entryRun() {
+      if (!state.file) { setStatus('請先上傳照片。', 'err'); return; }
+      refs.runBtn.disabled = true;
+      refs.clearBtn.disabled = true;
+      refs.resultCard.style.display = 'none';
+      // 優先用訪客自己貼的 key（可避開共用 key 被別人爆掉的風險）；否則用內建
+      const groqKey = groqKeyEl.value.trim() || EMBEDDED_GROQ_KEY;
+      const geminiKey = geminiKeyEl.value.trim();
+      state.processing = true;
+      state.abortController = new AbortController();
+      const signal = state.abortController.signal;
+      // 若是 Tesseract 路線且被中止 → terminate 全域 worker，下一次會重新建立
+      signal.addEventListener('abort', () => {
+        if (_worker) { try { _worker.terminate(); } catch(e){} _worker = null; _workerLangs = null; }
+      });
+      try {
+        let parsed, engineUsed;
+        if (groqKey) {
+          engineUsed = 'Groq ' + GROQ_MODEL.split('/').pop();
+          setBusy(); showProgress(30);
+          parsed = await callGroq(groqKey, GROQ_MODEL, state.base64, state.mime, signal);
+          showProgress(70);
+        } else if (geminiKey) {
+          engineUsed = 'Gemini ' + geminiModelEl.value;
+          setBusy(); showProgress(30);
+          parsed = await callGemini(geminiKey, geminiModelEl.value, state.base64, state.mime, signal);
+          showProgress(70);
+        } else {
+          engineUsed = 'Tesseract + MyMemory';
+          const langs = langEl.value;
+          setBusy(); showProgress(2);
+          _activeProgress = showProgress;
+          const worker = await getWorker(langs);
+          if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+          const { data } = await worker.recognize(state.file);
+          _activeProgress = null;
+          if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+          const rawText = data.text || '';
+          const currencyHint = curHintEl.value || null;
+          const cur = detectCurrency(rawText) || currencyHint;
+          parsed = parseReceipt(rawText, cur);
+          parsed.currency = cur;
+          setBusy(); showProgress(70);
+          const fromLang = mmLang(langs.split('+')[0]);
+          await translateItems(parsed.items, fromLang);
+        }
+
+        let rate = null;
+        if (parsed.currency && parsed.currency !== 'TWD') {
+          setBusy(); showProgress(90);
+          try { rate = await fetchTwdRate(parsed.currency); }
+          catch(e) { console.warn('rate fail', e); }
+        } else if (parsed.currency === 'TWD') {
+          rate = 1;
+        }
+
+        state.parsed = parsed; state.rate = rate;
+        parsed._engine = engineUsed;
+        renderResult(parsed, rate);
+        hideProgress();
+        setStatus('');
+        refs.resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        if (err && (err.name === 'AbortError' || /aborted/i.test(err.message || ''))) {
+          // 使用者主動中止：deleteSelf 已經處理掉 UI，這裡安靜返回
+          return;
+        }
+        console.error(err);
+        setStatus('發生錯誤：' + (err.message || err), 'err');
+        hideProgress();
+        _activeProgress = null;
+      } finally {
+        state.processing = false;
+        state.abortController = null;
+        refs.runBtn.disabled = false;
+        refs.clearBtn.disabled = false;
+      }
+    }
+
+    function renderResult(parsed, rate) {
+      const cur = (parsed.currency || '').toUpperCase() || '?';
+      const isInc = parsed.price_includes_tax === true;
+      const isExc = parsed.price_includes_tax === false;
+
+      refs.badgesEl.innerHTML = '';
+      if (isInc) refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge inc">品項已含稅</span>');
+      else if (isExc) refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge exc">品項未含稅</span>');
+      else refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge">含稅狀況未明</span>');
+      if (parsed.tax_label) refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge">' + escapeHtml(parsed.tax_label) + '</span>');
+      refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge">' + escapeHtml(cur) + '</span>');
+      if (parsed._engine) refs.badgesEl.insertAdjacentHTML('beforeend', '<span class="badge">' + escapeHtml(parsed._engine) + '</span>');
+
+      // 店家名稱：大標題用繁中翻譯，下方小字放原文（若不同）
+      const merchantZh = parsed.merchant_zh || parsed.merchant || '';
+      const merchantOrig = parsed.merchant || '';
+      refs.merchantEl.textContent = merchantZh;
+      refs.merchantOriginalEl.textContent = (merchantOrig && merchantOrig !== merchantZh) ? merchantOrig : '';
+
+      // 預計算（簡述列要用）
+      const taxRate = extractTaxRate(parsed.tax_label);
+      const totalTax = (typeof parsed.tax_amount === 'number') ? parsed.tax_amount : null;
+      const grandT = (typeof parsed.grand_total === 'number') ? parsed.grand_total : null;
+      const sumLine = parsed.items.reduce((s, it) => s + (it.line_total || 0), 0);
+
+      // 推算發票最終金額（優先用 grand_total）
+      let finalTotal;
+      if (grandT != null) finalTotal = grandT;
+      else if (parsed.price_includes_tax === false && totalTax != null) finalTotal = sumLine + totalTax;
+      else finalTotal = sumLine;
+      const finalTwd = (rate != null && finalTotal != null) ? finalTotal * rate : null;
+
+      const metaRows = [];
+      if (parsed.date) metaRows.push(['日期', fmtDate(parsed.date, parsed.time)]);
+      if (rate && cur !== 'TWD') metaRows.push(['匯率', '1 ' + cur + ' ≈ ' + fmtMoney(rate, 4) + ' TWD']);
+      // 簡述：N 件，X CUR ≈ Y TWD
+      const itemCount = parsed.items.length;
+      let summary = itemCount + ' 件';
+      if (finalTotal != null) {
+        summary += '，' + fmtAmount(finalTotal, cur);
+        if (finalTwd != null && cur !== 'TWD') {
+          summary += ' ≈ ' + fmtAmount(finalTwd, 'TWD', 0);
+        }
+      }
+      metaRows.push(['簡述', summary]);
+
+      const metaTbody = refs.metaEl.querySelector('tbody') || refs.metaEl;
+      metaTbody.innerHTML = metaRows.map(([k, v]) =>
+        '<tr><th>' + escapeHtml(k) + '</th><td>' + escapeHtml(v) + '</td></tr>'
+      ).join('');
+
+      // 新發票 → 清空舊的指派
+      state.assignments = {};
+      renderPayerTags();
+      refs.itemsEl.innerHTML = '';
+      if (parsed.items.length === 0) {
+        refs.itemsEl.innerHTML = '<div class="item" style="color:var(--muted);text-align:center;padding:24px 12px">' +
+          '無法從這張照片辨識出商品行。請試試更清楚的照片。</div>';
+      }
+      parsed.items.forEach((it, i) => {
+        const qty = (it.quantity == null) ? 1 : it.quantity;
+        const line = it.line_total;
+        const share = (sumLine > 0 && line != null) ? line / sumLine : 0;
+        let preTax = null, withTax = null;
+        if (isInc) {
+          withTax = line;
+          if (taxRate != null && line != null) preTax = line / (1 + taxRate);
+          else if (totalTax != null && line != null) preTax = line - totalTax * share;
+        } else if (isExc) {
+          preTax = line;
+          if (taxRate != null && line != null) withTax = line * (1 + taxRate);
+          else if (totalTax != null && line != null) withTax = line + totalTax * share;
+          else if (grandT != null && sumLine > 0 && line != null) {
+            const implied = (grandT - sumLine) / sumLine;
+            withTax = line * (1 + implied);
+          } else withTax = line;
+        } else {
+          withTax = line;
+          if (taxRate != null && line != null) preTax = line / (1 + taxRate);
+        }
+        const twd = (rate != null && withTax != null) ? withTax * rate : null;
+        const qtySuffix = (qty > 1) ? ' ×' + qty : '';
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.dataset.itemIdx = String(i);
+        div.innerHTML =
+          '<div class="item-main">' +
+            '<div class="name" contenteditable="true" spellcheck="false">' + escapeHtml(it.zh_name || '—') + escapeHtml(qtySuffix) + '</div>' +
+            (it.original_name && it.original_name !== it.zh_name
+              ? '<div class="orig" contenteditable="true" spellcheck="false">' + escapeHtml(it.original_name) + '</div>' : '') +
+            '<div class="prices">' +
+              '<div class="price-cell"><div class="price-label">未稅</div>' +
+                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(preTax, cur)) + '</div></div>' +
+              '<div class="price-sep">/</div>' +
+              '<div class="price-cell"><div class="price-label">含稅</div>' +
+                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(withTax, cur)) + '</div></div>' +
+              '<div class="price-sep">/</div>' +
+              '<div class="price-cell twd-cell"><div class="price-label">≈ 新台幣</div>' +
+                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</div></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="item-buyer">' +
+            '<div class="payer-label">購買人</div>' +
+            '<div class="item-tags"></div>' +
+          '</div>';
+        refs.itemsEl.appendChild(div);
+      });
+
+      const rows = [];
+      if (isExc) {
+        rows.push({ label: '品項小計（未稅）', orig: sumLine });
+        rows.push({ label: parsed.tax_label || '稅金', orig: (totalTax != null ? totalTax : (grandT != null ? grandT - sumLine : null)) });
+        const total = grandT != null ? grandT : (totalTax != null ? sumLine + totalTax : null);
+        rows.push({ label: '合計（含稅）', orig: total, grand: true });
+      } else if (isInc) {
+        const total = grandT != null ? grandT : sumLine;
+        rows.push({ label: '合計（已含稅）', orig: total, grand: true });
+        if (totalTax != null) rows.unshift({ label: '其中內含稅 ' + (parsed.tax_label || ''), orig: totalTax });
+      } else {
+        rows.push({ label: '品項小計', orig: sumLine });
+        if (grandT != null && Math.abs(grandT - sumLine) > 0.5) {
+          rows.push({ label: '差額', orig: grandT - sumLine });
+          rows.push({ label: '合計', orig: grandT, grand: true });
+        } else { rows[0].grand = true; rows[0].label = '合計'; }
+      }
+      if (parsed.items.length === 0) refs.totalsEl.innerHTML = '';
+      else refs.totalsEl.innerHTML = rows.map(r => {
+        const twd = (rate != null && r.orig != null) ? r.orig * rate : null;
+        return '<div class="total-row' + (r.grand ? ' grand' : '') + '">' +
+          '<span class="label">' + escapeHtml(r.label) + '</span>' +
+          '<span class="values">' +
+            '<span class="v-orig">' + escapeHtml(fmtAmount(r.orig, cur)) + '</span>' +
+            (twd != null ? '<span class="v-twd">≈ ' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</span>' : '') +
+          '</span>' +
+        '</div>';
+      }).join('');
+
+      if (parsed.tax_reasoning) {
+        refs.reasoningEl.style.display = 'block';
+        refs.reasoningEl.textContent = '判斷依據：' + parsed.tax_reasoning;
+      } else {
+        refs.reasoningEl.style.display = 'none';
+      }
+
+      attachItemHandlers();
+      refreshAssignableState();
+      refs.headerEl.style.display = '';        // 辨識完成後顯示編號+垃圾桶
+      refs.resultCard.style.display = 'block';
+      // 辨識完成 → 鎖定照片、把大預覽收起、改用 meta 旁的縮圖
+      state.locked = true;
+      state.recognizedAt = new Date();
+      refs.previewWrap.style.display = 'none';
+      // thumb-img 已經在 handleFile 時 setSrc，此時自動顯示在 meta-row 內
+      rebuildEntriesMenu();   // 更新抽屜內的清單標題
+      updateAddBtnVisibility();
+      scheduleSave();
+    }
+
+    function renderItemTags(itemIdx) {
+      const itemEl = refs.itemsEl.querySelector('.item[data-item-idx="' + itemIdx + '"]');
+      if (!itemEl) return;
+      const area = itemEl.querySelector('.item-tags');
+      if (!area) return;
+      area.innerHTML = '';
+      const ids = state.assignments[itemIdx] || [];
+      ids.forEach(tid => {
+        const t = tagById(tid);
+        if (!t) return;
+        area.appendChild(buildAssignedChip(t, tid, itemIdx, '從這個商品移除', () => unassignTag(tid, itemIdx)));
+      });
+    }
+    function renderPayerTags() {
+      refs.payerSlotEl.innerHTML = '';
+      const ids = state.assignments['payer'] || [];
+      if (ids.length === 0) {
+        const hint = document.createElement('span');
+        hint.className = 'payer-empty';
+        hint.textContent = '← 拖曳名字標籤到這裡';
+        refs.payerSlotEl.appendChild(hint);
+        return;
+      }
+      ids.forEach(tid => {
+        const t = tagById(tid);
+        if (!t) return;
+        refs.payerSlotEl.appendChild(buildAssignedChip(t, tid, 'payer', '從付款人移除', () => unassignTag(tid, 'payer')));
+      });
+    }
+    function assignTag(tagId, key) {
+      if (!state.assignments[key]) state.assignments[key] = [];
+      if (!state.assignments[key].includes(tagId)) state.assignments[key].push(tagId);
+      if (key === 'payer') renderPayerTags();
+      else renderItemTags(parseInt(key, 10));
+      scheduleSave();
+    }
+    function unassignTag(tagId, key) {
+      if (!state.assignments[key]) return;
+      state.assignments[key] = state.assignments[key].filter(t => t !== tagId);
+      if (!state.assignments[key].length) delete state.assignments[key];
+      if (key === 'payer') renderPayerTags();
+      else renderItemTags(parseInt(key, 10));
+      scheduleSave();
+    }
+    function removeTagFromAllAssignments(tagId) {
+      let changed = false;
+      for (const k of Object.keys(state.assignments)) {
+        const before = state.assignments[k].length;
+        state.assignments[k] = state.assignments[k].filter(t => t !== tagId);
+        if (state.assignments[k].length !== before) changed = true;
+        if (!state.assignments[k].length) delete state.assignments[k];
+      }
+      if (changed) refreshAllItemTags();
+    }
+    function refreshAllItemTags() {
+      refs.itemsEl.querySelectorAll('.item[data-item-idx]').forEach(el => {
+        const idx = parseInt(el.dataset.itemIdx, 10);
+        if (!isNaN(idx)) renderItemTags(idx);
+      });
+      renderPayerTags();
+    }
+    function refreshAssignableState() {
+      refs.itemsEl.querySelectorAll('.item[data-item-idx]').forEach(el => {
+        if (selectedTagId) el.classList.add('assignable');
+        else el.classList.remove('assignable');
+      });
+      if (selectedTagId) refs.payerRowEl.classList.add('assignable');
+      else refs.payerRowEl.classList.remove('assignable');
+    }
+    function attachItemHandlers() {
+      refs.itemsEl.querySelectorAll('.item[data-item-idx]').forEach(el => {
+        if (el._tagHandlerAttached) return;
+        el._tagHandlerAttached = true;
+        el.addEventListener('click', e => {
+          if (e.target.closest && e.target.closest('[contenteditable="true"]')) return;
+          if (!selectedTagId) return;
+          const idx = parseInt(el.dataset.itemIdx, 10);
+          if (!isNaN(idx)) assignTag(selectedTagId, idx);
+        });
+      });
+      if (!refs.payerRowEl._tagHandlerAttached) {
+        refs.payerRowEl._tagHandlerAttached = true;
+        refs.payerRowEl.addEventListener('click', e => {
+          if (e.target.closest('.item-tag')) return;
+          if (!selectedTagId) return;
+          assignTag(selectedTagId, 'payer');
+        });
+      }
+    }
+
+    function setNumber(n) { refs.numEl.textContent = n; }
+
+    function deleteSelf() {
+      // 處理中 → 先中止辨識
+      if (state.processing && state.abortController) {
+        try { state.abortController.abort(); } catch(e) {}
+      }
+      // 軟刪除：只是把 DOM 拔下、移到 deletedEntries 陣列；資料保留可由抽屜還原
+      refs.root.remove();
+      const idx = entries.indexOf(api);
+      if (idx >= 0) {
+        entries.splice(idx, 1);
+        deletedEntries.push(api);
+      }
+      if (entries.length === 0) addNewEntry();    // 至少留一張空白
+      else renumberEntries();
+      rebuildEntriesMenu();
+      updateAddBtnVisibility();
+      scheduleSave();
+    }
+
+    // ---- bind UI handlers ----
+    refs.dropEl.addEventListener('click', () => refs.fileEl.click());
+    refs.dropEl.addEventListener('dragover', e => { e.preventDefault(); refs.dropEl.classList.add('dragging'); });
+    refs.dropEl.addEventListener('dragleave', () => refs.dropEl.classList.remove('dragging'));
+    refs.dropEl.addEventListener('drop', e => {
+      e.preventDefault();
+      refs.dropEl.classList.remove('dragging');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    refs.fileEl.addEventListener('change', e => {
+      if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+    refs.previewEl.addEventListener('click', () => {
+      // 鎖定前：點預覽可重新選照片；鎖定後：點預覽放大檢視
+      if (state.locked) openLightbox(state.dataUrl);
+      else refs.fileEl.click();
+    });
+    refs.thumbImg.addEventListener('click', () => {
+      if (state.dataUrl) openLightbox(state.dataUrl);
+    });
+    refs.runBtn.addEventListener('click', entryRun);
+    refs.clearBtn.addEventListener('click', reset);
+    refs.deleteBtn.addEventListener('click', () => {
+      const msg = state.processing
+        ? '辨識進行中，要中止並刪除這一筆嗎？'
+        : '要刪除這一筆嗎？';
+      if (confirm(msg)) deleteSelf();
+    });
+    refs.collapseBtn.addEventListener('click', () => {
+      refs.root.classList.toggle('collapsed');
+    });
+
+    const api = {
+      element: refs.root,
+      state, refs,
+      handleFile, reset, run: entryRun,
+      render: renderResult,
+      assignTag, unassignTag, removeTagFromAllAssignments,
+      refreshAllItemTags, refreshAssignableState,
+      setNumber, delete: deleteSelf,
+      promptForFile: () => refs.fileEl.click()
+    };
+    // 套上 iOS 連續曲率轉角（SVG squircle 背景）
+    attachSquircleBg(refs.root, 22);
+    return api;
+  }
+
+  function renumberEntries() {
+    entries.forEach((e, i) => e.setNumber(i + 1));
+  }
+
+  // 最後一張單筆完全空白（還沒選照片）時，隱藏底部「點此加入發票照片」按鈕
+  // （否則會跟那張單筆框內的 drop 框重複出現）
+  // 一旦載入照片（含處理中）或辨識完成 → 顯示按鈕，方便平行加入下一張
+  // 另：完全沒 API key 時也隱藏（先請使用者輸入金鑰）
+  function updateAddBtnVisibility() {
+    const last = entries[entries.length - 1];
+    const lastHasFile = !!(last && last.state && last.state.file);
+    const hasKey = !!(groqKeyEl.value.trim() || geminiKeyEl.value.trim() || EMBEDDED_GROQ_KEY);
+    addEntryBtn.style.display = (hasKey && lastHasFile) ? '' : 'none';
+  }
+
+  function addNewEntry(autoOpenPicker) {
+    const e = createEntry();
+    entries.push(e);
+    entriesContainer.appendChild(e.element);
+    renumberEntries();
+    if (autoOpenPicker) {
+      setTimeout(() => {
+        e.promptForFile();
+        e.element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+    rebuildEntriesMenu();
+    updateKeyDependentUI();
+    return e;
+  }
+
+  function restoreEntry(api) {
+    const idx = deletedEntries.indexOf(api);
+    if (idx < 0) return;
+    deletedEntries.splice(idx, 1);
+    entries.push(api);
+    entriesContainer.appendChild(api.element);
+    renumberEntries();
+    rebuildEntriesMenu();
+    updateAddBtnVisibility();
+    scheduleSave();
+    setTimeout(() => api.element.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  // ===== 上/下單筆框導航 =====
+  function getCurrentEntryIdx() {
+    if (entries.length <= 1) return 0;
+    const tagBarHeight = tagBarEl.offsetHeight || 48;
+    const anchor = tagBarHeight + 20;     // viewport 內 sticky bar 下方一點點當基準
+    let best = 0, bestDist = Infinity;
+    entries.forEach((e, i) => {
+      const rect = e.element.getBoundingClientRect();
+      // 跟 anchor 最接近的那張視為「目前這張」
+      const dist = Math.abs(rect.top - anchor);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    return best;
+  }
+  function scrollToEntry(i) {
+    if (i < 0) i = 0;
+    if (i >= entries.length) i = entries.length - 1;
+    if (entries[i]) entries[i].element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  navUpBtn.addEventListener('click', () => scrollToEntry(getCurrentEntryIdx() - 1));
+  navDownBtn.addEventListener('click', () => scrollToEntry(getCurrentEntryIdx() + 1));
+
+  // ===== 全螢幕照片 lightbox =====
+  function openLightbox(src) {
+    if (!src) return;
+    lightboxImg.src = src;
+    photoLightbox.classList.add('visible');
+  }
+  function closeLightbox() {
+    photoLightbox.classList.remove('visible');
+    lightboxImg.src = '';
+  }
+  photoLightbox.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (photoLightbox.classList.contains('visible')) closeLightbox();
+      else if (entriesMenuEl.classList.contains('visible')) closeMenu();
+    }
+  });
+
+  // ===== 「全部單筆」抽屜 =====
+  function openMenu() {
+    rebuildEntriesMenu();
+    entriesMenuEl.classList.add('visible');
+    entriesMenuEl.setAttribute('aria-hidden', 'false');
+  }
+  function closeMenu() {
+    entriesMenuEl.classList.remove('visible');
+    entriesMenuEl.setAttribute('aria-hidden', 'true');
+  }
+  menuBtn.addEventListener('click', openMenu);
+  menuCloseBtn.addEventListener('click', closeMenu);
+  menuOverlayEl.addEventListener('click', closeMenu);
+
+  function fmtMenuTime(dt) {
+    if (!dt) return '';
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth() + 1).padStart(2, '0');
+    const d = String(dt.getDate()).padStart(2, '0');
+    const hh = String(dt.getHours()).padStart(2, '0');
+    const mm = String(dt.getMinutes()).padStart(2, '0');
+    return y + '/' + m + '/' + d + ' ' + hh + ':' + mm;
+  }
+  function fmtMenuTitle(api) {
+    // 「日期＋時間＋店家」— 優先用發票本身的日期/時間，缺則用掃描時間
+    const parsed = api.state.parsed;
+    const merchant = (parsed && parsed.merchant) ? parsed.merchant : '（尚未辨識）';
+    const recDate = api.state.recognizedAt || api.state.createdAt;
+    const receiptDate = parsed && parsed.date ? parsed.date : '';
+    const receiptTime = parsed && parsed.time ? parsed.time : '';
+    let dateTimePart;
+    if (receiptDate) {
+      // 發票上有日期：把日期 + 發票時間（沒則用掃描時間）組起來
+      let timeStr = '';
+      if (receiptTime) {
+        const tm = String(receiptTime).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
+        if (tm) {
+          const hh = String(parseInt(tm[1], 10)).padStart(2, '0');
+          const mi = String(parseInt(tm[2], 10)).padStart(2, '0');
+          timeStr = hh + ':' + mi;
+        }
+      } else if (recDate) {
+        timeStr = String(recDate.getHours()).padStart(2, '0') + ':' + String(recDate.getMinutes()).padStart(2, '0');
+      }
+      dateTimePart = receiptDate.replace(/-/g, '/') + (timeStr ? ' ' + timeStr : '');
+    } else {
+      dateTimePart = fmtMenuTime(recDate);
+    }
+    return dateTimePart + '　' + merchant;
+  }
+
+  function rebuildEntriesMenu() {
+    menuActiveList.innerHTML = '';
+    menuDeletedList.innerHTML = '';
+    if (entries.length === 0) {
+      menuActiveList.innerHTML = '<div class="menu-empty">尚無進行中單筆</div>';
+    } else {
+      entries.forEach((e, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="li-num">#' + (i + 1) + '</span>' +
+                       '<span class="li-title">' + escapeHtml(fmtMenuTitle(e)) + '</span>';
+        li.addEventListener('click', () => {
+          closeMenu();
+          setTimeout(() => e.element.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        });
+        menuActiveList.appendChild(li);
+      });
+    }
+    if (deletedEntries.length === 0) {
+      menuDeletedList.innerHTML = '<div class="menu-empty">無已刪除單筆</div>';
+    } else {
+      deletedEntries.forEach((e) => {
+        const li = document.createElement('li');
+        li.className = 'deleted';
+        li.innerHTML = '<span class="li-title">' + escapeHtml(fmtMenuTitle(e)) + '</span>' +
+                       '<span class="restore-hint">點此還原</span>';
+        li.addEventListener('click', () => {
+          closeMenu();
+          restoreEntry(e);
+        });
+        menuDeletedList.appendChild(li);
+      });
+    }
+  }
+
+  // ===== 初始化：先嘗試載入上次儲存的所有單筆，然後保證至少有一張空白 =====
+  (function initEntries() {
+    const stored = loadStoredEntries();
+    if (stored && Array.isArray(stored.entries)) {
+      for (const data of stored.entries) {
+        const e = createEntry();
+        entries.push(e);
+        entriesContainer.appendChild(e.element);
+        try { hydrateEntry(e, data); } catch (err) { console.warn('hydrate failed', err); }
+      }
+    }
+    if (stored && Array.isArray(stored.deletedEntries)) {
+      for (const data of stored.deletedEntries) {
+        const e = createEntry();
+        deletedEntries.push(e);
+        try { hydrateEntry(e, data); } catch (err) { console.warn('hydrate (deleted) failed', err); }
+      }
+    }
+    renumberEntries();
+    rebuildEntriesMenu();
+    if (entries.length === 0) addNewEntry();   // 第一次造訪 → 給一張空白
+    updateKeyDisplay();
+    updateKeyDependentUI();
+  })();
+  addEntryBtn.addEventListener('click', () => addNewEntry(true));
+})();
+</script>
+</body>
+</html>
