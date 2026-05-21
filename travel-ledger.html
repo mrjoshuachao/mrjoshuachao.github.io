@@ -31,6 +31,10 @@
     --radius-md: 18px;
     --radius-lg: 22px;
     --radius-xl: 28px;
+    /* 統一寬度：實際購買人 / 未稅含稅 toggle / 發票縮圖 都用這個寬度 */
+    --buyer-width: 120px;
+    /* 等同 .item 的右 padding，讓 tax-toggle / thumb 的左右邊都對齊 .item-buyer */
+    --buyer-right-offset: 10px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -59,77 +63,132 @@
   .tag-bar {
     max-width: 720px;
     margin: 0 auto;
-    padding: 8px 12px;
+    padding: 4px 12px;        /* 縮減上下 padding */
     display: flex;
-    align-items: stretch;     /* 讓 nav-arrows / menu-btn 自動撐滿整列高度 */
+    align-items: center;
     gap: 10px;
-    flex-wrap: nowrap;        /* 整列保持 nav-arrows + chips-area + menu-btn 三段式 */
-    min-height: 64px;         /* 給左右按鈕足夠高度 */
+    flex-wrap: nowrap;
+    min-height: 44px;         /* 縮減最小高度 */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
+  }
+  /* 中央 cluster：[← 日期 →] 整組置中、隨內容寬度伸縮 */
+  .middle-cluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    align-self: center;
   }
   .chips-area {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    align-self: center;       /* chips 在中央，不被整列拉高 */
+    align-self: center;
+    justify-content: center;
     gap: 8px;
-    flex: 1;
+    flex: 0 1 auto;            /* 隨內容寬度收縮，讓左右箭頭緊貼日期 */
     min-width: 0;
   }
-  /* 左側「上一筆／下一筆」整塊大按鈕，中間用一條線分上下 */
-  .nav-arrows {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    flex-shrink: 0;
-    align-self: stretch;
-    width: 46px;
-    border: 1px solid var(--ink);
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--panel);
+  /* 頂部標籤列現在當作「金鑰顯示處」，調整內含 key input / display 的尺寸 */
+  .chips-area-as-key .key-input {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    text-align: center;
+    width: auto;
+    max-width: 100%;
+    border: none !important;
+    background: transparent !important;
   }
-  .nav-arrows button {
+  .chips-area-as-key .key-display {
+    padding: 0 !important;
+    margin: 0;
+    text-align: center;
+  }
+  .chips-area-as-key .key-display-label {
+    font-size: 12px;
+  }
+  .chips-area-as-key .key-display-code {
+    margin-top: 2px;
+    max-width: 100%;
+  }
+  /* 頂部「YYYY-MM-DD (n/total)」大標題（取代金鑰顯示） */
+  .top-date-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.2;
+    display: none;
     width: 100%;
-    flex: 1 1 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .top-date-title.visible { display: block; }
+  /* 頂部圓形按鈕共用樣式：menu / nav / add 全部都是 32x32 正圓色塊 */
+  .menu-btn, .nav-btn, .add-btn {
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: none;
-    background: var(--panel);
+    background: var(--accent-soft);
     color: var(--ink);
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    min-height: unset;
-    font-family: inherit;
-  }
-  .nav-arrows button:first-child { border-bottom: 1px solid var(--ink); }
-  .nav-arrows button:hover { background: var(--accent-soft); }
-  .nav-arrows button:active { background: var(--ink); color: var(--panel); }
-  .nav-arrows button svg { width: 18px; height: 18px; display: block; }
-
-  /* 右側選單按鈕，整高同列 */
-  .menu-btn {
-    width: 48px;
-    align-self: stretch;
-    padding: 0;
-    border: 1px solid var(--ink);
-    background: var(--panel);
-    color: var(--ink);
-    border-radius: 16px;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     min-height: unset;
     flex: 0 0 auto;
+    align-self: center;
     font-family: inherit;
   }
-  .menu-btn:hover { background: var(--accent-soft); }
-  .menu-btn:active { background: var(--ink); color: var(--panel); }
-  .menu-btn svg { width: 26px; height: 26px; display: block; }
+  .menu-btn:hover, .nav-btn:hover, .add-btn:hover { filter: brightness(0.95); }
+  .menu-btn:active, .nav-btn:active, .add-btn:active { background: var(--ink); color: var(--panel); }
+  .menu-btn svg { width: 20px; height: 20px; display: block; }
+  .nav-btn svg { width: 14px; height: 14px; display: block; }
+  .add-btn svg { width: 18px; height: 18px; display: block; }
+
+  /* 「＋ 新增發票」彈出選單 */
+  .add-wrap {
+    position: relative;
+    align-self: center;
+    flex: 0 0 auto;
+  }
+  .add-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    display: none;
+    flex-direction: row;
+    gap: 4px;
+    z-index: 200;
+  }
+  .add-menu.visible { display: flex; }
+  .add-menu-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: var(--accent-soft);
+    color: var(--ink);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-height: unset;
+    font-family: inherit;
+  }
+  .add-menu-btn:hover { filter: brightness(0.95); }
+  .add-menu-btn:active { background: var(--ink); color: var(--panel); }
 
   /* 「全部單筆」抽屜 */
   .entries-menu {
@@ -169,11 +228,11 @@
   .menu-panel {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;                         /* 靠螢幕左側（配合左上角的三線選單按鈕） */
     width: min(380px, 92vw);
     height: 100%;
     background: var(--panel);
-    box-shadow: -4px 0 18px rgba(0,0,0,0.18);
+    box-shadow: 4px 0 18px rgba(0,0,0,0.18);   /* 陰影改到右側 */
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -397,32 +456,51 @@
   }
   .tag-ghost.touch .tag-chip-x { display: none; }
 
-  /* item card highlighted as drop target （無獨立 border，改用背景色強調） */
+  /* item drop target（拖曳場景已少用，保留視覺以防萬一） */
   .item.drop-target {
-    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1px var(--ink);
   }
-  .item.assignable { cursor: pointer; }
-  .item.assignable:hover { background: rgba(0,0,0,0.03); }
+  /* 新增商品品項按鈕 */
+  .add-item-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    min-height: unset;
+  }
+  .add-item-btn:hover { filter: brightness(0.95); }
 
-  /* 商品右側「購買人」虛線框 */
+  /* 商品右側「實際購買人」— 用網頁背景色，使色塊融入整體 */
   .item-buyer {
     display: flex;
     flex-direction: column;
-    align-items: center;          /* 內容水平置中 */
-    justify-content: center;      /* 內容垂直置中 */
+    align-items: center;
+    justify-content: center;
     gap: 6px;
     padding: 8px 10px;
-    border: 1px dashed var(--line);
+    border: none;
     border-radius: 16px;
-    background: #fafafa;
-    min-width: 108px;
-    max-width: 44%;
-    flex-shrink: 0;
+    background: var(--bg);
+    flex: 0 0 var(--buyer-width);
+    width: var(--buyer-width);
+    max-width: var(--buyer-width);
     align-self: stretch;
+    cursor: pointer;
+    transition: background 0.15s;
   }
+  .item-buyer:hover { filter: brightness(0.97); }
   .item-buyer .payer-label { text-align: center; }
-  /* 有標籤之後：隱藏「購買人」label，只顯示標籤 */
-  .item-buyer.has-tags .payer-label { display: none; }
+  /* 有標籤之後：隱藏「實際購買人」label 與 ＋ 按鈕，只顯示標籤 */
+  .item-buyer.has-tags .payer-label,
+  .item-buyer.has-tags .add-name-btn { display: none; }
   /* 還沒有標籤之前：item-tags 區域不要佔位 */
   .item-buyer:not(.has-tags) .item-tags { display: none; }
   /* 框內標籤垂直排列 */
@@ -460,23 +538,31 @@
   }
   .item-tag .x:hover { background: rgba(255,255,255,0.5); }
 
-  /* payer slot */
+  /* 付款人 + 未稅/含稅 toggle 同一橫列 */
+  .payer-tax-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    margin: 6px 0 10px;
+  }
+  /* payer slot — 用網頁背景色，融入整體 */
   .payer-row {
     display: flex;
     align-items: center;
-    justify-content: center;       /* label / slot 整列水平置中 */
-    gap: 10px;
-    padding: 12px 14px;
-    border: 1px dashed var(--line);
-    border-radius: 18px;
-    margin: 8px 0;                  /* 縮小上下空白 */
-    background: #fafafa;
-    min-height: 56px;
-    transition: border-color 0.15s, background 0.15s, transform 0.15s;
-    cursor: default;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border: none;
+    border-radius: 999px;
+    margin: 0;
+    background: var(--bg);
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 32px;
+    transition: background 0.15s;
+    cursor: pointer;
   }
-  .payer-row.assignable { cursor: pointer; }
-  .payer-row.assignable:hover { border-color: var(--accent); }
+  .payer-row:hover { filter: brightness(0.97); }
   .payer-row.drop-target {
     border-color: var(--accent);
     background: var(--accent-soft);
@@ -491,6 +577,31 @@
     flex-shrink: 0;
     text-align: center;
   }
+  /* 「付款人」「實際購買人」文字後面的「圓圈+」小按鈕 — 正圓、小到跟文字差不多 */
+  .add-name-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 13px;
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    min-height: 13px;
+    margin-left: 4px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--ink);
+    font-size: 10px;
+    line-height: 1;
+    font-family: inherit;
+    cursor: pointer;
+    vertical-align: middle;
+    box-sizing: border-box;
+  }
+  .add-name-btn:hover { filter: brightness(0.95); }
+  .item-buyer .add-name-btn { margin-left: 0; margin-top: 2px; }
   .payer-slot {
     display: flex;
     gap: 6px;
@@ -500,8 +611,9 @@
     justify-content: center;       /* 標籤在 slot 內置中 */
   }
   .payer-empty { display: none; }
-  /* 有標籤之後：隱藏「付款人」label，只顯示標籤 */
-  .payer-row.has-tags .payer-label { display: none; }
+  /* 有標籤之後：隱藏「付款人」label 與 ＋ 按鈕，只顯示標籤 */
+  .payer-row.has-tags .payer-label,
+  .payer-row.has-tags .add-name-btn { display: none; }
   /* 還沒有標籤之前：slot 不要佔位（裡面只有 display:none 的 empty hint） */
   .payer-row:not(.has-tags) .payer-slot { display: none; }
 
@@ -520,6 +632,34 @@
     max-width: 720px;
     margin: 0 auto;
     padding: 18px 16px 48px;
+  }
+  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個 */
+  #entriesContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;            /* 配合 JS 將 height 設成目前單筆框高度，避免下方留白 */
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    align-items: flex-start;       /* 不要把較矮的單筆框拉到一樣高 */
+    gap: 0;
+    margin: 0;
+    transition: height 0.2s ease;
+  }
+  #entriesContainer::-webkit-scrollbar { display: none; }
+  #entriesContainer > .card.entry,
+  #entriesContainer > * {
+    flex: 0 0 100%;
+    min-width: 100%;
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    margin-bottom: 0;
+    align-self: flex-start;        /* 各自保留自然高度 */
   }
   header h1 {
     font-size: 20px;
@@ -540,12 +680,12 @@
   }
   .card.entry {
     position: relative;
-    /* fallback：JS squircle 套上前用普通圓角邊框；套上後由 _squircled class 覆蓋 */
-    background: var(--card-bg);
-    border: 1px solid var(--ink);
+    background: #ffffff;        /* 純白底，無框線 */
+    border: none;
+    border-radius: 22px;
   }
   .card.entry._squircled {
-    background: transparent;
+    background: #ffffff;
     border: none;
   }
   /* 上/下箭頭捲動到單筆框時，預留 sticky 標籤列高度避免被遮 */
@@ -563,10 +703,9 @@
     overflow: visible;               /* path 貼著 SVG 邊，stroke 才不會被裁；視覺中心對齊 card box 邊緣 */
   }
   .squircle-bg path {
-    fill: var(--card-bg);
-    stroke: var(--ink);
-    stroke-width: 1;                 /* 與其他 CSS 1px 框線同寬 */
-    shape-rendering: geometricPrecision;   /* 讓細曲線描邊不會看起來像虛線/斷掉 */
+    fill: #ffffff;                   /* 純白填色 */
+    stroke: none;                    /* 不畫框線 */
+    shape-rendering: geometricPrecision;
   }
   /* 卡片內所有非 SVG 子元素疊在 SVG 之上 */
   .card.entry > *:not(.squircle-bg) {
@@ -927,20 +1066,29 @@
     margin-bottom: 0;
   }
   .meta-photo-slot {
-    width: 92px;
+    width: var(--buyer-width);       /* 同實際購買人寬 */
+    margin-right: var(--buyer-right-offset);   /* 右邊緣對齊 .item-buyer */
     flex-shrink: 0;
     display: flex;
     align-items: stretch;
   }
   .meta-photo-slot img.thumb-img {
     width: 100%;
-    height: auto;
-    max-height: 140px;
+    height: 120px;            /* 統一高度，無論發票長短都同尺寸 */
     object-fit: cover;
     border-radius: 14px;
-    border: 1px solid var(--line);
+    border: none;
     cursor: zoom-in;
     display: block;
+  }
+  /* 沒有照片時（例如手動輸入的空白單筆框）：縮圖位置改成淺色佔位塊，維持排版一致 */
+  .meta-photo-slot.no-photo {
+    background: var(--accent-soft);
+    border-radius: 14px;
+    height: 120px;
+  }
+  .meta-photo-slot.no-photo img.thumb-img {
+    visibility: hidden;
   }
 
   /* 全螢幕照片檢視 */
@@ -962,15 +1110,149 @@
     object-fit: contain;
   }
 
-  /* meta as a single bordered table */
-  .meta-table {
+  /* 名字選擇燈箱 */
+  .name-picker {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .name-picker.visible { display: flex; }
+  .name-picker-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .name-picker-modal {
+    position: relative;
+    z-index: 1;
+    background: var(--panel);
+    border-radius: 22px;
+    padding: 20px;
+    max-width: min(440px, 92vw);
     width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+  .name-picker-title {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 14px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  /* 名字標籤區：固定 5 個一排（不足一排不調整單顆寬度）、整體置中 */
+  .name-picker-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .picker-name {
+    /* 每個標籤等寬：(100% - 4 個 gap 6px = 24px) / 5 */
+    flex: 0 0 calc((100% - 24px) / 5);
+    max-width: calc((100% - 24px) / 5);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;       /* 名字水平置中 */
+    text-align: center;
+    padding: 4px 6px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+    opacity: 0.35;
+    transition: opacity 0.12s, transform 0.08s;
+    font-family: inherit;
+    white-space: nowrap;          /* 名字不斷行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    min-height: unset;
+  }
+  .picker-name:active { transform: scale(0.96); }
+  .picker-name.checked { opacity: 1; }
+  /* 新增名字標籤的 + 按鈕：正圓形、無框線、純色塊（同商品品項條色） */
+  .picker-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-soft);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    font-family: inherit;
+    min-height: unset;
+  }
+  .picker-add:hover { filter: brightness(0.95); }
+  .picker-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin: -10px 0 14px;
+    line-height: 1.4;
+  }
+  .name-picker-actions {
+    display: flex;
+    gap: 6px;                     /* 與名字標籤之間的 gap 一致 */
+    justify-content: center;
+    align-items: center;
+  }
+  /* 全選 / 確定 — 尺寸跟 2 字名字標籤一樣（1/5 容器寬） */
+  .picker-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 calc((100% - 24px) / 5);
+    max-width: calc((100% - 24px) / 5);
+    box-sizing: border-box;
+    padding: 4px 6px;
+    border-radius: 999px;
+    border: 1px solid #ffffff;
+    background: var(--muted);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.2;
+    font-family: inherit;
+    min-height: unset;
+    white-space: nowrap;
+  }
+  .picker-btn.primary {
+    background: var(--ink);
+    color: #fff;
+  }
+  .picker-btn:hover { filter: brightness(0.92); }
+
+  /* meta：三列日期/匯率/簡述。沒有外框，列之間用單一細線分隔（粗細一致）
+     margin-left: 13px → 整個表格往右挪 13px，使得「列間細線」左端與「商品品項名稱」對齊。
+     （card padding 16 + .item padding 10 + .name contenteditable padding 3 = 29，
+       table-left 從 16 變 16+13=29，剛好對齊） */
+  .meta-table {
+    width: auto;
     border-collapse: collapse;
     font-size: 13px;
     margin-bottom: 14px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    overflow: hidden;
+    margin-left: 13px;
+    border: none;
   }
   .meta-table th {
     text-align: left;
@@ -980,7 +1262,7 @@
     letter-spacing: 1px;
     font-weight: 600;
     background: transparent;         /* 不要淺色色塊，直接用單筆框底色 */
-    padding: 8px 4px 8px 4px;        /* 左右都縮小，標籤靠左、與資料距離也小 */
+    padding: 8px 4px 8px 0;          /* 左 0 — 表格本身已透過 margin-left: 13 推到對齊位置 */
     border-bottom: 1px solid var(--line);
     vertical-align: middle;          /* 標題垂直置中 cell */
     width: 1%;                       /* 寬度收成 min-content，不再撐到 84px */
@@ -996,31 +1278,57 @@
   }
   .meta-table tr:last-child th,
   .meta-table tr:last-child td { border-bottom: none; }
-  /* 所有商品品項全部包在一個大圓角矩形框內，每一條之間用一條實線隔開
-     （實線左右兩端跟大框框邊連在一起 → 用 .item + .item 的 border-top + overflow:hidden） */
+  /* 含稅/未稅 開關（iOS 風格 segmented control）— 同實際購買人寬 */
+  .tax-mode-toggle {
+    display: flex;
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 2px;
+    margin: 0 var(--buyer-right-offset) 0 0;   /* 右邊緣對齊 .item-buyer */
+    flex: 0 0 var(--buyer-width);
+    width: var(--buyer-width);
+    max-width: var(--buyer-width);
+    box-sizing: border-box;
+  }
+  .tax-mode-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+    min-height: unset;
+    white-space: nowrap;
+  }
+  .tax-mode-btn.active {
+    background: var(--ink);
+    color: var(--panel);
+  }
+  /* 依目前模式：把未選的那邊 price-cell 半透明 */
+  .item.tax-mode-inc .price-cell[data-cell="preTax"] { opacity: 0.4; }
+  .item.tax-mode-exc .price-cell[data-cell="withTax"] { opacity: 0.4; }
+
+  /* 每一條商品品項各自獨立、無框線，背景用淺色色塊（與「合計」grand row 一致） */
   .items {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: #fff;
-    overflow: hidden;            /* 切掉子元素的角，配合外框圓角 */
+    gap: 8px;
   }
   .item {
+    background: var(--accent-soft);
+    border-radius: 16px;
+    padding: 10px;
     border: none;
-    border-radius: 0;
-    padding: 12px 14px;
-    background: transparent;     /* 由 .items 外框提供白底 */
     /* 左右兩欄：主資訊 + 標籤 */
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    transition: background 0.15s;
-  }
-  /* 兩條品項之間的分隔線（左右貼齊大框邊緣） */
-  .item + .item {
-    border-top: 1px solid var(--line);
+    transition: background 0.15s, box-shadow 0.15s;
   }
   .item-main {
     flex: 1;
@@ -1066,6 +1374,7 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     margin-bottom: 2px;
+    padding-left: 3px;            /* 與下方 amount-num（contenteditable 內距 3px）對齊 */
   }
   .item .price-val {
     font-size: 14px;
@@ -1075,6 +1384,64 @@
   }
   .item .price-cell.twd-cell .price-label { color: var(--twd-red); }
   .item .price-cell.twd-cell .price-val { color: var(--twd-red); }
+  /* 幣別簡寫（JPY/TWD 等）不可編輯，顯示為較淡的色 */
+  .amount-cur, .cur-fixed {
+    color: var(--muted);
+    font-weight: 500;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .item .price-cell.twd-cell .amount-cur {
+    color: var(--twd-red);
+  }
+  /* 可編輯的數字本身（與其他 contenteditable 共用 hover/focus 樣式） */
+  .meta-table [contenteditable="true"] {
+    outline: none;
+    cursor: text;
+    border-radius: 8px;
+    padding: 0 3px;
+    transition: background 0.1s;
+  }
+  .meta-table [contenteditable="true"]:hover { background: var(--accent-soft); }
+  .meta-table [contenteditable="true"]:focus { background: #ffffff; }
+  /* 匯率列尾的「套用當日匯率」按鈕（小圓角膠囊） */
+  .live-rate-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 6px;                  /* 更窄 */
+    border-radius: 999px;
+    border: 1px solid var(--twd-red);
+    background: var(--panel);
+    color: var(--twd-red);             /* 深紅 */
+    font-size: 9px;                    /* 更小 */
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+    line-height: 1.2;
+    min-height: unset;
+  }
+  .live-rate-btn:hover { filter: brightness(0.95); }
+  .live-rate-btn:disabled { opacity: 0.6; cursor: default; }
+  /* 匯率列：xxx TWD 都用深紅 */
+  .meta-table .rate-num { color: var(--twd-red); }
+  .meta-table .cur-twd { color: var(--twd-red); }
+  /* 空白 contenteditable 欄位的 placeholder（YYYY-MM-DD / 0.0000 等） */
+  .meta-table [contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--muted);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .meta-table .date-num {
+    min-width: 100px;
+    display: inline-block;
+  }
+  /* 「≈」 一律深紅色 */
+  .approx { color: var(--twd-red); }
 
   /* 可編輯欄位（修錯字） */
   .item [contenteditable="true"] {
@@ -1106,9 +1473,15 @@
   .total-row .v-twd { font-size: 12px; color: var(--twd-red); display: block; margin-top: 2px; }
   .total-row.grand {
     margin-top: 4px;
-    padding: 10px;
-    background: var(--accent-soft);
-    border-radius: 16px;
+    padding: 6px 4px;
+    background: transparent;        /* 移除深色底色 */
+    border-radius: 0;
+  }
+  /* 「合計」與「其中內含稅 ⋯」之間加一條水平線 */
+  .total-row + .total-row {
+    border-top: 1px solid var(--line);
+    padding-top: 8px;
+    margin-top: 4px;
   }
   .total-row.grand .label { color: var(--ink); font-weight: 700; font-size: 15px; }
   .total-row.grand .v-orig { font-size: 17px; }
@@ -1195,18 +1568,7 @@
 <body>
 <div class="tag-bar-wrap">
   <div class="tag-bar" id="tagBar">
-    <div class="nav-arrows">
-      <button id="navUpBtn" type="button" title="上一筆單筆框" aria-label="上一筆">
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5 L4 17 L20 17 Z" fill="currentColor"/></svg>
-      </button>
-      <button id="navDownBtn" type="button" title="下一筆單筆框" aria-label="下一筆">
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 19 L4 7 L20 7 Z" fill="currentColor"/></svg>
-      </button>
-    </div>
-    <div class="chips-area" id="chipsArea">
-      <span class="tag-bar-label" style="display:none">買家標籤</span>
-      <!-- chips inserted here -->
-    </div>
+    <!-- 左：三線選單 -->
     <button id="menuBtn" class="menu-btn" type="button" title="所有單筆清單" aria-label="所有單筆">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -1214,12 +1576,68 @@
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
+    <!-- 中：[← 日期 →] 整組置中 -->
+    <div class="middle-cluster">
+      <button id="navUpBtn" class="nav-btn" type="button" title="上一筆單筆框" aria-label="上一筆">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 12 L18 4 L18 20 Z" fill="currentColor"/></svg>
+      </button>
+      <div class="chips-area" id="chipsArea">
+        <span class="tag-bar-label" style="display:none">買家標籤</span>
+      </div>
+      <button id="navDownBtn" class="nav-btn" type="button" title="下一筆單筆框" aria-label="下一筆">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 12 L6 4 L6 20 Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <!-- 右：＋ 新增發票（點開出現相機/相簿/手動輸入） -->
+    <div class="add-wrap">
+      <button id="topAddBtn" class="add-btn" type="button" title="新增發票" aria-label="新增發票">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+      <div class="add-menu" id="addMenu">
+        <button class="add-menu-btn" type="button" data-source="camera" title="拍照" aria-label="拍照">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </button>
+        <button class="add-menu-btn" type="button" data-source="library" title="相簿" aria-label="相簿">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </button>
+        <button class="add-menu-btn" type="button" data-source="manual" title="手動輸入" aria-label="手動輸入">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- 全螢幕照片檢視 -->
 <div class="photo-lightbox" id="photoLightbox">
   <img id="lightboxImg" alt="" />
+</div>
+
+<!-- 名字選擇燈箱（按付款人 / 實際購買人 框框後出現） -->
+<div class="name-picker" id="namePicker" aria-hidden="true">
+  <div class="name-picker-backdrop" id="namePickerBackdrop"></div>
+  <div class="name-picker-modal" role="dialog" aria-label="選擇名字">
+    <div class="name-picker-title" id="namePickerTitle">選擇名字</div>
+    <div class="name-picker-chips" id="namePickerChips"></div>
+    <p class="picker-hint">點＋新增；長按名字標籤可刪除</p>
+    <div class="name-picker-actions">
+      <button type="button" id="namePickerSelectAll" class="picker-btn">全選</button>
+      <button type="button" id="namePickerConfirm" class="picker-btn primary">確定</button>
+    </div>
+  </div>
 </div>
 
 <!-- 全部單筆抽屜 -->
@@ -1324,7 +1742,7 @@
     <section class="card entry empty">
       <!-- 單筆框頭列：左上編號 + 中央店名（點一下可收縮/展開）+ 右上刪除（辨識完成後才顯示） -->
       <div class="entry-header" style="display:none">
-        <span class="entry-number">1</span>
+        <span class="entry-number">#1</span>
         <div class="entry-merchant-wrap">
           <div class="entry-merchant"></div>
           <div class="entry-merchant-original"></div>
@@ -1339,11 +1757,6 @@
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
           </svg>
         </button>
-      </div>
-      <!-- 付款人欄位（緊接 header 下方） -->
-      <div class="payer-row" data-payer-slot="1">
-        <div class="payer-label">付款人</div>
-        <div class="payer-slot"></div>
       </div>
       <h2 style="display:none">上傳發票照片</h2>
       <div class="drop">
@@ -1371,7 +1784,20 @@
             <img class="thumb-img" alt="發票縮圖" title="點此放大" />
           </div>
         </div>
+        <!-- 付款人 + 含稅/未稅 同一橫列：付款人左、含稅未稅 toggle 右 -->
+        <div class="payer-tax-row">
+          <div class="payer-row" data-payer-slot="1">
+            <div class="payer-label">付款人</div>
+            <button class="add-name-btn" type="button" aria-label="新增付款人">+</button>
+            <div class="payer-slot"></div>
+          </div>
+          <div class="tax-mode-toggle" role="tablist" aria-label="價格基準">
+            <button class="tax-mode-btn" type="button" data-mode="exc" role="tab">未稅</button>
+            <button class="tax-mode-btn" type="button" data-mode="inc" role="tab">含稅</button>
+          </div>
+        </div>
         <div class="items"></div>
+        <button class="add-item-btn" type="button" title="新增一條商品品項">＋ 新增商品</button>
         <div class="totals"></div>
         <div class="reasoning" style="display:none;"></div>
       </div>
@@ -1509,33 +1935,8 @@
   }
   function tagById(id) { return tags.find(t => t.id === id); }
 
-  function renderTagBar() {
-    // 只重新渲染中間的 chips-area；nav-arrows 與 menu-btn 保留不動
-    const label = chipsAreaEl.querySelector('.tag-bar-label');
-    chipsAreaEl.innerHTML = '';
-    if (label) chipsAreaEl.appendChild(label);
-
-    if (tags.length === 0) {
-      const empty = document.createElement('span');
-      empty.className = 'tag-empty';
-      empty.textContent = '尚無標籤 →';
-      chipsAreaEl.appendChild(empty);
-    }
-
-    tags.forEach(tag => chipsAreaEl.appendChild(makeChip(tag)));
-
-    const addBtn = document.createElement('button');
-    addBtn.type = 'button';
-    addBtn.className = 'tag-add';
-    addBtn.textContent = '＋';
-    addBtn.title = '新增名字標籤';
-    addBtn.setAttribute('aria-label', '新增名字標籤');
-    addBtn.onclick = () => {
-      const name = prompt('輸入名字標籤（最多 16 字）：');
-      if (name && name.trim()) addTag(name.trim());
-    };
-    chipsAreaEl.appendChild(addBtn);
-  }
+  // 頂部標籤列改為「金鑰顯示」用途，不再渲染名字標籤（保留函式給其他呼叫者，no-op）
+  function renderTagBar() { /* no-op：名字標籤已改為燈箱勾選 */ }
 
   function makeChip(tag) {
     const chip = document.createElement('span');
@@ -1801,7 +2202,8 @@
       createdAt: s.createdAt ? s.createdAt.toISOString() : null,
       recognizedAt: s.recognizedAt ? s.recognizedAt.toISOString() : null,
       dataUrl: s.dataUrl,    // 已經是壓縮過的版本
-      mime: s.mime
+      mime: s.mime,
+      taxMode: s.taxMode || null
     };
   }
   function saveAllEntries() {
@@ -1840,9 +2242,17 @@
     s.recognizedAt = data.recognizedAt ? new Date(data.recognizedAt) : null;
     s.dataUrl = data.dataUrl || null;
     s.mime = data.mime || 'image/jpeg';
+    s.taxMode = data.taxMode || null;
     if (s.dataUrl) {
       api.refs.previewEl.src = s.dataUrl;
       api.refs.thumbImg.src = s.dataUrl;
+      if (api.refs.metaPhotoSlot) api.refs.metaPhotoSlot.classList.remove('no-photo');
+      api.refs.dropEl.style.display = 'none';
+      api.element.classList.remove('empty');
+    } else if (s.parsed) {
+      // 沒照片但有 parsed（手動輸入單筆）→ 縮圖位置顯示佔位塊
+      if (api.refs.metaPhotoSlot) api.refs.metaPhotoSlot.classList.add('no-photo');
+      api.refs.previewWrap.style.display = 'none';
       api.refs.dropEl.style.display = 'none';
       api.element.classList.remove('empty');
     }
@@ -1871,7 +2281,105 @@
   loadTags();
   migrateTagsIfNeeded();           // 舊使用者：佩慈→珮慈、阿惠→美惠、九號→宜儒，補「俞翔」
   seedDefaultTagsIfNeeded();       // 新使用者：用最新預設名單
-  renderTagBar();
+  renderTagBar();                  // 已 no-op；保留呼叫以維持原本流程
+
+  // ===== 名字選擇燈箱 =====
+  const namePickerEl = $('namePicker');
+  const namePickerChipsEl = $('namePickerChips');
+  const namePickerTitleEl = $('namePickerTitle');
+  let _pickerOnConfirm = null;
+  function renderPickerChips(initialIdsOrSet) {
+    namePickerChipsEl.innerHTML = '';
+    const initial = (initialIdsOrSet instanceof Set) ? initialIdsOrSet : new Set(initialIdsOrSet || []);
+    tags.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'picker-name tc-' + (tag.color % TAG_COLORS);
+      if (initial.has(tag.id)) btn.classList.add('checked');
+      btn.dataset.tagId = tag.id;
+      btn.textContent = tag.name;
+      btn.title = '點選＝勾選；長按＝刪除';
+      // 點 → 勾選/取消；長按 → 詢問是否刪除
+      let lpTimer = null, didLongPress = false;
+      btn.addEventListener('pointerdown', () => {
+        didLongPress = false;
+        lpTimer = setTimeout(() => {
+          didLongPress = true;
+          lpTimer = null;
+          if (confirm('刪除名字標籤「' + tag.name + '」？')) {
+            deleteTag(tag.id);
+            const checkedIds = new Set(
+              Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
+                .filter(b => b.dataset.tagId !== tag.id)
+                .map(b => b.dataset.tagId)
+            );
+            renderPickerChips(checkedIds);
+          }
+        }, 600);
+      });
+      const cancel = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
+      btn.addEventListener('pointerup', cancel);
+      btn.addEventListener('pointercancel', cancel);
+      btn.addEventListener('pointerleave', cancel);
+      btn.addEventListener('click', () => {
+        if (didLongPress) { didLongPress = false; return; }
+        btn.classList.toggle('checked');
+      });
+      namePickerChipsEl.appendChild(btn);
+    });
+    // 末端「＋」新增名字按鈕
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'picker-add';
+    addBtn.textContent = '＋';
+    addBtn.title = '新增名字標籤';
+    addBtn.setAttribute('aria-label', '新增名字標籤');
+    addBtn.addEventListener('click', () => {
+      const name = prompt('輸入名字標籤（最多 16 字）：');
+      if (!name || !name.trim()) return;
+      addTag(name.trim());
+      // 重新渲染、保留目前勾選狀態（含新加的標籤，預設勾起來）
+      const checkedIds = new Set(
+        Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
+          .map(b => b.dataset.tagId)
+      );
+      const newTag = tags[tags.length - 1];
+      if (newTag) checkedIds.add(newTag.id);
+      renderPickerChips(checkedIds);
+    });
+    namePickerChipsEl.appendChild(addBtn);
+  }
+  function openNamePicker(initialIds, title, onConfirm) {
+    namePickerTitleEl.textContent = title || '選擇名字';
+    renderPickerChips(initialIds);
+    _pickerOnConfirm = onConfirm;
+    namePickerEl.classList.add('visible');
+    namePickerEl.setAttribute('aria-hidden', 'false');
+  }
+  function closeNamePicker() {
+    namePickerEl.classList.remove('visible');
+    namePickerEl.setAttribute('aria-hidden', 'true');
+    _pickerOnConfirm = null;
+  }
+  // 「全選」按一下 → 全勾；如果已經全勾，再按一下 → 全部取消
+  $('namePickerSelectAll').addEventListener('click', () => {
+    const chips = Array.from(namePickerChipsEl.querySelectorAll('.picker-name'));
+    if (chips.length === 0) return;
+    const allChecked = chips.every(b => b.classList.contains('checked'));
+    chips.forEach(b => b.classList.toggle('checked', !allChecked));
+  });
+  $('namePickerConfirm').addEventListener('click', () => {
+    const ids = Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
+      .map(b => b.dataset.tagId);
+    const cb = _pickerOnConfirm;
+    closeNamePicker();
+    if (cb) cb(ids);
+  });
+  $('namePickerBackdrop').addEventListener('click', closeNamePicker);
+  // Esc 也可關閉
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && namePickerEl.classList.contains('visible')) closeNamePicker();
+  });
 
   // ---- preferences ----
   // 主辨識引擎：Groq + Llama Vision（OpenAI 相容 API、免費配額大）
@@ -1882,6 +2390,20 @@
   const keyDisplayEl = $('keyDisplay');
   const savedGroqKey = localStorage.getItem('groq_api_key');
   if (savedGroqKey) groqKeyEl.value = savedGroqKey;
+
+  // === 把金鑰輸入框 + 顯示元素搬到頂部 chipsArea 置中 ===
+  // 並另外加上「該張發票日期星期時間」大標題（取代金鑰顯示）
+  chipsAreaEl.innerHTML = '';
+  chipsAreaEl.appendChild(groqKeyEl);
+  chipsAreaEl.appendChild(keyDisplayEl);
+  const topDateTitleEl = document.createElement('div');
+  topDateTitleEl.id = 'topDateTitle';
+  topDateTitleEl.className = 'top-date-title';
+  chipsAreaEl.appendChild(topDateTitleEl);
+  chipsAreaEl.classList.add('chips-area-as-key');
+  // 隱藏原本放在頁面內的設定卡片（內容已被搬走）
+  const _setupCard = document.getElementById('setupCard');
+  if (_setupCard) _setupCard.style.display = 'none';
 
   // input 事件即時存、即時更新「點此加入照片」入口
   groqKeyEl.addEventListener('input', () => {
@@ -1935,24 +2457,50 @@
 
   function updateKeyDisplay() {
     const k = groqKeyEl.value.trim();
+    // 「已輸入金鑰」與金鑰字串永遠隱藏
+    keyDisplayEl.innerHTML = '';
+    keyDisplayEl.style.display = 'none';
     if (k) {
-      // 兩行：上方「已輸入金鑰」標題、下方金鑰本體（縮成一行可顯示完的大小）
-      keyDisplayEl.innerHTML = '';
-      const label = document.createElement('div');
-      label.className = 'key-display-label';
-      label.textContent = '已輸入金鑰';
-      const code = document.createElement('div');
-      code.className = 'key-display-code';
-      code.textContent = k;
-      keyDisplayEl.appendChild(label);
-      keyDisplayEl.appendChild(code);
-      keyDisplayEl.style.display = '';
+      // 有金鑰：把輸入框收起來，頂部改顯示日期標題
       groqKeyEl.style.display = 'none';
-      fitKeyCodeToOneLine(code);
+      updateTopDateTitle();
     } else {
-      keyDisplayEl.style.display = 'none';
+      // 沒金鑰：顯示輸入框讓使用者輸入；日期標題隱藏
       groqKeyEl.style.display = '';
+      topDateTitleEl.classList.remove('visible');
     }
+  }
+  // 頂部顯示目前單筆框的日期/星期/時間
+  function updateTopDateTitle() {
+    if (!topDateTitleEl) return;
+    const hasKey = !!groqKeyEl.value.trim();
+    if (!hasKey) { topDateTitleEl.classList.remove('visible'); return; }
+    const idx = (typeof getCurrentEntryIdx === 'function') ? getCurrentEntryIdx() : 0;
+    const cur = entries[idx];
+    const parsed = cur && cur.state && cur.state.parsed;
+    if (!parsed || !parsed.date) {
+      topDateTitleEl.textContent = '';
+      topDateTitleEl.classList.add('visible');     // 即使空字串也保留位置，避免高度跳動
+      return;
+    }
+    // 日期格式：YYYY-MM-DD，後面接 (同日第幾張 / 同日總共幾張)
+    const m = String(parsed.date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    let datePart = parsed.date;
+    if (m) {
+      const y = m[1];
+      const mo = String(parseInt(m[2], 10)).padStart(2, '0');
+      const d = String(parseInt(m[3], 10)).padStart(2, '0');
+      datePart = y + '-' + mo + '-' + d;
+    }
+    const sameDateList = entries.filter(e => {
+      const p = e.state && e.state.parsed;
+      return p && p.date === parsed.date;
+    });
+    const pos = sameDateList.indexOf(cur) + 1;
+    const total = sameDateList.length;
+    const suffix = (pos > 0 && total > 0) ? ' (' + pos + '/' + total + ')' : '';
+    topDateTitleEl.textContent = datePart + suffix;
+    topDateTitleEl.classList.add('visible');
   }
   // 動態縮小字級讓整串金鑰剛好一行顯示完
   let _keyFitResize = null;
@@ -2445,12 +2993,31 @@
     }
   }
 
+  // 取「套用當日匯率」：原 open.er-api.com 提供國際即期匯率（與台灣銀行公告價接近）
+  // 註：臺灣銀行 https://rate.bot.com.tw/xrt/flcsv/0/day 是 CSV、不支援瀏覽器 CORS，
+  // 因此這裡用相容的開放 API；若日後想直接抓台銀資料，需要透過自架代理伺服器。
   async function fetchTwdRate(currency) {
     const r = await fetch('https://open.er-api.com/v6/latest/' + encodeURIComponent(currency.toUpperCase()));
     if (!r.ok) throw new Error('匯率查詢失敗 ' + r.status);
     const j = await r.json();
     if (j.result !== 'success' || !j.rates || !j.rates.TWD) throw new Error('匯率回傳格式異常');
     return j.rates.TWD;
+  }
+
+  // ===== 使用者「最近一次選定的匯率」（依幣別記錄；做為新增單筆框時的預設） =====
+  const USER_DEFAULT_RATE_KEY = 'travel_ledger_default_rates_v1';
+  let userDefaultRates = {};
+  try { userDefaultRates = JSON.parse(localStorage.getItem(USER_DEFAULT_RATE_KEY) || '{}') || {}; }
+  catch (e) { userDefaultRates = {}; }
+  function getUserDefaultRate(currency) {
+    if (!currency) return null;
+    return userDefaultRates[currency.toUpperCase()] || null;
+  }
+  function setUserDefaultRate(currency, rate) {
+    if (!currency || rate == null) return;
+    userDefaultRates[currency.toUpperCase()] = rate;
+    try { localStorage.setItem(USER_DEFAULT_RATE_KEY, JSON.stringify(userDefaultRates)); }
+    catch (e) {}
   }
 
   // ---- formatting ----
@@ -2549,7 +3116,9 @@
       totalsEl: root.querySelector('.totals'),
       payerRowEl: root.querySelector('.payer-row'),
       payerSlotEl: root.querySelector('.payer-slot'),
-      reasoningEl: root.querySelector('.reasoning')
+      reasoningEl: root.querySelector('.reasoning'),
+      taxToggleEl: root.querySelector('.tax-mode-toggle'),
+      addItemBtn: root.querySelector('.add-item-btn')
     };
     const state = {
       file: null, base64: null, mime: null,
@@ -2560,7 +3129,8 @@
       abortController: null,
       createdAt: new Date(),
       recognizedAt: null,
-      dataUrl: null     // 完整 data URL（給 lightbox 用）
+      dataUrl: null,    // 完整 data URL（給 lightbox 用）
+      taxMode: null     // 'inc' / 'exc'，影響每條商品的透明度、TWD 換算、合計
     };
 
     function setStatus(msg, kind) {
@@ -2597,6 +3167,7 @@
         state.mime = 'image/jpeg';
         refs.previewEl.src = dataUrl;
         refs.thumbImg.src = dataUrl;
+        if (refs.metaPhotoSlot) refs.metaPhotoSlot.classList.remove('no-photo');
         refs.previewWrap.style.display = 'block';
         refs.dropEl.style.display = 'none';
         refs.root.classList.remove('empty');
@@ -2683,9 +3254,17 @@
 
         let rate = null;
         if (parsed.currency && parsed.currency !== 'TWD') {
-          setBusy(); showProgress(90);
-          try { rate = await fetchTwdRate(parsed.currency); }
-          catch(e) { console.warn('rate fail', e); }
+          // 第一筆（或尚未有 user 預設）→ 抓「當日收盤匯率」並存為預設；之後新增的單筆預設都用此值
+          const stored = getUserDefaultRate(parsed.currency);
+          if (stored != null) {
+            rate = stored;
+          } else {
+            setBusy(); showProgress(90);
+            try {
+              rate = await fetchTwdRate(parsed.currency);
+              if (rate) setUserDefaultRate(parsed.currency, rate);
+            } catch(e) { console.warn('rate fail', e); }
+          }
         } else if (parsed.currency === 'TWD') {
           rate = 1;
         }
@@ -2695,7 +3274,7 @@
         renderResult(parsed, rate);
         hideProgress();
         setStatus('');
-        refs.resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        refs.resultCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       } catch (err) {
         if (err && (err.name === 'AbortError' || /aborted/i.test(err.message || ''))) {
           // 使用者主動中止：deleteSelf 已經處理掉 UI，這裡安靜返回
@@ -2730,7 +3309,8 @@
       const merchantZh = parsed.merchant_zh || parsed.merchant || '';
       const merchantOrig = parsed.merchant || '';
       refs.merchantEl.textContent = merchantZh;
-      refs.merchantOriginalEl.textContent = (merchantOrig && merchantOrig !== merchantZh) ? merchantOrig : '';
+      // 不管原文跟繁中是否相同，都要顯示原文小標（例：LAWSON 底下顯示小的 LAWSON）
+      refs.merchantOriginalEl.textContent = merchantOrig || merchantZh || '';
       // 收縮時右側顯示的「簡短版日期 + 時間」（M/D HH:MM）
       if (refs.shortDateEl) refs.shortDateEl.textContent = fmtShortDate(parsed.date, parsed.time);
 
@@ -2747,24 +3327,42 @@
       else finalTotal = sumLine;
       const finalTwd = (rate != null && finalTotal != null) ? finalTotal * rate : null;
 
+      // metaRows 每筆是 [標籤, 內含 HTML 的值, dataRowKey]
       const metaRows = [];
-      if (parsed.date) metaRows.push(['日期', fmtDate(parsed.date, parsed.time)]);
-      if (rate && cur !== 'TWD') metaRows.push(['匯率', '1 ' + cur + ' ≈ ' + fmtMoney(rate, 4) + ' TWD']);
-      // 簡述：N 件，X CUR ≈ Y TWD
-      const itemCount = parsed.items.length;
-      let summary = itemCount + ' 件';
-      if (finalTotal != null) {
-        summary += '，' + fmtAmount(finalTotal, cur);
-        if (finalTwd != null && cur !== 'TWD') {
-          summary += ' ≈ ' + fmtAmount(finalTwd, 'TWD', 0);
-        }
+      // 日期列：有資料時顯示完整日期；手動空白單筆 → 顯示可編輯的空白欄位
+      if (parsed.date) {
+        metaRows.push(['日期', escapeHtml(fmtDate(parsed.date, parsed.time)), 'date']);
+      } else if (parsed._manualBlank) {
+        metaRows.push(['日期',
+          '<span class="amount-num date-num" contenteditable="true" spellcheck="false" data-placeholder="YYYY-MM-DD"></span>',
+          'date']);
       }
-      metaRows.push(['簡述', summary]);
+      // 匯率列：有 rate 時用既有版本；手動空白 → 顯示可編輯空白匯率
+      if (rate && cur !== 'TWD') {
+        metaRows.push(['匯率',
+          '1 <span class="cur-fixed">' + escapeHtml(cur) + '</span> <span class="approx">≈</span> ' +
+          '<span class="amount-num rate-num" contenteditable="true" spellcheck="false">' + escapeHtml(fmtMoney(rate, 4)) + '</span>' +
+          ' <span class="cur-fixed cur-twd">TWD</span>' +
+          '<button type="button" class="live-rate-btn" title="自動帶入當日收盤匯率">套用當日匯率</button>',
+          'rate'
+        ]);
+      } else if (parsed._manualBlank && cur !== 'TWD') {
+        metaRows.push(['匯率',
+          '1 <span class="cur-fixed">' + escapeHtml(cur || 'JPY') + '</span> <span class="approx">≈</span> ' +
+          '<span class="amount-num rate-num" contenteditable="true" spellcheck="false" data-placeholder="0.0000"></span>' +
+          ' <span class="cur-fixed cur-twd">TWD</span>' +
+          '<button type="button" class="live-rate-btn" title="自動帶入當日收盤匯率">套用當日匯率</button>',
+          'rate'
+        ]);
+      }
+      // 簡述：N 件，X CUR ≈ Y TWD（這格之後會用 renderSummary() 動態重算）
+      metaRows.push(['簡述', '', 'summary']);
 
       const metaTbody = refs.metaEl.querySelector('tbody') || refs.metaEl;
-      metaTbody.innerHTML = metaRows.map(([k, v]) =>
-        '<tr><th>' + escapeHtml(k) + '</th><td>' + escapeHtml(v) + '</td></tr>'
+      metaTbody.innerHTML = metaRows.map(([k, v, key]) =>
+        '<tr data-row="' + key + '"><th>' + escapeHtml(k) + '</th><td>' + v + '</td></tr>'
       ).join('');
+      renderSummary();   // 立即填入 簡述
 
       // 新發票 → 清空舊的指派
       state.assignments = {};
@@ -2795,7 +3393,18 @@
           withTax = line;
           if (taxRate != null && line != null) preTax = line / (1 + taxRate);
         }
-        const twd = (rate != null && withTax != null) ? withTax * rate : null;
+        // 依當前 taxMode 決定 TWD 換算基準（預設 inc 即原本行為）
+        const _mode0 = state.taxMode || (parsed.price_includes_tax === false ? 'exc' : 'inc');
+        const _twdBase0 = (_mode0 === 'exc') ? preTax : withTax;
+        let twd = (rate != null && _twdBase0 != null) ? _twdBase0 * rate : null;
+        // 若曾被使用者手動編輯過，優先採用編輯後的值
+        if (it._editedPreTax != null) preTax = it._editedPreTax;
+        if (it._editedWithTax != null) withTax = it._editedWithTax;
+        if (it._editedTwd != null) twd = it._editedTwd;
+        // 儲存目前 preTax/withTax 到 item 以便 toggle 切換時讀取
+        it._editedPreTax = preTax;
+        it._editedWithTax = withTax;
+        it._editedTwd = twd;
         const qtySuffix = (qty > 1) ? ' ×' + qty : '';
         const div = document.createElement('div');
         div.className = 'item';
@@ -2806,51 +3415,45 @@
             (it.original_name && it.original_name !== it.zh_name
               ? '<div class="orig" contenteditable="true" spellcheck="false">' + escapeHtml(it.original_name) + '</div>' : '') +
             '<div class="prices">' +
-              '<div class="price-cell"><div class="price-label">未稅</div>' +
-                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(preTax, cur)) + '</div></div>' +
+              '<div class="price-cell" data-cell="preTax"><div class="price-label">未稅</div>' +
+                '<div class="price-val">' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="preTax">' + escapeHtml(fmtMoney(preTax)) + '</span>' +
+                  ' <span class="amount-cur">' + escapeHtml(cur) + '</span>' +
+                '</div></div>' +
               '<div class="price-sep">/</div>' +
-              '<div class="price-cell"><div class="price-label">含稅</div>' +
-                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(withTax, cur)) + '</div></div>' +
+              '<div class="price-cell" data-cell="withTax"><div class="price-label">含稅</div>' +
+                '<div class="price-val">' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="withTax">' + escapeHtml(fmtMoney(withTax)) + '</span>' +
+                  ' <span class="amount-cur">' + escapeHtml(cur) + '</span>' +
+                '</div></div>' +
               '<div class="price-sep">/</div>' +
-              '<div class="price-cell twd-cell"><div class="price-label">≈ 新台幣</div>' +
-                '<div class="price-val" contenteditable="true" spellcheck="false">' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</div></div>' +
+              '<div class="price-cell twd-cell" data-cell="twd"><div class="price-label"><span class="approx">≈</span> 新台幣</div>' +
+                '<div class="price-val">' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="twd">' + escapeHtml(fmtMoney(twd, 0)) + '</span>' +
+                  ' <span class="amount-cur">TWD</span>' +
+                '</div></div>' +
             '</div>' +
           '</div>' +
           '<div class="item-buyer">' +
             '<div class="payer-label">實際購買人</div>' +
+            '<button class="add-name-btn" type="button" aria-label="新增實際購買人">+</button>' +
             '<div class="item-tags"></div>' +
           '</div>';
         refs.itemsEl.appendChild(div);
       });
 
-      const rows = [];
-      if (isExc) {
-        rows.push({ label: '品項小計（未稅）', orig: sumLine });
-        rows.push({ label: parsed.tax_label || '稅金', orig: (totalTax != null ? totalTax : (grandT != null ? grandT - sumLine : null)) });
-        const total = grandT != null ? grandT : (totalTax != null ? sumLine + totalTax : null);
-        rows.push({ label: '合計（含稅）', orig: total, grand: true });
-      } else if (isInc) {
-        const total = grandT != null ? grandT : sumLine;
-        rows.push({ label: '合計（已含稅）', orig: total, grand: true });
-        if (totalTax != null) rows.unshift({ label: '其中內含稅 ' + (parsed.tax_label || ''), orig: totalTax });
-      } else {
-        rows.push({ label: '品項小計', orig: sumLine });
-        if (grandT != null && Math.abs(grandT - sumLine) > 0.5) {
-          rows.push({ label: '差額', orig: grandT - sumLine });
-          rows.push({ label: '合計', orig: grandT, grand: true });
-        } else { rows[0].grand = true; rows[0].label = '合計'; }
+      // 推算這張發票的「未稅總計 / 含稅總計」（用 item 的 _editedPreTax / _editedWithTax）
+      const _sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
+      const _sumWith = parsed.items.reduce((s, it) => s + (it._editedWithTax || 0), 0);
+      // 預設 taxMode：state.taxMode > isInc/isExc > 預設 inc
+      if (!state.taxMode) {
+        if (isInc) state.taxMode = 'inc';
+        else if (isExc) state.taxMode = 'exc';
+        else state.taxMode = 'inc';
       }
-      if (parsed.items.length === 0) refs.totalsEl.innerHTML = '';
-      else refs.totalsEl.innerHTML = rows.map(r => {
-        const twd = (rate != null && r.orig != null) ? r.orig * rate : null;
-        return '<div class="total-row' + (r.grand ? ' grand' : '') + '">' +
-          '<span class="label">' + escapeHtml(r.label) + '</span>' +
-          '<span class="values">' +
-            '<span class="v-orig">' + escapeHtml(fmtAmount(r.orig, cur)) + '</span>' +
-            (twd != null ? '<span class="v-twd">≈ ' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</span>' : '') +
-          '</span>' +
-        '</div>';
-      }).join('');
+      renderTotals();
+      // 把目前 taxMode 套到 toggle / items
+      applyTaxMode(state.taxMode, false);
 
       if (parsed.tax_reasoning) {
         refs.reasoningEl.style.display = 'block';
@@ -2870,6 +3473,11 @@
       // thumb-img 已經在 handleFile 時 setSrc，此時自動顯示在 meta-row 內
       rebuildEntriesMenu();   // 更新抽屜內的清單標題
       updateAddBtnVisibility();
+      updateTopDateTitle();
+      // 辨識完成 → 依發票日期+時間重新排序所有單筆框，並把剛辨識完的這一筆 scroll 進視野
+      if (typeof sortEntriesByDateTime === 'function') {
+        sortEntriesByDateTime(api);
+      }
       scheduleSave();
     }
 
@@ -2943,28 +3551,377 @@
       if (selectedTagId) refs.payerRowEl.classList.add('assignable');
       else refs.payerRowEl.classList.remove('assignable');
     }
+    // 取代既有指派陣列、render、scheduleSave
+    function setAssignment(key, ids) {
+      if (!ids || ids.length === 0) delete state.assignments[key];
+      else state.assignments[key] = Array.from(ids);
+      if (key === 'payer') renderPayerTags();
+      else renderItemTags(parseInt(key, 10));
+      scheduleSave();
+    }
     function attachItemHandlers() {
+      // 商品旁「實際購買人」框 → 開啟燈箱多選 + 每個 .amount-num 失焦連動其他兩格
       refs.itemsEl.querySelectorAll('.item[data-item-idx]').forEach(el => {
         if (el._tagHandlerAttached) return;
         el._tagHandlerAttached = true;
-        el.addEventListener('click', e => {
-          if (e.target.closest && e.target.closest('[contenteditable="true"]')) return;
-          if (!selectedTagId) return;
-          const idx = parseInt(el.dataset.itemIdx, 10);
-          if (!isNaN(idx)) assignTag(selectedTagId, idx);
+        const buyerEl = el.querySelector('.item-buyer');
+        if (buyerEl) {
+          buyerEl.addEventListener('click', e => {
+            if (e.target.closest('.item-tag .x')) return;
+            const idx = parseInt(el.dataset.itemIdx, 10);
+            if (isNaN(idx)) return;
+            const current = state.assignments[idx] || [];
+            openNamePicker(current, '選擇實際購買人', (newIds) => setAssignment(idx, newIds));
+          });
+        }
+        // 商品內 3 個價格欄連動
+        el.querySelectorAll('.amount-num[data-kind]').forEach(num => {
+          num.addEventListener('blur', () => cascadeItemEdit(el, num));
+          num.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); num.blur(); }
+          });
         });
       });
+      // 「付款人」框 → 開啟燈箱多選
       if (!refs.payerRowEl._tagHandlerAttached) {
         refs.payerRowEl._tagHandlerAttached = true;
         refs.payerRowEl.addEventListener('click', e => {
-          if (e.target.closest('.item-tag')) return;
-          if (!selectedTagId) return;
-          assignTag(selectedTagId, 'payer');
+          if (e.target.closest('.item-tag .x')) return;
+          const current = state.assignments['payer'] || [];
+          openNamePicker(current, '選擇付款人', (newIds) => setAssignment('payer', newIds));
         });
       }
     }
 
-    function setNumber(n) { refs.numEl.textContent = n; }
+    // 解析用戶輸入：'1,234.5' → 1234.5；異常回傳 null
+    function parseEditedAmount(text) {
+      if (!text) return null;
+      const cleaned = String(text).replace(/[,\s]/g, '');
+      const n = parseFloat(cleaned);
+      return isFinite(n) ? n : null;
+    }
+    // 從多個來源推算這張發票的稅率：tax_label → 商品 preTax/withTax → tax_amount/總計
+    function resolveTaxRate(item) {
+      const parsed = state.parsed;
+      if (!parsed) return 0;
+      // 1) 「消費稅 10%」這類 label
+      const fromLabel = extractTaxRate(parsed.tax_label);
+      if (fromLabel != null && fromLabel > 0) return fromLabel;
+      // 2) 本商品的 preTax/withTax 若兩個都有，直接反推
+      if (item && item._editedPreTax > 0 && item._editedWithTax > 0) {
+        const r = (item._editedWithTax - item._editedPreTax) / item._editedPreTax;
+        if (r > 0.001 && r < 0.5) return r;
+      }
+      // 3) 從整張發票的 tax_amount / 未稅小計推
+      if (typeof parsed.tax_amount === 'number' && parsed.tax_amount > 0 && parsed.items) {
+        const sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
+        if (sumPre > 0) {
+          const r = parsed.tax_amount / sumPre;
+          if (r > 0.001 && r < 0.5) return r;
+        }
+      }
+      // 4) 從 grand_total - 未稅小計 反推
+      if (typeof parsed.grand_total === 'number' && parsed.items) {
+        const sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
+        if (sumPre > 0 && parsed.grand_total > sumPre) {
+          const r = (parsed.grand_total - sumPre) / sumPre;
+          if (r > 0.001 && r < 0.5) return r;
+        }
+      }
+      // 5) 找不到 → 0
+      return 0;
+    }
+    // 編輯了某商品某格 → 重算另外兩格並更新顯示
+    function cascadeItemEdit(itemEl, editedNum) {
+      const kind = editedNum.dataset.kind;
+      const newVal = parseEditedAmount(editedNum.textContent);
+      const idx = parseInt(itemEl.dataset.itemIdx, 10);
+      const item = state.parsed && state.parsed.items ? state.parsed.items[idx] : null;
+      if (!item) return;
+      const taxRate = resolveTaxRate(item);
+      const rate = state.rate;
+      // 解析失敗 → 還原顯示
+      if (newVal == null) {
+        const preTaxNow = item._editedPreTax != null ? item._editedPreTax : (item._preTax || 0);
+        const withTaxNow = item._editedWithTax != null ? item._editedWithTax : (item._withTax || item.line_total || 0);
+        const twdNow = item._editedTwd != null ? item._editedTwd : (item._twd || (rate ? withTaxNow * rate : null));
+        renderItemAmounts(itemEl, preTaxNow, withTaxNow, twdNow);
+        return;
+      }
+      const mode = state.taxMode || 'inc';
+      let preTax, withTax, twd;
+      if (kind === 'preTax') {
+        preTax = newVal;
+        withTax = newVal * (1 + taxRate);
+      } else if (kind === 'withTax') {
+        withTax = newVal;
+        preTax = newVal / (1 + taxRate);
+      } else if (kind === 'twd') {
+        twd = newVal;
+        // 反推：依目前模式決定 TWD 由 preTax 或 withTax 換算
+        if (mode === 'exc') {
+          preTax = rate ? newVal / rate : null;
+          withTax = (preTax != null) ? preTax * (1 + taxRate) : null;
+        } else {
+          withTax = rate ? newVal / rate : null;
+          preTax = (withTax != null) ? withTax / (1 + taxRate) : null;
+        }
+      }
+      // 若不是直接編 twd，依目前模式換算
+      if (kind !== 'twd') {
+        const base = mode === 'exc' ? preTax : withTax;
+        twd = (rate && base != null) ? base * rate : null;
+      }
+      item._editedPreTax = preTax;
+      item._editedWithTax = withTax;
+      item._editedTwd = twd;
+      item.line_total = withTax;     // 統一以「含稅」為 line_total
+      renderItemAmounts(itemEl, preTax, withTax, twd);
+      renderTotals();                 // 同步合計
+      scheduleSave();
+    }
+    function renderItemAmounts(itemEl, preTax, withTax, twd) {
+      const p = itemEl.querySelector('.amount-num[data-kind="preTax"]');
+      const w = itemEl.querySelector('.amount-num[data-kind="withTax"]');
+      const t = itemEl.querySelector('.amount-num[data-kind="twd"]');
+      if (p) p.textContent = fmtMoney(preTax);
+      if (w) w.textContent = fmtMoney(withTax);
+      if (t) t.textContent = fmtMoney(twd, 0);
+    }
+    // 重算「簡述」格（N 件 + 含/未稅總計 + TWD 換算）
+    function renderSummary() {
+      const parsed = state.parsed;
+      if (!parsed || !parsed.items) return;
+      const td = refs.metaEl.querySelector('tr[data-row="summary"] td');
+      if (!td) return;
+      const cur = parsed.currency || 'JPY';
+      const rate = state.rate;
+      const mode = state.taxMode || 'inc';
+      const sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
+      const sumWith = parsed.items.reduce((s, it) => s + (it._editedWithTax || 0), 0);
+      const finalTotal = mode === 'exc' ? sumPre : sumWith;
+      const finalTwd = (rate && finalTotal != null) ? finalTotal * rate : null;
+      let html = escapeHtml(parsed.items.length + ' 件');
+      if (finalTotal != null) {
+        html += escapeHtml('，' + fmtAmount(finalTotal, cur));
+        if (finalTwd != null && cur !== 'TWD') {
+          // 「≈ xxx TWD」整段深紅
+          html += ' <span class="approx">≈ ' + escapeHtml(fmtAmount(finalTwd, 'TWD', 0)) + '</span>';
+        }
+      }
+      td.innerHTML = html;
+    }
+    // 重算「合計」區塊（依目前 taxMode）
+    function renderTotals() {
+      const parsed = state.parsed;
+      if (!parsed || !parsed.items) { refs.totalsEl.innerHTML = ''; return; }
+      const cur = parsed.currency || 'JPY';
+      const rate = state.rate;
+      const mode = state.taxMode || 'inc';
+      const sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
+      const sumWith = parsed.items.reduce((s, it) => s + (it._editedWithTax || 0), 0);
+      const tax = sumWith - sumPre;
+      const rows = [];
+      if (mode === 'exc') {
+        rows.push({ label: '合計（未含稅）', orig: sumPre, twdBase: sumPre, grand: true });
+        if (Math.abs(tax) > 0.5) rows.push({ label: parsed.tax_label || '稅金', orig: tax, twdBase: tax });
+      } else {
+        rows.push({ label: '合計（已含稅）', orig: sumWith, twdBase: sumWith, grand: true });
+        if (Math.abs(tax) > 0.5) rows.push({ label: '其中內含稅 ' + (parsed.tax_label || ''), orig: tax, twdBase: tax });
+      }
+      if (parsed.items.length === 0) { refs.totalsEl.innerHTML = ''; return; }
+      refs.totalsEl.innerHTML = rows.map(r => {
+        const twd = (rate != null && r.twdBase != null) ? r.twdBase * rate : null;
+        return '<div class="total-row' + (r.grand ? ' grand' : '') + '">' +
+          '<span class="label">' + escapeHtml(r.label) + '</span>' +
+          '<span class="values">' +
+            '<span class="v-orig">' + escapeHtml(fmtAmount(r.orig, cur)) + '</span>' +
+            (twd != null ? '<span class="v-twd"><span class="approx">≈</span> ' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</span>' : '') +
+          '</span>' +
+        '</div>';
+      }).join('');
+      renderSummary();   // 合計動了，簡述（總計）也跟著動
+    }
+    // 套用含稅/未稅模式
+    function applyTaxMode(mode, save) {
+      if (mode !== 'inc' && mode !== 'exc') mode = 'inc';
+      state.taxMode = mode;
+      // toggle 按鈕 active 樣式
+      if (refs.taxToggleEl) {
+        refs.taxToggleEl.querySelectorAll('.tax-mode-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.mode === mode);
+        });
+      }
+      // 套到每條商品 → 透明度 + 換算 TWD
+      const rate = state.rate;
+      refs.itemsEl.querySelectorAll('.item[data-item-idx]').forEach(el => {
+        el.classList.remove('tax-mode-inc', 'tax-mode-exc');
+        el.classList.add('tax-mode-' + mode);
+        const idx = parseInt(el.dataset.itemIdx, 10);
+        const item = state.parsed && state.parsed.items ? state.parsed.items[idx] : null;
+        if (!item) return;
+        const base = mode === 'exc' ? item._editedPreTax : item._editedWithTax;
+        const newTwd = (rate != null && base != null) ? base * rate : null;
+        item._editedTwd = newTwd;
+        const t = el.querySelector('.amount-num[data-kind="twd"]');
+        if (t) t.textContent = fmtMoney(newTwd, 0);
+      });
+      // 重新渲染合計
+      renderTotals();
+      if (save !== false) scheduleSave();
+    }
+    // 一次性掛上 toggle 點擊（在 createEntry 初始化時做）
+    if (refs.taxToggleEl) {
+      refs.taxToggleEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.tax-mode-btn');
+        if (!btn) return;
+        applyTaxMode(btn.dataset.mode, true);
+      });
+    }
+    // 監聽匯率列（用 delegation，因為 metaTbody.innerHTML 每次 render 都重建）
+    refs.metaEl.addEventListener('focusout', (e) => {
+      const tgt = e.target;
+      if (tgt && tgt.classList && tgt.classList.contains('rate-num')) {
+        const newRate = parseEditedAmount(tgt.textContent);
+        if (newRate == null || newRate <= 0) {
+          // 還原；若原本沒匯率（手動空白），維持空字串
+          tgt.textContent = state.rate ? fmtMoney(state.rate, 4) : '';
+          return;
+        }
+        if (state.rate != null && Math.abs(newRate - state.rate) < 1e-9) return;
+        state.rate = newRate;
+        // 手動編輯後，把此匯率設為「往後新增單筆」的預設值
+        const _cur = state.parsed && state.parsed.currency;
+        if (_cur && _cur !== 'TWD') setUserDefaultRate(_cur, newRate);
+        const mode = state.taxMode || 'inc';
+        (state.parsed && state.parsed.items || []).forEach((item, idx) => {
+          // 依目前模式選用 base
+          const base = mode === 'exc' ? item._editedPreTax : item._editedWithTax;
+          const newTwd = (newRate != null && base != null) ? newRate * base : null;
+          item._editedTwd = newTwd;
+          const itemEl = refs.itemsEl.querySelector('.item[data-item-idx="' + idx + '"]');
+          if (itemEl) {
+            const t = itemEl.querySelector('.amount-num[data-kind="twd"]');
+            if (t) t.textContent = fmtMoney(newTwd, 0);
+          }
+        });
+        renderTotals();          // 匯率變了，合計也要重算
+        scheduleSave();
+      }
+    });
+    refs.metaEl.addEventListener('keydown', (e) => {
+      const tgt = e.target;
+      if (!tgt || !tgt.classList) return;
+      if ((tgt.classList.contains('rate-num') || tgt.classList.contains('date-num')) && e.key === 'Enter') {
+        e.preventDefault();
+        tgt.blur();
+      }
+    });
+    // 「日期」格手動編輯（支援 YYYY-MM-DD / YYYY/MM/DD / 2026年5月21日 等格式）
+    refs.metaEl.addEventListener('focusout', (e) => {
+      const tgt = e.target;
+      if (!tgt || !tgt.classList || !tgt.classList.contains('date-num')) return;
+      const txt = (tgt.textContent || '').trim();
+      if (!txt) {
+        if (state.parsed) state.parsed.date = null;
+        scheduleSave();
+        return;
+      }
+      const m = txt.match(/(\d{4})[\/\-年.](\d{1,2})[\/\-月.](\d{1,2})/);
+      if (!m) {
+        // 解析失敗 → 還原
+        tgt.textContent = state.parsed && state.parsed.date ? fmtDate(state.parsed.date, state.parsed.time) : '';
+        return;
+      }
+      const y = m[1];
+      const mo = String(parseInt(m[2], 10)).padStart(2, '0');
+      const d = String(parseInt(m[3], 10)).padStart(2, '0');
+      state.parsed.date = y + '-' + mo + '-' + d;
+      tgt.textContent = fmtDate(state.parsed.date, state.parsed.time);
+      // 排序＋頂部日期標題＋抽屜清單跟著更新
+      if (typeof sortEntriesByDateTime === 'function') sortEntriesByDateTime(api);
+      if (typeof updateTopDateTitle === 'function') updateTopDateTitle();
+      scheduleSave();
+    });
+    // 「套用當日匯率」按鈕：fetch live rate, 套用到目前單筆 + 更新預設
+    refs.metaEl.addEventListener('click', async (e) => {
+      const btn = e.target.closest && e.target.closest('.live-rate-btn');
+      if (!btn) return;
+      const cur = state.parsed && state.parsed.currency;
+      if (!cur || cur === 'TWD') return;
+      btn.disabled = true;
+      const origLabel = btn.textContent;
+      btn.textContent = '查詢中…';
+      try {
+        const fetched = await fetchTwdRate(cur);
+        if (!fetched) throw new Error('未取得匯率');
+        state.rate = fetched;
+        setUserDefaultRate(cur, fetched);
+        // 更新匯率顯示
+        const rn = refs.metaEl.querySelector('.rate-num');
+        if (rn) rn.textContent = fmtMoney(fetched, 4);
+        // 重新計算所有 TWD 與合計
+        applyTaxMode(state.taxMode || 'inc', true);
+        showToast('已套用當日匯率');
+      } catch (err) {
+        console.warn(err);
+        showToast('查詢匯率失敗');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = origLabel;
+      }
+    });
+
+    function setNumber(n) { refs.numEl.textContent = '#' + n; }
+
+    // 新增一條空白商品品項到目前單筆
+    function addBlankItem() {
+      if (!state.parsed) {
+        // 初始化空白 parsed
+        state.parsed = {
+          merchant: '', merchant_zh: '',
+          currency: 'TWD', date: null, time: null,
+          price_includes_tax: true, tax_label: null, tax_amount: null,
+          grand_total: 0, items: [], tax_reasoning: ''
+        };
+        state.rate = state.rate || 1;
+      }
+      state.parsed.items.push({
+        line_total: 0, quantity: 1,
+        original_name: '', zh_name: '商品',
+        _editedPreTax: 0, _editedWithTax: 0, _editedTwd: 0
+      });
+      renderResult(state.parsed, state.rate);
+    }
+    // 「初始化成空白單筆框」— 給「鉛筆／手動輸入」流程用
+    // 排版/格式跟普通辨識完的單筆框一樣，但所有資料欄位都空白讓使用者手動填寫
+    function initBlankManualEntry() {
+      state.parsed = {
+        merchant: '', merchant_zh: '',
+        currency: 'JPY',              // 預設 JPY；讓「匯率」列出現
+        date: null, time: null,       // 日期/時間空白，由使用者編填
+        price_includes_tax: true, tax_label: '消費稅 10%', tax_amount: 0,
+        grand_total: 0,
+        items: [{
+          line_total: 0, quantity: 1,
+          original_name: '', zh_name: '商品',
+          _editedPreTax: 0, _editedWithTax: 0, _editedTwd: 0
+        }],
+        tax_reasoning: '',
+        _manualBlank: true            // 標記：強制顯示日期/匯率列（即使值為空）
+      };
+      state.rate = null;              // 匯率空白，由使用者編填
+      state.locked = true;
+      state.recognizedAt = new Date();
+      refs.root.classList.remove('empty');
+      refs.previewWrap.style.display = 'none';
+      if (refs.metaPhotoSlot) refs.metaPhotoSlot.classList.add('no-photo');
+      renderResult(state.parsed, state.rate);
+    }
+    // refs.addItemBtn 點下 → 新增一條商品
+    if (refs.addItemBtn) {
+      refs.addItemBtn.addEventListener('click', addBlankItem);
+    }
 
     function deleteSelf() {
       // 處理中 → 先中止辨識
@@ -3034,7 +3991,9 @@
       assignTag, unassignTag, removeTagFromAllAssignments,
       refreshAllItemTags, refreshAssignableState,
       setNumber, delete: deleteSelf,
-      promptForFile: () => refs.fileEl.click()
+      promptForFile: () => refs.fileEl.click(),
+      initBlankManual: initBlankManualEntry,
+      addBlankItem: addBlankItem
     };
     // 套上 iOS 連續曲率轉角（SVG squircle 背景）
     attachSquircleBg(refs.root, 22);
@@ -3043,6 +4002,38 @@
 
   function renumberEntries() {
     entries.forEach((e, i) => e.setNumber(i + 1));
+  }
+
+  // 把 'YYYY-MM-DD' + 'HH:MM' 轉成可比較的 ms timestamp（缺則回傳大數使其排到最後）
+  function entryDateTimeMs(api) {
+    const p = api && api.state && api.state.parsed;
+    if (!p || !p.date) return Number.MAX_SAFE_INTEGER;   // 還沒辨識完成 → 排到最後
+    const m = String(p.date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (!m) return Number.MAX_SAFE_INTEGER;
+    let hh = 0, mi = 0;
+    if (p.time) {
+      const tm = String(p.time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
+      if (tm) { hh = parseInt(tm[1], 10) || 0; mi = parseInt(tm[2], 10) || 0; }
+    }
+    return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), hh, mi).getTime();
+  }
+  // 依發票「日期 + 時間」由舊到新排序所有單筆框
+  function sortEntriesByDateTime(focusOn) {
+    if (entries.length <= 1) return;
+    entries.sort((a, b) => entryDateTimeMs(a) - entryDateTimeMs(b));
+    // 依新順序重排 DOM
+    entries.forEach(e => entriesContainer.appendChild(e.element));
+    renumberEntries();
+    rebuildEntriesMenu();
+    // 把指定的 entry（通常是剛辨識完的那筆）保留在視野
+    if (focusOn && focusOn.element) {
+      setTimeout(() => {
+        focusOn.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+        syncCarouselHeight();
+        updateTopDateTitle();
+      }, 80);
+    }
+    scheduleSave();
   }
 
   // 最後一張單筆完全空白（還沒選照片）時，隱藏底部「點此加入發票照片」按鈕
@@ -3060,15 +4051,17 @@
     const e = createEntry();
     entries.push(e);
     entriesContainer.appendChild(e.element);
+    observeEntryForHeight(e);
     renumberEntries();
     if (autoOpenPicker) {
       setTimeout(() => {
         e.promptForFile();
-        e.element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        e.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       }, 50);
     }
     rebuildEntriesMenu();
     updateKeyDependentUI();
+    syncCarouselHeight();
     return e;
   }
 
@@ -3078,23 +4071,26 @@
     deletedEntries.splice(idx, 1);
     entries.push(api);
     entriesContainer.appendChild(api.element);
+    observeEntryForHeight(api);
     renumberEntries();
     rebuildEntriesMenu();
     updateAddBtnVisibility();
     scheduleSave();
-    setTimeout(() => api.element.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    syncCarouselHeight();
+    setTimeout(() => api.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }), 50);
   }
 
-  // ===== 上/下單筆框導航 =====
+  // ===== 上/下單筆框導航（橫向 carousel 版本） =====
   function getCurrentEntryIdx() {
     if (entries.length <= 1) return 0;
-    const tagBarHeight = tagBarEl.offsetHeight || 48;
-    const anchor = tagBarHeight + 20;     // viewport 內 sticky bar 下方一點點當基準
+    // 找出 carousel 中央最接近的那張
+    const containerRect = entriesContainer.getBoundingClientRect();
+    const anchor = containerRect.left + containerRect.width / 2;
     let best = 0, bestDist = Infinity;
     entries.forEach((e, i) => {
       const rect = e.element.getBoundingClientRect();
-      // 跟 anchor 最接近的那張視為「目前這張」
-      const dist = Math.abs(rect.top - anchor);
+      const center = rect.left + rect.width / 2;
+      const dist = Math.abs(center - anchor);
       if (dist < bestDist) { bestDist = dist; best = i; }
     });
     return best;
@@ -3102,10 +4098,66 @@
   function scrollToEntry(i) {
     if (i < 0) i = 0;
     if (i >= entries.length) i = entries.length - 1;
-    if (entries[i]) entries[i].element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // inline: center → carousel 對中；block: start → 視窗向上捲到該筆頂部（受 scroll-margin-top 影響）
+    if (entries[i]) entries[i].element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+  }
+  // 滑動切換後將頁面捲到目前單筆框的頂部（讓 sticky 標籤列下方即是該筆頂端）
+  function scrollPageToEntryTop() {
+    if (entries.length === 0) return;
+    const rect = entriesContainer.getBoundingClientRect();
+    const stickyH = (tagBarEl && tagBarEl.offsetHeight) || 64;
+    const desired = stickyH + 6;       // 目標：容器頂端離視窗頂 = sticky bar 高度 + 6px
+    const delta = rect.top - desired;
+    if (Math.abs(delta) > 2) {
+      window.scrollBy({ top: delta, behavior: 'smooth' });
+    }
   }
   navUpBtn.addEventListener('click', () => scrollToEntry(getCurrentEntryIdx() - 1));
   navDownBtn.addEventListener('click', () => scrollToEntry(getCurrentEntryIdx() + 1));
+
+  // ===== Carousel 高度動態同步：容器高度跟著目前 entry 的內容高度（不要有空白） =====
+  let _heightSyncRaf = null;
+  function syncCarouselHeight() {
+    if (_heightSyncRaf) cancelAnimationFrame(_heightSyncRaf);
+    _heightSyncRaf = requestAnimationFrame(() => {
+      _heightSyncRaf = null;
+      if (entries.length === 0) {
+        entriesContainer.style.height = '';
+        return;
+      }
+      const idx = getCurrentEntryIdx();
+      const cur = entries[idx];
+      if (!cur || !cur.element) return;
+      const h = cur.element.scrollHeight;
+      if (h > 0) entriesContainer.style.height = h + 'px';
+    });
+  }
+  let _scrollDebounceTimer = null;
+  let _lastSnapIdx = -1;
+  entriesContainer.addEventListener('scroll', () => {
+    if (_scrollDebounceTimer) clearTimeout(_scrollDebounceTimer);
+    syncCarouselHeight();
+    updateTopDateTitle();
+    _scrollDebounceTimer = setTimeout(() => {
+      syncCarouselHeight();
+      updateTopDateTitle();
+      // 偵測到 index 換了 → 把頁面捲到該筆頂部
+      const idx = getCurrentEntryIdx();
+      if (idx !== _lastSnapIdx) {
+        _lastSnapIdx = idx;
+        scrollPageToEntryTop();
+      }
+    }, 120);
+  }, { passive: true });
+  // 每個 entry 內容改動（cascade、折疊、新增/刪除 item）時也要重算
+  const _entryResizeObs = (typeof ResizeObserver !== 'undefined')
+    ? new ResizeObserver(() => syncCarouselHeight())
+    : null;
+  function observeEntryForHeight(api) {
+    if (_entryResizeObs && api && api.element) _entryResizeObs.observe(api.element);
+  }
+  // 視窗 resize 時也重新同步
+  window.addEventListener('resize', () => syncCarouselHeight());
 
   // ===== 全螢幕照片 lightbox =====
   function openLightbox(src) {
@@ -3188,7 +4240,7 @@
                        '<span class="li-title">' + escapeHtml(fmtMenuTitle(e)) + '</span>';
         li.addEventListener('click', () => {
           closeMenu();
-          setTimeout(() => e.element.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+          setTimeout(() => e.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }), 50);
         });
         menuActiveList.appendChild(li);
       });
@@ -3218,6 +4270,7 @@
         const e = createEntry();
         entries.push(e);
         entriesContainer.appendChild(e.element);
+        observeEntryForHeight(e);
         try { hydrateEntry(e, data); } catch (err) { console.warn('hydrate failed', err); }
       }
     }
@@ -3228,13 +4281,57 @@
         try { hydrateEntry(e, data); } catch (err) { console.warn('hydrate (deleted) failed', err); }
       }
     }
-    renumberEntries();
-    rebuildEntriesMenu();
+    // 載入完先依日期時間排序，再給編號
+    sortEntriesByDateTime();
     if (entries.length === 0) addNewEntry();   // 第一次造訪 → 給一張空白
     updateKeyDisplay();
     updateKeyDependentUI();
+    // 初始化完，等下一幀讓 layout 算好再 sync 一次容器高度
+    requestAnimationFrame(() => syncCarouselHeight());
   })();
   addEntryBtn.addEventListener('click', () => addNewEntry(true));
+
+  // ===== 頂部「＋ 新增發票」popup（相機 / 相簿 / 手動輸入） =====
+  const topAddBtn = $('topAddBtn');
+  const addMenu = $('addMenu');
+  function openAddMenu() { addMenu.classList.add('visible'); }
+  function closeAddMenu() { addMenu.classList.remove('visible'); }
+  topAddBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (addMenu.classList.contains('visible')) closeAddMenu();
+    else openAddMenu();
+  });
+  // 點空白處關閉
+  document.addEventListener('click', (e) => {
+    if (!addMenu.classList.contains('visible')) return;
+    if (e.target.closest('#addMenu') || e.target.closest('#topAddBtn')) return;
+    closeAddMenu();
+  });
+  // 三種來源
+  addMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-menu-btn');
+    if (!btn) return;
+    const source = btn.dataset.source;
+    closeAddMenu();
+    const newEntry = addNewEntry(false);   // 先建一張空白
+    if (source === 'manual') {
+      // 手動輸入：直接建一張空白卡片，內含 1 條空白商品；其餘格式同一般單筆
+      newEntry.initBlankManual();
+      showToast('已建立空白單筆，請手動編輯內容');
+      setTimeout(() => {
+        newEntry.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+      }, 50);
+      return;
+    }
+    // 相機 / 相簿：把 file input 加 capture 屬性後觸發
+    const fileEl = newEntry.refs.fileEl;
+    if (source === 'camera') {
+      fileEl.setAttribute('capture', 'environment');   // 後鏡頭直接開
+    } else {
+      fileEl.removeAttribute('capture');               // 相簿挑選
+    }
+    setTimeout(() => fileEl.click(), 50);
+  });
 })();
 </script>
 </body>
