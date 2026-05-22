@@ -4,14 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#c2410c" />
-<title>發票拆帳筆記</title>
+<title>旅遊發票帳本</title>
 <style>
   :root {
     /* 頁面背景改純白;單筆框（card）已無外框與底色,直接坐在白色頁面上 */
     --bg: #ffffff;        /* 頁面背景：純白 */
     --panel: #ffffff;     /* 給按鈕、彈出選單等（保持白） */
     --card-bg: #ffffff;   /* 單筆框背景（已不再使用,保留變數避免破壞他處） */
-    --pill-bg: #d0d0d0;   /* 付款人 / 實際購買人 等小膠囊背景 */
+    --buyer-bg: #e5e5e5;  /* 實際購買人 小框:比「商品品項條」(accent-soft #f3f3f3) 稍深一點 */
     --ink: #000000;
     --muted: #6b7280;
     --line: #000000;          /* 純黑框線 */
@@ -525,17 +525,18 @@
   }
   .add-item-btn:hover { filter: brightness(0.85); }
 
-  /* 商品右側「實際購買人」— 用網頁背景色，使色塊融入整體 */
+  /* 商品右側「實際購買人」— 略深於商品條的小框,內含「實際購買人」標籤與「+」同行 */
   .item-buyer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;          /* 標籤與「+」按鈕同一行 */
+    flex-wrap: wrap;              /* 有標籤時 .item-tags 可自然換行/獨佔 */
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 0;
     padding: 8px 10px;
     border: none;
     border-radius: 16px;
-    background: var(--pill-bg);
+    background: var(--buyer-bg);
     flex: 0 0 var(--buyer-width);
     width: var(--buyer-width);
     max-width: var(--buyer-width);
@@ -599,17 +600,18 @@
     gap: 8px;
     margin: 6px 0 10px;
   }
-  /* payer slot — 淺灰膠囊,在白色頁面上仍可看清楚 */
+  /* payer slot — 與「商品品項條」同色(accent-soft #f3f3f3),融入整體版面;
+     gap 設 0 → 「付款人」標籤與「+」按鈕之間只剩 .add-name-btn 自己的 margin-left:4px */
   .payer-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 0;
     padding: 4px 12px;
     border: none;
     border-radius: 999px;
     margin: 0;
-    background: var(--pill-bg);
+    background: var(--accent-soft);
     flex: 1 1 auto;
     min-width: 0;
     min-height: 32px;
@@ -660,7 +662,8 @@
     display: block;
   }
   .add-name-btn:hover { filter: brightness(0.85); }
-  .item-buyer .add-name-btn { margin-left: 0; margin-top: 2px; }
+  /* 實際購買人:標籤與「+」改成同一行 → 沿用預設的 margin-left:4px 即可,不再下移 */
+  .item-buyer .add-name-btn { margin-left: 4px; margin-top: 0; }
   .payer-slot {
     display: flex;
     gap: 6px;
@@ -692,9 +695,10 @@
     margin: 0 auto;
     padding: 18px 6px 48px;            /* 橫向縮到 6px,讓單筆框內容靠近螢幕邊緣 */
   }
-  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個
-     touch-action: pan-x → 只允許水平 pan;垂直觸控 / 滑鼠滾輪交給頁面 window scroll。
-     overscroll-behavior 只擋水平,避免擋到垂直方向的滾輪傳遞。 */
+  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個。
+     touch-action: pan-x → 只允許水平 pan;垂直觸控 / 滑鼠滾輪自然向上傳遞到 body。
+     不再使用 -webkit-overflow-scrolling: touch — iOS 上會建立獨立的 momentum
+     scroll context、有時會搶走垂直觸控導致整頁無法上下捲動。 */
   #entriesContainer {
     display: flex;
     flex-wrap: nowrap;
@@ -703,8 +707,7 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     overscroll-behavior-x: contain;
-    touch-action: pan-x;           /* 水平交瀏覽器處理;垂直 / 滑鼠滾輪自然向上傳遞到 body */
-    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     scrollbar-width: none;
     -ms-overflow-style: none;
     align-items: flex-start;       /* 不要把較矮的單筆框拉到一樣高 */
@@ -973,18 +976,11 @@
     margin-top: 6px;
     line-height: 1.5;
   }
+  /* 空白單筆框的 .drop 區塊:大按鈕已停用(新增發票一律由右上角「＋」),
+     視覺整段隱藏即可。為了不破壞「拖曳檔案進來」這類隱性互動,保留節點但不顯示 */
   .drop {
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 24px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    background: #fafafa;
+    display: none;
   }
-  .drop.dragging { border-color: var(--accent); background: var(--accent-soft); }
-  .drop p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
-  .drop strong { color: var(--ink); font-size: 15px; }
   .file-input { display: none; }
   /* 「點此加入發票照片」全寬按鈕 — 樣式同 drop zone */
   .add-entry-btn {
@@ -1461,12 +1457,12 @@
     background: transparent;
     color: var(--muted);
   }
-  /* active（已選定）的按鈕:永遠維持黑底白字,不被 hover / focus / 按壓蓋掉 */
+  /* active（已選定）的按鈕:永遠維持「深紅底白字」,不被 hover / focus / 按壓蓋掉 */
   .tax-mode-btn.active,
   .tax-mode-btn.active:hover:not(:disabled),
   .tax-mode-btn.active:focus:not(:disabled),
   .tax-mode-btn.active:active:not(:disabled) {
-    background: var(--ink);
+    background: var(--twd-red);
     color: var(--panel);
   }
   /* 依目前模式：把未選的那邊 price-cell 半透明 */
@@ -1749,7 +1745,7 @@
 <div class="tag-bar-wrap">
   <div class="tag-bar" id="tagBar">
     <!-- 左：三線選單 -->
-    <button id="menuBtn" class="menu-btn" type="button" title="所有單筆清單" aria-label="所有單筆">
+    <button id="menuBtn" class="menu-btn" type="button" title="發票總覽" aria-label="發票總覽">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -1840,9 +1836,9 @@
 <!-- 全部單筆抽屜 -->
 <div class="entries-menu" id="entriesMenu" aria-hidden="true">
   <div class="menu-overlay" id="menuOverlay"></div>
-  <aside class="menu-panel" role="dialog" aria-label="所有單筆">
+  <aside class="menu-panel" role="dialog" aria-label="發票總覽">
     <header class="menu-header">
-      <h3>所有單筆</h3>
+      <h3>發票總覽</h3>
       <button class="menu-close" id="menuCloseBtn" type="button" aria-label="關閉">×</button>
     </header>
     <div class="menu-body">
@@ -1872,15 +1868,12 @@
     ⚠️ 此 HTML 檔含有你的 API key，<b>請勿分享或上傳到公開位置</b>。若不慎外流，請到 <a href="https://aistudio.google.com/apikey" target="_blank" style="color:inherit">aistudio.google.com/apikey</a> 撤銷舊 key 並重發。
   </div>
 
-  <!-- 1. Groq API Key 設定 -->
-  <section class="card" id="setupCard">
+  <!-- 1. Groq API Key 設定容器 — 永遠隱藏(金鑰編輯改由畫面中央 modal 處理),
+       但裡面的 <input id="groqKey"> 與 <div id="keyDisplay"> 仍需存在供 JS 存取 -->
+  <section class="card" id="setupCard" hidden style="display:none">
     <div class="field">
-      <label class="row" for="groqKey" style="display:none">Groq API Key</label>
-      <input type="password" id="groqKey" class="key-input" placeholder="初次使用請輸入金鑰" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
-      <div id="keyDisplay" class="key-display" style="display:none" title="點此修改金鑰"></div>
-      <p class="hint" style="display:none">
-        免費取得：到 <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">console.groq.com</a> 用 Google／GitHub 登入 → 左側「API Keys」→「Create API Key」→ 複製 <code>gsk_…</code> 貼上。金鑰只存在你瀏覽器 localStorage、不會外傳；沒填則用本機 Tesseract OCR 備援（品質較差）。
-      </p>
+      <input type="password" id="groqKey" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <div id="keyDisplay" style="display:none"></div>
     </div>
   </section>
   <!-- Gemini 區已停用，欄位仍在 DOM 供向下相容 -->
@@ -2745,12 +2738,13 @@
   }
 
   function updateKeyDisplay() {
-    const k = groqKeyEl.value.trim();
     keyDisplayEl.innerHTML = '';
     keyDisplayEl.style.display = 'none';
     groqKeyEl.style.display = 'none';      // 永遠隱藏:金鑰編輯改由 modal 處理
-    if (k) {
-      // 有金鑰：頂部顯示日期標題、關閉 modal
+    // Groq 或 Gemini 任何一把 key 存在,就視為「有金鑰」
+    const hasKey = hasAnyApiKey();
+    if (hasKey) {
+      // 有金鑰：頂部顯示日期標題、關閉 modal(reload 後就不會再跳問)
       updateTopDateTitle();
       if (keyModalEl && keyModalEl.classList.contains('visible')) closeKeyModal(true);
     } else {
@@ -2760,10 +2754,25 @@
     }
   }
   // 頂部顯示目前單筆框的日期/星期/時間
+  // 今天的日期(YYYY-MM-DD)
+  function todayIsoDate() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, '0');
+    const da = String(d.getDate()).padStart(2, '0');
+    return y + '-' + mo + '-' + da;
+  }
   function updateTopDateTitle() {
     if (!topDateTitleEl) return;
-    const hasKey = !!groqKeyEl.value.trim();
-    if (!hasKey) { topDateTitleEl.classList.remove('visible'); return; }
+    if (!hasAnyApiKey()) { topDateTitleEl.classList.remove('visible'); return; }
+    // 沒有任何發票 → 顯示「今天日期 (0/0)」
+    if (entries.length === 0) {
+      topDateTitleEl.innerHTML =
+        escapeHtml(todayIsoDate()) +
+        '<span class="top-date-suffix">' + escapeHtml(' (0/0)') + '</span>';
+      topDateTitleEl.classList.add('visible');
+      return;
+    }
     const idx = (typeof getCurrentEntryIdx === 'function') ? getCurrentEntryIdx() : 0;
     const cur = entries[idx];
     const parsed = cur && cur.state && cur.state.parsed;
@@ -2899,13 +2908,32 @@
       '  ]',
       '}',
       '',
-      '判斷 price_includes_tax 的依據：',
+      '判斷 price_includes_tax 與 line_total 的依據（請仔細按順序套用）:',
+      '',
+      '【規則 A — 最高優先,看到就照做】「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格 / 稅抜」這類字樣',
+      '  - 這些字面意思一律是「未稅(不含消費稅)」。一旦發票上有任何地方出現,price_includes_tax 必須為 false。',
+      '  - line_total 必須使用「本体 / 税抜」對應的「未稅」金額,不可以使用含稅後的金額。',
+      '  - 範例 A1(每個品項旁都標本体):',
+      '      「商品A 本体 ¥100 / 商品B 本体 ¥200 / 小計(本体) ¥300 / 消費税 ¥30 / 合計 ¥330」',
+      '      → items: [{line_total:100},{line_total:200}], price_includes_tax:false, tax_amount:30, grand_total:330',
+      '  - 範例 A2(只有總計區有本体):',
+      '      「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」',
+      '      → 仍然 price_includes_tax:false。line_total 必須改寫成「未稅金額」:items: [{line_total:100},{line_total:200}](= 110/1.1, 220/1.1)。',
+      '      千萬不要因為品項標的是 110/220 就誤把 line_total 填 110/220 然後又標 price_includes_tax:false,這樣總和會對不起來。',
+      '  - 範例 A3:「税抜価格 ¥1000」當作未稅 ¥1000。',
+      '',
+      '【規則 B】其他狀況:',
       '- 發票另列 Tax / VAT / GST / 消費税 / 服務費 等且與品項小計分開 → false',
       '- 品項旁或發票標示「税込 / Tax Included / Inc. VAT / 含稅」→ true',
-      '- 若所有 line_total 加總 ≈ 總計 → true；若 line_total 加總 + 稅金 = 總計 → false',
-      '- 不確定時：日／韓／歐盟通常 true；美／加通常 false',
+      '- 若所有 line_total 加總 ≈ 總計 → true;若 line_total 加總 + 稅金 = 總計 → false',
+      '- 不確定時:日／韓／歐盟通常 true;美／加通常 false',
       '',
-      '金額一律阿拉伯數字，不要貨幣符號與千分位逗號。'
+      '【自我檢查】回傳前驗算:',
+      '- 若 price_includes_tax = false:sum(line_total) + tax_amount 必須 ≈ grand_total',
+      '- 若 price_includes_tax = true: sum(line_total) ≈ grand_total',
+      '- 對不起來就回去調整 line_total 或 price_includes_tax,不要回傳明顯矛盾的數字。',
+      '',
+      '金額一律阿拉伯數字,不要貨幣符號與千分位逗號。'
     ].join('\n');
 
     const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
@@ -2945,6 +2973,7 @@
     if (!parsed.items || !Array.isArray(parsed.items)) {
       throw new Error('Gemini 回傳缺少 items 陣列。');
     }
+    reconcilePriceIncludesTax(parsed);
     return parsed;
   }
 
@@ -2982,7 +3011,14 @@
       '  ]',
       '}',
       '',
-      '判斷 price_includes_tax 的依據：發票另列 Tax/VAT/GST/消費税 → false；標示「税込/Tax Included/含稅」→ true；line_total 加總 ≈ 總計 → true；line_total + 稅金 = 總計 → false；日韓歐通常 true；美加通常 false。',
+      '【判斷 price_includes_tax 與 line_total】請按順序套用:',
+      '(規則 A,最高優先)「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格 / 稅抜」這些字一律 = 未稅:',
+      '  - 一旦發票任何地方出現這些字 → price_includes_tax 必為 false。',
+      '  - line_total 必須使用「本体 / 税抜」對應的「未稅」金額。',
+      '  - 範例:「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」→ line_total 應該寫成 [100, 200](= 110/1.1, 220/1.1),不是 [110, 220]。也就是把品項換算回未稅,而不是直接照抄含稅數字。',
+      '  - 另一範例:「商品A 本体 ¥100 / 商品B 本体 ¥200 / 消費税 ¥30 / 合計 ¥330」→ line_total = [100, 200], tax_amount = 30, grand_total = 330。',
+      '(規則 B)其他狀況:發票另列 Tax/VAT/GST/消費税 → false;標示「税込/Tax Included/含稅」→ true;line_total 加總 ≈ 總計 → true;line_total + 稅金 = 總計 → false;日韓歐通常 true;美加通常 false。',
+      '(自我檢查)回傳前驗算:price_includes_tax=false 時 sum(line_total) + tax_amount ≈ grand_total;true 時 sum(line_total) ≈ grand_total。對不起來就調整 line_total,不要回傳矛盾的數字。',
       '金額一律阿拉伯數字，不含貨幣符號與千分位逗號。'
     ].join('\n');
 
@@ -3025,7 +3061,29 @@
     if (!parsed.items || !Array.isArray(parsed.items)) {
       throw new Error('Groq 回傳缺少 items 陣列');
     }
+    reconcilePriceIncludesTax(parsed);
     return parsed;
+  }
+  // 後處理:用 sum(line_total) 與 tax_amount / grand_total 的關係,反推真正的 price_includes_tax,
+  // 修正「LLM 看到本体就標 false 但 line_total 卻是含稅數字」這種前後矛盾的回傳。
+  function reconcilePriceIncludesTax(parsed) {
+    if (!parsed || !parsed.items || parsed.items.length === 0) return;
+    const sumLine = parsed.items.reduce((s, it) => s + (Number(it.line_total) || 0), 0);
+    const tax = Number(parsed.tax_amount) || 0;
+    const grand = Number(parsed.grand_total) || 0;
+    if (sumLine <= 0 || grand <= 0) return;
+    const tol = Math.max(1, grand * 0.01);
+    if (Math.abs(sumLine - grand) < tol) {
+      // line 加總 ≈ 總計 → 品項數字本來就含稅
+      parsed.price_includes_tax = true;
+      return;
+    }
+    if (tax > 0 && Math.abs(sumLine + tax - grand) < tol) {
+      // line 加總 + 稅 ≈ 總計 → 品項數字是未稅
+      parsed.price_includes_tax = false;
+      return;
+    }
+    // 兩者都對不起來時(LLM 抓錯數字)就保留 LLM 原本的判斷,交由使用者手動調整。
   }
 
   // ---- currency detection ----
@@ -3094,7 +3152,8 @@
     const totalRe = /(grand\s*total|^total\b|合\s*計|総\s*額|総\s*計|amount\s*due|balance\s*due|お買上|お支払|お会計|ご請求|合\s*算|應[付收][金額]|합\s*계|합\s*산|총\s*액|รวม|ยอดรวม)/i;
     // tax-inclusive markers
     const incTaxRe = /(税込|tax\s*incl|incl[\s.]*tax|含\s*税|含\s*稅|inc\.?\s*vat|vat\s*incl)/i;
-    const excTaxRe = /(税抜|tax\s*excl|excl[\s.]*tax|未\s*税|ex\.?\s*vat|vat\s*excl)/i;
+    // 「本体 / 本體 / 本体価格 / 本體價」也代表「未稅」價,出現這些字樣也視為未含稅
+    const excTaxRe = /(税抜|tax\s*excl|excl[\s.]*tax|未\s*税|ex\.?\s*vat|vat\s*excl|本\s*体|本\s*體)/i;
 
     // price pattern: at end of line, optional currency prefix
     // accepts: 1234, 1,234, 1.234,56, 1,234.56, ¥1,500
@@ -3661,6 +3720,14 @@
         state.base64 = dataUrl.split(',')[1];
         refs.runBtn.disabled = false;
         refs.clearBtn.disabled = false;
+        // 先把「處理中」狀態跟進度條打開 + 立刻 scroll 到這張單筆,
+        // 使用者馬上看到「這張正在被處理」的 UI,不用等 entryRun 結束
+        setBusy();
+        showProgress(5);
+        try {
+          refs.root.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
+        } catch(e) {}
+        syncCarouselHeight();
         updateAddBtnVisibility();
         setTimeout(() => entryRun(), 50);
       };
@@ -3780,6 +3847,8 @@
 
     function renderResult(parsed, rate) {
       const cur = (parsed.currency || '').toUpperCase() || '?';
+      // JPY / TWD 不顯示小數,使用者編輯時也四捨五入成整數
+      const curDecimals = (cur === 'JPY' || cur === 'TWD') ? 0 : undefined;
       const isInc = parsed.price_includes_tax === true;
       const isExc = parsed.price_includes_tax === false;
 
@@ -3894,18 +3963,19 @@
         div.innerHTML =
           '<div class="item-main">' +
             '<div class="name" contenteditable="true" spellcheck="false">' + escapeHtml(it.zh_name || '—') + escapeHtml(qtySuffix) + '</div>' +
-            (it.original_name && it.original_name !== it.zh_name
+            // 繁中大標題下方:只要有 original_name 就顯示「原文小灰字」(即使與譯名相同也顯示)
+            (it.original_name
               ? '<div class="orig" contenteditable="true" spellcheck="false">' + escapeHtml(it.original_name) + '</div>' : '') +
             '<div class="prices">' +
               '<div class="price-cell" data-cell="preTax"><div class="price-label">未稅</div>' +
                 '<div class="price-val">' +
-                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="preTax">' + escapeHtml(fmtMoney(preTax)) + '</span>' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="preTax">' + escapeHtml(fmtMoney(preTax, curDecimals)) + '</span>' +
                   ' <span class="amount-cur">' + escapeHtml(cur) + '</span>' +
                 '</div></div>' +
               '<div class="price-sep">/</div>' +
               '<div class="price-cell" data-cell="withTax"><div class="price-label">含稅</div>' +
                 '<div class="price-val">' +
-                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="withTax">' + escapeHtml(fmtMoney(withTax)) + '</span>' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="withTax">' + escapeHtml(fmtMoney(withTax, curDecimals)) + '</span>' +
                   ' <span class="amount-cur">' + escapeHtml(cur) + '</span>' +
                 '</div></div>' +
               '<div class="price-sep">/</div>' +
@@ -4136,21 +4206,31 @@
         return;
       }
       const mode = state.taxMode || 'inc';
+      // 幣別為 JPY / TWD 時,使用者輸入的金額一律當作整數(四捨五入,不允許小數)
+      const _cur = (state.parsed && state.parsed.currency || '').toUpperCase();
+      const _intCur = (_cur === 'JPY' || _cur === 'TWD');
+      let _userVal = newVal;
+      if (_intCur && (kind === 'preTax' || kind === 'withTax')) {
+        _userVal = Math.round(newVal);
+      }
+      if (kind === 'twd') {
+        _userVal = Math.round(newVal);     // TWD 一律整數
+      }
       let preTax, withTax, twd;
       if (kind === 'preTax') {
-        preTax = newVal;
-        withTax = newVal * (1 + taxRate);
+        preTax = _userVal;
+        withTax = _userVal * (1 + taxRate);
       } else if (kind === 'withTax') {
-        withTax = newVal;
-        preTax = newVal / (1 + taxRate);
+        withTax = _userVal;
+        preTax = _userVal / (1 + taxRate);
       } else if (kind === 'twd') {
-        twd = newVal;
+        twd = _userVal;
         // 反推：依目前模式決定 TWD 由 preTax 或 withTax 換算
         if (mode === 'exc') {
-          preTax = rate ? newVal / rate : null;
+          preTax = rate ? _userVal / rate : null;
           withTax = (preTax != null) ? preTax * (1 + taxRate) : null;
         } else {
-          withTax = rate ? newVal / rate : null;
+          withTax = rate ? _userVal / rate : null;
           preTax = (withTax != null) ? withTax / (1 + taxRate) : null;
         }
       }
@@ -4159,6 +4239,12 @@
         const base = mode === 'exc' ? preTax : withTax;
         twd = (rate && base != null) ? base * rate : null;
       }
+      // 若幣別為 JPY/TWD,把推算出的 preTax/withTax 也一併取整,避免顯示變回小數
+      if (_intCur) {
+        if (preTax != null) preTax = Math.round(preTax);
+        if (withTax != null) withTax = Math.round(withTax);
+      }
+      if (twd != null) twd = Math.round(twd);
       item._editedPreTax = preTax;
       item._editedWithTax = withTax;
       item._editedTwd = twd;
@@ -4171,8 +4257,11 @@
       const p = itemEl.querySelector('.amount-num[data-kind="preTax"]');
       const w = itemEl.querySelector('.amount-num[data-kind="withTax"]');
       const t = itemEl.querySelector('.amount-num[data-kind="twd"]');
-      if (p) p.textContent = fmtMoney(preTax);
-      if (w) w.textContent = fmtMoney(withTax);
+      // JPY / TWD 永遠 0 小數;其他幣別交給 fmtMoney 預設(>=100 → 0,否則 2)
+      const _cur = (state.parsed && state.parsed.currency || '').toUpperCase();
+      const _d = (_cur === 'JPY' || _cur === 'TWD') ? 0 : undefined;
+      if (p) p.textContent = fmtMoney(preTax, _d);
+      if (w) w.textContent = fmtMoney(withTax, _d);
       if (t) t.textContent = fmtMoney(twd, 0);
     }
     // 重算「簡述」格（N 件 + 含/未稅總計 + TWD 換算）
@@ -4182,6 +4271,8 @@
       const td = refs.metaEl.querySelector('tr[data-row="summary"] td');
       if (!td) return;
       const cur = parsed.currency || 'JPY';
+      const _intCur = (cur === 'JPY' || cur === 'TWD');
+      const _d = _intCur ? 0 : undefined;
       const rate = state.rate;
       const mode = state.taxMode || 'inc';
       const sumPre = parsed.items.reduce((s, it) => s + (it._editedPreTax || 0), 0);
@@ -4190,7 +4281,7 @@
       const finalTwd = (rate && finalTotal != null) ? finalTotal * rate : null;
       let html = escapeHtml(parsed.items.length + ' 件');
       if (finalTotal != null) {
-        html += escapeHtml('，' + fmtAmount(finalTotal, cur));
+        html += escapeHtml('，' + fmtAmount(finalTotal, cur, _d));
         if (finalTwd != null && cur !== 'TWD') {
           // 「≈ xxx TWD」整段深紅
           html += ' <span class="approx">≈ ' + escapeHtml(fmtAmount(finalTwd, 'TWD', 0)) + '</span>';
@@ -4217,12 +4308,14 @@
         if (Math.abs(tax) > 0.5) rows.push({ label: '其中內含稅 ' + (parsed.tax_label || ''), orig: tax, twdBase: tax });
       }
       if (parsed.items.length === 0) { refs.totalsEl.innerHTML = ''; return; }
+      const _intCur = (cur === 'JPY' || cur === 'TWD');
+      const _d = _intCur ? 0 : undefined;
       refs.totalsEl.innerHTML = rows.map(r => {
         const twd = (rate != null && r.twdBase != null) ? r.twdBase * rate : null;
         return '<div class="total-row' + (r.grand ? ' grand' : '') + '">' +
           '<span class="label">' + escapeHtml(r.label) + '</span>' +
           '<span class="values">' +
-            '<span class="v-orig">' + escapeHtml(fmtAmount(r.orig, cur)) + '</span>' +
+            '<span class="v-orig">' + escapeHtml(fmtAmount(r.orig, cur, _d)) + '</span>' +
             (twd != null ? '<span class="v-twd"><span class="approx">≈</span> ' + escapeHtml(fmtAmount(twd, 'TWD', 0)) + '</span>' : '') +
           '</span>' +
         '</div>';
@@ -4490,10 +4583,12 @@
         entries.splice(idx, 1);
         deletedEntries.push(api);
       }
-      if (entries.length === 0) addNewEntry();    // 至少留一張空白
-      else renumberEntries();
+      // 刪光時不再自動補空白單筆,讓使用者用右上角「＋」加入下一張發票
+      renumberEntries();
       rebuildEntriesMenu();
       updateAddBtnVisibility();
+      // 同步頂部日期標題(刪光時會回到「今天 (0/0)」)
+      if (typeof updateTopDateTitle === 'function') updateTopDateTitle();
       scheduleSave();
     }
 
@@ -4681,53 +4776,9 @@
       if (h > 0) entriesContainer.style.height = h + 'px';
     });
   }
-  // ===== 滑動方向鎖（輕量版） =====
-  // touch-action: pan-x 已讓「純垂直觸控」自然往上傳遞到 body,「純水平觸控」由瀏覽器原生
-  // 做 scroll-snap 切換單筆框。這裡只負責一件事:當主軸是垂直時,反向把 carousel 的
-  // scrollLeft 釘回起始位置,避免斜向滑動造成意外的水平漂移。
-  // 全程 passive:true,不 preventDefault,避免擋到垂直頁面捲動。
-  (function setupCarouselDirectionLock() {
-    let startX = 0, startY = 0;
-    let startScrollLeft = 0;
-    let axis = null;          // null | 'x' | 'y'
-    let activeId = null;
-
-    entriesContainer.addEventListener('touchstart', (e) => {
-      if (e.touches.length !== 1) { axis = null; activeId = null; return; }
-      const t = e.touches[0];
-      startX = t.clientX;
-      startY = t.clientY;
-      startScrollLeft = entriesContainer.scrollLeft;
-      axis = null;
-      activeId = t.identifier;
-    }, { passive: true });
-
-    entriesContainer.addEventListener('touchmove', (e) => {
-      if (e.touches.length !== 1) return;
-      const t = e.touches[0];
-      if (activeId !== null && t.identifier !== activeId) return;
-      const dx = t.clientX - startX;
-      const dy = t.clientY - startY;
-      if (axis == null) {
-        const threshold = 10;
-        if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return;
-        // 偏向垂直:橫向需明顯大於垂直（1.2 倍）才認定為 'x',
-        // 避免「主要垂直滑、夾帶一點水平」誤觸發切換單筆
-        axis = (Math.abs(dx) > Math.abs(dy) * 1.2) ? 'x' : 'y';
-      }
-      if (axis === 'y') {
-        // 垂直為主 → carousel 不准水平漂移
-        if (entriesContainer.scrollLeft !== startScrollLeft) {
-          entriesContainer.scrollLeft = startScrollLeft;
-        }
-      }
-      // axis === 'x' → 交給瀏覽器原生 pan-x + scroll-snap 處理,不做任何事
-    }, { passive: true });
-
-    function endTouch() { axis = null; activeId = null; }
-    entriesContainer.addEventListener('touchend', endTouch);
-    entriesContainer.addEventListener('touchcancel', endTouch);
-  })();
+  // 滑動方向鎖完全交給瀏覽器原生處理:容器 CSS 設了 touch-action: pan-x,
+  // 垂直觸控不會被這個元素消化、會自然往上傳遞到 body 捲動頁面。
+  // 不再掛任何 touch listener 上去,避免 iOS Safari 上的副作用。
 
   let _scrollDebounceTimer = null;
   let _lastSnapIdx = -1;
@@ -4888,7 +4939,7 @@
     }
     // 載入完先依日期時間排序，再給編號
     sortEntriesByDateTime();
-    if (entries.length === 0) addNewEntry();   // 第一次造訪 → 給一張空白
+    // 第一次造訪 → 不自動建立空白單筆;由使用者按右上角「＋」加入第一張發票
     updateKeyDisplay();
     updateKeyDependentUI();
     // 初始化完，等下一幀讓 layout 算好再 sync 一次容器高度
@@ -4936,6 +4987,24 @@
     } else {
       fileEl.removeAttribute('capture');               // 相簿挑選
     }
+    // 偵測「取消選檔」(modern browsers fire 'cancel' on the file input):
+    // 沒選任何檔案 → 把剛剛建的空單筆框刪掉,不留空白卡片
+    const onCancel = () => {
+      cleanup();
+      if (newEntry.state && !newEntry.state.file) {
+        try { newEntry.delete(); } catch(err) {}
+      }
+    };
+    const onPick = () => {
+      cleanup();
+      // change 觸發後,handleFile 已經透過原本的 change listener 接手
+    };
+    function cleanup() {
+      fileEl.removeEventListener('cancel', onCancel);
+      fileEl.removeEventListener('change', onPick);
+    }
+    fileEl.addEventListener('cancel', onCancel);
+    fileEl.addEventListener('change', onPick);
     setTimeout(() => fileEl.click(), 50);
   });
 })();
