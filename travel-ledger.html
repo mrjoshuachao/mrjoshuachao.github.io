@@ -165,10 +165,21 @@
     align-self: center;
     flex: 0 0 auto;
   }
+  /* 「+ 新增發票」popup 打開時的半透明遮罩,讓背景稍微變暗 */
+  .add-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 180;
+    display: none;
+  }
+  .add-menu-backdrop.visible { display: block; }
+  /* .add-menu 改成 position: fixed,位置由 JS 在 openAddMenu 時依 +按鈕 的座標計算
+     (放在 body 子節點才不會被 .tag-bar-wrap 的 stacking context 壓在 backdrop 下面) */
   .add-menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
+    position: fixed;
+    top: 56px;        /* 預設大概在 sticky bar 下方,實際座標 JS 會覆蓋 */
+    right: 12px;
     background: var(--panel);
     border-radius: 16px;
     padding: 6px;
@@ -176,7 +187,7 @@
     display: none;
     flex-direction: row;
     gap: 4px;
-    z-index: 200;
+    z-index: 220;     /* 高於 backdrop 的 180,確保按鈕不會被遮罩變暗 */
   }
   .add-menu.visible { display: flex; }
   .add-menu-btn {
@@ -507,9 +518,9 @@
   .item.drop-target {
     box-shadow: inset 0 0 0 1px var(--ink);
   }
-  /* 新增商品品項按鈕 */
+  /* 新增商品品項按鈕:預設一律隱藏,只有手動建立的單筆框(.card.entry.manual-entry)才顯示 */
   .add-item-btn {
-    display: block;
+    display: none;
     width: 100%;
     margin-top: 8px;
     padding: 8px 12px;
@@ -523,6 +534,7 @@
     font-family: inherit;
     min-height: unset;
   }
+  .card.entry.manual-entry .add-item-btn { display: block; }
   .add-item-btn:hover { filter: brightness(0.85); }
 
   /* 商品右側「實際購買人」— 略深於商品條的小框,內含「實際購買人」標籤與「+」同行 */
@@ -695,10 +707,11 @@
     margin: 0 auto;
     padding: 18px 6px 48px;            /* 橫向縮到 6px,讓單筆框內容靠近螢幕邊緣 */
   }
-  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個。
-     touch-action: pan-x → 只允許水平 pan;垂直觸控 / 滑鼠滾輪自然向上傳遞到 body。
-     不再使用 -webkit-overflow-scrolling: touch — iOS 上會建立獨立的 momentum
-     scroll context、有時會搶走垂直觸控導致整頁無法上下捲動。 */
+  /* 單筆框 carousel:橫向 scroll-snap,每個畫面只顯示一個。
+     touch-action: pan-x pan-y → 同時允許水平與垂直觸控;水平 pan 由 scroll-snap 處理,
+     垂直 pan 因為 overflow-y: hidden 不會被容器吃掉,自然向上傳遞到 body 捲動整個頁面。
+     scroll-snap-stop: normal → 動量大時可滑過一兩張;避免「mandatory + always」造成的
+     「滑過頭又彈回來」抖動感。 */
   #entriesContainer {
     display: flex;
     flex-wrap: nowrap;
@@ -707,7 +720,7 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     overscroll-behavior-x: contain;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     scrollbar-width: none;
     -ms-overflow-style: none;
     align-items: flex-start;       /* 不要把較矮的單筆框拉到一樣高 */
@@ -722,7 +735,7 @@
     min-width: 100%;
     width: 100%;
     scroll-snap-align: center;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;       /* 不強制每張都停;避免高速 swipe 後被反彈 */
     margin-bottom: 0;
     align-self: flex-start;        /* 各自保留自然高度 */
   }
@@ -851,6 +864,33 @@
     white-space: nowrap;
   }
   .entry-merchant-original:empty { display: none; }
+  /* 手動單筆:店家名稱可編輯時的 hover / focus / placeholder 樣式 */
+  .entry-merchant[contenteditable="true"],
+  .entry-merchant-original[contenteditable="true"] {
+    cursor: text;
+    outline: none;
+    border-radius: 8px;
+    padding: 0 4px;
+    transition: background 0.1s;
+    /* 維持 block 上下堆疊:大標題在上、原文小字在下一行 */
+    display: block;
+  }
+  .entry-merchant[contenteditable="true"]:hover,
+  .entry-merchant-original[contenteditable="true"]:hover { background: var(--accent-soft); }
+  .entry-merchant[contenteditable="true"]:focus,
+  .entry-merchant-original[contenteditable="true"]:focus { background: var(--accent-soft); }
+  /* 即使是空的(只顯示 placeholder)也維持 block,避免變成 inline-block 互相併在右邊 */
+  .entry-merchant[contenteditable="true"]:empty,
+  .entry-merchant-original[contenteditable="true"]:empty {
+    display: block;
+  }
+  .entry-merchant[contenteditable="true"]:empty::before,
+  .entry-merchant-original[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--muted);
+    opacity: 0.55;
+    pointer-events: none;
+  }
   /* 收縮版：右側顯示「簡短版日期與時間」（M/D HH:MM），預設隱藏 */
   .entry-short-date {
     position: absolute;
@@ -1764,7 +1804,7 @@
         <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M18 12 L6 4 L6 20 Z" fill="currentColor"/></svg>
       </button>
     </div>
-    <!-- 右：＋ 新增發票（點開出現相機/相簿/手動輸入） -->
+    <!-- 右：＋ 新增發票(點開出現相簿/手動輸入,popup 元素 .add-menu 改放在 body 子節點下面) -->
     <div class="add-wrap">
       <button id="topAddBtn" class="add-btn" type="button" title="新增發票" aria-label="新增發票">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
@@ -1772,29 +1812,29 @@
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
       </button>
-      <div class="add-menu" id="addMenu">
-        <button class="add-menu-btn" type="button" data-source="camera" title="拍照" aria-label="拍照">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
-        </button>
-        <button class="add-menu-btn" type="button" data-source="library" title="相簿" aria-label="相簿">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-        </button>
-        <button class="add-menu-btn" type="button" data-source="manual" title="手動輸入" aria-label="手動輸入">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 20h9"/>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/>
-          </svg>
-        </button>
-      </div>
     </div>
   </div>
+</div>
+
+<!-- ＋ popup 的半透明遮罩 + 兩顆按鈕:都必須放在 .tag-bar-wrap 之外
+     (.tag-bar-wrap 是 sticky+backdrop-filter,會建立 stacking context 把裡面 z-index
+     鎖在 50 那層,backdrop 會連同按鈕一起蓋暗)。這裡作為 body 直接子節點,
+     用 position: fixed,JS 在 openAddMenu 時動態算出相對 + 按鈕的座標 -->
+<div class="add-menu-backdrop" id="addMenuBackdrop" aria-hidden="true"></div>
+<div class="add-menu" id="addMenu">
+  <button class="add-menu-btn" type="button" data-source="library" title="相簿" aria-label="相簿">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  </button>
+  <button class="add-menu-btn" type="button" data-source="manual" title="手動輸入" aria-label="手動輸入">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/>
+    </svg>
+  </button>
 </div>
 
 <!-- 全螢幕照片檢視 -->
@@ -3866,6 +3906,18 @@
       refs.merchantEl.textContent = merchantZh;
       // 不管原文跟繁中是否相同，都要顯示原文小標（例：LAWSON 底下顯示小的 LAWSON）
       refs.merchantOriginalEl.textContent = merchantOrig || merchantZh || '';
+      // 手動建立的單筆 → 店家名稱可編輯;辨識照片來的單筆維持不可編輯
+      if (parsed._manualBlank) {
+        refs.merchantEl.setAttribute('contenteditable', 'true');
+        refs.merchantEl.setAttribute('spellcheck', 'false');
+        refs.merchantEl.setAttribute('data-placeholder', '店家名稱');
+        refs.merchantOriginalEl.setAttribute('contenteditable', 'true');
+        refs.merchantOriginalEl.setAttribute('spellcheck', 'false');
+        refs.merchantOriginalEl.setAttribute('data-placeholder', '原文店家名稱');
+      } else {
+        refs.merchantEl.removeAttribute('contenteditable');
+        refs.merchantOriginalEl.removeAttribute('contenteditable');
+      }
       // 收縮時右側顯示的「簡短版日期 + 時間」（M/D HH:MM）
       if (refs.shortDateEl) refs.shortDateEl.textContent = fmtShortDate(parsed.date, parsed.time);
 
@@ -4023,6 +4075,12 @@
       refreshAssignableState();
       refs.headerEl.style.display = '';        // 辨識完成後顯示編號+垃圾桶
       refs.resultCard.style.display = 'block';
+      // 「＋ 新增商品」只在手動建立的單筆框(按「筆」加的那種)上顯示;
+      // 用 CSS class 控制 — 比 inline style 更可靠,且不會被任何重新渲染清掉
+      if (parsed._manualBlank) refs.root.classList.add('manual-entry');
+      else refs.root.classList.remove('manual-entry');
+      // 清掉舊的 inline style(若上一輪曾經被設過 display:none/'',改用 class 後讓它退回 CSS 預設)
+      if (refs.addItemBtn) refs.addItemBtn.style.display = '';
       // 辨識完成 → 鎖定照片、把大預覽收起、改用 meta 旁的縮圖
       state.locked = true;
       state.recognizedAt = new Date();
@@ -4620,10 +4678,37 @@
         : '要刪除這一筆嗎？';
       if (confirm(msg)) deleteSelf();
     });
-    // 點店名大字 → 收縮/展開（stopPropagation 避免再被卡片層的展開 handler 抵消）
+    // 點店名大字 → 收縮/展開;但店名為可編輯(手動單筆)時,點下去要進入編輯而不收縮
     refs.merchantEl.addEventListener('click', (e) => {
+      if (refs.merchantEl.getAttribute('contenteditable') === 'true') return;
       refs.root.classList.toggle('collapsed');
       e.stopPropagation();
+    });
+    // 編輯店家名稱(繁中大標題) → blur 寫回 state.parsed.merchant_zh
+    refs.merchantEl.addEventListener('blur', () => {
+      if (refs.merchantEl.getAttribute('contenteditable') !== 'true') return;
+      if (!state.parsed) return;
+      const txt = (refs.merchantEl.textContent || '').trim();
+      state.parsed.merchant_zh = txt;
+      // 也同步 fmtMenuTitle / 抽屜清單
+      if (typeof rebuildEntriesMenu === 'function') rebuildEntriesMenu();
+      scheduleSave();
+    });
+    // 編輯原文小字 → blur 寫回 state.parsed.merchant
+    refs.merchantOriginalEl.addEventListener('blur', () => {
+      if (refs.merchantOriginalEl.getAttribute('contenteditable') !== 'true') return;
+      if (!state.parsed) return;
+      const txt = (refs.merchantOriginalEl.textContent || '').trim();
+      state.parsed.merchant = txt;
+      if (typeof rebuildEntriesMenu === 'function') rebuildEntriesMenu();
+      scheduleSave();
+    });
+    // 在可編輯店名按 Enter → blur(避免換行)
+    [refs.merchantEl, refs.merchantOriginalEl].forEach(el => {
+      el.addEventListener('keydown', (e) => {
+        if (el.getAttribute('contenteditable') !== 'true') return;
+        if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+      });
     });
     // 收縮狀態下：點卡片任何地方都會展開（不僅限於中央店名大字）
     refs.root.addEventListener('click', (e) => {
@@ -4948,23 +5033,39 @@
   // 底部「點此加入發票照片」已移除,只有元素還在時才需要 wire(向下相容)
   if (addEntryBtn) addEntryBtn.addEventListener('click', () => addNewEntry(true));
 
-  // ===== 頂部「＋ 新增發票」popup（相機 / 相簿 / 手動輸入） =====
+  // ===== 頂部「＋ 新增發票」popup（相簿 / 手動輸入） =====
   const topAddBtn = $('topAddBtn');
   const addMenu = $('addMenu');
-  function openAddMenu() { addMenu.classList.add('visible'); }
-  function closeAddMenu() { addMenu.classList.remove('visible'); }
+  const addMenuBackdrop = $('addMenuBackdrop');
+  function openAddMenu() {
+    // 計算 + 按鈕的螢幕座標,讓 popup 緊貼在它正下方
+    try {
+      const rect = topAddBtn.getBoundingClientRect();
+      addMenu.style.top = (rect.bottom + 6) + 'px';
+      addMenu.style.right = (window.innerWidth - rect.right) + 'px';
+      addMenu.style.left = 'auto';
+    } catch (e) {}
+    addMenu.classList.add('visible');
+    if (addMenuBackdrop) addMenuBackdrop.classList.add('visible');
+  }
+  function closeAddMenu() {
+    addMenu.classList.remove('visible');
+    if (addMenuBackdrop) addMenuBackdrop.classList.remove('visible');
+  }
   topAddBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (addMenu.classList.contains('visible')) closeAddMenu();
     else openAddMenu();
   });
+  // 點 backdrop 直接關閉
+  if (addMenuBackdrop) addMenuBackdrop.addEventListener('click', closeAddMenu);
   // 點空白處關閉
   document.addEventListener('click', (e) => {
     if (!addMenu.classList.contains('visible')) return;
     if (e.target.closest('#addMenu') || e.target.closest('#topAddBtn')) return;
     closeAddMenu();
   });
-  // 三種來源
+  // 兩種來源:相簿 / 手動輸入(相機已移除)
   addMenu.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-menu-btn');
     if (!btn) return;
@@ -4980,13 +5081,9 @@
       }, 50);
       return;
     }
-    // 相機 / 相簿：把 file input 加 capture 屬性後觸發
+    // 相簿:不帶 capture 屬性,系統會直接開啟相簿挑選
     const fileEl = newEntry.refs.fileEl;
-    if (source === 'camera') {
-      fileEl.setAttribute('capture', 'environment');   // 後鏡頭直接開
-    } else {
-      fileEl.removeAttribute('capture');               // 相簿挑選
-    }
+    fileEl.removeAttribute('capture');
     // 偵測「取消選檔」(modern browsers fire 'cancel' on the file input):
     // 沒選任何檔案 → 把剛剛建的空單筆框刪掉,不留空白卡片
     const onCancel = () => {
