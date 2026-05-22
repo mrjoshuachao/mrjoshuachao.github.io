@@ -5,6 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#c2410c" />
 <title>旅遊發票帳本</title>
+<!--
+================================================================================
+  旅遊發票帳本 (Travel Receipt Ledger) — Single-File Mobile-First Web App
+================================================================================
+
+  【一句話介紹】
+  把出國旅遊累積的紙本發票拍照、OCR + AI 解析、自動換算 TWD、然後依姓名
+  指派分攤金額；資料完全跑在使用者瀏覽器內,不需要伺服器。
+
+  【整個 App 的結構】
+  這支檔案是個 SPA (single-page app),所有 CSS / HTML / JS 都封裝在這一個 .html。
+  大致由三大段組成：
+    1. <style>        (約 line 8 ~ 1850)
+         所有樣式;頂部變數區 (:root) 定義配色與圓角。
+         有 .card.entry (單筆框)、.tag-bar (頂部標籤列)、燈箱、選單抽屜等。
+    2. <body>         (約 line 1853 ~ 2120)
+         主要 DOM 結構:
+           - 頂部 sticky 標籤列 (.tag-bar-wrap)
+           - 單筆框 carousel 容器 (#entriesContainer)
+           - 各種燈箱:photo lightbox, namePicker, keyModal
+           - <template id="entryTemplate"> ← 動態複製出來當每一張「單筆框」
+    3. <script>       (約 line 2124 ~ 5762)
+         所有邏輯都包在 IIFE 裡 (line 2125 開始的 (function(){ ... })()) ,
+         避免污染全域 (除了 window.* 上明確設定的幾個 hooks)。
+
+  【資料流 (Data Flow)】
+   使用者拍照 / 選相簿
+        │
+        ▼
+   壓縮成 base64 (compressImageDataUrl)
+        │
+        ▼
+   送進 AI Vision (callGemini 或 callGroq)
+        │  → 回傳 JSON: { currency, date, time, items[{name, price, tax_label,...}] }
+        ▼
+   解析 + 修正 (reconcilePriceIncludesTax, inferItemTaxRate)
+        │
+        ▼
+   查匯率 (fetchTwdRateAtDate → 多來源)
+        │
+        ▼
+   渲染進該張「單筆框」(renderResult)
+        │
+        ▼
+   使用者把名字 chip 拖到 / 燈箱勾到 商品 / payer 欄位
+        │
+        ▼
+   serializeEntry → localStorage (key: travel_ledger_entries_v1)
+
+  【State Shape】(每張「單筆框」內部都有一個 api.state 物件)
+     {
+       parsed: {                  // 從 AI / 使用者修改後的「目前發票資料」
+         currency: 'JPY' | 'TWD' | 'USD' | ...
+         date: '2025-09-12'
+         time: '13:45'            // 可空
+         items: [
+           {
+             name, name_translated,
+             price,               // 未稅單價（reconcilePriceIncludesTax 算出來的標準形式）
+             price_with_tax,      // 含稅單價
+             tax_label,           // '本体' / '内消費税' / '*' / '◇' 等原始字串
+             tax_rate,            // 0.08 / 0.10 / etc.（推測 + 修正後）
+             tax_reasoning,       // AI 寫的理由（debug 用）
+             _editedPreTax / _editedWithTax / _editedTwd  // 使用者手動 override 旗標
+             _taxRate             // 使用者手動 override 的稅率
+           }
+         ]
+       }
+       items: [...],              // 經過排序、UI-side 的 view (refs.itemEls 對應)
+       assignments: {             // 商品分攤指派
+         'item-0': [tagId, ...]   // key = item slot
+         'payer':  [tagId]        // 實際購買人（只允許 1 個）
+       }
+       photoDataUrl,              // 壓縮過的縮圖 (base64)
+       rate,                      // 該筆使用的 currency→TWD 匯率
+       taxMode: 'with_tax'|'pre_tax'  // 顯示模式
+       isManualEntry: bool
+       isDeleted: bool / deletedAt: epoch
+     }
+
+  【外部 API / 資料來源】(本檔已 100% self-contained,執行時才連線下列服務)
+    - Groq API           api.groq.com/openai/v1/chat/completions
+                         model: meta-llama/llama-4-scout-17b-16e-instruct
+    - Gemini API         generativelanguage.googleapis.com/v1beta
+                         model: gemini-2.5-flash
+    - 鉅亨網 cnyes        ws.api.cnyes.com/ws/api/v1/charting/history (TradingView UDF)
+                         > 2025-12-31 的歷史匯率
+    - OANDA fxds-hcc     fxds-hcc.oanda.com  (備援)
+    - Yahoo Finance      query1.finance.yahoo.com/v8/finance/chart/JPYTWD=X (備援)
+    - open.er-api        最新匯率備援 (latest only)
+    - 內建 CSV           JPY_TWD_DAILY_2000_2025  (內嵌的 9497 天歷史 JPY→TWD)
+
+  【localStorage Keys】
+    groq_api_key                 ← AI Vision 金鑰之一 (使用者貼上後存在本機)
+    gemini_api_key               ← AI Vision 金鑰之二
+    travel_ledger_entries_v1     ← 所有單筆框序列化
+    travel_ledger_default_rates_v1 ← 各幣別最近一次匯率（新增單筆時的預設）
+    name_tags                    ← [{id, name, color}, ...]
+    name_tags_seeded_v1          ← 預設 10 個名字是否已植入
+    name_tags_migrations_v1      ← 跨版本改名（'佩慈' → '珮慈' 等）
+
+  【設計與排版 notes】
+    - 「單筆框」沒有外框背景,直接坐在白頁面上;每張靠 horizontal carousel
+      (scroll-snap-type: x mandatory + scroll-snap-stop: always) 切換。
+    - 上下捲動 = 框內捲動;左右滑動 = 上一張 / 下一張。touch-action 同時開啟
+      pan-x 與 pan-y, 不過 carousel 容器另外處理。
+    - 雙擊放大 zoom 已用 touch-action: manipulation 鎖住。
+    - SF Symbols 是從 PDF (pdftocairo -svg) 抽出來的原始 path,viewBox
+      用 "1.5 -17.5 21.5 21";不要再加 transform: scale(1,-1)。
+    - .tag-bar-wrap 有 backdrop-filter,會造成 fixed positioned 子層被困住。
+      所以 + 新增發票 menu / backdrop 都搬到 <body> 直系下面,座標靠 JS
+      getBoundingClientRect 計算。
+
+  【排序】
+    entries[] 一定是「最舊 → 最新」(entryDateTimeMs 升冪),
+      所以畫面上的 #1 = 最舊,最右邊 = 最新。
+    選單 (rebuildEntriesMenu) 顯示時把 active 反過來,讓最新的在最上面。
+
+  【AI Prompt】
+    callGroq / callGemini 用同一份 prompt (JAPANESE_PROMPT_*),核心規則：
+      Rule A 内税 / 税込：tax_label 出現「内」「税込」「税抜後」之一 → price 是
+              「未稅」,price_with_tax 由 price * (1+tax_rate) 算出。
+      Rule B 外税 / 税抜：tax_label 出現「外」「税抜」「+」之一 → price 是
+              「未稅」,price_with_tax = price + 對應稅額。
+      日本超商/藥妝預設稅率：食品 0.08（軽減税率）、其他 0.10、酒類/外食 0.10。
+    然後 reconcilePriceIncludesTax 用文字關鍵字 (「内」「本体」「税込」) 二度確認;
+    inferItemTaxRate 依品名 / 商家別把不合理稅率推回去。
+
+  【碰過的踩雷 (Gotchas) — 給接手的人】
+    - 改 .tag-bar-wrap 的 backdrop-filter 會破壞下面 fixed 子層的座標。
+    - touch-action: pan-x 會擋掉 iOS Safari 垂直捲動;一定要 pan-x pan-y。
+    - overscroll-behavior: contain 會擋掉外層滾動回彈,改 overscroll-behavior-x。
+    - button:hover 的特異性比 .tax-mode-btn.active 高,需要明寫 .active:hover。
+    - JPY_TWD_DAILY_2000_2025 用「乘 100000 取整 + 逗號分隔字串」儲存,
+      lazy parse 成 Float32Array,降低初始 parse 時間與字串大小。
+    - localStorage 寫入 debounce 300ms (scheduleSave),避免拼字過程一直 stringify。
+
+================================================================================
+-->
 <style>
   :root {
     /* 頁面背景改純白;單筆框（card）已無外框與底色,直接坐在白色頁面上 */
@@ -54,6 +193,18 @@
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
+  /* ============================================================================
+     Sticky name-tag banner (.tag-bar-wrap)
+
+     畫面頂部固定的長條:
+       - 左邊:選單按鈕 (右抽屜) + 設定齒輪
+       - 中間:◀ 日期星期時間 ▶ (該張單筆的日期);左右箭頭切前/後一張
+       - 右邊:keyDisplay (Groq/Gemini 縮寫) + 「+ 新增發票」按鈕
+     position: sticky + backdrop-filter 製造半透明毛玻璃感。
+     ⚠ backdrop-filter 會建立 stacking context + containing block,所以
+       「+ 新增發票」popup 跟它的 backdrop 不能放在這裡面,否則 fixed 子層會
+       被困住 → 在 JS 中把它們 append 到 body 直系下。
+     ============================================================================ */
   /* ===== Sticky name-tag banner ===== */
   .tag-bar-wrap {
     position: sticky;
@@ -746,11 +897,18 @@
     margin: 0 auto;
     padding: 18px 6px 48px;            /* 橫向縮到 6px,讓單筆框內容靠近螢幕邊緣 */
   }
-  /* 單筆框 carousel:橫向 scroll-snap,每個畫面只顯示一個。
-     touch-action: pan-x pan-y → 同時允許水平與垂直觸控;水平 pan 由 scroll-snap 處理,
-     垂直 pan 因為 overflow-y: hidden 不會被容器吃掉,自然向上傳遞到 body 捲動整個頁面。
-     scroll-snap-stop: normal → 動量大時可滑過一兩張;避免「mandatory + always」造成的
-     「滑過頭又彈回來」抖動感。 */
+  /* ============================================================================
+     單筆框 carousel:橫向 scroll-snap,每個畫面只顯示一張。
+       touch-action: pan-x pan-y → 同時允許水平與垂直觸控;水平 pan 由 scroll-snap
+                                    處理,垂直 pan 因為 overflow-y: hidden 不會被
+                                    容器吃掉,自然向上傳遞到 body 捲動整個頁面。
+       scroll-snap-stop: normal   → 動量大時可滑過一兩張;避免「mandatory + always」
+                                    造成的「滑過頭又彈回來」抖動感。
+       overscroll-behavior-x: contain → 只擋掉水平方向的 overscroll(避免 swipe 觸發
+                                    瀏覽器返回手勢),不要擋掉垂直方向。
+     容器高度由 JS (syncCarouselHeight) 動態設成「目前正中央那張」的內容高度,避免
+     不同張高度差導致空白。
+     ============================================================================ */
   #entriesContainer {
     display: flex;
     flex-wrap: nowrap;
@@ -1850,6 +2008,25 @@
   }
 </style>
 </head>
+<!--
+  ============================================================================
+  <body> 結構概觀 (大致從上到下):
+
+    .tag-bar-wrap           ← sticky 頂部標籤列 (選單/日期/+按鈕)
+    .add-menu-backdrop      ← 「+ 新增」popup 的半透明遮罩 (移出 tag-bar-wrap)
+    .add-menu               ← 「+ 新增」popup 本體 (相簿 / 手動輸入)
+    .photo-lightbox         ← 全螢幕照片檢視 (點縮圖打開)
+    .key-modal              ← API 金鑰輸入燈箱 (初次或更換)
+    .name-picker            ← 名字選擇燈箱 (拖入後或點 + 加人)
+    .entries-menu           ← 「發票帳本總覽」右側抽屜
+    .wrap                   ← 主內容區
+      ├ 隱藏的舊設定 card (groqKey, geminiKey, langSelect 等,仍需存在供 JS 存取)
+      ├ <template id="entryTemplate"> ← 每張單筆框的 DOM 樣板,createEntry() 複製出來
+      └ #entriesContainer   ← carousel,所有 .card.entry 並排在裡面
+
+  「燈箱」(modal) 都是固定在 <body> 子層、預設 display:none,加上 .visible 才顯示。
+  ============================================================================
+-->
 <body>
 <div class="tag-bar-wrap">
   <div class="tag-bar" id="tagBar">
@@ -1968,7 +2145,7 @@
 <div class="wrap">
   <header style="display:none">
     <h1>國外旅遊購物發票辨識</h1>
-    <p>填入 Google Gemini 免費 key 享受高品質智慧辨識；不填則使用純本機 Tesseract OCR。</p>
+    <p>填入 Groq 或 Gemini API key,即可進行 AI Vision 發票辨識。</p>
   </header>
 
   <div class="notice" style="display:none">
@@ -1985,62 +2162,30 @@
       <div id="keyDisplay" style="display:none"></div>
     </div>
   </section>
-  <!-- Gemini 區已停用，欄位仍在 DOM 供向下相容 -->
+  <!-- Gemini key 隱藏欄位（沒了 <select>,只剩 input 給 JS 存讀） -->
   <section class="card" style="display:none">
     <div class="field"><input type="password" id="geminiKey" /></div>
-    <div class="field"><select id="geminiModel"><option value="gemini-2.5-flash">Gemini 2.5 Flash</option></select></div>
-  </section>
-
-  <!-- 2. Tesseract 設定（已停用，Groq 不需要；欄位仍在 DOM 供 fallback 使用） -->
-  <section class="card" style="display:none">
-    <h2 style="display:none">發票語言設定</h2>
-    <div class="grid-2">
-      <div class="field">
-        <label class="row" for="langSelect">主要文字語言</label>
-        <select id="langSelect">
-          <option value="jpn">日文（日本）</option>
-          <option value="eng">英文（美國／加拿大／澳洲）</option>
-          <option value="kor">韓文（韓國）</option>
-          <option value="chi_tra">繁體中文（港澳台）</option>
-          <option value="chi_sim">簡體中文（中國大陸／新加坡）</option>
-          <option value="tha">泰文（泰國）</option>
-          <option value="fra">法文（法國）</option>
-          <option value="deu">德文（德國／奧地利）</option>
-          <option value="ita">義大利文</option>
-          <option value="spa">西班牙文</option>
-          <option value="vie">越南文</option>
-          <option value="jpn+eng">日文 + 英文（混合）</option>
-          <option value="kor+eng">韓文 + 英文（混合）</option>
-          <option value="chi_sim+eng">簡中 + 英文（混合）</option>
-        </select>
-        <p class="hint">挑越接近發票實際語言越準確。混合選項較慢但對中英混雜收據較友善。</p>
-      </div>
-      <div class="field">
-        <label class="row" for="currencyHint">幣別（可選，自動偵測失敗時用）</label>
-        <select id="currencyHint">
-          <option value="">自動偵測</option>
-          <option value="JPY">日圓 JPY</option>
-          <option value="USD">美元 USD</option>
-          <option value="EUR">歐元 EUR</option>
-          <option value="KRW">韓元 KRW</option>
-          <option value="THB">泰銖 THB</option>
-          <option value="HKD">港幣 HKD</option>
-          <option value="SGD">新加坡幣 SGD</option>
-          <option value="CNY">人民幣 CNY</option>
-          <option value="GBP">英鎊 GBP</option>
-          <option value="AUD">澳幣 AUD</option>
-          <option value="CAD">加幣 CAD</option>
-          <option value="TWD">新台幣 TWD</option>
-        </select>
-        <p class="hint">「自動」會從 ¥ / $ / € / ₩ 等符號猜，猜不到時請手動指定。</p>
-      </div>
-    </div>
   </section>
 
   <!-- 3. Upload -->
   <!-- 全域：選定標籤時的提示 -->
   <div class="assign-hint" id="assignHint"></div>
 
+  <!-- ==========================================================================
+       單筆框 template (entryTemplate)
+
+       這份樣板被 createEntry() (JS §21) 用 cloneNode(true) 複製出來,每張發票
+       一份。複製出來的 DOM 由 entry 工廠負責補綁事件 + 渲染資料。
+
+       狀態結構 (CSS class 控制顯示):
+         .empty        ← 剛建立、還沒拍照、空狀態 (顯示 .drop)
+         .manual-entry ← 手動輸入 (不會放照片,顯示 + 新增商品 按鈕)
+         .collapsed    ← 已收摺,只顯示一行 (商家名 + 日期)
+
+       資料結構 (JS 端 state):
+         state.parsed.items[]  ↔ 對應 .items 內動態渲染的 .item rows
+         state.assignments['item-0','item-1',...,'payer']  ↔ 名字 chip 指派
+       ========================================================================== -->
   <!-- 單筆框 template（由 JS 複製產生） -->
   <template id="entryTemplate">
     <section class="card entry empty">
@@ -2113,16 +2258,49 @@
 
   <!-- 「加入下一筆」入口已統一放到右上角「＋」按鈕,這裡不再放底部按鈕 -->
 
-  <p class="footer-note" style="display:none">
-    Gemini 模式：圖片直接傳至 <a href="https://ai.google.dev" style="color:inherit" target="_blank">Google Generative Language API</a>，由 Gemini 一次完成辨識+翻譯+含稅判斷。<br/>
-    Tesseract 模式：OCR 由 <a href="https://github.com/naptha/tesseract.js" style="color:inherit" target="_blank">Tesseract.js</a> 在本機完成；翻譯由 <a href="https://mymemory.translated.net" style="color:inherit" target="_blank">MyMemory</a> 提供。<br/>
-    匯率由 <a href="https://www.exchangerate-api.com" style="color:inherit" target="_blank">Open ER-API</a> 提供。圖片不經任何第三方伺服器。
-  </p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 (function(){
+  // ============================================================================
+  // 整個 JS 全部包在這個 IIFE 內，避免污染 window 全域。
+  //
+  // 目錄（依本檔出現順序，方便接手的人快速跳轉）：
+  //   §1  全域 UI 元素參照            (line ~ 2270)
+  //   §2  Name-tag system            (line ~ 2295) — 標籤的 CRUD、預設值、跨版本 migration
+  //   §3  Drag / Long-press          (line ~ 2390) — 把名字 chip 拖到商品 / payer 欄
+  //   §4  Squircle 背景 helper        (line ~ 2510) — 目前已停用，留著備用
+  //   §5  圖片壓縮                    (line ~ 2570) — 寫入 localStorage 前先壓縮
+  //   §6  跨 session 儲存             (line ~ 2590) — serializeEntry / hydrateEntry
+  //   §7  名字選擇燈箱 (namePicker)    (line ~ 2700) — 全螢幕勾選名字
+  //   §8  金鑰輸入燈箱 (keyModal)      (line ~ 2840) — Groq / Gemini API key 輸入
+  //   §9  Toast / showToast           (line ~ 2920)
+  //   §10 頂部日期星期時間大標題       (line ~ 2970)
+  //   §12 AI Vision (Gemini / Groq)    (line ~ 3070) — receipt OCR + parse + translate
+  //   §13 reconcilePriceIncludesTax    (line ~ 3280) — AI 給的 price 是稅前還稅後 ?
+  //   §16 內建 JPY→TWD 歷史匯率表       (line ~ 3580) — 2000-01-01 ~ 2025-12-31
+  //   (註: §11 Tesseract / §14 fallback parser / §15 MyMemory 翻譯 已移除,只走 AI 路線)
+  //   §17 即時 / 歷史匯率查詢            (line ~ 3610) — yahoo / oanda / cnyes / latest
+  //   §18 fmt helpers                  (line ~ 3835) — 顯示用 formatter
+  //   §19 日期/時間「即時格式化」助理    (line ~ 3870) — contenteditable 輸入時自動補 - 與 :
+  //   §20 稅率推斷 (inferItemTaxRate)   (line ~ 4080) — 日本食品 8% vs 標準 10% 等規則
+  //   §21 createEntry() 工廠            (line ~ 4190) — 從 <template> 複製出一張單筆框 + 邏輯
+  //         ├ handleFile / entryRun     — OCR 流程主體
+  //         ├ renderResult              — 解析完渲染進 DOM
+  //         ├ renderItemTags / Payer   — 拖入 / 燈箱選的名字 chip
+  //         ├ assignTag / unassignTag  — 商品分攤指派 CRUD
+  //         ├ cascadeItemEdit          — 使用者手動改一格金額，其他兩格連動
+  //         ├ renderItemAmounts        — 三欄金額顯示
+  //         ├ renderSummary / Totals   — 商品總計 + 每人分攤
+  //         └ applyTaxMode             — 切「未稅 / 含稅」顯示模式
+  //   §22 entries 排序 / 重新編號         (line ~ 5420)
+  //   §23 carousel 導航 + 高度同步        (line ~ 5510)
+  //   §24 photo lightbox                  (line ~ 5595)
+  //   §25 menu 抽屜 (rebuildEntriesMenu)  (line ~ 5615)
+  //   §26 初始化 (boot)                   (line ~ 5740)
+  //   §27 「＋ 新增發票」popup             (line ~ 5775)
+  // ============================================================================
+
   const $ = id => document.getElementById(id);
   // 全域 UI 元素（設定區、標籤橫幅、單筆容器等）
   const tagBarEl = $('tagBar');
@@ -2139,17 +2317,31 @@
   const lightboxImg = $('lightboxImg');
   const assignHintEl = $('assignHint');
   const geminiKeyEl = $('geminiKey');
-  const geminiModelEl = $('geminiModel');
-  const langEl = $('langSelect');
-  const curHintEl = $('currencyHint');
   const entriesContainer = $('entriesContainer');
   const addEntryBtn = $('addEntryBtn');
   const entryTemplate = $('entryTemplate');
 
+  // §1 =========================================================================
+  // 全部單筆框：兩個陣列承擔整個 app 的核心狀態
+  //   - entries:        進行中、顯示在 carousel 上的單筆框 (顯示順序 = 由舊到新)
+  //   - deletedEntries: 已軟刪除,藏在「全部單筆」選單抽屜中可還原 / 永久刪除
+  // 每個元素是 entry 工廠 createEntry() 回傳的 api 物件,內含 .state .element 等。
+  // ============================================================================
   // ===== 全部單筆框 =====
   const entries = [];           // 進行中（顯示）
   const deletedEntries = [];    // 已軟刪除（藏在抽屜中可還原）
 
+  // §2 =========================================================================
+  // Name-tag system
+  //
+  // 「標籤」= 同行旅客的名字 chip。可拖到商品 / payer 欄做費用分攤指派。
+  // 完整流程:
+  //   loadTags() ← localStorage('name_tags')
+  //   seedDefaultTagsIfNeeded() — 第一次或全部刪光時補上 DEFAULT_TAGS
+  //   migrateTagsIfNeeded() — 跨版本改名 (例: '佩慈' → '珮慈')
+  // 顏色:有 10 個預設色 (.tc-0 ~ .tc-9),addTag 會挑「目前最少用」的色號。
+  // 每張單筆框上的指派儲存在 api.state.assignments(key 為 item-N 或 payer)。
+  // ============================================================================
   // ===== Name-tag system =====
   const TAG_COLORS = 10; // matches CSS .tc-0 ~ .tc-9
   const DEFAULT_TAGS = ['金英', '佳柔', '阿嬤', '美惠', '鴻蘭', '姍玟', '珮慈', '華軍', '宜儒', '俞翔'];
@@ -2283,6 +2475,14 @@
     assignHintEl.classList.remove('visible');
   }
 
+  // §3 =========================================================================
+  // Drag + Long-press
+  //
+  // 用 pointer events (而不是 touch / mouse 分開) 來統一桌面 + 行動裝置。
+  //   • 短按拖動 → 取得 elementFromPoint → 落點是 .item 或 .payer-row 就 assignTag
+  //   • 長按 1 秒不動 → showTagMenu (改名 / 刪除)
+  // 拖動時會建立 .ghost 半透明 chip 跟著手指走;移到目標上 .drop-hover 樣式高亮。
+  // ============================================================================
   // ===== Drag (pointer-events based, works on touch + mouse) =====
   // ===== + Long-press (1s) → 顯示修改/刪除選單 =====
   function onChipPointerDown(e, tagId) {
@@ -2407,6 +2607,13 @@
     });
   }
 
+  // §4 =========================================================================
+  // iOS 連續曲率轉角 (squircle)
+  //
+  // 目前**已停用** (沒有任何元素套用 attachSquircleBg)。
+  // 保留下來當 helper:把一個 SVG path 作為 element 的背景,模擬 iOS 風格圓角。
+  // 之前 .card.entry 有用,後來改成「沒有外框 / 純白背景」就拿掉了。
+  // ============================================================================
   // ===== iOS 連續曲率轉角（squircle）=====
   // 標準 border-radius 用四分之一圓，轉角曲率有「啪」一聲的突變。
   // iOS 的轉角是基於 superellipse（超橢圓）曲線，曲率連續變化、視覺更順。
@@ -2468,6 +2675,13 @@
     el._squircleMo = mo;
   }
 
+  // §5 =========================================================================
+  // 圖片壓縮
+  //
+  // 原始相機拍出來 1 張動輒 3~5 MB,直接 base64 寫進 localStorage 會撐爆配額
+  // (localStorage 通常 5~10 MB 上限)。所以縮成 maxDim x maxDim (預設 1024),
+  // 用 JPEG quality 0.85 編碼,單張通常壓到 100~300 KB。
+  // ============================================================================
   // ===== 圖片壓縮（給 localStorage 用，避免單張幾 MB 直接撐爆配額）=====
   function compressImageDataUrl(dataUrl, maxDim, quality) {
     return new Promise((resolve, reject) => {
@@ -2489,6 +2703,19 @@
     });
   }
 
+  // §6 =========================================================================
+  // 跨 session 儲存
+  //
+  // 整個 app 不依賴後端,所有資料都序列化進 localStorage:
+  //   key: travel_ledger_entries_v1
+  //   shape: { active: [serializeEntry(...)], deleted: [...] }
+  // serializeEntry 只挑「該保留」的欄位 (state.parsed, assignments, rate,
+  // taxMode, photoDataUrl, isManualEntry, isDeleted, deletedAt) ,把 element
+  // / DOM 參照剔除。
+  //
+  // 寫入採 debounce 300ms (scheduleSave),避免使用者打字過程一直 stringify
+  // 整個物件導致掉幀。
+  // ============================================================================
   // ===== 跨 session 儲存：把所有單筆框序列化到 localStorage =====
   const ENTRIES_STORAGE_KEY = 'travel_ledger_entries_v1';
   let _saveDebounceTimer = null;
@@ -2571,6 +2798,10 @@
       '<line x1="3.5" y1="3.5" x2="8.5" y2="8.5"></line>' +
       '<line x1="8.5" y1="3.5" x2="3.5" y2="8.5"></line>' +
     '</svg>';
+  // ============================================================================
+  // 共用 helper：已指派標籤 chip 的 DOM 結構
+  // 兩處共用 (商品 row 內 + payer 欄)。chip 上的「x」小按鈕點下去 = unassign。
+  // ============================================================================
   // ===== 共用：已指派標籤 chip 的 DOM 結構 =====
   function buildAssignedChip(tag, tagId, key, removeTitle, onRemove) {
     const chip = document.createElement('span');
@@ -2593,6 +2824,13 @@
   seedDefaultTagsIfNeeded();       // 新使用者：用最新預設名單
   renderTagBar();                  // 已 no-op；保留呼叫以維持原本流程
 
+  // §7 =========================================================================
+  // 名字選擇燈箱 (namePicker) — 全螢幕勾選 UI
+  //
+  // 點商品 / payer 欄位的「+ 加人」按鈕、或點 chip 區的「重新指派」會打開此燈箱。
+  // 內含所有名字、勾選狀態、底部「全選 / 全不選 / 刪除 / 新增名字 / 完成」按鈕。
+  // 確定後 callback (_pickerOnConfirm) 帶回勾選的 tagId 陣列。
+  // ============================================================================
   // ===== 名字選擇燈箱 =====
   const namePickerEl = $('namePicker');
   const namePickerChipsEl = $('namePickerChips');
@@ -2736,6 +2974,18 @@
   if (_setupCard) _setupCard.style.display = 'none';
   // groqKeyEl / keyDisplayEl 留在 setup card 內隱藏,供現有程式碼相容存取
 
+  // §8 =========================================================================
+  // 金鑰輸入燈箱 (keyModal)
+  //
+  // 首次開啟 app 且沒有任何 key (groq_api_key / gemini_api_key) 時自動彈出。
+  // detectKeyKind() 用前綴判斷是哪家:
+  //   gsk_   → Groq
+  //   AIza   → Gemini
+  // 存進對應的 localStorage key,並更新頂部標籤列的 keyDisplay 縮寫顯示。
+  //
+  // 安全:key 只存在 localStorage,絕不會傳給除了 api.groq.com /
+  // generativelanguage.googleapis.com 以外的任何地方。
+  // ============================================================================
   // ===== 金鑰輸入燈箱 =====
   // 支援兩種 API key:
   //   - Groq:以 'gsk_' 開頭(也接受任何不像 Gemini 的字串當 fallback)
@@ -2828,6 +3078,12 @@
     document.body.removeChild(ta);
   }
   // 螢幕正中央小提示（一秒後自動淡出）
+  // §9 =========================================================================
+  // Toast — 底部短訊息 (showToast)
+  //
+  // 用法: showToast('已套用當日匯率') / showToast('無法獲得歷史匯率資料')
+  // 自動 3 秒後淡出移除。同一時間只會顯示一個。
+  // ============================================================================
   let _toastEl = null, _toastHideTimer = null, _toastRemoveTimer = null;
   function showToast(msg) {
     if (!_toastEl) {
@@ -2871,6 +3127,12 @@
     const da = String(d.getDate()).padStart(2, '0');
     return y + '-' + mo + '-' + da;
   }
+  // §10 ========================================================================
+  // 頂部「日期 / 星期 / 時間」大標題
+  //
+  // 在 tag-bar 中央顯示目前 carousel 正中央那張 entry 的日期星期時間。
+  // 滑動切張 + entry 內手動改日期都會觸發 updateTopDateTitle。
+  // ============================================================================
   function updateTopDateTitle() {
     if (!topDateTitleEl) return;
     if (!hasAnyApiKey()) { topDateTitleEl.classList.remove('visible'); return; }
@@ -2946,32 +3208,23 @@
   const savedGeminiKey = localStorage.getItem('gemini_api_key') || '';
   if (savedGeminiKey) geminiKeyEl.value = savedGeminiKey;
   geminiKeyEl.addEventListener('change', () => localStorage.setItem('gemini_api_key', geminiKeyEl.value.trim()));
-  const savedGeminiModel = localStorage.getItem('gemini_model');
-  if (savedGeminiModel) geminiModelEl.value = savedGeminiModel;
-  geminiModelEl.addEventListener('change', () => localStorage.setItem('gemini_model', geminiModelEl.value));
-  const savedLang = localStorage.getItem('ocr_lang');
-  if (savedLang) langEl.value = savedLang;
-  langEl.addEventListener('change', () => localStorage.setItem('ocr_lang', langEl.value));
-  const savedCur = localStorage.getItem('ocr_currency_hint');
-  if (savedCur) curHintEl.value = savedCur;
-  curHintEl.addEventListener('change', () => localStorage.setItem('ocr_currency_hint', curHintEl.value));
 
-  // ---- Tesseract worker (cached per language) ----
-  let _worker = null;
-  let _workerLangs = null;
-  let _activeProgress = null;   // 由當前正在跑的單筆框設定，讓 worker 進度能回報到正確的 UI
-  async function getWorker(langs) {
-    if (_worker && _workerLangs === langs) return _worker;
-    if (_worker) { try { await _worker.terminate(); } catch(e){} }
-    const langArr = langs.split('+');
-    _worker = await Tesseract.createWorker(langArr, 1, {
-      logger: m => {
-        if (m.progress != null && _activeProgress) _activeProgress(m.progress * 100);
-      }
-    });
-    _workerLangs = langs;
-    return _worker;
-  }
+  // 預設 Gemini 模型(原本是個 <select>,Tesseract 拿掉後直接 hardcode)
+  const GEMINI_MODEL = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+
+  // §12 ========================================================================
+  // AI Vision call — Gemini
+  //
+  // 整個 receipt OCR + 翻譯 + 含稅判斷 在一次 API call 完成。Prompt 結構：
+  //   §A 任務交代 (品項辨識、翻譯規則)
+  //   §B 期望 JSON 格式 (currency, date, time, items[])
+  //   §C 「規則 A 内税 vs 規則 B 外税」— 日本發票最常踩雷的地方,用範例強迫對齊
+  //   §D 自我檢查 (sum 對得起來嗎?)
+  //
+  // Tax 處理：AI 回的 price 「以未稅為準」(line_total = 本体);Caller 端
+  // (reconcilePriceIncludesTax) 會再用 tax_label / tax_reasoning 文字關鍵字
+  // 二度確認,並把含稅 / 未稅單價分別填好。
+  // ============================================================================
 
   // ---- Gemini Vision call ----
   async function callGemini(apiKey, model, base64, mime, signal) {
@@ -3093,6 +3346,13 @@
     return parsed;
   }
 
+  // ----------------------------------------------------------------------------
+  // Groq Llama Vision (OpenAI 相容 API)
+  //
+  // 跟 Gemini 用的是同一份 prompt 結構,但 Groq 對長 prompt 比較不耐煩,
+  // 所以 compress 過。response_format = { type: 'json_object' } 強制 JSON。
+  // 模型: meta-llama/llama-4-scout-17b-16e-instruct (見 GROQ_MODEL 常數)。
+  // ----------------------------------------------------------------------------
   // ---- Groq Llama Vision call（OpenAI 相容 API）----
   async function callGroq(apiKey, model, base64, mime, signal) {
     const prompt = [
@@ -3181,9 +3441,17 @@
     reconcilePriceIncludesTax(parsed);
     return parsed;
   }
-  // 後處理:綜合 tax_label / tax_reasoning 文字 + sum(line_total) / tax_amount / grand_total 三者關係,
-  // 反推真正的 price_includes_tax,修正「LLM 看到本体就標 false 但 line_total 卻是含稅數字」、
-  // 或「LLM 把 LAWSON 風格『(内消費税等 ¥XX)』誤判成外税」這類前後矛盾的回傳。
+  // §13 ========================================================================
+  // reconcilePriceIncludesTax — AI 後處理
+  //
+  // 為什麼需要：LLM 在「内税 vs 外税」的判斷上很容易自相矛盾(看到「本体」就直接
+  // 標 false,但其實該欄印的是含稅價;或者看到「(内消費税等)」誤判為外税)。所以
+  // 我們不信任 LLM 自己回的 price_includes_tax,改用兩階段反推:
+  //   1) tax_label / tax_reasoning 文字中只要有「内 / 税込 / 含稅 / inc tax」=含稅;
+  //      只要有「本体 / 税抜 / excl tax」=未稅。
+  //   2) 文字看不出來的時候,用算術:sum(line_total)≈grand_total → 含稅;
+  //      sum(line_total)+tax_amount ≈ grand_total → 未稅。
+  // ============================================================================
   function reconcilePriceIncludesTax(parsed) {
     if (!parsed || !parsed.items || parsed.items.length === 0) return;
 
@@ -3225,264 +3493,16 @@
     // 兩者都對不起來時(LLM 抓錯數字)就保留 LLM 原本的判斷,交由使用者手動調整。
   }
 
-  // ---- currency detection ----
-  function detectCurrency(text) {
-    const t = text;
-    if (/HK\$|HKD|港[幣元]/i.test(t)) return 'HKD';
-    if (/NT\$|新[台臺]幣|TWD/i.test(t)) return 'TWD';
-    if (/S\$\b|SGD|新加坡[幣元]/i.test(t)) return 'SGD';
-    if (/A\$|AUD|澳[幣元]/i.test(t)) return 'AUD';
-    if (/C\$|CAD|加[幣元]/i.test(t)) return 'CAD';
-    if (/US\$|USD|美[元金]/i.test(t)) return 'USD';
-    if (/RMB|人民幣|CNY/i.test(t)) return 'CNY';
-    if (/¥|円|yen|JPY/i.test(t)) return 'JPY';
-    if (/₩|원|won|KRW/i.test(t)) return 'KRW';
-    if (/€|EUR|euro/i.test(t)) return 'EUR';
-    if (/£|GBP|pound/i.test(t)) return 'GBP';
-    if (/฿|baht|บาท|THB/i.test(t)) return 'THB';
-    if (/\bVND|đồng|dong\b/i.test(t)) return 'VND';
-    if (/\$/.test(t)) return 'USD';
-    return null;
-  }
-
-  // ---- receipt parser ----
-  function parseReceipt(rawText, currency) {
-    const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-    const items = [];
-    let totalAmount = null;
-    let taxAmount = null;
-    let taxLabel = null;
-    let priceIncludesTax = null;
-    let merchant = null;
-    let date = null;
-
-    // detect merchant: first non-numeric line (within top 4 lines)
-    let merchantLineIdx = -1;
-    for (let i = 0; i < Math.min(4, lines.length); i++) {
-      const l = lines[i];
-      if (l.length >= 2 && !/^[\d\s.,:/\-]+$/.test(l) && !/^(tel|電話|住所|address)/i.test(l)) {
-        merchant = l;
-        merchantLineIdx = i;
-        break;
-      }
-    }
-
-    // detect date: look for YYYY-MM-DD or DD/MM/YYYY etc.
-    const dateRe = /(20\d{2})[年./\-]\s*(\d{1,2})[月./\-]\s*(\d{1,2})|(\d{1,2})[./\-](\d{1,2})[./\-](20\d{2}|\d{2})/;
-    for (const l of lines) {
-      const m = l.match(dateRe);
-      if (m) {
-        if (m[1]) date = m[1] + '-' + String(m[2]).padStart(2,'0') + '-' + String(m[3]).padStart(2,'0');
-        else {
-          const yr = m[6].length === 2 ? '20' + m[6] : m[6];
-          date = yr + '-' + String(m[5]).padStart(2,'0') + '-' + String(m[4]).padStart(2,'0');
-        }
-        break;
-      }
-    }
-
-    // noise lines we should never treat as items
-    const noiseRe = /^(receipt|invoice|cash|change|tender(ed)?|paid|visa|master(card)?|amex|credit|debit|card|approval|auth|reference|trans|term|merchant|cust|customer|thank|welcome|お預り|お預かり|おつり|お釣り|お釣|お返し|現金|找零|信用卡|刷卡|簽帳|金融卡|ご来店|レジ|店員|店名|電話|tel\b|fax\b|住所|address|date|time|日時|店\b|store|host|table|guest|server|order\s*#|check\s*#|invoice\s*#|您的|歡迎|謝謝|多謝|感謝|saved|loyalty|points|member|會員|points\s*earned|earn(ed)?\s*points)/i;
-    // lines that mean subtotal/total/tax
-    const taxLineRe = /(消費税|消費稅|\btax\b|\bvat\b|\bgst\b|\btva\b|\biva\b|\bmwst\b|service\s*charge|サービス料|消費\s*税|sales\s*tax)/i;
-    // date-looking lines (so we don't treat them as items)
-    const datelyRe = /^\s*\d{1,4}\s*[年\/\-\.]\s*\d{1,2}\s*[月\/\-\.]\s*\d{1,2}|^\s*\d{1,2}\s*[\/\-\.]\s*\d{1,2}\s*[\/\-\.]\s*\d{2,4}|^\s*\d{1,2}\s*:\s*\d{2}/;
-    const subtotalRe = /(sub[\s\-]*total|小計|sub\b)/i;
-    const totalRe = /(grand\s*total|^total\b|合\s*計|総\s*額|総\s*計|amount\s*due|balance\s*due|お買上|お支払|お会計|ご請求|合\s*算|應[付收][金額]|합\s*계|합\s*산|총\s*액|รวม|ยอดรวม)/i;
-    // tax-inclusive markers
-    const incTaxRe = /(税込|tax\s*incl|incl[\s.]*tax|含\s*税|含\s*稅|inc\.?\s*vat|vat\s*incl)/i;
-    // 「本体 / 本體 / 本体価格 / 本體價」也代表「未稅」價,出現這些字樣也視為未含稅
-    const excTaxRe = /(税抜|tax\s*excl|excl[\s.]*tax|未\s*税|ex\.?\s*vat|vat\s*excl|本\s*体|本\s*體)/i;
-
-    // price pattern: at end of line, optional currency prefix
-    // accepts: 1234, 1,234, 1.234,56, 1,234.56, ¥1,500
-    const priceTailRe = /([\$¥€₩£฿]?)\s*(\d{1,3}(?:[,\.\s]\d{3})+(?:[\.,]\d{1,2})?|\d+(?:[\.,]\d{1,2})?)\s*(円|원|元|圆|baht|บาท)?\s*$/i;
-
-    function parseNum(s) {
-      if (!s) return null;
-      s = s.replace(/\s/g, '');
-      // if contains both , and . — last one is decimal
-      const lastDot = s.lastIndexOf('.');
-      const lastCom = s.lastIndexOf(',');
-      if (lastDot >= 0 && lastCom >= 0) {
-        if (lastDot > lastCom) {
-          s = s.replace(/,/g, '');
-        } else {
-          s = s.replace(/\./g, '').replace(',', '.');
-        }
-      } else if (lastCom >= 0 && lastDot < 0) {
-        // ambiguous: is "1,234" thousand sep or decimal?
-        const afterCom = s.length - 1 - lastCom;
-        if (afterCom === 3 && s.split(',').every((p,i) => i === 0 || p.length === 3)) {
-          s = s.replace(/,/g, ''); // thousand
-        } else {
-          s = s.replace(',', '.'); // decimal
-        }
-      }
-      const n = parseFloat(s);
-      return isNaN(n) ? null : n;
-    }
-
-    for (const raw of lines) {
-      if (incTaxRe.test(raw)) priceIncludesTax = true;
-      if (excTaxRe.test(raw)) priceIncludesTax = false;
-    }
-
-    for (let li = 0; li < lines.length; li++) {
-      const line = lines[li];
-      if (li === merchantLineIdx) continue; // 不要把店家名再當品項
-      const m = line.match(priceTailRe);
-      if (!m) continue;
-      const price = parseNum(m[2]);
-      if (price == null) continue;
-      // 跳過「年份單獨被當價格」的狀況（例：行尾就是 2025）
-      if (Number.isInteger(price) && price >= 1900 && price <= 2099 &&
-          /\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[年\/\-]\d{1,2}[月\/\-]\d{1,2}/.test(line)) {
-        continue;
-      }
-      const namePart = line.slice(0, line.length - m[0].length).trim().replace(/[:：\-—]+$/, '').trim();
-
-      // classify
-      if (taxLineRe.test(line)) {
-        // accumulate (some receipts have multiple tax rows)
-        taxAmount = (taxAmount || 0) + price;
-        if (!taxLabel) {
-          const lm = line.match(/(消費税|消費稅|tax|vat|gst|service\s*charge|サービス料)[^0-9]*?(\d{1,3}\s*%)?/i);
-          taxLabel = lm ? lm[0].trim().replace(/\s+/g,' ') : 'Tax';
-        }
-        continue;
-      }
-      if (totalRe.test(line) || /balance|due|payment/i.test(line)) {
-        // pick largest total seen
-        if (totalAmount == null || price > totalAmount) totalAmount = price;
-        continue;
-      }
-      if (subtotalRe.test(line)) continue; // skip subtotal lines
-
-      if (noiseRe.test(line)) continue;
-      if (datelyRe.test(line)) continue; // skip date / time lines
-      if (!namePart || namePart.length < 1) continue;
-      if (/^[\d\s.,\-:/年月日時分秒]+$/.test(namePart)) continue; // pure numeric / date-y
-
-      // strip leading qty: "2x", "2 ×", "2 @"
-      let qty = 1;
-      const qtyM = namePart.match(/^(\d+)\s*[x×*X@]\s*(.+)$/);
-      let nameOut = namePart;
-      if (qtyM) {
-        qty = parseInt(qtyM[1], 10) || 1;
-        nameOut = qtyM[2].trim();
-      }
-
-      // sanity: skip absurdly large prices that are likely barcodes etc.
-      if (price > 99999999) continue;
-
-      items.push({
-        original_name: nameOut,
-        zh_name: nameOut, // placeholder, will be translated
-        quantity: qty,
-        unit_price: (qty && qty !== 1) ? +(price / qty).toFixed(2) : price,
-        line_total: price
-      });
-    }
-
-    // Decide tax inclusivity heuristically if not explicitly marked
-    const sumLines = items.reduce((s, it) => s + (it.line_total || 0), 0);
-    let reasoning;
-    if (priceIncludesTax === true) {
-      reasoning = '發票上出現「税込／含稅／Tax Incl.」等字樣，判斷為已含稅。';
-    } else if (priceIncludesTax === false) {
-      reasoning = '發票上出現「税抜／未稅／Tax Excl.」等字樣，判斷為未含稅。';
-    } else if (taxAmount != null && totalAmount != null) {
-      if (Math.abs(sumLines + taxAmount - totalAmount) < Math.max(1, totalAmount * 0.01)) {
-        priceIncludesTax = false;
-        reasoning = '品項小計 (' + fmtMoney(sumLines) + ') + 稅金 (' + fmtMoney(taxAmount) + ') ≈ 發票總計 (' + fmtMoney(totalAmount) + ')，判斷品項為未含稅價。';
-      } else if (Math.abs(sumLines - totalAmount) < Math.max(1, totalAmount * 0.01)) {
-        priceIncludesTax = true;
-        reasoning = '品項小計 ≈ 發票總計，且稅金已另列，判斷品項為含稅價，稅金為內含明細。';
-      } else {
-        // 不一致，採用「最後總計減去品項小計」當稅，可能 OCR 有誤
-        priceIncludesTax = false;
-        reasoning = '品項小計 (' + fmtMoney(sumLines) + ')、稅金 (' + fmtMoney(taxAmount) + ')、總計 (' + fmtMoney(totalAmount) + ') 三者對不起來，可能 OCR 有漏／多抓行；仍以「未含稅」處理。';
-      }
-    } else if (taxAmount != null && totalAmount == null) {
-      priceIncludesTax = false;
-      reasoning = '發票最後另列稅金欄位 (' + fmtMoney(taxAmount) + ')，判斷品項為未含稅價。';
-    } else if (totalAmount != null && Math.abs(sumLines - totalAmount) < Math.max(1, totalAmount * 0.01)) {
-      priceIncludesTax = true;
-      reasoning = '品項小計 ≈ 發票總計，且未見獨立稅金欄位，判斷為含稅價。';
-    } else if (totalAmount != null && sumLines < totalAmount) {
-      priceIncludesTax = false;
-      taxAmount = +(totalAmount - sumLines).toFixed(2);
-      taxLabel = taxLabel || '稅 / 服務費（推算）';
-      reasoning = '品項小計 (' + fmtMoney(sumLines) + ') 比發票總計 (' + fmtMoney(totalAmount) + ') 少，差額視為稅／服務費。';
-    } else {
-      // default: assume tax included if no signal
-      if (currency === 'USD' || currency === 'CAD') {
-        priceIncludesTax = false;
-        reasoning = '無明確標示；幣別為 ' + currency + '，美加慣例為未含稅。';
-      } else {
-        priceIncludesTax = true;
-        reasoning = '無明確標示；以多數國家慣例假設為含稅價。';
-      }
-    }
-
-    return {
-      currency: currency,
-      merchant: merchant,
-      date: date,
-      price_includes_tax: priceIncludesTax,
-      tax_amount: taxAmount,
-      tax_label: taxLabel,
-      grand_total: totalAmount,
-      tax_reasoning: reasoning,
-      items: items
-    };
-  }
-
-  // ---- translation ----
-  function mmLang(tessCode) {
-    return {
-      eng: 'en', jpn: 'ja', kor: 'ko',
-      chi_sim: 'zh-CN', chi_tra: 'zh-TW',
-      tha: 'th', fra: 'fr', deu: 'de',
-      ita: 'it', spa: 'es', vie: 'vi'
-    }[tessCode] || 'en';
-  }
-
-  async function translateOne(text, from) {
-    const to = 'zh-TW';
-    if (from === 'zh-TW') return text;
-    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '|' + to;
-    const r = await fetch(url);
-    if (!r.ok) throw new Error('translate http ' + r.status);
-    const j = await r.json();
-    let txt = (j.responseData && j.responseData.translatedText) || '';
-    // MyMemory sometimes returns error message in translatedText
-    if (/MYMEMORY WARNING|INVALID|QUOTA/i.test(txt)) throw new Error(txt);
-    // If from zh-CN, do simple Simplified→Traditional? MyMemory zh-CN→zh-TW often returns Simplified.
-    // Skip — user can interpret OK.
-    return txt || text;
-  }
-
-  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-  async function translateItems(items, fromLang) {
-    if (!items.length) return;
-    if (fromLang === 'zh-TW') {
-      items.forEach(it => it.zh_name = it.original_name);
-      return;
-    }
-    for (let i = 0; i < items.length; i++) {
-      try {
-        const t = await translateOne(items[i].original_name, fromLang);
-        items[i].zh_name = t;
-      } catch (e) {
-        items[i].zh_name = items[i].original_name + '（翻譯失敗）';
-      }
-      await sleep(120); // be polite to free API
-    }
-  }
-
+  // §16 ========================================================================
+  // 內建 JPY → TWD 歷史匯率表 (2000-01-01 ~ 2025-12-31, 9497 天)
+  //
+  // 來源:Federal Reserve H.10 + FRED;原 CSV 約 2.85 MB,經過壓縮:
+  //   - 數值 ×100000 取整 → 整數,再用逗號分隔成一個 string
+  //   - 整段內嵌成 JPY_TWD_DAILY_2000_2025 常數
+  //   - 第一次呼叫 lookupBuiltinJpyTwd 時 lazy parse 成 Float32Array
+  // 任何 2000-01-01 ~ 2025-12-31 間的 JPY 匯率優先打這份內建表;之後的日期才
+  // 上網查 cnyes (見 §17)。
+  // ============================================================================
   // ===== 內建 JPY → TWD 歷史匯率(2000-01-01 ~ 2025-12-31) =====
 // 起始日期 2000-01-01,共 9497 天(到 2025-12-31)。
 // 每個值 = jpy_twd × 100000 取整;使用時除回 1e5 得到「1 JPY ≈ x TWD」。
@@ -3511,6 +3531,18 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     if (!isFinite(v) || v <= 0) return null;
     return v / 100000;       // 回傳「1 JPY = x TWD」
   }
+
+  // §17 ========================================================================
+  // 即時 / 歷史匯率查詢
+  //
+  // fetchTwdRateAtDate() 是入口,依序嘗試:
+  //   1. lookupBuiltinJpyTwd (僅 JPY,日期在內建表範圍內)
+  //   2. fetchCnyesRateAtDate (鉅亨網 TradingView UDF API,日期 > 2025-12-31 用)
+  //   3. fetchOandaRateAtDate (OANDA fxds-hcc 備援)
+  //   4. fetchYahooRateAtDate (Yahoo finance 備援)
+  //   5. fetchTwdRate (open.er-api 最新匯率,只能拿 today 的)
+  // 找到第一個能拿到的就 return,失敗就往下一個 fallback。
+  // ============================================================================
 
   // 即期(最新)匯率,作為最後 fallback
   async function fetchTwdRate(currency) {
@@ -3729,6 +3761,13 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     return await fetchTwdRate(currency);
   }
 
+  // §18 ========================================================================
+  // 使用者「最近一次選定的匯率」+ 顯示用 formatter
+  //
+  // localStorage key: travel_ledger_default_rates_v1
+  // 儲存 { JPY: 0.215, USD: 31.5, ... };新增單筆框時自動套這個當預設。
+  // fmtMoney / fmtAmount / fmtDate 都是顯示用,不會影響 state 的數字本體。
+  // ============================================================================
   // ===== 使用者「最近一次選定的匯率」（依幣別記錄；做為新增單筆框時的預設） =====
   const USER_DEFAULT_RATE_KEY = 'travel_ledger_default_rates_v1';
   let userDefaultRates = {};
@@ -3780,6 +3819,17 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     }
     return out;
   }
+  // §19 ========================================================================
+  // 日期 / 時間「即時格式化」helper
+  //
+  // 日期 / 時間都是 contenteditable 的 <span>;當使用者打字時:
+  //   _formatDateWhileTyping('20250912') → '2025-09-12'  (自動補 '-')
+  //   _formatTimeWhileTyping('1345')     → '13:45'        (自動補 ':')
+  // 比起 <input type="date"> 在 iOS 上的 picker 體驗,直接打數字+自動格式化更俐落。
+  //
+  // parseUserDate / parseUserTime 接受多種寫法 (2025/9/12, 2025-9-12, 20250912)
+  // 一律 normalise 成 'YYYY-MM-DD' 或 'HH:MM'。
+  // ============================================================================
   // ===== 日期 / 時間「即時格式化」helper =====
   // 把使用者目前輸入字串轉成帶分隔符的版本;addTrailing 表示「達到 4 / 6 位數的瞬間」要不要補出
   // 尾巴的「-」;刪除時(isDelete)就傳 false,避免使用者按 backspace 想刪「-」卻又被自動補回。
@@ -3994,6 +4044,18 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     }
     return out;
   }
+  // §20 ========================================================================
+  // 稅率推斷 (extractTaxRate + inferItemTaxRate)
+  //
+  // 即使 AI 已回傳每筆 item.tax_rate,仍然會踩雷:
+  //   - 日本超商買啤酒 (酒類) 應該是 10%,LLM 卻可能跟著旁邊飲料填 8%
+  //   - 藥妝店買藥品應該是 10%,LLM 可能填 8%
+  //   - 餐廳「内用」應該是 10%,「外帶」才是 8%
+  // 所以最終稅率邏輯為:
+  //   1) 使用者手動 override (_taxRate) → 用使用者的
+  //   2) 否則跑 inferItemTaxRate:依品名關鍵字 + 商家別,套日本消費稅政策
+  //   3) 都推不出來 → 用發票級的 defaultRate (從 tax_label 抽出或 fallback)
+  // ============================================================================
   // 從 tax_label（如「消費稅 10%」「VAT 19%」）抽出稅率，回傳 0~1 的小數，找不到則 null
   function extractTaxRate(label) {
     if (!label) return null;
@@ -4102,6 +4164,29 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
       .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
+  // §21 ========================================================================
+  // 單筆框工廠 createEntry()
+  //
+  // 一張「單筆框」= 一筆發票。createEntry 從 #entryTemplate 複製一份 DOM,然後
+  // 接上以下事件 + 邏輯。回傳的 api 物件被丟進 entries[] / deletedEntries[]。
+  //
+  // 內部函式(粗略順序):
+  //   handleFile(file)          ← 使用者選了照片 → 壓縮 + 跑 entryRun
+  //   entryRun()                ← 主流程:OCR → parse → 翻譯 → 匯率 → renderResult
+  //   renderResult(parsed,rate) ← 把 parsed 填進該張 entry 的 DOM
+  //   renderItemTags / Payer    ← 重畫已指派的名字 chip
+  //   assignTag / unassignTag   ← 商品分攤指派 CRUD
+  //   parseEditedAmount         ← 解析使用者手寫的金額(含 ¥, $, 千分位)
+  //   cascadeItemEdit           ← 改一格 (未稅/含稅/TWD) 時自動連動另外兩格
+  //   renderItemAmounts         ← 顯示三欄金額(未稅、含稅、TWD)
+  //   renderSummary / Totals    ← 商品總計 + 「每人多少錢」分攤摘要
+  //   applyTaxMode              ← 切「未稅」/「含稅」整張顯示模式
+  //   initBlankManualEntry      ← 手動輸入(不傳照片)時的空白狀態
+  //   deleteSelf                ← 軟刪除,丟進 deletedEntries
+  //
+  // 每個 entry 內部 state.parsed 跟 state.items 都會在 cascadeItemEdit /
+  // assignTag 等動作後馬上 scheduleSave。
+  // ============================================================================
   // ===== 單筆框工廠 =====
   function createEntry() {
     const root = entryTemplate.content.cloneNode(true).querySelector('.card.entry');
@@ -4233,16 +4318,12 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
       refs.runBtn.disabled = true;
       refs.clearBtn.disabled = true;
       refs.resultCard.style.display = 'none';
-      // 優先用訪客自己貼的 key（可避開共用 key 被別人爆掉的風險）；否則用內建
+      // 優先用使用者自己貼的 Groq key,否則退到 Gemini key
       const groqKey = groqKeyEl.value.trim() || EMBEDDED_GROQ_KEY;
       const geminiKey = geminiKeyEl.value.trim();
       state.processing = true;
       state.abortController = new AbortController();
       const signal = state.abortController.signal;
-      // 若是 Tesseract 路線且被中止 → terminate 全域 worker，下一次會重新建立
-      signal.addEventListener('abort', () => {
-        if (_worker) { try { _worker.terminate(); } catch(e){} _worker = null; _workerLangs = null; }
-      });
       try {
         let parsed, engineUsed;
         if (groqKey) {
@@ -4251,28 +4332,12 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
           parsed = await callGroq(groqKey, GROQ_MODEL, state.base64, state.mime, signal);
           showProgress(70);
         } else if (geminiKey) {
-          engineUsed = 'Gemini ' + geminiModelEl.value;
+          engineUsed = 'Gemini ' + GEMINI_MODEL;
           setBusy(); showProgress(30);
-          parsed = await callGemini(geminiKey, geminiModelEl.value, state.base64, state.mime, signal);
+          parsed = await callGemini(geminiKey, GEMINI_MODEL, state.base64, state.mime, signal);
           showProgress(70);
         } else {
-          engineUsed = 'Tesseract + MyMemory';
-          const langs = langEl.value;
-          setBusy(); showProgress(2);
-          _activeProgress = showProgress;
-          const worker = await getWorker(langs);
-          if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-          const { data } = await worker.recognize(state.file);
-          _activeProgress = null;
-          if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-          const rawText = data.text || '';
-          const currencyHint = curHintEl.value || null;
-          const cur = detectCurrency(rawText) || currencyHint;
-          parsed = parseReceipt(rawText, cur);
-          parsed.currency = cur;
-          setBusy(); showProgress(70);
-          const fromLang = mmLang(langs.split('+')[0]);
-          await translateItems(parsed.items, fromLang);
+          throw new Error('請先輸入 Groq 或 Gemini API key。');
         }
 
         let rate = null;
@@ -4307,7 +4372,6 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
         console.error(err);
         setStatus('發生錯誤：' + (err.message || err), 'err');
         hideProgress();
-        _activeProgress = null;
       } finally {
         state.processing = false;
         state.abortController = null;
@@ -5336,6 +5400,14 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     return api;
   }
 
+  // §22 ========================================================================
+  // entries 排序 / 重新編號
+  //
+  // 規則:entries[] 一律按發票日期+時間「舊 → 新」升冪排列。
+  //   - 還沒填日期的空白單筆排到最右(視為「最新」)
+  //   - 畫面上 carousel 由左到右 = 由舊到新, #1 = 最舊
+  //   - 選單清單則由 rebuildEntriesMenu 做 reverse,讓最新的顯示在最上面
+  // ============================================================================
   function renumberEntries() {
     entries.forEach((e, i) => e.setNumber(i + 1));
   }
@@ -5426,6 +5498,15 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     setTimeout(() => api.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }), 50);
   }
 
+  // §23 ========================================================================
+  // Carousel 導航 + 高度同步
+  //
+  // 各張單筆框並排在 #entriesContainer 內,容器是 horizontal scroll-snap。
+  // scrollToEntry(i) 用 element.scrollIntoView 切到第 i 張。
+  //
+  // syncCarouselHeight():容器的高度跟著「目前正中央」那張 entry 內容高度走,
+  // 否則某張內容多會撐高,其他張下方就會出現大片空白。靠 ResizeObserver。
+  // ============================================================================
   // ===== 上/下單筆框導航（橫向 carousel 版本） =====
   function getCurrentEntryIdx() {
     if (entries.length <= 1) return 0;
@@ -5509,6 +5590,11 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
   // 視窗 resize 時也重新同步
   window.addEventListener('resize', () => syncCarouselHeight());
 
+  // §24 ========================================================================
+  // 全螢幕照片 lightbox
+  //
+  // 點任何一張單筆框的縮圖,以全螢幕方式秀出原圖。輕觸背景或按 ESC 關閉。
+  // ============================================================================
   // ===== 全螢幕照片 lightbox =====
   function openLightbox(src) {
     if (!src) return;
@@ -5527,6 +5613,16 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     }
   });
 
+  // §25 ========================================================================
+  // 「全部單筆」抽屜 (entriesMenu / 發票帳本總覽)
+  //
+  // 右上角選單按鈕 → 從右側滑出。內含:
+  //   - active 區:所有未刪除 entry,點任一張會 scrollToEntry 並關閉抽屜
+  //                顯示「日期 + 店家 + 商品總計」摘要
+  //                順序反過來 (最新在最上面,跟 carousel 相反)
+  //   - deleted 區:軟刪除的 entry,可「還原」或按垃圾桶圖示「永久刪除」
+  // 每次開啟 / entries 變動時用 rebuildEntriesMenu 重畫。
+  // ============================================================================
   // ===== 「全部單筆」抽屜 =====
   function openMenu() {
     rebuildEntriesMenu();
@@ -5658,6 +5754,17 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
     scheduleSave();
   }
 
+  // §26 ========================================================================
+  // 初始化 (boot)
+  //
+  // 順序很重要:
+  //   1. loadTags + seedDefaultTagsIfNeeded + migrateTagsIfNeeded
+  //   2. loadStoredEntries — 把 localStorage 內所有 entry hydrate 回來
+  //   3. 沒有任何 active entry 就建一張空白 (initBlankManualEntry)
+  //   4. sortEntriesByDateTime → renumber → scrollToEntry(最新一張)
+  //   5. updateKeyDependentUI — 沒 key 就藏掉「+ 新增照片」入口
+  //   6. 沒 key 時 openKeyModal — 強制使用者先輸入 key
+  // ============================================================================
   // ===== 初始化：先嘗試載入上次儲存的所有單筆，然後保證至少有一張空白 =====
   (function initEntries() {
     const stored = loadStoredEntries();
@@ -5688,6 +5795,17 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
   // 底部「點此加入發票照片」已移除,只有元素還在時才需要 wire(向下相容)
   if (addEntryBtn) addEntryBtn.addEventListener('click', () => addNewEntry(true));
 
+  // §27 ========================================================================
+  // 頂部「＋ 新增發票」popup (相簿 / 手動輸入)
+  //
+  // 右上角 + 按鈕 → 彈出兩個選項 (相簿 / 手動輸入空白單)。
+  //
+  // 重要 gotcha:這個 popup 跟它的半透明 backdrop 都被 append 到 <body> 直系下
+  // (而非 .tag-bar-wrap 內),因為 .tag-bar-wrap 有 backdrop-filter,會建立 stacking
+  // context + containing block,把 fixed-positioned 子層困在自己的範圍內,導致
+  // backdrop 只蓋到上方一條而不是整個畫面。彈窗座標靠 topAddBtn.getBoundingClientRect()
+  // 即時計算 (見 openAddMenu)。
+  // ============================================================================
   // ===== 頂部「＋ 新增發票」popup（相簿 / 手動輸入） =====
   const topAddBtn = $('topAddBtn');
   const addMenu = $('addMenu');
