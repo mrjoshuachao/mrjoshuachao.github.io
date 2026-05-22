@@ -1811,7 +1811,7 @@
   <div class="key-modal-backdrop" id="keyModalBackdrop"></div>
   <div class="key-modal-panel" role="dialog" aria-label="輸入金鑰">
     <h2 class="key-modal-title">輸入金鑰</h2>
-    <input type="password" id="keyModalInput" class="key-modal-input" placeholder="貼上 gsk_..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+    <input type="password" id="keyModalInput" class="key-modal-input" placeholder="" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
     <div class="key-modal-actions">
       <button type="button" id="keyModalConfirm" class="key-modal-btn primary">送出</button>
     </div>
@@ -2635,29 +2635,50 @@
   // groqKeyEl / keyDisplayEl 留在 setup card 內隱藏,供現有程式碼相容存取
 
   // ===== 金鑰輸入燈箱 =====
+  // 支援兩種 API key:
+  //   - Groq:以 'gsk_' 開頭(也接受任何不像 Gemini 的字串當 fallback)
+  //   - Gemini:以 'AIza' 開頭(Google API key 共通前綴)
+  // 依前綴自動偵測、存到對應位置,另一邊會被清空,確保同一時間只有一把 key 在用。
   const keyModalEl = $('keyModal');
   const keyModalInput = $('keyModalInput');
+  function detectKeyKind(key) {
+    if (!key) return null;
+    if (key.startsWith('AIza')) return 'gemini';
+    return 'groq';   // 預設視為 Groq(包括 'gsk_' 開頭與其他)
+  }
   function openKeyModal() {
-    keyModalInput.value = groqKeyEl.value || '';
+    // 顯示目前任一把有效金鑰;優先顯示 Groq,因為 entryRun 也是 Groq 優先
+    keyModalInput.value = (groqKeyEl.value || geminiKeyEl.value || '');
     keyModalEl.classList.add('visible');
     keyModalEl.setAttribute('aria-hidden', 'false');
     setTimeout(() => { try { keyModalInput.focus(); keyModalInput.select(); } catch(e){} }, 60);
   }
   function closeKeyModal(force) {
     // 沒任何金鑰時,不允許關閉（除非強制）
-    if (!force && !groqKeyEl.value.trim()) return;
+    if (!force && !groqKeyEl.value.trim() && !geminiKeyEl.value.trim()) return;
     keyModalEl.classList.remove('visible');
     keyModalEl.setAttribute('aria-hidden', 'true');
   }
   function saveKeyModal() {
     const newKey = (keyModalInput.value || '').trim();
     if (!newKey) { showToast('請輸入金鑰'); return; }
-    groqKeyEl.value = newKey;
-    localStorage.setItem('groq_api_key', newKey);
+    const kind = detectKeyKind(newKey);
+    if (kind === 'gemini') {
+      geminiKeyEl.value = newKey;
+      try { localStorage.setItem('gemini_api_key', newKey); } catch(e) {}
+      // 清掉另一邊,保持「同時只有一把」
+      groqKeyEl.value = '';
+      try { localStorage.removeItem('groq_api_key'); } catch(e) {}
+    } else {
+      groqKeyEl.value = newKey;
+      try { localStorage.setItem('groq_api_key', newKey); } catch(e) {}
+      geminiKeyEl.value = '';
+      try { localStorage.removeItem('gemini_api_key'); } catch(e) {}
+    }
     updateKeyDisplay();
     updateKeyDependentUI();
     closeKeyModal(true);
-    showToast('金鑰已儲存');
+    showToast(kind === 'gemini' ? 'Gemini 金鑰已儲存' : 'Groq 金鑰已儲存');
   }
   $('keyModalConfirm').addEventListener('click', saveKeyModal);
   // 「取消」按鈕已移除;舊元素若不存在則略過(向下相容)
@@ -2806,10 +2827,10 @@
     updateAddBtnVisibility();
   }
 
-  // Gemini 已停用：清空 embedded、清除 localStorage 殘留
+  // Gemini 與 Groq 兩種 API key 都支援。讀回曾經儲存的 key:
   const EMBEDDED_GEMINI_KEY = '';
-  try { localStorage.removeItem('gemini_api_key'); } catch(e) {}
-  geminiKeyEl.value = '';
+  const savedGeminiKey = localStorage.getItem('gemini_api_key') || '';
+  if (savedGeminiKey) geminiKeyEl.value = savedGeminiKey;
   geminiKeyEl.addEventListener('change', () => localStorage.setItem('gemini_api_key', geminiKeyEl.value.trim()));
   const savedGeminiModel = localStorage.getItem('gemini_model');
   if (savedGeminiModel) geminiModelEl.value = savedGeminiModel;
