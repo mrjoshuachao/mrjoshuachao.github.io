@@ -46,6 +46,9 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+    /* 鎖住整個網頁的「雙擊放大」(double-tap zoom):
+       manipulation = 允許 pan + pinch zoom,但禁用 double-tap 局部放大 */
+    touch-action: manipulation;
   }
   body {
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -612,7 +615,7 @@
     gap: 8px;
     margin: 6px 0 10px;
   }
-  /* payer slot — 與「商品品項條」同色(accent-soft #f3f3f3),融入整體版面;
+  /* payer slot — 跟「實際購買人」同色(--buyer-bg);
      gap 設 0 → 「付款人」標籤與「+」按鈕之間只剩 .add-name-btn 自己的 margin-left:4px */
   .payer-row {
     display: flex;
@@ -623,7 +626,7 @@
     border: none;
     border-radius: 999px;
     margin: 0;
-    background: var(--accent-soft);
+    background: var(--buyer-bg);
     flex: 1 1 auto;
     min-width: 0;
     min-height: 32px;
@@ -1580,6 +1583,19 @@
   }
   .item .price-cell.twd-cell .price-label { color: var(--twd-red); }
   .item .price-cell.twd-cell .price-val { color: var(--twd-red); }
+  /* 「稅率」欄(放在「含稅」右邊):同樣 column 排版,值為 8% / 10% 等百分比 */
+  .item .price-cell.rate-cell .price-val { white-space: nowrap; }
+  /* 「≈ XXX TWD」新台幣換算:獨立一行,靠左,在商品條最底部 */
+  .item .item-twd-row {
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--twd-red);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+  .item .item-twd-row .amount-num { padding: 0 3px; }
+  .item .item-twd-row .amount-cur { color: var(--twd-red); }
   /* 幣別簡寫（JPY/TWD 等）不可編輯，顯示為較淡的色 */
   .amount-cur, .cur-fixed {
     color: var(--muted);
@@ -2943,35 +2959,46 @@
       '      "original_name": "發票上的原始文字",',
       '      "quantity": 數量（看不到填 1）,',
       '      "unit_price": 單價數字（看不到填 null）,',
-      '      "line_total": 該品項小計數字（依發票實際印的數字）',
+      '      "line_total": 該品項小計數字（依發票實際印的數字）,',
+      '      "tax_rate": "該品項的消費稅率(0~1 的小數)。日本:食品/飲料/外帶餐點/定期訂閱報紙 = 0.08;其他 = 0.10。非日本發票就用該國的稅率(美國視州別、歐盟視國別)。不確定填 null"',
       '    }',
       '  ]',
       '}',
       '',
-      '判斷 price_includes_tax 與 line_total 的依據（請仔細按順序套用）:',
+      '判斷 price_includes_tax 與 line_total 的依據(請按順序套用,日本發票常見兩大寫法要分清):',
       '',
-      '【規則 A — 最高優先,看到就照做】「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格 / 稅抜」這類字樣',
-      '  - 這些字面意思一律是「未稅(不含消費稅)」。一旦發票上有任何地方出現,price_includes_tax 必須為 false。',
-      '  - line_total 必須使用「本体 / 税抜」對應的「未稅」金額,不可以使用含稅後的金額。',
-      '  - 範例 A1(每個品項旁都標本体):',
-      '      「商品A 本体 ¥100 / 商品B 本体 ¥200 / 小計(本体) ¥300 / 消費税 ¥30 / 合計 ¥330」',
-      '      → items: [{line_total:100},{line_total:200}], price_includes_tax:false, tax_amount:30, grand_total:330',
-      '  - 範例 A2(只有總計區有本体):',
-      '      「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」',
-      '      → 仍然 price_includes_tax:false。line_total 必須改寫成「未稅金額」:items: [{line_total:100},{line_total:200}](= 110/1.1, 220/1.1)。',
-      '      千萬不要因為品項標的是 110/220 就誤把 line_total 填 110/220 然後又標 price_includes_tax:false,這樣總和會對不起來。',
-      '  - 範例 A3:「税抜価格 ¥1000」當作未稅 ¥1000。',
+      '【規則 A — 内税(税込)寫法 → price_includes_tax = true】',
+      '  發票出現「内消費税等 / 内消費税 / 内税 / 税込 / (内 ¥XX) / 含稅」這類字樣,意思是「税金已經包含在合計裡」(=日本內税)',
+      '  - 品項旁邊印的金額本來就已含稅 → line_total 直接照抄,不要換算。',
+      '  - price_includes_tax = true;tax_amount = 内括號裡的稅金;grand_total = 「合計」金額。',
+      '  - 範例(LAWSON 風格):',
+      '      「L焼餃子 260 / 細巻納豆 298 / 合計 ¥558 / (内消費税等 ¥41)」',
+      '      → items:[{line_total:260},{line_total:298}], price_includes_tax:true, tax_amount:41, grand_total:558',
+      '      → sum(line_total)=558 必須 ≈ grand_total。',
       '',
-      '【規則 B】其他狀況:',
-      '- 發票另列 Tax / VAT / GST / 消費税 / 服務費 等且與品項小計分開 → false',
-      '- 品項旁或發票標示「税込 / Tax Included / Inc. VAT / 含稅」→ true',
-      '- 若所有 line_total 加總 ≈ 總計 → true;若 line_total 加總 + 稅金 = 總計 → false',
-      '- 不確定時:日／韓／歐盟通常 true;美／加通常 false',
+      '【規則 B — 外税(税抜)寫法 → price_includes_tax = false】',
+      '  發票出現「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格 / 外消費税」這類字樣,意思是「税金獨立於合計之外」(=日本外税)',
+      '  - line_total 必須使用「本体 / 税抜」對應的「未稅」金額;若品項旁印的是含稅,要換算回未稅。',
+      '  - 範例 B1(逐行標本体): 「商品A 本体 ¥100 / 商品B 本体 ¥200 / 消費税 ¥30 / 合計 ¥330」',
+      '      → items:[{line_total:100},{line_total:200}], price_includes_tax:false, tax_amount:30, grand_total:330',
+      '  - 範例 B2(只有合計區有本体): 「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」',
+      '      → items:[{line_total:100},{line_total:200}](= 110/1.1, 220/1.1), price_includes_tax:false',
+      '',
+      '【重要差異】',
+      '  「(内消費税等 ¥41)」 → 内税,合計已含稅 → 規則 A → true',
+      '  「本体 ¥517 / 消費税 ¥41 / 合計 ¥558」 → 外税,合計另含稅 → 規則 B → false',
+      '  千萬不要把「内消費税」誤判成「本体/税抜」,兩者意思完全相反!',
+      '',
+      '【規則 C】沒明顯字樣時:',
+      '  - 發票另列 Tax / VAT / GST / Sales Tax 等且與品項小計分開 → false',
+      '  - 標示「Tax Included / Inc. VAT」 → true',
+      '  - 若 sum(line_total) ≈ 總計 → true;若 sum(line_total) + 稅金 = 總計 → false',
+      '  - 不確定時:日/韓/歐盟通常 true;美/加通常 false',
       '',
       '【自我檢查】回傳前驗算:',
-      '- 若 price_includes_tax = false:sum(line_total) + tax_amount 必須 ≈ grand_total',
-      '- 若 price_includes_tax = true: sum(line_total) ≈ grand_total',
-      '- 對不起來就回去調整 line_total 或 price_includes_tax,不要回傳明顯矛盾的數字。',
+      '  - true 時:sum(line_total) ≈ grand_total',
+      '  - false 時:sum(line_total) + tax_amount ≈ grand_total',
+      '  - 對不起來就調整 line_total 或 price_includes_tax,不要回傳明顯矛盾的數字。',
       '',
       '金額一律阿拉伯數字,不要貨幣符號與千分位逗號。'
     ].join('\n');
@@ -3046,20 +3073,21 @@
       '      "original_name": "發票上的原始文字",',
       '      "quantity": 數量（看不到填 1）,',
       '      "unit_price": 單價（看不到填 null）,',
-      '      "line_total": 該品項小計（依發票印出的數字）',
+      '      "line_total": 該品項小計（依發票印出的數字）,',
+      '      "tax_rate": 該品項稅率小數,日本食品/飲料 = 0.08,其他 = 0.10;非日本用該國稅率;不確定 null',
       '    }',
       '  ]',
       '}',
       '',
-      '【判斷 price_includes_tax 與 line_total】請按順序套用:',
-      '(規則 A,最高優先)「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格 / 稅抜」這些字一律 = 未稅:',
-      '  - 一旦發票任何地方出現這些字 → price_includes_tax 必為 false。',
-      '  - line_total 必須使用「本体 / 税抜」對應的「未稅」金額。',
-      '  - 範例:「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」→ line_total 應該寫成 [100, 200](= 110/1.1, 220/1.1),不是 [110, 220]。也就是把品項換算回未稅,而不是直接照抄含稅數字。',
-      '  - 另一範例:「商品A 本体 ¥100 / 商品B 本体 ¥200 / 消費税 ¥30 / 合計 ¥330」→ line_total = [100, 200], tax_amount = 30, grand_total = 330。',
-      '(規則 B)其他狀況:發票另列 Tax/VAT/GST/消費税 → false;標示「税込/Tax Included/含稅」→ true;line_total 加總 ≈ 總計 → true;line_total + 稅金 = 總計 → false;日韓歐通常 true;美加通常 false。',
-      '(自我檢查)回傳前驗算:price_includes_tax=false 時 sum(line_total) + tax_amount ≈ grand_total;true 時 sum(line_total) ≈ grand_total。對不起來就調整 line_total,不要回傳矛盾的數字。',
-      '金額一律阿拉伯數字，不含貨幣符號與千分位逗號。'
+      '【判斷 price_includes_tax 與 line_total】(日本發票兩種寫法要分清):',
+      '(規則 A,内税/税込) 出現「内消費税等 / 内消費税 / 内税 / 税込 / (内 ¥XX) / 含稅」 → price_includes_tax = true。品項旁的金額本來就含稅,line_total 直接照抄,不要換算。',
+      '  範例(LAWSON):「L焼餃子 260 / 細巻納豆 298 / 合計 ¥558 / (内消費税等 ¥41)」 → items:[{line_total:260},{line_total:298}], price_includes_tax:true, tax_amount:41, grand_total:558。sum(line_total)=558 ≈ grand_total。',
+      '(規則 B,外税/税抜) 出現「本体 / 本體 / 本体価格 / 本體價 / 税抜 / 税抜価格」 → price_includes_tax = false。line_total 必須是「未稅」金額(若品項旁印的是含稅就要除以(1+稅率)換算回未稅)。',
+      '  範例:「商品A ¥110 / 商品B ¥220 / 本体 ¥300 / 消費税 ¥30 / 合計 ¥330」 → line_total = [100, 200](= 110/1.1, 220/1.1),不是 [110, 220]。',
+      '【重要】「内消費税」(内=已含在内)與「本体/税抜」(税還在外面)意思完全相反,不要混淆。',
+      '(規則 C,沒明顯字樣) 發票另列 Tax/VAT/GST/消費税 → false;標示「Tax Included」→ true;sum(line_total) ≈ 總計 → true;sum(line_total) + 稅金 = 總計 → false;日韓歐通常 true,美加通常 false。',
+      '(自我檢查) true 時 sum(line_total) ≈ grand_total;false 時 sum(line_total) + tax_amount ≈ grand_total。對不起來就調整,不要回傳矛盾的數字。',
+      '金額一律阿拉伯數字,不含貨幣符號與千分位逗號。'
     ].join('\n');
 
     const body = {
@@ -3104,10 +3132,32 @@
     reconcilePriceIncludesTax(parsed);
     return parsed;
   }
-  // 後處理:用 sum(line_total) 與 tax_amount / grand_total 的關係,反推真正的 price_includes_tax,
-  // 修正「LLM 看到本体就標 false 但 line_total 卻是含稅數字」這種前後矛盾的回傳。
+  // 後處理:綜合 tax_label / tax_reasoning 文字 + sum(line_total) / tax_amount / grand_total 三者關係,
+  // 反推真正的 price_includes_tax,修正「LLM 看到本体就標 false 但 line_total 卻是含稅數字」、
+  // 或「LLM 把 LAWSON 風格『(内消費税等 ¥XX)』誤判成外税」這類前後矛盾的回傳。
   function reconcilePriceIncludesTax(parsed) {
     if (!parsed || !parsed.items || parsed.items.length === 0) return;
+
+    // 1) 先看 tax_label / tax_reasoning 的「内 / 税込 / 含稅」VS「本体 / 税抜 / 外税」字樣
+    //    日本內税 (内消費税 / 内税 / 税込 / (内 ¥XX))一律是含稅;外税 (本体 / 税抜)一律是未稅
+    const textBlob = [
+      parsed.tax_label || '',
+      parsed.tax_reasoning || ''
+    ].join(' ');
+    const insideTaxRe = /内\s*消費税|内\s*税|\(\s*内|税\s*込|含\s*税|含\s*稅|tax\s*incl|incl\.?\s*tax|inc\.?\s*vat/i;
+    const outsideTaxRe = /本\s*体|本\s*體|税\s*抜|外\s*消費税|外\s*税|tax\s*excl|excl\.?\s*tax|ex\.?\s*vat/i;
+    const hasInside = insideTaxRe.test(textBlob);
+    const hasOutside = outsideTaxRe.test(textBlob);
+    if (hasInside && !hasOutside) {
+      parsed.price_includes_tax = true;
+      return;
+    }
+    if (hasOutside && !hasInside) {
+      parsed.price_includes_tax = false;
+      return;
+    }
+
+    // 2) 沒明確字樣 / 兩種都有 → 用算術判斷
     const sumLine = parsed.items.reduce((s, it) => s + (Number(it.line_total) || 0), 0);
     const tax = Number(parsed.tax_amount) || 0;
     const grand = Number(parsed.grand_total) || 0;
@@ -3384,15 +3434,77 @@
     }
   }
 
-  // 取「套用當日匯率」：原 open.er-api.com 提供國際即期匯率（與台灣銀行公告價接近）
-  // 註：臺灣銀行 https://rate.bot.com.tw/xrt/flcsv/0/day 是 CSV、不支援瀏覽器 CORS，
-  // 因此這裡用相容的開放 API；若日後想直接抓台銀資料，需要透過自架代理伺服器。
+  // 即期(最新)匯率,作為最後 fallback
   async function fetchTwdRate(currency) {
     const r = await fetch('https://open.er-api.com/v6/latest/' + encodeURIComponent(currency.toUpperCase()));
     if (!r.ok) throw new Error('匯率查詢失敗 ' + r.status);
     const j = await r.json();
     if (j.result !== 'success' || !j.rates || !j.rates.TWD) throw new Error('匯率回傳格式異常');
     return j.rates.TWD;
+  }
+  // 從 Yahoo Finance 的 chart API 抓「指定日期」的歷史匯率
+  //   URL 範例: https://query1.finance.yahoo.com/v8/finance/chart/JPYTWD=X?period1=...&period2=...&interval=1d
+  //   - period1/period2 是 unix 秒,我們抓「發票日期前 3 天 ~ 後 7 天」一段範圍,涵蓋假日後的開盤日
+  //   - 回應內的 indicators.quote[0].close 是該日的收盤匯率;找最接近發票日的有效值
+  async function fetchYahooRateAtDate(fromCur, dateIso) {
+    if (!fromCur) throw new Error('沒有指定幣別');
+    const symbol = String(fromCur).toUpperCase() + 'TWD=X';
+    let period1, period2, targetMs;
+    if (dateIso && /^\d{4}-\d{1,2}-\d{1,2}$/.test(dateIso)) {
+      const m = dateIso.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      targetMs = Date.UTC(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), 12, 0, 0);
+      period1 = Math.floor((targetMs - 3 * 86400 * 1000) / 1000);
+      period2 = Math.floor((targetMs + 7 * 86400 * 1000) / 1000);
+    } else {
+      // 沒日期 → 抓最近 14 天的最新交易日
+      const now = Date.now();
+      period2 = Math.floor(now / 1000);
+      period1 = period2 - 14 * 86400;
+      targetMs = null;
+    }
+    const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' +
+                encodeURIComponent(symbol) +
+                '?period1=' + period1 + '&period2=' + period2 + '&interval=1d';
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('Yahoo http ' + r.status);
+    const j = await r.json();
+    if (j.chart && j.chart.error) {
+      throw new Error('Yahoo: ' + (j.chart.error.description || j.chart.error.code || 'unknown'));
+    }
+    const result = j.chart && j.chart.result && j.chart.result[0];
+    if (!result) throw new Error('Yahoo 沒有資料');
+    const timestamps = result.timestamp || [];
+    const closes = (result.indicators && result.indicators.quote && result.indicators.quote[0]
+                    && result.indicators.quote[0].close) || [];
+    // 找最接近目標日期的有效 close
+    if (targetMs != null && timestamps.length === closes.length && timestamps.length > 0) {
+      let bestVal = null, bestDist = Infinity;
+      for (let i = 0; i < timestamps.length; i++) {
+        const v = closes[i];
+        if (v == null) continue;
+        const dist = Math.abs(timestamps[i] * 1000 - targetMs);
+        if (dist < bestDist) { bestDist = dist; bestVal = v; }
+      }
+      if (bestVal != null) return bestVal;
+    }
+    // 沒目標日 / 對應不上 → 取最後一個有效 close(最近一個交易日)
+    for (let i = closes.length - 1; i >= 0; i--) {
+      if (closes[i] != null) return closes[i];
+    }
+    // 再不行就用 meta.regularMarketPrice
+    if (result.meta && typeof result.meta.regularMarketPrice === 'number') {
+      return result.meta.regularMarketPrice;
+    }
+    throw new Error('Yahoo 找不到當日匯率');
+  }
+  // 抓「指定日期」的歷史匯率:主要來源 Yahoo Finance,失敗才退回 open.er-api.com 最新匯率
+  async function fetchTwdRateAtDate(currency, dateIso) {
+    try {
+      return await fetchYahooRateAtDate(currency, dateIso);
+    } catch (e) {
+      console.warn('Yahoo Finance 匯率查詢失敗,退回 open.er-api.com 最新匯率:', e);
+    }
+    return await fetchTwdRate(currency);
   }
 
   // ===== 使用者「最近一次選定的匯率」（依幣別記錄；做為新增單筆框時的預設） =====
@@ -3666,6 +3778,102 @@
     const m = String(label).match(/(\d{1,2}(?:\.\d{1,2})?)\s*%/);
     return m ? parseFloat(m[1]) / 100 : null;
   }
+  // 推算單一商品的稅率:
+  // 1) LLM 提供 item.tax_rate → 用它
+  // 2) 日本發票:依商品名稱對應日本消費稅政策的分類
+  //    - 標準 10%:一般商品/服務、酒類、外食(イートイン)
+  //    - 軽減 8%:外帶飲食料品(不含酒)、定期訂閱報紙
+  // 3) 非日本或不確定 → 用發票整體稅率(defaultRate),否則 0.10
+
+  // 酒類 / 外食 / 雑貨類 / 藥妝類 → 強制 10%(即使外觀像食物也適用標準稅率)
+  const JP_RATE_10_RE = new RegExp([
+    // === 酒類 ===
+    'ビール','発泡酒','日本酒','清酒','焼酎','ウィスキー','ウイスキー','ワイン','シャンパン',
+    'カクテル','チューハイ','酎ハイ','サワー','梅酒','ハイボール','スピリッツ','リキュール',
+    'ジン','ウォッカ','ラム酒','テキーラ','ブランデー','スコッチ','バーボン','缶ビール','生ビール',
+    'ハイサワー','レモンサワー','酒\\b','Beer','Wine','Sake','Whiskey','Whisky','Cocktail','Champagne','Brandy',
+    // === 外食 / イートイン(店內食用) ===
+    'イートイン','店内','店內','店内飲食','店内利用','外食','レストラン','ファミレス',
+    // === 一般雜貨 / 日用品 ===
+    'タバコ','たばこ','煙草','香菸','ペット','ペット用品','文具','文房具','洗剤','洗濯洗剤','柔軟剤',
+    'バッテリー','電池','カイロ','傘\\b','服\\b','衣類','靴下','タオル','毛巾',
+    // === 藥品類(医薬品 / 保健品 / 漢方) ===
+    '医薬品','薬\\b','薬品','風邪薬','感冒藥','頭痛薬','頭痛藥','胃薬','胃藥','胃腸薬','胃腸藥',
+    '目薬','眼藥水','咳止め','軟膏','軟膏\\b','湿布','貼布','酸痛貼布','漢方','漢方藥',
+    'サプリ','サプリメント','保健品','保健食品','維他命','ビタミン','プロテイン','蛋白粉','栄養剤','栄養補助',
+    'のど飴','喉糖','栄養ドリンク','整腸剤','便秘薬','下痢止め','解熱剤','鎮痛剤','鎮咳剤','抗菌',
+    // === 衛生 / 救急用品 ===
+    'マスク','口罩','絆創膏','バンドエイド','OK繃','OK 繃','包帯','繃帶','ガーゼ','紗布','消毒液','消毒','消毒酒精',
+    '体温計','体溫計','綿棒','棉花棒','綿球','使い捨て','使い捨てマスク',
+    'ティッシュ','トイレットペーパー','衛生紙','生理用品','ナプキン','タンポン','衛生棉','棉條',
+    // === 牙齒口腔護理 ===
+    '歯磨き','歯磨き粉','歯ブラシ','牙膏','牙刷','マウスウォッシュ','洗口液','漱口水','デンタル','歯間',
+    // === 化粧品 / 美容 ===
+    '化粧品','コスメ','化粧水','化妝水','乳液\\b','美容液','美容精華','精華液','フェイスクリーム','面霜',
+    'ファンデーション','粉底','口紅','リップ','リップスティック','唇膏','リップクリーム','護唇膏','リップグロス','唇蜜',
+    'マスカラ','睫毛膏','アイシャドウ','眼影','アイブロウ','眉粉','眉筆','アイライナー','眼線',
+    'チーク','腮紅','パウダー','蜜粉','フェイスパウダー','フェイスパック','面膜','パック\\b',
+    '香水','フレグランス','コロン','日焼け止め','防曬乳','防曬乳液','UVケア','日焼け止めクリーム',
+    'マニキュア','指甲油','ネイル','ネイルカラー','美容パック','クレンジング','卸妝',
+    '洗顔','洗面乳','洗面皂','石鹸','石けん','肥皂','ハンドソープ','洗手乳',
+    'ボディソープ','沐浴乳','ボディクリーム','ボディローション','ハンドクリーム','護手霜','ヘアパック',
+    // === 髮類產品 ===
+    'シャンプー','洗髮精','洗髮乳','リンス','コンディショナー','護髮素','潤絲精','ヘアトリートメント','護髮霜',
+    'ヘアスプレー','髮膠','ヘアワックス','髮蠟','ヘアジェル','髮膠','ヘアミスト','ヘアオイル','護髮油','整髪料',
+    'ヘアカラー','染髪剤','染髮劑','育毛','育毛剤','育髮液','養髮液',
+    // === 男士剃鬚 ===
+    'カミソリ','刮鬍刀','髭剃り','シェービング','シェービングジェル','シェービングフォーム','剃鬚膏','アフターシェーブ',
+    // === 嬰兒/育兒用品 ===
+    'オムツ','尿布','紙おむつ','紙尿布','おしりふき','濕紙巾','ベビー用品','育児用品'
+  ].join('|'), 'i');
+
+  // 飲食料品 → 8%(軽減税率)
+  const JP_RATE_8_RE = new RegExp([
+    // 主食類
+    '餃子','飯糰','お握','おにぎり','サンドイッチ','サンド','サンドウィッチ','ハンバーガー','ピザ',
+    'パン\\b','麵包','麺\\b','拉麵','ラーメン','うどん','蕎麦','そば','焼きそば','チャーハン','チャーシュー',
+    'パスタ','スパゲッティ','スパゲティ','カレー','丼\\b','親子丼','カツ丼','牛丼','豚丼','天丼',
+    '寿司','鮨\\b','刺身','弁当','お弁当','便當','惣菜','おかず','御飯','ご飯',
+    // 蛋白質/魚肉/乳製品
+    '納豆','豆腐','卵\\b','たまご','タマゴ','蛋\\b','肉\\b','牛肉','豚肉','鶏肉','チキン','ポーク','ビーフ',
+    '魚\\b','鮮魚','刺身','鯛','サバ','サンマ','まぐろ','エビ','蛤','貝\\b','たい\\b','うなぎ','鰻',
+    'ハム','ベーコン','ソーセージ','ウィンナー','チーズ','ヨーグルト','牛乳','牛奶','乳製品','バター','生クリーム',
+    // 蔬果
+    '野菜','蔬菜','サラダ','沙拉','レタス','キャベツ','トマト','ジャガイモ','玉ねぎ','玉葱','タマネギ',
+    'きゅうり','キュウリ','たまねぎ','ねぎ','ニンジン','にんじん','大根','ブロッコリー','ピーマン','なす',
+    '果物','フルーツ','果実','みかん','林檎','りんご','苺','いちご','バナナ','ぶどう','メロン','スイカ','桃','もも','柿','梨\\b',
+    // 點心/零食/甜點
+    'デザート','甜點','アイス','アイスクリーム','冰淇淋','お菓子','零食','スナック','スイーツ',
+    'プリン','ゼリー','ケーキ','ドーナツ','クッキー','ビスケット','チョコ','チョコレート','巧克力','キャラメル',
+    '飴\\b','アメ','あめ','キャンディ','ガム','餅\\b','お餅','和菓子','洋菓子','大福','まんじゅう','団子',
+    // 飲料(非酒精)
+    'お?茶\\b','麦茶','烏龍茶','ウーロン茶','緑茶','紅茶','玄米茶','ほうじ茶','玉露','抹茶',
+    'コーヒー','咖啡','ジュース','果汁','水\\b','ミネラルウォーター','お水','清涼飲料',
+    'サイダー','コーラ','ファンタ','スプライト','オランジーナ','スポーツドリンク','スポドリ',
+    'ココア','ミルク','シロップ','甘酒','ノンアル','野菜ジュース','青汁','スムージー','エナジー','エネルギー',
+    // 食品 / 飲料 / 報紙 / 新聞 通用詞
+    '食品','飲料','報紙','新聞','調味料','醤油','味噌','砂糖','塩\\b','油\\b'
+  ].join('|'), 'i');
+
+  function inferItemTaxRate(item, parsed, defaultRate) {
+    // LLM 給的 tax_rate 優先採用,但若 LLM 把酒類標成 8% 仍會被下方覆蓋
+    const llmRate = (item && typeof item.tax_rate === 'number' && item.tax_rate >= 0 && item.tax_rate < 1)
+      ? item.tax_rate : null;
+
+    const cur = (parsed && parsed.currency || '').toUpperCase();
+    if (cur === 'JPY') {
+      const name = (item && (item.original_name || '') + ' ' + (item.zh_name || '')) || '';
+      // 1) 酒類 / 外食 / 明顯非食品的雜貨 → 一律 10%(覆蓋 LLM 判斷)
+      if (JP_RATE_10_RE.test(name)) return 0.10;
+      // 2) 飲食料品 / 報紙 → 8%
+      if (JP_RATE_8_RE.test(name)) return 0.08;
+      // 3) 無法從名稱判斷 → 信任 LLM(若有),否則預設 10%
+      if (llmRate != null) return llmRate;
+      return 0.10;
+    }
+    if (llmRate != null) return llmRate;
+    return (defaultRate != null && defaultRate >= 0) ? defaultRate : 0.10;
+  }
   function escapeHtml(s) {
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -3854,7 +4062,8 @@
           } else {
             setBusy(); showProgress(90);
             try {
-              rate = await fetchTwdRate(parsed.currency);
+              // 預設用「發票日期當天」的歷史匯率(假日 / 沒資料時自動回溯;最後仍失敗則退回最新)
+              rate = await fetchTwdRateAtDate(parsed.currency, parsed.date);
               if (rate) setUserDefaultRate(parsed.currency, rate);
             } catch(e) { console.warn('rate fail', e); }
           }
@@ -3979,14 +4188,23 @@
         const qty = (it.quantity == null) ? 1 : it.quantity;
         const line = it.line_total;
         const share = (sumLine > 0 && line != null) ? line / sumLine : 0;
+        // 每個商品自己的稅率:
+        //   1) 使用者編輯過的 _taxRate 優先(避免重新渲染時被覆蓋)
+        //   2) LLM 給的 item.tax_rate
+        //   3) 日本食品/飲料 → 8%、其他 → 10%
+        //   4) 整體 taxRate fallback
+        const itemRate = (typeof it._taxRate === 'number' && it._taxRate >= 0 && it._taxRate < 1)
+          ? it._taxRate
+          : inferItemTaxRate(it, parsed, taxRate);
+        it._taxRate = itemRate;
         let preTax = null, withTax = null;
         if (isInc) {
           withTax = line;
-          if (taxRate != null && line != null) preTax = line / (1 + taxRate);
+          if (itemRate != null && line != null) preTax = line / (1 + itemRate);
           else if (totalTax != null && line != null) preTax = line - totalTax * share;
         } else if (isExc) {
           preTax = line;
-          if (taxRate != null && line != null) withTax = line * (1 + taxRate);
+          if (itemRate != null && line != null) withTax = line * (1 + itemRate);
           else if (totalTax != null && line != null) withTax = line + totalTax * share;
           else if (grandT != null && sumLine > 0 && line != null) {
             const implied = (grandT - sumLine) / sumLine;
@@ -3994,7 +4212,7 @@
           } else withTax = line;
         } else {
           withTax = line;
-          if (taxRate != null && line != null) preTax = line / (1 + taxRate);
+          if (itemRate != null && line != null) preTax = line / (1 + itemRate);
         }
         // 依當前 taxMode 決定 TWD 換算基準（預設 inc 即原本行為）
         const _mode0 = state.taxMode || (parsed.price_includes_tax === false ? 'exc' : 'inc');
@@ -4009,6 +4227,10 @@
         it._editedWithTax = withTax;
         it._editedTwd = twd;
         const qtySuffix = (qty > 1) ? ' ×' + qty : '';
+        // 稅率顯示字串(8%、10% 等;不確定就空)
+        const rateText = (itemRate != null && itemRate >= 0)
+          ? (Math.round(itemRate * 1000) / 10) + '%'
+          : '';
         const div = document.createElement('div');
         div.className = 'item';
         div.dataset.itemIdx = String(i);
@@ -4031,11 +4253,15 @@
                   ' <span class="amount-cur">' + escapeHtml(cur) + '</span>' +
                 '</div></div>' +
               '<div class="price-sep">/</div>' +
-              '<div class="price-cell twd-cell" data-cell="twd"><div class="price-label"><span class="approx">≈</span> 新台幣</div>' +
+              '<div class="price-cell rate-cell" data-cell="taxRate"><div class="price-label">稅率</div>' +
                 '<div class="price-val">' +
-                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="twd">' + escapeHtml(fmtMoney(twd, 0)) + '</span>' +
-                  ' <span class="amount-cur">TWD</span>' +
+                  '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="taxRate" inputmode="decimal">' + escapeHtml(rateText) + '</span>' +
                 '</div></div>' +
+            '</div>' +
+            '<div class="item-twd-row">' +
+              '<span class="approx">≈</span> ' +
+              '<span class="amount-num" contenteditable="true" spellcheck="false" data-kind="twd">' + escapeHtml(fmtMoney(twd, 0)) + '</span>' +
+              ' <span class="amount-cur">TWD</span>' +
             '</div>' +
           '</div>' +
           '<div class="item-buyer">' +
@@ -4219,6 +4445,10 @@
     function resolveTaxRate(item) {
       const parsed = state.parsed;
       if (!parsed) return 0;
+      // 0) 商品自己的 _taxRate(per-item) 最優先
+      if (item && typeof item._taxRate === 'number' && item._taxRate >= 0 && item._taxRate < 1) {
+        return item._taxRate;
+      }
       // 1) 「消費稅 10%」這類 label
       const fromLabel = extractTaxRate(parsed.tax_label);
       if (fromLabel != null && fromLabel > 0) return fromLabel;
@@ -4246,13 +4476,63 @@
       // 5) 找不到 → 0
       return 0;
     }
+    // 把使用者打的稅率字串(如 "8%" / "8" / "0.08")轉成 0~1 的小數;解不出來回 null
+    function parseUserTaxRate(txt) {
+      if (!txt) return null;
+      const s = String(txt).replace(/[\s,]/g, '');
+      const m = s.match(/(-?\d+(?:\.\d+)?)\s*%?/);
+      if (!m) return null;
+      let n = parseFloat(m[1]);
+      if (isNaN(n)) return null;
+      // 「8」或「10」等 > 1 的數字當百分比;「0.08」這類 ≤ 1 直接用
+      if (n > 1) n = n / 100;
+      if (n < 0 || n > 1) return null;
+      return n;
+    }
     // 編輯了某商品某格 → 重算另外兩格並更新顯示
     function cascadeItemEdit(itemEl, editedNum) {
       const kind = editedNum.dataset.kind;
-      const newVal = parseEditedAmount(editedNum.textContent);
       const idx = parseInt(itemEl.dataset.itemIdx, 10);
       const item = state.parsed && state.parsed.items ? state.parsed.items[idx] : null;
       if (!item) return;
+      // 編輯「稅率」欄:把新稅率存到 item._taxRate,並用目前 mode 重算另一邊與 TWD
+      if (kind === 'taxRate') {
+        const newRate = parseUserTaxRate(editedNum.textContent);
+        if (newRate == null) {
+          // 還原顯示
+          renderItemAmounts(itemEl, item._editedPreTax, item._editedWithTax, item._editedTwd, item._taxRate);
+          return;
+        }
+        item._taxRate = newRate;
+        const mode = state.taxMode || 'inc';
+        let preTax = item._editedPreTax, withTax = item._editedWithTax;
+        if (mode === 'inc') {
+          // 含稅當基準,重算未稅
+          if (withTax != null) preTax = withTax / (1 + newRate);
+        } else {
+          // 未稅當基準,重算含稅
+          if (preTax != null) withTax = preTax * (1 + newRate);
+        }
+        const _cur2 = (state.parsed && state.parsed.currency || '').toUpperCase();
+        const _intCur2 = (_cur2 === 'JPY' || _cur2 === 'TWD');
+        if (_intCur2) {
+          if (preTax != null) preTax = Math.round(preTax);
+          if (withTax != null) withTax = Math.round(withTax);
+        }
+        const rate2 = state.rate;
+        const base2 = mode === 'exc' ? preTax : withTax;
+        let twd2 = (rate2 != null && base2 != null) ? base2 * rate2 : null;
+        if (twd2 != null) twd2 = Math.round(twd2);
+        item._editedPreTax = preTax;
+        item._editedWithTax = withTax;
+        item._editedTwd = twd2;
+        item.line_total = withTax;
+        renderItemAmounts(itemEl, preTax, withTax, twd2, newRate);
+        renderTotals();
+        scheduleSave();
+        return;
+      }
+      const newVal = parseEditedAmount(editedNum.textContent);
       const taxRate = resolveTaxRate(item);
       const rate = state.rate;
       // 解析失敗 → 還原顯示
@@ -4260,7 +4540,7 @@
         const preTaxNow = item._editedPreTax != null ? item._editedPreTax : (item._preTax || 0);
         const withTaxNow = item._editedWithTax != null ? item._editedWithTax : (item._withTax || item.line_total || 0);
         const twdNow = item._editedTwd != null ? item._editedTwd : (item._twd || (rate ? withTaxNow * rate : null));
-        renderItemAmounts(itemEl, preTaxNow, withTaxNow, twdNow);
+        renderItemAmounts(itemEl, preTaxNow, withTaxNow, twdNow, item._taxRate);
         return;
       }
       const mode = state.taxMode || 'inc';
@@ -4307,20 +4587,24 @@
       item._editedWithTax = withTax;
       item._editedTwd = twd;
       item.line_total = withTax;     // 統一以「含稅」為 line_total
-      renderItemAmounts(itemEl, preTax, withTax, twd);
+      renderItemAmounts(itemEl, preTax, withTax, twd, item._taxRate);
       renderTotals();                 // 同步合計
       scheduleSave();
     }
-    function renderItemAmounts(itemEl, preTax, withTax, twd) {
+    function renderItemAmounts(itemEl, preTax, withTax, twd, taxRateVal) {
       const p = itemEl.querySelector('.amount-num[data-kind="preTax"]');
       const w = itemEl.querySelector('.amount-num[data-kind="withTax"]');
       const t = itemEl.querySelector('.amount-num[data-kind="twd"]');
+      const r = itemEl.querySelector('.amount-num[data-kind="taxRate"]');
       // JPY / TWD 永遠 0 小數;其他幣別交給 fmtMoney 預設(>=100 → 0,否則 2)
       const _cur = (state.parsed && state.parsed.currency || '').toUpperCase();
       const _d = (_cur === 'JPY' || _cur === 'TWD') ? 0 : undefined;
       if (p) p.textContent = fmtMoney(preTax, _d);
       if (w) w.textContent = fmtMoney(withTax, _d);
       if (t) t.textContent = fmtMoney(twd, 0);
+      if (r && taxRateVal != null) {
+        r.textContent = (Math.round(taxRateVal * 1000) / 10) + '%';
+      }
     }
     // 重算「簡述」格（N 件 + 含/未稅總計 + TWD 換算）
     function renderSummary() {
@@ -4549,17 +4833,18 @@
         scheduleSave();
       }
     });
-    // 「套用當日匯率」按鈕：fetch live rate, 套用到目前單筆 + 更新預設
+    // 「套用當日匯率」按鈕:根據「發票日期」抓網路上的歷史匯率
     refs.metaEl.addEventListener('click', async (e) => {
       const btn = e.target.closest && e.target.closest('.live-rate-btn');
       if (!btn) return;
       const cur = state.parsed && state.parsed.currency;
+      const dateIso = state.parsed && state.parsed.date;
       if (!cur || cur === 'TWD') return;
       btn.disabled = true;
       const origLabel = btn.textContent;
       btn.textContent = '查詢中…';
       try {
-        const fetched = await fetchTwdRate(cur);
+        const fetched = await fetchTwdRateAtDate(cur, dateIso);
         if (!fetched) throw new Error('未取得匯率');
         state.rate = fetched;
         setUserDefaultRate(cur, fetched);
@@ -4568,7 +4853,7 @@
         if (rn) rn.textContent = fmtMoney(fetched, 4);
         // 重新計算所有 TWD 與合計
         applyTaxMode(state.taxMode || 'inc', true);
-        showToast('已套用當日匯率');
+        showToast(dateIso ? ('已套用 ' + dateIso + ' 的匯率') : '已套用最新匯率');
       } catch (err) {
         console.warn(err);
         showToast('查詢匯率失敗');
