@@ -7,10 +7,11 @@
 <title>發票拆帳筆記</title>
 <style>
   :root {
-    /* 三層明度：頁面（最暗）→ 單筆框（中等）→ 商品品項（最亮 #fff，直接寫死） */
-    --bg: #dcdcdc;        /* 頁面背景：與單筆框背景同色 */
+    /* 頁面背景改純白;單筆框（card）已無外框與底色,直接坐在白色頁面上 */
+    --bg: #ffffff;        /* 頁面背景：純白 */
     --panel: #ffffff;     /* 給按鈕、彈出選單等（保持白） */
-    --card-bg: #dcdcdc;   /* 單筆框內部：中等灰 */
+    --card-bg: #ffffff;   /* 單筆框背景（已不再使用,保留變數避免破壞他處） */
+    --pill-bg: #d0d0d0;   /* 付款人 / 實際購買人 等小膠囊背景 */
     --ink: #000000;
     --muted: #6b7280;
     --line: #000000;          /* 純黑框線 */
@@ -55,7 +56,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(220, 220, 220, 0.92);   /* 跟 --bg 一致 */
+    background: rgba(255, 255, 255, 0.92);   /* 跟白色頁面背景一致 */
     backdrop-filter: saturate(160%) blur(8px);
     -webkit-backdrop-filter: saturate(160%) blur(8px);
     border-bottom: 1px solid var(--line);
@@ -72,11 +73,12 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
   }
-  /* 中央 cluster：[← 日期 →] 整組置中、隨內容寬度伸縮 */
+  /* 中央 cluster：[← 日期 →] 整組置中、隨內容寬度伸縮
+     gap 加大,讓左右箭頭離正中央大標題遠一點 */
   .middle-cluster {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 24px;
     flex: 1 1 auto;
     min-width: 0;
     justify-content: center;
@@ -128,6 +130,11 @@
     text-overflow: ellipsis;
   }
   .top-date-title.visible { display: block; }
+  /* 標題後面「(n/total)」括號顏色更淺一些 */
+  .top-date-title .top-date-suffix {
+    color: var(--muted);
+    font-weight: 500;
+  }
   /* 頂部圓形按鈕共用樣式：menu / nav / add 全部都是 32x32 正圓色塊 */
   .menu-btn, .nav-btn, .add-btn {
     width: 32px;
@@ -146,7 +153,7 @@
     align-self: center;
     font-family: inherit;
   }
-  .menu-btn:hover, .nav-btn:hover, .add-btn:hover { filter: brightness(0.95); }
+  .menu-btn:hover, .nav-btn:hover, .add-btn:hover { filter: brightness(0.85); }
   .menu-btn:active, .nav-btn:active, .add-btn:active { background: var(--ink); color: var(--panel); }
   .menu-btn svg { width: 20px; height: 20px; display: block; }
   .nav-btn svg { width: 14px; height: 14px; display: block; }
@@ -187,7 +194,7 @@
     min-height: unset;
     font-family: inherit;
   }
-  .add-menu-btn:hover { filter: brightness(0.95); }
+  .add-menu-btn:hover { filter: brightness(0.85); }
   .add-menu-btn:active { background: var(--ink); color: var(--panel); }
 
   /* 「全部單筆」抽屜 */
@@ -235,8 +242,40 @@
     box-shadow: 4px 0 18px rgba(0,0,0,0.18);   /* 陰影改到右側 */
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;                /* panel 本身不捲;讓中間 .menu-body 負責捲動 */
     padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+  /* 中段可捲動,header / footer 保持在上下不動 */
+  .menu-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* 永遠黏在抽屜底部的 footer,放「更換金鑰」按鈕 */
+  .menu-footer {
+    flex: 0 0 auto;
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    text-align: left;             /* 按鈕靠左下角 */
+  }
+  .menu-change-key {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-family: inherit;
+    min-height: unset;
+    flex: 0 0 auto;
+  }
+  .menu-change-key:hover {
+    background: var(--accent-soft);
+    color: var(--ink);
   }
   .menu-header {
     display: flex;
@@ -297,10 +336,18 @@
     letter-spacing: 0.5px;
   }
   .menu-list li .li-title { font-weight: 600; }
-  .menu-list li.deleted .li-title { color: var(--muted); text-decoration: line-through; }
+  /* 「已刪除」清單:整體更淡,提示這些是已被移除的單筆 */
+  .menu-list li.deleted {
+    opacity: 0.5;
+  }
+  .menu-list li.deleted .li-num,
+  .menu-list li.deleted .li-title {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
   .menu-list li.deleted .restore-hint {
     font-size: 11px;
-    color: var(--accent);
+    color: var(--muted);
     margin-top: 2px;
   }
   .menu-empty {
@@ -476,7 +523,7 @@
     font-family: inherit;
     min-height: unset;
   }
-  .add-item-btn:hover { filter: brightness(0.95); }
+  .add-item-btn:hover { filter: brightness(0.85); }
 
   /* 商品右側「實際購買人」— 用網頁背景色，使色塊融入整體 */
   .item-buyer {
@@ -488,7 +535,7 @@
     padding: 8px 10px;
     border: none;
     border-radius: 16px;
-    background: var(--bg);
+    background: var(--pill-bg);
     flex: 0 0 var(--buyer-width);
     width: var(--buyer-width);
     max-width: var(--buyer-width);
@@ -496,7 +543,7 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-  .item-buyer:hover { filter: brightness(0.97); }
+  .item-buyer:hover { filter: brightness(0.85); }
   .item-buyer .payer-label { text-align: center; }
   /* 有標籤之後：隱藏「實際購買人」label 與 ＋ 按鈕，只顯示標籤 */
   .item-buyer.has-tags .payer-label,
@@ -528,15 +575,22 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.3);
+    background: #ffffff;        /* 白色正圓底色 */
+    color: var(--ink);          /* SVG 線條用黑色 */
     cursor: pointer;
-    font-size: 12px;
     margin-left: 0;             /* gap 已負責空隙 */
+    flex: 0 0 16px;
+    vertical-align: middle;
   }
-  .item-tag .x:hover { background: rgba(255,255,255,0.5); }
+  .item-tag .x svg {
+    width: 11px;
+    height: 11px;
+    display: block;
+  }
+  .item-tag .x:hover { filter: brightness(0.85); }
 
   /* 付款人 + 未稅/含稅 toggle 同一橫列 */
   .payer-tax-row {
@@ -545,7 +599,7 @@
     gap: 8px;
     margin: 6px 0 10px;
   }
-  /* payer slot — 用網頁背景色，融入整體 */
+  /* payer slot — 淺灰膠囊,在白色頁面上仍可看清楚 */
   .payer-row {
     display: flex;
     align-items: center;
@@ -555,14 +609,14 @@
     border: none;
     border-radius: 999px;
     margin: 0;
-    background: var(--bg);
+    background: var(--pill-bg);
     flex: 1 1 auto;
     min-width: 0;
     min-height: 32px;
     transition: background 0.15s;
     cursor: pointer;
   }
-  .payer-row:hover { filter: brightness(0.97); }
+  .payer-row:hover { filter: brightness(0.85); }
   .payer-row.drop-target {
     border-color: var(--accent);
     background: var(--accent-soft);
@@ -577,30 +631,35 @@
     flex-shrink: 0;
     text-align: center;
   }
-  /* 「付款人」「實際購買人」文字後面的「圓圈+」小按鈕 — 正圓、小到跟文字差不多 */
+  /* 「付款人」「實際購買人」文字後面的「圓圈+」小按鈕 —
+     白色正圓底色 + 黑色 SVG 線條畫的「+」,跟勾勾/叉叉風格一致 */
   .add-name-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 13px;
-    width: 13px;
-    height: 13px;
-    min-width: 13px;
-    min-height: 13px;
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
     margin-left: 4px;
     padding: 0;
     border: none;
     border-radius: 50%;
-    background: var(--accent-soft);
-    color: var(--ink);
-    font-size: 10px;
+    background: #ffffff;        /* 白色正圓 */
+    color: var(--ink);          /* SVG 線條用黑色 */
     line-height: 1;
     font-family: inherit;
     cursor: pointer;
     vertical-align: middle;
     box-sizing: border-box;
   }
-  .add-name-btn:hover { filter: brightness(0.95); }
+  .add-name-btn svg {
+    width: 11px;
+    height: 11px;
+    display: block;
+  }
+  .add-name-btn:hover { filter: brightness(0.85); }
   .item-buyer .add-name-btn { margin-left: 0; margin-top: 2px; }
   .payer-slot {
     display: flex;
@@ -631,9 +690,11 @@
   .wrap {
     max-width: 720px;
     margin: 0 auto;
-    padding: 18px 16px 48px;
+    padding: 18px 6px 48px;            /* 橫向縮到 6px,讓單筆框內容靠近螢幕邊緣 */
   }
-  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個 */
+  /* 單筆框 carousel：橫向 scroll-snap，每個畫面只顯示一個
+     touch-action: pan-x → 只允許水平 pan;垂直觸控 / 滑鼠滾輪交給頁面 window scroll。
+     overscroll-behavior 只擋水平,避免擋到垂直方向的滾輪傳遞。 */
   #entriesContainer {
     display: flex;
     flex-wrap: nowrap;
@@ -642,6 +703,7 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     overscroll-behavior-x: contain;
+    touch-action: pan-x;           /* 水平交瀏覽器處理;垂直 / 滑鼠滾輪自然向上傳遞到 body */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -680,33 +742,22 @@
   }
   .card.entry {
     position: relative;
-    background: #ffffff;        /* 純白底，無框線 */
+    background: transparent;    /* 不再畫卡片底色;內容直接坐在白色頁面上 */
     border: none;
-    border-radius: 22px;
+    border-radius: 0;
+    padding: 14px 6px;          /* 取代繼承 .card 的 16px:橫向縮到 6px、貼近螢幕邊緣 */
   }
   .card.entry._squircled {
-    background: #ffffff;
+    background: transparent;
     border: none;
   }
   /* 上/下箭頭捲動到單筆框時，預留 sticky 標籤列高度避免被遮 */
   .card.entry {
     scroll-margin-top: 80px;
   }
-  /* SVG squircle 背景填入 .card.entry 內、做為「連續曲率」邊框與底色 */
-  .squircle-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: visible;               /* path 貼著 SVG 邊，stroke 才不會被裁；視覺中心對齊 card box 邊緣 */
-  }
-  .squircle-bg path {
-    fill: #ffffff;                   /* 純白填色 */
-    stroke: none;                    /* 不畫框線 */
-    shape-rendering: geometricPrecision;
-  }
+  /* 已停用：原本用 SVG squircle 當單筆框的圓角白底,現在卡片背景已拿掉 */
+  .squircle-bg { display: none; }
+  .squircle-bg path { fill: transparent; stroke: none; }
   /* 卡片內所有非 SVG 子元素疊在 SVG 之上 */
   .card.entry > *:not(.squircle-bg) {
     position: relative;
@@ -731,7 +782,7 @@
 
   /* 收縮狀態：只顯示「編號 + 繁中店家大標題」，連垃圾桶都隱藏 */
   .card.entry.collapsed {
-    padding: 8px 16px;            /* 上下對稱，編號/店家名稱垂直置中 */
+    padding: 8px 6px;             /* 與展開狀態橫向 padding 一致 */
   }
   .card.entry.collapsed .entry-header {
     min-height: 32px;             /* 縮一點，line-height 32 對應 22px 字級的視覺中心 */
@@ -990,14 +1041,17 @@
     min-height: 44px;
     flex: 1;
   }
-  button:hover:not(:disabled) { background: #f3f4f6; }
+  /* 任何按鈕 hover 都「變深」(brightness < 1),不要變淺;
+     特殊規則(例如 .tax-mode-btn.active hover 保持黑底)會用更高特異度覆蓋 */
+  button:hover:not(:disabled) { filter: brightness(0.85); }
   button.primary {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
     flex: 2;
   }
-  button.primary:hover:not(:disabled) { background: #333333; }
+  /* primary 按鈕 hover 共用上方 button:hover 的 filter:brightness(0.85);
+     不再覆蓋成 #333333 那種「變淺」的黑色 */
   button:disabled { opacity: 0.5; cursor: not-allowed; }
   .status {
     font-size: 13px;
@@ -1110,6 +1164,96 @@
     object-fit: contain;
   }
 
+  /* ===== API 金鑰輸入燈箱（畫面正中央） ===== */
+  .key-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .key-modal.visible { display: flex; }
+  .key-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .key-modal-panel {
+    position: relative;
+    z-index: 1;
+    background: var(--panel);
+    border-radius: 22px;
+    padding: 22px;
+    max-width: min(380px, 92vw);
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+  .key-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 10px;
+    text-align: center;
+  }
+  .key-modal-hint {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+  .key-modal-hint a {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+  .key-modal-hint code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--accent-soft);
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+  .key-modal-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    font-size: 15px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    background: #fff;
+    color: var(--ink);
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .key-modal-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .key-modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;     /* 「送出」按鈕置中 */
+    margin-top: 14px;
+  }
+  .key-modal-btn {
+    flex: 0 0 auto;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid #ffffff;
+    background: var(--muted);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    min-height: unset;
+    white-space: nowrap;
+  }
+  .key-modal-btn.primary { background: var(--ink); }
+  .key-modal-btn:hover:not(:disabled) { filter: brightness(0.85); }
+
   /* 名字選擇燈箱 */
   .name-picker {
     position: fixed;
@@ -1146,32 +1290,31 @@
     text-align: center;
     letter-spacing: 1px;
   }
-  /* 名字標籤區：固定 5 個一排（不足一排不調整單顆寬度）、整體置中 */
+  /* 名字標籤區：一排最多 3 個、整體置中 */
   .name-picker-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     justify-content: center;
     margin-bottom: 18px;
   }
   .picker-name {
-    /* 每個標籤等寬：(100% - 4 個 gap 6px = 24px) / 5 */
-    flex: 0 0 calc((100% - 24px) / 5);
-    max-width: calc((100% - 24px) / 5);
+    /* 一排三個等寬：(100% - 2 個 gap 8px = 16px) / 3 */
+    flex: 0 0 calc((100% - 16px) / 3);
+    max-width: calc((100% - 16px) / 3);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;       /* 名字水平置中 */
     text-align: center;
-    padding: 4px 6px;
+    padding: 6px 10px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: #fff;
     border: 1px solid #ffffff;
     cursor: pointer;
-    opacity: 0.35;
-    transition: opacity 0.12s, transform 0.08s;
+    transition: transform 0.08s, box-shadow 0.12s;
     font-family: inherit;
     white-space: nowrap;          /* 名字不斷行 */
     overflow: hidden;
@@ -1180,53 +1323,63 @@
     min-height: unset;
   }
   .picker-name:active { transform: scale(0.96); }
-  .picker-name.checked { opacity: 1; }
-  /* 新增名字標籤的 + 按鈕：正圓形、無框線、純色塊（同商品品項條色） */
-  .picker-add {
-    display: inline-flex;
+  /* 勾選後：右側出現「正圓形 + 勾勾」圖示，並加上微微內陰影提示已選 */
+  .picker-name.checked {
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.18);
+  }
+  .picker-name .picker-name-check {
+    display: none;
     align-items: center;
     justify-content: center;
-    flex: 0 0 28px;
-    width: 28px;
-    height: 28px;
-    padding: 0;
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
     border-radius: 50%;
-    border: none;
-    background: var(--accent-soft);
-    color: var(--ink);
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1;
-    font-family: inherit;
-    min-height: unset;
+    background: #ffffff;        /* 白色正圓底色 */
+    color: var(--ink);          /* SVG 線條用黑色 */
+    flex: 0 0 16px;
+    vertical-align: middle;
   }
-  .picker-add:hover { filter: brightness(0.95); }
+  .picker-name .picker-name-check svg {
+    width: 11px;
+    height: 11px;
+    display: block;
+  }
+  .picker-name.checked .picker-name-check { display: inline-flex; }
+  /* 舊「+ 新增」按鈕已移除（改由左下「新增」按鈕取代），保留 class 樣式避免殘留呼叫者 */
+  .picker-add { display: none !important; }
   .picker-hint {
+    display: none;
     text-align: center;
     font-size: 11px;
     color: var(--muted);
     margin: -10px 0 14px;
     line-height: 1.4;
   }
+  /* 燈箱底部：左下=新增/刪除,右下=全選/確定 */
   .name-picker-actions {
     display: flex;
-    gap: 6px;                     /* 與名字標籤之間的 gap 一致 */
-    justify-content: center;
+    gap: 6px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .name-picker-actions-left,
+  .name-picker-actions-right {
+    display: flex;
+    gap: 6px;
     align-items: center;
   }
-  /* 全選 / 確定 — 尺寸跟 2 字名字標籤一樣（1/5 容器寬） */
+  /* 名字燈箱底部四個按鈕(新增 / 刪除 / 全選 / 確定):一律黑底白字、無框 */
   .picker-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 calc((100% - 24px) / 5);
-    max-width: calc((100% - 24px) / 5);
     box-sizing: border-box;
-    padding: 4px 6px;
+    padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid #ffffff;
-    background: var(--muted);
+    border: none;
+    background: var(--ink);
     color: #fff;
     cursor: pointer;
     font-weight: 600;
@@ -1235,46 +1388,41 @@
     font-family: inherit;
     min-height: unset;
     white-space: nowrap;
+    flex: 0 0 auto;
   }
-  .picker-btn.primary {
-    background: var(--ink);
-    color: #fff;
+  .picker-btn.primary { background: var(--ink); }
+  .picker-btn.danger  { background: var(--ink); }
+  .picker-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
-  .picker-btn:hover { filter: brightness(0.92); }
+  .picker-btn:hover:not(:disabled) { filter: brightness(0.85); }
 
-  /* meta：三列日期/匯率/簡述。沒有外框，列之間用單一細線分隔（粗細一致）
-     margin-left: 13px → 整個表格往右挪 13px，使得「列間細線」左端與「商品品項名稱」對齊。
-     （card padding 16 + .item padding 10 + .name contenteditable padding 3 = 29，
-       table-left 從 16 變 16+13=29，剛好對齊） */
+  /* meta：三列日期/匯率/簡述。
+     已移除小標題（th display:none）;資料移到原本小標題的橫向位置（與商品品項名稱對齊）。
+     td 用 padding-left:13 把資料推到該位置;width:100% 讓表格填滿單筆框、給資料最大空間 */
   .meta-table {
-    width: auto;
+    width: 100%;
     border-collapse: collapse;
     font-size: 13px;
     margin-bottom: 14px;
-    margin-left: 13px;
+    margin-left: 0;
     border: none;
+    table-layout: fixed;
   }
   .meta-table th {
-    text-align: left;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    background: transparent;         /* 不要淺色色塊，直接用單筆框底色 */
-    padding: 8px 4px 8px 0;          /* 左 0 — 表格本身已透過 margin-left: 13 推到對齊位置 */
-    border-bottom: 1px solid var(--line);
-    vertical-align: middle;          /* 標題垂直置中 cell */
-    width: 1%;                       /* 寬度收成 min-content，不再撐到 84px */
-    white-space: nowrap;
+    display: none;                   /* 刪除「日期 / 匯率 / 簡述」小標題 */
   }
   .meta-table td {
-    padding: 8px 12px 8px 4px;       /* 左側 padding 縮小，配合上面 */
+    padding: 8px 4px 8px 13px;       /* 左 13:對齊商品品項名稱（.item padding 10 + 名稱 padding 3） */
     color: var(--ink);
     font-weight: 600;
     font-size: 14px;
     border-bottom: 1px solid var(--line);
-    word-break: break-word;
+    word-break: keep-all;
+    white-space: nowrap;             /* 強制一行,避免「日期/匯率/簡述」三列因螢幕窄而斷行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .meta-table tr:last-child th,
   .meta-table tr:last-child td { border-bottom: none; }
@@ -1304,8 +1452,20 @@
     font-family: inherit;
     min-height: unset;
     white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
   }
-  .tax-mode-btn.active {
+  /* 非 active 的按鈕被 hover / tap 時:維持透明底（取消通用 button:hover 的灰色） */
+  .tax-mode-btn:hover:not(:disabled),
+  .tax-mode-btn:focus:not(:disabled),
+  .tax-mode-btn:active:not(:disabled) {
+    background: transparent;
+    color: var(--muted);
+  }
+  /* active（已選定）的按鈕:永遠維持黑底白字,不被 hover / focus / 按壓蓋掉 */
+  .tax-mode-btn.active,
+  .tax-mode-btn.active:hover:not(:disabled),
+  .tax-mode-btn.active:focus:not(:disabled),
+  .tax-mode-btn.active:active:not(:disabled) {
     background: var(--ink);
     color: var(--panel);
   }
@@ -1395,16 +1555,29 @@
   .item .price-cell.twd-cell .amount-cur {
     color: var(--twd-red);
   }
-  /* 可編輯的數字本身（與其他 contenteditable 共用 hover/focus 樣式） */
+  /* 可編輯的數字本身（與其他 contenteditable 共用 hover/focus 樣式）
+     不加左右 padding,讓 date / rate / time 等文字直接靠齊 td 內邊緣,
+     與下方 商品 / 匯率 / 簡述 等資料切齊 */
   .meta-table [contenteditable="true"] {
     outline: none;
     cursor: text;
     border-radius: 8px;
-    padding: 0 3px;
+    padding: 0;
     transition: background 0.1s;
   }
   .meta-table [contenteditable="true"]:hover { background: var(--accent-soft); }
   .meta-table [contenteditable="true"]:focus { background: #ffffff; }
+  /* 日期列裡面的「星期」段:不可編輯、不可選取,純粹由日期自動算出。
+     用 margin-left 在「日期 → 星期」之間留 4px;沒有 margin-right,留給 time-num 自己的 margin-left */
+  .meta-table .date-weekday {
+    color: var(--ink);
+    font-weight: 600;
+    margin: 0 0 0 4px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    cursor: default;
+  }
   /* 匯率列尾的「套用當日匯率」按鈕（小圓角膠囊） */
   .live-rate-btn {
     display: inline-flex;
@@ -1424,7 +1597,7 @@
     line-height: 1.2;
     min-height: unset;
   }
-  .live-rate-btn:hover { filter: brightness(0.95); }
+  .live-rate-btn:hover { filter: brightness(0.85); }
   .live-rate-btn:disabled { opacity: 0.6; cursor: default; }
   /* 匯率列：xxx TWD 都用深紅 */
   .meta-table .rate-num { color: var(--twd-red); }
@@ -1436,9 +1609,15 @@
     opacity: 0.5;
     pointer-events: none;
   }
+  /* 日期/時間段:不設 min-width,讓元素剛好等於內容寬度,
+     這樣「日期 → 星期」與「星期 → 時間」(或無星期時「日期 → 時間」)
+     之間的視覺間距完全等於 CSS margin (4px),不會因尾端空白而變大 */
   .meta-table .date-num {
-    min-width: 100px;
     display: inline-block;
+  }
+  .meta-table .time-num {
+    display: inline-block;
+    margin-left: 4px;
   }
   /* 「≈」 一律深紅色 */
   .approx { color: var(--twd-red); }
@@ -1483,9 +1662,10 @@
     padding-top: 8px;
     margin-top: 4px;
   }
-  .total-row.grand .label { color: var(--ink); font-weight: 700; font-size: 15px; }
-  .total-row.grand .v-orig { font-size: 17px; }
-  .total-row.grand .v-twd { font-size: 14px; }
+  /* 「合計」列字級統一放大到 17px (= .item .name 的字級) */
+  .total-row.grand .label { color: var(--ink); font-weight: 700; font-size: 17px; }
+  .total-row.grand .v-orig { font-size: 17px; font-weight: 700; }
+  .total-row.grand .v-twd { font-size: 17px; font-weight: 700; }
   .reasoning {
     margin-top: 10px;
     /* 字級 / 顏色 / 字距 / 字重：與 .meta-table th（日期、匯率、簡述）一致 */
@@ -1626,16 +1806,33 @@
   <img id="lightboxImg" alt="" />
 </div>
 
+<!-- API 金鑰輸入燈箱（初次無金鑰時自動開啟,或由選單抽屜的「更換金鑰」開啟） -->
+<div class="key-modal" id="keyModal" aria-hidden="true">
+  <div class="key-modal-backdrop" id="keyModalBackdrop"></div>
+  <div class="key-modal-panel" role="dialog" aria-label="輸入金鑰">
+    <h2 class="key-modal-title">輸入金鑰</h2>
+    <input type="password" id="keyModalInput" class="key-modal-input" placeholder="貼上 gsk_..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+    <div class="key-modal-actions">
+      <button type="button" id="keyModalConfirm" class="key-modal-btn primary">送出</button>
+    </div>
+  </div>
+</div>
+
 <!-- 名字選擇燈箱（按付款人 / 實際購買人 框框後出現） -->
 <div class="name-picker" id="namePicker" aria-hidden="true">
   <div class="name-picker-backdrop" id="namePickerBackdrop"></div>
   <div class="name-picker-modal" role="dialog" aria-label="選擇名字">
     <div class="name-picker-title" id="namePickerTitle">選擇名字</div>
     <div class="name-picker-chips" id="namePickerChips"></div>
-    <p class="picker-hint">點＋新增；長按名字標籤可刪除</p>
     <div class="name-picker-actions">
-      <button type="button" id="namePickerSelectAll" class="picker-btn">全選</button>
-      <button type="button" id="namePickerConfirm" class="picker-btn primary">確定</button>
+      <div class="name-picker-actions-left">
+        <button type="button" id="namePickerAdd" class="picker-btn">新增</button>
+        <button type="button" id="namePickerDelete" class="picker-btn danger">刪除</button>
+      </div>
+      <div class="name-picker-actions-right">
+        <button type="button" id="namePickerSelectAll" class="picker-btn">全選</button>
+        <button type="button" id="namePickerConfirm" class="picker-btn primary">確定</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1648,14 +1845,19 @@
       <h3>所有單筆</h3>
       <button class="menu-close" id="menuCloseBtn" type="button" aria-label="關閉">×</button>
     </header>
-    <section class="menu-section">
-      <h4>進行中</h4>
-      <ul class="menu-list" id="menuActiveList"></ul>
-    </section>
-    <section class="menu-section">
-      <h4>已刪除</h4>
-      <ul class="menu-list" id="menuDeletedList"></ul>
-    </section>
+    <div class="menu-body">
+      <section class="menu-section">
+        <h4>進行中</h4>
+        <ul class="menu-list" id="menuActiveList"></ul>
+      </section>
+      <section class="menu-section">
+        <h4>已刪除</h4>
+        <ul class="menu-list" id="menuDeletedList"></ul>
+      </section>
+    </div>
+    <footer class="menu-footer">
+      <button type="button" id="menuChangeKeyBtn" class="menu-change-key">更換金鑰</button>
+    </footer>
   </aside>
 </div>
 <div class="wrap">
@@ -1788,7 +1990,7 @@
         <div class="payer-tax-row">
           <div class="payer-row" data-payer-slot="1">
             <div class="payer-label">付款人</div>
-            <button class="add-name-btn" type="button" aria-label="新增付款人">+</button>
+            <button class="add-name-btn" type="button" aria-label="新增付款人"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="2.8" x2="6" y2="9.2"></line><line x1="2.8" y1="6" x2="9.2" y2="6"></line></svg></button>
             <div class="payer-slot"></div>
           </div>
           <div class="tax-mode-toggle" role="tablist" aria-label="價格基準">
@@ -1807,8 +2009,7 @@
   <!-- 已建立的單筆框容器 -->
   <div id="entriesContainer"></div>
 
-  <!-- 加入下一筆 -->
-  <button id="addEntryBtn" class="add-entry-btn" type="button">點此加入發票照片</button>
+  <!-- 「加入下一筆」入口已統一放到右上角「＋」按鈕,這裡不再放底部按鈕 -->
 
   <p class="footer-note" style="display:none">
     Gemini 模式：圖片直接傳至 <a href="https://ai.google.dev" style="color:inherit" target="_blank">Google Generative Language API</a>，由 Gemini 一次完成辨識+翻譯+含稅判斷。<br/>
@@ -1861,9 +2062,10 @@
     if (!Array.isArray(tags)) tags = [];
   }
   function seedDefaultTagsIfNeeded() {
-    // 只在第一次開啟此頁面（沒有 seed 旗標）時塞入預設名單；之後即使使用者
-    // 刪光所有預設、加自己的標籤，reload 也不會重複塞回來
-    if (localStorage.getItem(SEED_FLAG_KEY)) return;
+    // 第一次開啟頁面 → seed 預設名單。
+    // 之外如果使用者把所有標籤都刪光了 → 也自動補回預設名單(避免無法復原)。
+    const seeded = localStorage.getItem(SEED_FLAG_KEY);
+    if (seeded && tags.length > 0) return;
     const existingNames = new Set(tags.map(t => t.name));
     DEFAULT_TAGS.forEach((name, i) => {
       if (!existingNames.has(name)) {
@@ -2261,6 +2463,12 @@
     }
   }
 
+  // 共用 SVG：叉叉（白色正圓內含黑色線條叉,與名字標籤勾勾外觀一致）
+  const ITEM_TAG_X_SVG =
+    '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">' +
+      '<line x1="3.5" y1="3.5" x2="8.5" y2="8.5"></line>' +
+      '<line x1="8.5" y1="3.5" x2="3.5" y2="8.5"></line>' +
+    '</svg>';
   // ===== 共用：已指派標籤 chip 的 DOM 結構 =====
   function buildAssignedChip(tag, tagId, key, removeTitle, onRemove) {
     const chip = document.createElement('span');
@@ -2270,8 +2478,8 @@
     chip.appendChild(n);
     const x = document.createElement('span');
     x.className = 'x';
-    x.textContent = '×';
     x.title = removeTitle;
+    x.innerHTML = ITEM_TAG_X_SVG;
     x.addEventListener('click', e => { e.stopPropagation(); onRemove(); });
     chip.appendChild(x);
     return chip;
@@ -2288,6 +2496,13 @@
   const namePickerChipsEl = $('namePickerChips');
   const namePickerTitleEl = $('namePickerTitle');
   let _pickerOnConfirm = null;
+  // 勾勾圖示（白底正圓內含勾勾） — 點選後才顯示在名字後面
+  const PICKER_CHECK_SVG =
+    '<span class="picker-name-check" aria-hidden="true">' +
+      '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<polyline points="2.5 6.4 5 8.8 9.5 3.6"></polyline>' +
+      '</svg>' +
+    '</span>';
   function renderPickerChips(initialIdsOrSet) {
     namePickerChipsEl.innerHTML = '';
     const initial = (initialIdsOrSet instanceof Set) ? initialIdsOrSet : new Set(initialIdsOrSet || []);
@@ -2297,59 +2512,47 @@
       btn.className = 'picker-name tc-' + (tag.color % TAG_COLORS);
       if (initial.has(tag.id)) btn.classList.add('checked');
       btn.dataset.tagId = tag.id;
-      btn.textContent = tag.name;
-      btn.title = '點選＝勾選；長按＝刪除';
-      // 點 → 勾選/取消；長按 → 詢問是否刪除
-      let lpTimer = null, didLongPress = false;
-      btn.addEventListener('pointerdown', () => {
-        didLongPress = false;
-        lpTimer = setTimeout(() => {
-          didLongPress = true;
-          lpTimer = null;
-          if (confirm('刪除名字標籤「' + tag.name + '」？')) {
-            deleteTag(tag.id);
-            const checkedIds = new Set(
-              Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
-                .filter(b => b.dataset.tagId !== tag.id)
-                .map(b => b.dataset.tagId)
-            );
-            renderPickerChips(checkedIds);
-          }
-        }, 600);
-      });
-      const cancel = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
-      btn.addEventListener('pointerup', cancel);
-      btn.addEventListener('pointercancel', cancel);
-      btn.addEventListener('pointerleave', cancel);
+      btn.title = '點一下勾選 / 取消勾選';
+      // 結構：[名字文字][勾勾圖示] — 勾勾只在 .checked 時 display:inline-flex
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'picker-name-text';
+      nameSpan.textContent = tag.name;
+      btn.appendChild(nameSpan);
+      btn.insertAdjacentHTML('beforeend', PICKER_CHECK_SVG);
       btn.addEventListener('click', () => {
-        if (didLongPress) { didLongPress = false; return; }
         btn.classList.toggle('checked');
+        updatePickerDeleteBtnState();
+        updatePickerSelectAllBtnState();
       });
       namePickerChipsEl.appendChild(btn);
     });
-    // 末端「＋」新增名字按鈕
-    const addBtn = document.createElement('button');
-    addBtn.type = 'button';
-    addBtn.className = 'picker-add';
-    addBtn.textContent = '＋';
-    addBtn.title = '新增名字標籤';
-    addBtn.setAttribute('aria-label', '新增名字標籤');
-    addBtn.addEventListener('click', () => {
-      const name = prompt('輸入名字標籤（最多 16 字）：');
-      if (!name || !name.trim()) return;
-      addTag(name.trim());
-      // 重新渲染、保留目前勾選狀態（含新加的標籤，預設勾起來）
-      const checkedIds = new Set(
-        Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
-          .map(b => b.dataset.tagId)
-      );
-      const newTag = tags[tags.length - 1];
-      if (newTag) checkedIds.add(newTag.id);
-      renderPickerChips(checkedIds);
-    });
-    namePickerChipsEl.appendChild(addBtn);
+    updatePickerDeleteBtnState();
+    updatePickerSelectAllBtnState();
+  }
+  // 「刪除」按鈕：只有有勾選的名字時才能按
+  function updatePickerDeleteBtnState() {
+    const btn = $('namePickerDelete');
+    if (!btn) return;
+    const anyChecked = !!namePickerChipsEl.querySelector('.picker-name.checked');
+    btn.disabled = !anyChecked;
+  }
+  // 「全選」按鈕:若目前全部已勾選 → 顯示「取消全選」,否則顯示「全選」
+  function updatePickerSelectAllBtnState() {
+    const btn = $('namePickerSelectAll');
+    if (!btn) return;
+    const chips = Array.from(namePickerChipsEl.querySelectorAll('.picker-name'));
+    if (chips.length === 0) {
+      btn.textContent = '全選';
+      btn.disabled = true;
+      return;
+    }
+    btn.disabled = false;
+    const allChecked = chips.every(b => b.classList.contains('checked'));
+    btn.textContent = allChecked ? '取消全選' : '全選';
   }
   function openNamePicker(initialIds, title, onConfirm) {
+    // 如果使用者剛把所有標籤都刪光,進燈箱時自動把預設名單補回來,避免無法選任何名字
+    if (tags.length === 0) seedDefaultTagsIfNeeded();
     namePickerTitleEl.textContent = title || '選擇名字';
     renderPickerChips(initialIds);
     _pickerOnConfirm = onConfirm;
@@ -2361,12 +2564,40 @@
     namePickerEl.setAttribute('aria-hidden', 'true');
     _pickerOnConfirm = null;
   }
-  // 「全選」按一下 → 全勾；如果已經全勾，再按一下 → 全部取消
+  // 「全選」按一下 → 全勾,且按鈕文字會變成「取消全選」;再按一下 → 全部取消、字回到「全選」
   $('namePickerSelectAll').addEventListener('click', () => {
     const chips = Array.from(namePickerChipsEl.querySelectorAll('.picker-name'));
     if (chips.length === 0) return;
     const allChecked = chips.every(b => b.classList.contains('checked'));
     chips.forEach(b => b.classList.toggle('checked', !allChecked));
+    updatePickerDeleteBtnState();
+    updatePickerSelectAllBtnState();
+  });
+  // 「新增」：詢問新名字 → 加入全域標籤清單 → 重新渲染並自動勾選新加的這個
+  $('namePickerAdd').addEventListener('click', () => {
+    const name = prompt('輸入名字標籤（最多 16 字）：');
+    if (!name || !name.trim()) return;
+    addTag(name.trim());
+    const checkedIds = new Set(
+      Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
+        .map(b => b.dataset.tagId)
+    );
+    const newTag = tags[tags.length - 1];
+    if (newTag) checkedIds.add(newTag.id);
+    renderPickerChips(checkedIds);
+  });
+  // 「刪除」：把目前勾選的名字從全域標籤清單中移除（也會清掉所有發票上的指派）
+  $('namePickerDelete').addEventListener('click', () => {
+    const checked = Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'));
+    if (checked.length === 0) return;
+    const names = checked.map(b => {
+      const t = tagById(b.dataset.tagId);
+      return t ? t.name : '';
+    }).filter(Boolean);
+    const msg = '確定要刪除' + names.join('、') + '？這些標籤在所有發票上的指派也會清除。';
+    if (!confirm(msg)) return;
+    checked.forEach(b => deleteTag(b.dataset.tagId));
+    renderPickerChips(new Set());
   });
   $('namePickerConfirm').addEventListener('click', () => {
     const ids = Array.from(namePickerChipsEl.querySelectorAll('.picker-name.checked'))
@@ -2391,19 +2622,56 @@
   const savedGroqKey = localStorage.getItem('groq_api_key');
   if (savedGroqKey) groqKeyEl.value = savedGroqKey;
 
-  // === 把金鑰輸入框 + 顯示元素搬到頂部 chipsArea 置中 ===
-  // 並另外加上「該張發票日期星期時間」大標題（取代金鑰顯示）
+  // === 頂部標題列只放「該張發票日期星期時間」大標題 ===
+  // 金鑰輸入改由畫面正中央的 key modal 處理,不再放在 chipsArea
   chipsAreaEl.innerHTML = '';
-  chipsAreaEl.appendChild(groqKeyEl);
-  chipsAreaEl.appendChild(keyDisplayEl);
   const topDateTitleEl = document.createElement('div');
   topDateTitleEl.id = 'topDateTitle';
   topDateTitleEl.className = 'top-date-title';
   chipsAreaEl.appendChild(topDateTitleEl);
-  chipsAreaEl.classList.add('chips-area-as-key');
-  // 隱藏原本放在頁面內的設定卡片（內容已被搬走）
+  // 隱藏原本放在頁面內的設定卡片
   const _setupCard = document.getElementById('setupCard');
   if (_setupCard) _setupCard.style.display = 'none';
+  // groqKeyEl / keyDisplayEl 留在 setup card 內隱藏,供現有程式碼相容存取
+
+  // ===== 金鑰輸入燈箱 =====
+  const keyModalEl = $('keyModal');
+  const keyModalInput = $('keyModalInput');
+  function openKeyModal() {
+    keyModalInput.value = groqKeyEl.value || '';
+    keyModalEl.classList.add('visible');
+    keyModalEl.setAttribute('aria-hidden', 'false');
+    setTimeout(() => { try { keyModalInput.focus(); keyModalInput.select(); } catch(e){} }, 60);
+  }
+  function closeKeyModal(force) {
+    // 沒任何金鑰時,不允許關閉（除非強制）
+    if (!force && !groqKeyEl.value.trim()) return;
+    keyModalEl.classList.remove('visible');
+    keyModalEl.setAttribute('aria-hidden', 'true');
+  }
+  function saveKeyModal() {
+    const newKey = (keyModalInput.value || '').trim();
+    if (!newKey) { showToast('請輸入金鑰'); return; }
+    groqKeyEl.value = newKey;
+    localStorage.setItem('groq_api_key', newKey);
+    updateKeyDisplay();
+    updateKeyDependentUI();
+    closeKeyModal(true);
+    showToast('金鑰已儲存');
+  }
+  $('keyModalConfirm').addEventListener('click', saveKeyModal);
+  // 「取消」按鈕已移除;舊元素若不存在則略過(向下相容)
+  {
+    const _cancel = $('keyModalCancel');
+    if (_cancel) _cancel.addEventListener('click', () => closeKeyModal(false));
+  }
+  $('keyModalBackdrop').addEventListener('click', () => closeKeyModal(false));
+  keyModalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); saveKeyModal(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && keyModalEl.classList.contains('visible')) closeKeyModal(false);
+  });
 
   // input 事件即時存、即時更新「點此加入照片」入口
   groqKeyEl.addEventListener('input', () => {
@@ -2457,17 +2725,17 @@
 
   function updateKeyDisplay() {
     const k = groqKeyEl.value.trim();
-    // 「已輸入金鑰」與金鑰字串永遠隱藏
     keyDisplayEl.innerHTML = '';
     keyDisplayEl.style.display = 'none';
+    groqKeyEl.style.display = 'none';      // 永遠隱藏:金鑰編輯改由 modal 處理
     if (k) {
-      // 有金鑰：把輸入框收起來，頂部改顯示日期標題
-      groqKeyEl.style.display = 'none';
+      // 有金鑰：頂部顯示日期標題、關閉 modal
       updateTopDateTitle();
+      if (keyModalEl && keyModalEl.classList.contains('visible')) closeKeyModal(true);
     } else {
-      // 沒金鑰：顯示輸入框讓使用者輸入；日期標題隱藏
-      groqKeyEl.style.display = '';
+      // 沒金鑰：頂部標題隱藏、自動開啟金鑰 modal
       topDateTitleEl.classList.remove('visible');
+      if (keyModalEl) openKeyModal();
     }
   }
   // 頂部顯示目前單筆框的日期/星期/時間
@@ -2498,8 +2766,11 @@
     });
     const pos = sameDateList.indexOf(cur) + 1;
     const total = sameDateList.length;
+    // 「(n/total)」用 .top-date-suffix 包起來,讓 CSS 套上較淺的顏色
     const suffix = (pos > 0 && total > 0) ? ' (' + pos + '/' + total + ')' : '';
-    topDateTitleEl.textContent = datePart + suffix;
+    topDateTitleEl.innerHTML =
+      escapeHtml(datePart) +
+      (suffix ? '<span class="top-date-suffix">' + escapeHtml(suffix) + '</span>' : '');
     topDateTitleEl.classList.add('visible');
   }
   // 動態縮小字級讓整串金鑰剛好一行顯示完
@@ -3031,7 +3302,7 @@
     if (n == null || isNaN(n)) return '—';
     return fmtMoney(n, decimals) + ' ' + (currency || '?');
   }
-  // 日期格式化：'2026-05-21' → '2026年05月21日（四）'，若有 time 補 24 小時制 HH:MM
+  // 日期格式化：'2026-05-21' → '2026-05-21（四） HH:MM'
   function fmtDate(iso, time) {
     if (!iso) return '';
     const m = String(iso).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
@@ -3042,18 +3313,212 @@
     const week = ['日','一','二','三','四','五','六'][dt.getDay()];
     const mm = String(mo).padStart(2, '0');
     const dd = String(d).padStart(2, '0');
-    let out = y + ' 年 ' + mm + ' 月 ' + dd + ' 日（' + week + '）';
+    let out = y + '-' + mm + '-' + dd + '（' + week + '）';
     if (time) {
       const tm = String(time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
       if (tm) {
         let hh = parseInt(tm[1], 10);
         let mi = parseInt(tm[2], 10);
         if (!isNaN(hh) && !isNaN(mi) && hh >= 0 && hh <= 23 && mi >= 0 && mi <= 59) {
-          out += String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+          out += ' ' + String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
         }
       }
     }
     return out;
+  }
+  // ===== 日期 / 時間「即時格式化」helper =====
+  // 把使用者目前輸入字串轉成帶分隔符的版本;addTrailing 表示「達到 4 / 6 位數的瞬間」要不要補出
+  // 尾巴的「-」;刪除時(isDelete)就傳 false,避免使用者按 backspace 想刪「-」卻又被自動補回。
+  function _formatDateWhileTyping(text, addTrailing) {
+    const digits = String(text).replace(/\D/g, '').slice(0, 8);
+    if (digits.length < 4) return digits;
+    if (digits.length === 4) return addTrailing ? digits + '-' : digits;
+    if (digits.length < 6) return digits.slice(0, 4) + '-' + digits.slice(4);
+    if (digits.length === 6) return addTrailing
+      ? digits.slice(0, 4) + '-' + digits.slice(4) + '-'
+      : digits.slice(0, 4) + '-' + digits.slice(4);
+    return digits.slice(0, 4) + '-' + digits.slice(4, 6) + '-' + digits.slice(6, 8);
+  }
+  function _formatTimeWhileTyping(text, addTrailing) {
+    const digits = String(text).replace(/\D/g, '').slice(0, 4);
+    if (digits.length < 2) return digits;
+    if (digits.length === 2) return addTrailing ? digits + ':' : digits;
+    return digits.slice(0, 2) + ':' + digits.slice(2, 4);
+  }
+  // 判斷 contenteditable 內 cursor 是否落在內容最尾端
+  function _isCursorAtContenteditableEnd(el) {
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return false;
+    const range = sel.getRangeAt(0);
+    if (!range.collapsed) return false;
+    try {
+      const clone = range.cloneRange();
+      clone.setStart(el, 0);
+      return clone.toString().length === el.textContent.length;
+    } catch (e) { return false; }
+  }
+  // 用一個 ISO 'YYYY-MM-DD' 即時刷新 td 內的「星期」段;沒對應元素就建立、解析失敗則略過
+  function _refreshWeekdaySpan(td, iso) {
+    if (!iso) return;
+    const m = String(iso).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (!m) return;
+    const dt = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+    if (isNaN(dt.getTime())) return;
+    const weekday = ['日','一','二','三','四','五','六'][dt.getDay()];
+    let weekdayEl = td.querySelector('.date-weekday');
+    if (!weekdayEl) {
+      weekdayEl = document.createElement('span');
+      weekdayEl.className = 'date-weekday';
+      weekdayEl.setAttribute('aria-hidden', 'true');
+      const dateEl = td.querySelector('.date-num');
+      if (dateEl && dateEl.parentNode) {
+        dateEl.parentNode.insertBefore(weekdayEl, dateEl.nextSibling);
+      }
+    }
+    weekdayEl.textContent = '（' + weekday + '）';
+  }
+  // 把 cursor 移到 contenteditable 內容最尾端
+  function _placeCursorAtEnd(el) {
+    try {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (e) {}
+  }
+
+  // 解析使用者輸入的時間（HHMM 純數字 / HH:MM / HH：MM）成 'HH:MM',解不出來回 null
+  function parseUserTime(txt) {
+    if (!txt) return null;
+    const trimmed = String(txt).trim();
+    // 含分隔符:HH:MM / H:MM / 全形冒號
+    let m = trimmed.match(/^(\d{1,2})\s*[:：]\s*(\d{1,2})$/);
+    let hh, mi;
+    if (m) {
+      hh = parseInt(m[1], 10);
+      mi = parseInt(m[2], 10);
+    } else {
+      // 純數字:4 碼 HHMM 或 3 碼 HMM
+      const digits = trimmed.replace(/\D/g, '');
+      if (digits.length === 4) {
+        hh = parseInt(digits.slice(0, 2), 10);
+        mi = parseInt(digits.slice(2, 4), 10);
+      } else if (digits.length === 3) {
+        hh = parseInt(digits.slice(0, 1), 10);
+        mi = parseInt(digits.slice(1, 3), 10);
+      } else {
+        return null;
+      }
+    }
+    if (isNaN(hh) || isNaN(mi) || hh < 0 || hh > 23 || mi < 0 || mi > 59) return null;
+    return String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+  }
+  // 由 parsed.date 算出顯示用的 date 文字（YYYY-MM-DD）與星期(中文)
+  function dateDisplayParts(parsed) {
+    const date = parsed && parsed.date;
+    let dateText = '', weekday = '';
+    if (date) {
+      const m = String(date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (m) {
+        const y = m[1];
+        const mo = String(parseInt(m[2], 10)).padStart(2, '0');
+        const d = String(parseInt(m[3], 10)).padStart(2, '0');
+        dateText = y + '-' + mo + '-' + d;
+        const dt = new Date(parseInt(y, 10), parseInt(mo, 10) - 1, parseInt(d, 10));
+        if (!isNaN(dt.getTime())) weekday = ['日','一','二','三','四','五','六'][dt.getDay()];
+      } else {
+        dateText = String(date);
+      }
+    }
+    return { dateText, weekday };
+  }
+  function timeDisplayText(parsed) {
+    const time = parsed && parsed.time;
+    if (!time) return '';
+    const tm = String(time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
+    if (!tm) return '';
+    const hh = parseInt(tm[1], 10), mi = parseInt(tm[2], 10);
+    if (isNaN(hh) || isNaN(mi) || hh < 0 || hh > 23 || mi < 0 || mi > 59) return '';
+    return String(hh).padStart(2, '0') + ':' + String(mi).padStart(2, '0');
+  }
+  // 把目前 parsed.date / parsed.time 渲染成「日期 td」的 HTML —— 三個獨立 span:
+  //   1) 日期(可編輯) 2) 星期(由日期算出、不可編輯) 3) 時間(可獨立編輯)
+  // span 之間的水平間距由 CSS 統一控制(.date-weekday / .time-num 的 margin-left),
+  // 不要在 HTML 內插入字面空格,避免「日期-星期」與「星期-時間」間距不一致。
+  function dateRowTdHtml(parsed) {
+    const { dateText, weekday } = dateDisplayParts(parsed);
+    const timeText = timeDisplayText(parsed);
+    const weekdayHtml = weekday
+      ? '<span class="date-weekday" aria-hidden="true">（' + weekday + '）</span>'
+      : '';
+    return (
+      '<span class="amount-num date-num" contenteditable="true" spellcheck="false" inputmode="numeric" data-placeholder="YYYYMMDD">' +
+        escapeHtml(dateText) +
+      '</span>' +
+      weekdayHtml +
+      '<span class="amount-num time-num" contenteditable="true" spellcheck="false" inputmode="numeric" data-placeholder="HHMM">' +
+        escapeHtml(timeText) +
+      '</span>'
+    );
+  }
+  // 在 focusout 後外科性更新 td 內三個 span 的文字 / 增刪 weekday;
+  // 不重建 td.innerHTML,避免破壞使用者剛點到的下一個 contenteditable 節點
+  function updateDateRowSpans(td, parsed) {
+    if (!td) return;
+    const dateEl = td.querySelector('.date-num');
+    const timeEl = td.querySelector('.time-num');
+    let weekdayEl = td.querySelector('.date-weekday');
+    const { dateText, weekday } = dateDisplayParts(parsed);
+    const timeText = timeDisplayText(parsed);
+    if (dateEl) dateEl.textContent = dateText;
+    if (weekday) {
+      if (!weekdayEl) {
+        weekdayEl = document.createElement('span');
+        weekdayEl.className = 'date-weekday';
+        weekdayEl.setAttribute('aria-hidden', 'true');
+        if (dateEl && dateEl.parentNode) {
+          dateEl.parentNode.insertBefore(weekdayEl, dateEl.nextSibling);
+        }
+      }
+      weekdayEl.textContent = '（' + weekday + '）';
+    } else if (weekdayEl) {
+      weekdayEl.remove();
+    }
+    if (timeEl) timeEl.textContent = timeText;
+  }
+  // 把使用者輸入的日期字串（YYYYMMDD 純數字、或含 / - 年月日 等分隔符）解析成 'YYYY-MM-DD'
+  // 解析不出來回傳 null。
+  function parseUserDate(txt) {
+    if (!txt) return null;
+    const trimmed = String(txt).trim();
+    // 1) 含分隔符的常見格式
+    let m = trimmed.match(/(\d{4})[\/\-年.](\d{1,2})[\/\-月.](\d{1,2})/);
+    if (m) {
+      const mm = String(parseInt(m[2], 10)).padStart(2, '0');
+      const dd = String(parseInt(m[3], 10)).padStart(2, '0');
+      return m[1] + '-' + mm + '-' + dd;
+    }
+    // 2) 純數字輸入：YYYYMMDD（8 碼）/ YYYYMDD / YYYYMMD（7 碼）/ YYYYMD（6 碼）
+    const digits = trimmed.replace(/\D/g, '');
+    let y, mo, d;
+    if (digits.length === 8) {
+      y = digits.slice(0, 4); mo = digits.slice(4, 6); d = digits.slice(6, 8);
+    } else if (digits.length === 7) {
+      y = digits.slice(0, 4);
+      // YYYYMMD vs YYYYMDD 兩種可能：用前兩碼月份判斷
+      const mm2 = parseInt(digits.slice(4, 6), 10);
+      if (mm2 >= 1 && mm2 <= 12) { mo = digits.slice(4, 6); d = digits.slice(6, 7); }
+      else                       { mo = digits.slice(4, 5); d = digits.slice(5, 7); }
+    } else if (digits.length === 6) {
+      y = digits.slice(0, 4); mo = digits.slice(4, 5); d = digits.slice(5, 6);
+    } else {
+      return null;
+    }
+    const mn = parseInt(mo, 10), dn = parseInt(d, 10);
+    if (isNaN(mn) || isNaN(dn) || mn < 1 || mn > 12 || dn < 1 || dn > 31) return null;
+    return y + '-' + String(mn).padStart(2, '0') + '-' + String(dn).padStart(2, '0');
   }
   // 簡短版日期 + 時間：'2026-05-21' / '14:32' → 'M/D HH:MM' 或 'M/D'
   function fmtShortDate(iso, time) {
@@ -3329,13 +3794,9 @@
 
       // metaRows 每筆是 [標籤, 內含 HTML 的值, dataRowKey]
       const metaRows = [];
-      // 日期列：有資料時顯示完整日期；手動空白單筆 → 顯示可編輯的空白欄位
-      if (parsed.date) {
-        metaRows.push(['日期', escapeHtml(fmtDate(parsed.date, parsed.time)), 'date']);
-      } else if (parsed._manualBlank) {
-        metaRows.push(['日期',
-          '<span class="amount-num date-num" contenteditable="true" spellcheck="false" data-placeholder="YYYY-MM-DD"></span>',
-          'date']);
+      // 日期列:永遠顯示,內含三個獨立 span(日期可編 / 星期自動 / 時間可編)
+      if (parsed.date || parsed.time || parsed._manualBlank) {
+        metaRows.push(['日期', dateRowTdHtml(parsed), 'date']);
       }
       // 匯率列：有 rate 時用既有版本；手動空白 → 顯示可編輯空白匯率
       if (rate && cur !== 'TWD') {
@@ -3436,7 +3897,12 @@
           '</div>' +
           '<div class="item-buyer">' +
             '<div class="payer-label">實際購買人</div>' +
-            '<button class="add-name-btn" type="button" aria-label="新增實際購買人">+</button>' +
+            '<button class="add-name-btn" type="button" aria-label="新增實際購買人">' +
+              '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">' +
+                '<line x1="6" y1="2.8" x2="6" y2="9.2"></line>' +
+                '<line x1="2.8" y1="6" x2="9.2" y2="6"></line>' +
+              '</svg>' +
+            '</button>' +
             '<div class="item-tags"></div>' +
           '</div>';
         refs.itemsEl.appendChild(div);
@@ -3812,36 +4278,104 @@
     refs.metaEl.addEventListener('keydown', (e) => {
       const tgt = e.target;
       if (!tgt || !tgt.classList) return;
-      if ((tgt.classList.contains('rate-num') || tgt.classList.contains('date-num')) && e.key === 'Enter') {
+      if ((tgt.classList.contains('rate-num') || tgt.classList.contains('date-num') || tgt.classList.contains('time-num')) && e.key === 'Enter') {
         e.preventDefault();
         tgt.blur();
       }
     });
-    // 「日期」格手動編輯（支援 YYYY-MM-DD / YYYY/MM/DD / 2026年5月21日 等格式）
+    // 「日期」/「時間」格手動編輯:focus 時保留現有格式化字串、全選讓使用者輸入覆蓋
+    // 真正的「打數字 → 自動補分隔符」由下方 input handler 即時處理
+    refs.metaEl.addEventListener('focusin', (e) => {
+      const tgt = e.target;
+      if (!tgt || !tgt.classList) return;
+      const isDate = tgt.classList.contains('date-num');
+      const isTime = tgt.classList.contains('time-num');
+      if (!isDate && !isTime) return;
+      requestAnimationFrame(() => {
+        try {
+          const range = document.createRange();
+          range.selectNodeContents(tgt);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } catch (e) {}
+      });
+    });
+    // input event:輸入到 4 位數補「-」(年-月)、6 位數再補「-」(月-日);時間 2 位數補「:」
+    refs.metaEl.addEventListener('input', (e) => {
+      const tgt = e.target;
+      if (!tgt || !tgt.classList) return;
+      const isDate = tgt.classList.contains('date-num');
+      const isTime = tgt.classList.contains('time-num');
+      if (!isDate && !isTime) return;
+      // 中間 insert 不自動補分隔符(交給 blur 用 parseUserDate/parseUserTime 收尾),避免游標亂跳
+      if (!_isCursorAtContenteditableEnd(tgt)) return;
+      const isDelete = (e.inputType || '').startsWith('delete');
+      const before = tgt.textContent;
+      const after = isDate
+        ? _formatDateWhileTyping(before, !isDelete)
+        : _formatTimeWhileTyping(before, !isDelete);
+      if (before !== after) {
+        tgt.textContent = after;
+        _placeCursorAtEnd(tgt);
+      }
+      // 即時更新「星期」段(只在編輯日期、且能成功解析時更新;尚未湊滿 8 碼就保持原狀)
+      if (isDate) {
+        const td = tgt.closest('tr') && tgt.closest('tr').querySelector('td');
+        if (td) {
+          const txt = (tgt.textContent || '').trim();
+          if (!txt) {
+            const w = td.querySelector('.date-weekday');
+            if (w) w.remove();
+          } else {
+            const iso = parseUserDate(txt);
+            if (iso) _refreshWeekdaySpan(td, iso);
+          }
+        }
+      }
+    });
     refs.metaEl.addEventListener('focusout', (e) => {
       const tgt = e.target;
-      if (!tgt || !tgt.classList || !tgt.classList.contains('date-num')) return;
+      if (!tgt || !tgt.classList) return;
+      const isDate = tgt.classList.contains('date-num');
+      const isTime = tgt.classList.contains('time-num');
+      if (!isDate && !isTime) return;
+      if (!state.parsed) return;
       const txt = (tgt.textContent || '').trim();
-      if (!txt) {
-        if (state.parsed) state.parsed.date = null;
+      const td = tgt.closest('tr') && tgt.closest('tr').querySelector('td');
+      if (isDate) {
+        if (!txt) {
+          state.parsed.date = null;
+        } else {
+          const iso = parseUserDate(txt);
+          if (!iso) {
+            // 解析失敗 → 還原 td 整體顯示(三個 span)
+            if (td) updateDateRowSpans(td, state.parsed);
+            return;
+          }
+          state.parsed.date = iso;
+        }
+        if (td) updateDateRowSpans(td, state.parsed);
+        if (typeof sortEntriesByDateTime === 'function') sortEntriesByDateTime(api);
+        if (typeof updateTopDateTitle === 'function') updateTopDateTitle();
         scheduleSave();
-        return;
+      } else {
+        // 時間
+        if (!txt) {
+          state.parsed.time = null;
+        } else {
+          const hm = parseUserTime(txt);
+          if (!hm) {
+            if (td) updateDateRowSpans(td, state.parsed);
+            return;
+          }
+          state.parsed.time = hm;
+        }
+        if (td) updateDateRowSpans(td, state.parsed);
+        if (typeof sortEntriesByDateTime === 'function') sortEntriesByDateTime(api);
+        if (typeof updateTopDateTitle === 'function') updateTopDateTitle();
+        scheduleSave();
       }
-      const m = txt.match(/(\d{4})[\/\-年.](\d{1,2})[\/\-月.](\d{1,2})/);
-      if (!m) {
-        // 解析失敗 → 還原
-        tgt.textContent = state.parsed && state.parsed.date ? fmtDate(state.parsed.date, state.parsed.time) : '';
-        return;
-      }
-      const y = m[1];
-      const mo = String(parseInt(m[2], 10)).padStart(2, '0');
-      const d = String(parseInt(m[3], 10)).padStart(2, '0');
-      state.parsed.date = y + '-' + mo + '-' + d;
-      tgt.textContent = fmtDate(state.parsed.date, state.parsed.time);
-      // 排序＋頂部日期標題＋抽屜清單跟著更新
-      if (typeof sortEntriesByDateTime === 'function') sortEntriesByDateTime(api);
-      if (typeof updateTopDateTitle === 'function') updateTopDateTitle();
-      scheduleSave();
     });
     // 「套用當日匯率」按鈕：fetch live rate, 套用到目前單筆 + 更新預設
     refs.metaEl.addEventListener('click', async (e) => {
@@ -4004,28 +4538,22 @@
     entries.forEach((e, i) => e.setNumber(i + 1));
   }
 
-  // 把 'YYYY-MM-DD' + 'HH:MM' 轉成可比較的 ms timestamp（缺則回傳大數使其排到最後）
-  function entryDateTimeMs(api) {
-    const p = api && api.state && api.state.parsed;
-    if (!p || !p.date) return Number.MAX_SAFE_INTEGER;   // 還沒辨識完成 → 排到最後
-    const m = String(p.date).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-    if (!m) return Number.MAX_SAFE_INTEGER;
-    let hh = 0, mi = 0;
-    if (p.time) {
-      const tm = String(p.time).match(/^\s*(\d{1,2})\s*[:：]\s*(\d{1,2})/);
-      if (tm) { hh = parseInt(tm[1], 10) || 0; mi = parseInt(tm[2], 10) || 0; }
-    }
-    return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), hh, mi).getTime();
+  // 取得單筆的「新增時間」毫秒(以 state.createdAt 為依據,沒有的話用很大的值排到最後)
+  function entryCreatedAtMs(api) {
+    const ca = api && api.state && api.state.createdAt;
+    if (!ca) return Number.MAX_SAFE_INTEGER;
+    if (ca instanceof Date) return ca.getTime();
+    const t = new Date(ca).getTime();
+    return isNaN(t) ? Number.MAX_SAFE_INTEGER : t;
   }
-  // 依發票「日期 + 時間」由舊到新排序所有單筆框
+  // 依「新增時間」由早到晚排序:早加入的單筆在左、晚加入的單筆在右(編號從 1 開始往右遞增)
+  // 函式名保留 sortEntriesByDateTime 維持向下相容(其他呼叫端不需要改)
   function sortEntriesByDateTime(focusOn) {
     if (entries.length <= 1) return;
-    entries.sort((a, b) => entryDateTimeMs(a) - entryDateTimeMs(b));
-    // 依新順序重排 DOM
+    entries.sort((a, b) => entryCreatedAtMs(a) - entryCreatedAtMs(b));
     entries.forEach(e => entriesContainer.appendChild(e.element));
     renumberEntries();
     rebuildEntriesMenu();
-    // 把指定的 entry（通常是剛辨識完的那筆）保留在視野
     if (focusOn && focusOn.element) {
       setTimeout(() => {
         focusOn.element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'start' });
@@ -4037,10 +4565,10 @@
   }
 
   // 最後一張單筆完全空白（還沒選照片）時，隱藏底部「點此加入發票照片」按鈕
-  // （否則會跟那張單筆框內的 drop 框重複出現）
-  // 一旦載入照片（含處理中）或辨識完成 → 顯示按鈕，方便平行加入下一張
-  // 另：完全沒 API key 時也隱藏（先請使用者輸入金鑰）
+  // 「加入下一筆」按鈕已從畫面底部移除,改由右上角「＋」按鈕統一處理。
+  // 這個函式保留下來給舊呼叫端,只有 addEntryBtn 還存在時才操作它(向下相容)。
   function updateAddBtnVisibility() {
+    if (!addEntryBtn) return;
     const last = entries[entries.length - 1];
     const lastHasFile = !!(last && last.state && last.state.file);
     const hasKey = !!(groqKeyEl.value.trim() || geminiKeyEl.value.trim() || EMBEDDED_GROQ_KEY);
@@ -4132,6 +4660,54 @@
       if (h > 0) entriesContainer.style.height = h + 'px';
     });
   }
+  // ===== 滑動方向鎖（輕量版） =====
+  // touch-action: pan-x 已讓「純垂直觸控」自然往上傳遞到 body,「純水平觸控」由瀏覽器原生
+  // 做 scroll-snap 切換單筆框。這裡只負責一件事:當主軸是垂直時,反向把 carousel 的
+  // scrollLeft 釘回起始位置,避免斜向滑動造成意外的水平漂移。
+  // 全程 passive:true,不 preventDefault,避免擋到垂直頁面捲動。
+  (function setupCarouselDirectionLock() {
+    let startX = 0, startY = 0;
+    let startScrollLeft = 0;
+    let axis = null;          // null | 'x' | 'y'
+    let activeId = null;
+
+    entriesContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) { axis = null; activeId = null; return; }
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      startScrollLeft = entriesContainer.scrollLeft;
+      axis = null;
+      activeId = t.identifier;
+    }, { passive: true });
+
+    entriesContainer.addEventListener('touchmove', (e) => {
+      if (e.touches.length !== 1) return;
+      const t = e.touches[0];
+      if (activeId !== null && t.identifier !== activeId) return;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (axis == null) {
+        const threshold = 10;
+        if (Math.abs(dx) < threshold && Math.abs(dy) < threshold) return;
+        // 偏向垂直:橫向需明顯大於垂直（1.2 倍）才認定為 'x',
+        // 避免「主要垂直滑、夾帶一點水平」誤觸發切換單筆
+        axis = (Math.abs(dx) > Math.abs(dy) * 1.2) ? 'x' : 'y';
+      }
+      if (axis === 'y') {
+        // 垂直為主 → carousel 不准水平漂移
+        if (entriesContainer.scrollLeft !== startScrollLeft) {
+          entriesContainer.scrollLeft = startScrollLeft;
+        }
+      }
+      // axis === 'x' → 交給瀏覽器原生 pan-x + scroll-snap 處理,不做任何事
+    }, { passive: true });
+
+    function endTouch() { axis = null; activeId = null; }
+    entriesContainer.addEventListener('touchend', endTouch);
+    entriesContainer.addEventListener('touchcancel', endTouch);
+  })();
+
   let _scrollDebounceTimer = null;
   let _lastSnapIdx = -1;
   entriesContainer.addEventListener('scroll', () => {
@@ -4190,6 +4766,14 @@
   menuBtn.addEventListener('click', openMenu);
   menuCloseBtn.addEventListener('click', closeMenu);
   menuOverlayEl.addEventListener('click', closeMenu);
+  // 底部「更換金鑰」→ 關閉抽屜後開啟金鑰 modal
+  const menuChangeKeyBtn = $('menuChangeKeyBtn');
+  if (menuChangeKeyBtn) {
+    menuChangeKeyBtn.addEventListener('click', () => {
+      closeMenu();
+      setTimeout(openKeyModal, 80);
+    });
+  }
 
   function fmtMenuTime(dt) {
     if (!dt) return '';
@@ -4198,7 +4782,7 @@
     const d = String(dt.getDate()).padStart(2, '0');
     const hh = String(dt.getHours()).padStart(2, '0');
     const mm = String(dt.getMinutes()).padStart(2, '0');
-    return y + '/' + m + '/' + d + ' ' + hh + ':' + mm;
+    return y + '-' + m + '-' + d + ' ' + hh + ':' + mm;
   }
   function fmtMenuTitle(api) {
     // 「日期＋時間＋店家」— 優先用發票本身的日期/時間，缺則用掃描時間
@@ -4221,7 +4805,7 @@
       } else if (recDate) {
         timeStr = String(recDate.getHours()).padStart(2, '0') + ':' + String(recDate.getMinutes()).padStart(2, '0');
       }
-      dateTimePart = receiptDate.replace(/-/g, '/') + (timeStr ? ' ' + timeStr : '');
+      dateTimePart = receiptDate + (timeStr ? ' ' + timeStr : '');
     } else {
       dateTimePart = fmtMenuTime(recDate);
     }
@@ -4289,7 +4873,8 @@
     // 初始化完，等下一幀讓 layout 算好再 sync 一次容器高度
     requestAnimationFrame(() => syncCarouselHeight());
   })();
-  addEntryBtn.addEventListener('click', () => addNewEntry(true));
+  // 底部「點此加入發票照片」已移除,只有元素還在時才需要 wire(向下相容)
+  if (addEntryBtn) addEntryBtn.addEventListener('click', () => addNewEntry(true));
 
   // ===== 頂部「＋ 新增發票」popup（相機 / 相簿 / 手動輸入） =====
   const topAddBtn = $('topAddBtn');
