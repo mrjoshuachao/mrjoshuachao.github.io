@@ -10,6 +10,7 @@
       --page-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
       --zh-article-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
       --article-caption-font-size: clamp(11px, 0.92vw, 15px);
+      --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
       --page-title-font-size: clamp(24px, 2.1vw, 42px);
       --page-title-line-height: calc(0.96em + 2px);
       --heading-content-gap: 20px;
@@ -383,7 +384,7 @@
 
     .essay p {
       margin: 0 0 14px;
-      font-size: var(--article-caption-font-size);
+      font-size: var(--article-body-font-size);
       line-height: 1.42;
       letter-spacing: 0;
     }
@@ -393,33 +394,52 @@
     }
 
     .biography-layout {
-      --biography-photo-width: clamp(260px, 24vw, 430px);
+      --biography-photo-ratio: 0.5835;
+      --biography-photo-width: calc(100vh * var(--biography-photo-ratio));
       --biography-photo-gap: 44px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--biography-photo-width);
+      gap: var(--biography-photo-gap);
+      align-items: start;
       position: relative;
     }
 
     .biography-layout .essay {
-      width: calc(100% - var(--biography-photo-width) - var(--biography-photo-gap));
+      width: 100%;
+      min-width: 0;
     }
 
     .biography-photo {
       position: fixed;
-      top: 36px;
+      top: 0;
+      bottom: 0;
       right: var(--outer-text-gutter);
       z-index: 1;
       width: var(--biography-photo-width);
-      height: calc(100vh - 72px);
+      height: 100vh;
       margin: 0;
       pointer-events: none;
       background: var(--site-bg);
+      overflow: hidden;
     }
 
     .biography-photo img {
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
+      background: var(--site-bg);
+    }
+
+    @supports (height: 100dvh) {
+      .biography-layout {
+        --biography-photo-width: calc(100dvh * var(--biography-photo-ratio));
+      }
+
+      .biography-photo {
+        height: 100dvh;
+      }
     }
 
     .grid {
@@ -525,18 +545,44 @@
       background: #000;
     }
 
+    .media-frame.is-media-loading::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 3;
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.86);
+      border-top-color: #000;
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.16);
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
+      pointer-events: none;
+      transform: translate(-50%, -50%) rotate(0turn);
+      animation: mediaLoadingSpin 720ms linear infinite;
+    }
+
+    @keyframes mediaLoadingSpin {
+      to {
+        transform: translate(-50%, -50%) rotate(1turn);
+      }
+    }
+
     .media-frame::after {
-      content: none;
+      content: "";
       position: absolute;
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      box-shadow: none;
+      border: 2px solid var(--site-bg);
+      box-shadow: inset 0 0 0 2px var(--site-bg);
     }
 
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
       content: none;
+      border: 0;
       box-shadow: none;
     }
 
@@ -856,7 +902,7 @@
     .sound-button {
       position: absolute;
       top: 8px;
-      left: 8px;
+      right: 8px;
       z-index: 3;
       display: inline-flex;
       align-items: center;
@@ -1001,7 +1047,7 @@
     .resume-contact a,
     .resume-meta,
     .award-list li {
-      font-size: var(--article-caption-font-size);
+      font-size: var(--article-body-font-size);
       line-height: 1.42;
       letter-spacing: 0;
     }
@@ -1153,6 +1199,7 @@
       :root {
         --outer-text-gutter: 24px;
         --article-caption-font-size: 15.5px;
+        --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
       }
 
@@ -1509,6 +1556,7 @@
         order: 2;
         position: relative;
         top: auto;
+        bottom: auto;
         right: auto;
         width: 100%;
         height: auto;
@@ -2767,9 +2815,71 @@
 
     function ensureVideoSource(video) {
       if (!video.getAttribute("src") && video.dataset.src) {
+        setMediaFrameLoading(video.closest(".media-frame"), true);
         video.src = video.dataset.src;
         video.load();
       }
+    }
+
+    function setMediaFrameLoading(frame, isLoading) {
+      if (!frame) return;
+      frame.classList.toggle("is-media-loading", Boolean(isLoading));
+    }
+
+    function updateImageLoadingIndicator(image) {
+      const frame = image.closest(".media-frame");
+      if (!frame) return;
+      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
+    }
+
+    function updateVideoLoadingIndicator(video) {
+      const frame = video.closest(".media-frame");
+      if (!frame) return;
+      const hasSource = Boolean(video.currentSrc || video.getAttribute("src") || video.dataset.src);
+      setMediaFrameLoading(frame, hasSource && video.readyState < 2);
+    }
+
+    function setupMediaLoadingIndicators(scope = document) {
+      scope.querySelectorAll(".media-frame").forEach((frame) => {
+        const image = frame.querySelector("img:not(.image-lightbox__image)");
+        const video = frame.querySelector("video");
+        const iframe = frame.querySelector("iframe");
+
+        if (image) {
+          updateImageLoadingIndicator(image);
+          if (!image.dataset.mediaLoadingBound) {
+            image.dataset.mediaLoadingBound = "true";
+            image.addEventListener("load", () => updateImageLoadingIndicator(image));
+            image.addEventListener("error", () => setMediaFrameLoading(frame, false));
+          }
+          return;
+        }
+
+        if (video) {
+          updateVideoLoadingIndicator(video);
+          if (!video.dataset.mediaLoadingBound) {
+            video.dataset.mediaLoadingBound = "true";
+            video.addEventListener("loadstart", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("loadeddata", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("canplay", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("playing", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("waiting", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("error", () => setMediaFrameLoading(frame, false));
+          }
+          return;
+        }
+
+        if (iframe) {
+          setMediaFrameLoading(frame, !iframe.dataset.mediaLoaded);
+          if (!iframe.dataset.mediaLoadingBound) {
+            iframe.dataset.mediaLoadingBound = "true";
+            iframe.addEventListener("load", () => {
+              iframe.dataset.mediaLoaded = "true";
+              setMediaFrameLoading(frame, false);
+            });
+          }
+        }
+      });
     }
 
     function isLazyVideoNearViewport(video) {
@@ -2798,6 +2908,7 @@
 
     function preparePortfolioImages(scope = document) {
       scope.querySelectorAll("img:not(.image-lightbox__image)").forEach((image) => {
+        updateImageLoadingIndicator(image);
         image.loading = "eager";
         image.removeAttribute("loading");
         image.decoding = "async";
@@ -2808,6 +2919,7 @@
         }
         if (image.complete) {
           repaintPortfolioImage(image);
+          updateImageLoadingIndicator(image);
         } else if (image.getAttribute("src")) {
           image.src = image.getAttribute("src");
         }
@@ -2825,6 +2937,7 @@
 
     function playMutedVideo(video) {
       ensureVideoSource(video);
+      updateVideoLoadingIndicator(video);
       video.muted = true;
       video.defaultMuted = true;
       if (isSilentMedia(video)) {
@@ -3145,6 +3258,7 @@
       });
       requestAnimationFrame(() => {
         repaintActivePanelImages();
+        setupMediaLoadingIndicators(document.querySelector(`[data-panel="${target}"]`) || document);
         updateLazyPanelVideos();
       });
     }
@@ -3505,6 +3619,7 @@
     window.addEventListener("resize", scheduleLazyPanelVideoUpdate);
 
     applyRemovedIds();
+    setupMediaLoadingIndicators();
     preparePortfolioImages();
     repaintActivePanelImages();
     equalizeMobileMenuTitleWidths();
