@@ -445,6 +445,21 @@
       }
     }
 
+    @media (min-width: 761px) and (max-width: 1180px) and (orientation: portrait) {
+      .biography-layout {
+        --biography-photo-width: 33.333vw;
+        --biography-photo-height: calc(var(--biography-photo-width) / var(--biography-photo-ratio));
+        --biography-photo-gap: 32px;
+      }
+
+      .biography-photo {
+        top: var(--biography-photo-inset);
+        right: var(--outer-text-gutter);
+        width: var(--biography-photo-width);
+        height: var(--biography-photo-height);
+      }
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
