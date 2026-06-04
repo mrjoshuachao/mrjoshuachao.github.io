@@ -17,6 +17,11 @@
       --section-gap: 56px;
       --outer-text-gutter: 36px;
       --side-nav-width: 20vw;
+      --site-bg: #fff;
+      color-scheme: light;
+    }
+
+    :root.is-site-ready {
       --site-bg: rgb(245, 245, 245);
     }
 
@@ -50,6 +55,10 @@
     *::before,
     *::after {
       font-family: var(--page-font);
+    }
+
+    html {
+      background: #fff;
     }
 
     body {
@@ -176,7 +185,7 @@
 
     .hero {
       padding: 36px 20px 20px 0;
-      border-bottom: 2px solid var(--site-bg);
+      border-bottom: 0;
     }
 
     h1 {
@@ -195,7 +204,7 @@
     }
 
     .section {
-      border-bottom: 2px solid var(--site-bg);
+      border-bottom: 0;
     }
 
     .section + .section {
@@ -205,7 +214,7 @@
     .section h2 {
       margin: 0;
       padding: 16px 20px 14px 0;
-      border-bottom: 2px solid var(--site-bg);
+      border-bottom: 0;
       font-family: var(--page-font);
       font-size: var(--page-title-font-size);
       font-weight: 900;
@@ -240,7 +249,7 @@
       margin: var(--section-gap) 0 0;
       padding: var(--section-gap) 0 36px;
       border: 0;
-      border-top: 2px solid var(--site-bg);
+      border-top: 0;
       background: var(--site-bg);
       color: #000;
       font-family: var(--page-font);
@@ -326,7 +335,7 @@
     .section-note {
       margin: 0;
       padding: 12px 20px 14px 0;
-      border-bottom: 2px solid var(--site-bg);
+      border-bottom: 0;
       font-size: 14px;
     }
 
@@ -503,12 +512,12 @@
     }
 
     .media-frame::after {
-      content: "";
+      content: none;
       position: absolute;
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--site-bg);
+      box-shadow: none;
     }
 
     .media-frame:fullscreen::after,
@@ -2575,7 +2584,7 @@
           </figure>
           <div class="essay">
             <div class="essay-block" lang="en">
-              <p><strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <strong>AI Creativity Educator</strong> with <strong>9 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. Skilled in building <strong>brand systems</strong>, communications design, <strong>visual storytelling</strong>, and cross-disciplinary creative projects across music, entertainment, technology, academia, and industry in <strong>Japan and Taiwan</strong>.</p>
+              <p>Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <strong>AI Creativity Educator</strong> with <strong>9 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. Skilled in building <strong>brand systems</strong>, communications design, <strong>visual storytelling</strong>, and cross-disciplinary creative projects across music, entertainment, technology, academia, and industry in <strong>Japan and Taiwan</strong>.</p>
               <p>Since joining <strong>KKBOX GROUP</strong> in 2016 as <strong>Creative Director</strong>, Joshua has played a key role in shaping the creative direction of multiple businesses within the group. His earliest work began with <strong>KKTV</strong>, where he led creative and design development for the launch of a new video streaming brand, including <strong>identity</strong>, logotype design, product demo videos, launch presentations, advertising, campaign films, website visuals, and <strong>brand design guidelines</strong>.</p>
               <p>Beginning in 2017, his responsibilities expanded from <strong>KKTV</strong> to <strong>KKFARM</strong>, where he contributed to music, artist management, and entertainment projects. His work included the debut design system for <strong>Julia Wu</strong>, visual direction for music releases, albums and concerts, the <strong>Ju&amp;u AR Book</strong>, the <strong>jutv YouTube Channel</strong>, creative assets for other KKFARM artists, the KKFARM official website, and numerous video, print, event, and digital materials.</p>
               <p>As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across <strong>KKBOX GROUP</strong>. His projects included <strong>KKBOX GROUP corporate image campaigns</strong>, MA Program recruiting, career website design, KKBOX product feature videos, KKVERSE, VoiceOut, <strong>KKStream BlendVision</strong>, <strong>KKCOMPANY worldview</strong>, KKCOMPANY logotype and website, and the <strong>KKFARM rebranding initiative</strong>. This work reflects his ability to operate at the intersection of <strong>strategy, design, motion, product, and business communication</strong>.</p>
@@ -3438,6 +3447,7 @@
     setupSoundButtons();
     setupVideoControls();
     updateLazyPanelVideos();
+    document.documentElement.classList.add("is-site-ready");
   </script>
 </body>
 </html>
