@@ -3039,8 +3039,14 @@
 
     function unmuteVideo(video, { pauseOthers = false, play = true } = {}) {
       if (isSilentMedia(video)) {
+        if (pauseOthers) {
+          pauseOtherVideos(video);
+        }
         enforceSilentMedia(video);
         updateSoundButton(video);
+        if (play) {
+          playVideo(video);
+        }
         return;
       }
       if (pauseOthers) {
@@ -3275,7 +3281,7 @@
 
     function toggleVideoPlayback(video) {
       if (video.paused) {
-        playVideo(video);
+        unmuteVideo(video, { pauseOthers: true });
       } else {
         video.pause();
       }
