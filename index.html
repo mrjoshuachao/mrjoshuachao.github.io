@@ -395,7 +395,9 @@
 
     .biography-layout {
       --biography-photo-ratio: 0.5835;
-      --biography-photo-width: calc(100vh * var(--biography-photo-ratio));
+      --biography-photo-inset: 36px;
+      --biography-photo-height: calc(100vh - (var(--biography-photo-inset) * 2));
+      --biography-photo-width: calc(var(--biography-photo-height) * var(--biography-photo-ratio));
       --biography-photo-gap: 44px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) var(--biography-photo-width);
@@ -411,12 +413,12 @@
 
     .biography-photo {
       position: fixed;
-      top: 0;
-      bottom: 0;
+      top: var(--biography-photo-inset);
+      bottom: auto;
       right: var(--outer-text-gutter);
       z-index: 1;
       width: var(--biography-photo-width);
-      height: 100vh;
+      height: var(--biography-photo-height);
       margin: 0;
       pointer-events: none;
       background: var(--site-bg);
@@ -434,11 +436,12 @@
 
     @supports (height: 100dvh) {
       .biography-layout {
-        --biography-photo-width: calc(100dvh * var(--biography-photo-ratio));
+        --biography-photo-height: calc(100dvh - (var(--biography-photo-inset) * 2));
+        --biography-photo-width: calc(var(--biography-photo-height) * var(--biography-photo-ratio));
       }
 
       .biography-photo {
-        height: 100dvh;
+        height: var(--biography-photo-height);
       }
     }
 
@@ -553,11 +556,10 @@
       z-index: 3;
       width: 24px;
       height: 24px;
-      border: 2px solid rgba(255, 255, 255, 0.86);
-      border-top-color: #000;
+      border: 2px solid rgba(128, 128, 128, 0.28);
+      border-top-color: rgb(128, 128, 128);
       border-radius: 999px;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.16);
-      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
+      box-shadow: 0 0 0 1px rgba(128, 128, 128, 0.18);
       pointer-events: none;
       transform: translate(-50%, -50%) rotate(0turn);
       animation: mediaLoadingSpin 720ms linear infinite;
@@ -575,8 +577,8 @@
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      border: 2px solid var(--site-bg);
-      box-shadow: inset 0 0 0 2px var(--site-bg);
+      border: 1px solid var(--site-bg);
+      box-shadow: inset 0 0 0 1px var(--site-bg);
     }
 
     .media-frame:fullscreen::after,
@@ -1029,7 +1031,7 @@
     }
 
     .card-body {
-      padding: 12px 14px 14px 0;
+      padding: 12px 14px 14px 1px;
     }
 
     h3 {
@@ -2291,8 +2293,14 @@
             <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00" data-title="KKCompany Logo Design Process" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\k-00-crop.png">
               <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/img-050-k-00-crop.webp" alt="KKCompany Logo Design Process" /></div>
             </article>
-            <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00-2" data-title="KKCompany Logo Design Process Detail" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\_Website Upload\assets\optimized\images\img-050-k-00-crop-2.jpg">
+            <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00-2" data-title="KKCompany Logo Design Process Detail" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\img-050-k-00-crop-2.jpg">
               <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/img-050-k-00-crop-2.jpg" alt="KKCompany Logo Design Process Detail" /></div>
+            </article>
+            <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-logotype-old-color" data-title="KKCompany Old Color Logotype" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\KKCOMPANY-logotype-old-color-1920x1080.png">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkcompany-logotype-old-color-1920x1080.webp" alt="KKCompany Old Color Logotype" /></div>
+            </article>
+            <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-logotype-old-color-swatch" data-title="KKCompany Old Color Logotype Swatch" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\KKCOMPANY-logotype-old-color-swatch-1920x1080.png">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkcompany-logotype-old-color-swatch-1920x1080.webp" alt="KKCompany Old Color Logotype Swatch" /></div>
             </article>
           </div>
         </section>
@@ -2320,7 +2328,7 @@
         </section>
 
         <section class="section" aria-labelledby="kkculture-motion-title">
-          <h2 id="kkculture-motion-title">KKCulture 2025 Website &quot;Connected Dots&quot; Motion System</h2>
+          <h2 id="kkculture-motion-title">KKCulture 2025 “Connected Dots” Motion System</h2>
           <div class="grid">
             <article class="card" data-card data-id="kkculture-dots-concept-video" data-title="KKCulture Dots Concept" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20221125 KKCulture dots concept video\20221125.mp4">
               <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-024-20221125.mp4"></video></div>
@@ -2344,7 +2352,7 @@
         </section>
 
         <section class="section" aria-labelledby="kkculture-final-title">
-          <h2 id="kkculture-final-title">KKCulture 2023 Website &quot;You Create&quot; Pixel System</h2>
+          <h2 id="kkculture-final-title">KKCulture 2023 “You Create” Pixel System</h2>
           <div class="grid pixel-system-grid">
             <article class="card pixel-system-card--full" data-card data-id="kkculture-2023-website-screen-recording" data-title="KKCulture 2023 Website" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKCulture 2023\KKCulture 2023.mp4">
               <div class="media-frame"><video data-silent-media="true" muted loop playsinline preload="none" data-src="assets/optimized/videos/video-031-kkculture-2023.mp4"></video></div>
@@ -2352,10 +2360,28 @@
                 <h3>KKCulture 2023 Website</h3>
               </div>
             </article>
-            <article class="card pixel-system-card--full" data-card data-id="kkculture-pixel-system-overview-2965" data-title="KKCulture Pixel System Overview" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20221209 KKCulture pixel art\pixel-art-2965x1668.png">
-              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/img-053-pixel-art-2965x1668.webp" alt="KKCulture Pixel System Overview" /></div>
+            <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-interface-1" data-title="KKCulture “You Create” Interface 1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-1.png">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkculture-you-create-interface-1.webp" alt="KKCulture “You Create” Interface 1" /></div>
               <div class="card-body">
-                <h3>KKCulture Pixel System Overview</h3>
+                <h3>KKCulture “You Create” Interface 1</h3>
+              </div>
+            </article>
+            <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-interface-2" data-title="KKCulture “You Create” Interface 2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-2.png">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkculture-you-create-interface-2.webp" alt="KKCulture “You Create” Interface 2" /></div>
+              <div class="card-body">
+                <h3>KKCulture “You Create” Interface 2</h3>
+              </div>
+            </article>
+            <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-art-2" data-title="KKCulture “You Create” Artwork 1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-2.jpg">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkculture-you-create-art-2.webp" alt="KKCulture “You Create” Artwork 1" /></div>
+              <div class="card-body">
+                <h3>KKCulture “You Create” Artwork 1</h3>
+              </div>
+            </article>
+            <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-art-1" data-title="KKCulture “You Create” Artwork 2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-1.png">
+              <div class="media-frame media-frame-image"><img decoding="async" src="assets/optimized/images/kkculture-you-create-art-1.webp" alt="KKCulture “You Create” Artwork 2" /></div>
+              <div class="card-body">
+                <h3>KKCulture “You Create” Artwork 2</h3>
               </div>
             </article>
             <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-01" data-title="You Create Pixel Art Print 01" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (01).png">
@@ -2455,12 +2481,12 @@
         </section>
 
         <section class="section" aria-labelledby="nvidia-sccd-final-title">
-          <h2 id="nvidia-sccd-final-title">NVIDIA Computex &quot;NV&quot; Showreel</h2>
+          <h2 id="nvidia-sccd-final-title">NVIDIA Computex “NV” Showreel</h2>
           <div class="grid">
-            <article class="card full-row-card" data-card data-id="nvidia-sccd-project-nv-final-film" data-title="NVIDIA Computex &quot;NV&quot; Showreel" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\OurSong x NVIDIA x SCCD Project NV\20230425 SCCD X OurSong NV Reel by Rex\SCCD X OurSong_NV_Reel_0425.mov">
+            <article class="card full-row-card" data-card data-id="nvidia-sccd-project-nv-final-film" data-title="NVIDIA Computex “NV” Showreel" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\OurSong x NVIDIA x SCCD Project NV\20230425 SCCD X OurSong NV Reel by Rex\SCCD X OurSong_NV_Reel_0425.mov">
               <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-027-sccd-x-oursong-nv-reel-0425.mp4"></video></div>
               <div class="card-body">
-                <h3>NVIDIA Computex &quot;NV&quot; Showreel</h3>
+                <h3>NVIDIA Computex “NV” Showreel</h3>
               </div>
             </article>
           </div>
@@ -2489,33 +2515,33 @@
         </section>
 
         <section class="section" aria-labelledby="nvidia-sccd-kimberley-title">
-          <h2 id="nvidia-sccd-kimberley-title">Kimberley &quot;Street Signs&quot; Generative AI MV</h2>
+          <h2 id="nvidia-sccd-kimberley-title">Kimberley “Street Signs” Generative AI MV</h2>
           <div class="essay">
             <div class="essay-block" lang="en">
-              <p>Kimberley &quot;Street Signs&quot; was conceived as an AI music video, extending the emotional disorientation of the song into a constantly mutating visual world. The project explored how a pop music work could move beyond traditional music-video production and become a contemporary image event, bringing together star image, synthetic imagery, media attention, and musical identity.</p>
+              <p>Kimberley “Street Signs” was conceived as an AI music video, extending the emotional disorientation of the song into a constantly mutating visual world. The project explored how a pop music work could move beyond traditional music-video production and become a contemporary image event, bringing together star image, synthetic imagery, media attention, and musical identity.</p>
               <p>The early phase revolved around emotion, fragments, and visual instability. Street signs, urban surfaces, distorted rooms, unstable portraits, and generated characters became the raw vocabulary. The earliest images were not treated as finished work, but as tests of tone: how much imperfection could remain before accidental error became expression.</p>
               <p>Production required constant translation between AI output and music-video direction. Generated shots were selected, sequenced, compared, repaired, and edited into formats that could support both the full-length film and promotional assets. The work demanded taste judgments under pressure: when to preserve the strange texture of AI, and when to tame it through rhythm, continuity, and editing control.</p>
               <p>As the project neared completion, the focus shifted toward delivery and impact. Horizontal and vertical teasers, final H.264 exports, volume balancing, and media versions were refined one by one so the work could move across screens. The visual language had to remain experimental, while the release itself had to function like a complete campaign asset.</p>
-              <p>The final outcome was more than a music video. It was an artist statement, a media object, and proof of creative-direction ability within an AI production environment. Through the finished film, teasers, and press exposure, &quot;Street Signs&quot; showed how synthetic imagery could be transformed into a precise and complete cultural moment.</p>
+              <p>The final outcome was more than a music video. It was an artist statement, a media object, and proof of creative-direction ability within an AI production environment. Through the finished film, teasers, and press exposure, “Street Signs” showed how synthetic imagery could be transformed into a precise and complete cultural moment.</p>
             </div>
           </div>
           <div class="grid kimberley-video-grid">
-            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley &quot;Street Signs&quot; Gen-AI MV #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley “Street Signs” Gen-AI MV #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
               <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
-                <h3>Kimberley &quot;Street Signs&quot; Gen-AI MV #1</h3>
+                <h3>Kimberley “Street Signs” Gen-AI MV #1</h3>
               </div>
             </article>
-            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley &quot;Street Signs&quot; Gen-AI MV #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley “Street Signs” Gen-AI MV #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
               <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
-                <h3>Kimberley &quot;Street Signs&quot; Gen-AI MV #2</h3>
+                <h3>Kimberley “Street Signs” Gen-AI MV #2</h3>
               </div>
             </article>
-            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley &quot;Street Signs&quot; Gen-AI MV #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+            <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley “Street Signs” Gen-AI MV #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
               <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
-                <h3>Kimberley &quot;Street Signs&quot; Gen-AI MV #3</h3>
+                <h3>Kimberley “Street Signs” Gen-AI MV #3</h3>
               </div>
             </article>
           </div>
@@ -2541,8 +2567,8 @@
           </div>
         </section>
         <div class="next-panel-link">
-          <span class="next-panel-link__label">Next: Biography</span>
-          <button class="next-panel-link__button" type="button" data-menu-target="biography" data-scroll-top aria-label="Go to Biography">
+          <span class="next-panel-link__label">Back to Biography</span>
+          <button class="next-panel-link__button" type="button" data-menu-target="biography" data-scroll-top aria-label="Back to Biography">
             <span class="next-panel-link__arrow" aria-hidden="true"></span>
           </button>
         </div>
@@ -2650,7 +2676,7 @@
 
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
-          <h2 id="biography-panel-title">Biography</h2>
+          <h2 id="biography-panel-title">Professional Biography</h2>
           <div class="biography-layout">
           <figure class="biography-photo">
             <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" />
@@ -2663,7 +2689,7 @@
               <p>As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across <strong>KKBOX GROUP</strong>. His projects included <strong>KKBOX GROUP corporate image campaigns</strong>, MA Program recruiting, career website design, KKBOX product feature videos, KKVERSE, VoiceOut, <strong>KKStream BlendVision</strong>, <strong>KKCOMPANY worldview</strong>, KKCOMPANY logotype and website, and the <strong>KKFARM rebranding initiative</strong>. This work reflects his ability to operate at the intersection of <strong>strategy, design, motion, product, and business communication</strong>.</p>
               <p>In his role as <strong>Creative Director for KKBOX GROUP</strong>, Joshua also supported <strong>OurSong</strong>, a blockchain company invested in by the group. While OurSong was not his direct employer, he contributed during the company's formative stage by helping establish its early logo, homepage, intro video, certificate design, Song Share cards, interface direction, whitepaper design, business presentation materials, and <strong>international client-facing assets</strong>.</p>
               <p>Following the restructuring of <strong>KKBOX GROUP</strong> into <strong>KKCOMPANY</strong> and <strong>KKCulture</strong>, Joshua's creative work moved into a higher level of integration. His responsibilities spanned both organizations and expanded into <strong>corporate branding</strong>, <strong>narrative development</strong>, and organizational communication. For KKCulture, he contributed to Project Messiah, <strong>KKCulture visual identity</strong>, website, brand book studies, new office design, and touchpoints that extended the brand into space, presentations, objects, workplace environments, and internal use cases.</p>
-              <p>During the <strong>KKCulture</strong> period, Joshua also became deeply involved in <strong>new technologies</strong> and <strong>cross-disciplinary creative work</strong>. He participated in AI-related narrative music video projects and <strong>generative AI experiments</strong> connected to OurSong, <strong>NVIDIA</strong>, and <strong>SCCD</strong>, including the generative AI music video for <strong>Kimberley Chen's &quot;Street Signs&quot;</strong>, behind-the-scenes production, concept development, educational materials, and media interview content.</p>
+              <p>During the <strong>KKCulture</strong> period, Joshua also became deeply involved in <strong>new technologies</strong> and <strong>cross-disciplinary creative work</strong>. He participated in AI-related narrative music video projects and <strong>generative AI experiments</strong> connected to OurSong, <strong>NVIDIA</strong>, and <strong>SCCD</strong>, including the generative AI music video for <strong>Kimberley Chen's “Street Signs”</strong>, behind-the-scenes production, concept development, educational materials, and media interview content.</p>
               <p>Across his long career within the <strong>KK ecosystem</strong>, Joshua's journey has not been a conventional progression from designer to Creative Director. Rather, he entered the organization from the beginning as a <strong>Creative Director</strong> and became a central creative force as <strong>KKTV</strong>, <strong>KKFARM</strong>, <strong>KKBOX GROUP</strong>, <strong>KKCOMPANY</strong>, and <strong>KKCulture</strong> continued to evolve. His work spans <strong>large-scale brand and product systems</strong> as well as highly detailed execution, from business cards and signage to motion systems, websites, presentations, events, and everyday brand touchpoints.</p>
               <p>Since 2023, Joshua has co-founded <strong>Applied Creativity</strong>, also known as <strong>ACE</strong>, with Chris Lin, founder and CEO of <strong>KKBOX GROUP</strong>. ACE is dedicated to education at the intersection of <strong>creativity and artificial intelligence</strong>. Through ACE, Joshua has trained teachers, students, executives, and professionals from <strong>UWC ISAK Japan</strong>, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and small to medium-sized enterprise CEOs.</p>
               <p>In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for eight years as an adjunct lecturer in the <strong>Department of Communications Design at Shih Chien University</strong>, where he continues to integrate <strong>creativity, design thinking, and AI</strong> into his courses. Through industry, education, and emerging technology, he has established himself as a creative leader who bridges <strong>strategy and execution</strong>, <strong>culture and technology</strong>, imagination and implementation.</p>
@@ -2672,8 +2698,8 @@
           </div>
         </section>
         <div class="next-panel-link">
-          <span class="next-panel-link__label">Next: KKTV</span>
-          <button class="next-panel-link__button" type="button" data-menu-target="kktv" data-scroll-top aria-label="Go to KKTV">
+          <span class="next-panel-link__label">Start with KKTV</span>
+          <button class="next-panel-link__button" type="button" data-menu-target="kktv" data-scroll-top aria-label="Start with KKTV">
             <span class="next-panel-link__arrow" aria-hidden="true"></span>
           </button>
         </div>
