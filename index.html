@@ -94,7 +94,7 @@
       width: var(--side-nav-width);
       min-height: 100vh;
       padding: 36px 18px 36px var(--outer-text-gutter);
-      border-right: 2px solid var(--site-bg);
+      border-right: 0;
       background: var(--site-bg);
     }
 
@@ -439,13 +439,13 @@
       grid-column: 1 / -1;
     }
 
-    .process-grid [data-id="kkcompany-process-logo-design-blog-k-00"] .media-frame {
+    .process-grid [data-id^="kkcompany-process-logo-design-blog-k-00"] .media-frame {
       aspect-ratio: auto;
       overflow: visible;
       background: var(--site-bg);
     }
 
-    .process-grid [data-id="kkcompany-process-logo-design-blog-k-00"] .media-frame img {
+    .process-grid [data-id^="kkcompany-process-logo-design-blog-k-00"] .media-frame img {
       width: 100%;
       height: auto;
       object-fit: contain;
@@ -648,10 +648,40 @@
       background: #000;
       cursor: default;
       touch-action: pan-y;
+      overflow: hidden;
     }
 
     .image-lightbox[hidden] {
       display: none;
+    }
+
+    .image-lightbox__stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+
+    .image-lightbox__track {
+      display: flex;
+      width: 300vw;
+      height: 100%;
+      transform: translate3d(-100vw, 0, 0);
+      will-change: transform;
+    }
+
+    .image-lightbox__track.is-sliding {
+      transition: transform 260ms cubic-bezier(0.22, 0.8, 0.22, 1);
+    }
+
+    .image-lightbox__slide {
+      display: flex;
+      flex: 0 0 100vw;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100%;
+      overflow: hidden;
     }
 
     .image-lightbox__image {
@@ -663,6 +693,9 @@
       object-fit: contain;
       background: transparent;
       cursor: default;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
     }
 
     .image-lightbox__nav {
@@ -719,7 +752,7 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      z-index: 1;
+      z-index: 3;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1091,6 +1124,13 @@
       :root {
         --outer-text-gutter: 24px;
         --article-caption-font-size: 15.5px;
+        --mobile-menu-height: 100vh;
+      }
+
+      @supports (height: 100dvh) {
+        :root {
+          --mobile-menu-height: 100dvh;
+        }
       }
 
       html.is-mobile-menu-open,
@@ -1168,16 +1208,16 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        justify-content: space-between;
+        justify-content: center;
         height: 38px;
         max-width: calc(100% - 96px);
         margin: 0;
         overflow: hidden;
         color: #000;
         font-family: var(--page-font);
-        font-size: clamp(14px, 3.85vw, 18px);
+        font-size: clamp(15px, 4.25vw, 19px);
         font-weight: 900;
-        line-height: 1;
+        line-height: 0.92;
         letter-spacing: 0;
         text-align: right;
         white-space: normal;
@@ -1200,8 +1240,10 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        justify-content: center;
         width: 100vw;
-        min-height: 100vh;
+        min-height: var(--mobile-menu-height);
+        height: var(--mobile-menu-height);
         max-height: none;
         overflow: hidden;
         border: 0;
@@ -1217,12 +1259,9 @@
 
       .side-nav.is-mobile-menu-open::before {
         position: fixed;
-        top: 0;
-        right: 0;
-        bottom: auto;
-        left: 0;
+        inset: 0;
         z-index: 0;
-        height: 100vh;
+        height: var(--mobile-menu-height);
         background: #fff;
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
@@ -1235,7 +1274,7 @@
 
       @keyframes mobileMenuPanelDown {
         from {
-          clip-path: inset(0 0 calc(100vh - 64px) 0);
+          clip-path: inset(0 0 calc(var(--mobile-menu-height) - 64px) 0);
         }
 
         to {
@@ -1249,13 +1288,13 @@
         }
 
         to {
-          clip-path: inset(0 0 calc(100vh - 64px) 0);
+          clip-path: inset(0 0 calc(var(--mobile-menu-height) - 64px) 0);
         }
       }
 
       @keyframes mobileMenuItemsDown {
         from {
-          transform: translateY(-100vh);
+          transform: translateY(calc(-1 * var(--mobile-menu-height)));
         }
 
         to {
@@ -1269,7 +1308,7 @@
         }
 
         to {
-          transform: translateY(-100vh);
+          transform: translateY(calc(-1 * var(--mobile-menu-height)));
         }
       }
 
@@ -1277,6 +1316,12 @@
       .side-nav.is-mobile-menu-open .side-menu {
         position: relative;
         z-index: 1;
+      }
+
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle {
+        position: absolute;
+        top: 14px;
+        left: var(--outer-text-gutter);
       }
 
       .side-nav.is-mobile-menu-open .mobile-menu-title {
@@ -1310,6 +1355,7 @@
       }
 
       .side-nav.is-mobile-menu-open .side-menu {
+        margin: 0;
         animation: mobileMenuItemsDown 260ms cubic-bezier(0.22, 0.8, 0.22, 1) both;
       }
 
@@ -1320,7 +1366,7 @@
       .side-nav.is-mobile-menu-open .side-menu button,
       .side-nav.is-mobile-menu-open .side-menu a {
         font-size: var(--page-title-font-size);
-        line-height: var(--page-title-line-height);
+        line-height: calc(var(--page-title-line-height) + 5px);
       }
 
       .side-nav.is-mobile-menu-open .side-menu--secondary {
@@ -2158,17 +2204,8 @@
             <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00" data-title="KKCompany Logo Design Process" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\k-00-crop.png">
               <div class="media-frame media-frame-image"><img loading="lazy" decoding="async" src="assets/optimized/images/img-050-k-00-crop.webp" alt="KKCompany Logo Design Process" /></div>
             </article>
-            <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-storyboard-01" data-title="Storyboard &amp; Art Test #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\03 MixCode\20210908 storyboard and art test\20210908 (1).png">
-              <div class="media-frame media-frame-image"><img loading="lazy" decoding="async" src="assets/optimized/images/img-051-20210908-1.webp" alt="Storyboard &amp; Art Test #1" /></div>
-              <div class="card-body">
-                <h3>Storyboard &amp; Art Test #1</h3>
-              </div>
-            </article>
-            <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-storyboard-02" data-title="Storyboard &amp; Art Test #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\03 MixCode\20210908 storyboard and art test\20210908 (5).png">
-              <div class="media-frame media-frame-image"><img loading="lazy" decoding="async" src="assets/optimized/images/img-052-20210908-5.webp" alt="Storyboard &amp; Art Test #2" /></div>
-              <div class="card-body">
-                <h3>Storyboard &amp; Art Test #2</h3>
-              </div>
+            <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00-2" data-title="KKCompany Logo Design Process Detail" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\_Website Upload\assets\optimized\images\img-050-k-00-crop-2.jpg">
+              <div class="media-frame media-frame-image"><img loading="lazy" decoding="async" src="assets/optimized/images/img-050-k-00-crop-2.jpg" alt="KKCompany Logo Design Process Detail" /></div>
             </article>
           </div>
         </section>
@@ -2529,7 +2566,7 @@
           <h2 id="biography-panel-title">Biography</h2>
           <div class="biography-layout">
           <figure class="biography-photo">
-            <img src="assets/images/Joshua-Chao-Biography-Photo.jpg?v=20260604-175750" alt="Joshua Chao" />
+            <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" />
           </figure>
           <div class="essay">
             <div class="essay-block" lang="en">
@@ -2593,7 +2630,19 @@
         <path d="M15 5 8 12l7 7"></path>
       </svg>
     </button>
-    <img class="image-lightbox__image" data-image-lightbox-image alt="" />
+    <div class="image-lightbox__stage" data-image-lightbox-stage>
+      <div class="image-lightbox__track" data-image-lightbox-track>
+        <div class="image-lightbox__slide">
+          <img class="image-lightbox__image" data-image-lightbox-prev-image alt="" aria-hidden="true" />
+        </div>
+        <div class="image-lightbox__slide">
+          <img class="image-lightbox__image" data-image-lightbox-image alt="" />
+        </div>
+        <div class="image-lightbox__slide">
+          <img class="image-lightbox__image" data-image-lightbox-next-image alt="" aria-hidden="true" />
+        </div>
+      </div>
+    </div>
     <button class="image-lightbox__nav image-lightbox__nav--next" type="button" data-image-lightbox-next aria-label="Next image" hidden>
       <svg aria-hidden="true" viewBox="0 0 24 24">
         <path d="m9 5 7 7-7 7"></path>
@@ -2610,6 +2659,7 @@
     let imageLightboxImages = [];
     let imageLightboxIndex = -1;
     let imageLightboxTouchStart = null;
+    let imageLightboxIsSliding = false;
     let mobileMenuCloseTimer = null;
 
     function apiUrl(path) {
@@ -3049,19 +3099,70 @@
       });
     }
 
-    function renderImageLightboxImage(index) {
+    function normalizeImageLightboxIndex(index) {
+      if (!imageLightboxImages.length) return -1;
+      return (index + imageLightboxImages.length) % imageLightboxImages.length;
+    }
+
+    function getImageLightboxElements() {
       const lightbox = document.querySelector("[data-image-lightbox]");
-      const lightboxImage = lightbox?.querySelector("[data-image-lightbox-image]");
-      if (!lightbox || !lightboxImage || !imageLightboxImages.length) return;
-      imageLightboxIndex = (index + imageLightboxImages.length) % imageLightboxImages.length;
-      const image = imageLightboxImages[imageLightboxIndex];
+      return {
+        lightbox,
+        track: lightbox?.querySelector("[data-image-lightbox-track]"),
+        previousImage: lightbox?.querySelector("[data-image-lightbox-prev-image]"),
+        currentImage: lightbox?.querySelector("[data-image-lightbox-image]"),
+        nextImage: lightbox?.querySelector("[data-image-lightbox-next-image]"),
+      };
+    }
+
+    function getImageLightboxRecord(index) {
+      const normalizedIndex = normalizeImageLightboxIndex(index);
+      const image = normalizedIndex >= 0 ? imageLightboxImages[normalizedIndex] : null;
       const source = getImageLightboxSource(image);
-      if (!source) return;
-      const title = image.alt || image.closest("[data-card]")?.dataset.title || "Image preview";
-      lightboxImage.src = source;
-      lightboxImage.alt = title;
+      if (!source) return null;
+      return {
+        source,
+        title: image.alt || image.closest("[data-card]")?.dataset.title || "Image preview",
+      };
+    }
+
+    function setImageLightboxImage(image, record) {
+      if (!image) return;
+      if (!record) {
+        image.removeAttribute("src");
+        image.alt = "";
+        image.hidden = true;
+        return;
+      }
+      image.hidden = false;
+      image.src = record.source;
+      image.alt = record.title;
+    }
+
+    function setImageLightboxTrackOffset(offsetX = 0) {
+      const { track } = getImageLightboxElements();
+      if (!track) return;
+      track.style.transform = `translate3d(calc(-100vw + ${offsetX}px), 0, 0)`;
+    }
+
+    function resetImageLightboxTrack() {
+      const { track } = getImageLightboxElements();
+      if (!track) return;
+      track.classList.remove("is-sliding");
+      track.style.transform = "translate3d(-100vw, 0, 0)";
+    }
+
+    function renderImageLightboxImage(index) {
+      const { lightbox, previousImage, currentImage, nextImage } = getImageLightboxElements();
+      if (!lightbox || !currentImage || !imageLightboxImages.length) return;
+      imageLightboxIndex = normalizeImageLightboxIndex(index);
+      const hasMultipleImages = imageLightboxImages.length > 1;
+      setImageLightboxImage(previousImage, hasMultipleImages ? getImageLightboxRecord(imageLightboxIndex - 1) : null);
+      setImageLightboxImage(currentImage, getImageLightboxRecord(imageLightboxIndex));
+      setImageLightboxImage(nextImage, hasMultipleImages ? getImageLightboxRecord(imageLightboxIndex + 1) : null);
+      resetImageLightboxTrack();
       lightbox.querySelectorAll("[data-image-lightbox-prev], [data-image-lightbox-next]").forEach((button) => {
-        button.hidden = imageLightboxImages.length < 2;
+        button.hidden = !hasMultipleImages;
       });
     }
 
@@ -3079,25 +3180,41 @@
     }
 
     function showAdjacentImageLightbox(direction) {
-      const lightbox = document.querySelector("[data-image-lightbox]");
-      if (!lightbox || lightbox.hidden || imageLightboxImages.length < 2) return;
-      renderImageLightboxImage(imageLightboxIndex + direction);
+      const { lightbox, track } = getImageLightboxElements();
+      if (!lightbox || !track || lightbox.hidden || imageLightboxImages.length < 2 || imageLightboxIsSliding) return;
+      imageLightboxIsSliding = true;
+      track.classList.add("is-sliding");
+      requestAnimationFrame(() => {
+        track.style.transform = direction > 0 ? "translate3d(-200vw, 0, 0)" : "translate3d(0, 0, 0)";
+      });
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        track.removeEventListener("transitionend", finish);
+        imageLightboxIsSliding = false;
+        renderImageLightboxImage(imageLightboxIndex + direction);
+      };
+      track.addEventListener("transitionend", finish);
+      window.setTimeout(finish, 320);
     }
 
     function closeImageLightbox() {
       const lightbox = document.querySelector("[data-image-lightbox]");
       if (!lightbox || lightbox.hidden) return;
-      const lightboxImage = lightbox.querySelector("[data-image-lightbox-image]");
       lightbox.hidden = true;
       lightbox.setAttribute("aria-hidden", "true");
       document.body.classList.remove("is-lightbox-open");
-      if (lightboxImage) {
-        lightboxImage.removeAttribute("src");
-        lightboxImage.alt = "";
-      }
+      lightbox.querySelectorAll(".image-lightbox__image").forEach((image) => {
+        image.removeAttribute("src");
+        image.alt = "";
+        image.hidden = false;
+      });
       imageLightboxImages = [];
       imageLightboxIndex = -1;
       imageLightboxTouchStart = null;
+      imageLightboxIsSliding = false;
+      resetImageLightboxTrack();
     }
 
     function setMobileMenuOpen(isOpen, options = {}) {
@@ -3219,21 +3336,73 @@
       }
     });
 
-    document.querySelector("[data-image-lightbox]")?.addEventListener("touchstart", (event) => {
-      if (event.target.closest("button")) return;
+    function snapImageLightboxBack() {
+      const { track } = getImageLightboxElements();
+      if (!track) return;
+      track.classList.add("is-sliding");
+      track.style.transform = "translate3d(-100vw, 0, 0)";
+      window.setTimeout(() => {
+        track.classList.remove("is-sliding");
+      }, 280);
+    }
+
+    const imageLightboxElement = document.querySelector("[data-image-lightbox]");
+
+    imageLightboxElement?.addEventListener("touchstart", (event) => {
+      if (event.target.closest("button") || imageLightboxImages.length < 2 || imageLightboxIsSliding) return;
       const touch = event.changedTouches[0];
-      imageLightboxTouchStart = touch ? { x: touch.clientX, y: touch.clientY } : null;
+      if (!touch) return;
+      const { track } = getImageLightboxElements();
+      track?.classList.remove("is-sliding");
+      imageLightboxTouchStart = {
+        x: touch.clientX,
+        y: touch.clientY,
+        deltaX: 0,
+        deltaY: 0,
+        isDragging: false,
+      };
     }, { passive: true });
 
-    document.querySelector("[data-image-lightbox]")?.addEventListener("touchend", (event) => {
-      if (!imageLightboxTouchStart || event.target.closest("button")) return;
-      const touch = event.changedTouches[0];
+    imageLightboxElement?.addEventListener("touchmove", (event) => {
+      if (!imageLightboxTouchStart || event.target.closest("button") || imageLightboxImages.length < 2) return;
+      const touch = event.changedTouches[0] || event.touches[0];
       if (!touch) return;
       const deltaX = touch.clientX - imageLightboxTouchStart.x;
       const deltaY = touch.clientY - imageLightboxTouchStart.y;
+      imageLightboxTouchStart.deltaX = deltaX;
+      imageLightboxTouchStart.deltaY = deltaY;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+      if (!imageLightboxTouchStart.isDragging) {
+        if (absX < 8 || absX < absY * 1.15) return;
+        imageLightboxTouchStart.isDragging = true;
+      }
+      event.preventDefault();
+      setImageLightboxTrackOffset(deltaX);
+    }, { passive: false });
+
+    imageLightboxElement?.addEventListener("touchend", (event) => {
+      if (!imageLightboxTouchStart || event.target.closest("button")) return;
+      const touch = event.changedTouches[0];
+      if (touch) {
+        imageLightboxTouchStart.deltaX = touch.clientX - imageLightboxTouchStart.x;
+        imageLightboxTouchStart.deltaY = touch.clientY - imageLightboxTouchStart.y;
+      }
+      const { deltaX, deltaY, isDragging } = imageLightboxTouchStart;
       imageLightboxTouchStart = null;
-      if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
-      showAdjacentImageLightbox(deltaX < 0 ? 1 : -1);
+      if (!isDragging) return;
+      const swipeThreshold = Math.min(120, Math.max(52, window.innerWidth * 0.18));
+      if (Math.abs(deltaX) >= swipeThreshold && Math.abs(deltaX) >= Math.abs(deltaY) * 1.15) {
+        showAdjacentImageLightbox(deltaX < 0 ? 1 : -1);
+      } else {
+        snapImageLightboxBack();
+      }
+    }, { passive: true });
+
+    imageLightboxElement?.addEventListener("touchcancel", () => {
+      if (!imageLightboxTouchStart) return;
+      imageLightboxTouchStart = null;
+      snapImageLightboxBack();
     }, { passive: true });
 
     document.addEventListener("fullscreenchange", updateFullscreenButton);
