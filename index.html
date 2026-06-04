@@ -21,7 +21,7 @@
       --section-gap: 56px;
       --outer-text-gutter: 36px;
       --side-nav-width: 20vw;
-      --site-bg: #fff;
+      --site-bg: rgb(245, 245, 245);
       color-scheme: light;
     }
 
@@ -108,7 +108,7 @@
       min-height: 100vh;
       padding: 36px 18px 36px var(--outer-text-gutter);
       border-right: 0;
-      background: #fff;
+      background: var(--site-bg);
     }
 
     .side-title {
@@ -1334,7 +1334,7 @@
         min-height: 0;
         border-right: 0;
         border-bottom: 0;
-        background: #fff;
+        background: transparent;
         padding: 14px 18px 12px var(--outer-text-gutter);
       }
 
@@ -1344,9 +1344,9 @@
         inset: 0;
         z-index: -1;
         display: block;
-        background: #fff;
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
+        background: rgba(245, 245, 245, 0.72);
+        -webkit-backdrop-filter: blur(18px) saturate(1.08);
+        backdrop-filter: blur(18px) saturate(1.08);
         pointer-events: none;
       }
 
@@ -1451,7 +1451,7 @@
         inset: 0;
         z-index: 0;
         height: var(--mobile-menu-height);
-        background: #fff;
+        background: var(--site-bg);
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
         animation: mobileMenuPanelDown 260ms cubic-bezier(0.22, 0.8, 0.22, 1) both;
@@ -1775,10 +1775,10 @@
         <a class="resume-link" href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
         <a class="design-archive-link" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Design Archive</a>
         <a class="award-logo-row" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener" aria-label="Awards">
-          <img src="assets/awards-logos/award-good-design-256x256.gif" alt="Good Design Award" loading="eager" decoding="async" />
-          <img src="assets/awards-logos/award-if-256x256_2x.gif" alt="iF Design Award" loading="eager" decoding="async" />
-          <img src="assets/awards-logos/award-red-dot-256x256_2x.gif" alt="Red Dot Award" loading="eager" decoding="async" />
-          <img src="assets/awards-logos/award-siggraph-256x256_2x.gif" alt="SIGGRAPH Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-good-design-256x256.png" alt="Good Design Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-if-256x256.png" alt="iF Design Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-red-dot-256x256.png" alt="Red Dot Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-siggraph-256x256.png" alt="SIGGRAPH Award" loading="eager" decoding="async" />
         </a>
 
       </nav>
