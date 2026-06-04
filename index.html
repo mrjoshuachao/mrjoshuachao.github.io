@@ -1209,6 +1209,7 @@
         flex-direction: column;
         align-items: flex-end;
         justify-content: center;
+        gap: 2px;
         height: 38px;
         max-width: calc(100% - 96px);
         margin: 0;
@@ -1226,6 +1227,10 @@
       .mobile-menu-title span {
         display: block;
         white-space: nowrap;
+      }
+
+      .mobile-menu-title__secondary {
+        transform-origin: right center;
       }
 
       .side-title,
@@ -1542,8 +1547,8 @@
         <span aria-hidden="true"></span>
       </button>
       <p class="mobile-menu-title">
-        <span>Joshua Hua-Chun Chao</span>
-        <span>2016-2026 Selected Portfolio</span>
+        <span class="mobile-menu-title__primary" data-mobile-title-primary>Joshua Hua-Chun Chao</span>
+        <span class="mobile-menu-title__secondary" data-mobile-title-secondary>2016-2026 Selected Portfolio</span>
       </p>
       <p class="side-title">
         <span>Joshua</span>
@@ -3255,6 +3260,21 @@
       setMobileMenuOpen(false);
     }
 
+    function equalizeMobileMenuTitleWidths() {
+      const title = document.querySelector(".mobile-menu-title");
+      const primary = title?.querySelector("[data-mobile-title-primary]");
+      const secondary = title?.querySelector("[data-mobile-title-secondary]");
+      if (!title || !primary || !secondary) return;
+      secondary.style.fontSize = "";
+      if (!window.matchMedia("(max-width: 760px)").matches) return;
+      const baseFontSize = parseFloat(window.getComputedStyle(title).fontSize);
+      const primaryWidth = primary.getBoundingClientRect().width;
+      const secondaryWidth = secondary.getBoundingClientRect().width;
+      if (!baseFontSize || !primaryWidth || !secondaryWidth) return;
+      const targetFontSize = baseFontSize * Math.min(1, primaryWidth / secondaryWidth);
+      secondary.style.fontSize = `${targetFontSize}px`;
+    }
+
     document.addEventListener("click", (event) => {
       const lightbox = event.target.closest("[data-image-lightbox]");
       if (lightbox) {
@@ -3320,6 +3340,7 @@
       if (!window.matchMedia("(max-width: 760px)").matches) {
         setMobileMenuOpen(false, { immediate: true });
       }
+      equalizeMobileMenuTitleWidths();
     });
 
     document.addEventListener("keydown", (event) => {
@@ -3411,6 +3432,8 @@
     window.addEventListener("resize", scheduleLazyPanelVideoUpdate);
 
     applyRemovedIds();
+    equalizeMobileMenuTitleWidths();
+    document.fonts?.ready?.then(equalizeMobileMenuTitleWidths).catch(() => {});
     setupAutoplayVideos();
     setupSoundButtons();
     setupVideoControls();
