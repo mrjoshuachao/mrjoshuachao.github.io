@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kokoro Link — Your life in Japan, simplified.</title>
+<style>
+  /* ============== Design tokens ============== */
+  :root {
+    --orange: #ef6c2a;
+    --orange-dark: #d65a1d;
+    --orange-soft: #fff1e8;
+    --green: #2f7a4d;
+    --green-dark: #266a40;
+    --green-soft: #e7f3ec;
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #fafaf7;
+    --card: #ffffff;
+    --blue: #2563eb;
+    --blue-soft: #eaf1fe;
+    --rose: #f43f5e;
+    --rose-soft: #ffe4e8;
+    --amber: #f59e0b;
+    --amber-soft: #fff4dc;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06), 0 1px 3px rgba(15, 23, 42, .04);
+    --shadow: 0 4px 14px rgba(15, 23, 42, .08), 0 1px 3px rgba(15, 23, 42, .04);
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", "Hiragino Kaku Gothic ProN", "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: 0; background: none; }
+  input, select, textarea { font-family: inherit; font-size: 14px; color: var(--ink); }
+
+  /* ============== Top app bar ============== */
+  .topbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 18px; color: var(--ink);
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange) 0%, #f08f5b 100%);
+    display: grid; place-items: center; color: #fff; font-weight: 700;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+  .nav button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .nav button:hover { background: var(--bg); color: var(--ink); }
+  .nav button.active {
+    background: var(--orange-soft); color: var(--orange-dark); font-weight: 600;
+  }
+  .top-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .top-actions select {
+    padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px;
+    background: #fff; cursor: pointer;
+  }
+  .btn-ghost {
+    padding: 7px 14px; border-radius: 8px; color: var(--ink-soft); font-weight: 500;
+  }
+  .btn-ghost:hover { background: var(--bg); color: var(--ink); }
+  .btn-primary {
+    padding: 8px 16px; border-radius: 8px;
+    background: var(--orange); color: #fff; font-weight: 600;
+    transition: all .15s ease;
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+
+  .menu-toggle { display: none; padding: 8px; border-radius: 8px; }
+  .menu-toggle:hover { background: var(--bg); }
+
+  /* ============== Page container ============== */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    display: none;
+    animation: fadein .3s ease;
+  }
+  .page.active { display: block; }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ============== Buttons & forms ============== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all .15s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-orange { background: var(--orange); color: #fff; }
+  .btn-orange:hover { background: var(--orange-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-outline { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-outline:hover { background: var(--bg); border-color: #d1d5db; }
+  .btn-soft { background: var(--orange-soft); color: var(--orange-dark); }
+  .btn-soft:hover { background: #ffe4d2; }
+  .btn-pill { border-radius: 999px; }
+  .btn-sm { padding: 7px 12px; font-size: 13px; }
+  .btn-block { width: 100%; justify-content: center; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .field input, .field select, .field textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(239, 108, 42, .15);
+  }
+
+  /* ============== Cards ============== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+  }
+  .card-pad { padding: 24px; }
+  .card-tight { padding: 16px; }
+
+  .grid { display: grid; gap: 16px; }
+  .row { display: flex; gap: 16px; }
+
+  /* ============== Landing ============== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 32px;
+    background: linear-gradient(135deg, #fff8f3 0%, #fef4ec 60%, #f5e9da 100%);
+    border-radius: 18px;
+    padding: 40px;
+    align-items: center;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero h1 {
+    font-size: 40px; line-height: 1.15;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  .hero p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin: 0 0 22px;
+    max-width: 460px;
+  }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-image {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .12);
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #fff;
+  }
+
+  .section-h {
+    font-size: 22px; font-weight: 700;
+    margin: 32px 0 16px;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .feature {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition: all .2s ease;
+    cursor: pointer;
+  }
+  .feature:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: var(--shadow); }
+  .feat-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: grid; place-items: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .feat-icon.green { background: var(--green-soft); color: var(--green); }
+  .feat-icon.orange { background: var(--orange-soft); color: var(--orange); }
+  .feat-icon.blue { background: var(--blue-soft); color: var(--blue); }
+  .feat-icon.rose { background: var(--rose-soft); color: var(--rose); }
+  .feat-icon.amber { background: var(--amber-soft); color: var(--amber); }
+
+  .feature h4 { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+  .feature p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+  /* ============== Stepper ============== */
+  .stepper {
+    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 24px;
+    flex-wrap: wrap;
+  }
+  .step {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .step .dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #f3f4f6; color: var(--muted);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .step.done .dot { background: var(--green); color: #fff; }
+  .step.active .dot { background: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(239, 108, 42, .15); }
+  .step.active { color: var(--ink); font-weight: 600; }
+  .step.done { color: var(--ink-soft); }
+  .step .line {
+    width: 28px; height: 2px; background: var(--line); border-radius: 2px;
+  }
+  .step.done .line, .step.active .line { background: var(--green); }
+
+  /* ============== Onboarding ============== */
+  .onboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+  }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .summary-card { padding: 20px; }
+  .summary-card .avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange) 0%, #ffb085 100%);
+    color: #fff; font-weight: 700; font-size: 22px;
+    display: grid; place-items: center;
+    margin: 0 auto 12px;
+  }
+  .sum-list { list-style: none; padding: 0; margin: 16px 0 0; }
+  .sum-list li {
+    display: flex; gap: 10px; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 13px;
+  }
+  .sum-list li:last-child { border-bottom: 0; }
+  .sum-list li b { color: var(--ink-soft); margin-right: auto; font-weight: 500; }
+  .sum-icon { font-size: 14px; }
+
+  .form-actions {
+    display: flex; justify-content: space-between; gap: 12px;
+    margin-top: 8px;
+  }
+
+  /* ============== Dashboard ============== */
+  .dash-greet {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    margin-bottom: 18px;
+  }
+  .dash-greet h2 { margin: 0 0 4px; font-size: 24px; }
+  .dash-greet p { margin: 0; color: var(--muted); font-size: 14px; }
+  .ring {
+    --p: 65;
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: conic-gradient(var(--orange) calc(var(--p) * 1%), #f3f4f6 0);
+    display: grid; place-items: center;
+    position: relative;
+  }
+  .ring::after {
+    content: ""; position: absolute; inset: 6px; background: #fff; border-radius: 50%;
+  }
+  .ring span {
+    position: relative; z-index: 1; font-weight: 700; font-size: 18px; color: var(--ink);
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin: 18px 0 24px;
+    position: relative;
+  }
+  .tl-step {
+    position: relative;
+    padding: 26px 12px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .tl-step::before {
+    content: ""; position: absolute;
+    top: 14px; left: 50%; width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--line);
+    transform: translateX(-50%);
+    z-index: 2;
+    transition: all .2s ease;
+  }
+  .tl-line {
+    position: absolute;
+    top: 19px; left: 0; right: 0; height: 3px;
+    background: var(--line);
+    z-index: 1;
+  }
+  .tl-line-fill {
+    position: absolute;
+    top: 19px; left: 10%; height: 3px;
+    background: var(--orange);
+    z-index: 1;
+    transition: width .4s ease;
+  }
+  .tl-step.done::before { background: var(--green); border-color: var(--green); }
+  .tl-step.current::before { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 0 5px rgba(239, 108, 42, .2); }
+  .tl-step h5 { margin: 0 0 2px; font-size: 13px; font-weight: 700; }
+  .tl-step span { font-size: 12px; color: var(--muted); }
+  .tl-step:hover { background: var(--bg); border-radius: 10px; }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+  }
+  .task-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    margin-bottom: 8px;
+    transition: all .15s;
+  }
+  .task-row:hover { border-color: var(--orange); background: #fffaf6; }
+  .task-row .check {
+    width: 22px; height: 22px; border: 2px solid var(--line); border-radius: 6px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all .15s;
+    background: #fff;
+  }
+  .task-row .check:hover { border-color: var(--orange); }
+  .task-row.done .check { background: var(--green); border-color: var(--green); color: #fff; }
+  .task-row.done .task-text h5 { text-decoration: line-through; color: var(--muted); }
+  .task-text { flex: 1; }
+  .task-text h5 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+  .task-text span { font-size: 12px; color: var(--muted); }
+  .pill {
+    padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600;
+    background: var(--rose-soft); color: var(--rose);
+  }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.blue { background: var(--blue-soft); color: var(--blue); }
+
+  .progress {
+    display: flex; align-items: center; gap: 10px;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  .progress span:first-child { width: 110px; color: var(--ink-soft); }
+  .progress span:last-child { width: 36px; text-align: right; font-weight: 600; color: var(--ink); }
+  .bar { flex: 1; height: 8px; background: #f3f4f6; border-radius: 999px; overflow: hidden; }
+  .bar-fill {
+    height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--orange) 0%, #f8a06d 100%);
+    transition: width .6s ease;
+  }
+  .shortcut {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .shortcut:hover { border-color: var(--orange); background: #fffaf6; transform: translateX(2px); }
+  .shortcut .ic {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--orange-soft); color: var(--orange);
+    display: grid; place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ============== Task detail ============== */
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .breadcrumb a { color: var(--orange-dark); cursor: pointer; }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  .task-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .task-head h2 { margin: 0 0 4px; font-size: 24px; }
+  .task-head .sub { color: var(--muted); font-size: 14px; }
+
+  .task-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+  }
+  .info-stack > * + * { margin-top: 10px; }
+  .info-row {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .info-row:last-child { border-bottom: 0; }
+  .info-row b { color: var(--muted); font-weight: 500; flex: 0 0 130px; }
+
+  .step-list { padding: 0; margin: 0; list-style: none; counter-reset: stepc; }
+  .step-list li {
+    counter-increment: stepc;
+    padding: 14px 14px 14px 50px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    transition: all .15s;
+    cursor: pointer;
+  }
+  .step-list li::before {
+    content: counter(stepc);
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--orange-soft); color: var(--orange-dark);
+    display: grid; place-items: center; font-weight: 700; font-size: 13px;
+  }
+  .step-list li:hover { border-color: var(--orange); background: #fffaf6; }
+  .step-list li h5 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+  .step-list li p { margin: 0; font-size: 13px; color: var(--muted); }
+  .step-list li.done { background: #f6faf7; border-color: #cfe5d6; }
+  .step-list li.done::before { background: var(--green); color: #fff; }
+
+  .commit-list { padding: 0; margin: 8px 0 0; list-style: none; }
+  .commit-list li {
+    display: flex; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--ink-soft);
+    border-bottom: 1px dashed var(--line);
+  }
+  .commit-list li:last-child { border-bottom: 0; }
+  .commit-list li::before {
+    content: "!"; flex: 0 0 18px; height: 18px; border-radius: 50%;
+    background: var(--amber-soft); color: var(--amber);
+    display: grid; place-items: center; font-weight: 700; font-size: 12px;
+  }
+
+  /* ============== Document translation ============== */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .doc-frame {
+    border: 1px dashed #c4c4c4;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fafaf3;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .doc-frame.uploaded {
+    border-style: solid;
+    background: #fff;
+    border-color: var(--green);
+  }
+  .doc-jp {
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+    line-height: 1.6;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .doc-jp h6 { margin: 0 0 6px; font-size: 15px; font-weight: 700; }
+  .key-list {
+    list-style: none; padding: 0; margin: 8px 0 0;
+  }
+  .key-list li {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .key-list li b { color: var(--muted); font-weight: 500; }
+  .upload-zone {
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    background: #fbfaf5;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 16px;
+  }
+  .upload-zone:hover, .upload-zone.drag {
+    border-color: var(--orange); background: #fff5ec;
+  }
+  .upload-zone .ic {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--orange-soft); color: var(--orange);
+    display: grid; place-items: center;
+    font-size: 18px; margin: 0 auto 10px;
+  }
+  .upload-zone p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+  .upload-zone p.small { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ============== Booking ============== */
+  .bk-tabs {
+    display: flex; gap: 6px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .bk-tab {
+    padding: 10px 16px;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  .bk-tab.active { color: var(--orange-dark); border-color: var(--orange); font-weight: 600; }
+
+  .bk-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+  }
+  .appt-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .appt {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    background: #fff;
+    transition: all .2s;
+  }
+  .appt:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .appt .ic-lg {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: grid; place-items: center; margin-bottom: 10px;
+    font-size: 18px;
+  }
+  .appt h5 { margin: 0 0 4px; font-size: 14px; font-weight: 700; }
+  .appt p { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+  .appt button { width: 100%; }
+
+  .consult-card {
+    background: linear-gradient(135deg, #fff8f3 0%, #fef0e2 100%);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+  }
+  .consult-card img {
+    width: 100%; max-width: 180px; height: auto;
+    border-radius: 12px; margin: 8px auto 12px; display: block;
+    box-shadow: var(--shadow);
+  }
+  .consult-card h5 { margin: 0; font-size: 15px; font-weight: 700; }
+  .consult-card .online {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--green); font-weight: 500;
+    margin-top: 4px;
+  }
+  .consult-card .online::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green); animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+  .call-btns {
+    display: flex; gap: 10px; justify-content: center; margin: 14px 0 12px;
+  }
+  .call-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; color: #fff;
+    cursor: pointer; transition: transform .15s;
+    font-size: 16px;
+  }
+  .call-btn:hover { transform: scale(1.08); }
+  .call-btn.video { background: var(--blue); }
+  .call-btn.audio { background: var(--orange); }
+  .call-btn.chat { background: var(--green); }
+
+  .reco-list { list-style: none; padding: 0; margin: 0; }
+  .reco-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .reco-list li:hover { border-color: var(--orange); background: #fffaf6; }
+  .reco-list li .ic {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    flex-shrink: 0; font-size: 14px;
+  }
+  .reco-list li h5 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+  .reco-list li p { margin: 0; font-size: 12px; color: var(--muted); }
+  .reco-list li .meta {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: var(--green-soft); color: var(--green); font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .mountain-band {
+    margin-top: 28px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(90deg, #fff8f3 0%, #fef0e2 50%, #fff8f3 100%);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  .mountain-band .copy { padding: 24px 28px; }
+  .mountain-band h4 { margin: 0 0 6px; font-size: 18px; }
+  .mountain-band p { margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+  .mountain-band img { width: 100%; height: 100%; object-fit: cover; min-height: 140px; max-height: 200px; }
+
+  /* ============== Modal ============== */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, .55);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-bg.active { display: flex; animation: fadein .2s; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, .25);
+  }
+  .modal h3 { margin: 0 0 8px; font-size: 18px; }
+  .modal p { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ============== Toast ============== */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 200;
+    transition: transform .3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+    display: flex; align-items: center; gap: 8px;
+    max-width: 90vw;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast::before {
+    content: "✓"; color: #4ade80; font-weight: 700;
+  }
+
+  /* ============== Footer ============== */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+    background: #fff;
+  }
+
+  /* ============== Responsive ============== */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 28px; }
+    .hero h1 { font-size: 32px; }
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    .onboard-grid, .dash-grid, .task-grid, .doc-grid, .bk-grid { grid-template-columns: 1fr; }
+    .appt-grid { grid-template-columns: repeat(2, 1fr); }
+    .timeline { grid-template-columns: repeat(5, 1fr); }
+    .mountain-band { grid-template-columns: 1fr; }
+    .mountain-band img { max-height: 160px; }
+  }
+
+  @media (max-width: 720px) {
+    .topbar-inner { padding: 12px 16px; gap: 12px; flex-wrap: wrap; }
+    .nav {
+      width: 100%;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+      display: none;
+    }
+    .nav.open { display: flex; }
+    .nav button { width: 100%; text-align: left; }
+    .menu-toggle { display: inline-flex; margin-left: auto; }
+    .top-actions .btn-ghost { display: none; }
+
+    .page { padding: 18px 14px 60px; }
+    .hero { padding: 22px; }
+    .hero h1 { font-size: 26px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: repeat(2, 1fr); }
+    .timeline .tl-line, .timeline .tl-line-fill { display: none; }
+    .tl-step { text-align: left; padding-left: 36px; }
+    .tl-step::before { left: 14px; top: 22px; transform: none; }
+    .appt-grid { grid-template-columns: 1fr; }
+    .info-row b { flex: 0 0 100px; }
+    .key-list li { grid-template-columns: 1fr; gap: 2px; }
+    .stepper { gap: 4px; }
+    .step .line { width: 14px; }
+    .step span.step-label { display: none; }
+    .step.active span.step-label { display: inline; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 22px; }
+    .section-h { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ Top bar ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" data-go="landing">
+      <span class="brand-mark">心</span>
+      Kokoro Link
+    </a>
+    <nav class="nav" id="mainNav">
+      <button data-go="landing">Home</button>
+      <button data-go="onboarding">Onboarding</button>
+      <button data-go="dashboard">Dashboard</button>
+      <button data-go="task">Task Detail</button>
+      <button data-go="translate">Documents</button>
+      <button data-go="booking">Booking</button>
+    </nav>
+    <div class="top-actions">
+      <select id="lang" aria-label="Language">
+        <option>EN</option>
+        <option>日本語</option>
+        <option>中文</option>
+      </select>
+      <button class="btn-ghost" onclick="toast('Logging in… (demo)')">Log in</button>
+      <button class="btn-primary" data-go="onboarding">Get Started</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ Landing page ============ -->
+<main class="page active" id="page-landing">
+  <section class="hero">
+    <div>
+      <h1>Your life in Japan,<br />simplified and supported.</h1>
+      <p>Personalized digital guidance, clear explanations, and hands-on support for every stage of your journey.</p>
+      <div class="hero-cta">
+        <button class="btn btn-orange" data-go="onboarding">Get Started →</button>
+        <button class="btn btn-outline" onclick="toast('Playing intro video… (demo)')">▶ See How It Works</button>
+      </div>
+    </div>
+    <img class="hero-image" src="assets/family-hd.png" alt="Family arriving in Japan" />
+  </section>
+
+  <h3 class="section-h">Everything you need, in one place.</h3>
+  <div class="feature-grid">
+    <div class="feature" data-go="dashboard">
+      <div class="feat-icon green">✓</div>
+      <h4>Personalized Checklist</h4>
+      <p>Step-by-step tasks made for your life stage.</p>
+    </div>
+    <div class="feature" data-go="task">
+      <div class="feat-icon orange">📘</div>
+      <h4>System Explanation Helper</h4>
+      <p>Understand how Japan's systems really work.</p>
+    </div>
+    <div class="feature" data-go="translate">
+      <div class="feat-icon blue">🌐</div>
+      <h4>Translation &amp; Interpretation</h4>
+      <p>Documents, letters, and conversations made clear.</p>
+    </div>
+    <div class="feature" data-go="booking">
+      <div class="feat-icon rose">📅</div>
+      <h4>Assisted Booking Support</h4>
+      <p>Appointments handled for you, without the stress.</p>
+    </div>
+    <div class="feature" data-go="dashboard">
+      <div class="feat-icon amber">⚙️</div>
+      <h4>Life-Stage Adaptive Dashboard</h4>
+      <p>Guidance that adapts as your life in Japan evolves.</p>
+    </div>
+  </div>
+</main>
+
+<!-- ============ Onboarding page ============ -->
+<main class="page" id="page-onboarding">
+  <h2 style="margin:0 0 4px; font-size:24px;">Onboarding / Profile Setup</h2>
+  <p style="margin:0 0 22px; color:var(--muted); font-size:14px;">This helps us create the perfect plan for your journey in Japan.</p>
+
+  <div class="stepper">
+    <div class="step done"><span class="dot">✓</span><span class="step-label">About You</span></div>
+    <div class="line"></div>
+    <div class="step active"><span class="dot">2</span><span class="step-label">Your Family</span></div>
+    <div class="line"></div>
+    <div class="step"><span class="dot">3</span><span class="step-label">Your Plans</span></div>
+    <div class="line"></div>
+    <div class="step"><span class="dot">4</span><span class="step-label">Review &amp; Confirm</span></div>
+  </div>
+
+  <div class="onboard-grid">
+    <div class="card card-pad">
+      <h3 style="margin:0 0 16px; font-size:18px;">Let's get to know you</h3>
+
+      <form id="onboardForm" onsubmit="event.preventDefault(); submitOnboard();">
+        <div class="form-grid">
+          <div class="field">
+            <label>Visa Type</label>
+            <select id="f-visa">
+              <option>Engineer / Specialist in Humanities / Int'l Services</option>
+              <option>Highly Skilled Professional</option>
+              <option>Spouse / Family</option>
+              <option>Student</option>
+              <option>Working Holiday</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Family Status</label>
+            <select id="f-family">
+              <option>Married, with children</option>
+              <option>Married, no children</option>
+              <option>Single</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Language Ability (Japanese)</label>
+            <select id="f-lang">
+              <option>Basic (Can read Hiragana / Katakana)</option>
+              <option>Conversational (N4–N3)</option>
+              <option>Business (N2)</option>
+              <option>Fluent (N1)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Child Age</label>
+            <select id="f-child">
+              <option>3–5 years</option>
+              <option>6–12 years</option>
+              <option>13+ years</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Current Location</label>
+            <select id="f-loc">
+              <option>Vancouver, Canada</option>
+              <option>San Francisco, USA</option>
+              <option>Taipei, Taiwan</option>
+              <option>London, UK</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Planned Arrival Date</label>
+            <input id="f-date" type="date" value="2026-07-15" />
+          </div>
+          <div class="field full">
+            <label>Initial Stay Plan in Japan</label>
+            <select id="f-stay">
+              <option>Settling in for 3–5 years</option>
+              <option>Short-term (1–2 years)</option>
+              <option>Long-term / Permanent</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="go('landing')">← Back</button>
+          <button type="submit" class="btn btn-orange">Match Your Family →</button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="card summary-card">
+      <div style="text-align:center;">
+        <div class="avatar">A</div>
+        <div style="font-weight:700;">Your Journey Summary</div>
+      </div>
+      <ul class="sum-list">
+        <li><span class="sum-icon">📍</span><b>From</b><span id="s-loc">Vancouver, Canada</span></li>
+        <li><span class="sum-icon">📅</span><b>Arrival</b><span id="s-date">July 15, 2026</span></li>
+        <li><span class="sum-icon">🏯</span><b>Destination</b><span>Nagano, Japan</span></li>
+        <li><span class="sum-icon">👨‍👩‍👦</span><b>Family</b><span id="s-fam">Wife &amp; 1 child (5)</span></li>
+        <li><span class="sum-icon">🚩</span><b>Stay</b><span id="s-stay">3–5 years</span></li>
+      </ul>
+      <img src="assets/village-hd.png" alt="Settling in Japan" style="width:100%; border-radius:10px; margin-top:14px;" />
+    </aside>
+  </div>
+</main>
+
+<!-- ============ Dashboard page ============ -->
+<main class="page" id="page-dashboard">
+  <div class="dash-greet">
+    <div>
+      <h2>Welcome, Alex 👋</h2>
+      <p>Software Engineer from Canada · Moving to Nagano · Wife &amp; 5-year-old son</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="text-align:right;">
+        <div style="font-size:12px; color:var(--muted);">Overall Progress</div>
+        <div style="font-weight:700;">40% complete</div>
+      </div>
+      <div class="ring" style="--p:40;"><span>40%</span></div>
+    </div>
+  </div>
+
+  <div class="card card-pad">
+    <h4 style="margin:0 0 4px; font-size:16px;">Life Journey Timeline</h4>
+    <p style="margin:0; font-size:13px; color:var(--muted);">Click any phase to view its tasks.</p>
+
+    <div class="timeline">
+      <div class="tl-line"></div>
+      <div class="tl-line-fill" style="width:40%;"></div>
+      <div class="tl-step done" onclick="toast('Pre-arrival tasks — 100% complete')">
+        <h5>Before Arrival</h5><span>Done</span>
+      </div>
+      <div class="tl-step current" onclick="toast('First-week tasks — in progress')">
+        <h5>First Week</h5><span>In progress</span>
+      </div>
+      <div class="tl-step" onclick="toast('First Month plan — opens soon')">
+        <h5>First Month</h5><span>Upcoming</span>
+      </div>
+      <div class="tl-step" onclick="toast('First 3 Months plan — locked')">
+        <h5>First Three Months</h5><span>Upcoming</span>
+      </div>
+      <div class="tl-step" onclick="toast('6-Month+ planning — locked')">
+        <h5>6-Month+</h5><span>Upcoming</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-grid" style="margin-top:18px;">
+    <div class="card card-pad">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <h4 style="margin:0; font-size:16px;">Upcoming &amp; Urgent Tasks</h4>
+        <span class="pill">3 Open</span>
+      </div>
+      <div style="margin-top:14px;" id="taskList">
+        <div class="task-row" onclick="go('task')">
+          <div class="check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+          <div class="task-text"><h5>Town Hall Registration (Juminhyo)</h5><span>Within 14 days of arrival</span></div>
+          <span class="pill">Urgent</span>
+        </div>
+        <div class="task-row" onclick="go('task')">
+          <div class="check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+          <div class="task-text"><h5>Enroll in Health Insurance &amp; Pension</h5><span>Required for residency</span></div>
+          <span class="pill amber">High</span>
+        </div>
+        <div class="task-row" onclick="go('booking')">
+          <div class="check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+          <div class="task-text"><h5>Book bilingual school enrollment tour</h5><span>This week — 2 slots left</span></div>
+          <span class="pill blue">Soon</span>
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="margin-top:14px;" onclick="toast('Showing all 12 categories…')">View all tasks →</button>
+
+      <h4 style="margin:24px 0 12px; font-size:16px;">Task Progress by Category</h4>
+      <div class="progress"><span>Administrative</span><div class="bar"><div class="bar-fill" style="width:75%;"></div></div><span>75%</span></div>
+      <div class="progress"><span>Housing</span><div class="bar"><div class="bar-fill" style="width:60%;"></div></div><span>60%</span></div>
+      <div class="progress"><span>Healthcare</span><div class="bar"><div class="bar-fill" style="width:40%;"></div></div><span>40%</span></div>
+      <div class="progress"><span>Family / School</span><div class="bar"><div class="bar-fill" style="width:25%;"></div></div><span>25%</span></div>
+      <div class="progress"><span>Banking</span><div class="bar"><div class="bar-fill" style="width:10%;"></div></div><span>10%</span></div>
+    </div>
+
+    <aside>
+      <div class="card card-pad">
+        <h4 style="margin:0 0 12px; font-size:16px;">Support Shortcuts</h4>
+        <div class="shortcut" onclick="go('translate')">
+          <div class="ic">🌐</div>
+          <div><h5 style="margin:0;font-size:13px;font-weight:600;">Find a Translator</h5></div>
+        </div>
+        <div class="shortcut" onclick="go('booking')">
+          <div class="ic">👤</div>
+          <div><h5 style="margin:0;font-size:13px;font-weight:600;">Book a Consultant</h5></div>
+        </div>
+        <div class="shortcut" onclick="toast('Opening calendar…')">
+          <div class="ic">📅</div>
+          <div><h5 style="margin:0;font-size:13px;font-weight:600;">Schedule an Appointment</h5></div>
+        </div>
+        <div class="shortcut" onclick="toast('Loading neighborhood guide…')">
+          <div class="ic">📍</div>
+          <div><h5 style="margin:0;font-size:13px;font-weight:600;">Find Local Info</h5></div>
+        </div>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px;">
+        <h4 style="margin:0 0 6px; font-size:16px;">💡 Tip for Today</h4>
+        <p style="margin:0; font-size:13px; color:var(--ink-soft);">Register your <b>juminhyo</b> at the local town hall within 14 days of arrival to keep insurance, pension, and child benefits on track.</p>
+        <button class="btn btn-soft btn-sm btn-pill" style="margin-top:10px;" onclick="toast('Saved to your reminders.')">Remind me</button>
+      </div>
+
+      <div class="card card-pad" style="margin-top:14px;">
+        <h4 style="margin:0 0 8px; font-size:16px;">📨 Messages</h4>
+        <p style="margin:0; font-size:13px; color:var(--ink-soft);">Yuki (your consultant): "Documents reviewed — you're all set for tomorrow's appointment."</p>
+        <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="go('booking')">Open chat</button>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ============ Task Detail page ============ -->
+<main class="page" id="page-task">
+  <div class="breadcrumb"><a data-go="dashboard">Dashboard</a> · <a data-go="dashboard">Tasks</a> · <span style="color:var(--ink);">Health Insurance &amp; Pension</span></div>
+
+  <div class="task-head">
+    <div>
+      <h2>Enroll in Health Insurance &amp; Pension</h2>
+      <div class="sub">For Japan's public health insurance and national pension system</div>
+    </div>
+    <span class="pill">High Priority</span>
+  </div>
+
+  <div class="task-grid">
+    <div>
+      <div class="card card-pad">
+        <h4 style="margin:0 0 14px; font-size:16px;">Overview</h4>
+        <div class="info-stack">
+          <div class="info-row"><b>Why it matters</b><span>Ensures you and your family can access healthcare and contribute to the public pension.</span></div>
+          <div class="info-row"><b>When to do</b><span>Within 14 days after your move-in registration.</span></div>
+          <div class="info-row"><b>Estimated time</b><span>30–45 minutes at the town hall.</span></div>
+          <div class="info-row"><b>Bring with you</b><span>My Number card, residence card, juminhyo, and bank book.</span></div>
+        </div>
+      </div>
+
+      <div class="card card-pad" style="margin-top:16px;">
+        <h4 style="margin:0 0 14px; font-size:16px;">How the Japanese System Works</h4>
+        <ol class="step-list" id="taskSteps">
+          <li class="done" onclick="toggleStepDone(this)"><h5>Resident registration first</h5><p>Enrollment is automatic once you complete town hall registration.</p></li>
+          <li onclick="toggleStepDone(this)"><h5>Choose your insurance type</h5><p>Employer-based (kenkō hoken) vs. national (kokumin kenkō hoken).</p></li>
+          <li onclick="toggleStepDone(this)"><h5>Set up monthly payment</h5><p>Bank withdrawal recommended — first invoice arrives in 4–6 weeks.</p></li>
+          <li onclick="toggleStepDone(this)"><h5>Receive your insurance card</h5><p>Mailed in ~2 weeks. Use it at any clinic for 70% co-pay coverage.</p></li>
+        </ol>
+      </div>
+
+      <div class="card card-pad" style="margin-top:16px;">
+        <h4 style="margin:0 0 8px; font-size:16px;">Common Mistakes</h4>
+        <ul class="commit-list">
+          <li>Waiting more than 14 days after move-in (back-payments may apply).</li>
+          <li>Not enrolling family members on the same day.</li>
+          <li>Forgetting to notify changes (job change, address) within 14 days.</li>
+        </ul>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card card-pad">
+        <h4 style="margin:0 0 12px; font-size:16px;">Status</h4>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:14px;">
+          <span class="pill amber" id="taskStatus">Not Started</span>
+          <span style="font-size:12px; color:var(--muted);">Updates as you complete steps.</span>
+        </div>
+
+        <div class="info-row"><b>At a glance</b><span></span></div>
+        <div class="info-row"><b>Deadline</b><span>July 29, 2026</span></div>
+        <div class="info-row"><b>Estimated cost</b><span>¥0 enrollment · ¥10–30k / month</span></div>
+        <div class="info-row"><b>Where to go</b><span>Nagano City Hall · 1F<br /><span style="color:var(--muted); font-size:12px;">2-2-1 Tsuruga Akawa-machi · 3 min walk from Zenkō-ji</span></span></div>
+
+        <button class="btn btn-orange btn-block" style="margin-top:14px;" onclick="markTaskInProgress()">Start this task →</button>
+        <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="go('booking')">Book a consultant</button>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ============ Document Translation page ============ -->
+<main class="page" id="page-translate">
+  <h2 style="margin:0 0 4px; font-size:24px;">Document Translation &amp; Guidance</h2>
+  <p style="margin:0 0 22px; color:var(--muted); font-size:14px;">Upload Japanese documents and we'll explain what they mean — in plain English.</p>
+
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px;">
+    <span class="pill green">● Action required</span>
+    <span style="font-size:13px; color:var(--ink-soft);">Reply by: July 7, 2026</span>
+  </div>
+
+  <div class="doc-grid">
+    <div class="card card-pad">
+      <h4 style="margin:0 0 10px; font-size:16px;">Understand Your Documents</h4>
+      <div class="doc-frame uploaded" id="docFrame">
+        <div class="doc-jp">
+          <h6>国民健康保険　納付のご案内</h6>
+          <p style="font-size:12px; color:var(--muted); margin:0;">国保お支払い・2025年7月吉日</p>
+          <hr style="border:0; border-top:1px solid var(--line); margin:6px 0;" />
+          <p style="font-size:13px; margin:0;">ご加入者各位<br />本書類は今年度の国民健康保険料の納付通知書です。期限までに指定口座へお支払いください。</p>
+          <hr style="border:0; border-top:1px solid var(--line); margin:6px 0;" />
+          <table style="width:100%; font-size:12px; border-collapse:collapse;">
+            <tr><td style="padding:4px 0;">納付額</td><td align="right">¥18,500</td></tr>
+            <tr><td style="padding:4px 0;">納付期限</td><td align="right">2026/07/07</td></tr>
+            <tr><td style="padding:4px 0;">口座番号</td><td align="right">1234-5678</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="upload-zone" id="dropzone" onclick="simulateUpload()">
+        <div class="ic">⬆</div>
+        <p>Drag &amp; drop a document here, or click to browse.</p>
+        <p class="small">Supports JPG · PNG · PDF · up to 10 MB</p>
+      </div>
+      <button class="btn btn-orange btn-block" style="margin-top:12px;" onclick="simulateUpload()">Upload Another Document</button>
+    </div>
+
+    <div class="card card-pad">
+      <h4 style="margin:0 0 10px; font-size:16px;">Translation &amp; Explanation</h4>
+      <div style="background:var(--green-soft); border-radius:10px; padding:14px; margin-bottom:14px;">
+        <b style="font-size:13px; color:var(--green-dark);">Summary</b>
+        <p style="margin:6px 0 0; font-size:13px; color:var(--ink-soft);">
+          This is a notice about your <b>National Health Insurance premium</b> for this year.
+          You need to pay the printed amount by the due date.
+        </p>
+      </div>
+
+      <h5 style="margin:0 0 6px; font-size:14px;">What you need to do</h5>
+      <ul style="padding-left:18px; margin:0 0 14px; font-size:13px; color:var(--ink-soft);">
+        <li>Pay <b>¥18,500</b> at any convenience store, by bank transfer, or via the city's online portal.</li>
+        <li>Keep the receipt — it's needed for tax filing.</li>
+        <li>If you can't pay on time, contact the city office before the due date.</li>
+      </ul>
+
+      <h5 style="margin:0 0 6px; font-size:14px;">Key Details</h5>
+      <ul class="key-list">
+        <li><b>Document type</b><span>National Health Insurance — premium notice</span></li>
+        <li><b>Payment due</b><span>July 7, 2026</span></li>
+        <li><b>Amount</b><span>¥18,500</span></li>
+        <li><b>Issuer</b><span>Nagano City Office</span></li>
+        <li><b>Account</b><span>Nagano Co-op · 1234-5678</span></li>
+      </ul>
+
+      <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+        <button class="btn btn-green" onclick="toast('Document marked as understood.')">Explain this document</button>
+        <button class="btn btn-outline" onclick="go('booking')">Ask consultant</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ Booking page ============ -->
+<main class="page" id="page-booking">
+  <div class="bk-tabs">
+    <div class="bk-tab" data-tab="appts">Appointments</div>
+    <div class="bk-tab active" data-tab="visits">Visits</div>
+    <div class="bk-tab" data-tab="docs">Documents</div>
+    <div class="bk-tab" data-tab="support">Support</div>
+    <div class="bk-tab" data-tab="messages">Messages</div>
+  </div>
+
+  <h3 style="margin:0 0 14px; font-size:18px;">Appointments (We'll handle the call for you)</h3>
+
+  <div class="bk-grid">
+    <div>
+      <div class="appt-grid">
+        <div class="appt">
+          <div class="ic-lg" style="background:var(--blue-soft); color:var(--blue);">🏛</div>
+          <h5>Town Hall Visit</h5>
+          <p>Juminhyo · 30 min slot</p>
+          <button class="btn btn-orange btn-sm btn-block" data-book="Town Hall Visit">Book Now</button>
+        </div>
+        <div class="appt">
+          <div class="ic-lg" style="background:var(--green-soft); color:var(--green);">🏫</div>
+          <h5>School Consultation &amp; Enrollment</h5>
+          <p>Bilingual coordinator · 60 min</p>
+          <button class="btn btn-orange btn-sm btn-block" data-book="School Consultation">Book Now</button>
+        </div>
+        <div class="appt">
+          <div class="ic-lg" style="background:var(--rose-soft); color:var(--rose);">＋</div>
+          <h5>Clinic Visit</h5>
+          <p>Family doctor intake · 45 min</p>
+          <button class="btn btn-orange btn-sm btn-block" data-book="Clinic Visit">Book Now</button>
+        </div>
+        <div class="appt">
+          <div class="ic-lg" style="background:var(--amber-soft); color:var(--amber);">🚗</div>
+          <h5>Driver's License Conversion</h5>
+          <p>Test booking + interpreter · 90 min</p>
+          <button class="btn btn-orange btn-sm btn-block" data-book="Driver's License Conversion">Book Now</button>
+        </div>
+      </div>
+
+      <h3 style="margin:24px 0 12px; font-size:18px;">Adaptive Recommendations (For Your Future)</h3>
+      <ul class="reco-list">
+        <li onclick="toast('Opening Driver's License Conversion plan…')">
+          <div class="ic">🚗</div>
+          <div style="flex:1;">
+            <h5>Driver's License Conversion</h5>
+            <p>Start the process now and get the test slot you want this fall.</p>
+          </div>
+          <span class="meta">Recommended</span>
+        </li>
+        <li onclick="toast('Opening Permanent Residency timeline…')">
+          <div class="ic">🏯</div>
+          <div style="flex:1;">
+            <h5>Permanent Residency Path</h5>
+            <p>Check your eligibility and required steps over the next 12 months.</p>
+          </div>
+          <span class="meta" style="background:var(--amber-soft); color:var(--amber);">In Progress</span>
+        </li>
+        <li onclick="toast('Opening Home Ownership Guide…')">
+          <div class="ic">🏠</div>
+          <div style="flex:1;">
+            <h5>Home Ownership Guide</h5>
+            <p>Understand the process and tax implications before you decide.</p>
+          </div>
+          <span class="meta" style="background:var(--blue-soft); color:var(--blue);">Plan ahead</span>
+        </li>
+      </ul>
+      <button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick="toast('Loading all recommendations…')">View all recommendations →</button>
+    </div>
+
+    <aside>
+      <div class="consult-card">
+        <h5>Talk to a Consultant</h5>
+        <span class="online">Online now</span>
+        <img src="assets/consultant-hd.png" alt="Yuki, your bilingual consultant" />
+        <div style="font-size:13px; color:var(--ink-soft); margin-top:-6px;">
+          <b>Yuki Tanaka</b> · EN/JP/中文
+        </div>
+        <div class="call-btns">
+          <div class="call-btn video" title="Video call" onclick="openCall('video')">📹</div>
+          <div class="call-btn audio" title="Audio call" onclick="openCall('audio')">📞</div>
+          <div class="call-btn chat" title="Chat" onclick="openCall('chat')">💬</div>
+        </div>
+        <button class="btn btn-green btn-block" onclick="openCall('video')">Start Video Call</button>
+        <button class="btn btn-outline btn-block btn-sm" style="margin-top:8px;" onclick="toast('Chat opened. Yuki will reply shortly.')">Chat now</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="mountain-band">
+    <div class="copy">
+      <h4>Plans that adapt as your life changes</h4>
+      <p>Whether you're settling for a few years or building a long-term future in Japan, we'll guide you step by step.</p>
+      <button class="btn btn-orange btn-sm" onclick="go('onboarding')">Update My Plans</button>
+    </div>
+    <img src="assets/mountain-hd.png" alt="Mt. Fuji landscape" />
+  </div>
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="footer">
+  Kokoro Link is here to support you and your family — every step, before you arrive, and long after you settle in.
+</footer>
+
+<!-- ============ Modal & Toast ============ -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h3 id="m-title">Confirm</h3>
+    <p id="m-body">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-orange" id="m-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Done</div>
+
+<script>
+  /* =============== Routing =============== */
+  const pages = ["landing", "onboarding", "dashboard", "task", "translate", "booking"];
+  function go(name) {
+    pages.forEach(p => {
+      const el = document.getElementById("page-" + p);
+      if (el) el.classList.toggle("active", p === name);
+    });
+    document.querySelectorAll(".nav button").forEach(b => {
+      b.classList.toggle("active", b.dataset.go === name);
+    });
+    document.getElementById("mainNav").classList.remove("open");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  document.querySelectorAll("[data-go]").forEach(el => {
+    el.addEventListener("click", e => { go(el.dataset.go); });
+  });
+
+  /* =============== Mobile menu =============== */
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    document.getElementById("mainNav").classList.toggle("open");
+  });
+
+  /* =============== Toast =============== */
+  let toastTimer;
+  function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    // re-add the checkmark via ::before rule
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  /* =============== Modal =============== */
+  function openModal(title, body, onOk) {
+    document.getElementById("m-title").textContent = title;
+    document.getElementById("m-body").textContent = body;
+    document.getElementById("modal").classList.add("active");
+    document.getElementById("m-ok").onclick = () => { closeModal(); if (onOk) onOk(); };
+  }
+  function closeModal() { document.getElementById("modal").classList.remove("active"); }
+  document.getElementById("modal").addEventListener("click", e => {
+    if (e.target.id === "modal") closeModal();
+  });
+
+  /* =============== Onboarding submit =============== */
+  function submitOnboard() {
+    const visa = document.getElementById("f-visa").value;
+    const fam = document.getElementById("f-family").value;
+    const loc = document.getElementById("f-loc").value;
+    const date = document.getElementById("f-date").value;
+    const stay = document.getElementById("f-stay").value;
+    document.getElementById("s-loc").textContent = loc;
+    if (date) {
+      const d = new Date(date);
+      document.getElementById("s-date").textContent = d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    }
+    document.getElementById("s-fam").textContent = fam;
+    document.getElementById("s-stay").textContent = stay;
+    openModal("Profile saved!", "We've matched a personalized plan for your family. Continue to your dashboard?", () => {
+      go("dashboard");
+      toast("Welcome to your personalized plan, Alex!");
+    });
+  }
+
+  /* =============== Live summary updates =============== */
+  ["f-loc","f-stay","f-family","f-date"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("change", () => {
+      if (id === "f-loc") document.getElementById("s-loc").textContent = el.value;
+      if (id === "f-stay") document.getElementById("s-stay").textContent = el.value;
+      if (id === "f-family") document.getElementById("s-fam").textContent = el.value;
+      if (id === "f-date" && el.value) {
+        const d = new Date(el.value);
+        document.getElementById("s-date").textContent = d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      }
+    });
+  });
+
+  /* =============== Dashboard task checks =============== */
+  function toggleCheck(el) {
+    const row = el.closest(".task-row");
+    row.classList.toggle("done");
+    if (row.classList.contains("done")) {
+      el.innerHTML = "✓";
+      el.style.color = "#fff";
+      toast("Nice — task marked complete.");
+    } else {
+      el.innerHTML = "";
+    }
+  }
+
+  /* =============== Task detail step toggle =============== */
+  function toggleStepDone(li) {
+    li.classList.toggle("done");
+    const total = document.querySelectorAll("#taskSteps li").length;
+    const done = document.querySelectorAll("#taskSteps li.done").length;
+    const status = document.getElementById("taskStatus");
+    if (done === 0) { status.textContent = "Not Started"; status.className = "pill amber"; }
+    else if (done < total) { status.textContent = "In Progress"; status.className = "pill blue"; }
+    else { status.textContent = "Completed"; status.className = "pill green"; toast("Health Insurance & Pension — completed!"); }
+  }
+  function markTaskInProgress() {
+    const status = document.getElementById("taskStatus");
+    status.textContent = "In Progress";
+    status.className = "pill blue";
+    toast("Task started — we'll guide you through each step.");
+  }
+
+  /* =============== Document upload (simulated) =============== */
+  function simulateUpload() {
+    const dz = document.getElementById("dropzone");
+    dz.classList.add("drag");
+    dz.querySelector("p").textContent = "Uploading…";
+    setTimeout(() => {
+      dz.classList.remove("drag");
+      dz.querySelector("p").textContent = "Document uploaded. AI translation in progress…";
+      setTimeout(() => {
+        dz.querySelector("p").textContent = "Drag & drop a document here, or click to browse.";
+        toast("Translation ready!");
+      }, 1300);
+    }, 900);
+  }
+
+  // drag & drop visual cue
+  const dz = document.getElementById("dropzone");
+  ["dragenter","dragover"].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.classList.add("drag"); }));
+  ["dragleave","drop"].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.classList.remove("drag"); if (evt === "drop") simulateUpload(); }));
+
+  /* =============== Booking tabs =============== */
+  document.querySelectorAll(".bk-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".bk-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      toast(`Switched to "${tab.textContent}" tab.`);
+    });
+  });
+
+  /* =============== Booking card actions =============== */
+  document.querySelectorAll("[data-book]").forEach(b => {
+    b.addEventListener("click", () => {
+      const name = b.dataset.book;
+      openModal(`Book: ${name}`, `We'll find the next available slot and confirm via email. Continue?`, () => {
+        b.textContent = "Booked ✓";
+        b.classList.remove("btn-orange");
+        b.classList.add("btn-green");
+        b.disabled = true;
+        toast(`Appointment requested: ${name}`);
+      });
+    });
+  });
+
+  /* =============== Consultant calls =============== */
+  function openCall(type) {
+    const labels = { video: "Starting video call with Yuki…", audio: "Calling Yuki…", chat: "Opening chat with Yuki…" };
+    toast(labels[type] || "Connecting…");
+  }
+
+  /* =============== Language switcher (cosmetic demo) =============== */
+  document.getElementById("lang").addEventListener("change", e => {
+    toast(`Language preview: ${e.target.value}`);
+  });
+
+  /* =============== Init =============== */
+  go("landing");
+</script>
+</body>
+</html>
