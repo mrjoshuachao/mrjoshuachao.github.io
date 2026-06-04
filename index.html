@@ -603,6 +603,12 @@
       box-shadow: none;
     }
 
+    .media-frame.is-fullscreen .sound-button,
+    .media-frame:fullscreen .sound-button,
+    .media-frame:-webkit-full-screen .sound-button {
+      display: none;
+    }
+
     .media-frame video,
     .media-frame img,
     .media-frame iframe {
@@ -3313,6 +3319,7 @@
         const button = frame.querySelector(".fullscreen-button");
         if (!button) return;
         const isActive = getFullscreenElement() === frame || getFullscreenElement() === frame.querySelector("video");
+        frame.classList.toggle("is-fullscreen", isActive);
         button.innerHTML = isActive ? button.dataset.exitFullscreenIcon : button.dataset.fullscreenIcon;
         button.setAttribute("aria-label", isActive ? "Exit fullscreen" : "Open fullscreen");
         button.title = isActive ? "Exit fullscreen" : "Open fullscreen";
