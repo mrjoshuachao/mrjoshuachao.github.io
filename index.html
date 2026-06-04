@@ -3022,6 +3022,7 @@
       getVideoPageScope(video).querySelectorAll("video").forEach((otherVideo) => {
         if (otherVideo === video) return;
         otherVideo.pause();
+        muteVideo(otherVideo);
         updatePlayButton(otherVideo);
       });
     }
