@@ -2948,11 +2948,20 @@
     }
 
     function updateLazyPanelVideos() {
-      document.querySelectorAll("[data-panel].is-active video[data-src]").forEach((video) => {
+      const activePanel = document.querySelector("[data-panel].is-active");
+      if (!activePanel) return;
+      const audibleVideo = [...activePanel.querySelectorAll("video")].find((video) => !video.muted && !isSilentMedia(video));
+      activePanel.querySelectorAll("video[data-src]").forEach((video) => {
         if (isLazyVideoNearViewport(video)) {
-          playMutedVideo(video);
+          if (audibleVideo && video !== audibleVideo) {
+            video.pause();
+            updatePlayButton(video);
+            return;
+          }
+          playVideoPreservingSound(video);
         } else {
           video.pause();
+          updatePlayButton(video);
         }
       });
     }
@@ -3051,6 +3060,20 @@
       ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       muteVideo(video);
+      playVideo(video);
+    }
+
+    function playVideoPreservingSound(video) {
+      if (video.muted || isSilentMedia(video)) {
+        playMutedVideo(video);
+        return;
+      }
+      ensureVideoSource(video);
+      updateVideoLoadingIndicator(video);
+      video.defaultMuted = false;
+      video.removeAttribute("muted");
+      video.volume = 1;
+      updateSoundButton(video);
       playVideo(video);
     }
 
