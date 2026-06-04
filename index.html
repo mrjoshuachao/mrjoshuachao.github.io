@@ -3020,6 +3020,7 @@
     function muteVideo(video) {
       video.muted = true;
       video.defaultMuted = true;
+      video.setAttribute("muted", "");
       if (isSilentMedia(video)) {
         video.volume = 0;
       }
@@ -3038,6 +3039,7 @@
       ensureVideoSource(video);
       video.muted = false;
       video.defaultMuted = false;
+      video.removeAttribute("muted");
       video.volume = 1;
       updateSoundButton(video);
       if (play) {
@@ -3072,6 +3074,7 @@
         video.volume = 0;
       }
       video.defaultMuted = true;
+      video.setAttribute("muted", "");
     }
 
     function updateSoundButton(video) {
@@ -3290,6 +3293,7 @@
           promise.catch(() => resetFullscreenVideo(video));
         }
       } else if (video.webkitEnterFullscreen) {
+        video.addEventListener("webkitbeginfullscreen", () => unmuteVideo(video, { pauseOthers: true }), { once: true });
         video.addEventListener("webkitendfullscreen", () => resetFullscreenVideo(video, { resumePage: true }), { once: true });
         video.webkitEnterFullscreen();
       }
@@ -3307,9 +3311,13 @@
     }
 
     function handleFullscreenChange() {
-      if (!getFullscreenElement() && activeFullscreenVideo) {
+      const fullscreenElement = getFullscreenElement();
+      if (!fullscreenElement && activeFullscreenVideo) {
         resetFullscreenVideo(activeFullscreenVideo, { resumePage: true });
         return;
+      }
+      if (fullscreenElement && activeFullscreenVideo) {
+        unmuteVideo(activeFullscreenVideo, { pauseOthers: true });
       }
       updateFullscreenButton();
     }
