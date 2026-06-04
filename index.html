@@ -108,16 +108,30 @@
     }
 
     .side-title {
+      appearance: none;
       margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
       font-family: var(--page-font);
       font-size: var(--page-title-font-size);
       font-weight: 900;
       line-height: calc(var(--page-title-line-height) + 3px);
       letter-spacing: 0;
+      text-align: left;
+      cursor: pointer;
     }
 
     .side-title span {
       display: block;
+    }
+
+    .side-title:hover,
+    .side-title:focus-visible,
+    .mobile-menu-title:hover,
+    .mobile-menu-title:focus-visible {
+      outline: 0;
     }
 
     .mobile-menu-toggle {
@@ -1217,6 +1231,7 @@
       }
 
       .mobile-menu-title {
+        appearance: none;
         position: absolute;
         top: 14px;
         right: var(--outer-text-gutter);
@@ -1228,7 +1243,10 @@
         height: 38px;
         max-width: calc(100% - 96px);
         margin: 0;
+        padding: 0;
+        border: 0;
         overflow: hidden;
+        background: transparent;
         color: #000;
         font-family: var(--page-font);
         font-size: clamp(15px, 4.25vw, 19px);
@@ -1237,6 +1255,7 @@
         letter-spacing: 0;
         text-align: right;
         white-space: normal;
+        cursor: pointer;
       }
 
       .mobile-menu-title span {
@@ -1561,18 +1580,18 @@
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </button>
-      <p class="mobile-menu-title">
+      <button class="mobile-menu-title" type="button" data-menu-target="biography" data-scroll-top aria-label="Go to Biography">
         <span class="mobile-menu-title__primary" data-mobile-title-primary>Joshua Hua-Chun Chao</span>
         <span class="mobile-menu-title__secondary" data-mobile-title-secondary>2016-2026 Selected Portfolio</span>
-      </p>
-      <p class="side-title">
+      </button>
+      <button class="side-title" type="button" data-menu-target="biography" data-scroll-top aria-label="Go to Biography">
         <span>Joshua</span>
         <span>Hua-Chun</span>
         <span>Chao</span>
         <span>2016-2026</span>
         <span>Selected</span>
         <span>Portfolio</span>
-      </p>
+      </button>
       <nav class="side-menu" aria-label="Portfolio sections">
         <button type="button" data-menu-target="kktv">KKTV</button>
         <button type="button" data-menu-target="kkfarm">KKFARM</button>
