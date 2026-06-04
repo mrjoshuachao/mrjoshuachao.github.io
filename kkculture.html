@@ -156,7 +156,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
-      margin: auto 0 0;
+      margin: var(--side-menu-group-gap, calc(1.15em + 6px)) 0 0;
     }
 
     .side-menu button,
@@ -191,12 +191,47 @@
     }
 
     .side-menu--secondary {
-      margin-top: clamp(42px, 2.6vw, 56px);
+      margin-top: calc(1.15em + 6px);
       padding-top: 0;
     }
 
     .side-menu__subline {
       display: block;
+    }
+
+    .side-menu a.award-logo-row {
+      position: absolute;
+      left: var(--outer-text-gutter);
+      bottom: 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0;
+      width: var(--award-logo-row-width, auto);
+      margin: 0;
+      line-height: 1;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .side-menu a.design-archive-link {
+      margin-top: 0;
+    }
+
+    .side-menu a.award-logo-row:hover,
+    .side-menu a.award-logo-row:focus-visible {
+      text-decoration: none;
+      outline: 0;
+    }
+
+    .award-logo-row img {
+      display: block;
+      width: clamp(25px, 1.75vw, 33px);
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: contain;
+      vertical-align: bottom;
+      cursor: pointer;
     }
 
     .content-panel {
@@ -1218,7 +1253,7 @@
     }
 
     .trash-button {
-      width: 32px;
+      width: 33px;
       padding: 0;
     }
 
@@ -1500,6 +1535,23 @@
         line-height: calc(var(--page-title-line-height) + 5px);
       }
 
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        left: var(--outer-text-gutter);
+        bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+        gap: 0;
+        width: var(--award-logo-row-width, auto);
+        margin: 0;
+        line-height: 1;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu a.design-archive-link {
+        margin-top: 0;
+      }
+
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        width: 33px;
+      }
+
       .side-nav.is-mobile-menu-open .side-menu--secondary {
         margin-top: 34px;
       }
@@ -1692,12 +1744,19 @@
         <a href="kkcompany.html">KKCompany</a>
         <a href="kkculture.html" class="is-active" aria-current="page">KKCulture</a>
         <a href="nvidia-sccd.html">NVIDIA x SCCD</a>
+        <a href="ace.html">ACE</a>
       </nav>
       <nav class="side-menu side-menu--secondary" aria-label="Portfolio documents">
         <a href="index.html">Biography</a>
-        <a href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-        <a href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Awards</a>
-        <a href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">2005-2015</a>
+        <a class="resume-link" href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="design-archive-link" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Design Archive</a>
+        <a class="award-logo-row" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener" aria-label="Awards">
+          <img src="assets/awards-logos/award-good-design-256x256.gif" alt="Good Design Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-if-256x256_2x.gif" alt="iF Design Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-red-dot-256x256_2x.gif" alt="Red Dot Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-siggraph-256x256_2x.gif" alt="SIGGRAPH Award" loading="eager" decoding="async" />
+        </a>
+
       </nav>
     </aside>
     <main class="page">
@@ -2093,8 +2152,12 @@
       });
     }
 
+    function getPortfolioImages(scope = document) {
+      return [...scope.querySelectorAll("img:not(.image-lightbox__image)")].filter((image) => !image.closest(".side-nav"));
+    }
+
     function preparePortfolioImages(scope = document) {
-      const orderedImages = getOrderedMedia(scope.querySelectorAll("img:not(.image-lightbox__image)"));
+      const orderedImages = getOrderedMedia(getPortfolioImages(scope));
       const priorityCount = getPriorityMediaCount();
       orderedImages.forEach((image, index) => {
         const isPriority = index < priorityCount;
@@ -2121,7 +2184,7 @@
       if (!activePanel) return;
       preparePortfolioImages(activePanel);
       requestAnimationFrame(() => {
-        activePanel.querySelectorAll("img:not(.image-lightbox__image)").forEach(repaintPortfolioImage);
+        getPortfolioImages(activePanel).forEach(repaintPortfolioImage);
       });
     }
 
@@ -2751,6 +2814,10 @@
         document.body.classList.add("is-mobile-menu-open");
         toggle.setAttribute("aria-expanded", "true");
         toggle.setAttribute("aria-label", "Close menu");
+        requestAnimationFrame(() => {
+          syncAwardLogoRowWidth();
+          syncSideMenuGroupSpacing();
+        });
         return;
       }
 
@@ -2789,6 +2856,81 @@
       if (!baseFontSize || !primaryWidth || !secondaryWidth) return;
       const targetFontSize = baseFontSize * Math.min(1, primaryWidth / secondaryWidth);
       secondary.style.fontSize = `${targetFontSize}px`;
+    }
+
+    function measureTextWidth(text, referenceElement) {
+      if (!text || !referenceElement) return 0;
+      const styles = window.getComputedStyle(referenceElement);
+      const probe = document.createElement("span");
+      probe.textContent = text;
+      probe.style.position = "fixed";
+      probe.style.left = "0";
+      probe.style.top = "-9999px";
+      probe.style.visibility = "hidden";
+      probe.style.whiteSpace = "nowrap";
+      probe.style.fontFamily = styles.fontFamily;
+      probe.style.fontSize = styles.fontSize;
+      probe.style.fontStyle = styles.fontStyle;
+      probe.style.fontWeight = styles.fontWeight;
+      probe.style.letterSpacing = styles.letterSpacing;
+      probe.style.textTransform = styles.textTransform;
+      document.body.appendChild(probe);
+      const width = probe.getBoundingClientRect().width;
+      probe.remove();
+      return width;
+    }
+
+    function measureElementTextWidth(element) {
+      if (!element) return 0;
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const width = range.getBoundingClientRect().width;
+      range.detach?.();
+      return width || measureTextWidth(element.textContent.trim(), element);
+    }
+
+    function syncAwardLogoRowWidth() {
+      const sideNav = document.querySelector(".side-nav");
+      const awardRows = document.querySelectorAll(".award-logo-row");
+      if (!sideNav || !awardRows.length) return;
+      const isMobile = window.matchMedia("(max-width: 760px)").matches;
+      const titleLine = isMobile
+        ? document.querySelector(".design-archive-link")
+        : document.querySelector(".side-title span:nth-child(4)");
+      const fallbackText = isMobile ? "Design Archive" : "2016-2026";
+      const titleWidth = measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, titleLine || document.body);
+      if (titleWidth > 0) {
+        sideNav.style.setProperty("--award-logo-row-width", `${titleWidth}px`);
+      } else {
+        sideNav.style.removeProperty("--award-logo-row-width");
+      }
+    }
+
+    function syncSideMenuGroupSpacing() {
+      const sideNav = document.querySelector(".side-nav");
+      const firstMenu = document.querySelector(".side-menu:not(.side-menu--secondary)");
+      const secondaryMenu = document.querySelector(".side-menu--secondary");
+      const awardRow = document.querySelector(".award-logo-row");
+      const portfolioLine = document.querySelector(".side-title span:last-child");
+      if (!sideNav || !firstMenu || !secondaryMenu || !awardRow || !portfolioLine) return;
+
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        sideNav.style.removeProperty("--side-menu-group-gap");
+        return;
+      }
+
+      sideNav.style.removeProperty("--side-menu-group-gap");
+      const portfolioBottom = portfolioLine.getBoundingClientRect().bottom;
+      const firstMenuRect = firstMenu.getBoundingClientRect();
+      const secondaryMenuRect = secondaryMenu.getBoundingClientRect();
+      const awardRect = awardRow.getBoundingClientRect();
+      const menuGroupHeight = secondaryMenuRect.bottom - firstMenuRect.top;
+      const availableSpace = awardRect.top - portfolioBottom;
+      const balancedGap = Math.max(0, (availableSpace - menuGroupHeight) / 2);
+
+      if (Number.isFinite(balancedGap)) {
+        sideNav.style.setProperty("--side-menu-group-gap", `${balancedGap}px`);
+      }
     }
 
     document.addEventListener("click", (event) => {
@@ -2857,6 +2999,8 @@
         setMobileMenuOpen(false, { immediate: true });
       }
       equalizeMobileMenuTitleWidths();
+      syncAwardLogoRowWidth();
+      syncSideMenuGroupSpacing();
     });
 
     document.addEventListener("keydown", (event) => {
@@ -2952,7 +3096,13 @@
     preparePortfolioImages();
     repaintActivePanelImages();
     equalizeMobileMenuTitleWidths();
-    document.fonts?.ready?.then(equalizeMobileMenuTitleWidths).catch(() => {});
+    syncAwardLogoRowWidth();
+    syncSideMenuGroupSpacing();
+    document.fonts?.ready?.then(() => {
+      equalizeMobileMenuTitleWidths();
+      syncAwardLogoRowWidth();
+      syncSideMenuGroupSpacing();
+    }).catch(() => {});
     setupAutoplayVideos();
     setupSoundButtons();
     setupVideoControls();
@@ -2961,6 +3111,23 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
