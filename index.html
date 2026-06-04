@@ -964,6 +964,15 @@
       transition: opacity 140ms ease;
     }
 
+    .video-progress-hitbox {
+      position: relative;
+      flex: 1 1 auto;
+      height: 64px;
+      margin: -15px 0;
+      cursor: ew-resize;
+      touch-action: none;
+    }
+
     .play-button,
     .fullscreen-button {
       display: inline-flex;
@@ -992,12 +1001,16 @@
 
     .video-progress {
       appearance: none;
-      flex: 1 1 auto;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
       width: 100%;
-      height: 22px;
+      height: 64px;
       margin: 0;
       background: transparent;
-      cursor: pointer;
+      cursor: ew-resize;
+      touch-action: none;
     }
 
     .video-progress::-webkit-slider-runnable-track {
@@ -2976,19 +2989,68 @@
       });
     }
 
-    function playMutedVideo(video) {
+    let activeFullscreenVideo = null;
+
+    function playVideo(video) {
       ensureVideoSource(video);
-      updateVideoLoadingIndicator(video);
+      const promise = video.play();
+      if (promise && typeof promise.catch === "function") {
+        promise.catch(() => {});
+      }
+    }
+
+    function getVideoPageScope(video) {
+      return video.closest("[data-panel]") || document;
+    }
+
+    function pauseOtherVideos(video) {
+      getVideoPageScope(video).querySelectorAll("video").forEach((otherVideo) => {
+        if (otherVideo === video) return;
+        otherVideo.pause();
+        updatePlayButton(otherVideo);
+      });
+    }
+
+    function muteVideo(video) {
       video.muted = true;
       video.defaultMuted = true;
       if (isSilentMedia(video)) {
         video.volume = 0;
       }
       updateSoundButton(video);
-      const promise = video.play();
-      if (promise && typeof promise.catch === "function") {
-        promise.catch(() => {});
+    }
+
+    function unmuteVideo(video, { pauseOthers = false, play = true } = {}) {
+      if (isSilentMedia(video)) {
+        enforceSilentMedia(video);
+        updateSoundButton(video);
+        return;
       }
+      if (pauseOthers) {
+        pauseOtherVideos(video);
+      }
+      ensureVideoSource(video);
+      video.muted = false;
+      video.defaultMuted = false;
+      video.volume = 1;
+      updateSoundButton(video);
+      if (play) {
+        playVideo(video);
+      }
+    }
+
+    function playMutedVideo(video) {
+      ensureVideoSource(video);
+      updateVideoLoadingIndicator(video);
+      muteVideo(video);
+      playVideo(video);
+    }
+
+    function restartMutedPageVideos(video) {
+      getVideoPageScope(video).querySelectorAll("video").forEach((pageVideo) => {
+        playMutedVideo(pageVideo);
+        updatePlayButton(pageVideo);
+      });
     }
 
     function isSilentMedia(video) {
@@ -3050,16 +3112,10 @@
         button.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
-          video.muted = !video.muted;
-          video.defaultMuted = video.muted;
-          if (!video.muted) {
-            video.volume = 1;
-          }
-          updateSoundButton(video);
-          ensureVideoSource(video);
-          const promise = video.play();
-          if (promise && typeof promise.catch === "function") {
-            promise.catch(() => {});
+          if (video.muted) {
+            unmuteVideo(video, { pauseOthers: true });
+          } else {
+            muteVideo(video);
           }
         });
 
@@ -3128,7 +3184,30 @@
           if (!Number.isFinite(video.duration) || video.duration <= 0) return;
           video.currentTime = (Number(progress.value) / 1000) * video.duration;
         });
-        progress.addEventListener("pointerdown", (event) => event.stopPropagation());
+        const progressHitbox = document.createElement("div");
+        progressHitbox.className = "video-progress-hitbox";
+        progressHitbox.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          progressHitbox.setPointerCapture?.(event.pointerId);
+          seekVideoFromProgressEvent(video, progress, progressHitbox, event);
+        });
+        progressHitbox.addEventListener("pointermove", (event) => {
+          if (!progressHitbox.hasPointerCapture?.(event.pointerId)) return;
+          event.preventDefault();
+          event.stopPropagation();
+          seekVideoFromProgressEvent(video, progress, progressHitbox, event);
+        });
+        progressHitbox.addEventListener("pointerup", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          seekVideoFromProgressEvent(video, progress, progressHitbox, event);
+          progressHitbox.releasePointerCapture?.(event.pointerId);
+        });
+        progressHitbox.addEventListener("pointercancel", (event) => {
+          progressHitbox.releasePointerCapture?.(event.pointerId);
+        });
+        progressHitbox.appendChild(progress);
 
         const fullscreenButton = document.createElement("button");
         fullscreenButton.className = "fullscreen-button";
@@ -3142,7 +3221,7 @@
         });
 
         controls.appendChild(playButton);
-        controls.appendChild(progress);
+        controls.appendChild(progressHitbox);
         controls.appendChild(fullscreenButton);
         frame.appendChild(controls);
 
@@ -3163,11 +3242,7 @@
 
     function toggleVideoPlayback(video) {
       if (video.paused) {
-        ensureVideoSource(video);
-        const promise = video.play();
-        if (promise && typeof promise.catch === "function") {
-          promise.catch(() => {});
-        }
+        playVideo(video);
       } else {
         video.pause();
       }
@@ -3180,6 +3255,9 @@
 
     function toggleFullscreen(frame, video) {
       if (getFullscreenElement()) {
+        if (activeFullscreenVideo) {
+          muteVideo(activeFullscreenVideo);
+        }
         const exit = document.exitFullscreen || document.webkitExitFullscreen;
         if (exit) {
           const promise = exit.call(document);
@@ -3190,21 +3268,44 @@
         return;
       }
 
+      activeFullscreenVideo = video;
+      unmuteVideo(video, { pauseOthers: true });
+
       if (frame.requestFullscreen) {
         const promise = frame.requestFullscreen();
         if (promise && typeof promise.catch === "function") {
-          promise.catch(() => {});
+          promise.catch(() => resetFullscreenVideo(video));
         }
       } else if (frame.webkitRequestFullscreen) {
         frame.webkitRequestFullscreen();
       } else if (video.requestFullscreen) {
         const promise = video.requestFullscreen();
         if (promise && typeof promise.catch === "function") {
-          promise.catch(() => {});
+          promise.catch(() => resetFullscreenVideo(video));
         }
       } else if (video.webkitEnterFullscreen) {
+        video.addEventListener("webkitendfullscreen", () => resetFullscreenVideo(video, { resumePage: true }), { once: true });
         video.webkitEnterFullscreen();
       }
+    }
+
+    function resetFullscreenVideo(video, { resumePage = false } = {}) {
+      muteVideo(video);
+      if (activeFullscreenVideo === video) {
+        activeFullscreenVideo = null;
+      }
+      if (resumePage) {
+        restartMutedPageVideos(video);
+      }
+      updateFullscreenButton();
+    }
+
+    function handleFullscreenChange() {
+      if (!getFullscreenElement() && activeFullscreenVideo) {
+        resetFullscreenVideo(activeFullscreenVideo, { resumePage: true });
+        return;
+      }
+      updateFullscreenButton();
     }
 
     function updateFullscreenButton() {
@@ -3225,6 +3326,16 @@
       button.innerHTML = isPaused ? button.dataset.playIcon : button.dataset.pauseIcon;
       button.setAttribute("aria-label", isPaused ? "Play video" : "Pause video");
       button.title = isPaused ? "Play video" : "Pause video";
+    }
+
+    function seekVideoFromProgressEvent(video, progress, hitbox, event) {
+      if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+      const rect = hitbox.getBoundingClientRect();
+      if (!rect.width) return;
+      const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+      const progressValue = Math.round(ratio * 1000);
+      progress.value = String(progressValue);
+      video.currentTime = ratio * video.duration;
     }
 
     function updateVideoProgress(video) {
@@ -3654,8 +3765,8 @@
       snapImageLightboxBack();
     }, { passive: true });
 
-    document.addEventListener("fullscreenchange", updateFullscreenButton);
-    document.addEventListener("webkitfullscreenchange", updateFullscreenButton);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     window.addEventListener("scroll", scheduleLazyPanelVideoUpdate, { passive: true });
     window.addEventListener("resize", scheduleLazyPanelVideoUpdate);
 
