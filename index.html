@@ -108,7 +108,7 @@
       min-height: 100vh;
       padding: 36px 18px 36px var(--outer-text-gutter);
       border-right: 0;
-      background: var(--site-bg);
+      background: #fff;
     }
 
     .side-title {
@@ -231,7 +231,7 @@
 
     .award-logo-row img {
       display: block;
-      width: clamp(25px, 1.75vw, 33px);
+      width: min(clamp(16px, 1.75vw, 33px), calc(var(--award-logo-row-width, 132px) / 4));
       aspect-ratio: 1 / 1;
       height: auto;
       object-fit: contain;
@@ -1334,7 +1334,7 @@
         min-height: 0;
         border-right: 0;
         border-bottom: 0;
-        background: transparent;
+        background: #fff;
         padding: 14px 18px 12px var(--outer-text-gutter);
       }
 
@@ -1344,9 +1344,9 @@
         inset: 0;
         z-index: -1;
         display: block;
-        background: rgba(245, 245, 245, 0.72);
-        -webkit-backdrop-filter: blur(18px) saturate(1.08);
-        backdrop-filter: blur(18px) saturate(1.08);
+        background: #fff;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
         pointer-events: none;
       }
 
@@ -1573,7 +1573,7 @@
       }
 
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: 33px;
+        width: 26.4px;
       }
 
       .side-nav.is-mobile-menu-open .side-menu--secondary {

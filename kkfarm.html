@@ -108,7 +108,7 @@
       min-height: 100vh;
       padding: 36px 18px 36px var(--outer-text-gutter);
       border-right: 0;
-      background: var(--site-bg);
+      background: #fff;
     }
 
     .side-title {
@@ -231,7 +231,7 @@
 
     .award-logo-row img {
       display: block;
-      width: clamp(25px, 1.75vw, 33px);
+      width: min(clamp(16px, 1.75vw, 33px), calc(var(--award-logo-row-width, 132px) / 4));
       aspect-ratio: 1 / 1;
       height: auto;
       object-fit: contain;
@@ -1316,7 +1316,7 @@
         min-height: 0;
         border-right: 0;
         border-bottom: 0;
-        background: transparent;
+        background: #fff;
         padding: 14px 18px 12px var(--outer-text-gutter);
       }
 
@@ -1326,9 +1326,9 @@
         inset: 0;
         z-index: -1;
         display: block;
-        background: rgba(245, 245, 245, 0.72);
-        -webkit-backdrop-filter: blur(18px) saturate(1.08);
-        backdrop-filter: blur(18px) saturate(1.08);
+        background: #fff;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
         pointer-events: none;
       }
 
@@ -1555,7 +1555,7 @@
       }
 
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: 33px;
+        width: 26.4px;
       }
 
       .side-nav.is-mobile-menu-open .side-menu--secondary {
@@ -1784,52 +1784,52 @@
     <section class="section" aria-labelledby="kkfarm-music-videos-jutv-title">
       <h2 id="kkfarm-music-videos-jutv-title">Music Videos &amp; jutv</h2>
       <div class="grid">
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-01" data-title="å°åŒ—å¤œç©ºä¸‹ - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\å°åŒ—å¤œç©ºä¸‹ - Julia Wu å³å“æºï½œOfficial Music Video - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-01" data-title="台北夜空下 - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\台北夜空下 - Julia Wu 吳卓源｜Official Music Video - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-007-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
-            <h3>å°åŒ—å¤œç©ºä¸‹ - Official Music Video</h3>
+            <h3>台北夜空下 - Official Music Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-02" data-title="ç‚ºä½ æˆ‘å—å†·é¢¨å¹ - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\ç‚ºä½ æˆ‘å—å†·é¢¨å¹ - Julia Wu å³å“æºï½œOfficial Music Video - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-02" data-title="為你我受冷風吹 - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\為你我受冷風吹 - Julia Wu 吳卓源｜Official Music Video - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-008-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
-            <h3>ç‚ºä½ æˆ‘å—å†·é¢¨å¹ - Official Music Video</h3>
+            <h3>為你我受冷風吹 - Official Music Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-03" data-title="å¤œæ™š (Acoustic) - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\å¤œæ™š (Acoustic) - Julia Wu å³å“æºï½œOfficial Music Video - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-03" data-title="夜晚 (Acoustic) - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\夜晚 (Acoustic) - Julia Wu 吳卓源｜Official Music Video - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-009-acoustic-julia-wu-official-music-video-jul.mp4"></video></div>
           <div class="card-body">
-            <h3>å¤œæ™š (Acoustic) - Official Music Video</h3>
+            <h3>夜晚 (Acoustic) - Official Music Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-04" data-title="åº•ç·š - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\åº•ç·š - Julia Wu å³å“æºï½œOfficial Lyric Video - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-04" data-title="底線 - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\底線 - Julia Wu 吳卓源｜Official Lyric Video - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-010-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
-            <h3>åº•ç·š - Official Lyric Video</h3>
+            <h3>底線 - Official Lyric Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-05" data-title="åˆ¥å“­äº† - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\åˆ¥å“­äº† - Julia Wu å³å“æºï½œOfficial Lyric Video - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-05" data-title="別哭了 - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\別哭了 - Julia Wu 吳卓源｜Official Lyric Video - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-011-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
-            <h3>åˆ¥å“­äº† - Official Lyric Video</h3>
+            <h3>別哭了 - Official Lyric Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="jutv ep.01 é€™å€‹å¾ˆæœ‰å–”" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.01 é€™å€‹å¾ˆæœ‰å–” - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="jutv ep.01 這個很有喔" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.01 這個很有喔 - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>jutv ep.01 é€™å€‹å¾ˆæœ‰å–”</h3>
+            <h3>jutv ep.01 這個很有喔</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="jutv ep.02 çªç™¼!!!72å°æ™‚MVèª•ç”Ÿ" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.02 çªç™¼!!!72å°æ™‚MVèª•ç”Ÿ - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="jutv ep.02 突發!!!72小時MV誕生" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.02 突發!!!72小時MV誕生 - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>jutv ep.02 çªç™¼!!!72å°æ™‚MVèª•ç”Ÿ</h3>
+            <h3>jutv ep.02 突發!!!72小時MV誕生</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="jutv ep.03 å¾ˆå¥½çœ‹é¤’" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.03 å¾ˆå¥½çœ‹é¤’ - Julia å³å“æº (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="jutv ep.03 很好看餒" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv ep.03 很好看餒 - Julia 吳卓源 (1080p, h264).mp4">
           <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>jutv ep.03 å¾ˆå¥½çœ‹é¤’</h3>
+            <h3>jutv ep.03 很好看餒</h3>
           </div>
         </article>
       </div>
