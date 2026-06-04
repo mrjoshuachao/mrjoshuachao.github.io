@@ -3115,7 +3115,7 @@
           if (video.muted) {
             unmuteVideo(video, { pauseOthers: true });
           } else {
-            muteVideo(video);
+            restartMutedPageVideos(video);
           }
         });
 
