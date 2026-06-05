@@ -135,7 +135,7 @@
 
     a {
       color: inherit;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: 1px;
       text-underline-offset: 2px;
     }
 
@@ -248,7 +248,7 @@
     .side-menu a:hover,
     .side-menu a:focus-visible {
       text-decoration: underline;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: 1px;
       text-underline-offset: 2px;
       outline: 0;
     }
@@ -643,6 +643,17 @@
       background: var(--site-bg);
     }
 
+    .pixel-system-grid [data-id="kkculture-2023-website-screen-recording"] .media-frame {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+
+    .pixel-system-grid [data-id="kkculture-2023-website-screen-recording"] .media-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
     .pixel-system-card--wide {
       grid-column: span 3;
     }
@@ -860,10 +871,16 @@
       align-items: center;
       justify-content: center;
       padding: 0;
-      background: var(--site-bg);
+      background: transparent;
+      background-color: transparent;
       cursor: default;
       touch-action: pan-y;
       overflow: hidden;
+    }
+
+    .image-lightbox:not([hidden]) {
+      background: #000;
+      background-color: #000;
     }
 
     .image-lightbox[hidden] {
