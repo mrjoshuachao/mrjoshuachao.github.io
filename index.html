@@ -68,6 +68,8 @@
       --award-logo-gap: clamp(7px, 0.75vw, 14px);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
+      --award-logo-bottom-offset: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px));
+      --side-nav-viewport-height: 100vh;
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
       color-scheme: only light !important;
@@ -75,6 +77,12 @@
 
     :root.is-site-ready {
       --site-bg: rgb(245, 245, 245);
+    }
+
+    @supports (height: 100svh) {
+      :root {
+        --side-nav-viewport-height: 100svh;
+      }
     }
 
     @font-face {
@@ -146,13 +154,13 @@
       display: grid;
       grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
       width: 100%;
-      min-height: 100vh;
+      min-height: var(--side-nav-viewport-height);
       background: var(--site-bg);
       background-color: var(--site-bg);
     }
 
     .side-nav::after {
-      content: "V1.2.2";
+      content: "V1.1.2";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -173,8 +181,10 @@
       display: flex;
       flex-direction: column;
       width: var(--side-nav-width);
-      min-height: 100vh;
-      padding: 36px 18px 36px var(--outer-text-gutter);
+      min-height: var(--side-nav-viewport-height);
+      height: var(--side-nav-viewport-height);
+      max-height: var(--side-nav-viewport-height);
+      padding: 36px 18px var(--award-logo-bottom-offset) var(--outer-text-gutter);
       border-right: 0;
       background: var(--site-bg);
     }
@@ -275,7 +285,7 @@
     .side-menu a.award-logo-row {
       position: absolute;
       left: var(--outer-text-gutter);
-      bottom: 36px;
+      bottom: var(--award-logo-bottom-offset);
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
@@ -1390,11 +1400,18 @@
         --award-logo-gap: clamp(8px, 2vw, 14px);
         --award-logo-min-row-width: 132px;
         --award-logo-size: 26.4px;
+        --mobile-award-bottom-buffer: max(56px, calc(env(safe-area-inset-bottom, 0px) + 48px));
       }
 
       @supports (height: 100dvh) {
         :root {
           --mobile-menu-height: 100dvh;
+        }
+      }
+
+      @supports (height: 100svh) {
+        :root {
+          --mobile-menu-height: 100svh;
         }
       }
 
@@ -1531,7 +1548,7 @@
         background: transparent;
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
-        padding: 14px var(--outer-text-gutter) 42px;
+        padding: 14px var(--outer-text-gutter) var(--mobile-award-bottom-buffer);
       }
 
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
@@ -1831,10 +1848,17 @@
         --article-caption-font-size: clamp(11px, 0.92vw, 15px);
         --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
         --landscape-column-top: 32px;
-        --landscape-scroll-bottom: max(48px, calc(env(safe-area-inset-bottom) + 28px));
+        --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
+        --landscape-viewport-height: 100vh;
         --award-logo-gap: clamp(7px, 1.8vh, 10px);
         --award-logo-min-row-width: 128px;
         --award-logo-size: clamp(15px, 4vh, 24px);
+      }
+
+      @supports (height: 100svh) {
+        :root {
+          --landscape-viewport-height: 100svh;
+        }
       }
 
       html,
@@ -1849,23 +1873,20 @@
       }
 
       body {
-        height: 100vh;
-        height: 100dvh;
+        height: var(--landscape-viewport-height);
       }
 
       .layout {
         display: grid;
         grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
-        height: 100vh;
-        height: 100dvh;
+        height: var(--landscape-viewport-height);
         min-height: 0;
         overflow: hidden;
         background: var(--site-bg);
       }
 
       .page {
-        height: 100vh;
-        height: 100dvh;
+        height: var(--landscape-viewport-height);
         min-height: 0;
         overflow-x: hidden;
         overflow-y: auto;
@@ -1904,10 +1925,8 @@
         justify-content: flex-start;
         width: var(--side-nav-width);
         min-height: 0;
-        height: 100vh;
-        height: 100dvh;
-        max-height: 100vh;
-        max-height: 100dvh;
+        height: var(--landscape-viewport-height);
+        max-height: var(--landscape-viewport-height);
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -1930,7 +1949,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.2";
+        content: "V1.1.2";
         position: absolute;
         left: 3px;
         bottom: 3px;
