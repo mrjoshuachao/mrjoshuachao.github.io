@@ -1,8 +1,22 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="rgb(245, 245, 245)" />
+  <meta name="color-scheme" content="light only" />
+  <style id="initial-background-style">
+    :root {
+      color-scheme: light;
+      background: rgb(245, 245, 245);
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: rgb(245, 245, 245);
+    }
+  </style>
   <title>Joshua Chao 2026</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
@@ -62,10 +76,12 @@
     }
 
     html {
-      background: #fff;
+      min-height: 100%;
+      background: var(--site-bg);
     }
 
     body {
+      min-height: 100vh;
       margin: 0;
       background: var(--site-bg);
       color: #000;
@@ -627,7 +643,7 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      background: #000;
+      background: var(--site-bg);
     }
 
     .media-frame.is-media-loading::before {
@@ -660,7 +676,7 @@
       z-index: 2;
       pointer-events: none;
       border: 1px solid var(--site-bg);
-      box-shadow: inset 0 0 0 1px var(--site-bg);
+      box-shadow: none;
     }
 
     .media-frame:fullscreen::after,
@@ -683,7 +699,7 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: #000;
+      background: var(--site-bg);
       object-fit: contain;
     }
 
@@ -712,7 +728,7 @@
     .concert-grid .media-frame {
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      background: #000;
+      background: var(--site-bg);
     }
 
     .concert-grid .media-frame img {
@@ -720,7 +736,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      background: #000;
+      background: var(--site-bg);
     }
 
     .concert-grid {
@@ -738,7 +754,7 @@
     .meeting-grid .media-frame {
       aspect-ratio: 16 / 9;
       overflow: hidden;
-      background: #000;
+      background: var(--site-bg);
     }
 
     .meeting-grid .media-frame img {
@@ -746,7 +762,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      background: #000;
+      background: var(--site-bg);
     }
 
     .meeting-grid .card-body {
@@ -810,7 +826,7 @@
       align-items: center;
       justify-content: center;
       padding: 0;
-      background: #000;
+      background: var(--site-bg);
       cursor: default;
       touch-action: pan-y;
       overflow: hidden;
@@ -1294,7 +1310,7 @@
     .trash-button:hover,
     .trash-button:focus-visible {
       outline: 0;
-      background: #000;
+      background: var(--site-bg);
       color: #fff;
     }
 
@@ -2032,6 +2048,13 @@
           }
           return;
         }
+        if (isVideoUserPaused(video)) {
+          if (!video.paused) {
+            video.pause();
+          }
+          updatePlayButton(video);
+          return;
+        }
         if (audibleVideo && video !== audibleVideo) {
           video.pause();
           muteVideo(video);
@@ -2092,6 +2115,18 @@
 
     let activeFullscreenVideo = null;
 
+    function isVideoUserPaused(video) {
+      return video.dataset.userPaused === "true";
+    }
+
+    function setVideoUserPaused(video, isPaused) {
+      if (isPaused) {
+        video.dataset.userPaused = "true";
+      } else {
+        delete video.dataset.userPaused;
+      }
+    }
+
     function playVideo(video) {
       ensureVideoSource(video);
       const promise = video.play();
@@ -2124,6 +2159,7 @@
     }
 
     function unmuteVideo(video, { pauseOthers = false, play = true } = {}) {
+      setVideoUserPaused(video, false);
       if (isSilentMedia(video)) {
         if (pauseOthers) {
           pauseOtherVideos(video);
@@ -2172,6 +2208,7 @@
 
     function restartMutedPageVideos(video) {
       getVideoPageScope(video).querySelectorAll("video").forEach((pageVideo) => {
+        setVideoUserPaused(pageVideo, false);
         playMutedVideo(pageVideo);
         updatePlayButton(pageVideo);
       });
@@ -2182,6 +2219,7 @@
       updatePlayButton(video);
       getVideoPageScope(video).querySelectorAll("video").forEach((pageVideo) => {
         if (pageVideo === video) return;
+        setVideoUserPaused(pageVideo, false);
         playMutedVideo(pageVideo);
         updatePlayButton(pageVideo);
       });
@@ -2377,8 +2415,10 @@
 
     function toggleVideoPlayback(video) {
       if (video.paused) {
+        setVideoUserPaused(video, false);
         unmuteVideo(video, { pauseOthers: true });
       } else {
+        setVideoUserPaused(video, true);
         video.pause();
         restartMutedOtherPageVideos(video);
       }
