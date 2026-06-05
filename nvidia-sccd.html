@@ -1088,7 +1088,7 @@
       height: 24px;
       fill: currentColor;
       stroke: none;
-      filter: drop-shadow(0 1px 2px rgba(40, 40, 40, 0.8));
+      filter: drop-shadow(0 0 2px rgba(40, 40, 40, 0.8));
       pointer-events: none;
     }
 
@@ -1109,6 +1109,7 @@
     .video-progress::-webkit-slider-runnable-track {
       height: 4px;
       background: rgba(255, 255, 255, 0.58);
+      box-shadow: 0 0 2px rgba(40, 40, 40, 0.8);
     }
 
     .video-progress::-webkit-slider-thumb {
@@ -1119,12 +1120,13 @@
       border: 0;
       border-radius: 999px;
       background: #fff;
-      box-shadow: 0 1px 2px rgba(40, 40, 40, 0.6);
+      box-shadow: 0 0 5.2px rgba(40, 40, 40, 0.8);
     }
 
     .video-progress::-moz-range-track {
       height: 4px;
       background: rgba(255, 255, 255, 0.58);
+      box-shadow: 0 0 2px rgba(40, 40, 40, 0.8);
     }
 
     .video-progress::-moz-range-thumb {
@@ -1133,7 +1135,7 @@
       border: 0;
       border-radius: 999px;
       background: #fff;
-      box-shadow: 0 1px 2px rgba(40, 40, 40, 0.6);
+      box-shadow: 0 0 5.2px rgba(40, 40, 40, 0.8);
     }
 
     .media-frame:hover .video-controls,
@@ -1675,7 +1677,7 @@
       }
 
       .pixel-system-grid [data-id^="kkculture-you-create-pixel-art-print-"] {
-        grid-column: span 2;
+        grid-column: span 1;
       }
 
       .essay,
@@ -1746,6 +1748,116 @@
 
       .image-lightbox__nav--next {
         right: 4px;
+      }
+    }
+
+
+    @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+      :root {
+        --outer-text-gutter: 18px;
+        --side-nav-width: 20vw;
+        --page-title-font-size: clamp(20px, 5.2vh, 30px);
+      }
+
+      html.is-mobile-menu-open,
+      html.is-mobile-menu-open body {
+        overflow: auto;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
+        min-height: 100vh;
+      }
+
+      .page {
+        padding-left: 0;
+        padding-right: var(--outer-text-gutter);
+      }
+
+      .side-nav,
+      .side-nav.is-mobile-menu-open,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
+        position: sticky;
+        top: 0;
+        inset: auto;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: var(--side-nav-width);
+        min-height: 0;
+        height: 100vh;
+        max-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 0;
+        background: var(--site-bg);
+        padding: clamp(18px, 4vh, 28px) clamp(8px, 1.4vw, 14px) clamp(18px, 4vh, 28px) var(--outer-text-gutter);
+      }
+
+      .side-nav::before,
+      .side-nav.is-mobile-menu-open::before,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
+        content: none;
+        animation: none;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-menu-title,
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
+      .side-nav.is-mobile-menu-open .mobile-menu-title {
+        display: none;
+      }
+
+      .side-title {
+        display: block;
+        flex: 0 0 auto;
+      }
+
+      .side-nav:not(.is-mobile-menu-open) .side-menu,
+      .side-nav.is-mobile-menu-open .side-menu,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
+        display: flex;
+        position: static;
+        z-index: auto;
+        width: 100%;
+        margin: calc(1.15em + 10px) 0 0;
+        animation: none;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu button,
+      .side-nav.is-mobile-menu-open .side-menu a,
+      .side-menu button,
+      .side-menu a {
+        font-size: clamp(13px, 3.2vh, 17px);
+        line-height: calc(1.15em + 5px);
+      }
+
+      .side-menu--secondary,
+      .side-nav.is-mobile-menu-open .side-menu--secondary {
+        margin-top: calc(1.15em + 16px);
+      }
+
+      .side-menu a.award-logo-row,
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        position: static;
+        left: auto;
+        bottom: auto;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 0;
+        width: var(--award-logo-row-width, auto);
+        margin: calc(1.15em + 16px) 0 0;
+        line-height: 1;
+      }
+
+      .award-logo-row img,
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        width: min(clamp(10px, 3.2vh, 24px), calc(var(--award-logo-row-width, 96px) / 4));
       }
     }
 
@@ -2917,10 +3029,13 @@
       const awardRows = document.querySelectorAll(".award-logo-row");
       if (!sideNav || !awardRows.length) return;
       const isMobile = window.matchMedia("(max-width: 760px)").matches;
-      const titleLine = isMobile
-        ? document.querySelector(".design-archive-link")
-        : document.querySelector(".side-title span:nth-child(4)");
-      const fallbackText = isMobile ? "Design Archive" : "2016-2026";
+      const isMobileLandscapeSidebar = window.matchMedia("(orientation: landscape) and (max-height: 520px) and (max-width: 960px)").matches;
+      const titleLine = isMobileLandscapeSidebar
+        ? document.querySelector(".side-title span:nth-child(2)")
+        : isMobile
+          ? document.querySelector(".design-archive-link")
+          : document.querySelector(".side-title span:nth-child(4)");
+      const fallbackText = isMobileLandscapeSidebar ? "Hua-Chun" : isMobile ? "Design Archive" : "2016-2026";
       const titleWidth = measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, titleLine || document.body);
       if (titleWidth > 0) {
         sideNav.style.setProperty("--award-logo-row-width", `${titleWidth}px`);
@@ -2937,7 +3052,7 @@
       const portfolioLine = document.querySelector(".side-title span:last-child");
       if (!sideNav || !firstMenu || !secondaryMenu || !awardRow || !portfolioLine) return;
 
-      if (window.matchMedia("(max-width: 760px)").matches) {
+      if (window.matchMedia("(max-width: 760px)").matches || window.matchMedia("(orientation: landscape) and (max-height: 520px) and (max-width: 960px)").matches) {
         sideNav.style.removeProperty("--side-menu-group-gap");
         return;
       }
