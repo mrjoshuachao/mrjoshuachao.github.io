@@ -69,6 +69,7 @@
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
       --award-logo-bottom-offset: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px));
+      --next-panel-bottom-offset: var(--award-logo-bottom-offset);
       --side-nav-viewport-height: 100vh;
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
@@ -392,7 +393,7 @@
       gap: 0.28em;
       width: 100%;
       margin: var(--section-gap) 0 0;
-      padding: var(--section-gap) 0 36px;
+      padding: var(--section-gap) 0 var(--next-panel-bottom-offset);
       border: 0;
       border-top: 0;
       background: var(--site-bg);
@@ -1831,6 +1832,7 @@
         --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
         --landscape-column-top: 32px;
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
+        --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
         --award-logo-gap: clamp(7px, 1.8vh, 10px);
         --award-logo-min-row-width: 128px;
