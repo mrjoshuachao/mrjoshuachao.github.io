@@ -65,6 +65,9 @@
       --essay-media-gap: 44px;
       --section-gap: 56px;
       --outer-text-gutter: 36px;
+      --award-logo-gap: clamp(7px, 0.75vw, 14px);
+      --award-logo-min-row-width: 128px;
+      --award-logo-size: clamp(16px, 1.75vw, 33px);
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
       color-scheme: only light !important;
@@ -120,21 +123,6 @@
       font-size: 16px;
       line-height: 1.35;
     }
-    body::after {
-      content: "V1.1.1";
-      position: fixed;
-      left: 3px;
-      bottom: 3px;
-      z-index: 2147483647;
-      color: rgb(191, 191, 191);
-      font-size: 6px;
-      font-weight: 400;
-      line-height: 1;
-      letter-spacing: 0;
-      pointer-events: none;
-      user-select: none;
-    }
-
     a {
       color: inherit;
       text-decoration-thickness: 1px;
@@ -161,6 +149,21 @@
       min-height: 100vh;
       background: var(--site-bg);
       background-color: var(--site-bg);
+    }
+
+    .side-nav::after {
+      content: "V1.2.2";
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      z-index: 1;
+      color: rgb(191, 191, 191);
+      font-size: 6px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
     }
 
     .side-nav {
@@ -276,8 +279,8 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      gap: 0;
-      width: var(--award-logo-row-width, auto);
+      gap: var(--award-logo-gap);
+      width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), calc(100% - var(--outer-text-gutter) - 18px));
       margin: 0;
       line-height: 1;
       cursor: pointer;
@@ -296,7 +299,10 @@
 
     .award-logo-row img {
       display: block;
-      width: min(clamp(16px, 1.75vw, 33px), calc(var(--award-logo-row-width, 132px) / 4));
+      flex: 0 1 var(--award-logo-size);
+      width: var(--award-logo-size);
+      max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
+      min-width: 0;
       aspect-ratio: 1 / 1;
       height: auto;
       object-fit: contain;
@@ -1363,6 +1369,9 @@
         --article-caption-font-size: 15.5px;
         --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
+        --award-logo-gap: clamp(8px, 2vw, 14px);
+        --award-logo-min-row-width: 132px;
+        --award-logo-size: 26.4px;
       }
 
       @supports (height: 100dvh) {
@@ -1383,6 +1392,12 @@
       .page {
         padding-left: var(--outer-text-gutter);
         padding-right: var(--outer-text-gutter);
+      }
+
+
+
+      .side-nav::after {
+        content: none;
       }
 
       .side-nav {
@@ -1621,8 +1636,8 @@
         position: static;
         left: auto;
         bottom: auto;
-        gap: 0;
-        width: var(--award-logo-row-width, auto);
+        gap: var(--award-logo-gap);
+        width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), 100%);
         margin: 34px 0 0;
         line-height: 1;
       }
@@ -1632,7 +1647,8 @@
       }
 
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: 26.4px;
+        flex-basis: var(--award-logo-size);
+        width: var(--award-logo-size);
       }
 
       .side-nav.is-mobile-menu-open .side-menu--secondary {
@@ -1798,6 +1814,9 @@
         --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
         --landscape-column-top: 32px;
         --landscape-scroll-bottom: max(48px, calc(env(safe-area-inset-bottom) + 28px));
+        --award-logo-gap: clamp(7px, 1.8vh, 10px);
+        --award-logo-min-row-width: 128px;
+        --award-logo-size: clamp(15px, 4vh, 24px);
       }
 
       html,
@@ -1890,6 +1909,17 @@
         animation: none;
       }
 
+      .side-nav::after,
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "V1.2.2";
+        position: absolute;
+        left: 3px;
+        bottom: 3px;
+        z-index: 1;
+        display: block;
+      }
+
       .mobile-menu-toggle,
       .mobile-menu-title,
       .side-nav.is-mobile-menu-open .mobile-menu-toggle,
@@ -1934,15 +1964,17 @@
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        gap: 0;
-        width: var(--award-logo-row-width, auto);
+        gap: var(--award-logo-gap);
+        width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), 100%);
         margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
         line-height: 1;
       }
 
       .award-logo-row img,
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: min(clamp(12.5px, 4vh, 30px), calc(var(--award-logo-row-width, 96px) / 3.2));
+        flex-basis: var(--award-logo-size);
+        width: var(--award-logo-size);
+        max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
       }
     }
 
