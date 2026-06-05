@@ -1,27 +1,48 @@
 <!doctype html>
-<html lang="en" style="background-color: rgb(245, 245, 245); color-scheme: light;">
+<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="rgb(245, 245, 245)" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="color-scheme" content="only light" />
   <style id="initial-background-style">
     :root,
     html,
     body {
+      min-width: 100%;
       min-height: 100%;
+      margin: 0;
       background: rgb(245, 245, 245) !important;
       background-color: rgb(245, 245, 245) !important;
-      color-scheme: light;
+      background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+      color-scheme: only light !important;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
+      pointer-events: none;
+    }
+
+    video {
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
     }
 
     @media (prefers-color-scheme: dark) {
       :root,
       html,
-      body {
+      body,
+      body::before,
+      video {
         background: rgb(245, 245, 245) !important;
         background-color: rgb(245, 245, 245) !important;
-        color-scheme: light;
+        background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+        color-scheme: only light !important;
       }
     }
   </style>
@@ -44,7 +65,7 @@
       --outer-text-gutter: 36px;
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
-      color-scheme: light;
+      color-scheme: only light !important;
     }
 
     :root.is-site-ready {
@@ -126,6 +147,8 @@
       width: 100%;
       min-width: 0;
       padding-right: var(--outer-text-gutter);
+      background: var(--site-bg);
+      background-color: var(--site-bg);
       text-align: left;
     }
 
@@ -134,6 +157,8 @@
       grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
       width: 100%;
       min-height: 100vh;
+      background: var(--site-bg);
+      background-color: var(--site-bg);
     }
 
     .side-nav {
@@ -1921,7 +1946,7 @@
     }
   </style>
 </head>
-<body bgcolor="#f5f5f5" style="background-color: rgb(245, 245, 245);">
+<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
@@ -1982,9 +2007,9 @@
       <h2 id="tvc-title">KKTV Television Commercials</h2>
       <div class="grid">
 
-        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_å¤šæƒ…ç¯‡_20ç§’_synced.mp4">
+        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Ã¥Â¤Å¡Ã¦Æ’â€¦Ã§Â¯â€¡_20Ã§Â§â€™_synced.mp4">
           <div class="media-frame">
-            <video muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #1 Too Much Love 20s</h3>
@@ -1999,9 +2024,9 @@
             </div>
           </div>
         </article>
-        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_æž•é‚Šäººç¯‡_20ç§’_synced.mp4">
+        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Ã¦Å¾â€¢Ã©â€šÅ Ã¤ÂºÂºÃ§Â¯â€¡_20Ã§Â§â€™_synced.mp4">
           <div class="media-frame">
-            <video muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #2 Pillow Talk 20s</h3>
@@ -2016,9 +2041,9 @@
             </div>
           </div>
         </article>
-        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_æ©Ÿæƒ…ç¯‡_20ç§’_synced.mp4">
+        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Ã¦Â©Å¸Ã¦Æ’â€¦Ã§Â¯â€¡_20Ã§Â§â€™_synced.mp4">
           <div class="media-frame">
-            <video muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #3 Device Crush 20s</h3>
@@ -2033,9 +2058,9 @@
             </div>
           </div>
         </article>
-        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_çˆ­å¯µç¯‡_20ç§’_synced.mp4">
+        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Ã§Ë†Â­Ã¥Â¯ÂµÃ§Â¯â€¡_20Ã§Â§â€™_synced.mp4">
           <div class="media-frame">
-            <video muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #4 Fighting for Attention 20s</h3>
@@ -2058,7 +2083,7 @@
 
         <article class="card" data-card data-id="guidelines-source-08" data-title="KKTV Full HD Trailer Ending Animation" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\__GUIDELINES\m\video animation trailer\Animation_Trailer_Ending.mov">
           <div class="media-frame">
-            <video data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV Full HD Trailer Ending Animation</h3>
@@ -2076,7 +2101,7 @@
 
         <article class="card" data-card data-id="guidelines-screen-record-01" data-title="KKTV Guidelines &amp; Materials Open Database" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKTV Guidelines & Materials Website\screen record.mp4">
           <div class="media-frame">
-            <video data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4"></video>
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV Guidelines &amp; Materials Open Database</h3>

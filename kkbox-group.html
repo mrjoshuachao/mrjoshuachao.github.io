@@ -1,27 +1,48 @@
 <!doctype html>
-<html lang="en" style="background-color: rgb(245, 245, 245); color-scheme: light;">
+<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="rgb(245, 245, 245)" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="color-scheme" content="only light" />
   <style id="initial-background-style">
     :root,
     html,
     body {
+      min-width: 100%;
       min-height: 100%;
+      margin: 0;
       background: rgb(245, 245, 245) !important;
       background-color: rgb(245, 245, 245) !important;
-      color-scheme: light;
+      background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+      color-scheme: only light !important;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
+      pointer-events: none;
+    }
+
+    video {
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
     }
 
     @media (prefers-color-scheme: dark) {
       :root,
       html,
-      body {
+      body,
+      body::before,
+      video {
         background: rgb(245, 245, 245) !important;
         background-color: rgb(245, 245, 245) !important;
-        color-scheme: light;
+        background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+        color-scheme: only light !important;
       }
     }
   </style>
@@ -44,7 +65,7 @@
       --outer-text-gutter: 36px;
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
-      color-scheme: light;
+      color-scheme: only light !important;
     }
 
     :root.is-site-ready {
@@ -126,6 +147,8 @@
       width: 100%;
       min-width: 0;
       padding-right: var(--outer-text-gutter);
+      background: var(--site-bg);
+      background-color: var(--site-bg);
       text-align: left;
     }
 
@@ -134,6 +157,8 @@
       grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
       width: 100%;
       min-height: 100vh;
+      background: var(--site-bg);
+      background-color: var(--site-bg);
     }
 
     .side-nav {
@@ -1921,7 +1946,7 @@
     }
   </style>
 </head>
-<body bgcolor="#f5f5f5" style="background-color: rgb(245, 245, 245);">
+<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
@@ -1978,26 +2003,26 @@
       </div>
       <h2 id="kkbox-group-image-recruitment-title">KKBOX Group Image &amp; Recruitment</h2>
       <div class="grid">
-        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-01" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.1_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-01" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Ã¤Â¼ÂÃ¦Â¥Â­Ã¥Â½Â¢Ã¨Â±Â¡Ã¥Â»Â£Ã¥â€˜Å  + MA Program Ã¥Â¾ÂµÃ¦â€°Â\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.1_Final_4K.mp4">
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #1</h3>
           </div>
         </article>
-        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-02" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.2_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-02" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Ã¤Â¼ÂÃ¦Â¥Â­Ã¥Â½Â¢Ã¨Â±Â¡Ã¥Â»Â£Ã¥â€˜Å  + MA Program Ã¥Â¾ÂµÃ¦â€°Â\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.2_Final_4K.mp4">
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #2</h3>
           </div>
         </article>
-        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-03" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.3_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-03" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Ã¤Â¼ÂÃ¦Â¥Â­Ã¥Â½Â¢Ã¨Â±Â¡Ã¥Â»Â£Ã¥â€˜Å  + MA Program Ã¥Â¾ÂµÃ¦â€°Â\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.3_Final_4K.mp4">
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #3</h3>
           </div>
         </article>
-        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-04" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #4" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.4_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+        <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-04" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #4" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Ã¤Â¼ÂÃ¦Â¥Â­Ã¥Â½Â¢Ã¨Â±Â¡Ã¥Â»Â£Ã¥â€˜Å  + MA Program Ã¥Â¾ÂµÃ¦â€°Â\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.4_Final_4K.mp4">
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #4</h3>
           </div>
@@ -2018,25 +2043,25 @@
       </div>
       <div class="grid blendvision-grid">
         <article class="card kkbox-group-card blendvision-worldview" data-card data-id="kkstream-blendvision-worldview-final" data-title="BlendVision Worldview" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210601 BlendVision worldview video FINAL with Inter font\BlendVision Worldview 20210601 OFFLINE PLAYBACK subtitles www.blendvision.com.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Worldview</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-loom" data-title="BlendVision Loom" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\L.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-021-l.mp4"></video></div>
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-021-l.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Loom</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-kaleido" data-title="BlendVision Kaleido" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-020-k.mp4"></video></div>
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-020-k.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Kaleido</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-moment" data-title="BlendVision Moment" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\M.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-022-m.mp4"></video></div>
+          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-022-m.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Moment</h3>
           </div>

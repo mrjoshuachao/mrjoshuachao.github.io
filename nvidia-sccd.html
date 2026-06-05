@@ -1,27 +1,48 @@
 <!doctype html>
-<html lang="en" style="background-color: rgb(245, 245, 245); color-scheme: light;">
+<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="rgb(245, 245, 245)" />
-  <meta name="color-scheme" content="light only" />
+  <meta name="color-scheme" content="only light" />
   <style id="initial-background-style">
     :root,
     html,
     body {
+      min-width: 100%;
       min-height: 100%;
+      margin: 0;
       background: rgb(245, 245, 245) !important;
       background-color: rgb(245, 245, 245) !important;
-      color-scheme: light;
+      background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+      color-scheme: only light !important;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
+      pointer-events: none;
+    }
+
+    video {
+      background: rgb(245, 245, 245) !important;
+      background-color: rgb(245, 245, 245) !important;
     }
 
     @media (prefers-color-scheme: dark) {
       :root,
       html,
-      body {
+      body,
+      body::before,
+      video {
         background: rgb(245, 245, 245) !important;
         background-color: rgb(245, 245, 245) !important;
-        color-scheme: light;
+        background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+        color-scheme: only light !important;
       }
     }
   </style>
@@ -44,7 +65,7 @@
       --outer-text-gutter: 36px;
       --side-nav-width: 20vw;
       --site-bg: rgb(245, 245, 245);
-      color-scheme: light;
+      color-scheme: only light !important;
     }
 
     :root.is-site-ready {
@@ -126,6 +147,8 @@
       width: 100%;
       min-width: 0;
       padding-right: var(--outer-text-gutter);
+      background: var(--site-bg);
+      background-color: var(--site-bg);
       text-align: left;
     }
 
@@ -134,6 +157,8 @@
       grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
       width: 100%;
       min-height: 100vh;
+      background: var(--site-bg);
+      background-color: var(--site-bg);
     }
 
     .side-nav {
@@ -1921,7 +1946,7 @@
     }
   </style>
 </head>
-<body bgcolor="#f5f5f5" style="background-color: rgb(245, 245, 245);">
+<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
@@ -1982,7 +2007,7 @@
           <h2 id="nvidia-sccd-final-title">NVIDIA Computex &ldquo;NV&rdquo; Showreel</h2>
           <div class="grid">
             <article class="card full-row-card" data-card data-id="nvidia-sccd-project-nv-final-film" data-title="NVIDIA Computex &ldquo;NV&rdquo; Showreel" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\OurSong x NVIDIA x SCCD Project NV\20230425 SCCD X OurSong NV Reel by Rex\SCCD X OurSong_NV_Reel_0425.mov">
-              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-027-sccd-x-oursong-nv-reel-0425.mp4"></video></div>
+              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-027-sccd-x-oursong-nv-reel-0425.mp4"></video></div>
               <div class="card-body">
                 <h3>NVIDIA Computex &ldquo;NV&rdquo; Showreel</h3>
               </div>
@@ -2025,38 +2050,38 @@
           </div>
           <div class="grid kimberley-video-grid">
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1</h3>
               </div>
             </article>
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2</h3>
               </div>
             </article>
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3</h3>
               </div>
             </article>
           </div>
           <div class="grid incg-page-grid">
-            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-01" data-title="InCG Issue 56 Kimberley Interview Page 01" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 æ˜ CGå°ˆè¨ª Kimberley AI MV å…¨æ–‡ï¼ˆå·²ä¿®æ”¹ï¼‰\InCG_issue56_Kimberley_v2-1.png">
+            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-01" data-title="InCG Issue 56 Kimberley Interview Page 01" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 Ã¦ËœÂ CGÃ¥Â°Ë†Ã¨Â¨Âª Kimberley AI MV Ã¥â€¦Â¨Ã¦â€“â€¡Ã¯Â¼Ë†Ã¥Â·Â²Ã¤Â¿Â®Ã¦â€Â¹Ã¯Â¼â€°\InCG_issue56_Kimberley_v2-1.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-072-incg-issue56-kimberley-v2-1.webp" alt="InCG Issue 56 Kimberley Interview Page 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
               <div class="card-body">
                 <h3>InCG Issue 56 Kimberley Interview Page 01</h3>
               </div>
             </article>
-            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-02" data-title="InCG Issue 56 Kimberley Interview Page 02" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 æ˜ CGå°ˆè¨ª Kimberley AI MV å…¨æ–‡ï¼ˆå·²ä¿®æ”¹ï¼‰\InCG_issue56_Kimberley_v2-2.png">
+            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-02" data-title="InCG Issue 56 Kimberley Interview Page 02" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 Ã¦ËœÂ CGÃ¥Â°Ë†Ã¨Â¨Âª Kimberley AI MV Ã¥â€¦Â¨Ã¦â€“â€¡Ã¯Â¼Ë†Ã¥Â·Â²Ã¤Â¿Â®Ã¦â€Â¹Ã¯Â¼â€°\InCG_issue56_Kimberley_v2-2.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-073-incg-issue56-kimberley-v2-2.webp" alt="InCG Issue 56 Kimberley Interview Page 02" decoding="async" loading="lazy" fetchpriority="low" /></div>
               <div class="card-body">
                 <h3>InCG Issue 56 Kimberley Interview Page 02</h3>
               </div>
             </article>
-            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-03" data-title="InCG Issue 56 Kimberley Interview Page 03" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 æ˜ CGå°ˆè¨ª Kimberley AI MV å…¨æ–‡ï¼ˆå·²ä¿®æ”¹ï¼‰\InCG_issue56_Kimberley_v2-3.png">
+            <article class="card full-row-card" data-card data-id="nvidia-sccd-kimberley-incg-page-03" data-title="InCG Issue 56 Kimberley Interview Page 03" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230818 Ã¦ËœÂ CGÃ¥Â°Ë†Ã¨Â¨Âª Kimberley AI MV Ã¥â€¦Â¨Ã¦â€“â€¡Ã¯Â¼Ë†Ã¥Â·Â²Ã¤Â¿Â®Ã¦â€Â¹Ã¯Â¼â€°\InCG_issue56_Kimberley_v2-3.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-074-incg-issue56-kimberley-v2-3.webp" alt="InCG Issue 56 Kimberley Interview Page 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
               <div class="card-body">
                 <h3>InCG Issue 56 Kimberley Interview Page 03</h3>

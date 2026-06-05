@@ -180,3 +180,26 @@ Kimberley Street Signs 被構想為一支 AI 音樂錄影帶，讓歌曲中的�
 接近完成時，重點轉向交付與影響力。橫式與直式 teaser、最終 H.264 輸出、音量平衡與媒體版本被一一修整，讓作品可以跨螢幕流動。視覺語言必須保持實驗性，但發布本身必須像一個完整的 campaign asset 一樣運作。
 
 最終成果不只是一支音樂錄影帶。它同時是一份藝人聲明、一個媒體物件，也是 AI 製作環境下創意指導能力的證明。透過完成版影片、teaser 與新聞曝光，Street Signs 展示了合成影像如何被轉化為精準而完整的文化時刻。
+
+//////////
+
+Applied Creativity Engine (2023-2026)
+Joshua Chao and Chris Lin created Applied Creativity Engine (ACE) because they saw a growing gap between the speed of AI and the pace of traditional education. Their question was not only how to teach people new tools, but how to help them stay meaningfully human as execution, information, and even reasoning become increasingly automated. ACE began as experiments in AI, creativity, and education, then grew into a response to a larger cultural challenge: if AI makes knowledge cheap, human curiosity, judgment, empathy, and story become more valuable than ever.
+
+At the heart of ACE is the belief that creativity is not a rare gift for a few people, but a discipline that can be practiced, strengthened, and applied. Joshua brought the perspective of a creative director, designer, and educator; Chris brought the perspective of a technology entrepreneur. Together, they shaped ACE around independent will, meaningful problem finding, creative problem solving, and creating value for others. This later developed into a learning cycle built on curiosity, remix thinking, empathy, and storycraft.
+
+ACE turns these ideas into hands-on learning rather than abstract lectures. Its programs train learners to move from vague ideas to pitch-ready concepts, prototypes, stories, and proposals. The work spans children's creativity workshops, AI music-video experiments, foundation programs, corporate training, leadership workshops, online courses, printed thinking tools, certificates, student showcases, and project-based assignments such as Impossible Product Design, Impeccable Brand Ambassador, Incredible Crossover Campaign, The Empathy Lab, and The MVP Pitch Room.
+
+By 2026, ACE had trained more than 500 learners across Japan and Taiwan, working with UWC ISAK Japan, Junyi School of Innovation, Shih Chien University, Chunghwa Telecom, KKCompany, Waseda University students, YPO, ShareStart, and other education and industry groups. Its work does not stay inside classrooms. Learners develop ideas around real brands, real needs, and real presentation contexts, building a bridge between creative education and business expectations.
+
+What makes ACE distinctive is how it connects school, industry, and personal transformation. At UWC ISAK Japan, it grew from pilot workshops into a leadership-learning system; in corporate settings, it helped teams rediscover imagination as a practical business capability. Joshua and Chris did not build ACE to make people faster versions of machines. They built it to help people become more awake, inventive, and capable of turning insight into action. In this sense, ACE is both an education company and a philosophy of work: a creative engine for people who want to lead with meaning in the AI era.
+
+Joshua Chao 與 Chris Lin 創立 Applied Creativity Engine，是因為他們看見 AI 的發展速度與傳統教育的步調之間，正在出現越來越大的落差。他們關心的問題不只是如何教人使用新工具，而是在人類的執行、資訊取得，甚至推理能力都逐漸被自動化的時代，如何幫助人保有真正有意義的人性。ACE 最初源自 AI、創造力與教育之間的實驗，後來逐漸發展成對一個更大文化挑戰的回應：如果 AI 讓知識變得廉價，那麼人類的好奇心、判斷力、同理心與故事能力，將會比以往任何時候都更加珍貴。
+
+ACE 的核心信念是：創造力並不是少數人才擁有的稀有天賦，而是一種可以被練習、強化並實際應用的能力。Joshua 帶來的是創意總監、設計師與教育者的視角；Chris 則帶來科技創業家的視角。兩人共同將 ACE 建立在獨立意志、有意義的問題發現、創造性問題解決，以及為他人創造價值等核心之上。這套架構後來進一步發展成一個以好奇心、混搭式思考、同理心與故事力為基礎的學習循環。
+
+ACE 將這些想法轉化為動手實作的學習，而不是抽象的講座。它的課程訓練學習者，從模糊的想法出發，一步步發展成可以提案的概念、原型、故事與企劃。其內容涵蓋兒童創造力工作坊、AI 音樂錄影帶實驗、基礎課程、企業培訓、領導力工作坊、線上課程、紙本思考工具、證書、學生作品展示，以及以專案為核心的作業，例如 Impossible Product Design、Impossible Brand Ambassador、The Empathy Lab 與 The MVP Pitch Room。
+
+截至 2026 年，ACE 已在日本與台灣培訓超過 500 位學習者，合作對象包括 UWC ISAK Japan、均一國際教育實驗學校、實踐大學、中華電信、KKCompany、早稻田大學學生、YPO、ShareStart，以及其他教育與產業團體。ACE 的工作並不只停留在教室裡。學習者被要求圍繞真實品牌、真實需求與真實提案情境發展創意，讓創意教育與商業期待之間建立起橋梁。
+
+ACE 最獨特之處，在於它連結了學校、產業與個人轉化。在 UWC ISAK Japan，ACE 從試行工作坊逐漸發展成一套領導力學習系統；在企業場域中，它則幫助團隊重新發現想像力作為實用商業能力的價值。Joshua 與 Chris 創立 ACE，並不是為了讓人成為速度更快的機器版本。他們創立 ACE，是為了幫助人變得更加清醒、更有創造力，也更有能力將洞察轉化為行動。從這個意義上來說，ACE 既是一間教育公司，也是一種工作哲學：它是一座為那些希望在 AI 時代以意義引領前進的人所打造的創意引擎。
