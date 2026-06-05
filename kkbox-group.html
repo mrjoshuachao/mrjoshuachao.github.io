@@ -1757,22 +1757,64 @@
         --outer-text-gutter: 18px;
         --side-nav-width: 20vw;
         --page-title-font-size: clamp(20px, 5.2vh, 30px);
+        --article-caption-font-size: clamp(11px, 0.92vw, 15px);
+        --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
+        --landscape-column-top: 32px;
+        --landscape-scroll-bottom: max(48px, calc(env(safe-area-inset-bottom) + 28px));
       }
 
+      html,
+      body,
       html.is-mobile-menu-open,
       html.is-mobile-menu-open body {
-        overflow: auto;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        height: 100vh;
+        height: 100dvh;
       }
 
       .layout {
         display: grid;
         grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
-        min-height: 100vh;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+        background: var(--site-bg);
       }
 
       .page {
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        background: var(--site-bg);
         padding-left: 0;
         padding-right: var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .content-panel > .section:first-child h2 {
+        padding-top: var(--landscape-column-top);
+      }
+
+      .page::-webkit-scrollbar,
+      .side-nav::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       .side-nav,
@@ -1789,13 +1831,19 @@
         width: var(--side-nav-width);
         min-height: 0;
         height: 100vh;
+        height: 100dvh;
         max-height: 100vh;
+        max-height: 100dvh;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
         border: 0;
         background: var(--site-bg);
-        padding: clamp(18px, 4vh, 28px) clamp(8px, 1.4vw, 14px) clamp(18px, 4vh, 28px) var(--outer-text-gutter);
+        box-shadow: 1px 0 0 var(--site-bg), 2px 0 0 var(--site-bg);
+        padding: var(--landscape-column-top) clamp(8px, 1.4vw, 14px) var(--landscape-scroll-bottom) var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
       }
 
       .side-nav::before,
@@ -1851,13 +1899,13 @@
         justify-content: space-between;
         gap: 0;
         width: var(--award-logo-row-width, auto);
-        margin: calc(1.15em + 16px) 0 0;
+        margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
         line-height: 1;
       }
 
       .award-logo-row img,
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: min(clamp(10px, 3.2vh, 24px), calc(var(--award-logo-row-width, 96px) / 4));
+        width: min(clamp(12.5px, 4vh, 30px), calc(var(--award-logo-row-width, 96px) / 3.2));
       }
     }
 
@@ -1931,25 +1979,25 @@
       <h2 id="kkbox-group-image-recruitment-title">KKBOX Group Image &amp; Recruitment</h2>
       <div class="grid">
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-01" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.1_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #1</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-02" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.2_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #2</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-03" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.3_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #3</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-04" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #4" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 ä¼æ¥­å½¢è±¡å»£å‘Š + MA Program å¾µæ‰\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.4_Final_4K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #4</h3>
           </div>
@@ -1970,25 +2018,25 @@
       </div>
       <div class="grid blendvision-grid">
         <article class="card kkbox-group-card blendvision-worldview" data-card data-id="kkstream-blendvision-worldview-final" data-title="BlendVision Worldview" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210601 BlendVision worldview video FINAL with Inter font\BlendVision Worldview 20210601 OFFLINE PLAYBACK subtitles www.blendvision.com.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Worldview</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-loom" data-title="BlendVision Loom" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\L.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-021-l.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-021-l.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Loom</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-kaleido" data-title="BlendVision Kaleido" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\K.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-020-k.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-020-k.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Kaleido</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-moment" data-title="BlendVision Moment" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\M.mp4">
-          <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-022-m.mp4"></video></div>
+          <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-022-m.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Moment</h3>
           </div>
@@ -2209,12 +2257,13 @@
     function updateLazyPanelVideos() {
       const activePanel = document.querySelector("[data-panel].is-active");
       if (!activePanel) return;
-      const orderedVideos = getOrderedMedia(activePanel.querySelectorAll("video[data-src]"));
+      const orderedVideos = getOrderedMedia(activePanel.querySelectorAll("video"));
       const audibleVideo = [...activePanel.querySelectorAll("video")].find((video) => !video.muted && !isSilentMedia(video));
       const loadableVideos = orderedVideos.filter((video) => isLazyVideoNearViewport(video));
       const priorityVideos = new Set(loadableVideos.slice(0, getPriorityMediaCount()));
       orderedVideos.forEach((video) => {
-        if (!isLazyVideoNearViewport(video)) {
+        const hasDeferredSource = Boolean(video.dataset.src);
+        if (hasDeferredSource && !isLazyVideoNearViewport(video)) {
           if (video.getAttribute("src")) {
             video.pause();
             updatePlayButton(video);
@@ -2234,7 +2283,7 @@
           updatePlayButton(video);
           return;
         }
-        if (!priorityVideos.has(video) && !video.getAttribute("src")) {
+        if (hasDeferredSource && !priorityVideos.has(video) && !video.getAttribute("src")) {
           return;
         }
         playVideoPreservingSound(video);
@@ -2716,15 +2765,15 @@
         video.autoplay = true;
         video.loop = true;
         video.playsInline = true;
-        video.preload = "none";
+        video.preload = "auto";
         video.setAttribute("muted", "");
         video.setAttribute("autoplay", "");
         video.setAttribute("loop", "");
         video.setAttribute("playsinline", "");
-        video.setAttribute("preload", "none");
+        video.setAttribute("preload", "auto");
         if (video.dataset.src) {
+          ensureVideoSource(video);
           updateVideoLoadingIndicator(video);
-          return;
         }
         const panel = video.closest("[data-panel]");
         const isActivePanel = !panel || panel.classList.contains("is-active");

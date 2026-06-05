@@ -1762,22 +1762,64 @@
         --outer-text-gutter: 18px;
         --side-nav-width: 20vw;
         --page-title-font-size: clamp(20px, 5.2vh, 30px);
+        --article-caption-font-size: clamp(11px, 0.92vw, 15px);
+        --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
+        --landscape-column-top: 32px;
+        --landscape-scroll-bottom: max(48px, calc(env(safe-area-inset-bottom) + 28px));
       }
 
+      html,
+      body,
       html.is-mobile-menu-open,
       html.is-mobile-menu-open body {
-        overflow: auto;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        height: 100vh;
+        height: 100dvh;
       }
 
       .layout {
         display: grid;
         grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
-        min-height: 100vh;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+        background: var(--site-bg);
       }
 
       .page {
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        background: var(--site-bg);
         padding-left: 0;
         padding-right: var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .content-panel > .section:first-child h2 {
+        padding-top: var(--landscape-column-top);
+      }
+
+      .page::-webkit-scrollbar,
+      .side-nav::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       .side-nav,
@@ -1794,13 +1836,19 @@
         width: var(--side-nav-width);
         min-height: 0;
         height: 100vh;
+        height: 100dvh;
         max-height: 100vh;
+        max-height: 100dvh;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
         border: 0;
         background: var(--site-bg);
-        padding: clamp(18px, 4vh, 28px) clamp(8px, 1.4vw, 14px) clamp(18px, 4vh, 28px) var(--outer-text-gutter);
+        box-shadow: 1px 0 0 var(--site-bg), 2px 0 0 var(--site-bg);
+        padding: var(--landscape-column-top) clamp(8px, 1.4vw, 14px) var(--landscape-scroll-bottom) var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
       }
 
       .side-nav::before,
@@ -1856,13 +1904,13 @@
         justify-content: space-between;
         gap: 0;
         width: var(--award-logo-row-width, auto);
-        margin: calc(1.15em + 16px) 0 0;
+        margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
         line-height: 1;
       }
 
       .award-logo-row img,
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        width: min(clamp(10px, 3.2vh, 24px), calc(var(--award-logo-row-width, 96px) / 4));
+        width: min(clamp(12.5px, 4vh, 30px), calc(var(--award-logo-row-width, 96px) / 3.2));
       }
     }
 
@@ -1939,19 +1987,19 @@
           <h2 id="kkculture-motion-title">KKCulture 2025 &ldquo;Connected Dots&rdquo; Motion System</h2>
           <div class="grid">
             <article class="card" data-card data-id="kkculture-dots-concept-video" data-title="KKCulture Dots Concept" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20221125 KKCulture dots concept video\20221125.mp4">
-              <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-024-20221125.mp4"></video></div>
+              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-024-20221125.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture Dots Concept</h3>
               </div>
             </article>
             <article class="card kkculture-vi-cover-card" data-card data-id="kkculture-inverted-vi" data-title="KKCulture Visual Identity Motion" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20240606 KKCulture Website (Evergreen Fund)\VI-inverted.mp4">
-              <div class="media-frame"><video muted loop playsinline preload="none" data-src="assets/optimized/videos/video-025-vi-inverted.mp4"></video></div>
+              <div class="media-frame"><video muted loop playsinline preload="auto" src="assets/optimized/videos/video-025-vi-inverted.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture Visual Identity Motion</h3>
               </div>
             </article>
             <article class="card full-row-card" data-card data-id="kkculture-website-screen-recording" data-title="KKCulture Website 2024" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20240606 KKCulture Website (Evergreen Fund)\1-home-screenshot-20240612.mp4">
-              <div class="media-frame media-frame--cover"><video data-silent-media="true" muted loop playsinline preload="none" data-src="assets/optimized/videos/video-026-1-home-screenshot-20240612.mp4"></video></div>
+              <div class="media-frame media-frame--cover"><video data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-026-1-home-screenshot-20240612.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture Website 2024</h3>
               </div>
@@ -1963,7 +2011,7 @@
           <h2 id="kkculture-final-title">KKCulture 2023 &ldquo;You Create&rdquo; Pixel System</h2>
           <div class="grid pixel-system-grid">
             <article class="card pixel-system-card--full" data-card data-id="kkculture-2023-website-screen-recording" data-title="KKCulture 2023 Website" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKCulture 2023\KKCulture 2023.mp4">
-              <div class="media-frame"><video data-silent-media="true" muted loop playsinline preload="none" data-src="assets/optimized/videos/video-031-kkculture-2023.mp4"></video></div>
+              <div class="media-frame"><video data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-031-kkculture-2023.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture 2023 Website</h3>
               </div>
@@ -2279,12 +2327,13 @@
     function updateLazyPanelVideos() {
       const activePanel = document.querySelector("[data-panel].is-active");
       if (!activePanel) return;
-      const orderedVideos = getOrderedMedia(activePanel.querySelectorAll("video[data-src]"));
+      const orderedVideos = getOrderedMedia(activePanel.querySelectorAll("video"));
       const audibleVideo = [...activePanel.querySelectorAll("video")].find((video) => !video.muted && !isSilentMedia(video));
       const loadableVideos = orderedVideos.filter((video) => isLazyVideoNearViewport(video));
       const priorityVideos = new Set(loadableVideos.slice(0, getPriorityMediaCount()));
       orderedVideos.forEach((video) => {
-        if (!isLazyVideoNearViewport(video)) {
+        const hasDeferredSource = Boolean(video.dataset.src);
+        if (hasDeferredSource && !isLazyVideoNearViewport(video)) {
           if (video.getAttribute("src")) {
             video.pause();
             updatePlayButton(video);
@@ -2304,7 +2353,7 @@
           updatePlayButton(video);
           return;
         }
-        if (!priorityVideos.has(video) && !video.getAttribute("src")) {
+        if (hasDeferredSource && !priorityVideos.has(video) && !video.getAttribute("src")) {
           return;
         }
         playVideoPreservingSound(video);
@@ -2786,15 +2835,15 @@
         video.autoplay = true;
         video.loop = true;
         video.playsInline = true;
-        video.preload = "none";
+        video.preload = "auto";
         video.setAttribute("muted", "");
         video.setAttribute("autoplay", "");
         video.setAttribute("loop", "");
         video.setAttribute("playsinline", "");
-        video.setAttribute("preload", "none");
+        video.setAttribute("preload", "auto");
         if (video.dataset.src) {
+          ensureVideoSource(video);
           updateVideoLoadingIndicator(video);
-          return;
         }
         const panel = video.closest("[data-panel]");
         const isActivePanel = !panel || panel.classList.contains("is-active");
