@@ -71,7 +71,7 @@
       --award-logo-bottom-offset: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px));
       --next-panel-bottom-offset: var(--award-logo-bottom-offset);
       --side-nav-viewport-height: 100vh;
-      --side-nav-width: 20vw;
+      --side-nav-width: calc(100vw / 5);
       --site-bg: rgb(245, 245, 245);
       color-scheme: only light !important;
     }
@@ -161,7 +161,7 @@
     }
 
     .side-nav::after {
-      content: "V1.1.2";
+      content: "v1.2.5";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -1948,7 +1948,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.1.2";
+        content: "v1.2.5";
         position: absolute;
         left: 3px;
         bottom: 3px;
@@ -2001,7 +2001,7 @@
         align-items: flex-end;
         justify-content: space-between;
         gap: var(--award-logo-gap);
-        width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), 100%);
+        width: min(var(--award-logo-row-width, var(--award-logo-min-row-width)), 100%);
         margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
         line-height: 1;
       }
@@ -3108,11 +3108,11 @@
       const isMobile = window.matchMedia("(max-width: 760px)").matches;
       const isMobileLandscapeSidebar = window.matchMedia("(orientation: landscape) and (max-height: 520px) and (max-width: 960px)").matches;
       const titleLine = isMobileLandscapeSidebar
-        ? document.querySelector(".side-title span:nth-child(2)")
+        ? document.querySelector(".side-title span:nth-child(4)")
         : isMobile
           ? document.querySelector(".design-archive-link")
           : document.querySelector(".side-title span:nth-child(4)");
-      const fallbackText = isMobileLandscapeSidebar ? "Hua-Chun" : isMobile ? "Design Archive" : "2016-2026";
+      const fallbackText = isMobileLandscapeSidebar ? "2016-2026" : isMobile ? "Design Archive" : "2016-2026";
       const titleWidth = measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, titleLine || document.body);
       if (titleWidth > 0) {
         sideNav.style.setProperty("--award-logo-row-width", `${titleWidth}px`);
