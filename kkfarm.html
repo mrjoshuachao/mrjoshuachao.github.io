@@ -1424,22 +1424,18 @@
         z-index: 9000;
         width: auto;
         min-height: 0;
+        height: auto;
+        max-height: none;
+        overflow: visible;
         border-right: 0;
         border-bottom: 0;
-        background: transparent;
+        background: var(--site-bg);
+        background-color: var(--site-bg);
         padding: 14px 18px 12px var(--outer-text-gutter);
       }
 
       .side-nav::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        display: block;
-        background: rgba(245, 245, 245, 0.72);
-        -webkit-backdrop-filter: blur(18px) saturate(1.08);
-        backdrop-filter: blur(18px) saturate(1.08);
-        pointer-events: none;
+        content: none;
       }
 
       .mobile-menu-toggle {
@@ -1539,6 +1535,7 @@
       }
 
       .side-nav.is-mobile-menu-open::before {
+        content: "";
         position: fixed;
         inset: 0;
         z-index: 0;
