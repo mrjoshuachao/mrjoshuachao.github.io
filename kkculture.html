@@ -161,7 +161,7 @@
     }
 
     .side-nav::after {
-      content: "v1.2.5";
+      content: "v1.2.6";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -1566,6 +1566,23 @@
         animation: mobileMenuPanelUp 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
       }
 
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "v1.2.6";
+        position: fixed;
+        left: 3px;
+        bottom: max(3px, env(safe-area-inset-bottom, 0px));
+        z-index: 2;
+        display: block;
+        color: rgb(191, 191, 191);
+        font-size: 6px;
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: 0;
+        pointer-events: none;
+        user-select: none;
+      }
+
       @keyframes mobileMenuPanelDown {
         from {
           clip-path: inset(0 0 calc(var(--mobile-menu-height) - 64px) 0);
@@ -1946,11 +1963,11 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.2.5";
-        position: absolute;
+        content: "v1.2.6";
+        position: fixed;
         left: 3px;
-        bottom: 3px;
-        z-index: 1;
+        bottom: max(3px, env(safe-area-inset-bottom, 0px));
+        z-index: 9500;
         display: block;
       }
 
