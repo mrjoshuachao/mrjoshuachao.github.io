@@ -68,8 +68,17 @@
       --award-logo-gap: clamp(7px, 0.75vw, 14px);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
+      --side-title-font-size: var(--page-title-font-size);
+      --side-menu-font-size: clamp(16px, 1.15vw, 22px);
+      --side-menu-line-extra: 6px;
+      --side-award-logo-gap: var(--award-logo-gap);
+      --side-award-logo-size: var(--award-logo-size);
+      --side-nav-top-padding: 36px;
+      --content-title-top-padding: 32px;
       --award-logo-bottom-offset: max(52px, calc(env(safe-area-inset-bottom, 0px) + 44px));
       --next-panel-bottom-offset: var(--award-logo-bottom-offset);
+      --next-panel-visual-align-shift: 0.075em;
+      --next-panel-start-visual-align-shift: 0.27em;
       --side-nav-viewport-height: 100vh;
       --side-nav-width: calc(100vw / 5);
       --site-bg: rgb(245, 245, 245);
@@ -143,7 +152,8 @@
     }
 
     .page {
-      width: 100%;
+      width: fit-content;
+      max-width: 100%;
       min-width: 0;
       padding-right: var(--outer-text-gutter);
       background: var(--site-bg);
@@ -185,9 +195,26 @@
       min-height: var(--side-nav-viewport-height);
       height: var(--side-nav-viewport-height);
       max-height: var(--side-nav-viewport-height);
-      padding: 36px 18px var(--award-logo-bottom-offset) var(--outer-text-gutter);
+      padding: var(--side-nav-top-padding) 18px var(--award-logo-bottom-offset) var(--outer-text-gutter);
       border-right: 0;
       background: var(--site-bg);
+    }
+
+    @media (min-width: 761px) {
+      :root {
+        --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
+        --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
+        --content-title-top-padding: var(--side-nav-top-padding);
+      }
+
+      .side-nav {
+        --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
+        --side-menu-font-size: clamp(12px, min(max(16px, 1.15vw), 2.25vh), 22px);
+        --side-menu-line-extra: clamp(3px, 0.7vh, 6px);
+        --side-award-logo-gap: clamp(4px, min(max(7px, 0.75vw), 1.1vh), 14px);
+        --side-award-logo-size: clamp(12px, min(max(16px, 1.75vw), 3vh), 33px);
+        --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
+      }
     }
 
     .side-title {
@@ -198,7 +225,7 @@
       background: transparent;
       color: inherit;
       font-family: var(--page-font);
-      font-size: var(--page-title-font-size);
+      font-size: var(--side-title-font-size);
       font-weight: 900;
       line-height: calc(var(--page-title-line-height) + 3px);
       letter-spacing: 0;
@@ -235,7 +262,8 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
-      margin: var(--side-menu-group-gap, calc(1.15em + 6px)) 0 0;
+      margin: var(--side-menu-group-gap, calc(1.15em + var(--side-menu-line-extra))) 0 0;
+      font-size: var(--side-menu-font-size);
     }
 
     .side-menu button,
@@ -248,9 +276,9 @@
       background: transparent;
       color: #000;
       font-family: var(--page-font);
-      font-size: clamp(16px, 1.15vw, 22px);
+      font-size: inherit;
       font-weight: 700;
-      line-height: calc(1.15em + 6px);
+      line-height: calc(1.15em + var(--side-menu-line-extra));
       letter-spacing: 0;
       text-align: left;
       cursor: pointer;
@@ -270,7 +298,7 @@
     }
 
     .side-menu--secondary {
-      margin-top: calc(1.15em + 6px);
+      margin-top: calc(1.15em + var(--side-menu-line-extra));
       padding-top: 0;
     }
 
@@ -290,8 +318,8 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      gap: var(--award-logo-gap);
-      width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), calc(100% - var(--outer-text-gutter) - 18px));
+      gap: var(--side-award-logo-gap);
+      width: var(--award-logo-row-width, var(--award-logo-min-row-width));
       margin: 0;
       line-height: 1;
       cursor: pointer;
@@ -310,9 +338,9 @@
 
     .award-logo-row img {
       display: block;
-      flex: 0 1 var(--award-logo-size);
-      width: var(--award-logo-size);
-      max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
+      flex: 0 1 var(--side-award-logo-size);
+      width: var(--side-award-logo-size);
+      max-width: calc((100% - (var(--side-award-logo-gap) * 3)) / 4);
       min-width: 0;
       aspect-ratio: 1 / 1;
       height: auto;
@@ -362,7 +390,7 @@
       padding: 16px 20px 14px 0;
       border-bottom: 0;
       font-family: var(--page-font);
-      font-size: var(--page-title-font-size);
+      font-size: var(--side-title-font-size);
       font-weight: 900;
       line-height: calc(var(--page-title-line-height) + 3px);
       letter-spacing: 0;
@@ -370,6 +398,11 @@
 
     .content-panel > .section:first-child h2 {
       padding-top: 32px;
+    }
+
+    .content-panel > .section:first-child > h2:first-of-type {
+      padding-top: var(--content-title-top-padding);
+      font-size: var(--side-title-font-size);
     }
 
     .section h2 + .grid,
@@ -405,10 +438,17 @@
       letter-spacing: 0;
       text-align: left;
       text-decoration: none;
+      cursor: pointer;
     }
 
     .next-panel-link__label {
       flex: 0 1 auto;
+      transform: translateY(var(--next-panel-visual-align-shift));
+    }
+
+    .next-panel-link--start,
+    .next-panel-link--flat-bottom {
+      --next-panel-visual-align-shift: var(--next-panel-start-visual-align-shift);
     }
 
     .next-panel-link__button {
@@ -428,11 +468,12 @@
       line-height: 1;
       text-align: center;
       text-decoration: none;
+      transform: translateY(var(--next-panel-visual-align-shift));
       cursor: pointer;
     }
 
-    .next-panel-link__button:hover,
-    .next-panel-link__button:focus-visible {
+    .next-panel-link:hover .next-panel-link__button,
+    .next-panel-link:focus-visible .next-panel-link__button {
       background: #000;
       color: #fff;
       text-decoration: none;
@@ -1680,7 +1721,7 @@
 
       h1,
       .section h2 {
-        line-height: var(--page-title-line-height);
+        line-height: calc(var(--page-title-line-height) + 3px);
       }
 
       h3 {
@@ -1712,7 +1753,7 @@
         left: auto;
         bottom: auto;
         gap: var(--award-logo-gap);
-        width: min(max(var(--award-logo-row-width, var(--award-logo-min-row-width)), var(--award-logo-min-row-width)), 100%);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
         margin: 34px 0 0;
         line-height: 1;
       }
@@ -1888,6 +1929,7 @@
         --article-caption-font-size: clamp(11px, 0.92vw, 15px);
         --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
         --landscape-column-top: 32px;
+        --content-title-top-padding: var(--landscape-column-top);
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
         --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
@@ -1942,6 +1984,10 @@
 
       .content-panel > .section:first-child h2 {
         padding-top: var(--landscape-column-top);
+      }
+
+      .section h2 {
+        line-height: calc(var(--page-title-line-height) + 4px);
       }
 
       .page::-webkit-scrollbar,
@@ -2043,7 +2089,7 @@
         align-items: flex-end;
         justify-content: space-between;
         gap: var(--award-logo-gap);
-        width: min(var(--award-logo-row-width, var(--award-logo-min-row-width)), 100%);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
         margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
         line-height: 1;
       }
@@ -2113,7 +2159,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kkfarm">
     <section class="section" aria-labelledby="kkfarm-overview-title">
-      <h2 id="kkfarm-overview-title">KKFARM (2016-2018)</h2>
+      <h2 id="kkfarm-overview-title">KKFARM &mdash; Building an Artist World Across Music, Video, and Live Experience</h2>
       <div class="essay">
         <div class="essay-block" lang="en">
           <p>KKFARM began with its first signed artist, Julia Wu, and the work centered on shaping the public image of a young artist into a system deeper than any single release. The task was to build continuity for sound, attitude, vulnerability, and rhythm. Rather than treating each song as an isolated object, the project imagined Julia as a world that could unfold over time.</p>
@@ -2485,12 +2531,12 @@
         </article>
       </div>
     </section>
-        <div class="next-panel-link">
+        <a class="next-panel-link" href="kkbox-group.html" aria-label="Go to KKBOX Group">
           <span class="next-panel-link__label">Next: KKBOX Group</span>
-          <a class="next-panel-link__button" href="kkbox-group.html" aria-label="Go to KKBOX Group">
+          <span class="next-panel-link__button" aria-hidden="true">
             <span class="next-panel-link__arrow" aria-hidden="true"></span>
-          </a>
-        </div>
+          </span>
+        </a>
       </section>
     </main>
   </div>
@@ -3494,19 +3540,28 @@
       return width || measureTextWidth(element.textContent.trim(), element);
     }
 
+    function getVisibleTextLineCount(element) {
+      if (!element) return 0;
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const rects = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 && rect.height > 0);
+      range.detach?.();
+      return rects.length;
+    }
+
     function syncAwardLogoRowWidth() {
       const sideNav = document.querySelector(".side-nav");
       const awardRows = document.querySelectorAll(".award-logo-row");
       if (!sideNav || !awardRows.length) return;
-      const isMobile = window.matchMedia("(max-width: 760px)").matches;
-      const isMobileLandscapeSidebar = window.matchMedia("(orientation: landscape) and (max-height: 520px) and (max-width: 960px)").matches;
-      const titleLine = isMobileLandscapeSidebar
-        ? document.querySelector(".side-title span:nth-child(4)")
-        : isMobile
-          ? document.querySelector(".design-archive-link")
-          : document.querySelector(".side-title span:nth-child(4)");
-      const fallbackText = isMobileLandscapeSidebar ? "2016-2026" : isMobile ? "Design Archive" : "2016-2026";
-      const titleWidth = measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, titleLine || document.body);
+      const yearLine = document.querySelector(".side-title span:nth-child(4)");
+      const huaChunLine = document.querySelector(".side-title span:nth-child(2)");
+      const useHuaChunFallback = getVisibleTextLineCount(yearLine) > 1;
+      const titleLine = useHuaChunFallback ? huaChunLine : yearLine;
+      const fallbackText = useHuaChunFallback ? "Hua-Chun" : "2016-2026";
+      const referenceElement = titleLine || yearLine || huaChunLine || document.querySelector(".mobile-menu-title") || document.body;
+      const titleWidth = useHuaChunFallback
+        ? measureTextWidth(fallbackText, referenceElement)
+        : measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, referenceElement);
       if (titleWidth > 0) {
         sideNav.style.setProperty("--award-logo-row-width", `${titleWidth}px`);
       } else {
