@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
+<html lang="en" style="background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
   <meta name="color-scheme" content="only light" />
@@ -15,10 +15,11 @@
       min-width: 100%;
       min-height: 100%;
       margin: 0;
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
-      background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
+      background-image: linear-gradient(#f5f5f5, #f5f5f5) !important;
       color-scheme: only light !important;
+      forced-color-adjust: none !important;
     }
 
     body::before {
@@ -26,19 +27,19 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
       pointer-events: none;
     }
 
     video,
     iframe,
-    img,
+    img:not(.image-lightbox__image),
     picture,
     canvas,
     .media-frame {
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -48,14 +49,15 @@
       body::before,
       video,
       iframe,
-      img,
+      img:not(.image-lightbox__image),
       picture,
       canvas,
       .media-frame {
-        background: rgb(245, 245, 245) !important;
-        background-color: rgb(245, 245, 245) !important;
-        background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+        background: #f5f5f5 !important;
+        background-color: #f5f5f5 !important;
+        background-image: linear-gradient(#f5f5f5, #f5f5f5) !important;
         color-scheme: only light !important;
+        forced-color-adjust: none !important;
       }
     }
   </style>
@@ -64,7 +66,9 @@
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Bold.otf" as="font" type="font/otf" crossorigin="anonymous" />
-  <style>
+  </head>
+<body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
+<style id="site-styles">
     :root {
       --page-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
       --zh-article-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
@@ -92,12 +96,13 @@
       --next-panel-start-visual-align-shift: 0.27em;
       --side-nav-viewport-height: 100vh;
       --side-nav-width: calc(100vw / 5);
-      --site-bg: rgb(245, 245, 245);
+      --site-bg: #f5f5f5;
       color-scheme: only light !important;
+      forced-color-adjust: none;
     }
 
     :root.is-site-ready {
-      --site-bg: rgb(245, 245, 245);
+      --site-bg: #f5f5f5;
     }
 
     @supports (height: 100svh) {
@@ -151,6 +156,7 @@
       font-family: var(--page-font);
       font-size: 16px;
       line-height: 1.35;
+      forced-color-adjust: none;
     }
     a {
       color: inherit;
@@ -2146,8 +2152,6 @@
       }
     }
   </style>
-</head>
-<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">

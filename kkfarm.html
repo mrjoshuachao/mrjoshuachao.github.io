@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
+<html lang="en" style="background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
   <meta name="color-scheme" content="only light" />
@@ -15,10 +15,11 @@
       min-width: 100%;
       min-height: 100%;
       margin: 0;
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
-      background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
+      background-image: linear-gradient(#f5f5f5, #f5f5f5) !important;
       color-scheme: only light !important;
+      forced-color-adjust: none !important;
     }
 
     body::before {
@@ -26,19 +27,19 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
       pointer-events: none;
     }
 
     video,
     iframe,
-    img,
+    img:not(.image-lightbox__image),
     picture,
     canvas,
     .media-frame {
-      background: rgb(245, 245, 245) !important;
-      background-color: rgb(245, 245, 245) !important;
+      background: #f5f5f5 !important;
+      background-color: #f5f5f5 !important;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -48,14 +49,15 @@
       body::before,
       video,
       iframe,
-      img,
+      img:not(.image-lightbox__image),
       picture,
       canvas,
       .media-frame {
-        background: rgb(245, 245, 245) !important;
-        background-color: rgb(245, 245, 245) !important;
-        background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+        background: #f5f5f5 !important;
+        background-color: #f5f5f5 !important;
+        background-image: linear-gradient(#f5f5f5, #f5f5f5) !important;
         color-scheme: only light !important;
+        forced-color-adjust: none !important;
       }
     }
   </style>
@@ -64,7 +66,9 @@
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Bold.otf" as="font" type="font/otf" crossorigin="anonymous" />
-  <style>
+  </head>
+<body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
+<style id="site-styles">
     :root {
       --page-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
       --zh-article-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
@@ -92,12 +96,13 @@
       --next-panel-start-visual-align-shift: 0.27em;
       --side-nav-viewport-height: 100vh;
       --side-nav-width: calc(100vw / 5);
-      --site-bg: rgb(245, 245, 245);
+      --site-bg: #f5f5f5;
       color-scheme: only light !important;
+      forced-color-adjust: none;
     }
 
     :root.is-site-ready {
-      --site-bg: rgb(245, 245, 245);
+      --site-bg: #f5f5f5;
     }
 
     @supports (height: 100svh) {
@@ -151,6 +156,7 @@
       font-family: var(--page-font);
       font-size: 16px;
       line-height: 1.35;
+      forced-color-adjust: none;
     }
     a {
       color: inherit;
@@ -2128,8 +2134,6 @@
       }
     }
   </style>
-</head>
-<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
@@ -2220,22 +2224,22 @@
             <h3>Don't Cry Anymore - Official Lyric Video</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="JUTV Ep. 01 This One Has Something" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\JUTV Ep. 01 This One Has Something - Julia Wu (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="jutv Ep. 01 This One Has Something" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 01 This One Has Something - Julia Wu (1080p, h264).mp4">
           <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>JUTV Ep. 01 This One Has Something</h3>
+            <h3>jutv Ep. 01 This One Has Something</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="JUTV Ep. 02 Breaking!!! A Music Video Born in 72 Hours" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\JUTV Ep. 02 Breaking!!! A Music Video Born in 72 Hours - Julia Wu (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours - Julia Wu (1080p, h264).mp4">
           <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>JUTV Ep. 02 Breaking!!! A Music Video Born in 72 Hours</h3>
+            <h3>jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="JUTV Ep. 03 It Looks Great" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\JUTV Ep. 03 It Looks Great - Julia Wu (1080p, h264).mp4">
+        <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="jutv Ep. 03 It Looks Great" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 03 It Looks Great - Julia Wu (1080p, h264).mp4">
           <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
-            <h3>JUTV Ep. 03 It Looks Great</h3>
+            <h3>jutv Ep. 03 It Looks Great</h3>
           </div>
         </article>
       </div>
