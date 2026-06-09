@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: light;">
+<html lang="en" style="background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
 <head>
   <meta charset="utf-8" />
+  <meta name="color-scheme" content="only light" />
+  <meta name="supported-color-schemes" content="light" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f5f5f5" />
   <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: dark)" />
-  <meta name="color-scheme" content="light" />
   <style id="initial-background-style">
     :root,
     html,
@@ -17,7 +18,7 @@
       background: rgb(245, 245, 245) !important;
       background-color: rgb(245, 245, 245) !important;
       background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
-      color-scheme: light !important;
+      color-scheme: only light !important;
     }
 
     body::before {
@@ -30,7 +31,12 @@
       pointer-events: none;
     }
 
-    video {
+    video,
+    iframe,
+    img,
+    picture,
+    canvas,
+    .media-frame {
       background: rgb(245, 245, 245) !important;
       background-color: rgb(245, 245, 245) !important;
     }
@@ -40,11 +46,16 @@
       html,
       body,
       body::before,
-      video {
+      video,
+      iframe,
+      img,
+      picture,
+      canvas,
+      .media-frame {
         background: rgb(245, 245, 245) !important;
         background-color: rgb(245, 245, 245) !important;
         background-image: linear-gradient(rgb(245, 245, 245), rgb(245, 245, 245)) !important;
-        color-scheme: light !important;
+        color-scheme: only light !important;
       }
     }
   </style>
@@ -82,7 +93,7 @@
       --side-nav-viewport-height: 100vh;
       --side-nav-width: calc(100vw / 5);
       --site-bg: rgb(245, 245, 245);
-      color-scheme: light !important;
+      color-scheme: only light !important;
     }
 
     :root.is-site-ready {
@@ -170,7 +181,7 @@
     }
 
     .side-nav::after {
-      content: "V1.1.5";
+      content: "V1.1.52";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -840,6 +851,7 @@
       height: 100%;
       border: 0;
       background: var(--site-bg);
+      background-color: var(--site-bg);
       object-fit: contain;
     }
 
@@ -848,6 +860,7 @@
     .media-frame.media-frame-file,
     .media-frame.media-frame-file iframe {
       background: var(--site-bg);
+      background-color: var(--site-bg);
     }
 
     .media-frame--cover video,
@@ -1650,7 +1663,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.1.5";
+        content: "V1.1.52";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2054,7 +2067,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.1.5";
+        content: "V1.1.52";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2132,7 +2145,7 @@
     }
   </style>
 </head>
-<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: light;">
+<body bgcolor="#f5f5f5" style="margin: 0; background: rgb(245, 245, 245); background-color: rgb(245, 245, 245); color-scheme: only light;">
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
       <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
