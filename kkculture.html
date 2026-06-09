@@ -161,7 +161,7 @@
     }
 
     .side-nav::after {
-      content: "v1.3";
+      content: "V1.1.4";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -524,12 +524,24 @@
       margin-bottom: 0;
     }
 
-    .biography-layout {
+    .document-copy {
       --biography-photo-ratio: 0.5835;
       --biography-photo-inset: 36px;
       --biography-photo-height: calc(100vh - (var(--biography-photo-inset) * 2));
       --biography-photo-width: calc(var(--biography-photo-height) * var(--biography-photo-ratio));
       --biography-photo-gap: 44px;
+    }
+
+    @media (min-width: 761px) {
+      #biography-panel-title {
+        max-width: max(6.4em, calc(100vw - var(--side-nav-width) - var(--outer-text-gutter) - var(--biography-photo-width) - var(--biography-photo-gap)));
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: normal;
+      }
+    }
+
+    .biography-layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) var(--biography-photo-width);
       gap: var(--biography-photo-gap);
@@ -566,6 +578,11 @@
     }
 
     @supports (height: 100dvh) {
+      .document-copy {
+        --biography-photo-height: calc(100dvh - (var(--biography-photo-inset) * 2));
+        --biography-photo-width: calc(var(--biography-photo-height) * var(--biography-photo-ratio));
+      }
+
       .biography-layout {
         --biography-photo-height: calc(100dvh - (var(--biography-photo-inset) * 2));
         --biography-photo-width: calc(var(--biography-photo-height) * var(--biography-photo-ratio));
@@ -577,10 +594,32 @@
     }
 
     @media (min-width: 761px) and (max-width: 1180px) and (orientation: portrait) {
+      .document-copy {
+        --biography-photo-width: 33.333vw;
+        --biography-photo-height: calc(var(--biography-photo-width) / var(--biography-photo-ratio));
+        --biography-photo-gap: 32px;
+      }
+
       .biography-layout {
         --biography-photo-width: 33.333vw;
         --biography-photo-height: calc(var(--biography-photo-width) / var(--biography-photo-ratio));
         --biography-photo-gap: 32px;
+      }
+
+      .biography-photo {
+        top: var(--biography-photo-inset);
+        right: var(--outer-text-gutter);
+        width: var(--biography-photo-width);
+        height: var(--biography-photo-height);
+      }
+    }
+
+    @media (min-width: 761px) and (min-aspect-ratio: 3 / 4) and (max-aspect-ratio: 4 / 3) {
+      .document-copy,
+      .biography-layout {
+        --biography-photo-gap: clamp(32px, 3.8vw, 44px);
+        --biography-photo-width: calc((100vw - var(--side-nav-width) - var(--outer-text-gutter) - var(--biography-photo-gap)) / 2);
+        --biography-photo-height: calc(var(--biography-photo-width) / var(--biography-photo-ratio));
       }
 
       .biography-photo {
@@ -1568,7 +1607,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.3";
+        content: "V1.1.4";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -1967,7 +2006,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.3";
+        content: "V1.1.4";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
