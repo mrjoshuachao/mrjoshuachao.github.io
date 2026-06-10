@@ -2301,6 +2301,12 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+
+    @media (max-width: 760px) and (orientation: portrait) {
+      .photo-book-grid > .card:last-child:nth-child(n) {
+        grid-column: 1 / -1;
+      }
+    }
   </style>
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
@@ -4051,7 +4057,6 @@
   </script>
 </body>
 </html>
-
 
 
 

@@ -2144,6 +2144,17 @@
       }
     }
 
+    @media (max-width: 760px) and (orientation: portrait) {
+      .brand-book-feature-row {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-book-feature-row .brand-book-application-card,
+      .brand-book-feature-row .brand-book-video-card {
+        grid-column: 1 / -1;
+      }
+    }
+
 
     @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
       :root {
@@ -3892,8 +3903,6 @@
   </script>
 </body>
 </html>
-
-
 
 
 

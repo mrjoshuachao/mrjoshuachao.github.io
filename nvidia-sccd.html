@@ -2253,6 +2253,12 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+
+    @media (max-width: 760px) and (orientation: portrait) {
+      .meeting-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
@@ -3768,7 +3774,6 @@
   </script>
 </body>
 </html>
-
 
 
 
