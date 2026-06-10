@@ -1,0 +1,191 @@
+<manifest alg="2" build="2018.1.1.386" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="www.kkculture.com" resolutions="1x,2x" timestamp="1673220765730">
+  <folder name="css">
+    <file name="site_global.css" crc="444006867"/>
+    <file name="index.css" crc="3788135271" ref="index"/>
+    <file name="visual-identity.css" crc="4092726866" ref="visual-identity"/>
+    <file name="you-create.css" crc="443158441" ref="you-create"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:visual-identity:you-create"/>
+    <file name="museutils.js" crc="3939489907" ref="index:visual-identity:you-create"/>
+    <file name="whatinput.js" crc="86476730" ref="index:visual-identity:you-create"/>
+    <file name="museconfig.js" crc="3936894949" ref="index:visual-identity:you-create"/>
+    <file name="jquery.watch.js" crc="522499760" ref="index:visual-identity:you-create"/>
+    <file name="jquery.scrolleffects.js" crc="312044820" ref="index"/>
+    <file name="require.js" crc="4177726516" ref="index:visual-identity:you-create"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="85124417" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="kkculture-favicon.ico" crc="3885619609" ref="index"/>
+    <file name="visual-identity-favicon.ico" crc="3885619609" ref="visual-identity"/>
+    <file name="go.png" crc="4070027799" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="go_2x.png" crc="3996069481" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="pic-distribution.jpg" crc="448843622" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="pic-lebals.jpg" crc="3991438548" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="pic-kklive.jpg" crc="86156682" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="go w.png" crc="3882610208" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="go w_2x.png" crc="3933328027" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="pic-labels-dark.jpg" crc="407203628" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="pic-agencies.jpg" crc="3944597655" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkculture-b.png" crc="4016884036" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="kkculture-b_2x.png" crc="469440715" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="vi-s-b.png" crc="3920890151" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="vi-s-b_2x.png" crc="3796890009" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="grid-b.png" crc="4180942089" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="grid-b_2x.png" crc="3806204113" seo="true" ref="index:visual-identity:you-create">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="visual-identity" alt=""/>
+      <caption webpage="you-create" alt=""/>
+    </file>
+    <file name="kkculture-w.png" crc="4074756543" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="kkculture-w_2x.png" crc="3831803255" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="vi-s-w.png" crc="455353902" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="vi-s-w_2x.png" crc="325549715" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="grid-w.png" crc="4106759290" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="grid-w_2x.png" crc="4106759290" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="mv-1.jpg" crc="54024007" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="white-dot-mask.png" crc="144146276" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="white-dot-mask_2x.png" crc="219347723" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="mv-2.jpg" crc="53761973" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="mv-3.jpg" crc="4217344231" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-c-pic.jpg" crc="4276172548" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-c-pic_2x.jpg" crc="216318655" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-b-pic.jpg" crc="101583997" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-b-pic_2x.jpg" crc="508732443" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-a-pic.jpg" crc="511700232" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-a-pic_2x.jpg" crc="3998182096" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-mask.png" crc="26822792" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="marquee-mask_2x.png" crc="25644132" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="vi-l.jpg" crc="137915785" seo="true" ref="visual-identity">
+      <caption webpage="visual-identity" alt=""/>
+    </file>
+    <file name="you-create-favicon.ico" crc="3885619609" ref="you-create"/>
+  </folder>
+  <file name="index.html" crc="460468825" seo="true" mt="1673220754147" redirect="true"/>
+  <file name="visual-identity.html" crc="4116591826" seo="true" mt="1673220353922" redirect="true"/>
+  <file name="you-create.html" crc="209915690" seo="true" mt="1673220361726" redirect="true"/>
+</manifest>

@@ -2,57 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://www.kkculture.com/index.html</loc>
-    <lastmod>2023-01-09</lastmod>
+    <lastmod>2023-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/go.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/go_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/go%20w.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/go%20w_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture-b_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/vi-s-b.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid-b.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture-w.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/kkculture-w_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/vi-s-w.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/vi-s-w_2x.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid-w.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://www.kkculture.com/images/grid-w_2x.png</image:loc>
-    </image:image>
     <image:image>
       <image:loc>http://www.kkculture.com/images/mv-1.jpg</image:loc>
     </image:image>
@@ -68,10 +20,79 @@
     <image:image>
       <image:loc>http://www.kkculture.com/images/mv-3.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go%20w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/pic-distribution.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/go_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/grid-w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-s-w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-w.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/kkculture-w_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/mv-1318x318.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/white-dot-mask320x320.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/white-dot-mask320x320_2x.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/mv-2318x318.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/mv-3318x318.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/pic-distribution250x250.jpg</image:loc>
+    </image:image>
   </url>
   <url>
-    <loc>http://www.kkculture.com/visual-identity.html</loc>
-    <lastmod>2023-01-09</lastmod>
+    <loc>http://www.kkculture.com/about.html</loc>
+    <lastmod>2023-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -93,12 +114,21 @@
       <image:loc>http://www.kkculture.com/images/grid-b_2x.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-l-m.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-l-m_2x.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://www.kkculture.com/images/vi-l.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://www.kkculture.com/images/vi-l320x180.jpg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://www.kkculture.com/you-create.html</loc>
-    <lastmod>2023-01-09</lastmod>
+    <lastmod>2023-02-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
