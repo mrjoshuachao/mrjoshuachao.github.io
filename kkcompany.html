@@ -122,13 +122,13 @@
       --essay-media-gap: 44px;
       --section-gap: 56px;
       --outer-text-gutter: 36px;
-      --award-logo-gap: clamp(3.5px, 0.375vw, 7px);
+      --award-logo-gap: calc(var(--award-logo-size) / 2);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
       --side-title-font-size: var(--page-title-font-size);
       --side-menu-font-size: clamp(16px, 1.15vw, 22px);
       --side-menu-line-extra: 6px;
-      --side-award-logo-gap: var(--award-logo-gap);
+      --side-award-logo-gap: calc(var(--side-award-logo-size) / 2);
       --side-award-logo-size: var(--award-logo-size);
       --side-nav-top-padding: 36px;
       --content-title-top-padding: 32px;
@@ -230,7 +230,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.1";
+      content: "V1.2.2";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -270,7 +270,7 @@
         --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
         --side-menu-font-size: clamp(12px, min(max(16px, 1.15vw), 2.25vh), 22px);
         --side-menu-line-extra: clamp(3px, 0.7vh, 6px);
-        --side-award-logo-gap: clamp(2px, min(max(3.5px, 0.375vw), 0.55vh), 7px);
+        --side-award-logo-gap: calc(var(--side-award-logo-size) / 2);
         --side-award-logo-size: clamp(12px, min(max(16px, 1.75vw), 3vh), 33px);
         --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
       }
@@ -376,7 +376,7 @@
       bottom: var(--award-logo-bottom-offset);
       display: flex;
       align-items: flex-end;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: var(--side-award-logo-gap);
       width: var(--award-logo-row-width, var(--award-logo-min-row-width));
       margin: 0;
@@ -397,7 +397,7 @@
 
     .award-logo-row img {
       display: block;
-      flex: 0 1 var(--side-award-logo-size);
+      flex: 0 0 var(--side-award-logo-size);
       width: var(--side-award-logo-size);
       max-width: calc((100% - (var(--side-award-logo-gap) * 3)) / 4);
       min-width: 0;
@@ -596,6 +596,24 @@
       padding: 12px 20px 14px 0;
       border-bottom: 0;
       font-size: 14px;
+    }
+
+    .archive-footnote {
+      margin: calc(var(--section-gap) * 2) 20px 0 0;
+      max-width: 1120px;
+      color: #808080;
+      font-size: var(--article-body-font-size);
+      line-height: 1.42;
+      letter-spacing: 0;
+    }
+
+    .archive-footnote p {
+      margin: 0;
+    }
+
+    .archive-footnote strong {
+      color: #808080;
+      font-weight: 700;
     }
 
     .essay {
@@ -881,6 +899,23 @@
     .media-frame::after {
       content: none;
     }
+
+    .media-frame.is-fullscreen,
+    .media-frame:fullscreen,
+    .media-frame:-webkit-full-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
+      max-width: 100dvw;
+      max-height: 100dvh;
+      aspect-ratio: auto;
+      background: #000;
+      background-color: #000;
+    }
+
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
       content: none;
@@ -910,6 +945,25 @@
     .media-frame img {
       box-sizing: border-box;
       border: 2px solid rgb(245, 245, 245);
+    }
+
+    .media-frame.is-fullscreen video,
+    .media-frame:fullscreen video,
+    .media-frame:-webkit-full-screen video,
+    video:fullscreen,
+    video:-webkit-full-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
+      max-width: 100dvw;
+      max-height: 100dvh;
+      border: 0;
+      object-fit: contain;
+      background: #000;
+      background-color: #000;
     }
     .media-frame.media-frame-image,
     .media-frame.media-frame-image img,
@@ -1108,10 +1162,14 @@
 
     .image-lightbox__image {
       display: block;
-      width: 100vmin;
-      height: 100vmin;
+      width: 100vw;
+      height: 100vh;
       max-width: 100vw;
       max-height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
+      max-width: 100dvw;
+      max-height: 100dvh;
       border: 0;
       object-fit: contain;
       background: transparent;
@@ -1326,6 +1384,24 @@
       fill: currentColor;
       stroke: none;
       filter: drop-shadow(0 0 2px rgba(40, 40, 40, 0.8));
+      pointer-events: none;
+    }
+
+    .video-time-remaining {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 0 0 auto;
+      min-width: 38px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      text-shadow: 0 0 2px rgba(40, 40, 40, 0.9);
+      white-space: nowrap;
+      user-select: none;
       pointer-events: none;
     }
 
@@ -1563,7 +1639,7 @@
         --article-caption-font-size: 15.5px;
         --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
-        --award-logo-gap: clamp(4px, 1vw, 7px);
+        --award-logo-gap: calc(var(--award-logo-size) / 2);
         --award-logo-min-row-width: 132px;
         --award-logo-size: 26.4px;
         --mobile-award-bottom-buffer: max(56px, calc(env(safe-area-inset-bottom, 0px) + 48px));
@@ -1735,7 +1811,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.1";
+        content: "V1.2.2";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -1827,6 +1903,10 @@
         line-height: calc(var(--page-title-line-height) + 3px);
       }
 
+      .overview-title-subtitle {
+        line-height: 1.24;
+      }
+
       h3 {
         font-size: clamp(11px, 0.92vw, 15px);
       }
@@ -1866,7 +1946,7 @@
       }
 
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        flex-basis: var(--award-logo-size);
+        flex: 0 0 var(--award-logo-size);
         width: var(--award-logo-size);
       }
 
@@ -2036,7 +2116,7 @@
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
         --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
-        --award-logo-gap: clamp(3.5px, 0.9vh, 5px);
+        --award-logo-gap: calc(var(--award-logo-size) / 2);
         --award-logo-min-row-width: 128px;
         --award-logo-size: clamp(15px, 4vh, 24px);
       }
@@ -2093,6 +2173,10 @@
         line-height: calc(var(--page-title-line-height) + 4px);
       }
 
+      .overview-title-subtitle {
+        line-height: 1.24;
+      }
+
       .page::-webkit-scrollbar,
       .side-nav::-webkit-scrollbar,
       .side-nav.is-mobile-menu-open::-webkit-scrollbar,
@@ -2139,7 +2223,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.1";
+        content: "V1.2.2";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2190,7 +2274,7 @@
         bottom: auto;
         display: flex;
         align-items: flex-end;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: var(--award-logo-gap);
         width: var(--award-logo-row-width, var(--award-logo-min-row-width));
         margin: calc(1.15em + 16px) 0 var(--landscape-scroll-bottom);
@@ -2199,7 +2283,7 @@
 
       .award-logo-row img,
       .side-nav.is-mobile-menu-open .award-logo-row img {
-        flex-basis: var(--award-logo-size);
+        flex: 0 0 var(--award-logo-size);
         width: var(--award-logo-size);
         max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
       }
@@ -2314,6 +2398,10 @@
             </article>
           </div>
         </section>
+
+        <div class="archive-footnote" role="note" aria-label="Archived project folders not shown above">
+          <p><strong>Archived project contents not shown above:</strong> KKCOMPANY Logotype &amp; Website, KKCOMPANY Career Logotype, KKCOMPANY Certificate of Achievement - UWC ISAK Innovative Product Pitch, KKCompany Friendly Workplace, KKCompany MA Program Design Thinking, KKCompany Merchandise, KKCompany Talaria Intro Video, KKBook, KKVERSE Intro Video, Our Happy Company Website, Song of Freedom, OurSong App Icon, OurSong 2023 Branding, OurSong Business Card, OurSong Cake, OurSong Certificate Animation, OurSong Certificate Design Guidelines, OurSong Copyright Share Card, OurSong CSC, OurSong DSD Video, OurSong Intro Video, OurSong Logo Design, OurSong Website, OurSong T-Shirt, OurCoin Symbol, OurSong 2023 Branding, OurSong App How-To Videos, OurSong Homepage, OurSong Intro Video, OurSong Laser Seal, OurSong Team T-shirt, OurSong Trivago intro video, OurSong UI, OurSong UI Card Book, OurSong Website Redesign, OurSong Whitepaper, OurStory Mockup Video.</p>
+        </div>
 
         <a class="next-panel-link next-panel-link--flat-bottom" href="kkculture.html" aria-label="Go to KKCulture">
           <span class="next-panel-link__label">Next: KKCulture</span>
@@ -2837,6 +2925,11 @@
           toggleVideoPlayback(video);
         });
 
+        const remainingTime = document.createElement("span");
+        remainingTime.className = "video-time-remaining";
+        remainingTime.textContent = "0:00";
+        remainingTime.setAttribute("aria-label", "Time remaining 0 minutes 0 seconds");
+
         const progress = document.createElement("input");
         progress.className = "video-progress";
         progress.type = "range";
@@ -2849,6 +2942,7 @@
           event.stopPropagation();
           if (!Number.isFinite(video.duration) || video.duration <= 0) return;
           video.currentTime = (Number(progress.value) / 1000) * video.duration;
+          updateVideoTimeRemaining(video);
         });
         const progressHitbox = document.createElement("div");
         progressHitbox.className = "video-progress-hitbox";
@@ -2887,6 +2981,7 @@
         });
 
         controls.appendChild(playButton);
+        controls.appendChild(remainingTime);
         controls.appendChild(progressHitbox);
         controls.appendChild(fullscreenButton);
         frame.appendChild(controls);
@@ -3003,6 +3098,34 @@
       button.title = isPaused ? "Play video" : "Pause video";
     }
 
+    function formatVideoTime(seconds) {
+      const totalSeconds = Math.max(0, Math.ceil(seconds));
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const remainingSeconds = totalSeconds % 60;
+      const paddedSeconds = String(remainingSeconds).padStart(2, "0");
+      if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, "0")}:${paddedSeconds}`;
+      }
+      return `${minutes}:${paddedSeconds}`;
+    }
+
+    function updateVideoTimeRemaining(video) {
+      const timeRemaining = video.closest(".media-frame")?.querySelector(".video-time-remaining");
+      if (!timeRemaining) return;
+      if (!Number.isFinite(video.duration) || video.duration <= 0) {
+        timeRemaining.textContent = "0:00";
+        timeRemaining.setAttribute("aria-label", "Time remaining 0 minutes 0 seconds");
+        return;
+      }
+      const secondsLeft = Math.max(0, video.duration - video.currentTime);
+      const roundedSeconds = Math.max(0, Math.ceil(secondsLeft));
+      const totalMinutes = Math.floor(roundedSeconds / 60);
+      const seconds = roundedSeconds % 60;
+      timeRemaining.textContent = formatVideoTime(secondsLeft);
+      timeRemaining.setAttribute("aria-label", `Time remaining ${totalMinutes} minutes ${seconds} seconds`);
+    }
+
     function seekVideoFromProgressEvent(video, progress, hitbox, event) {
       if (!Number.isFinite(video.duration) || video.duration <= 0) return;
       const rect = hitbox.getBoundingClientRect();
@@ -3011,16 +3134,21 @@
       const progressValue = Math.round(ratio * 1000);
       progress.value = String(progressValue);
       video.currentTime = ratio * video.duration;
+      updateVideoTimeRemaining(video);
     }
 
     function updateVideoProgress(video) {
       const progress = video.closest(".media-frame")?.querySelector(".video-progress");
-      if (!progress || progress.matches(":active")) return;
+      if (!progress) return;
       if (!Number.isFinite(video.duration) || video.duration <= 0) {
         progress.value = "0";
+        updateVideoTimeRemaining(video);
         return;
       }
-      progress.value = String(Math.round((video.currentTime / video.duration) * 1000));
+      if (!progress.matches(":active")) {
+        progress.value = String(Math.round((video.currentTime / video.duration) * 1000));
+      }
+      updateVideoTimeRemaining(video);
     }
 
     function setupAutoplayVideos() {
@@ -3338,18 +3466,22 @@
       const awardRows = document.querySelectorAll(".award-logo-row");
       if (!sideNav || !awardRows.length) return;
       const yearLine = document.querySelector(".side-title span:nth-child(4)");
-      const huaChunLine = document.querySelector(".side-title span:nth-child(2)");
-      const useHuaChunFallback = getVisibleTextLineCount(yearLine) > 1;
-      const titleLine = useHuaChunFallback ? huaChunLine : yearLine;
-      const fallbackText = useHuaChunFallback ? "Hua-Chun" : "2016-2026";
-      const referenceElement = titleLine || yearLine || huaChunLine || document.querySelector(".mobile-menu-title") || document.body;
-      const titleWidth = useHuaChunFallback
-        ? measureTextWidth(fallbackText, referenceElement)
-        : measureElementTextWidth(titleLine) || measureTextWidth(fallbackText, referenceElement);
+      const referenceElement = yearLine || document.querySelector(".mobile-menu-title") || document.body;
+      const titleWidth = measureElementTextWidth(yearLine) || measureTextWidth("2016-2026", referenceElement);
       if (titleWidth > 0) {
+        const logoSize = titleWidth / 5.5;
+        const logoGap = logoSize / 2;
         sideNav.style.setProperty("--award-logo-row-width", `${titleWidth}px`);
+        sideNav.style.setProperty("--side-award-logo-size", `${logoSize}px`);
+        sideNav.style.setProperty("--side-award-logo-gap", `${logoGap}px`);
+        sideNav.style.setProperty("--award-logo-size", `${logoSize}px`);
+        sideNav.style.setProperty("--award-logo-gap", `${logoGap}px`);
       } else {
         sideNav.style.removeProperty("--award-logo-row-width");
+        sideNav.style.removeProperty("--side-award-logo-size");
+        sideNav.style.removeProperty("--side-award-logo-gap");
+        sideNav.style.removeProperty("--award-logo-size");
+        sideNav.style.removeProperty("--award-logo-gap");
       }
     }
 
@@ -3558,8 +3690,6 @@
   </script>
 </body>
 </html>
-
-
 
 
 
