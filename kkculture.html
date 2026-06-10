@@ -465,6 +465,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -803,14 +814,14 @@
     }
 
     .pixel-system-grid [data-id="kkculture-2023-website-screen-recording"] .media-frame {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 1920 / 1028;
       overflow: hidden;
     }
 
     .pixel-system-grid [data-id="kkculture-2023-website-screen-recording"] .media-frame video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
     }
 
     .pixel-system-card--wide {
@@ -876,6 +887,9 @@
       pointer-events: none;
       border: 1px solid var(--site-bg);
       box-shadow: none;
+    }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
     }
 
     .media-frame:fullscreen::after,
@@ -1221,6 +1235,30 @@
       display: none;
     }
 
+    .business-card-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .business-card-grid .media-frame {
+      aspect-ratio: 2388 / 1668;
+      overflow: hidden;
+      background: var(--site-bg);
+    }
+
+    .business-card-grid .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: var(--site-bg);
+    }
+
+    .business-card-grid .card-body {
+      display: none;
+    }
+
     .sound-button {
       position: absolute;
       top: 8px;
@@ -1374,6 +1412,53 @@
       font-size: var(--article-caption-font-size);
       font-weight: 400;
       line-height: 1.1;
+    }
+
+    .card-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .card-title-link:hover,
+    .card-title-link:focus-visible {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      outline: 0;
+    }
+
+    .external-arrow-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 14px;
+      height: 14px;
+      inline-size: 14px;
+      block-size: 14px;
+      min-width: 14px;
+      max-width: 14px;
+      min-height: 14px;
+      max-height: 14px;
+      aspect-ratio: 1 / 1;
+      padding: 0;
+      margin-left: 5px;
+      box-sizing: border-box;
+      background: #000;
+      color: #fff;
+      line-height: 1;
+      vertical-align: middle;
+      flex: 0 0 auto;
+    }
+
+    .external-arrow-icon svg {
+      display: block;
+      width: 11px;
+      height: 11px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3.6;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      overflow: visible;
     }
 
     .document-lead,
@@ -1869,6 +1954,7 @@
       .meeting-grid,
       .book-page-grid,
       .photo-book-grid,
+      .business-card-grid,
       .compact-square-grid,
       .incg-page-grid {
         display: grid;
@@ -1899,6 +1985,7 @@
       .meeting-grid .card + .card,
       .book-page-grid .card + .card,
       .photo-book-grid .card + .card,
+      .business-card-grid .card + .card,
       .compact-square-grid .card + .card,
       .incg-page-grid .card + .card {
         margin-top: 0;
@@ -2236,7 +2323,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kkculture">
         <section class="section" aria-labelledby="kkculture-title">
-          <h2 id="kkculture-title">KKCulture &mdash; Building a Visual System for Culture, Technology, and Creative Infrastructure</h2>
+          <h2 id="kkculture-title"><span class="overview-title-line">KKCulture (2022-2025)</span> <span class="overview-title-subtitle">Building a Visual System for Culture, Technology, and Creative Infrastructure</span></h2>
           <div class="essay">
             <div class="essay-block" lang="en">
               <p>The birth of KKCulture required a clear, intelligent, and symbolically powerful new cultural and corporate identity. The project asked how a company involved in culture, technology, investment, and creative infrastructure should present itself. Its identity had to be minimal without feeling empty, systematic without becoming cold, and durable enough to keep growing.</p>
@@ -2249,38 +2336,98 @@
         </section>
 
         <section class="section" aria-labelledby="kkculture-motion-title">
-          <h2 id="kkculture-motion-title">KKCulture 2025 &ldquo;Connected Dots&rdquo; Motion System</h2>
+          <h2 id="kkculture-motion-title">KKCulture 2022 &ldquo;Connected Dots&rdquo; Motion System</h2>
           <div class="grid">
             <article class="card" data-card data-id="kkculture-dots-concept-video" data-title="KKCulture Dots Concept" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20221125 KKCulture dots concept video\20221125.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-024-20221125.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-024-20221125.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture Dots Concept</h3>
               </div>
             </article>
             <article class="card kkculture-vi-cover-card" data-card data-id="kkculture-inverted-vi" data-title="KKCulture Visual Identity Motion" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20240606 KKCulture Website (Evergreen Fund)\VI-inverted.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-025-vi-inverted.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-025-vi-inverted.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCulture Visual Identity Motion</h3>
               </div>
             </article>
-            <article class="card full-row-card" data-card data-id="kkculture-website-screen-recording" data-title="KKCulture Website 2024" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20240606 KKCulture Website (Evergreen Fund)\1-home-screenshot-20240612.mp4">
-              <div class="media-frame media-frame--cover"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-026-1-home-screenshot-20240612.mp4"></video></div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="kkculture-business-card-title">
+          <h2 id="kkculture-business-card-title">KKCulture 2023 Business Card Unified Design System</h2>
+          <div class="grid business-card-grid">
+            <article class="card" data-card data-id="kkculture-business-card-kkculture" data-title="KKCulture Business Card - KKCulture" data-file-path="asset more\KKCulture\KKCulture Business Card - KKCulture.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kkculture.webp" alt="KKCulture Business Card - KKCulture" decoding="async" loading="lazy" fetchpriority="low" /></div>
               <div class="card-body">
-                <h3>KKCulture Website 2024</h3>
+                <h3>KKCulture Business Card - KKCulture</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-business-card-kkfarm" data-title="KKCulture Business Card - KKFARM" data-file-path="asset more\KKCulture\KKCulture Business Card - KKFARM.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kkfarm.webp" alt="KKCulture Business Card - KKFARM" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture Business Card - KKFARM</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-business-card-kktv" data-title="KKCulture Business Card - KKTV" data-file-path="asset more\KKCulture\KKCulture Business Card - KKTV.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kktv.webp" alt="KKCulture Business Card - KKTV" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture Business Card - KKTV</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-business-card-kklive" data-title="KKCulture Business Card - KKLIVE" data-file-path="asset more\KKCulture\KKCulture Business Card - KKLIVE.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kklive.webp" alt="KKCulture Business Card - KKLIVE" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture Business Card - KKLIVE</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-business-card-kktix" data-title="KKCulture Business Card - KKTIX" data-file-path="asset more\KKCulture\KKCulture Business Card - KKTIX.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kktix.webp" alt="KKCulture Business Card - KKTIX" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture Business Card - KKTIX</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-business-card-back-side" data-title="KKCulture Business Card - Back Side" data-file-path="asset more\KKCulture\KKCulture Business Card - Back Side.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-back-side.webp" alt="KKCulture Business Card - Back Side" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture Business Card - Back Side</h3>
               </div>
             </article>
           </div>
         </section>
 
         <section class="section" aria-labelledby="kkculture-final-title">
-          <h2 id="kkculture-final-title">KKCulture 2023 &ldquo;You Create&rdquo; Pixel System</h2>
+          <h2 id="kkculture-final-title">KKCulture 2023 Website</h2>
           <div class="grid pixel-system-grid">
-            <article class="card pixel-system-card--full" data-card data-id="kkculture-2023-website-screen-recording" data-title="KKCulture 2023 Website" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKCulture 2023\KKCulture 2023.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-031-kkculture-2023.mp4"></video></div>
+            <article class="card pixel-system-card--full" data-card data-id="kkculture-2023-website-screen-recording" data-title="KKCulture 2023 Website" data-file-path="asset more\KKCulture\KKCulture 2023.mp4">
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-031-kkculture-2023.mp4"></video></div>
               <div class="card-body">
-                <h3>KKCulture 2023 Website</h3>
+                <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKCulture-2023/" target="_blank" rel="noopener noreferrer">KKCulture 2023 Website<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 16 8"></path><path d="M10 8h6v6"></path></svg></span></a></h3>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="kkculture-intro-keynote-title">
+          <h2 id="kkculture-intro-keynote-title">KKCulture 2023 Intro Deck Animation Design</h2>
+          <div class="grid">
+            <article class="card" data-card data-id="kkculture-intro-keynote-image" data-title="KKCulture Intro Keynote Image" data-file-path="asset more\KKCulture\KKCulture Intro Keynote.png">
+              <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-intro-keynote.webp" alt="KKCulture Intro Keynote" decoding="async" loading="lazy" fetchpriority="low" /></div>
+              <div class="card-body">
+                <h3>KKCulture 2023 Intro Deck Keynote</h3>
+              </div>
+            </article>
+            <article class="card" data-card data-id="kkculture-intro-keynote-video" data-title="KKCulture Intro Keynote Video" data-file-path="asset more\KKCulture\KKCulture Intro Keynote.mp4">
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-041-kkculture-intro-keynote.mp4"></video></div>
+              <div class="card-body">
+                <h3>KKCulture 2023 Intro Deck Animation</h3>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="kkculture-you-create-title">
+          <h2 id="kkculture-you-create-title">KKCulture 2023 &ldquo;You Create&rdquo; Office Visual System</h2>
+          <div class="grid pixel-system-grid">
             <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-interface-1" data-title="KKCulture &ldquo;You Create&rdquo; Interface 1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-1.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-you-create-interface-1.webp" alt="KKCulture &ldquo;You Create&rdquo; Interface 1" decoding="async" loading="eager" fetchpriority="high" /></div>
               <div class="card-body">
@@ -2305,76 +2452,15 @@
                 <h3>KKCulture &ldquo;You Create&rdquo; Artwork 2</h3>
               </div>
             </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-01" data-title="You Create Pixel Art Print 01" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (01).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-056-you-create-01.webp" alt="You Create Pixel Art Print 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          </div>
+        </section>
+        <section class="section" aria-labelledby="kkculture-2024-website-title">
+          <h2 id="kkculture-2024-website-title">KKCulture 2024 Website Redesign</h2>
+          <div class="grid">
+            <article class="card full-row-card" data-card data-id="kkculture-website-screen-recording" data-title="KKCulture 2024 Website Redesign" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20240606 KKCulture Website (Evergreen Fund)\1-home-screenshot-20240612.mp4">
+              <div class="media-frame media-frame--cover media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-026-1-home-screenshot-20240612.mp4"></video></div>
               <div class="card-body">
-                <h3>You Create Pixel Art Print 01</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-02" data-title="You Create Pixel Art Print 02" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (02).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-057-you-create-02.webp" alt="You Create Pixel Art Print 02" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 02</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-03" data-title="You Create Pixel Art Print 03" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (03).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-058-you-create-03.webp" alt="You Create Pixel Art Print 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 03</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-04" data-title="You Create Pixel Art Print 04" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (04).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-059-you-create-04.webp" alt="You Create Pixel Art Print 04" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 04</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-05" data-title="You Create Pixel Art Print 05" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (05).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-060-you-create-05.webp" alt="You Create Pixel Art Print 05" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 05</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-06" data-title="You Create Pixel Art Print 06" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (06).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-061-you-create-06.webp" alt="You Create Pixel Art Print 06" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 06</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-07" data-title="You Create Pixel Art Print 07" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (07).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-062-you-create-07.webp" alt="You Create Pixel Art Print 07" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 07</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-08" data-title="You Create Pixel Art Print 08" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (08).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-063-you-create-08.webp" alt="You Create Pixel Art Print 08" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 08</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-09" data-title="You Create Pixel Art Print 09" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (09).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-064-you-create-09.webp" alt="You Create Pixel Art Print 09" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 09</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-10" data-title="You Create Pixel Art Print 10" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (10).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-065-you-create-10.webp" alt="You Create Pixel Art Print 10" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 10</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-11" data-title="You Create Pixel Art Print 11" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (11).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-066-you-create-11.webp" alt="You Create Pixel Art Print 11" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 11</h3>
-              </div>
-            </article>
-            <article class="card" data-card data-id="kkculture-you-create-pixel-art-print-12" data-title="You Create Pixel Art Print 12" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\20230218 KKCulture You Create pixel arts PRINT\You Create (12).png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-067-you-create-12.webp" alt="You Create Pixel Art Print 12" decoding="async" loading="lazy" fetchpriority="low" /></div>
-              <div class="card-body">
-                <h3>You Create Pixel Art Print 12</h3>
+                <h3><a class="card-title-link" href="https://www.kkculture.com/" target="_blank" rel="noopener noreferrer">KKCulture 2024 Website Redesign<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 16 8"></path><path d="M10 8h6v6"></path></svg></span></a></h3>
               </div>
             </article>
           </div>

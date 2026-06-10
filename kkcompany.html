@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -772,6 +783,15 @@
       grid-column: 1 / -1;
     }
 
+    .process-equal-row {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 2158fr) minmax(0, 1634fr);
+      gap: 10px;
+      align-items: start;
+      background: var(--site-bg);
+    }
+
     .process-grid [data-id^="kkcompany-process-logo-design-blog-k-00"] .media-frame {
       aspect-ratio: auto;
       overflow: visible;
@@ -867,6 +887,9 @@
       border: 1px solid var(--site-bg);
       box-shadow: none;
     }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
+    }
 
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
@@ -903,6 +926,19 @@
 
     .media-frame--cover video,
     .media-frame--cover img {
+      object-fit: cover;
+    }
+
+    [data-id="kkcompany-career-website-design"] .media-frame,
+    [data-id="kkcompany-search-interface-design"] .media-frame {
+      aspect-ratio: 1920 / 1028;
+      overflow: hidden;
+    }
+
+    [data-id="kkcompany-career-website-design"] .media-frame video,
+    [data-id="kkcompany-search-interface-design"] .media-frame video {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
@@ -2220,7 +2256,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kkcompany">
         <section class="section" aria-labelledby="kkcompany-worldview-title">
-          <h2 id="kkcompany-worldview-title">KKCompany &mdash; Turning Organizational Complexity into a Coherent Technology Brand</h2>
+          <h2 id="kkcompany-worldview-title"><span class="overview-title-line">KKCompany (2021-2022)</span> <span class="overview-title-subtitle">Turning Organizational Complexity into a Coherent Technology Brand</span></h2>
           <div class="essay">
             <div class="essay-block" lang="en">
               <p>The KKCompany identity and worldview work began with the need to describe a company that had grown beyond a single product. As the organization evolved, it required a creative system capable of carrying culture, technology, talent, and corporate purpose at the same time. The project set out to build a recognizable voice for the company, and a visual structure that could support future storytelling.</p>
@@ -2232,7 +2268,7 @@
           </div>
           <div class="grid">
             <article class="card kkcompany-card kkcompany-final-card" data-card data-id="kkcompany-worldview-final" data-title="KKCompany Worldview" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\11 FINAL MIX\KKCompany worldview video 20211124A FINAL MIX.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-023-kkcompany-worldview-video-20211124a-final-.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-023-kkcompany-worldview-video-20211124a-final-.mp4"></video></div>
               <div class="card-body">
                 <h3>KKCompany Worldview</h3>
               </div>
@@ -2243,17 +2279,31 @@
         <section class="section" aria-labelledby="kkcompany-process-title">
           <h2 id="kkcompany-process-title">Process Sketches &amp; Concept Development</h2>
           <div class="grid process-grid">
-            <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00" data-title="KKCompany Logo Design Process" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\k-00-crop.png">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-050-k-00-crop.webp" alt="KKCompany Logo Design Process" decoding="async" loading="eager" fetchpriority="high" /></div>
-            </article>
-            <article class="card kkcompany-card process-card--full" data-card data-id="kkcompany-process-logo-design-blog-k-00-2" data-title="KKCompany Logo Design Process Detail" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\img-050-k-00-crop-2.jpg">
-              <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-050-k-00-crop-2.jpg" alt="KKCompany Logo Design Process Detail" decoding="async" loading="eager" fetchpriority="high" /></div>
-            </article>
+            <div class="process-equal-row">
+              <article class="card kkcompany-card" data-card data-id="kkcompany-process-logo-design-blog-k-00" data-title="KKCompany Logo Design Process" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\k-00-crop.png">
+                <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-050-k-00-crop.webp" alt="KKCompany Logo Design Process" decoding="async" loading="eager" fetchpriority="high" /></div>
+              </article>
+              <article class="card kkcompany-card" data-card data-id="kkcompany-process-logo-design-blog-k-00-2" data-title="KKCompany Logo Design Process Detail" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20210809 KKCOMPANY worldview video\img-050-k-00-crop-2.jpg">
+                <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-050-k-00-crop-2.jpg" alt="KKCompany Logo Design Process Detail" decoding="async" loading="eager" fetchpriority="high" /></div>
+              </article>
+            </div>
             <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-logotype-old-color" data-title="KKCompany Old Color Logotype" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\KKCOMPANY-logotype-old-color-1920x1080.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkcompany-logotype-old-color-1920x1080.webp" alt="KKCompany Old Color Logotype" decoding="async" loading="eager" fetchpriority="high" /></div>
             </article>
             <article class="card kkcompany-card process-card--half" data-card data-id="kkcompany-process-logotype-old-color-swatch" data-title="KKCompany Old Color Logotype Swatch" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKCompany Worldview\20220127 KK blog interview KKCOMPANY logo design\pic\KKCOMPANY-logotype-old-color-swatch-1920x1080.png">
               <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkcompany-logotype-old-color-swatch-1920x1080.webp" alt="KKCompany Old Color Logotype Swatch" decoding="async" loading="eager" fetchpriority="high" /></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="kkcompany-career-website-title">
+          <h2 id="kkcompany-career-website-title">KKCompany Career Website &amp; Search Interface Design</h2>
+          <div class="grid">
+            <article class="card kkcompany-card" data-card data-id="kkcompany-career-website-design" data-title="KKCompany Career Website Design" data-file-path="asset more\KKCompany\KKCompany Career 1.mp4">
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-039-kkcompany-career-1.mp4"></video></div>
+            </article>
+            <article class="card kkcompany-card" data-card data-id="kkcompany-search-interface-design" data-title="KKCompany Search Interface Design" data-file-path="asset more\KKCompany\KKCompany Career 2.mp4">
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-040-kkcompany-career-2.mp4"></video></div>
             </article>
           </div>
         </section>

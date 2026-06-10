@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -866,6 +877,9 @@
       pointer-events: none;
       border: 1px solid var(--site-bg);
       box-shadow: none;
+    }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
     }
 
     .media-frame:fullscreen::after,
@@ -2220,7 +2234,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="ace">
         <section class="section" aria-labelledby="ace-title">
-          <h2 id="ace-title">Applied Creativity Engine &mdash; Redesigning Human Creativity for the AI Era</h2>
+          <h2 id="ace-title"><span class="overview-title-line">Applied Creativity Engine (2023-2026)</span> <span class="overview-title-subtitle">Redesigning Human Creativity for the AI Era</span></h2>
           <div class="essay">
             <div class="essay-block" lang="en">
               <p>Joshua Chao and Chris Lin created Applied Creativity Engine (ACE) because they saw a growing gap between the speed of AI and the pace of traditional education. Their question was not only how to teach people new tools, but how to help them stay meaningfully human as execution, information, and even reasoning become increasingly automated. ACE began as experiments in AI, creativity, and education, then grew into a response to a larger cultural challenge: if AI makes knowledge cheap, human curiosity, judgment, empathy, and story become more valuable than ever.</p>

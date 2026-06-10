@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -867,6 +878,9 @@
       border: 1px solid var(--site-bg);
       box-shadow: none;
     }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
+    }
 
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
@@ -918,28 +932,6 @@
 
     img.is-image-repainting:not(.image-lightbox__image) {
       opacity: 0.999;
-    }
-
-    .concert-grid .media-frame {
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      background: var(--site-bg);
-    }
-
-    .concert-grid .media-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      background: var(--site-bg);
-    }
-
-    .concert-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .concert-grid .card-body {
-      display: none;
     }
 
     .meeting-grid {
@@ -1203,6 +1195,30 @@
     }
 
     .photo-book-grid .card-body {
+      display: none;
+    }
+
+    .sui-cover-art-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .sui-cover-art-grid .media-frame {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--site-bg);
+    }
+
+    .sui-cover-art-grid .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      background: var(--site-bg);
+    }
+
+    .sui-cover-art-grid .card-body {
       display: none;
     }
 
@@ -1849,10 +1865,10 @@
 
       .process-grid,
       .pixel-system-grid,
-      .concert-grid,
       .meeting-grid,
       .book-page-grid,
       .photo-book-grid,
+      .sui-cover-art-grid,
       .compact-square-grid,
       .incg-page-grid {
         display: grid;
@@ -1862,7 +1878,6 @@
 
       .process-grid,
       .pixel-system-grid,
-      .concert-grid,
       .meeting-grid,
       .book-page-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1877,12 +1892,16 @@
         grid-template-columns: 1fr;
       }
 
+      .sui-cover-art-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
       .process-grid .card + .card,
       .pixel-system-grid .card + .card,
-      .concert-grid .card + .card,
       .meeting-grid .card + .card,
       .book-page-grid .card + .card,
       .photo-book-grid .card + .card,
+      .sui-cover-art-grid .card + .card,
       .compact-square-grid .card + .card,
       .incg-page-grid .card + .card {
         margin-top: 0;
@@ -2220,7 +2239,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kkfarm">
     <section class="section" aria-labelledby="kkfarm-overview-title">
-      <h2 id="kkfarm-overview-title">KKFARM &mdash; Building an Artist World Across Music, Video, and Live Experience</h2>
+      <h2 id="kkfarm-overview-title"><span class="overview-title-line">KKFARM (2016-2018)</span> <span class="overview-title-subtitle">Building an Artist World Across Music, Video, and Live Experience</span></h2>
       <div class="essay">
         <div class="essay-block" lang="en">
           <p>KKFARM began with its first signed artist, Julia Wu, and the work centered on shaping the public image of a young artist into a system deeper than any single release. The task was to build continuity for sound, attitude, vulnerability, and rhythm. Rather than treating each song as an isolated object, the project imagined Julia as a world that could unfold over time.</p>
@@ -2237,49 +2256,49 @@
       <h2 id="kkfarm-music-videos-jutv-title">Music Videos &amp; jutv</h2>
       <div class="grid">
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-01" data-title="Under the Taipei Night Sky - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Under the Taipei Night Sky - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-007-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-007-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Under the Taipei Night Sky - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-02" data-title="For You, I Brave the Cold Wind - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\For You, I Brave the Cold Wind - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-008-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-008-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>For You, I Brave the Cold Wind - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-03" data-title="Night (Acoustic) - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Night (Acoustic) - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-009-acoustic-julia-wu-official-music-video-jul.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-009-acoustic-julia-wu-official-music-video-jul.mp4"></video></div>
           <div class="card-body">
             <h3>Night (Acoustic) - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-04" data-title="Bottom Line - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Bottom Line - Julia Wu | Official Lyric Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-010-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-010-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Bottom Line - Official Lyric Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-05" data-title="Don't Cry Anymore - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Don't Cry Anymore - Julia Wu | Official Lyric Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-011-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-011-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Don't Cry Anymore - Official Lyric Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="jutv Ep. 01 This One Has Something" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 01 This One Has Something - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 01 This One Has Something</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="jutv Ep. 03 It Looks Great" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 03 It Looks Great - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 03 It Looks Great</h3>
           </div>
@@ -2467,127 +2486,97 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="kkfarm-concert-title">
-      <h2 id="kkfarm-concert-title">Anniversary Concert at Clapper Studio</h2>
-      <div class="grid concert-grid">
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-01" data-title="Julia Wu Concert Photo 01" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\IMG_9585.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-030-img-9585.webp" alt="Julia Wu Concert Photo 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
+    <section class="section" aria-labelledby="kkfarm-project-sui-cover-arts-title">
+      <h2 id="kkfarm-project-sui-cover-arts-title">Project SUI Cover Arts</h2>
+      <div class="grid sui-cover-art-grid">
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-01" data-title="Project SUI Cover Art 01" data-file-path="asset more\KKFARM\SUI Cover 01.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-01.webp" alt="Project SUI Cover Art 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 01</h3>
+            <h3>Project SUI Cover Art 01</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-03" data-title="Julia Wu Concert Photo 03" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4043.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-031-jas-4043.webp" alt="Julia Wu Concert Photo 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-02" data-title="Project SUI Cover Art 02" data-file-path="asset more\KKFARM\SUI Cover 02.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-02.webp" alt="Project SUI Cover Art 02" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 03</h3>
+            <h3>Project SUI Cover Art 02</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-04" data-title="Julia Wu Concert Photo 04" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4056.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-032-jas-4056.webp" alt="Julia Wu Concert Photo 04" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-03" data-title="Project SUI Cover Art 03" data-file-path="asset more\KKFARM\SUI Cover 03.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-03.webp" alt="Project SUI Cover Art 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 04</h3>
+            <h3>Project SUI Cover Art 03</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-05" data-title="Julia Wu Concert Photo 05" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4085.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-033-jas-4085.webp" alt="Julia Wu Concert Photo 05" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-04" data-title="Project SUI Cover Art 04" data-file-path="asset more\KKFARM\SUI Cover 04.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-04.webp" alt="Project SUI Cover Art 04" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 05</h3>
+            <h3>Project SUI Cover Art 04</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-10" data-title="Julia Wu Concert Photo 10" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4255.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-034-jas-4255.webp" alt="Julia Wu Concert Photo 10" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-05" data-title="Project SUI Cover Art 05" data-file-path="asset more\KKFARM\SUI Cover 05.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-05.webp" alt="Project SUI Cover Art 05" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 10</h3>
+            <h3>Project SUI Cover Art 05</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-14" data-title="Julia Wu Concert Photo 14" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4394.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-035-jas-4394.webp" alt="Julia Wu Concert Photo 14" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-06" data-title="Project SUI Cover Art 06" data-file-path="asset more\KKFARM\SUI Cover 06.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-06.webp" alt="Project SUI Cover Art 06" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 14</h3>
+            <h3>Project SUI Cover Art 06</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-17" data-title="Julia Wu Concert Photo 17" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4433.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-036-jas-4433.webp" alt="Julia Wu Concert Photo 17" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-07" data-title="Project SUI Cover Art 07" data-file-path="asset more\KKFARM\SUI Cover 07.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-07.webp" alt="Project SUI Cover Art 07" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 17</h3>
+            <h3>Project SUI Cover Art 07</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-20" data-title="Julia Wu Concert Photo 20" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4465.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-037-jas-4465.webp" alt="Julia Wu Concert Photo 20" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-08" data-title="Project SUI Cover Art 08" data-file-path="asset more\KKFARM\SUI Cover 08.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-08.webp" alt="Project SUI Cover Art 08" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 20</h3>
+            <h3>Project SUI Cover Art 08</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-22" data-title="Julia Wu Concert Photo 22" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4524.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-038-jas-4524.webp" alt="Julia Wu Concert Photo 22" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-09" data-title="Project SUI Cover Art 09" data-file-path="asset more\KKFARM\SUI Cover 09.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-09.webp" alt="Project SUI Cover Art 09" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 22</h3>
+            <h3>Project SUI Cover Art 09</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-27" data-title="Julia Wu Concert Photo 27" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4588.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-039-jas-4588.webp" alt="Julia Wu Concert Photo 27" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-10" data-title="Project SUI Cover Art 10" data-file-path="asset more\KKFARM\SUI Cover 10.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-10.webp" alt="Project SUI Cover Art 10" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 27</h3>
+            <h3>Project SUI Cover Art 10</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-29" data-title="Julia Wu Concert Photo 29" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4605.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-040-jas-4605.webp" alt="Julia Wu Concert Photo 29" decoding="async" loading="lazy" fetchpriority="low" /></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="kkfarm-project-sui-music-videos-title">
+      <h2 id="kkfarm-project-sui-music-videos-title">Project SUI Music Videos</h2>
+      <div class="grid">
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-julia-wu-dial-up" data-title="SUI - Julia Wu - Dial Up" data-file-path="asset more\KKFARM\SUI - Julia Wu - Dial Up.mp4">
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-035-sui-julia-wu-dial-up.mp4"></video></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 29</h3>
+            <h3>SUI - Julia Wu - Dial Up</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-34" data-title="Julia Wu Concert Photo 34" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4724.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-041-jas-4724.webp" alt="Julia Wu Concert Photo 34" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-sophy-dwc" data-title="SUI - Sophy - DWC" data-file-path="asset more\KKFARM\SUI - Sophy - DWC.mp4">
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-034-sui-sophy-dwc.mp4"></video></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 34</h3>
+            <h3>SUI - Sophy - DWC</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-36" data-title="Julia Wu Concert Photo 36" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4745.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-042-jas-4745.webp" alt="Julia Wu Concert Photo 36" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-ching-g-squad-coconut-tree" data-title="SUI - Ching G Squad - Coconut Tree" data-file-path="asset more\KKFARM\SUI - Ching G Squad - Coconut Tree.mp4">
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-036-sui-ching-g-squad-coconut-tree.mp4"></video></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 36</h3>
+            <h3>SUI - Ching G Squad - Coconut Tree</h3>
           </div>
         </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-37" data-title="Julia Wu Concert Photo 37" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4764.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-043-jas-4764.webp" alt="Julia Wu Concert Photo 37" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-eileen-yo-for-you" data-title="SUI - Eileen Yo - For You" data-file-path="asset more\KKFARM\SUI - Eileen Yo - For You.mp4">
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-037-sui-eileen-yo-for-you.mp4"></video></div>
           <div class="card-body">
-            <h3>Julia Wu Concert Photo 37</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-40" data-title="Julia Wu Concert Photo 40" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4795.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-044-jas-4795.webp" alt="Julia Wu Concert Photo 40" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 40</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-43" data-title="Julia Wu Concert Photo 43" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_4924.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-045-jas-4924.webp" alt="Julia Wu Concert Photo 43" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 43</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-46" data-title="Julia Wu Concert Photo 46" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_5118.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-046-jas-5118.webp" alt="Julia Wu Concert Photo 46" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 46</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-48" data-title="Julia Wu Concert Photo 48" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_5176.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-047-jas-5176.webp" alt="Julia Wu Concert Photo 48" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 48</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-49" data-title="Julia Wu Concert Photo 49" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\JAS_5323.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-048-jas-5323.webp" alt="Julia Wu Concert Photo 49" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 49</h3>
-          </div>
-        </article>
-        <article class="card kfarm-card" data-card data-id="kkfarm-concert-50" data-title="Julia Wu Concert Photo 50" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia&#x27;s House Party\Photos by Jasmine\Julia&#x27;s House Party\KUO_1423.jpg">
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-049-kuo-1423.webp" alt="Julia Wu Concert Photo 50" decoding="async" loading="lazy" fetchpriority="low" /></div>
-          <div class="card-body">
-            <h3>Julia Wu Concert Photo 50</h3>
+            <h3>SUI - Eileen Yo - For You</h3>
           </div>
         </article>
       </div>

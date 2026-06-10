@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -867,6 +878,9 @@
       border: 1px solid var(--site-bg);
       box-shadow: none;
     }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
+    }
 
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
@@ -1009,6 +1023,33 @@
       display: none;
     }
 
+        .kktv-landing-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .kktv-trailer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .kktv-landing-grid .media-frame,
+    .kktv-trailer-grid .media-frame {
+      aspect-ratio: 16 / 9;
+    }
+
+    .kktv-landing-grid .card-body {
+      display: block;
+    }
+        .kktv-prepaid-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .kktv-prepaid-grid .media-frame {
+      aspect-ratio: 4679 / 1642;
+    }
+
+    .kktv-prepaid-grid .card-body {
+      display: block;
+    }
     body.is-lightbox-open {
       overflow: hidden;
     }
@@ -1361,7 +1402,52 @@
       line-height: 1.1;
     }
 
-    .document-lead,
+        .card-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .card-title-link:hover,
+    .card-title-link:focus-visible {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      outline: 0;
+    }
+    .external-arrow-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 14px;
+      height: 14px;
+      inline-size: 14px;
+      block-size: 14px;
+      min-width: 14px;
+      max-width: 14px;
+      min-height: 14px;
+      max-height: 14px;
+      aspect-ratio: 1 / 1;
+      padding: 0;
+      margin-left: 5px;
+      box-sizing: border-box;
+      background: #000;
+      color: #fff;
+      line-height: 1;
+      vertical-align: middle;
+      flex: 0 0 14px;
+    }
+
+    .external-arrow-icon svg {
+      display: block;
+      width: 11px;
+      height: 11px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3.6;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      overflow: visible;
+    }
+.document-lead,
     .document-copy p,
     .document-copy li,
     .resume-entry p,
@@ -2175,6 +2261,27 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+    @media (max-width: 760px) {
+      .kktv-landing-grid,
+      .kktv-trailer-grid {
+        display: grid;
+        gap: 10px;
+        background: var(--site-bg);
+      }
+
+      .kktv-landing-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .kktv-trailer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .kktv-landing-grid .card + .card,
+      .kktv-trailer-grid .card + .card {
+        margin-top: 0;
+      }
+    }
   </style>
   <div class="layout">
     <aside class="side-nav" aria-label="Portfolio menu">
@@ -2220,7 +2327,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kktv">
     <section class="section" aria-labelledby="kktv-overview-title">
-      <h2 id="kktv-overview-title">KKTV &mdash; Launching a Streaming Brand Across Identity, Product, and Campaign</h2>
+      <h2 id="kktv-overview-title"><span class="overview-title-line">KKTV (2016)</span> <span class="overview-title-subtitle">Launching a Streaming Brand Across Identity, Product, and Campaign</span></h2>
       <div class="essay">
         <div class="essay-block" lang="en">
           <p>KKTV was a brand launch project shaped by clear strategic pressure: a new streaming brand had to be understood quickly in a crowded market. The purpose of the work was to build a complete public face for the service, from identity and product expression to advertising and screen communication. It became a brand system designed for immediate recognition and long-term use.</p>
@@ -2237,7 +2344,7 @@
       <div class="grid">
 
         <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
@@ -2254,7 +2361,7 @@
           </div>
         </article>
         <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
@@ -2271,7 +2378,7 @@
           </div>
         </article>
         <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
@@ -2288,7 +2395,7 @@
           </div>
         </article>
         <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
@@ -2306,12 +2413,121 @@
         </article>
       </div>
     </section>
+    <section class="section" aria-labelledby="kktv-landing-page-title">
+      <h2 id="kktv-landing-page-title">KKTV Landing Page</h2>
+      <div class="grid kktv-landing-grid">
+        <article class="card" data-card data-id="kktv-landing-page-01" data-title="KKTV Landing Page Hero 1" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 1.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-01.webp" alt="KKTV Landing Page Hero 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="card-body">
+            <h3>KKTV Landing Page Hero 1</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Landing Page Hero 1 from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-card data-id="kktv-landing-page-02" data-title="KKTV Landing Page Hero 2" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 2.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-02.webp" alt="KKTV Landing Page Hero 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="card-body">
+            <h3>KKTV Landing Page Hero 2</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Landing Page Hero 2 from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-card data-id="kktv-landing-page-03" data-title="KKTV Landing Page Hero 3" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 3.jpg">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-03.webp" alt="KKTV Landing Page Hero 3" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="card-body">
+            <h3>KKTV Landing Page Hero 3</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Landing Page Hero 3 from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="kktv-trailers-title">
+      <h2 id="kktv-trailers-title">KKTV Drama Trailers</h2>
+      <div class="grid kktv-trailer-grid">
+        <article class="card" data-card data-id="kktv-drama-trailer" data-title="KKTV Drama Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Drama Trailer.mov">
+          <div class="media-frame media-frame-video">
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-032-kktv-drama-trailer.mp4"></video>
+          </div>
+          <div class="card-body">
+            <h3>KKTV Drama Trailer</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Drama Trailer from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-card data-id="kktv-original-trailer" data-title="KKTV Original Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Original Trailer.mov">
+          <div class="media-frame media-frame-video">
+            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-033-kktv-original-trailer.mp4"></video>
+          </div>
+          <div class="card-body">
+            <h3>KKTV Original Trailer</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Original Trailer from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="kktv-prepaid-cards-title">
+      <h2 id="kktv-prepaid-cards-title">KKTV Prepaid Cards</h2>
+      <div class="grid kktv-prepaid-grid">
+        <article class="card" data-card data-id="kktv-prepaid-cards" data-title="KKTV Convenience Store Prepaid Cards" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV-Prepaid-Cards.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-prepaid-cards.webp?v=20260610-200544" alt="KKTV Convenience Store Prepaid Cards" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="card-body">
+            <h3>KKTV Convenience Store Prepaid Cards</h3>
+            <div class="card-tools">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Convenience Store Prepaid Cards from page" title="Remove from page">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
+                  <path d="M6 10h12l-1 11H7L6 10Z"></path>
+                  <path d="M10 12v7M14 12v7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
     <section class="section" aria-labelledby="guidelines-source-title">
       <h2 id="guidelines-source-title">KKTV Guidelines &amp; Materials</h2>
       <div class="grid">
 
         <article class="card" data-card data-id="guidelines-source-08" data-title="KKTV Full HD Trailer Ending Animation" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\__GUIDELINES\m\video animation trailer\Animation_Trailer_Ending.mov">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4"></video>
           </div>
           <div class="card-body">
@@ -2329,11 +2545,11 @@
         </article>
 
         <article class="card" data-card data-id="guidelines-screen-record-01" data-title="KKTV Guidelines &amp; Materials Open Database" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKTV Guidelines & Materials Website\screen record.mp4">
-          <div class="media-frame">
+          <div class="media-frame media-frame-video">
             <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4"></video>
           </div>
           <div class="card-body">
-            <h3>KKTV Guidelines &amp; Materials Open Database</h3>
+            <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 16 8"></path><path d="M10 8h6v6"></path></svg></span></a></h3>
             <div class="card-tools">
               <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Guidelines &amp; Materials Open Database from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">

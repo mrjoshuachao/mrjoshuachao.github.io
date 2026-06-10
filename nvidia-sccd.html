@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -866,6 +877,9 @@
       pointer-events: none;
       border: 1px solid var(--site-bg);
       box-shadow: none;
+    }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
     }
 
     .media-frame:fullscreen::after,
@@ -2220,7 +2234,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="nvidia-sccd">
         <section class="section" aria-labelledby="nvidia-sccd-title">
-          <h2 id="nvidia-sccd-title">NVIDIA x SCCD &mdash; Turning Early-Stage Generative AI into Cinematic Grammar</h2>
+          <h2 id="nvidia-sccd-title"><span class="overview-title-line">NVIDIA x SCCD (2023)</span> <span class="overview-title-subtitle">Turning Early-Stage Generative AI into Cinematic Grammar</span></h2>
           <div class="essay">
             <div class="essay-block" lang="en">
               <p>Project NV began with a question of authorship: what happens when music, narrative, and machine imagination enter the same creative space. Built within the collaboration between OurSong, NVIDIA, and SCCD, the project was not about decorating technology, but testing whether generative AI could become a cinematic creative partner, translating a song into atmosphere, memory, motion, and public cultural meaning.</p>
@@ -2236,7 +2250,7 @@
           <h2 id="nvidia-sccd-final-title">NVIDIA Computex &ldquo;NV&rdquo; Showreel</h2>
           <div class="grid">
             <article class="card full-row-card" data-card data-id="nvidia-sccd-project-nv-final-film" data-title="NVIDIA Computex &ldquo;NV&rdquo; Showreel" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\OurSong x NVIDIA x SCCD Project NV\20230425 SCCD X OurSong NV Reel by Rex\SCCD X OurSong_NV_Reel_0425.mov">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-027-sccd-x-oursong-nv-reel-0425.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-027-sccd-x-oursong-nv-reel-0425.mp4"></video></div>
               <div class="card-body">
                 <h3>NVIDIA Computex &ldquo;NV&rdquo; Showreel</h3>
               </div>
@@ -2279,19 +2293,19 @@
           </div>
           <div class="grid kimberley-video-grid">
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1</h3>
               </div>
             </article>
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2</h3>
               </div>
             </article>
             <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
-              <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
+              <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4"></video></div>
               <div class="card-body">
                 <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3</h3>
               </div>

@@ -466,6 +466,17 @@
       font-size: var(--side-title-font-size);
     }
 
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
+    }
+
     .section h2 + .grid,
     .section h2 + .essay {
       margin-top: var(--heading-content-gap);
@@ -867,6 +878,9 @@
       border: 1px solid var(--site-bg);
       box-shadow: none;
     }
+    .media-frame.media-frame-video::after {
+      border-color: #fff;
+    }
 
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
@@ -1176,6 +1190,72 @@
 
     .book-page-grid .card-body {
       display: none;
+    }
+
+    .brand-book-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .brand-book-grid .media-frame {
+      aspect-ratio: 1000 / 707;
+      overflow: hidden;
+      background: var(--site-bg);
+    }
+
+    .brand-book-grid .media-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: var(--site-bg);
+    }
+
+    .brand-book-grid .card-body {
+      display: none;
+    }
+
+    .brand-book-caption {
+      grid-column: 1 / -1;
+      padding: 2px 0 10px 1px;
+    }
+
+    .brand-book-application-card {
+      grid-column: 1 / -1;
+    }
+
+    .brand-book-video-card {
+      grid-column: 1 / -1;
+    }
+
+    .brand-book-feature-row {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .brand-book-feature-row .brand-book-application-card,
+    .brand-book-feature-row .brand-book-video-card {
+      grid-column: auto;
+    }
+
+    .brand-book-grid .brand-book-application-card .media-frame {
+      aspect-ratio: 16 / 9;
+    }
+
+    .brand-book-grid .brand-book-video-card .media-frame {
+      aspect-ratio: 16 / 9;
+    }
+
+    .brand-book-grid .brand-book-application-card .card-body {
+      display: block;
+    }
+
+    .brand-book-grid .brand-book-video-card .card-body {
+      display: block;
     }
 
     .photo-book-grid {
@@ -1852,6 +1932,7 @@
       .concert-grid,
       .meeting-grid,
       .book-page-grid,
+      .brand-book-grid,
       .photo-book-grid,
       .compact-square-grid,
       .incg-page-grid {
@@ -1864,7 +1945,8 @@
       .pixel-system-grid,
       .concert-grid,
       .meeting-grid,
-      .book-page-grid {
+      .book-page-grid,
+      .brand-book-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -1882,6 +1964,7 @@
       .concert-grid .card + .card,
       .meeting-grid .card + .card,
       .book-page-grid .card + .card,
+      .brand-book-grid .card + .card,
       .photo-book-grid .card + .card,
       .compact-square-grid .card + .card,
       .incg-page-grid .card + .card {
@@ -2220,7 +2303,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="kkbox-group">
     <section class="section" aria-labelledby="kkbox-group-recruit-title">
-      <h2 id="kkbox-group-recruit-title">KKBOX Group &mdash; Turning Company Culture into a Series of Mini Episodes</h2>
+      <h2 id="kkbox-group-recruit-title"><span class="overview-title-line">KKBOX Group (2018-2021)</span> <span class="overview-title-subtitle">Turning Company Culture into Mini Episode Series</span></h2>
       <div class="essay">
         <div class="essay-block" lang="en">
           <p>The branding and corporate hiring campaign for KKBOX Group began with a question: how should a technology company express the cultural force behind it? The project existed to attract talent, communicate internal values, and translate organizational life into an outward-facing story. It treated recruiting as storytelling, not administrative information.</p>
@@ -2233,25 +2316,25 @@
       <h2 id="kkbox-group-image-recruitment-title">KKBOX Group Image &amp; Recruitment</h2>
       <div class="grid">
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-01" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Corporate Image Campaign + MA Program Recruitment\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.1_Final_4K.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-015-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #1</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-02" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Corporate Image Campaign + MA Program Recruitment\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.2_Final_4K.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-016-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #2</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-03" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Corporate Image Campaign + MA Program Recruitment\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.3_Final_4K.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-017-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #3</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkbox-group-final-04" data-title="KKBOX Group Image &amp; Recruitment Mini Episode #4" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKBOX GROUP Recruit\20201028 KKBOX GROUP 2021 Corporate Image Campaign + MA Program Recruitment\20210201 all episodes 4K files FINAL\KKBOX_GROUP_2021_MAprogram_CorpImage_CF_Series_Ep.4_Final_4K.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-018-kkbox-group-2021-maprogram-corpimage-cf-se.mp4"></video></div>
           <div class="card-body">
             <h3>KKBOX Group Image &amp; Recruitment Mini Episode #4</h3>
           </div>
@@ -2260,7 +2343,7 @@
     </section>
 
     <section class="section" aria-labelledby="kkstream-blendvision-title">
-      <h2 id="kkstream-blendvision-title">BlendVision &mdash; Making Enterprise Streaming Infrastructure Visible</h2>
+      <h2 id="kkstream-blendvision-title"><span class="overview-title-line">BlendVision (2020)</span> <span class="overview-title-subtitle">Making Enterprise Streaming Infrastructure Visible</span></h2>
       <div class="essay">
         <div class="essay-block" lang="en">
           <p>KKStream BlendVision called for another kind of narrative: turning enterprise streaming technology into something visible, memorable, and felt. The project existed because infrastructure, without form, is difficult to understand or trust. The creative challenge was to translate backend capability into a visual language, allowing clients to grasp its value before they had to understand its architecture.</p>
@@ -2272,29 +2355,82 @@
       </div>
       <div class="grid blendvision-grid">
         <article class="card kkbox-group-card blendvision-worldview" data-card data-id="kkstream-blendvision-worldview-final" data-title="BlendVision Worldview" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210601 BlendVision worldview video FINAL with Inter font\BlendVision Worldview 20210601 OFFLINE PLAYBACK subtitles www.blendvision.com.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-019-blendvision-worldview-20210601-offline-pla.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Worldview</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-loom" data-title="BlendVision Loom" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\L.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-021-l.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-021-l.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Loom</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-kaleido" data-title="BlendVision Kaleido" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\K.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-020-k.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-020-k.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Kaleido</h3>
           </div>
         </article>
         <article class="card kkbox-group-card" data-card data-id="kkstream-blendvision-main-visual-moment" data-title="BlendVision Moment" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKStream BlendVision\20201216 KKStream BlendVision\20210409 BlendVision April 16th Event Preparation\2 keynote m\4 product main visual intro\M.mp4">
-          <div class="media-frame"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-022-m.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-022-m.mp4"></video></div>
           <div class="card-body">
             <h3>BlendVision Moment</h3>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="kkbox-brand-book-application-title">
+      <h2 id="kkbox-brand-book-application-title">KKBOX 2020 Brand Book &amp; Application</h2>
+      <div class="grid brand-book-grid">
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-01" data-title="KKBOX Brand Book 2020 Page 1" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 1.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-01.webp" alt="KKBOX Brand Book 2020 Page 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-29" data-title="KKBOX Brand Book 2020 Page 29" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 29.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-29.webp" alt="KKBOX Brand Book 2020 Page 29" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-32" data-title="KKBOX Brand Book 2020 Page 32" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 32.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-32.webp" alt="KKBOX Brand Book 2020 Page 32" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-37" data-title="KKBOX Brand Book 2020 Page 37" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 37.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-37.webp" alt="KKBOX Brand Book 2020 Page 37" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-38" data-title="KKBOX Brand Book 2020 Page 38" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 38.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-38.webp" alt="KKBOX Brand Book 2020 Page 38" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-44" data-title="KKBOX Brand Book 2020 Page 44" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 44.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-44.webp" alt="KKBOX Brand Book 2020 Page 44" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-48" data-title="KKBOX Brand Book 2020 Page 48" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 48.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-48.webp" alt="KKBOX Brand Book 2020 Page 48" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-49" data-title="KKBOX Brand Book 2020 Page 49" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 49.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-49.webp" alt="KKBOX Brand Book 2020 Page 49" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-52" data-title="KKBOX Brand Book 2020 Page 52" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 52.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-52.webp" alt="KKBOX Brand Book 2020 Page 52" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-56" data-title="KKBOX Brand Book 2020 Page 56" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 56.png">
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-56.webp" alt="KKBOX Brand Book 2020 Page 56" decoding="async" loading="lazy" fetchpriority="low" /></div>
+        </article>
+        <div class="brand-book-caption">
+          <h3>KKBOX Brand Book</h3>
+        </div>
+        <div class="brand-book-feature-row">
+          <article class="card kkbox-group-card brand-book-application-card" data-card data-id="kkbox-brand-book-application-turn-up-festival-merch" data-title="KKBOX Turn Up Festival Merch" data-file-path="asset more\KKBOX Group\KKBOX Turn Up Festival Merch H.png">
+            <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-turn-up-festival-merch-h.webp" alt="KKBOX Turn Up Festival Merch" decoding="async" loading="lazy" fetchpriority="low" /></div>
+            <div class="card-body">
+              <h3>KKBOX Turn Up Festival Merch</h3>
+            </div>
+          </article>
+          <article class="card kkbox-group-card brand-book-video-card" data-card data-id="kkbox-brand-book-application-feature-video" data-title="KKBOX Feature Intro Video" data-file-path="asset more\KKBOX Group\KKBOX Feature Video.mp4">
+            <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-038-kkbox-feature-video.mp4"></video></div>
+            <div class="card-body">
+              <h3>KKBOX Feature Intro Video</h3>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
