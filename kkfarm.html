@@ -122,7 +122,7 @@
       --essay-media-gap: 44px;
       --section-gap: 56px;
       --outer-text-gutter: 36px;
-      --award-logo-gap: clamp(7px, 0.75vw, 14px);
+      --award-logo-gap: clamp(3.5px, 0.375vw, 7px);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
       --side-title-font-size: var(--page-title-font-size);
@@ -230,7 +230,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.0";
+      content: "V1.2.1";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -270,7 +270,7 @@
         --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
         --side-menu-font-size: clamp(12px, min(max(16px, 1.15vw), 2.25vh), 22px);
         --side-menu-line-extra: clamp(3px, 0.7vh, 6px);
-        --side-award-logo-gap: clamp(4px, min(max(7px, 0.75vw), 1.1vh), 14px);
+        --side-award-logo-gap: clamp(2px, min(max(3.5px, 0.375vw), 0.55vh), 7px);
         --side-award-logo-size: clamp(12px, min(max(16px, 1.75vw), 3vh), 33px);
         --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
       }
@@ -870,18 +870,8 @@
     }
 
     .media-frame::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      border: 1px solid var(--site-bg);
-      box-shadow: none;
+      content: none;
     }
-    .media-frame.media-frame-video::after {
-      border-color: rgb(245, 245, 245);
-    }
-
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
       content: none;
@@ -907,6 +897,11 @@
       object-fit: contain;
     }
 
+    .media-frame video,
+    .media-frame img {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+    }
     .media-frame.media-frame-image,
     .media-frame.media-frame-image img,
     .media-frame.media-frame-file,
@@ -921,6 +916,9 @@
     }
 
     img:not(.image-lightbox__image) {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+      outline: 0;
       cursor: zoom-in;
       backface-visibility: hidden;
       transform: translateZ(0);
@@ -1060,10 +1058,11 @@
 
     .image-lightbox__image {
       display: block;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      max-height: none;
+      width: 100vmin;
+      height: 100vmin;
+      max-width: 100vw;
+      max-height: 100vh;
+      border: 0;
       object-fit: contain;
       background: transparent;
       cursor: default;
@@ -1071,7 +1070,6 @@
       -webkit-user-drag: none;
       pointer-events: none;
     }
-
     .image-lightbox__nav {
       appearance: none;
       position: fixed;
@@ -1171,27 +1169,19 @@
     }
 
     .photo-book-grid {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(15, minmax(0, 1fr));
       gap: 10px;
       align-items: start;
     }
 
     .photo-book-grid > .card {
-      grid-column: span 1;
+      grid-column: span 3;
     }
 
-    .photo-book-grid > .card:nth-child(9n + 1),
-    .photo-book-grid > .card:nth-child(9n + 2),
-    .photo-book-grid > .card:nth-child(9n + 3) {
-      grid-column: span 2;
-    }
-
-    .photo-book-grid > .card:nth-child(28) {
-      grid-column: 2 / span 2;
-    }
-
-    .photo-book-grid > .card:nth-child(29) {
-      grid-column: 4 / span 2;
+    .photo-book-grid > .card:nth-child(8n + 1),
+    .photo-book-grid > .card:nth-child(8n + 2),
+    .photo-book-grid > .card:nth-child(8n + 3) {
+      grid-column: span 5;
     }
 
     .photo-book-grid .media-frame {
@@ -1557,7 +1547,7 @@
         --article-caption-font-size: 15.5px;
         --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
-        --award-logo-gap: clamp(8px, 2vw, 14px);
+        --award-logo-gap: clamp(4px, 1vw, 7px);
         --award-logo-min-row-width: 132px;
         --award-logo-size: 26.4px;
         --mobile-award-bottom-buffer: max(56px, calc(env(safe-area-inset-bottom, 0px) + 48px));
@@ -1729,7 +1719,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -1902,20 +1892,31 @@
       }
 
       .compact-square-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .photo-book-grid,
       .incg-page-grid {
         grid-template-columns: 1fr;
       }
 
-      .photo-book-grid > .card {
+      .photo-book-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .photo-book-grid > .card:nth-child(n) {
+        grid-column: span 2;
+      }
+
+      .photo-book-grid > .card:nth-child(5n + 1) {
         grid-column: 1 / -1;
       }
 
+      .photo-book-grid > .card:last-child:nth-child(5n + 2) {
+        grid-column: 2 / span 2;
+      }
+
       .sui-cover-art-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .process-grid .card + .card,
@@ -1942,11 +1943,11 @@
       }
 
       .pixel-system-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .pixel-system-grid .pixel-system-card--wide {
-        grid-column: span 3;
+        grid-column: 1 / -1;
       }
 
       .pixel-system-grid [data-id^="kkculture-you-create-pixel-art-print-"] {
@@ -2037,7 +2038,7 @@
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
         --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
-        --award-logo-gap: clamp(7px, 1.8vh, 10px);
+        --award-logo-gap: clamp(3.5px, 0.9vh, 5px);
         --award-logo-min-row-width: 128px;
         --award-logo-size: clamp(15px, 4vh, 24px);
       }
@@ -2140,7 +2141,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2278,49 +2279,49 @@
       <h2 id="kkfarm-music-videos-jutv-title">Music Videos &amp; jutv</h2>
       <div class="grid">
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-01" data-title="Under the Taipei Night Sky - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Under the Taipei Night Sky - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-007-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-007-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Under the Taipei Night Sky - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-02" data-title="For You, I Brave the Cold Wind - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\For You, I Brave the Cold Wind - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-008-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-008-julia-wu-official-music-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>For You, I Brave the Cold Wind - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-03" data-title="Night (Acoustic) - Official Music Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Night (Acoustic) - Julia Wu | Official Music Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-009-acoustic-julia-wu-official-music-video-jul.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-009-acoustic-julia-wu-official-music-video-jul.mp4"></video></div>
           <div class="card-body">
             <h3>Night (Acoustic) - Official Music Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-04" data-title="Bottom Line - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Bottom Line - Julia Wu | Official Lyric Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-010-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-010-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Bottom Line - Official Lyric Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-05" data-title="Don't Cry Anymore - Official Lyric Video" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\Don't Cry Anymore - Julia Wu | Official Lyric Video - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-011-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-011-julia-wu-official-lyric-video-julia-1080p-.mp4"></video></div>
           <div class="card-body">
             <h3>Don't Cry Anymore - Official Lyric Video</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-06" data-title="jutv Ep. 01 This One Has Something" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 01 This One Has Something - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-012-jutv-ep-01-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 01 This One Has Something</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-07" data-title="jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-013-jutv-ep-02-72-mv-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 02 Breaking!!! A Music Video Born in 72 Hours</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-music-videos-jutv-08" data-title="jutv Ep. 03 It Looks Great" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\YouTube Videos\jutv Ep. 03 It Looks Great - Julia Wu (1080p, h264).mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-014-jutv-ep-03-julia-1080p-h264.mp4"></video></div>
           <div class="card-body">
             <h3>jutv Ep. 03 It Looks Great</h3>
           </div>
@@ -2329,7 +2330,7 @@
     </section>
 
     <section class="section" aria-labelledby="kkfarm-ju-u-photography-book-title">
-      <h2 id="kkfarm-ju-u-photography-book-title">Anniversary Photography Book Selection</h2>
+      <h2 id="kkfarm-ju-u-photography-book-title">Anniversary Photography Book</h2>
       <div class="grid photo-book-grid">
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-01" data-title="ju&amp;u Cover" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\_cover.jpg">
           <div class="media-frame media-frame-image"><img class="photo-book-cover" src="assets/optimized/images/img-001-cover.webp" alt="ju&amp;u Cover" decoding="async" loading="eager" fetchpriority="high" /></div>
@@ -2566,25 +2567,25 @@
       <h2 id="kkfarm-project-sui-music-videos-title">Project SUI Music Videos</h2>
       <div class="grid">
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-julia-wu-dial-up" data-title="SUI - Julia Wu - Dial Up" data-file-path="asset more\KKFARM\SUI - Julia Wu - Dial Up.mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-035-sui-julia-wu-dial-up.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-035-sui-julia-wu-dial-up.mp4"></video></div>
           <div class="card-body">
             <h3>SUI - Julia Wu - Dial Up</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-sophy-dwc" data-title="SUI - Sophy - DWC" data-file-path="asset more\KKFARM\SUI - Sophy - DWC.mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-034-sui-sophy-dwc.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-034-sui-sophy-dwc.mp4"></video></div>
           <div class="card-body">
             <h3>SUI - Sophy - DWC</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-ching-g-squad-coconut-tree" data-title="SUI - Ching G Squad - Coconut Tree" data-file-path="asset more\KKFARM\SUI - Ching G Squad - Coconut Tree.mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-036-sui-ching-g-squad-coconut-tree.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-036-sui-ching-g-squad-coconut-tree.mp4"></video></div>
           <div class="card-body">
             <h3>SUI - Ching G Squad - Coconut Tree</h3>
           </div>
         </article>
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-music-video-eileen-yo-for-you" data-title="SUI - Eileen Yo - For You" data-file-path="asset more\KKFARM\SUI - Eileen Yo - For You.mp4">
-          <div class="media-frame media-frame-video"><video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-037-sui-eileen-yo-for-you.mp4"></video></div>
+          <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-037-sui-eileen-yo-for-you.mp4"></video></div>
           <div class="card-body">
             <h3>SUI - Eileen Yo - For You</h3>
           </div>

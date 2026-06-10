@@ -122,7 +122,7 @@
       --essay-media-gap: 44px;
       --section-gap: 56px;
       --outer-text-gutter: 36px;
-      --award-logo-gap: clamp(7px, 0.75vw, 14px);
+      --award-logo-gap: clamp(3.5px, 0.375vw, 7px);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
       --side-title-font-size: var(--page-title-font-size);
@@ -230,7 +230,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.0";
+      content: "V1.2.1";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -270,7 +270,7 @@
         --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
         --side-menu-font-size: clamp(12px, min(max(16px, 1.15vw), 2.25vh), 22px);
         --side-menu-line-extra: clamp(3px, 0.7vh, 6px);
-        --side-award-logo-gap: clamp(4px, min(max(7px, 0.75vw), 1.1vh), 14px);
+        --side-award-logo-gap: clamp(2px, min(max(3.5px, 0.375vw), 0.55vh), 7px);
         --side-award-logo-size: clamp(12px, min(max(16px, 1.75vw), 3vh), 33px);
         --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
       }
@@ -870,18 +870,8 @@
     }
 
     .media-frame::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      border: 1px solid var(--site-bg);
-      box-shadow: none;
+      content: none;
     }
-    .media-frame.media-frame-video::after {
-      border-color: rgb(245, 245, 245);
-    }
-
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
       content: none;
@@ -907,6 +897,11 @@
       object-fit: contain;
     }
 
+    .media-frame video,
+    .media-frame img {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+    }
     .media-frame.media-frame-image,
     .media-frame.media-frame-image img,
     .media-frame.media-frame-file,
@@ -921,6 +916,9 @@
     }
 
     img:not(.image-lightbox__image) {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+      outline: 0;
       cursor: zoom-in;
       backface-visibility: hidden;
       transform: translateZ(0);
@@ -1109,10 +1107,11 @@
 
     .image-lightbox__image {
       display: block;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      max-height: none;
+      width: 100vmin;
+      height: 100vmin;
+      max-width: 100vw;
+      max-height: 100vh;
+      border: 0;
       object-fit: contain;
       background: transparent;
       cursor: default;
@@ -1120,7 +1119,6 @@
       -webkit-user-drag: none;
       pointer-events: none;
     }
-
     .image-lightbox__nav {
       appearance: none;
       position: fixed;
@@ -1433,6 +1431,7 @@
       color: #fff;
       line-height: 1;
       vertical-align: middle;
+      transform: translateY(-1px);
       flex: 0 0 14px;
     }
 
@@ -1609,7 +1608,7 @@
         --article-caption-font-size: 15.5px;
         --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
-        --award-logo-gap: clamp(8px, 2vw, 14px);
+        --award-logo-gap: clamp(4px, 1vw, 7px);
         --award-logo-min-row-width: 132px;
         --award-logo-size: 26.4px;
         --mobile-award-bottom-buffer: max(56px, calc(env(safe-area-inset-bottom, 0px) + 48px));
@@ -1781,7 +1780,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -1955,7 +1954,7 @@
       }
 
       .compact-square-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .photo-book-grid,
@@ -1987,11 +1986,11 @@
       }
 
       .pixel-system-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .pixel-system-grid .pixel-system-card--wide {
-        grid-column: span 3;
+        grid-column: 1 / -1;
       }
 
       .pixel-system-grid [data-id^="kkculture-you-create-pixel-art-print-"] {
@@ -2082,7 +2081,7 @@
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
         --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
-        --award-logo-gap: clamp(7px, 1.8vh, 10px);
+        --award-logo-gap: clamp(3.5px, 0.9vh, 5px);
         --award-logo-min-row-width: 128px;
         --award-logo-size: clamp(15px, 4vh, 24px);
       }
@@ -2185,7 +2184,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2345,7 +2344,7 @@
 
         <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #1 Too Much Love 20s</h3>
@@ -2362,7 +2361,7 @@
         </article>
         <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #2 Pillow Talk 20s</h3>
@@ -2379,7 +2378,7 @@
         </article>
         <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #3 Device Crush 20s</h3>
@@ -2396,7 +2395,7 @@
         </article>
         <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV TVC #4 Fighting for Attention 20s</h3>
@@ -2468,7 +2467,7 @@
       <div class="grid kktv-trailer-grid">
         <article class="card" data-card data-id="kktv-drama-trailer" data-title="KKTV Drama Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Drama Trailer.mov">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-032-kktv-drama-trailer.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-032-kktv-drama-trailer.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV Drama Trailer</h3>
@@ -2485,7 +2484,7 @@
         </article>
         <article class="card" data-card data-id="kktv-original-trailer" data-title="KKTV Original Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Original Trailer.mov">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-033-kktv-original-trailer.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-033-kktv-original-trailer.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV Original Trailer</h3>
@@ -2528,7 +2527,7 @@
 
         <article class="card" data-card data-id="guidelines-source-08" data-title="KKTV Full HD Trailer Ending Animation" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\__GUIDELINES\m\video animation trailer\Animation_Trailer_Ending.mov">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4"></video>
           </div>
           <div class="card-body">
             <h3>KKTV Full HD Trailer Ending Animation</h3>
@@ -2546,7 +2545,7 @@
 
         <article class="card" data-card data-id="guidelines-screen-record-01" data-title="KKTV Guidelines &amp; Materials Open Database" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKTV Guidelines & Materials Website\screen record.mp4">
           <div class="media-frame media-frame-video">
-            <video poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4"></video>
           </div>
           <div class="card-body">
             <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 16 8"></path><path d="M10 8h6v6"></path></svg></span></a></h3>

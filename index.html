@@ -122,7 +122,7 @@
       --essay-media-gap: 44px;
       --section-gap: 56px;
       --outer-text-gutter: 36px;
-      --award-logo-gap: clamp(7px, 0.75vw, 14px);
+      --award-logo-gap: clamp(3.5px, 0.375vw, 7px);
       --award-logo-min-row-width: 128px;
       --award-logo-size: clamp(16px, 1.75vw, 33px);
       --side-title-font-size: var(--page-title-font-size);
@@ -230,7 +230,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.0";
+      content: "V1.2.1";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -270,7 +270,7 @@
         --side-title-font-size: clamp(18px, min(max(24px, 2.1vw), 4.2vh), 42px);
         --side-menu-font-size: clamp(12px, min(max(16px, 1.15vw), 2.25vh), 22px);
         --side-menu-line-extra: clamp(3px, 0.7vh, 6px);
-        --side-award-logo-gap: clamp(4px, min(max(7px, 0.75vw), 1.1vh), 14px);
+        --side-award-logo-gap: clamp(2px, min(max(3.5px, 0.375vw), 0.55vh), 7px);
         --side-award-logo-size: clamp(12px, min(max(16px, 1.75vw), 3vh), 33px);
         --side-nav-top-padding: clamp(18px, min(36px, 3.6vh), 36px);
       }
@@ -464,6 +464,17 @@
     .content-panel > .section:first-child > h2:first-of-type {
       padding-top: var(--content-title-top-padding);
       font-size: var(--side-title-font-size);
+    }
+
+    .overview-title-line,
+    .overview-title-subtitle {
+      display: block;
+    }
+
+    .overview-title-subtitle {
+      margin-top: calc(var(--heading-content-gap) + 14px);
+      font-size: 0.78em;
+      line-height: 1.12;
     }
 
     .section h2 + .grid,
@@ -877,18 +888,8 @@
     }
 
     .media-frame::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      border: 1px solid var(--site-bg);
-      box-shadow: none;
+      content: none;
     }
-    .media-frame.media-frame-video::after {
-      border-color: rgb(245, 245, 245);
-    }
-
     .media-frame:fullscreen::after,
     .media-frame:-webkit-full-screen::after {
       content: none;
@@ -914,6 +915,11 @@
       object-fit: contain;
     }
 
+    .media-frame video,
+    .media-frame img {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+    }
     .media-frame.media-frame-image,
     .media-frame.media-frame-image img,
     .media-frame.media-frame-file,
@@ -928,6 +934,9 @@
     }
 
     img:not(.image-lightbox__image) {
+      box-sizing: border-box;
+      border: 2px solid rgb(245, 245, 245);
+      outline: 0;
       cursor: zoom-in;
       backface-visibility: hidden;
       transform: translateZ(0);
@@ -1089,10 +1098,11 @@
 
     .image-lightbox__image {
       display: block;
-      width: 100vw;
-      height: 100vh;
-      max-width: none;
-      max-height: none;
+      width: 100vmin;
+      height: 100vmin;
+      max-width: 100vw;
+      max-height: 100vh;
+      border: 0;
       object-fit: contain;
       background: transparent;
       cursor: default;
@@ -1100,7 +1110,6 @@
       -webkit-user-drag: none;
       pointer-events: none;
     }
-
     .image-lightbox__nav {
       appearance: none;
       position: fixed;
@@ -1544,7 +1553,7 @@
         --article-caption-font-size: 15.5px;
         --article-body-font-size: 18.6px;
         --mobile-menu-height: 100vh;
-        --award-logo-gap: clamp(8px, 2vw, 14px);
+        --award-logo-gap: clamp(4px, 1vw, 7px);
         --award-logo-min-row-width: 132px;
         --award-logo-size: 26.4px;
         --mobile-award-bottom-buffer: max(56px, calc(env(safe-area-inset-bottom, 0px) + 48px));
@@ -1716,7 +1725,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -1890,7 +1899,7 @@
       }
 
       .compact-square-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .photo-book-grid,
@@ -1922,11 +1931,11 @@
       }
 
       .pixel-system-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .pixel-system-grid .pixel-system-card--wide {
-        grid-column: span 3;
+        grid-column: 1 / -1;
       }
 
       .pixel-system-grid [data-id^="kkculture-you-create-pixel-art-print-"] {
@@ -2017,7 +2026,7 @@
         --landscape-scroll-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
         --next-panel-bottom-offset: max(144px, calc(env(safe-area-inset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 112px));
         --landscape-viewport-height: 100vh;
-        --award-logo-gap: clamp(7px, 1.8vh, 10px);
+        --award-logo-gap: clamp(3.5px, 0.9vh, 5px);
         --award-logo-min-row-width: 128px;
         --award-logo-size: clamp(15px, 4vh, 24px);
       }
@@ -2120,7 +2129,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.0";
+        content: "V1.2.1";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2241,7 +2250,7 @@
     <main class="page">
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
-          <h2 id="biography-panel-title">Joshua Chao &mdash; Creative Director Bridging Culture, Technology, Education, and AI</h2>
+          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle">Creative Director Bridging Culture, Technology, Education, and AI</span></h2>
           <div class="biography-layout">
           <figure class="biography-photo">
             <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="eager" fetchpriority="high" />
