@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2694,6 +2707,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2934,7 +2978,7 @@
         <dl class="project-overview-grid">
             <div class="project-overview-item">
               <dt>Project Type</dt>
-              <dd class="biography-sync-highlight">Animated Visual System, Cultural Technology Brand, Digital And Physical Touchpoints</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Animated Visual System, Cultural Technology Brand, Digital and Physical Touchpoints</dd>
             </div>
             <div class="project-overview-item">
               <dt>Role</dt>
@@ -2946,7 +2990,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
-              <dd>Web, Motion, Print, Office Environment, Deck, Internal And Leadership Communication</dd>
+              <dd class="copy-edit-highlight">Web, Motion, Print, Office Environment, Deck, Internal and Leadership Communication</dd>
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
@@ -3080,7 +3124,7 @@
               </div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="kkculture-intro-keynote-video" data-title="KKCulture Intro Keynote Video" data-file-path="m\Screen Record - KKCulture Intro Keynote\KKCulture Intro Keynote.mp4">
+        <article class="card" data-card data-id="kkculture-intro-keynote-video" data-title="KKCulture Intro Keynote Video" data-file-path="asset more\KKCulture\KKCulture Intro Keynote.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-041-kkculture-intro-keynote.mp4" fetchpriority="low"></video></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
@@ -3155,12 +3199,12 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">KKCulture required a higher level of integration after the restructuring of KKBOX Group into KKCompany and KKCulture: a cultural technology identity that could extend from company narrative and visual identity into website, brand book, office design, merchandise, presentations, and internal use cases.</p>
-              <p class="biography-sync-highlight">The animated system had to be elegant enough for leadership communication and practical enough for daily use across digital, physical, office, presentation, merchandise, and internal brand touchpoints.</p>
-              <p>The early phase focused on the logotype, dot system, motion, and visual variations. These studies worked like conceptual sketches, testing how connection, cycles, and cultural exchange could be reduced into a graphic language. The project explored whether a very small set of visual rules could generate a larger institutional character.</p>
-              <p>Production expanded from identity into a complete digital presence. Logo systems, concept videos, website assets, brand book studies, typography, cover imagery, and digital content were developed as one ecosystem. Every element supported the same quiet premise: culture can be structured without losing openness.</p>
-              <p>As the work neared completion, the design became more disciplined. Social previews, website screens, visual identity variants, guideline materials, and motion elements were integrated into a system that could continue to be used. The identity had to be elegant enough for leadership communication, and practical enough to support daily use.</p>
-              <p>The final outcome gave KKCulture a precise visual and digital foundation. The identity no longer depended on explanation; it could operate through repetition, white space, motion, and restraint. It turned a new corporate idea into a cultural language ready for immediate use.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">KKCulture required a higher level of integration after the restructuring of KKBOX Group into KKCompany and KKCulture: a cultural technology identity that could extend from company narrative and visual identity into website, brand book, office design, merchandise, presentations, and internal use cases.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The animated system had to be refined enough for leadership communication and practical enough for daily use across digital, physical, office, presentation, merchandise, and internal brand touchpoints.</p>
+              <p class="copy-edit-highlight">Early development focused on the logotype, dot system, motion behavior, and visual variations. The work tested how connection, cycles, and cultural exchange could become a simple graphic language with enough flexibility for institutional use.</p>
+              <p class="copy-edit-highlight">Production expanded the identity into a complete digital and physical presence. Logo systems, concept videos, website assets, brand book studies, typography, cover imagery, and digital content were developed as one connected system.</p>
+              <p class="copy-edit-highlight">Final refinement made the design more disciplined and reusable. Social previews, website screens, visual identity variants, guideline materials, and motion elements were integrated into a system that could support leadership communication and daily brand execution.</p>
+              <p class="copy-edit-highlight">The final outcome gave KKCulture a precise visual and digital foundation. The identity could operate through repetition, white space, motion, and restraint while remaining practical across company communication, workplace environments, and internal use.</p>
             </div>
           </div>
     </section>

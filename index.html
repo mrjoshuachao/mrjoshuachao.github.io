@@ -139,9 +139,9 @@
   </style>
   <!-- SEO AND ASSET HINTS: title/description for sharing plus local font preloads for stable typography. -->
   <title>Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity</title>
-  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, motion, digital campaigns, cultural projects, and AI-driven creative workflows in Taiwan, Japan, and East Asian markets." />
+  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, campaign direction, video, digital experiences, event and retail touchpoints, and AI-assisted creative workflows in Taiwan, Japan, China, and East Asian markets." />
   <meta property="og:title" content="Joshua Chao &mdash; Selected Creative Direction Portfolio" />
-  <meta property="og:description" content="Brand systems, technology storytelling, campaign direction, motion, digital, and AI-assisted creative work across culture, enterprise technology, entertainment, and education." />
+  <meta property="og:description" content="Creative direction across brand systems, technology storytelling, campaign platforms, motion, digital, AI-assisted production, corporate identity, and cultural projects." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
@@ -152,25 +152,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -182,6 +194,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2614,6 +2627,37 @@
       color: #c01818 !important;
       text-decoration-color: #c01818 !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2859,7 +2903,7 @@
   <main class="page">
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
-          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
+          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight copy-edit-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Integrated Creative Workflows</span></h2>
           <div class="biography-layout">
           <figure class="biography-photo">
             <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
@@ -2867,17 +2911,17 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="revision-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <a class="bio-link" href="ace.html#ace-title"><strong>AI-Powered Creativity Educator</strong></a> with <strong>over 10 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. He builds integrated brand systems, marketing campaigns, company narratives, and communication design assets across enterprise technology, culture, entertainment, and education in Taiwan, Japan, and China.</p>
-              <p class="revision-highlight">With over 10 years of hands-on creative leadership experience, Joshua works across strategy, creative and art direction, visual systems, video, web, presentations, event touchpoints, and AI production and education. His work connects high-level brand thinking with detailed execution, helping complex ideas become clear, scalable, and emotionally resonant creative systems.</p>
-              <p class="revision-highlight">Since joining <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> in 2016 as <strong>Creative Director</strong>, Joshua has played a key role in shaping the creative direction of multiple businesses within the group. His earliest work began with <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, where he led creative and design development for the launch of a new video streaming brand, including its <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>identity</strong></a>, product demo videos, presentations, advertising, campaigns, website, and <a class="bio-link" href="kktv.html#guidelines-source-title"><strong>design guidelines</strong></a>.</p>
-              <p class="revision-highlight">Beginning in 2017, his responsibilities expanded from <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a> to <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, where he contributed to music, entertainment, and artist management projects. His work included the debut design system for <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>Julia Wu</strong></a>, visual direction for music releases, albums, concerts, <a class="bio-link" href="kkfarm.html#kkfarm-ju-u-photography-book-title"><strong>publications</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-music-videos-jutv-title"><strong>YouTube channels</strong></a>, creative assets for other KKFARM artists, websites, and numerous video, print, event, digital, and physical materials.</p>
-              <p class="revision-highlight">As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. His projects included <a class="bio-link" href="kkbox-group.html#kkbox-group-image-recruitment-title"><strong>KKBOX Group corporate image campaigns</strong></a>, MA Program recruiting materials, websites, videos, KKVERSE, VoiceOut, <a class="bio-link" href="kkbox-group.html#kkstream-blendvision-title"><strong>KKStream BlendVision</strong></a>, the <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany worldview</strong></a>, and the <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM rebranding initiative</strong></a>. This work reflects his ability to operate at the intersection of <strong>strategy, design, motion, product, and business communication</strong>.</p>
-              <p class="revision-highlight">In his role as <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>Creative Director for KKBOX Group</strong></a>, Joshua also supported <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>OurSong</strong></a>, a blockchain company invested in by the group. Joshua contributed during the company&rsquo;s formative stage by helping establish its early logo, homepage, intro video, certificate design, Song Share cards, interface direction, business presentation materials, and <strong>international client-facing assets</strong>.</p>
-              <p class="revision-highlight">Following the restructuring of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a> and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a>, Joshua&rsquo;s creative work moved into a higher level of integration. His responsibilities spanned both organizations and expanded into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>corporate branding</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>company narrative</strong></a>, and organizational communication. For KKCulture, he contributed to Project Messiah, <a class="bio-link" href="kkculture.html#kkculture-motion-title"><strong>visual identity</strong></a>, the website, brand book, office design, and touchpoints that extended the brand into workplace environments, presentations, merchandise, and internal use cases.</p>
-              <p class="revision-highlight">During the <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> period, Joshua became deeply involved in new technologies and cross-disciplinary creative work. <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>NVIDIA x SCCD Project NV</strong></a> and <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-kimberley-title"><strong>Kimberley&rsquo;s &ldquo;Street Signs&rdquo;</strong></a> explored new possibilities in generative AI, music, and video editing.</p>
-              <p class="revision-highlight">Across his long career within the <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>&ldquo;KK&rdquo; ecosystem</strong></a>, Joshua&rsquo;s journey has not been a conventional progression from designer to Creative Director. Rather, he entered the organization from the beginning as a <strong>Creative Director</strong> and became a central creative force as <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a>, and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> continued to evolve. His work spans <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>large-scale brand and product systems</strong></a> as well as highly detailed execution, from business cards and signage to motion systems, websites, presentations, events, and everyday brand touchpoints.</p>
-              <p class="revision-highlight">In 2023, Joshua co-founded <a class="bio-link" href="ace.html#ace-title"><strong>Applied Creativity Engine</strong></a>, also known as <a class="bio-link" href="ace.html#ace-title"><strong>ACE</strong></a>, with Chris Lin, founder and CEO of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. ACE is dedicated to education at the intersection of <a class="bio-link" href="ace.html#ace-title"><strong>human creativity and artificial intelligence</strong></a>. Through ACE, Joshua has trained teachers, students, executives, and professionals from <a class="bio-link" href="ace.html#ace-title"><strong>UWC ISAK Japan</strong></a>, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and CEOs of small and medium-sized enterprises.</p>
-              <p class="revision-highlight">In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for <strong>8 years</strong> as an adjunct lecturer in the <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>Department of Communications Design at Shih Chien University</strong></a>, where he continues to integrate <a class="bio-link" href="ace.html#ace-title"><strong>creativity, design thinking, and AI</strong></a> into his courses. Through his work across industry, education, and emerging technology, he has established himself as a creative leader who bridges <strong>strategy and execution</strong>, <strong>culture and technology</strong>, and imagination and implementation.</p>
+              <p class="revision-highlight copy-edit-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and AI-powered creativity educator with <strong>more than 10 years of in-house creative leadership</strong> and <strong>8 years of teaching experience</strong>. He leads integrated brand systems, campaign narratives, product and company storytelling, video, web, presentation, event, retail, and AI-assisted creative workflows across technology, entertainment, culture, and education in Taiwan, Japan, and Mandarin-speaking markets.</p>
+              <p class="revision-highlight copy-edit-highlight">His practice connects strategy, art direction, visual systems, motion, digital experiences, and production management. He is strongest when complex business or technology ideas need to become clear creative platforms, consistent visual systems, and delivery-ready assets across multiple channels.</p>
+              <p class="revision-highlight copy-edit-highlight">Since joining <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> in 2016 as <strong>Creative Director</strong>, Joshua has helped shape the creative direction of multiple businesses within the group. His earliest work began with <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, where he led the creative development of a new streaming brand across identity, product demo videos, presentations, launch advertising, campaign assets, website direction, and design guidelines.</p>
+              <p class="revision-highlight copy-edit-highlight">Beginning in 2017, his responsibilities expanded from KKTV to <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, where music, entertainment, and artist management required a more flexible creative system. His work included the debut design system for <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>Julia Wu</strong></a>, visual direction for music releases, albums, concerts, publications, YouTube content, artist websites, and video, print, event, digital, and physical materials.</p>
+              <p class="revision-highlight copy-edit-highlight">As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across KKBOX Group. His projects included corporate image campaigns, MA Program recruiting materials, websites, videos, KKVERSE, VoiceOut, <a class="bio-link" href="kkbox-group.html#kkstream-blendvision-title"><strong>KKStream / BlendVision</strong></a>, the <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany worldview system</strong></a>, and the KKFARM rebranding initiative. This work demonstrates his ability to connect <strong>strategy, design, motion, product storytelling, and business communication</strong> inside a fast-moving in-house environment.</p>
+              <p class="revision-highlight copy-edit-highlight">Joshua also supported <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>OurSong</strong></a>, a blockchain company invested in by the group, during its formative stage. His contributions included early logo direction, homepage direction, intro video, certificate design, Song Share cards, interface direction, business presentation materials, and <strong>international client-facing assets</strong>.</p>
+              <p class="revision-highlight copy-edit-highlight">Following the restructuring of KKBOX Group into KKCompany and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a>, Joshua&rsquo;s work moved into a higher level of corporate integration. His responsibilities expanded into company narrative, corporate identity, leadership communication, website direction, motion assets, workplace touchpoints, merchandise, and brand materials designed for both internal and external use.</p>
+              <p class="revision-highlight copy-edit-highlight">During the KKCulture period, Joshua also became involved in generative AI production and cross-disciplinary technology work. <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>Project NV</strong></a> and <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-kimberley-title"><strong>Kimberley&rsquo;s &ldquo;Street Signs&rdquo;</strong></a> connected AI-generated imagery, music, editing, and presentation-ready storytelling into finished film and media assets.</p>
+              <p class="revision-highlight copy-edit-highlight">Across the &ldquo;KK&rdquo; ecosystem, Joshua has operated as an in-house <strong>Creative Director</strong> from launch-stage consumer brands to reorganized corporate groups. His work moves between high-level brand architecture and detailed asset delivery, covering identity systems, motion, websites, presentations, campaigns, events, signage, merchandise, and daily brand governance.</p>
+              <p class="revision-highlight copy-edit-highlight">In 2023, Joshua co-founded <a class="bio-link" href="ace.html#ace-title"><strong>Applied Creativity Engine</strong></a>, also known as ACE, with Chris Lin, founder and CEO of KKBOX Group. ACE develops AI-powered creativity education, workshops, and training systems for teachers, students, executives, and professionals from UWC ISAK Japan, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and CEOs of small and medium-sized enterprises.</p>
+              <p class="revision-highlight copy-edit-highlight">In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for <strong>8 years</strong> as an adjunct lecturer in the Department of Communications Design at Shih Chien University, where he integrates creativity, design thinking, and AI-assisted workflows into design education. Across industry, education, and emerging technology, his work connects <strong>strategy and execution</strong>, <strong>culture and technology</strong>, and imagination and implementation.</p>
             </div>
           </div>
           </div>
@@ -2904,8 +2948,8 @@
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
-              <h3>AI-Powered Creativity Work</h3>
-              <p>Using generative AI to accelerate ideation and production across creative workflows. Teaching human-centered and AI-powered creative/design methods and business innovation.</p>
+              <h3 class="copy-edit-highlight">AI-Integrated Creative Workflow</h3>
+              <p class="copy-edit-highlight">Applying generative AI tools to expand ideation, accelerate visual exploration, support storytelling, and improve production workflows while keeping human judgment, taste, and brand context at the center.</p>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
@@ -2914,8 +2958,8 @@
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
-              <h3>East Asian / APAC Cultural Context</h3>
-              <p>Experience across Taiwan, Japan, and China, including Shanghai and Beijing, with sensitivity to subtle cultural differences, audience behavior, and local adaptation.</p>
+              <h3 class="copy-edit-highlight">East Asian and Mandarin-Market Context</h3>
+              <p class="copy-edit-highlight">Experience across Taiwan, Japan, China, Shanghai, and Beijing, with sensitivity to language, tone, audience behavior, localization, and the way global creative direction needs to adapt across markets.</p>
             </article>
           </div>
         </section>
@@ -2980,7 +3024,7 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p>Joshua&rsquo;s creative methodology connects strategic thinking, narrative development, systemic design, and executional precision. His process is designed to turn complex business, cultural, and technological ideas into clear, scalable, and emotionally resonant communication systems.</p>
+              <p class="copy-edit-highlight">Joshua&rsquo;s creative methodology connects strategic diagnosis, narrative architecture, art direction, system design, production planning, and executional refinement. The process is built to turn complex business, cultural, and technological ideas into clear creative platforms and scalable communication systems.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -2988,11 +3032,11 @@
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
+        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p class="copy-edit-highlight">Joshua develops the strategic and communication foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
+        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p class="copy-edit-highlight">Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept through delivery. His role is to align strategy, craft, technology, timeline, and stakeholder feedback so teams can move with clarity and consistent creative standards.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
@@ -3005,7 +3049,7 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="portfolio-section-lead">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable, and emotionally resonant creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, and organizational communication.</p>
+              <p class="portfolio-section-lead copy-edit-highlight">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, stakeholder alignment, and organizational communication.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -3022,12 +3066,12 @@
         </section>
 
         <section class="section revision-highlight" aria-labelledby="cross-market-title">
-          <h2 id="cross-market-title">Multi-national Creative Context</h2>
+          <h2 id="cross-market-title" class="copy-edit-highlight">Cross-Market Creative Context</h2>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="portfolio-section-lead">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan , Japan and China markets, with earlier professional experience in Shanghai and Beijing. His projects often sit at the intersection of brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
-              <p class="portfolio-section-lead">His multi-national experience is not only geographic, but also cultural and organizational. He brings sensitivity to how ideas need to be framed differently across different markets, how visual and verbal tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
+              <p class="portfolio-section-lead copy-edit-highlight">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan, Japan, and China, with earlier professional experience in Shanghai and Beijing. His projects often sit between brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
+              <p class="portfolio-section-lead copy-edit-highlight">His cross-market experience is cultural and organizational as much as geographic. He brings sensitivity to how ideas need to be framed across markets, how verbal and visual tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -3035,9 +3079,9 @@
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
+        <article class="portfolio-text-card"><h3 class="copy-edit-highlight">Cross-Market Education and Training</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
+        <article class="portfolio-text-card"><h3 class="copy-edit-highlight">Mandarin-Market Cultural Adaptation</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>Stakeholder Translation</h3><p>Experience aligning executives, product teams, engineers, educators, creators, business stakeholders, and external partners by translating complex strategic, technical, and creative ideas into clear shared direction.</p></article>
           </div>
@@ -3054,11 +3098,11 @@
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p>Experience directing and producing video, motion, and campaign assets through Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment mini-series.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p>Practical experience applying ChatGPT, Midjourney, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, and prototype campaign ideas.</p></article>
+        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p class="copy-edit-highlight">Practical experience applying ChatGPT, Midjourney, Runway, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, prototype campaign ideas, and improve creative production workflows.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p>Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, and technical teams.</p></article>
+        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p class="copy-edit-highlight">Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, business, and technical teams.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
+        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p class="copy-edit-highlight">Experienced leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
           </div>
         </section>
 

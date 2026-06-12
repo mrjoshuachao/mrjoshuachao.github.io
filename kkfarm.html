@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2638,6 +2651,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2878,15 +2922,15 @@
         <dl class="project-overview-grid">
             <div class="project-overview-item">
               <dt>Project Type</dt>
-              <dd class="biography-sync-highlight">Artist Branding, Music Video Direction And Production, Live And Concert Visuals, Cultural Campaign</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Artist Branding, Music Video Direction and Production, Live and Concert Visuals, Cultural Campaign</dd>
             </div>
             <div class="project-overview-item">
               <dt>Role</dt>
-              <dd>Creative Direction, Art Direction, Artist Visual System, Music Video Direction, Event And Print Direction</dd>
+              <dd class="copy-edit-highlight">Creative Direction, Art Direction, Artist Visual System, Music Video Direction, Event and Print Direction</dd>
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight">Artist Identity, Album And Single Artwork, Music Videos, Live And Concert Visuals, Screen-Based And Printed Assets, Campaign Materials</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Artist Identity, Album and Single Artwork, Music Videos, Live and Concert Visuals, Screen-Based and Printed Assets, Campaign Materials</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2898,7 +2942,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
-              <dd>Artist Framing <span class="workflow-arrow" aria-hidden="true"></span> Visual Territory <span class="workflow-arrow" aria-hidden="true"></span> Release Assets <span class="workflow-arrow" aria-hidden="true"></span> Video And Event Production <span class="workflow-arrow" aria-hidden="true"></span> Refinement <span class="workflow-arrow" aria-hidden="true"></span> Launch</dd>
+              <dd class="copy-edit-highlight">Artist Framing <span class="workflow-arrow" aria-hidden="true"></span> Visual Territory <span class="workflow-arrow" aria-hidden="true"></span> Release Assets <span class="workflow-arrow" aria-hidden="true"></span> Video and Event Production <span class="workflow-arrow" aria-hidden="true"></span> Refinement <span class="workflow-arrow" aria-hidden="true"></span> Launch</dd>
             </div>
             </dl>
           </div>
@@ -3382,11 +3426,11 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
         <div class="essay-block" lang="en">
-          <p class="biography-sync-highlight">Beginning in 2017, Joshua&rsquo;s responsibilities expanded from KKTV to KKFARM, where music, entertainment, and artist management projects required a different kind of creative system: one that could hold artist identity, release rhythm, music video direction, live experience, screen-based and printed assets, and long-term cultural continuity.</p>
-          <p>The early material carried an intimate, tactile texture: album covers, single artwork, Polaroid-like images, retro game references, lyric-driven fragments, and performance visuals. These pieces operated like identity sketches, searching for a balance between softness and confidence, pop immediacy and personal strangeness, commercial clarity and emotional grain.</p>
-          <p>Production crossed music packaging, video, profile content, concert posters, banners, merchandise, and platform materials. Each format required its own solution, but the creative direction connected them through tone. This was not a fixed template applied repeatedly; it was a way of keeping the artist recognizable while allowing the language to keep changing.</p>
-          <p>As singles, albums, and events moved toward completion, the system was refined through details: cropping, color, typography, photographic mood, object design, and screen behavior. The final materials had to feel natural and light, while carrying a chain of decisions about audience, intimacy, performance, and memory.</p>
-          <p>The completed body of work presented a continuous artist identity rather than a set of disconnected images. Across covers, videos, concerts, and merchandise, Julia Wu became a visually recognizable cultural figure in motion. The project shows how creative direction can let an artist evolve without losing the core.</p>
+          <p class="biography-sync-highlight copy-edit-highlight">Beginning in 2017, Joshua&rsquo;s responsibilities expanded from KKTV to KKFARM, where music, entertainment, and artist management projects required a flexible creative system across artist identity, release rhythm, music video direction, live experience, screen-based assets, print, merchandise, and campaign materials.</p>
+          <p class="copy-edit-highlight">Early development focused on building a recognizable but flexible visual language for artist releases. Album covers, single artwork, photography references, retro game cues, lyric-driven graphics, and performance visuals were tested as a system rather than as isolated pieces.</p>
+          <p class="copy-edit-highlight">Production crossed music packaging, video, profile content, concert posters, banners, merchandise, social assets, and platform materials. Each format required its own solution, but the creative direction kept the artist identity consistent across releases and performance contexts.</p>
+          <p class="copy-edit-highlight">As singles, albums, and events moved toward release, the work was refined through cropping, color, typography, photographic tone, object design, and screen behavior. The goal was to keep the work light and natural while still carrying a clear strategy for audience, intimacy, performance, and memory.</p>
+          <p class="copy-edit-highlight">The completed body of work built a continuous artist identity across covers, videos, concerts, merchandise, and platform assets. It shows how creative direction can support an artist&rsquo;s evolution while maintaining recognition and long-term visual continuity.</p>
         </div>
       </div>
     </section>

@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2632,6 +2645,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2880,7 +2924,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight">Corporate Worldview Film, Logotype Studies, Public And Career Website Imagery, Motion Assets, Shareholder-Facing Materials, Employer-Facing Content</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Corporate Worldview Film, Logotype Studies, Public and Career Website Imagery, Motion Assets, Shareholder-Facing Materials, Employer-Facing Content</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2888,7 +2932,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
-              <dd>Executives, Product And Business Teams, Marketers, Designers, Video Editors</dd>
+              <dd class="copy-edit-highlight">Executives, Product and Business Teams, Marketers, Designers, Video Editors</dd>
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
@@ -2968,12 +3012,12 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">The KKCompany identity and worldview system responded to a complex technology organization that needed clearer company narrative, public and career website expression, motion assets, and shareholder-facing materials after expanding beyond a single product identity.</p>
-              <p class="biography-sync-highlight">The project required translating organizational complexity into a clear, scalable brand system that could support company narrative, leadership communication, digital presence, employer branding, organizational communication, and long-term corporate storytelling.</p>
-              <p>The early phase included logotype exploration, website mockups, motion tests, career-facing identity, and fragments of thinking around the company&rsquo;s character. These were not isolated design tasks, but attempts to locate a posture. The question was not only what KKCompany should look like, but how it could speak about itself with conviction.</p>
-              <p>Production moved across film, website, identity, and employer brand materials. The worldview video, logo system, website imagery, blog assets, career applications, and internal narrative all needed to align without flattening the company into a formula. The work had to move constantly between high-level abstraction and concrete design decisions.</p>
-              <p>As the project matured, refinement centered on tone. Typography, motion, color, image scale, and narrative rhythm were adjusted so the company could feel contemporary, stable, and ambitious. The system had to support both external communication and internal confidence, becoming a shared language rather than a decorative layer.</p>
-              <p>The final outcome established KKCompany as a coherent corporate brand presence. Through film, logo, website treatment, and employer-facing materials, the work translated organizational complexity into a disciplined identity. It allowed the company&rsquo;s worldview to be not only stated, but seen.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The KKCompany identity and worldview system responded to a complex technology organization that needed a clearer corporate narrative, public and career website expression, motion assets, and shareholder-facing materials after expanding beyond a single product identity.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The project translated organizational complexity into a scalable brand system for company narrative, leadership communication, digital presence, employer branding, organizational communication, and long-term corporate storytelling.</p>
+              <p class="copy-edit-highlight">Early development included logotype exploration, website mockups, motion tests, career-facing identity, and narrative studies around the company&rsquo;s character. The goal was to define not only how KKCompany should look, but how it should explain itself with clarity and confidence.</p>
+              <p class="copy-edit-highlight">Production moved across film, website, identity, and employer brand materials. The worldview video, logo system, website imagery, blog assets, career applications, and internal narrative needed to align without reducing the organization to a generic corporate formula.</p>
+              <p class="copy-edit-highlight">Final refinement centered on tone and system behavior. Typography, motion, color, image scale, and narrative rhythm were adjusted so the company could feel contemporary, stable, ambitious, and usable across internal and external communication.</p>
+              <p class="copy-edit-highlight">The final outcome established KKCompany as a coherent corporate brand presence. Through film, logo, website treatment, and employer-facing materials, the work made organizational complexity easier to see, present, and maintain.</p>
             </div>
           </div>
     </section>

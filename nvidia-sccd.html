@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2595,6 +2608,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2839,11 +2883,11 @@
             </div>
             <div class="project-overview-item">
               <dt>Role</dt>
-              <dd>Creative Direction, AI Workflow, Prompt-To-Scene Judgment, Motion And Editorial Direction, Presentation Framing</dd>
+              <dd class="copy-edit-highlight">Creative Direction, Generative AI Workflow, Prompt-to-Scene Direction, Motion and Editorial Direction, Presentation Framing</dd>
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight">AI-Generated Scenes, Music-Video Assets, Showreel, Runway Experiments, Keynote-Ready Visual Material</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">AI-Generated Scenes, Music Video Assets, Showreel, Runway Experiments, Presentation-Ready Visual Material</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2919,45 +2963,45 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">NVIDIA x SCCD Project NV was an early-stage generative AI music video and showreel project exploring how AI-generated imagery, music, video editing, and creative direction could form a coherent cinematic language for technology-facing presentation contexts.</p>
-              <p class="biography-sync-highlight">The collaboration context included OurSong, NVIDIA, and SCCD, but the creative focus was the production system: prompt fragments, generated scenes, Runway experiments, editorial judgment, music structure, and the discipline of turning unstable AI output into intentional cinematic direction.</p>
-              <p>The earliest state of the project was intentionally unstable. It did not begin with polished storyboards, but with fragments of prompts, frame tests, rough notes on editing order, and visual hypotheses. These materials behaved like sketches: unfinished, suggestive, and full of possibility. The goal was to find a language where algorithmic chance could still feel directed, emotional, and artistically intentional.</p>
-              <p>Production became a dialogue between direction and discovery. AI-generated scenes, Runway experiments, musical structure, editing rhythm, and showreel requirements were shaped together. Each output was judged not only by novelty, but by whether it carried narrative tension. The real creative work was turning unpredictable machine images into sequences with pressure, pulse, and visual conviction.</p>
-              <p>As the work neared completion, the focus shifted from experimentation to legibility. The rhythm was tightened, the strongest visual motifs were selected, and the material was organized for keynote, showreel, and presentation contexts. The film had to feel advanced without becoming abstract, spectacular without losing the emotional trace of the song.</p>
-              <p>The final outcome positioned generative AI as a creative instrument rather than a technical gimmick. Across the narrative film, the Computex presentation reel, and related experiments, Project NV showed how music, technology, and visual direction could form a persuasive cultural signal. It made AI feel less like software and more like a new cinematic grammar.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">Project NV was an early-stage generative AI music video and showreel project exploring how AI-generated imagery, music, video editing, and creative direction could form a coherent cinematic language for technology-facing presentation contexts.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The collaboration context included OurSong, NVIDIA, and SCCD, but the creative focus was the production system: prompt development, generated scenes, Runway experiments, editorial judgment, music structure, and the process of turning unstable AI output into intentional visual direction.</p>
+              <p class="copy-edit-highlight">The project began with exploratory prompts, frame tests, edit notes, visual references, and rough sequencing. Instead of treating AI output as finished imagery, the work used generated material as a sketch layer for finding tone, pacing, and visual motifs.</p>
+              <p class="copy-edit-highlight">Production connected direction and experimentation. AI-generated scenes, Runway tests, music structure, editing rhythm, and showreel requirements were shaped together, with each output judged by narrative clarity, visual consistency, and its ability to support a presentation context.</p>
+              <p class="copy-edit-highlight">Final refinement moved the work from experiment to usable asset. The strongest motifs were selected, the rhythm was tightened, and the material was organized for keynote, showreel, and presentation use.</p>
+              <p class="copy-edit-highlight">The final outcome positioned generative AI as a practical creative instrument for technology storytelling. Across the film, Computex presentation reel, and related experiments, Project NV showed how music, AI imagery, and editorial direction could become a persuasive, presentation-ready creative system.</p>
             </div>
           </div>
     </section>
     <!-- CONTENT SECTION: one major vertical block with a heading and either project metadata, media, or prose. Keep section spacing consistent through the shared CSS variables. -->
     <section class="section" aria-labelledby="nvidia-sccd-kimberley-title">
-          <h2 id="nvidia-sccd-kimberley-title">Kimberley &ldquo;Street Signs&rdquo; Generative AI MV</h2>
+          <h2 id="nvidia-sccd-kimberley-title" class="copy-edit-highlight">Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video</h2>
       <!-- MEDIA GRID: each child card contains one image/video/iframe plus caption and optional local curation controls. -->
       <div class="grid kimberley-video-grid">
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-01" data-title="Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (1) H.264 (Volume Equalized by Joshua)_fixed.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-028-kimberley-chen-street-signs-generative-ai-.mp4" fetchpriority="low"></video></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-                <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #1</h3>
+                <h3><span class="copy-edit-highlight">Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #1</span></h3>
               </div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-02" data-title="Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (2) H.264 (Volume Equalized by Joshua)_fixed.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-029-kimberley-chen-street-signs-generative-ai-.mp4" fetchpriority="low"></video></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-                <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #2</h3>
+                <h3><span class="copy-edit-highlight">Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #2</span></h3>
               </div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
+        <article class="card" data-card data-id="nvidia-sccd-kimberley-street-signs-final-03" data-title="Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #3" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\3 NVIDIA x SCCD\Kimberley Street Signs Generative AI MV\20230704 Kimberley Chen street signs Generative AI MV FINAL H.264 (Volume Equalized by Joshua)\Kimberley Chen  street signs  Generative AI MV FINAL (3) H.264 (Volume Equalized by Joshua)_fixed.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video"><video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-030-kimberley-chen-street-signs-generative-ai-.mp4" fetchpriority="low"></video></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-                <h3>Kimberley &ldquo;Street Signs&rdquo; Gen-AI MV #3</h3>
+                <h3><span class="copy-edit-highlight">Kimberley &ldquo;Street Signs&rdquo; Generative AI Music Video #3</span></h3>
               </div>
             </article>
           </div>
@@ -2994,11 +3038,11 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">Kimberley&rsquo;s &ldquo;Street Signs&rdquo; extended the same generative AI exploration into a music-video context, testing how synthetic imagery, editing rhythm, artist identity, and media-facing assets could become a finished cultural release rather than only an experiment.</p>
-              <p>The early phase revolved around emotion, fragments, and visual instability. Street signs, urban surfaces, distorted rooms, unstable portraits, and generated characters became the raw vocabulary. The earliest images were not treated as finished work, but as tests of tone: how much imperfection could remain before accidental error became expression.</p>
-              <p>Production required constant translation between AI output and music-video direction. Generated shots were selected, sequenced, compared, repaired, and edited into formats that could support both the full-length film and promotional assets. The work demanded taste judgments under pressure: when to preserve the strange texture of AI, and when to tame it through rhythm, continuity, and editing control.</p>
-              <p>As the project neared completion, the focus shifted toward delivery and impact. Horizontal and vertical teasers, final H.264 exports, volume balancing, and media versions were refined one by one so the work could move across screens. The visual language had to remain experimental, while the release itself had to function like a complete campaign asset.</p>
-              <p>The final outcome was more than a music video. It was an artist statement, a media object, and proof of creative-direction ability within an AI production environment. Through the finished film, teasers, and press exposure, &ldquo;Street Signs&rdquo; showed how synthetic imagery could be transformed into a precise and complete cultural moment.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">Kimberley&rsquo;s &ldquo;Street Signs&rdquo; extended the same generative AI workflow into a finished music-video context, testing how synthetic imagery, editing rhythm, artist identity, and media-facing assets could support a complete cultural release.</p>
+              <p class="copy-edit-highlight">The early phase defined a visual vocabulary from street signs, urban surfaces, distorted rooms, unstable portraits, and generated characters. These images were evaluated for tone, narrative usefulness, and how much AI imperfection could remain without distracting from the artist and song.</p>
+              <p class="copy-edit-highlight">Production required constant translation between AI output and music-video direction. Generated shots were selected, sequenced, compared, repaired, and edited into formats that could support the full-length film and promotional assets.</p>
+              <p class="copy-edit-highlight">Final delivery focused on screen behavior and release readiness. Horizontal and vertical teasers, final H.264 exports, volume balancing, and media versions were refined so the work could move across platforms while keeping its experimental visual identity.</p>
+              <p class="copy-edit-highlight">The final outcome became a finished music video, media asset, and proof of creative-direction capability inside an AI production environment. Through the film, teasers, and press exposure, &ldquo;Street Signs&rdquo; showed how synthetic imagery can be shaped into a controlled and complete release.</p>
             </div>
           </div>
         </section>

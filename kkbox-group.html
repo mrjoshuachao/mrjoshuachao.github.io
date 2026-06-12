@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2682,6 +2695,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2938,11 +2982,11 @@
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
-              <dd>Executives, HR And Recruiting Teams, Marketers, Videographers, Editors, Designers</dd>
+              <dd class="copy-edit-highlight">Executives, HR and Recruiting Teams, Marketers, Videographers, Editors, Designers</dd>
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
-              <dd>Culture Framing <span class="workflow-arrow" aria-hidden="true"></span> Campaign Concept <span class="workflow-arrow" aria-hidden="true"></span> Film And Website Direction <span class="workflow-arrow" aria-hidden="true"></span> Production <span class="workflow-arrow" aria-hidden="true"></span> Final Delivery</dd>
+              <dd class="copy-edit-highlight">Culture Framing <span class="workflow-arrow" aria-hidden="true"></span> Campaign Concept <span class="workflow-arrow" aria-hidden="true"></span> Film and Website Direction <span class="workflow-arrow" aria-hidden="true"></span> Production <span class="workflow-arrow" aria-hidden="true"></span> Final Delivery</dd>
             </div>
             </dl>
           </div>
@@ -3074,12 +3118,12 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
         <div class="essay-block" lang="en">
-          <p class="biography-sync-highlight">The KKBOX Group branding and recruitment campaign translated internal culture into a public-facing talent story for a holding-company context, using a mini-episode series, career website, and recruiting materials to make organizational life visible and credible.</p>
-              <p class="biography-sync-highlight">The campaign treated recruiting as a designed brand experience, connecting group branding, corporate video, career communication, and talent storytelling into one outward-facing system.</p>
-          <p>The early material included campaign proposals, career website layouts, culture models, growth-cycle diagrams, and fragments of corporate tone. These were conceptual drafts for an employer identity, searching for a way to make company culture visible without reducing it to slogans or decorative office imagery.</p>
-          <p>Production moved through corporate image films, MA Program recruiting materials, career website design, videography, and internal communication assets. The work had to connect people, teams, values, and ambition across many formats. It required a balance between polish and sincerity, because employer branding stops working once it feels too artificial.</p>
-          <p>As the campaign approached completion, it became more precise. Four 4K episodes, website pages, culture graphics, and final delivery versions were adjusted to become clearer, more rhythmic, and more emotionally credible. Visual and editing decisions had to make the organization feel energetic while remaining believable.</p>
-          <p>The final outcome presented KKBOX Group as a living ecosystem formed by talent, culture, and shared purpose. The campaign made recruiting and corporate communication more designed, more memorable, and more strategic. It demonstrated how an internal identity can become a persuasive public story.</p>
+          <p class="biography-sync-highlight copy-edit-highlight">The KKBOX Group branding and recruitment campaign translated internal culture into a public-facing employer brand system for a holding-company context, using a mini-episode series, career website, and recruiting materials to make organizational life clear, credible, and distinctive.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The campaign treated recruiting as a designed brand experience, connecting group branding, corporate video, career communication, culture graphics, and talent storytelling into one outward-facing system.</p>
+          <p class="copy-edit-highlight">Early development included campaign proposals, career website layouts, culture models, growth-cycle diagrams, and corporate tone references. The goal was to define an employer identity that could communicate culture with specificity rather than relying on generic slogans or office imagery.</p>
+          <p class="copy-edit-highlight">Production moved through corporate image films, MA Program recruiting materials, career website direction, videography, editing, and internal communication assets. The work had to connect people, teams, values, and ambition across multiple formats while staying believable.</p>
+          <p class="copy-edit-highlight">Final refinement focused on structure, rhythm, and credibility. Four 4K episodes, website pages, culture graphics, and delivery versions were adjusted so the organization felt energetic, clear, and professionally presented.</p>
+          <p class="copy-edit-highlight">The final outcome strengthened KKBOX Group&rsquo;s public-facing employer brand and gave recruiting communication a more designed, memorable, and strategic platform. It demonstrates how internal culture can become a credible external story.</p>
         </div>
       </div>
     </section>
@@ -3113,7 +3157,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
-              <dd>Product Framing <span class="workflow-arrow" aria-hidden="true"></span> Metaphor Development <span class="workflow-arrow" aria-hidden="true"></span> Visual Direction <span class="workflow-arrow" aria-hidden="true"></span> Film And Asset Production <span class="workflow-arrow" aria-hidden="true"></span> Sales-Ready Delivery</dd>
+              <dd class="copy-edit-highlight">Product Framing <span class="workflow-arrow" aria-hidden="true"></span> Metaphor Development <span class="workflow-arrow" aria-hidden="true"></span> Visual Direction <span class="workflow-arrow" aria-hidden="true"></span> Film and Asset Production <span class="workflow-arrow" aria-hidden="true"></span> Sales-Ready Delivery</dd>
             </div>
             </dl>
           </div>
@@ -3163,12 +3207,12 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
         <div class="essay-block" lang="en">
-          <p class="biography-sync-highlight">KKStream / BlendVision required a B2B technology brand storytelling system that could make enterprise streaming infrastructure easier to understand through conceptual metaphors, video, website assets, and sales-facing visuals.</p>
-              <p class="biography-sync-highlight">The work translated backend capability into a clear product universe, helping business audiences understand, trust, and present streaming infrastructure before entering technical detail.</p>
-          <p>The early phase was built from product metaphors and abstract systems. Kaleido, Loom, and Moment each suggested a different way of thinking about viewing technology: pattern, fabric, and captured experience. These concepts worked like strategic sketches, giving shape to a product universe that might otherwise have lived only in specifications, diagrams, and sales language.</p>
-          <p>Production connected product thinking with cinematic communication. Worldview films, product introductions, client-facing videos, website hero assets, and datasheet imagery were developed as one coherent ecosystem. Every asset had to make the technology feel precise and credible, while retaining enough atmosphere to create anticipation.</p>
-          <p>In the final stage, the work was refined into a clearer and more business-ready state. Subtitles, product names, visual rhythm, demo segments, and website materials were adjusted so the same story could move through meetings, websites, presentations, and sales conversations. The design language became modular without becoming generic or characterless.</p>
-          <p>The final outcome gave BlendVision and KKStream a more cinematic B2B voice. It did not explain technology only through features; it presented streaming infrastructure as a designed experience. The project made enterprise communication sharper, more confident, and better able to carry strategic ambition.</p>
+          <p class="biography-sync-highlight copy-edit-highlight">KKStream / BlendVision required a B2B technology storytelling system that could make enterprise streaming infrastructure easier to understand through product metaphors, video, website assets, presentation materials, and sales-facing visuals.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The work translated backend capability into a clear product universe, helping business audiences understand, trust, and present streaming infrastructure before entering technical detail.</p>
+          <p class="copy-edit-highlight">Early development used product metaphors to organize complex platform capabilities. Kaleido, Loom, and Moment each gave a different entry point into viewing technology: pattern, fabric, and captured experience. These concepts turned technical infrastructure into a product story that sales and business teams could use.</p>
+          <p class="copy-edit-highlight">Production connected product strategy with cinematic communication. Worldview films, product introduction videos, client-facing visuals, website hero assets, and datasheet imagery were developed as one coherent B2B communication system.</p>
+          <p class="copy-edit-highlight">Final refinement made the system more modular and meeting-ready. Subtitles, product names, visual rhythm, demo segments, and website materials were adjusted so the same story could move through websites, presentations, sales conversations, and client meetings.</p>
+          <p class="copy-edit-highlight">The final outcome gave BlendVision and KKStream a sharper B2B voice. Instead of explaining technology only through features, the project presented streaming infrastructure as a designed experience with clearer strategic value.</p>
         </div>
       </div>
     </section>

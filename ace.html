@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2580,6 +2593,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2820,7 +2864,7 @@
         <dl class="project-overview-grid">
             <div class="project-overview-item">
               <dt>Project Type</dt>
-              <dd class="biography-sync-highlight">AI-Powered Creativity Education, Training And Workshop System</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">AI-Powered Creativity Education, Training and Workshop System</dd>
             </div>
             <div class="project-overview-item">
               <dt>Role</dt>
@@ -2828,7 +2872,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight">Workshops, Online Courses, Printed Thinking Tools, Certificates, Showcases, Human-Centered AI Ideation And Pitching Exercises</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Workshops, Online Courses, Printed Thinking Tools, Certificates, Showcases, Human-Centered AI Ideation and Pitching Exercises</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2836,7 +2880,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
-              <dd>Chris Lin (Founder Of KKBOX Group), Educators, Executives, Entrepreneurs, Students, CEOs, Institutional Partners</dd>
+              <dd class="copy-edit-highlight">Chris Lin (Founder of KKBOX Group), Educators, Executives, Entrepreneurs, Students, CEOs, Institutional Partners</dd>
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
@@ -2854,11 +2898,11 @@
           <div class="card-body"><h3>2023 Creative Confidence AI Summer Lab</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="ace-02" data-title="2024 UWC ISAK JAPAN Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-02.jpg">
+        <article class="card" data-card data-id="ace-02" data-title="2024 UWC ISAK Japan Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-02.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-02.webp" alt="2024 UWC ISAK JAPAN Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-02.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
-          <div class="card-body"><h3>2024 UWC ISAK JAPAN Teacher Training</h3></div>
+          <div class="card-body"><h3><span class="copy-edit-highlight">2024 UWC ISAK Japan Teacher Training</span></h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-03" data-title="2025 Junyi School of Innovation Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-03.jpg">
@@ -2875,11 +2919,11 @@
           <div class="card-body"><h3>2025 Sharestart Education Foundation Training</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="ace-05" data-title="2024 UWC ISAK JAPAN Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-05.jpg">
+        <article class="card" data-card data-id="ace-05" data-title="2024 UWC ISAK Japan Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-05.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-05.webp" alt="2024 UWC ISAK JAPAN Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-05.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
-          <div class="card-body"><h3>2024 UWC ISAK JAPAN Teacher Training</h3></div>
+          <div class="card-body"><h3><span class="copy-edit-highlight">2024 UWC ISAK Japan Teacher Training</span></h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-06" data-title="2025 Chunghwa Telecom Institute Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-06.jpg">
@@ -2909,12 +2953,12 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">Applied Creativity Engine, also known as ACE, is an AI-powered creativity education, training, and workshop system co-founded by Joshua Chao and Chris Lin to help teachers, students, executives, entrepreneurs, and future leaders use emerging tools with human-centered judgment.</p>
-              <p class="biography-sync-highlight">ACE demonstrates Joshua&rsquo;s ability to explain emerging creative technologies, design learning systems, and translate AI-powered creative workflows into practical education for schools, institutions, executives, and business leaders.</p>
-              <p>At the heart of ACE is the belief that creativity is not a rare gift for a few people, but a discipline that can be practiced, strengthened, and applied. Joshua brought the perspective of a creative director, designer, and educator; Chris brought the perspective of a technology entrepreneur. Together, they shaped ACE around independent will, meaningful problem finding, creative problem solving, and creating value for others. This later developed into a learning cycle built on curiosity, remix thinking, empathy, and storycraft.</p>
-              <p>ACE turns these ideas into hands-on learning rather than abstract lectures. Its programs train learners to move from vague ideas to pitch-ready concepts, prototypes, stories, and proposals. The work spans children's creativity workshops, AI music-video experiments, foundation programs, corporate training, leadership workshops, online courses, printed thinking tools, certificates, student showcases, and project-based assignments such as Impossible Product Design, Impeccable Brand Ambassador, Incredible Crossover Campaign, The Empathy Lab, and The MVP Pitch Room.</p>
-              <p>By 2026, ACE had trained more than 500 learners across Japan and Taiwan, working with UWC ISAK Japan, Junyi School of Innovation, Shih Chien University, Chunghwa Telecom, KKCompany, Waseda University students, YPO, ShareStart, and other education and industry groups. Its work does not stay inside classrooms. Learners develop ideas around real brands, real needs, and real presentation contexts, building a bridge between creative education and business expectations.</p>
-              <p>What makes ACE distinctive is how it connects school, industry, and personal transformation. At UWC ISAK Japan, it grew from pilot workshops into a leadership-learning system; in corporate settings, it helped teams rediscover imagination as a practical business capability. Joshua and Chris did not build ACE to make people faster versions of machines. They built it to help people become more awake, inventive, and capable of turning insight into action. In this sense, ACE is both an education company and a philosophy of work: a creative engine for people who want to lead with meaning in the AI era.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">Applied Creativity Engine, also known as ACE, is an AI-powered creativity education, training, and workshop system co-founded by Joshua Chao and Chris Lin to help teachers, students, executives, entrepreneurs, and future leaders use emerging tools with human-centered judgment.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">ACE demonstrates Joshua&rsquo;s ability to translate emerging creative technologies into structured learning systems, workshop formats, executive presentations, and practical AI-assisted creative workflows for schools, institutions, and business leaders.</p>
+              <p class="copy-edit-highlight">ACE is built on the idea that creativity can be practiced, trained, and applied. Joshua brought the perspective of a creative director, designer, and educator; Chris brought the perspective of a technology entrepreneur. Together, they shaped the program around problem finding, creative problem solving, independent judgment, value creation, and the responsible use of AI tools.</p>
+              <p class="copy-edit-highlight">The programs turn theory into hands-on learning. Learners move from vague ideas to pitch-ready concepts, prototypes, stories, and proposals through workshops, online courses, printed thinking tools, certificates, showcases, and project-based assignments such as Impossible Product Design, Impeccable Brand Ambassador, Incredible Crossover Campaign, The Empathy Lab, and The MVP Pitch Room.</p>
+              <p class="copy-edit-highlight">By 2026, ACE had trained more than 500 learners across Japan and Taiwan, working with UWC ISAK Japan, Junyi School of Innovation, Shih Chien University, Chunghwa Telecom, KKCompany, Waseda University students, YPO, Sharestart, and other education and industry groups. The work connects creative education with real brands, real presentation contexts, and practical business expectations.</p>
+              <p class="copy-edit-highlight">ACE is distinctive because it links school, industry, and leadership training through a clear creative process. At UWC ISAK Japan, it grew from pilot workshops into a leadership-learning system; in corporate settings, it helped teams apply imagination as a practical business capability. The result is an education platform and workshop system for people who need to lead, communicate, and create in the AI era.</p>
             </div>
           </div>
     </section>

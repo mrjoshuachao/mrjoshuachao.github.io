@@ -141,25 +141,37 @@
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
 <!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
     // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
     const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
     const setRevisionColorMode = (showColor) => {
       root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
       try {
         window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    const setCopyEditColorMode = (showColor) => {
+      root.classList.toggle("is-copy-edit-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
       } catch {}
     };
     try {
       setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
     } catch {
       setRevisionColorMode(false);
+    }
+    try {
+      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
+    } catch {
+      setCopyEditColorMode(false);
     }
     let revisionToggleClickCount = 0;
     let revisionToggleClickTimer;
@@ -171,6 +183,7 @@
       }
     };
     revisionColorToggle?.addEventListener("click", () => {
+      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
       revisionToggleClickCount += 1;
       if (revisionToggleClickCount === 1) {
         revisionToggleClickTimer = window.setTimeout(() => {
@@ -2699,6 +2712,37 @@
       color: #7a2cff !important;
       text-decoration-color: #7a2cff !important;
     }
+    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .copy-edit-highlight,
+    .copy-edit-highlight a,
+    .copy-edit-highlight strong,
+    .revision-highlight .copy-edit-highlight,
+    .revision-highlight .copy-edit-highlight a,
+    .revision-highlight .copy-edit-highlight strong,
+    .biography-sync-highlight.copy-edit-highlight,
+    .biography-sync-highlight.copy-edit-highlight a,
+    .biography-sync-highlight.copy-edit-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-copy-edit-color .copy-edit-highlight,
+    html.is-copy-edit-color .copy-edit-highlight a,
+    html.is-copy-edit-color .copy-edit-highlight strong,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
+    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
+    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
+      color: #e68600 !important;
+      text-decoration-color: #e68600 !important;
+    }
+
+    .copy-edit-highlight a {
+      text-decoration-color: currentColor !important;
+    }
+
     .revision-color-toggle {
       appearance: none;
       position: fixed;
@@ -2947,7 +2991,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight">Identity, Product Expression, Motion, Design Guidelines, TVCs, Landing Pages, Retail Materials, Screen-Based And Printed Assets</dd>
+              <dd class="biography-sync-highlight copy-edit-highlight">Identity, Product Expression, Motion, Design Guidelines, TVCs, Landing Pages, Retail Materials, Screen-Based and Printed Assets</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2955,7 +2999,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
-              <dd>Product Teams, Marketers, Designers, Filmmakers, Media And Retail Partners</dd>
+              <dd class="copy-edit-highlight">Product Teams, Marketers, Designers, Filmmakers, Media and Retail Partners</dd>
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
@@ -2972,16 +3016,16 @@
       <div class="grid">
 
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1: Too Much Love (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
             <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3>KKTV TVC #1 Too Much Love 20s</h3>
+            <h3><span class="copy-edit-highlight">KKTV TVC #1: Too Much Love (20 sec)</span></h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #1 Too Much Love 20s from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #1: Too Much Love (20 sec) from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -2992,16 +3036,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2: Pillow Talk (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
             <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3>KKTV TVC #2 Pillow Talk 20s</h3>
+            <h3><span class="copy-edit-highlight">KKTV TVC #2: Pillow Talk (20 sec)</span></h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #2 Pillow Talk 20s from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #2: Pillow Talk (20 sec) from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -3012,16 +3056,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3: Device Crush (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
             <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3>KKTV TVC #3 Device Crush 20s</h3>
+            <h3><span class="copy-edit-highlight">KKTV TVC #3: Device Crush (20 sec)</span></h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #3 Device Crush 20s from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #3: Device Crush (20 sec) from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -3032,16 +3076,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4: Fighting for Attention (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
             <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3>KKTV TVC #4 Fighting for Attention 20s</h3>
+            <h3><span class="copy-edit-highlight">KKTV TVC #4: Fighting for Attention (20 sec)</span></h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #4 Fighting for Attention 20s from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #4: Fighting for Attention (20 sec) from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -3240,17 +3284,17 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
         <div class="essay-block" lang="en">
-          <p class="biography-sync-highlight">KKTV became the first major expression of Joshua&rsquo;s Creative Director role inside the KK ecosystem: an OTT streaming brand launch that needed to connect product experience, identity, advertising, and public communication at launch speed.</p>
-              <p class="biography-sync-highlight">The launch integrated identity, product expression, motion, design guidelines, TVCs, landing pages, retail materials, and screen-based and printed assets into one recognizable brand system.</p>
-          <p>The earliest phase included app icons, logotype studies, website photography references, keynote materials, product screens, and motion concepts. These elements formed the sketch layer before launch, testing how a streaming service could feel approachable, cinematic, and technologically fluid without becoming visually noisy.</p>
-          <p>Production connected nearly every visible surface of the new brand. Guidelines, product demos, app store screenshots, campaign films, TVC materials, website visuals, print assets, bus advertising, and logo animation were all developed as part of one launch language. The project demanded speed, range, and consistency.</p>
-          <p>As launch approached, the work became an exercise in precision. App icon, logotype usage, screen layouts, film cuts, cover images, and print formats were refined so every channel could speak with the same voice. The brand had to translate from a keynote stage to a phone screen, then again to street advertising.</p>
-          <p>The final outcome transformed KKTV from a product into a recognizable entertainment brand. The launch system gave internal teams a practical design foundation and gave audiences a clear first impression. It is a strong example of creative direction moving across identity, product, motion, and campaign at the same time.</p>
+          <p class="biography-sync-highlight copy-edit-highlight">KKTV was Joshua&rsquo;s first full-scale in-house Creative Director assignment in the KK ecosystem: a consumer streaming launch that required identity, product expression, advertising, retail, web, motion, and public communication to work as one system.</p>
+              <p class="biography-sync-highlight copy-edit-highlight">The launch connected brand strategy with hands-on art direction and production across app icons, logotype usage, product demos, TVCs, landing pages, retail cards, printed materials, screen-based assets, and internal design guidelines.</p>
+          <p class="copy-edit-highlight">Early development focused on defining a brand behavior that could move from product screens to mass-market advertising. App icons, logotype studies, keynote materials, product screens, motion concepts, and website photography references were tested against a launch requirement: make the service feel accessible, cinematic, and immediately usable.</p>
+          <p class="copy-edit-highlight">Production required parallel execution across product, marketing, retail, and media assets. Guidelines, app store screenshots, demo videos, TVC materials, website visuals, print pieces, bus advertising, and logo animation were developed as one launch toolkit.</p>
+          <p class="copy-edit-highlight">Final refinement centered on channel consistency. Icon usage, screen layouts, film cuts, cover images, print formats, and retail applications were adjusted so the brand could move from keynote presentation to phone screen to street-level advertising without losing recognition.</p>
+          <p class="copy-edit-highlight">The final outcome helped turn KKTV from a product launch into a recognizable entertainment brand. The system gave internal teams a practical design foundation and gave audiences a clear first impression across product, campaign, motion, retail, and print touchpoints.</p>
         </div>
       </div>
     </section>
         <div class="archive-footnote" role="note" aria-label="Archived project folders not shown above">
-          <p><strong>Archived project contents not shown above:</strong> KKTV Drama Postcard Design, KKTV Press Release Event Print, KKTV Press Release Event Keynote, KKTV Screen-Based Images, KKTV Brand Book, KKTV Bus Ad, KKTV Business Card, KKTV Gift Box, KKTV Huge Flags, KKTV Intro DM, KKTV Logo Wall, KKTV Mister K Cardboard Cut-Out, KKTV Mister K Tiny Cardboard Cut-Out for Experience Area, KKTV Paper Bag, KKTV Serial Number Card For Gift, KKTV Serial Number Card For Retail, KKTV Stage Background, KKTV Tattoo Sticker, KKTV T-Shirt, KKTV 2016 Information Month Conference Handbook, KKTV Business Next Innovation Expo Collaboration NFC Poster, KKTV App Store Screenshots, KKTV Beta Testing Announcement, KKTV Promotion For TV Channel, KKTV Google Play Screenshots, KKTV Headline Image, KKTV App Install Guide, KKTV Online Video Survey, KKTV KOL Cover Image, KKTV OTT Official Content Badge, KKTV Demo Video, KKTV Video Loading Animation, KKTV Coming Soon Page.</p>
+          <p class="copy-edit-highlight"><strong>Archived project contents not shown above:</strong> KKTV Drama Postcard Design, KKTV Press Release Event Print, KKTV Press Release Event Keynote, KKTV Screen-Based Images, KKTV Brand Book, KKTV Bus Ad, KKTV Business Card, KKTV Gift Box, KKTV Huge Flags, KKTV Intro DM, KKTV Logo Wall, KKTV Mister K Cardboard Cut-Out, KKTV Mister K Tiny Cardboard Cut-Out for Experience Area, KKTV Paper Bag, KKTV Serial Number Card for Gift, KKTV Serial Number Card for Retail, KKTV Stage Background, KKTV Tattoo Sticker, KKTV T-Shirt, KKTV 2016 Information Month Conference Handbook, KKTV Business Next Innovation Expo Collaboration NFC Poster, KKTV App Store Screenshots, KKTV Beta Testing Announcement, KKTV Promotion for TV Channel, KKTV Google Play Screenshots, KKTV Headline Image, KKTV App Install Guide, KKTV Online Video Survey, KKTV KOL Cover Image, KKTV OTT Official Content Badge, KKTV Demo Video, KKTV Video Loading Animation, KKTV Coming Soon Page.</p>
         </div>
       <!-- NEXT-PAGE LINK: bottom progression link aligned visually with the left-side award-logo baseline. -->
       <a class="next-panel-link next-panel-link--flat-bottom" href="kkfarm.html" aria-label="Next: KKFARM">
