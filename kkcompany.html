@@ -2671,20 +2671,18 @@
       padding: 14px 20px 14px 0;
       border-top: 1px solid #000;
     }
-
     .portfolio-text-card h3 {
-      margin: 0 0 6px;
+      margin: 0 0 4.5px;
       font-size: var(--article-body-font-size);
-      font-weight: 700;
-      line-height: 1.2;
+      font-weight: 800;
+      line-height: 1.18;
       letter-spacing: 0;
     }
-
     .portfolio-text-card p,
     .portfolio-text-card li {
       margin: 0;
-      font-size: var(--article-body-font-size);
-      line-height: 1.42;
+      font-size: var(--article-caption-font-size);
+      line-height: 1.25;
       letter-spacing: 0;
     }
 
@@ -2692,13 +2690,14 @@
     .portfolio-text-card li + li {
       margin-top: 6px;
     }
-
     .portfolio-tags {
-      display: block;
-      margin-top: 8px;
-      font-size: clamp(11px, 0.9vw, 14px);
-      font-weight: 700;
-      line-height: 1.25;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      margin-top: 9px;
+      font-size: clamp(9px, calc(var(--article-caption-font-size) - 3px), 12px);
+      font-weight: 400;
+      line-height: 1.1;
       letter-spacing: 0;
     }
 
@@ -2753,38 +2752,34 @@
       content: "➔";
     }
 
-    /* PROJECT OVERVIEW META GRID: the six top fields (Project Type, Role, Key Outputs, Channels, Collaborators, Workflow). */
+    /* PROJECT OVERVIEW META GRID: the six top fields use three columns on desktop/tablet and two columns in the mobile media query below. */
 
     .project-overview-card {
       margin: var(--heading-content-gap) 0 var(--section-gap);
       padding: 0;
     }
-
     .project-overview-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 27px 27px;
+      gap: 10px 27px;
       margin: 0;
     }
-
     .project-overview-item {
       min-width: 0;
-      padding: 14px 20px 0 0;
+      padding: 14px 20px 14px 0;
       border-top: 1px solid #000;
     }
-
     .project-overview-item dt {
-      margin: 0;
+      margin: 0 0 4.5px;
       font-size: var(--article-body-font-size);
       font-weight: 800;
-      line-height: 1.28;
+      line-height: 1.18;
       letter-spacing: 0;
     }
-
     .project-overview-item dd {
-      margin: 3px 0 0;
+      margin: 0;
       font-size: var(--article-caption-font-size);
-      line-height: 1.42;
+      line-height: 1.25;
       letter-spacing: 0;
     }
 
@@ -2795,10 +2790,15 @@
     .post-media-essay-section .essay + .essay {
       margin-top: var(--section-gap);
     }
-
     @media (max-width: 760px) {
+      /* MOBILE LINED TEXT BLOCKS: all horizontal-rule subtitle cards keep the same two-column rhythm. */
       .portfolio-text-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 21px 21px;
+      }
+
+      .portfolio-text-card {
+        padding-right: 12px;
       }
 
       .project-overview-grid {
