@@ -1,5 +1,26 @@
 <!doctype html>
+<!--
+  CODE HANDOFF NOTES
+  File: index.html
+  Browser title: Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity
+  Purpose: Biography landing page. This page combines the professional biography, capabilities, methodology, leadership context, tools, and the portfolio entry link.
+
+  Architecture overview:
+  - This is a static, self-contained HTML page. Each page duplicates the shared CSS and JS intentionally so it can be uploaded or handed off without a build step.
+  - The page is organized as: head metadata and paint shield, early boot script, full stylesheet, left navigation, main content sections, shared image lightbox, and shared runtime script.
+  - Visual layout depends mostly on CSS custom properties in :root. Change spacing, type scale, left-nav width, and responsive behavior there before editing many individual selectors.
+  - Portfolio assets are represented by article.card elements with data-card, data-id, data-title, and data-file-path attributes. The runtime uses those attributes for local curation, captions, and image-lightbox ordering.
+  - The red/purple revision text is hidden by default. Triple-click the invisible 200x200px button in the top-right corner within one second to toggle revision colors.
+  - The site is designed to work from file:// and from static hosting. Optional helper API calls are silent and non-critical.
+
+  Maintenance warnings:
+  - Keep data-id values stable when replacing assets; localStorage removal state and lightbox ordering rely on them.
+  - Keep .media-frame around all image/video/iframe assets; it supplies the RGB 245 edge mask and loading state.
+  - Keep .project-overview-card spacing tied to --heading-content-gap and --section-gap so all pages stay rhythmically consistent.
+  - When adding a new page, copy one existing page and update only content, active nav state, metadata, and bottom next-link target.
+-->
 <html lang="en" style="background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
+<!-- HEAD: metadata, early paint protection, SEO tags, favicon, and font preloads. -->
 <head>
   <meta charset="utf-8" />
   <meta name="color-scheme" content="only light" />
@@ -8,7 +29,9 @@
   <meta name="theme-color" content="#f5f5f5" />
   <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: dark)" />
+  <!-- INITIAL PAINT SHIELD STYLE: runs before the main stylesheet to prevent black/dark flashes while local media and fonts load. -->
   <style id="initial-background-style">
+    /* This block is deliberately duplicated before the main CSS. It forces the page, media frames, and paint shield to RGB 245 so browser dark mode or video edges cannot show black during first paint. */
     :root,
     html,
     body {
@@ -60,6 +83,8 @@
     img:not(.image-lightbox__image),
     picture,
     canvas,
+          /* MEDIA FRAME: masks image/video edges with the RGB 245 frame color and provides a stable aspect-ratio box for lazy media. */
+
     .media-frame {
       background: #f5f5f5 !important;
       background-color: #f5f5f5 !important;
@@ -112,6 +137,7 @@
     }
 
   </style>
+  <!-- SEO AND ASSET HINTS: title/description for sharing plus local font preloads for stable typography. -->
   <title>Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity</title>
   <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, motion, digital campaigns, cultural projects, and AI-driven creative workflows in Taiwan, Japan, and East Asian markets." />
   <meta property="og:title" content="Joshua Chao &mdash; Selected Creative Direction Portfolio" />
@@ -121,11 +147,15 @@
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Bold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   </head>
+<!-- BODY: all visible UI starts here. Inline background repeats the paint-shield color before CSS finishes loading. -->
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
+<!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
+<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
 <button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
+    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
     const revisionColorStorageKey = "portfolioRevisionTextColorV2";
@@ -177,7 +207,11 @@
     });
   })();
 </script>
+<!-- MAIN STYLESHEET: shared responsive layout, typography, media frames, navigation, lightbox, and page-specific grids. -->
 <style id="site-styles">
+    /* STYLE MAP: variables -> base layout -> navigation -> sections -> media cards -> lightbox/video controls -> responsive rules -> revision/project overview utilities. */
+    /* DESIGN TOKENS: global fonts, responsive type sizes, spacing units, side-nav width, award-logo sizing, and shared background color. These variables are reused throughout the stylesheet, so layout changes should usually start here. */
+
     :root {
       --page-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
       --zh-article-font: "Myriad Pro", myriad-pro, "Myriad Set Pro", sans-serif;
@@ -220,6 +254,8 @@
       }
     }
 
+    /* LOCAL FONT LOADING: Myriad Pro files are bundled in assets/fonts so the portfolio renders consistently offline and when uploaded as static files. */
+
     @font-face {
       font-family: "Myriad Pro";
       src: url("assets/fonts/MyriadPro-Regular.otf") format("opentype");
@@ -252,6 +288,8 @@
       font-family: var(--page-font);
     }
 
+    /* DOCUMENT BASE: locks the site to a light visual environment and prevents browser dark-mode overrides from changing the portfolio colors. */
+
     html {
       min-height: 100%;
       background: var(--site-bg);
@@ -277,6 +315,8 @@
       font: inherit;
     }
 
+    /* MAIN SCROLLING CANVAS: the right-side content area. Desktop/tablet pages reserve one fifth of the viewport for the fixed left navigation. */
+
     .page {
       width: fit-content;
       max-width: 100%;
@@ -286,6 +326,8 @@
       background-color: var(--site-bg);
       text-align: left;
     }
+
+    /* TWO-COLUMN APPLICATION SHELL: left side-nav plus right content panel. Mobile media queries later collapse this into a top-menu experience. */
 
     .layout {
       display: grid;
@@ -310,6 +352,8 @@
       pointer-events: none;
       user-select: none;
     }
+
+    /* LEFT NAVIGATION RAIL: fixed/viewport-height navigation that holds the title, case-study links, document links, and award logos. */
 
     .side-nav {
       position: sticky;
@@ -475,6 +519,16 @@
       cursor: pointer;
     }
 
+    /* DESKTOP/TABLET AWARD BASELINE: pin award logos to the visual viewport so Safari/iPad does not place them higher than the bottom next-link label. */
+    @media (min-width: 761px) {
+      .side-menu a.award-logo-row {
+        position: fixed;
+        z-index: 2;
+      }
+    }
+
+    /* CONTENT PANEL: each page currently has one active panel, but the class structure supports panel switching from earlier versions. */
+
     .content-panel {
       display: none;
       background: var(--site-bg);
@@ -504,6 +558,8 @@
       margin: 18px 0 0;
       font-size: clamp(14px, 1.1vw, 18px);
     }
+
+    /* SECTION RHYTHM: all major content blocks share these spacing rules so headings, media grids, essays, and next links remain visually consistent. */
 
     .section {
       border-bottom: 0;
@@ -557,6 +613,8 @@
     .section .grid + h2 {
       margin-top: var(--section-gap);
     }
+
+    /* BOTTOM NAVIGATION LINK: aligns the case-study progression link with the award-logo baseline in the left navigation. */
 
     .next-panel-link {
       display: flex;
@@ -665,6 +723,8 @@
       font-size: 14px;
     }
 
+    /* ARTICLE COPY: single-column essay container used for biography copy and post-media case-study writing. */
+
     .essay {
       display: grid;
       grid-template-columns: 1fr;
@@ -721,6 +781,8 @@
     .bio-link strong {
       font-weight: inherit;
     }
+
+    /* BIOGRAPHY-SPECIFIC LAYOUT: constrains the article column and manages the fixed right-side portrait on desktop/tablet. */
 
     .content-panel[data-panel="biography"] {
       --biography-photo-ratio: 0.5835;
@@ -851,6 +913,8 @@
       }
     }
 
+      /* MEDIA GRID: default two-column portfolio grid. Specialized page grids override this for books, square assets, process grids, and video rows. */
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -933,6 +997,8 @@
     .pixel-system-grid [data-id^="kkculture-you-create-pixel-art-print-"] .card-body {
       display: none;
     }
+
+        /* MEDIA CARD: one portfolio asset wrapper. data-card/data-id/data-title/data-file-path are used by JS selection and lightbox tooling. */
 
     .card {
       display: block;
@@ -1170,9 +1236,13 @@
       display: none;
     }
 
+    /* LIGHTBOX STATE: prevents page scroll while an image is open in the fullscreen overlay. */
+
     body.is-lightbox-open {
       overflow: hidden;
     }
+
+    /* IMAGE LIGHTBOX: fixed overlay for click-to-view image browsing, including keyboard and touch navigation. */
 
     .image-lightbox {
       position: fixed;
@@ -1404,6 +1474,8 @@
       background: transparent;
       color: #fff;
     }
+
+    /* CUSTOM VIDEO CONTROLS: visual layer added by JS for play/pause, progress, remaining time, sound, and fullscreen. */
 
     .video-controls {
       position: absolute;
@@ -1663,6 +1735,8 @@
       margin: 0;
     }
 
+    /* LOCAL CURATION CONTROL: the trash button hides a media card locally and persists the removed ID in localStorage. */
+
     .trash-button {
       display: none;
       align-items: center;
@@ -1699,6 +1773,8 @@
       background: var(--site-bg);
       color: #fff;
     }
+
+    /* MOBILE PORTRAIT/TALL VIEWPORTS: converts the fixed side navigation into a top hamburger menu and single-column content flow. */
 
     @media (max-width: 760px) {
       :root {
@@ -2171,6 +2247,8 @@
     }
 
 
+    /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
+
     @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
       :root {
         --outer-text-gutter: 18px;
@@ -2528,6 +2606,8 @@
       text-decoration-color: currentColor;
     }
 
+    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
+
     html.is-revision-color .revision-highlight,
     html.is-revision-color .revision-highlight a,
     html.is-revision-color .revision-highlight strong {
@@ -2541,8 +2621,8 @@
       right: 0;
       z-index: 9500;
       display: block;
-      width: 200px;
-      height: 200px;
+      width: 10px;
+      height: 10px;
       margin: 0;
       padding: 0;
       border: 0;
@@ -2557,6 +2637,8 @@
     .revision-color-toggle:focus-visible {
       outline: 0;
     }
+
+    /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
 
     .portfolio-text-grid {
       display: grid;
@@ -2635,6 +2717,30 @@
       text-decoration-color: #808080 !important;
     }
 
+
+    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
+    .card .card-body h3 .external-arrow-icon,
+    .card .card-body h3 .external-arrow-icon *,
+    .brand-book-caption h3 .external-arrow-icon,
+    .brand-book-caption h3 .external-arrow-icon * {
+      color: #fff !important;
+      text-decoration-color: #fff !important;
+    }
+
+    .card .card-body h3 .external-arrow-icon svg,
+    .brand-book-caption h3 .external-arrow-icon svg {
+      fill: none !important;
+      stroke: #fff !important;
+    }
+
+    .card .card-body h3 .external-arrow-icon path,
+    .brand-book-caption h3 .external-arrow-icon path {
+      fill: none !important;
+      stroke: #fff !important;
+    }
+
+    /* WORKFLOW ARROW: decorative separator inserted between workflow terms without adding extra text semantics for screen readers. */
+
     .workflow-arrow {
       display: inline-block;
       margin: 0;
@@ -2647,6 +2753,8 @@
     .workflow-arrow::before {
       content: "➔";
     }
+
+    /* PROJECT OVERVIEW META GRID: the six top fields (Project Type, Role, Key Outputs, Channels, Collaborators, Workflow). */
 
     .project-overview-card {
       margin: var(--heading-content-gap) 0 var(--section-gap);
@@ -2686,8 +2794,14 @@
     }
 
     @media (max-width: 760px) {
+      /* MOBILE BIOGRAPHY TEXT GRID: keep Biography capability/work/method/tool cards in the same two-column rhythm as project overview metadata. */
       .portfolio-text-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 21px 21px;
+      }
+
+      .portfolio-text-card {
+        padding-right: 12px;
       }
 
       .project-overview-grid {
@@ -2702,9 +2816,12 @@
     /* End Codex portfolio refinement markers */
 
   </style>
-  <div class="layout">
-    <aside class="side-nav" aria-label="Portfolio menu">
-      <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
+<!-- PAGE SHELL: wraps the persistent navigation rail and the main case-study/biography content area. -->
+<div class="layout">
+  <!-- SIDE NAVIGATION: desktop/tablet fixed rail; mobile CSS turns this same markup into a hamburger menu. -->
+  <aside class="side-nav" aria-label="Portfolio menu">
+    <!-- MOBILE MENU TOGGLE: visible only at mobile breakpoints; JS toggles is-mobile-menu-open on the side-nav/html. -->
+    <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -2713,7 +2830,8 @@
         <span class="mobile-menu-title__primary" data-mobile-title-primary>Joshua Hua-Chun Chao</span>
         <span class="mobile-menu-title__secondary" data-mobile-title-secondary>2016-2026 Selected Portfolio</span>
       </a>
-      <a class="side-title" href="index.html" aria-label="Go to Biography">
+    <!-- DESKTOP SITE TITLE: also acts as a home/biography link. Kept as stacked spans to preserve the poster-like left-rail typography. -->
+    <a class="side-title" href="index.html" aria-label="Go to Biography">
         <span>Joshua</span>
         <span>Hua-Chun</span>
         <span>Chao</span>
@@ -2721,7 +2839,8 @@
         <span>Selected</span>
         <span>Portfolio</span>
       </a>
-      <nav class="side-menu" aria-label="Portfolio sections">
+    <!-- PRIMARY CASE-STUDY LINKS: order mirrors the requested portfolio story sequence. Active page uses is-active and aria-current. -->
+    <nav class="side-menu" aria-label="Portfolio sections">
         <a href="kktv.html">KKTV</a>
         <a href="kkfarm.html">KKFARM</a>
         <a href="kkbox-group.html">KKBOX Group</a>
@@ -2730,7 +2849,8 @@
         <a href="nvidia-sccd.html">NVIDIA x SCCD</a>
         <a href="ace.html">ACE</a>
       </nav>
-      <nav class="side-menu side-menu--secondary" aria-label="Portfolio documents">
+    <!-- SECONDARY DOCUMENT LINKS: biography, resume PDF, external archive, and award-logo row. These are intentionally grey in the UI. -->
+    <nav class="side-menu side-menu--secondary" aria-label="Portfolio documents">
         <a href="index.html" class="is-active side-menu-muted" aria-current="page">Biography</a>
         <a class="resume-link side-menu-muted" href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
         <a class="design-archive-link side-menu-muted" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Design Archive</a>
@@ -2743,7 +2863,8 @@
 
       </nav>
     </aside>
-    <main class="page">
+  <!-- MAIN CONTENT: scrollable right-side column. Text, images, videos, essays, and next-link progression live here. -->
+  <main class="page">
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
           <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
@@ -2751,7 +2872,8 @@
           <figure class="biography-photo">
             <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
           </figure>
-          <div class="essay">
+      <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
+      <div class="essay">
             <div class="essay-block" lang="en">
               <p class="revision-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <a class="bio-link" href="ace.html#ace-title"><strong>AI-Powered Creativity Educator</strong></a> with <strong>over 10 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. He builds integrated brand systems, marketing campaigns, company narratives, and communication design assets across enterprise technology, culture, entertainment, and education in Taiwan, Japan, and China.</p>
               <p class="revision-highlight">With over 10 years of hands-on creative leadership experience, Joshua works across strategy, creative and art direction, visual systems, video, web, presentations, event touchpoints, and AI production and education. His work connects high-level brand thinking with detailed execution, helping complex ideas become clear, scalable, and emotionally resonant creative systems.</p>
@@ -2771,28 +2893,35 @@
 
         <section class="section revision-highlight" id="capabilities" aria-labelledby="capabilities-title">
           <h2 id="capabilities-title">Key Creative Capabilities</h2>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card">
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>Integrated Brand Systems</h3>
               <p>Brand identity, company narratives, visual guidelines, typography, motion, digital and physical applications, presentation systems, and internal and external use cases.</p>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>Technology and Enterprise Storytelling</h3>
               <p>Turning complex products, platforms, infrastructure, and organizational ideas into clear visual narratives for business, leadership, and public-facing communication.</p>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>Campaign and Content Ecosystems</h3>
               <p>Creative direction across launch campaigns, recruitment mini-episodes, product videos, social assets, websites, event materials, print materials, and internal communications.</p>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>AI-Powered Creativity Work</h3>
               <p>Using generative AI to accelerate ideation and production across creative workflows. Teaching human-centered and AI-powered creative/design methods and business innovation.</p>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>Cross-Functional Creative Leadership</h3>
               <p>Working smoothly with executives, product teams, engineers, marketers, artists, educators, external partners, and production teams from concept to delivery.</p>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>East Asian / APAC Cultural Context</h3>
               <p>Experience across Taiwan, Japan, and China, including Shanghai and Beijing, with sensitivity to subtle cultural differences, audience behavior, and local adaptation.</p>
             </article>
@@ -2801,43 +2930,52 @@
 
         <section class="section revision-highlight" id="work" aria-labelledby="featured-work-title">
           <h2 id="featured-work-title">Featured Work</h2>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card">
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKTV</h3>
               <p>An OTT streaming brand launch that integrated identity, product expression, motion, design guidelines, TVCs, landing pages, retail materials, and screen-based and printed assets into one recognizable brand.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Consumer Brand</span><span class="portfolio-tag-chip">Launch Campaign</span><span class="portfolio-tag-chip">Design Guidelines</span><span class="portfolio-tag-chip">Video</span><span class="portfolio-tag-chip">Retail Materials</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKFARM</h3>
               <p>Artist branding, music video direction and production, live and concert design, screen-based and printed assets, and campaign materials that built continuity across releases and performance contexts.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Artist Branding</span><span class="portfolio-tag-chip">Music Video</span><span class="portfolio-tag-chip">Live and Concert Visuals</span><span class="portfolio-tag-chip">Cultural Campaign</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKBOX Group</h3>
               <p>A holding-company branding and recruitment campaign that translated internal culture into a mini-episode series, a career website, and public-facing talent storytelling.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Group Branding</span><span class="portfolio-tag-chip">Recruitment Campaign</span><span class="portfolio-tag-chip">Corporate Video</span><span class="portfolio-tag-chip">Website</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKStream</h3>
               <p>A B2B technology brand storytelling system for BlendVision that made enterprise streaming infrastructure easier to understand through conceptual metaphors, video, a website, and sales-facing visuals.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Enterprise Streaming</span><span class="portfolio-tag-chip">B2B Technology</span><span class="portfolio-tag-chip">Product Storytelling</span><span class="portfolio-tag-chip">Sales Assets</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKCompany</h3>
               <p>A corporate identity and worldview system for a complex technology organization, integrating company narrative, public and career websites, motion assets, and shareholder-facing materials.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Technology Brand System</span><span class="portfolio-tag-chip">Corporate Narrative</span><span class="portfolio-tag-chip">Motion</span><span class="portfolio-tag-chip">Website</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>KKCulture</h3>
               <p>An animated visual system extended across company identity, motion assets, websites, screen-based and printed assets, office and workplace environments, and leadership communication.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Visual Identity</span><span class="portfolio-tag-chip">Digital and Physical System</span><span class="portfolio-tag-chip">Motion</span><span class="portfolio-tag-chip">Office Touchpoints</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>NVIDIA x SCCD</h3>
               <p>An early-stage generative AI music video and showreel project exploring how AI-generated imagery, music, video editing, and creative direction can form a coherent cinematic language.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Generative AI</span><span class="portfolio-tag-chip">Production Workflow</span><span class="portfolio-tag-chip">Technology Collaboration</span><span class="portfolio-tag-chip">Music Video</span></span>
             </article>
-            <article class="portfolio-text-card">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card">
               <h3>Applied Creativity Engine</h3>
               <p>An AI-powered creativity education, training, and workshop system for teachers, students, executives, entrepreneurs, and future leaders learning to use emerging tools with human-centered judgment.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Generative AI</span><span class="portfolio-tag-chip">Education</span><span class="portfolio-tag-chip">Workshops</span><span class="portfolio-tag-chip">Creativity Training</span><span class="portfolio-tag-chip">Curriculum Design</span></span>
@@ -2847,65 +2985,93 @@
 
         <section class="section revision-highlight" id="workflow" aria-labelledby="workflow-title">
           <h2 id="workflow-title">Creative Methodology</h2>
-          <div class="essay">
+      <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
+      <div class="essay">
             <div class="essay-block" lang="en">
               <p>Joshua&rsquo;s creative methodology connects strategic thinking, narrative development, systemic design, and executional precision. His process is designed to turn complex business, cultural, and technological ideas into clear, scalable, and emotionally resonant communication systems.</p>
             </div>
           </div>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
-            <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
-            <article class="portfolio-text-card"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
-            <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
-            <article class="portfolio-text-card"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
-            <article class="portfolio-text-card"><h3>6. Learning, Adaptation &amp; Scale</h3><p>After delivery, Joshua evaluates how creative work is received, adopted, and reused across audiences, organizations, and channels. Each project becomes a learning system, helping future creative work become sharper, more scalable, and more deeply connected to real-world use.</p></article>
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>6. Learning, Adaptation &amp; Scale</h3><p>After delivery, Joshua evaluates how creative work is received, adopted, and reused across audiences, organizations, and channels. Each project becomes a learning system, helping future creative work become sharper, more scalable, and more deeply connected to real-world use.</p></article>
           </div>
         </section>
 
         <section class="section revision-highlight" aria-labelledby="leadership-practice-title">
           <h2 id="leadership-practice-title">Creative Leadership in Practice</h2>
-          <div class="essay">
+      <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
+      <div class="essay">
             <div class="essay-block" lang="en">
               <p class="portfolio-section-lead">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable, and emotionally resonant creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, and organizational communication.</p>
             </div>
           </div>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card"><h3>Brand Launch Leadership</h3><p>Joshua led the creative development of a consumer streaming brand from its launch identity to full market expression. The work integrated brand strategy, visual identity, product storytelling, motion language, campaign materials, landing pages, retail applications, screen-based assets, printed materials, and design guidelines into one recognizable brand system.</p></article>
-            <article class="portfolio-text-card"><h3>Enterprise Storytelling</h3><p>For enterprise technology, Joshua transformed complex streaming infrastructure into a cinematic B2B product narrative. Through conceptual metaphors, structured messaging, video, website, presentation systems, and sales-facing visuals, he helped make technical platforms more understandable, persuasive, and relevant to business audiences.</p></article>
-            <article class="portfolio-text-card"><h3>Corporate Identity Systems</h3><p>Joshua created corporate identity systems for technology and culture organizations navigating growth, restructuring, and transformation. His work connected company narrative, visual identity, motion assets, websites, leadership communication, internal materials, shareholder-facing content, workplace environments, and everyday brand touchpoints into coherent organizational systems.</p></article>
-            <article class="portfolio-text-card"><h3>AI-Integrated Creative Production</h3><p>Ahead of mainstream creative adoption, Joshua developed AI-assisted workflows across film, music video, visual experimentation, education, and creative training. His work explores how generative AI can accelerate ideation and production while preserving human-centered judgment, narrative clarity, and creative direction.</p></article>
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Brand Launch Leadership</h3><p>Joshua led the creative development of a consumer streaming brand from its launch identity to full market expression. The work integrated brand strategy, visual identity, product storytelling, motion language, campaign materials, landing pages, retail applications, screen-based assets, printed materials, and design guidelines into one recognizable brand system.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Enterprise Storytelling</h3><p>For enterprise technology, Joshua transformed complex streaming infrastructure into a cinematic B2B product narrative. Through conceptual metaphors, structured messaging, video, website, presentation systems, and sales-facing visuals, he helped make technical platforms more understandable, persuasive, and relevant to business audiences.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Corporate Identity Systems</h3><p>Joshua created corporate identity systems for technology and culture organizations navigating growth, restructuring, and transformation. His work connected company narrative, visual identity, motion assets, websites, leadership communication, internal materials, shareholder-facing content, workplace environments, and everyday brand touchpoints into coherent organizational systems.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>AI-Integrated Creative Production</h3><p>Ahead of mainstream creative adoption, Joshua developed AI-assisted workflows across film, music video, visual experimentation, education, and creative training. His work explores how generative AI can accelerate ideation and production while preserving human-centered judgment, narrative clarity, and creative direction.</p></article>
           </div>
         </section>
 
         <section class="section revision-highlight" aria-labelledby="cross-market-title">
           <h2 id="cross-market-title">Multi-national Creative Context</h2>
-          <div class="essay">
+      <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
+      <div class="essay">
             <div class="essay-block" lang="en">
               <p class="portfolio-section-lead">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan , Japan and China markets, with earlier professional experience in Shanghai and Beijing. His projects often sit at the intersection of brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
               <p class="portfolio-section-lead">His multi-national experience is not only geographic, but also cultural and organizational. He brings sensitivity to how ideas need to be framed differently across different markets, how visual and verbal tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
             </div>
           </div>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
-            <article class="portfolio-text-card"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
-            <article class="portfolio-text-card"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
-            <article class="portfolio-text-card"><h3>Stakeholder Translation</h3><p>Experience aligning executives, product teams, engineers, educators, creators, business stakeholders, and external partners by translating complex strategic, technical, and creative ideas into clear shared direction.</p></article>
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Stakeholder Translation</h3><p>Experience aligning executives, product teams, engineers, educators, creators, business stakeholders, and external partners by translating complex strategic, technical, and creative ideas into clear shared direction.</p></article>
           </div>
         </section>
 
         <section class="section revision-highlight" aria-labelledby="tools-title">
           <h2 id="tools-title">Tools &amp; Production Fluency</h2>
-          <div class="portfolio-text-grid">
-            <article class="portfolio-text-card"><h3>Brand Systems &amp; Visual Identity</h3><p>Advanced hands-on fluency across Adobe Illustrator, Photoshop, InDesign, and Figma, with experience building brand guidelines, identity systems, visual rules, and scalable design applications.</p></article>
-            <article class="portfolio-text-card"><h3>Integrated Campaign Assets</h3><p>Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and communication systems across consumer, enterprise, and corporate contexts.</p></article>
-            <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p>Experience directing and producing video, motion, and campaign assets through Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment mini-series.</p></article>
-            <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p>Practical experience applying ChatGPT, Midjourney, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, and prototype campaign ideas.</p></article>
-            <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p>Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, and technical teams.</p></article>
-            <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
+      <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
+      <div class="portfolio-text-grid">
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Brand Systems &amp; Visual Identity</h3><p>Advanced hands-on fluency across Adobe Illustrator, Photoshop, InDesign, and Figma, with experience building brand guidelines, identity systems, visual rules, and scalable design applications.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Integrated Campaign Assets</h3><p>Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and communication systems across consumer, enterprise, and corporate contexts.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p>Experience directing and producing video, motion, and campaign assets through Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment mini-series.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p>Practical experience applying ChatGPT, Midjourney, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, and prototype campaign ideas.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p>Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, and technical teams.</p></article>
+        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
+        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
           </div>
         </section>
 
-        <a class="next-panel-link next-panel-link--start next-panel-link--flat-bottom" href="kktv.html" aria-label="Start with KKTV">
+      <!-- NEXT-PAGE LINK: bottom progression link aligned visually with the left-side award-logo baseline. -->
+      <a class="next-panel-link next-panel-link--start next-panel-link--flat-bottom" href="kktv.html" aria-label="Start with KKTV">
           <span class="next-panel-link__label revision-highlight">Start with KKTV</span>
           <span class="next-panel-link__button" aria-hidden="true">
             <span class="next-panel-link__arrow" aria-hidden="true"></span>
@@ -2914,6 +3080,7 @@
       </section>
     </main>
   </div>
+  <!-- IMAGE LIGHTBOX MARKUP: hidden by default; JS populates previous/current/next images for keyboard, button, and swipe navigation. -->
   <div class="image-lightbox" data-image-lightbox role="dialog" aria-modal="true" aria-hidden="true" hidden>
     <button class="image-lightbox__close" type="button" data-image-lightbox-close aria-label="Close image preview">
       <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2944,30 +3111,66 @@
       </svg>
     </button>
   </div>
+  <!-- RUNTIME SCRIPT: shared behavior for local curation, lazy media loading, video controls, image lightbox, mobile menu, and responsive alignment. -->
   <script>
-    const storageKey = "joshua-chao-kktv-removed-v1";
+    // LOCAL CURATION STATE: removing cards is a browser-local editing aid; it does not delete assets from disk.
+    const storageKey
+    /* Runtime state lives in this script because the site has no build step or module loader. Keep selectors/data attributes stable if moving code into external files later. */ = "joshua-chao-kktv-removed-v1";
     const trashStorageKeys = {
       default: storageKey,
     };
     const helperOrigin = "http://127.0.0.1:8765";
     const apiBase = location.protocol === "file:" ? helperOrigin : "";
+    // LIGHTBOX AND MOBILE MENU STATE: small module-level variables shared by event handlers below.
     let imageLightboxImages = [];
     let imageLightboxIndex = -1;
     let imageLightboxTouchStart = null;
     let imageLightboxIsSliding = false;
     let mobileMenuCloseTimer = null;
 
+    /*
+
+      FUNCTION: apiUrl
+
+      Builds an API URL. When the site is opened from file://, it points optional helper calls at the local helper server.
+
+    */
+
     function apiUrl(path) {
       return `${apiBase}${path}`;
     }
+
+    /*
+
+      FUNCTION: getTrashScope
+
+      Finds which removal list a card belongs to. This allows different card groups to have separate localStorage scopes.
+
+    */
 
     function getTrashScope(card, button) {
       return button?.dataset.trashScope || card?.dataset.trashScope || "default";
     }
 
+    /*
+
+      FUNCTION: storageKeyForScope
+
+      Resolves the localStorage key for a removal scope, falling back to the default key when a custom scope is absent.
+
+    */
+
     function storageKeyForScope(scope) {
       return trashStorageKeys[scope] || trashStorageKeys.default;
     }
+
+    /*
+
+      FUNCTION: readRemovedIds
+
+      Reads locally removed media-card IDs. Invalid or missing localStorage data is treated as an empty list.
+
+    */
 
     function readRemovedIds(scope = "default") {
       try {
@@ -2978,6 +3181,14 @@
       }
     }
 
+    /*
+
+      FUNCTION: getCardRecord
+
+      Serializes one data-card into the small record used by selection/export helper payloads.
+
+    */
+
     function getCardRecord(card) {
       return {
         id: card.dataset.id || "",
@@ -2985,6 +3196,14 @@
         path: card.dataset.filePath || "",
       };
     }
+
+    /*
+
+      FUNCTION: getPayload
+
+      Builds a full selection payload: page name, scope, removed card records, and remaining card records.
+
+    */
 
     function getPayload(removedIds, scope = "default") {
       const cards = [...document.querySelectorAll("[data-card]")].filter((card) => getTrashScope(card) === scope);
@@ -3000,6 +3219,14 @@
       };
     }
 
+    /*
+
+      FUNCTION: saveRemovedIds
+
+      Persists removed card IDs locally and quietly mirrors the selection to the optional local helper endpoint.
+
+    */
+
     async function saveRemovedIds(removedIds, scope = "default") {
       localStorage.setItem(storageKeyForScope(scope), JSON.stringify(removedIds));
       try {
@@ -3012,6 +3239,14 @@
       }
     }
 
+    /*
+
+      FUNCTION: applyRemovedIds
+
+      Removes cards from the DOM when their IDs were previously hidden by the local trash/selection tool.
+
+    */
+
     function applyRemovedIds() {
       document.querySelectorAll("[data-card]").forEach((card) => {
         const removed = new Set(readRemovedIds(getTrashScope(card)));
@@ -3021,6 +3256,11 @@
       });
     }
 
+    /* MEDIA LOADING GROUP: source deferral, loading indicators, visual ordering, priority stamping, and active-panel media preparation. */
+    /*
+      FUNCTION: ensureVideoSource
+      Attaches a deferred video src from data-src and starts loading only when the video is close enough to matter.
+    */
     function ensureVideoSource(video) {
       if (!video.getAttribute("src") && video.dataset.src) {
         setMediaFrameLoading(video.closest(".media-frame"), true);
@@ -3029,10 +3269,26 @@
       }
     }
 
+    /*
+
+      FUNCTION: setMediaFrameLoading
+
+      Toggles the media-frame loading state used by the pale placeholder overlay/spinner behavior.
+
+    */
+
     function setMediaFrameLoading(frame, isLoading) {
       if (!frame) return;
       frame.classList.toggle("is-media-loading", Boolean(isLoading));
     }
+
+    /*
+
+      FUNCTION: updateImageLoadingIndicator
+
+      Keeps an image frame in loading state until the image has decoded and has a natural size.
+
+    */
 
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
@@ -3040,12 +3296,28 @@
       setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
     }
 
+    /*
+
+      FUNCTION: updateVideoLoadingIndicator
+
+      Keeps a video frame in loading state while the browser has not loaded enough data to display it.
+
+    */
+
     function updateVideoLoadingIndicator(video) {
       const frame = video.closest(".media-frame");
       if (!frame) return;
       const hasSource = Boolean(video.currentSrc || video.getAttribute("src") || video.dataset.src);
       setMediaFrameLoading(frame, hasSource && video.readyState < 2);
     }
+
+    /*
+
+      FUNCTION: setupMediaLoadingIndicators
+
+      Binds load/error events for images, videos, and iframes so each media frame can show or clear loading UI.
+
+    */
 
     function setupMediaLoadingIndicators(scope = document) {
       scope.querySelectorAll(".media-frame").forEach((frame) => {
@@ -3090,6 +3362,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: getMediaDocumentPosition
+
+      Reads document coordinates for media ordering. This is used instead of DOM order when responsive grids reflow.
+
+    */
+
     function getMediaDocumentPosition(element) {
       const rect = element.getBoundingClientRect();
       return {
@@ -3099,6 +3379,14 @@
         height: rect.height,
       };
     }
+
+    /*
+
+      FUNCTION: getOrderedMediaRecords
+
+      Sorts visible media into visual rows and columns, then assigns priority indexes for loading/autoplay.
+
+    */
 
     function getOrderedMediaRecords(elements) {
       const sortedRecords = [...elements]
@@ -3129,11 +3417,27 @@
       return getOrderedMediaRecords(elements).map((record) => record.element);
     }
 
+    /*
+
+      FUNCTION: getMediaPriorityForRow
+
+      Maps a visual row index to fetch/loading priority so top-row media starts sooner than lower content.
+
+    */
+
     function getMediaPriorityForRow(rowIndex) {
       if (rowIndex === 0) return "high";
       if (rowIndex === 1) return "auto";
       return "low";
     }
+
+    /*
+
+      FUNCTION: stampMediaLoadPriority
+
+      Writes the calculated priority to the DOM element so later lazy-loading logic can reuse it cheaply.
+
+    */
 
     function stampMediaLoadPriority(element, record) {
       const priority = getMediaPriorityForRow(record.rowIndex);
@@ -3145,24 +3449,64 @@
       element.fetchPriority = priority;
     }
 
+    /*
+
+      FUNCTION: getActiveMediaScope
+
+      Returns the active content panel. The site currently uses one active panel per page, but the helper keeps the JS reusable.
+
+    */
+
     function getActiveMediaScope() {
       return document.querySelector("[data-panel].is-active") || document;
     }
 
+    /*
+
+      FUNCTION: getPortfolioImages
+
+      Collects portfolio images that can be prepared for repainting and lightbox behavior.
+
+    */
+
     function getPortfolioImages(scope = document) {
       return [...scope.querySelectorAll("img:not(.image-lightbox__image)")].filter((image) => !image.closest(".side-nav"));
     }
+
+    /*
+
+      FUNCTION: getPortfolioMedia
+
+      Collects images and videos while excluding side-nav and lightbox UI assets.
+
+    */
 
     function getPortfolioMedia(scope = document) {
       return [...scope.querySelectorAll("img:not(.image-lightbox__image), video")]
         .filter((media) => !media.closest(".side-nav") && !media.closest("[data-image-lightbox]"));
     }
 
+    /*
+
+      FUNCTION: isLazyVideoNearViewport
+
+      Determines whether a deferred video is close enough to the viewport to receive a src and begin loading.
+
+    */
+
     function isLazyVideoNearViewport(video) {
       const rect = video.getBoundingClientRect();
       const lead = video.dataset.mediaPriority === "high" ? 720 : video.dataset.mediaPriority === "auto" ? 440 : 260;
       return rect.bottom >= -160 && rect.top <= window.innerHeight + lead;
     }
+
+    /*
+
+      FUNCTION: updateLazyPanelVideos
+
+      Central lazy-video loop. It attaches sources near the viewport, pauses user-paused media, and avoids competing audible playback.
+
+    */
 
     function updateLazyPanelVideos() {
       const activePanel = getActiveMediaScope();
@@ -3205,6 +3549,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: repaintPortfolioImage
+
+      Forces a small repaint cycle on loaded images to prevent edge artifacts after lazy loading or browser compositing.
+
+    */
+
     function repaintPortfolioImage(image) {
       if (!image || image.closest("[data-image-lightbox]")) return;
       image.classList.add("is-image-repainting");
@@ -3213,6 +3565,14 @@
         image.classList.remove("is-image-repainting");
       });
     }
+
+    /*
+
+      FUNCTION: preparePortfolioImageRecord
+
+      Applies priority metadata and load/repaint handlers to one ordered image record.
+
+    */
 
     function preparePortfolioImageRecord(record) {
       const image = record.element;
@@ -3233,12 +3593,28 @@
       }
     }
 
+    /*
+
+      FUNCTION: preparePortfolioVideoRecord
+
+      Applies priority metadata and preload settings to one ordered video record.
+
+    */
+
     function preparePortfolioVideoRecord(record) {
       const video = record.element;
       stampMediaLoadPriority(video, record);
       video.preload = "auto";
       video.setAttribute("preload", "auto");
     }
+
+    /*
+
+      FUNCTION: applyMediaLoadPriorities
+
+      Prepares all ordered media in the active scope with row-based priority behavior.
+
+    */
 
     function applyMediaLoadPriorities(scope = getActiveMediaScope()) {
       getOrderedMediaRecords(getPortfolioMedia(scope)).forEach((record) => {
@@ -3250,13 +3626,37 @@
       });
     }
 
+    /*
+
+      FUNCTION: preparePortfolioImages
+
+      Compatibility wrapper for image preparation; kept so older calls still work.
+
+    */
+
     function preparePortfolioImages(scope = getActiveMediaScope()) {
       applyMediaLoadPriorities(scope);
     }
 
+    /*
+
+      FUNCTION: preparePortfolioVideos
+
+      Compatibility wrapper for video preparation; kept so older calls still work.
+
+    */
+
     function preparePortfolioVideos(scope = getActiveMediaScope()) {
       applyMediaLoadPriorities(scope);
     }
+
+    /*
+
+      FUNCTION: repaintActivePanelImages
+
+      Runs image preparation/repaint for the active panel after load, resize, or content changes.
+
+    */
 
     function repaintActivePanelImages() {
       const activePanel = getActiveMediaScope();
@@ -3268,9 +3668,22 @@
 
     let activeFullscreenVideo = null;
 
+    /* VIDEO PLAYBACK GROUP: user-pause memory, muting rules, one-at-a-time playback, custom controls, fullscreen handling, and autoplay restart. */
+    /*
+      FUNCTION: isVideoUserPaused
+      Checks whether a user explicitly paused a video. Autoplay logic respects this flag.
+    */
     function isVideoUserPaused(video) {
       return video.dataset.userPaused === "true";
     }
+
+    /*
+
+      FUNCTION: setVideoUserPaused
+
+      Stores or clears the explicit user-paused state on a video element.
+
+    */
 
     function setVideoUserPaused(video, isPaused) {
       if (isPaused) {
@@ -3280,6 +3693,14 @@
       }
     }
 
+    /*
+
+      FUNCTION: playVideo
+
+      Attempts to play a video and ignores autoplay promise failures so browsers can enforce their own policies.
+
+    */
+
     function playVideo(video) {
       ensureVideoSource(video);
       const promise = video.play();
@@ -3288,9 +3709,25 @@
       }
     }
 
+    /*
+
+      FUNCTION: getVideoPageScope
+
+      Finds the page/panel scope for a video so playback controls can pause only related videos.
+
+    */
+
     function getVideoPageScope(video) {
       return video.closest("[data-panel]") || document;
     }
+
+    /*
+
+      FUNCTION: pauseOtherVideos
+
+      Pauses other videos in the same scope so one intentional playback action does not create competing audio/video.
+
+    */
 
     function pauseOtherVideos(video) {
       getVideoPageScope(video).querySelectorAll("video").forEach((otherVideo) => {
@@ -3301,6 +3738,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: muteVideo
+
+      Mutes one video and updates its related sound button UI.
+
+    */
+
     function muteVideo(video) {
       video.muted = true;
       video.defaultMuted = true;
@@ -3310,6 +3755,14 @@
       }
       updateSoundButton(video);
     }
+
+    /*
+
+      FUNCTION: unmuteVideo
+
+      Unmutes one video, pauses competing videos when requested, and refreshes related controls.
+
+    */
 
     function unmuteVideo(video, { pauseOthers = false, play = true } = {}) {
       setVideoUserPaused(video, false);
@@ -3338,12 +3791,28 @@
       }
     }
 
+    /*
+
+      FUNCTION: playMutedVideo
+
+      Starts a video muted; used for ambient portfolio loops and browser-safe autoplay.
+
+    */
+
     function playMutedVideo(video) {
       ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       muteVideo(video);
       playVideo(video);
     }
+
+    /*
+
+      FUNCTION: playVideoPreservingSound
+
+      Starts or resumes video playback while preserving the user's chosen mute state.
+
+    */
 
     function playVideoPreservingSound(video) {
       if (video.muted || isSilentMedia(video)) {
@@ -3359,6 +3828,14 @@
       playVideo(video);
     }
 
+    /*
+
+      FUNCTION: restartMutedPageVideos
+
+      Restarts muted ambient videos after returning from fullscreen or other playback interruptions.
+
+    */
+
     function restartMutedPageVideos(video) {
       getVideoPageScope(video).querySelectorAll("video").forEach((pageVideo) => {
         setVideoUserPaused(pageVideo, false);
@@ -3366,6 +3843,14 @@
         updatePlayButton(pageVideo);
       });
     }
+
+    /*
+
+      FUNCTION: restartMutedOtherPageVideos
+
+      Restarts muted videos except for the current focus video.
+
+    */
 
     function restartMutedOtherPageVideos(video) {
       muteVideo(video);
@@ -3378,9 +3863,25 @@
       });
     }
 
+    /*
+
+      FUNCTION: isSilentMedia
+
+      Detects whether a video should be treated as silent/ambient and kept muted.
+
+    */
+
     function isSilentMedia(video) {
       return video.dataset.silentMedia === "true";
     }
+
+    /*
+
+      FUNCTION: enforceSilentMedia
+
+      Forces silent/ambient videos to remain muted even if browser controls or events try to change volume.
+
+    */
 
     function enforceSilentMedia(video) {
       if (!isSilentMedia(video)) return;
@@ -3394,6 +3895,14 @@
       video.setAttribute("muted", "");
     }
 
+    /*
+
+      FUNCTION: updateSoundButton
+
+      Synchronizes the visible sound toggle state with the video's muted state.
+
+    */
+
     function updateSoundButton(video) {
       const button = video.closest(".media-frame")?.querySelector(".sound-button");
       if (!button) return;
@@ -3404,6 +3913,14 @@
       button.title = isMuted ? "Turn sound on" : "Mute video";
       button.setAttribute("aria-pressed", String(!isMuted));
     }
+
+    /*
+
+      FUNCTION: setupSoundButtons
+
+      Creates and wires the small sound buttons attached to video media frames.
+
+    */
 
     function setupSoundButtons() {
       const mutedIcon = `
@@ -3449,6 +3966,14 @@
         updateSoundButton(video);
       });
     }
+
+    /*
+
+      FUNCTION: setupVideoControls
+
+      Creates custom play, progress, time, and fullscreen controls for each video frame.
+
+    */
 
     function setupVideoControls() {
       const playIcon = `
@@ -3573,6 +4098,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: toggleVideoPlayback
+
+      Handles custom play/pause actions and records whether the pause was user initiated.
+
+    */
+
     function toggleVideoPlayback(video) {
       if (video.paused) {
         setVideoUserPaused(video, false);
@@ -3585,9 +4118,25 @@
       updatePlayButton(video);
     }
 
+    /*
+
+      FUNCTION: getFullscreenElement
+
+      Returns the current fullscreen element across standard and WebKit-prefixed browser APIs.
+
+    */
+
     function getFullscreenElement() {
       return document.fullscreenElement || document.webkitFullscreenElement || null;
     }
+
+    /*
+
+      FUNCTION: toggleFullscreen
+
+      Enters or exits fullscreen for a media frame while keeping video playback state coherent.
+
+    */
 
     function toggleFullscreen(frame, video) {
       if (getFullscreenElement()) {
@@ -3626,6 +4175,14 @@
       }
     }
 
+    /*
+
+      FUNCTION: resetFullscreenVideo
+
+      Restores media-frame classes and playback behavior after a fullscreen session ends.
+
+    */
+
     function resetFullscreenVideo(video, { resumePage = false } = {}) {
       muteVideo(video);
       if (activeFullscreenVideo === video) {
@@ -3636,6 +4193,14 @@
       }
       updateFullscreenButton();
     }
+
+    /*
+
+      FUNCTION: handleFullscreenChange
+
+      Global fullscreen-change handler for standard and WebKit events.
+
+    */
 
     function handleFullscreenChange() {
       const fullscreenElement = getFullscreenElement();
@@ -3649,6 +4214,14 @@
       updateFullscreenButton();
     }
 
+    /*
+
+      FUNCTION: updateFullscreenButton
+
+      Updates fullscreen button labels/states after entering or exiting fullscreen.
+
+    */
+
     function updateFullscreenButton() {
       document.querySelectorAll(".media-frame").forEach((frame) => {
         const button = frame.querySelector(".fullscreen-button");
@@ -3661,6 +4234,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: updatePlayButton
+
+      Keeps the custom play button icon and label synchronized with video playback.
+
+    */
+
     function updatePlayButton(video) {
       const button = video.closest(".media-frame")?.querySelector(".play-button");
       if (!button) return;
@@ -3669,6 +4250,14 @@
       button.setAttribute("aria-label", isPaused ? "Play video" : "Pause video");
       button.title = isPaused ? "Play video" : "Pause video";
     }
+
+    /*
+
+      FUNCTION: formatVideoTime
+
+      Formats seconds into a compact minute:second label for video controls.
+
+    */
 
     function formatVideoTime(seconds) {
       const totalSeconds = Math.max(0, Math.ceil(seconds));
@@ -3681,6 +4270,14 @@
       }
       return `${minutes}:${paddedSeconds}`;
     }
+
+    /*
+
+      FUNCTION: updateVideoTimeRemaining
+
+      Updates the countdown/time label shown in custom video controls.
+
+    */
 
     function updateVideoTimeRemaining(video) {
       const timeRemaining = video.closest(".media-frame")?.querySelector(".video-time-remaining");
@@ -3698,6 +4295,14 @@
       timeRemaining.setAttribute("aria-label", `Time remaining ${totalMinutes} minutes ${seconds} seconds`);
     }
 
+    /*
+
+      FUNCTION: seekVideoFromProgressEvent
+
+      Converts pointer/input position on the progress control into a video currentTime value.
+
+    */
+
     function seekVideoFromProgressEvent(video, progress, hitbox, event) {
       if (!Number.isFinite(video.duration) || video.duration <= 0) return;
       const rect = hitbox.getBoundingClientRect();
@@ -3708,6 +4313,14 @@
       video.currentTime = ratio * video.duration;
       updateVideoTimeRemaining(video);
     }
+
+    /*
+
+      FUNCTION: updateVideoProgress
+
+      Synchronizes progress bar value, max, and time label with the video timeline.
+
+    */
 
     function updateVideoProgress(video) {
       const progress = video.closest(".media-frame")?.querySelector(".video-progress");
@@ -3722,6 +4335,14 @@
       }
       updateVideoTimeRemaining(video);
     }
+
+    /*
+
+      FUNCTION: setupAutoplayVideos
+
+      Initializes autoplay behavior and silent-video enforcement for all portfolio videos.
+
+    */
 
     function setupAutoplayVideos() {
       preparePortfolioVideos();
@@ -3760,6 +4381,11 @@
       });
     }
 
+    /* PANEL AND SCHEDULING GROUP: kept from the multi-panel version of the site; still useful for batching media recalculation after scroll/resize. */
+    /*
+      FUNCTION: switchContentPanel
+      Legacy panel switcher. Kept because the shared JS can still support multi-panel versions of the portfolio.
+    */
     function switchContentPanel(target) {
       document.querySelectorAll("[data-menu-target]").forEach((button) => {
         const isActive = button.dataset.menuTarget === target;
@@ -3795,6 +4421,14 @@
 
     let lazyVideoTicking = false;
 
+    /*
+
+      FUNCTION: scheduleLazyPanelVideoUpdate
+
+      Batches lazy-video work into requestAnimationFrame during scroll/resize.
+
+    */
+
     function scheduleLazyPanelVideoUpdate() {
       if (lazyVideoTicking) return;
       lazyVideoTicking = true;
@@ -3806,6 +4440,14 @@
 
     let mediaPriorityTicking = false;
 
+    /*
+
+      FUNCTION: scheduleMediaPriorityUpdate
+
+      Batches row-priority recalculation into requestAnimationFrame after layout changes.
+
+    */
+
     function scheduleMediaPriorityUpdate() {
       if (mediaPriorityTicking) return;
       mediaPriorityTicking = true;
@@ -3816,9 +4458,22 @@
       });
     }
 
+    /* IMAGE LIGHTBOX GROUP: builds the visual-order image list, opens/closes the overlay, renders prev/current/next images, and handles swipes. */
+    /*
+      FUNCTION: getImageLightboxSource
+      Returns the best full-size image source for the lightbox, preferring currentSrc when available.
+    */
     function getImageLightboxSource(image) {
       return image?.currentSrc || image?.getAttribute("src") || "";
     }
+
+    /*
+
+      FUNCTION: getImageLightboxImages
+
+      Builds the ordered lightbox image list from the same visual media scope as the clicked image.
+
+    */
 
     function getImageLightboxImages(image) {
       const scope = image.closest(".section") || image.closest("[data-panel]") || document;
@@ -3833,10 +4488,26 @@
       });
     }
 
+    /*
+
+      FUNCTION: normalizeImageLightboxIndex
+
+      Wraps image indexes so previous/next navigation loops cleanly through the image list.
+
+    */
+
     function normalizeImageLightboxIndex(index) {
       if (!imageLightboxImages.length) return -1;
       return (index + imageLightboxImages.length) % imageLightboxImages.length;
     }
+
+    /*
+
+      FUNCTION: getImageLightboxElements
+
+      Central DOM query for all lightbox parts so render functions do not repeat selectors.
+
+    */
 
     function getImageLightboxElements() {
       const lightbox = document.querySelector("[data-image-lightbox]");
@@ -3849,6 +4520,14 @@
       };
     }
 
+    /*
+
+      FUNCTION: getImageLightboxRecord
+
+      Returns image, source, and label data for a normalized lightbox index.
+
+    */
+
     function getImageLightboxRecord(index) {
       const normalizedIndex = normalizeImageLightboxIndex(index);
       const image = normalizedIndex >= 0 ? imageLightboxImages[normalizedIndex] : null;
@@ -3859,6 +4538,14 @@
         title: image.alt || image.closest("[data-card]")?.dataset.title || "Image preview",
       };
     }
+
+    /*
+
+      FUNCTION: setImageLightboxImage
+
+      Writes src and alt text into one of the lightbox's previous/current/next image slots.
+
+    */
 
     function setImageLightboxImage(image, record) {
       if (!image) return;
@@ -3873,11 +4560,27 @@
       image.alt = record.title;
     }
 
+    /*
+
+      FUNCTION: setImageLightboxTrackOffset
+
+      Moves the lightbox track during touch dragging.
+
+    */
+
     function setImageLightboxTrackOffset(offsetX = 0) {
       const { track } = getImageLightboxElements();
       if (!track) return;
       track.style.transform = `translate3d(calc(-100vw + ${offsetX}px), 0, 0)`;
     }
+
+    /*
+
+      FUNCTION: resetImageLightboxTrack
+
+      Returns the lightbox track to the centered/current-image position.
+
+    */
 
     function resetImageLightboxTrack() {
       const { track } = getImageLightboxElements();
@@ -3885,6 +4588,14 @@
       track.classList.remove("is-sliding");
       track.style.transform = "translate3d(-100vw, 0, 0)";
     }
+
+    /*
+
+      FUNCTION: renderImageLightboxImage
+
+      Renders current, previous, and next images and toggles navigation controls.
+
+    */
 
     function renderImageLightboxImage(index) {
       const { lightbox, previousImage, currentImage, nextImage } = getImageLightboxElements();
@@ -3900,6 +4611,14 @@
       });
     }
 
+    /*
+
+      FUNCTION: openImageLightbox
+
+      Opens the image lightbox from a clicked portfolio image and starts at the matching visual-order index.
+
+    */
+
     function openImageLightbox(image) {
       const lightbox = document.querySelector("[data-image-lightbox]");
       if (!lightbox || !getImageLightboxSource(image)) return;
@@ -3912,6 +4631,14 @@
       document.body.classList.add("is-lightbox-open");
       lightbox.querySelector("[data-image-lightbox-close]")?.focus({ preventScroll: true });
     }
+
+    /*
+
+      FUNCTION: showAdjacentImageLightbox
+
+      Moves the lightbox to the previous or next image, including sliding animation state.
+
+    */
 
     function showAdjacentImageLightbox(direction) {
       const { lightbox, track } = getImageLightboxElements();
@@ -3933,6 +4660,14 @@
       window.setTimeout(finish, 320);
     }
 
+    /*
+
+      FUNCTION: closeImageLightbox
+
+      Closes the image lightbox and clears temporary navigation/touch state.
+
+    */
+
     function closeImageLightbox() {
       const lightbox = document.querySelector("[data-image-lightbox]");
       if (!lightbox || lightbox.hidden) return;
@@ -3951,6 +4686,11 @@
       resetImageLightboxTrack();
     }
 
+    /* MOBILE MENU AND ALIGNMENT GROUP: opens/closes the hamburger menu and recalculates text widths, logo width, and menu spacing after layout changes. */
+    /*
+      FUNCTION: setMobileMenuOpen
+      Opens or closes the mobile menu and coordinates body scroll locking plus closing animation state.
+    */
     function setMobileMenuOpen(isOpen, options = {}) {
       const sideNav = document.querySelector(".side-nav");
       const toggle = document.querySelector("[data-mobile-menu-toggle]");
@@ -3988,10 +4728,26 @@
       }, 240);
     }
 
+    /*
+
+      FUNCTION: closeMobileMenu
+
+      Convenience wrapper used by links and Escape-like flows to close the mobile menu.
+
+    */
+
     function closeMobileMenu() {
       if (!window.matchMedia("(max-width: 760px)").matches) return;
       setMobileMenuOpen(false);
     }
+
+    /*
+
+      FUNCTION: equalizeMobileMenuTitleWidths
+
+      Balances the two-line mobile title width so the compact header reads as one centered title block.
+
+    */
 
     function equalizeMobileMenuTitleWidths() {
       const title = document.querySelector(".mobile-menu-title");
@@ -4007,6 +4763,14 @@
       const targetFontSize = baseFontSize * Math.min(1, primaryWidth / secondaryWidth);
       secondary.style.fontSize = `${targetFontSize}px`;
     }
+
+    /*
+
+      FUNCTION: measureTextWidth
+
+      Measures raw text width with a canvas using the element's computed font settings.
+
+    */
 
     function measureTextWidth(text, referenceElement) {
       if (!text || !referenceElement) return 0;
@@ -4030,6 +4794,14 @@
       return width;
     }
 
+    /*
+
+      FUNCTION: measureElementTextWidth
+
+      Measures an element's rendered text width by forwarding its computed styles to measureTextWidth.
+
+    */
+
     function measureElementTextWidth(element) {
       if (!element) return 0;
       const range = document.createRange();
@@ -4039,6 +4811,14 @@
       return width || measureTextWidth(element.textContent.trim(), element);
     }
 
+    /*
+
+      FUNCTION: getVisibleTextLineCount
+
+      Estimates the number of visible text lines; used to make compact menu labels more stable.
+
+    */
+
     function getVisibleTextLineCount(element) {
       if (!element) return 0;
       const range = document.createRange();
@@ -4047,6 +4827,14 @@
       range.detach?.();
       return rects.length;
     }
+
+    /*
+
+      FUNCTION: syncAwardLogoRowWidth
+
+      Keeps the award-logo row visually aligned with the menu width across responsive layouts.
+
+    */
 
     function syncAwardLogoRowWidth() {
       const sideNav = document.querySelector(".side-nav");
@@ -4071,6 +4859,14 @@
         sideNav.style.removeProperty("--award-logo-gap");
       }
     }
+
+    /*
+
+      FUNCTION: syncSideMenuGroupSpacing
+
+      Calculates vertical menu spacing so primary links, secondary links, and award logos remain balanced.
+
+    */
 
     function syncSideMenuGroupSpacing() {
       const sideNav = document.querySelector(".side-nav");
@@ -4099,6 +4895,7 @@
       }
     }
 
+    /* EVENT WIRING: delegated click handler covers trash buttons, image-lightbox opening, and mobile/menu interactions without binding every card individually. */
     document.addEventListener("click", (event) => {
       const lightbox = event.target.closest("[data-image-lightbox]");
       if (lightbox) {
@@ -4160,6 +4957,7 @@
       }
     });
 
+    /* RESPONSIVE RECALCULATION: resize events close desktop-incompatible mobile menus and resync measured navigation widths/spacings. */
     window.addEventListener("resize", () => {
       if (!window.matchMedia("(max-width: 760px)").matches) {
         setMobileMenuOpen(false, { immediate: true });
@@ -4169,6 +4967,7 @@
       syncSideMenuGroupSpacing();
     });
 
+    /* KEYBOARD ACCESSIBILITY: Escape closes the image lightbox, and arrow keys move between lightbox images. */
     document.addEventListener("keydown", (event) => {
       const lightbox = document.querySelector("[data-image-lightbox]");
       const isLightboxOpen = lightbox && !lightbox.hidden;
@@ -4183,6 +4982,14 @@
       }
     });
 
+    /*
+
+      FUNCTION: snapImageLightboxBack
+
+      Returns the lightbox to the current image when a touch drag does not pass the swipe threshold.
+
+    */
+
     function snapImageLightboxBack() {
       const { track } = getImageLightboxElements();
       if (!track) return;
@@ -4193,6 +5000,7 @@
       }, 280);
     }
 
+    /* TOUCH NAVIGATION: swipe handlers move the image lightbox track only after a clear horizontal drag threshold. */
     const imageLightboxElement = document.querySelector("[data-image-lightbox]");
 
     imageLightboxElement?.addEventListener("touchstart", (event) => {
@@ -4257,6 +5065,7 @@
     window.addEventListener("scroll", scheduleLazyPanelVideoUpdate, { passive: true });
     window.addEventListener("resize", scheduleMediaPriorityUpdate);
 
+    /* STARTUP SEQUENCE: apply saved local curation, initialize media/lightbox/menu systems, then mark the site ready for final CSS states. */
     applyRemovedIds();
     setupMediaLoadingIndicators();
     applyMediaLoadPriorities();
