@@ -10,7 +10,7 @@
   - The page is organized as: head metadata and paint shield, early boot script, full stylesheet, left navigation, main content sections, shared image lightbox, and shared runtime script.
   - Visual layout depends mostly on CSS custom properties in :root. Change spacing, type scale, left-nav width, and responsive behavior there before editing many individual selectors.
   - Portfolio assets are represented by article.card elements with data-card, data-id, data-title, and data-file-path attributes. The runtime uses those attributes for local curation, captions, and image-lightbox ordering.
-  - The red/purple revision text is hidden by default. Triple-click the invisible 200x200px button in the top-right corner within one second to toggle revision colors.
+  - Final delivery marker classes render in black; archived-project notes and secondary navigation links render in grey.
   - The site is designed to work from file:// and from static hosting. Optional helper API calls are silent and non-critical.
 
   Maintenance warnings:
@@ -140,62 +140,11 @@
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
-<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Click to toggle copy-edit text between black and orange; triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<!-- EARLY BOOT SCRIPT: keeps the background stable and releases the paint shield after first layout. -->
 <script>
   (() => {
-    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
-    const revisionColorStorageKey = "portfolioRevisionTextColorV2";
-    const copyEditColorStorageKey = "portfolioCopyEditTextColorV1";
-    const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
-    const setRevisionColorMode = (showColor) => {
-      root.classList.toggle("is-revision-color", showColor);
-      try {
-        window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
-      } catch {}
-    };
-    const setCopyEditColorMode = (showColor) => {
-      root.classList.toggle("is-copy-edit-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
-      try {
-        window.localStorage?.setItem(copyEditColorStorageKey, showColor ? "orange" : "black");
-      } catch {}
-    };
-    try {
-      setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
-    } catch {
-      setRevisionColorMode(false);
-    }
-    try {
-      setCopyEditColorMode(window.localStorage?.getItem(copyEditColorStorageKey) === "orange");
-    } catch {
-      setCopyEditColorMode(false);
-    }
-    let revisionToggleClickCount = 0;
-    let revisionToggleClickTimer;
-    const resetRevisionToggleClickCount = () => {
-      revisionToggleClickCount = 0;
-      if (revisionToggleClickTimer) {
-        window.clearTimeout(revisionToggleClickTimer);
-        revisionToggleClickTimer = undefined;
-      }
-    };
-    revisionColorToggle?.addEventListener("click", () => {
-      setCopyEditColorMode(!root.classList.contains("is-copy-edit-color"));
-      revisionToggleClickCount += 1;
-      if (revisionToggleClickCount === 1) {
-        revisionToggleClickTimer = window.setTimeout(() => {
-          revisionToggleClickCount = 0;
-          revisionToggleClickTimer = undefined;
-        }, 1000);
-      }
-      if (revisionToggleClickCount >= 3) {
-        resetRevisionToggleClickCount();
-        setRevisionColorMode(!root.classList.contains("is-revision-color"));
-      }
-    });
     root.style.background = bg;
     root.style.backgroundColor = bg;
     root.style.colorScheme = "only light";
@@ -320,6 +269,8 @@
     /* MAIN SCROLLING CANVAS: the right-side content area. Desktop/tablet pages reserve one fifth of the viewport for the fixed left navigation. */
 
     .page {
+      grid-column: 2;
+ grid-column: 2;
       width: fit-content;
       max-width: 100%;
       min-width: 0;
@@ -341,7 +292,7 @@
     }
 
     .side-nav::after {
-      content: "v1.2.5";
+      content: "V1.2.6";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -358,8 +309,9 @@
     /* LEFT NAVIGATION RAIL: fixed/viewport-height navigation that holds the title, case-study links, document links, and award logos. */
 
     .side-nav {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 9000;
       align-self: start;
       display: flex;
       flex-direction: column;
@@ -1826,7 +1778,7 @@
 
     /* MOBILE PORTRAIT/TALL VIEWPORTS: converts the fixed side navigation into a top hamburger menu and single-column content flow. */
 
-    @media (max-width: 760px) {
+    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
       :root {
         --outer-text-gutter: 24px;
         --article-caption-font-size: 15.5px;
@@ -2004,7 +1956,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.2.5";
+        content: "V1.2.6";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2299,342 +2251,7 @@
 
     /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
 
-    @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
-      :root {
-        --outer-text-gutter: 18px;
-        --side-nav-width: calc(100vw / 5);
-        --page-title-font-size: clamp(20px, 5.2vh, 30px);
-        --article-caption-font-size: clamp(11px, 0.92vw, 15px);
-        --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
-        --landscape-column-top: 32px;
-        --content-title-top-padding: var(--landscape-column-top);
-        --award-logo-bottom-offset: max(28px, calc(env(safe-area-inset-bottom, 0px) + 24px));
-        --next-panel-bottom-offset: var(--award-logo-bottom-offset);
-        --landscape-scroll-bottom: calc(var(--award-logo-bottom-offset) + var(--award-logo-size) + 24px);
-        --landscape-viewport-height: 100vh;
-        --award-logo-gap: calc(var(--award-logo-size) / 2);
-        --award-logo-min-row-width: 128px;
-        --award-logo-size: clamp(15px, 4vh, 24px);
-      }
-
-      @supports (height: 100svh) {
-        :root {
-          --landscape-viewport-height: 100svh;
-        }
-      }
-
-      html,
-      body,
-      html.is-mobile-menu-open,
-      html.is-mobile-menu-open body {
-        height: 100%;
-        min-height: 0;
-        overflow: hidden;
-        -webkit-text-size-adjust: 100%;
-        text-size-adjust: 100%;
-      }
-
-      body {
-        height: var(--landscape-viewport-height);
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
-        height: var(--landscape-viewport-height);
-        min-height: 0;
-        overflow: hidden;
-        background: var(--site-bg);
-      }
-
-      .page {
-        height: var(--landscape-viewport-height);
-        min-height: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
-        scrollbar-width: none;
-        background: var(--site-bg);
-        padding-left: 4px;
-        padding-right: var(--outer-text-gutter);
-        scroll-padding-bottom: var(--landscape-scroll-bottom);
-      }
-
-      .content-panel > .section:first-child > h2:first-of-type {
-        padding-top: var(--landscape-column-top);
-      }
-
-      .section h2 {
-        line-height: calc(var(--page-title-line-height) + 4px);
-      }
-
-      .overview-title-subtitle {
-        line-height: 1.32;
-      }
-
-      .page::-webkit-scrollbar,
-      .side-nav::-webkit-scrollbar,
-      .side-nav.is-mobile-menu-open::-webkit-scrollbar,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
-      }
-
-      .side-nav,
-      .side-nav.is-mobile-menu-open,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
-        position: sticky;
-        top: 0;
-        inset: auto;
-        z-index: 9000;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: var(--side-nav-width);
-        min-height: 0;
-        height: var(--landscape-viewport-height);
-        max-height: var(--landscape-viewport-height);
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
-        scrollbar-width: none;
-        border: 0;
-        background: var(--site-bg);
-        box-shadow: 1px 0 0 var(--site-bg), 2px 0 0 var(--site-bg);
-        padding: var(--landscape-column-top) clamp(8px, 1.4vw, 14px) var(--landscape-scroll-bottom) var(--outer-text-gutter);
-        scroll-padding-bottom: var(--landscape-scroll-bottom);
-      }
-
-      .side-nav::before,
-      .side-nav.is-mobile-menu-open::before,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
-        content: none;
-        animation: none;
-      }
-
-      .side-nav::after,
-      .side-nav.is-mobile-menu-open::after,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.2.5";
-        position: fixed;
-        left: 3px;
-        bottom: max(3px, env(safe-area-inset-bottom, 0px));
-        z-index: 9500;
-        display: block;
-      }
-
-      .mobile-menu-toggle,
-      .mobile-menu-title,
-      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
-      .side-nav.is-mobile-menu-open .mobile-menu-title {
-        display: none;
-      }
-
-      .side-title {
-        display: block;
-        flex: 0 0 auto;
-      }
-
-      .side-nav:not(.is-mobile-menu-open) .side-menu,
-      .side-nav.is-mobile-menu-open .side-menu,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
-        display: flex;
-        position: static;
-        z-index: auto;
-        width: 100%;
-        margin: calc(1.15em + 10px) 0 0;
-        animation: none;
-      }
-
-      .side-nav.is-mobile-menu-open .side-menu button,
-      .side-nav.is-mobile-menu-open .side-menu a,
-      .side-menu button,
-      .side-menu a {
-        font-size: clamp(13px, 3.2vh, 17px);
-        line-height: calc(1.15em + 5px);
-      }
-
-      .side-menu--secondary,
-      .side-nav.is-mobile-menu-open .side-menu--secondary {
-        margin-top: calc(1.15em + 16px);
-      }
-
-      .side-menu a.award-logo-row,
-      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
-        position: fixed;
-        left: var(--outer-text-gutter);
-        bottom: var(--award-logo-bottom-offset);
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
-        gap: var(--award-logo-gap);
-        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
-        margin: 0;
-        line-height: 1;
-      }
-
-      .award-logo-row img,
-      .side-nav.is-mobile-menu-open .award-logo-row img {
-        flex: 0 0 var(--award-logo-size);
-        width: var(--award-logo-size);
-        max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
-      }
-
-      .content-panel[data-panel="biography"],
-      .document-copy,
-      .biography-layout {
-        --biography-photo-width: 0px;
-        --biography-photo-gap: 0px;
-        --biography-text-column-width: calc(100vw - var(--side-nav-width) - var(--outer-text-gutter));
-      }
-
-      .biography-photo {
-        display: none;
-      }
-
-      #biography-panel-title,
-      .content-panel[data-panel="biography"] > .section:not(.document-copy),
-      .content-panel[data-panel="biography"] > .next-panel-link,
-      .biography-layout {
-        width: var(--biography-text-column-width);
-        max-width: var(--biography-text-column-width);
-      }
-    }
-
-    @media (min-width: 600px) and (max-width: 760px) and (orientation: portrait) {
-      :root {
-        --outer-text-gutter: 14px;
-        --side-nav-width: calc(100vw / 5);
-        --side-title-font-size: clamp(16px, 2.7vw, 20px);
-        --side-menu-font-size: clamp(12px, 2vw, 14px);
-        --side-menu-line-extra: 4px;
-        --side-award-logo-size: clamp(14px, 2.4vw, 17px);
-        --side-award-logo-gap: calc(var(--side-award-logo-size) / 2);
-        --award-logo-min-row-width: 84px;
-        --side-nav-top-padding: 24px;
-        --content-title-top-padding: var(--side-nav-top-padding);
-        --award-logo-bottom-offset: max(44px, calc(env(safe-area-inset-bottom, 0px) + 36px));
-      }
-
-      html.is-mobile-menu-open,
-      html.is-mobile-menu-open body {
-        overflow: auto;
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
-        min-height: var(--side-nav-viewport-height);
-      }
-
-      .page {
-        padding-left: 0;
-        padding-right: var(--outer-text-gutter);
-      }
-
-      .side-nav,
-      .side-nav.is-mobile-menu-open,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
-        position: sticky;
-        top: 0;
-        inset: auto;
-        z-index: 9000;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: var(--side-nav-width);
-        min-height: var(--side-nav-viewport-height);
-        height: var(--side-nav-viewport-height);
-        max-height: var(--side-nav-viewport-height);
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        border: 0;
-        background: var(--site-bg);
-        padding: var(--side-nav-top-padding) clamp(8px, 1.8vw, 14px) var(--award-logo-bottom-offset) var(--outer-text-gutter);
-      }
-
-      .side-nav::before,
-      .side-nav.is-mobile-menu-open::before,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
-        content: none;
-        animation: none;
-      }
-
-      .side-nav::after,
-      .side-nav.is-mobile-menu-open::after,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "v1.2.5";
-        position: absolute;
-        left: 3px;
-        bottom: 3px;
-      }
-
-      .mobile-menu-toggle,
-      .mobile-menu-title,
-      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
-      .side-nav.is-mobile-menu-open .mobile-menu-title {
-        display: none;
-      }
-
-      .side-title {
-        display: block;
-        flex: 0 0 auto;
-      }
-
-      .side-nav:not(.is-mobile-menu-open) .side-menu,
-      .side-nav.is-mobile-menu-open .side-menu,
-      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
-        display: flex;
-        position: static;
-        z-index: auto;
-        width: 100%;
-        margin: calc(1.15em + var(--side-menu-line-extra)) 0 0;
-        animation: none;
-      }
-
-      .side-nav.is-mobile-menu-open .side-menu button,
-      .side-nav.is-mobile-menu-open .side-menu a,
-      .side-menu button,
-      .side-menu a {
-        font-size: var(--side-menu-font-size);
-        line-height: calc(1.15em + var(--side-menu-line-extra));
-      }
-
-      .side-menu--secondary,
-      .side-nav.is-mobile-menu-open .side-menu--secondary {
-        margin-top: calc(1.15em + 10px);
-      }
-
-      .side-menu a.award-logo-row,
-      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
-        position: absolute;
-        left: var(--outer-text-gutter);
-        bottom: var(--award-logo-bottom-offset);
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
-        gap: var(--side-award-logo-gap);
-        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
-        margin: 0;
-        line-height: 1;
-      }
-
-      .award-logo-row img,
-      .side-nav.is-mobile-menu-open .award-logo-row img {
-        flex: 0 0 var(--side-award-logo-size);
-        width: var(--side-award-logo-size);
-        max-width: calc((100% - (var(--side-award-logo-gap) * 3)) / 4);
-      }
-    }
-
-    @media (max-width: 460px) {
+            @media (max-width: 460px) {
       .process-grid,
       .book-page-grid {
         grid-template-columns: 1fr;
@@ -2644,7 +2261,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-    @media (max-width: 760px) {
+    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
       .kktv-landing-grid,
       .kktv-trailer-grid {
         display: grid;
@@ -2672,47 +2289,16 @@
         grid-template-columns: 1fr;
       }
     }
-    /* Codex portfolio refinement markers */
+    /* Codex portfolio refinement markers: final delivery keeps edited/revised text black and archive notes grey. */
     .revision-highlight,
     .revision-highlight a,
-    .revision-highlight strong {
-      color: #000 !important;
-      text-decoration-color: #000 !important;
-    }
-
-    .revision-highlight a {
-      text-decoration-color: currentColor;
-    }
-
-    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
-
-    html.is-revision-color .revision-highlight,
-    html.is-revision-color .revision-highlight a,
-    html.is-revision-color .revision-highlight strong {
-      color: #c01818 !important;
-      text-decoration-color: #c01818 !important;
-    }
-
+    .revision-highlight strong,
     .biography-sync-highlight,
     .biography-sync-highlight a,
     .biography-sync-highlight strong,
     .revision-highlight .biography-sync-highlight,
     .revision-highlight .biography-sync-highlight a,
-    .revision-highlight .biography-sync-highlight strong {
-      color: #000 !important;
-      text-decoration-color: #000 !important;
-    }
-
-    html.is-revision-color .biography-sync-highlight,
-    html.is-revision-color .biography-sync-highlight a,
-    html.is-revision-color .biography-sync-highlight strong,
-    html.is-revision-color .revision-highlight .biography-sync-highlight,
-    html.is-revision-color .revision-highlight .biography-sync-highlight a,
-    html.is-revision-color .revision-highlight .biography-sync-highlight strong {
-      color: #7a2cff !important;
-      text-decoration-color: #7a2cff !important;
-    }
-    /* COPY EDIT HIGHLIGHT: copy-edited text is black by default; clicking the invisible top-right button toggles orange review color. */
+    .revision-highlight .biography-sync-highlight strong,
     .copy-edit-highlight,
     .copy-edit-highlight a,
     .copy-edit-highlight strong,
@@ -2726,45 +2312,16 @@
       text-decoration-color: #000 !important;
     }
 
-    html.is-copy-edit-color .copy-edit-highlight,
-    html.is-copy-edit-color .copy-edit-highlight a,
-    html.is-copy-edit-color .copy-edit-highlight strong,
-    html.is-copy-edit-color .revision-highlight .copy-edit-highlight,
-    html.is-copy-edit-color .revision-highlight .copy-edit-highlight a,
-    html.is-copy-edit-color .revision-highlight .copy-edit-highlight strong,
-    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight,
-    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight a,
-    html.is-copy-edit-color .biography-sync-highlight.copy-edit-highlight strong {
-      color: #e68600 !important;
-      text-decoration-color: #e68600 !important;
-    }
-
+    .revision-highlight a,
+    .biography-sync-highlight a,
     .copy-edit-highlight a {
       text-decoration-color: currentColor !important;
     }
 
-    .revision-color-toggle {
-      appearance: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 9500;
-      display: block;
-      width: 10px;
-      height: 10px;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: transparent;
-      opacity: 0;
-      cursor: default;
-    }
-
-    .revision-color-toggle:focus,
-    .revision-color-toggle:focus-visible {
-      outline: 0;
+    .archive-footnote,
+    .archive-footnote * {
+      color: #808080 !important;
+      text-decoration-color: #808080 !important;
     }
 
     /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
@@ -2901,7 +2458,7 @@
     .post-media-essay-section .essay + .essay {
       margin-top: var(--section-gap);
     }
-    @media (max-width: 760px) {
+    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
       /* MOBILE LINED TEXT BLOCKS: all horizontal-rule subtitle cards keep the same two-column rhythm. */
       .portfolio-text-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
