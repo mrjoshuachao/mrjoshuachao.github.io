@@ -602,11 +602,12 @@
       --next-panel-visual-align-shift: var(--next-panel-start-visual-align-shift);
     }
 
+
     .next-panel-link__button {
       appearance: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+      display: inline-grid;
+      place-items: center;
       flex: 0 0 auto;
       width: 0.82em;
       height: 0.82em;
@@ -614,11 +615,12 @@
       padding: 0;
       border: 0;
       background: #000;
-      color: #fff;
+      color: rgb(245, 245, 245);
       font: inherit;
       line-height: 1;
       text-align: center;
       text-decoration: none;
+      overflow: hidden;
       transform: translateY(var(--next-panel-visual-align-shift));
       cursor: pointer;
     }
@@ -626,25 +628,28 @@
     .next-panel-link:hover .next-panel-link__button,
     .next-panel-link:focus-visible .next-panel-link__button {
       background: #000;
-      color: #fff;
+      color: rgb(245, 245, 245);
       text-decoration: none;
       outline: 2px solid #000;
       outline-offset: 2px;
     }
 
+
     .next-panel-link__arrow {
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       display: block;
-      flex: 0 0 auto;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      width: auto;
+      height: auto;
+      color: rgb(245, 245, 245);
+      font-family: Arial, "Segoe UI Symbol", sans-serif;
       font-size: 0.66em;
       font-weight: 900;
-      line-height: 1.242424;
+      line-height: 1;
       text-align: center;
+      transform: translate(-50%, -50%) scale(0.75);
+      transform-origin: center center;
       user-select: none;
     }
 
@@ -2264,25 +2269,25 @@
     }
 
 
-    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
+    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square uses RGB 245 for contrast. */
     .card .card-body h3 .external-arrow-icon,
     .card .card-body h3 .external-arrow-icon *,
     .brand-book-caption h3 .external-arrow-icon,
     .brand-book-caption h3 .external-arrow-icon * {
-      color: #fff !important;
-      text-decoration-color: #fff !important;
+      color: rgb(245, 245, 245) !important;
+      text-decoration-color: rgb(245, 245, 245) !important;
     }
 
     .card .card-body h3 .external-arrow-icon svg,
     .brand-book-caption h3 .external-arrow-icon svg {
       fill: none !important;
-      stroke: #fff !important;
+      stroke: rgb(245, 245, 245) !important;
     }
 
     .card .card-body h3 .external-arrow-icon path,
     .brand-book-caption h3 .external-arrow-icon path {
       fill: none !important;
-      stroke: #fff !important;
+      stroke: rgb(245, 245, 245) !important;
     }
 
     /* WORKFLOW ARROW: decorative separator inserted between workflow terms without adding extra text semantics for screen readers. */
