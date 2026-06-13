@@ -640,34 +640,17 @@
       height: 100%;
       overflow: hidden;
       color: #fff;
-      font-size: inherit;
-      line-height: 1;
+      font-family: Arial, sans-serif;
+      font-size: 0.66em;
+      font-weight: 900;
+      line-height: 1.242424;
+      text-align: center;
       user-select: none;
     }
 
     .next-panel-link__arrow::before,
     .next-panel-link__arrow::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      display: block;
-      background: #fff;
-    }
-
-    .next-panel-link__arrow::before {
-      width: 44%;
-      height: 0.075em;
-      transform: translate(-58%, -50%);
-    }
-
-    .next-panel-link__arrow::after {
-      width: 28%;
-      height: 28%;
-      border-top: 0.075em solid #fff;
-      border-right: 0.075em solid #fff;
-      background: transparent;
-      transform: translate(-48%, -50%) rotate(45deg);
+      content: none;
     }
 
     .section-note {
@@ -1585,6 +1568,7 @@
       outline: 0;
     }
     .external-arrow-icon {
+      position: relative;
       display: inline-grid;
       place-items: center;
       width: 14px;
@@ -1607,18 +1591,18 @@
       flex: 0 0 14px;
     }
 
-    .external-arrow-icon svg {
+    .external-arrow-symbol {
       display: block;
-      width: 11px;
-      height: 11px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 3.6;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      overflow: visible;
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 14px;
+      text-align: center;
+      transform: rotate(-45deg);
       transform-origin: center center;
-      transform: scale(1.09);
     }
     .document-lead,
     .document-copy p,
@@ -2840,7 +2824,7 @@
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 14.7 9.3"></path><path d="M10 8h6v6"></path></svg></span></a></h3>
+            <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><span class="external-arrow-symbol">➔</span></span></a></h3>
             <div class="card-tools">
               <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Guidelines &amp; Materials Open Database from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2875,7 +2859,7 @@
       <a class="next-panel-link next-panel-link--flat-bottom" href="kkfarm.html" aria-label="Next: KKFARM">
           <span class="next-panel-link__label revision-highlight">Next: KKFARM</span>
           <span class="next-panel-link__button" aria-hidden="true">
-            <span class="next-panel-link__arrow" aria-hidden="true"></span>
+            <span class="next-panel-link__arrow" aria-hidden="true">➔</span>
           </span>
         </a>
       </section>
