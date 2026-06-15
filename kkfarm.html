@@ -960,7 +960,29 @@
       }
     }
 
-    .media-frame::after {
+    
+
+    /* PROGRESSIVE IMAGE LOADING: staged images begin with a tiny preview, then swap to medium, high, and full-resolution sources while keeping the existing spinner visible. */
+    img[data-progressive-image]:not(.image-lightbox__image) {
+      transition: filter 180ms ease, opacity 180ms ease;
+    }
+
+    img[data-progressive-image][data-progressive-loaded="low"]:not(.image-lightbox__image) {
+      filter: blur(8px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="medium"]:not(.image-lightbox__image) {
+      filter: blur(4px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="high"]:not(.image-lightbox__image) {
+      filter: blur(1.5px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="full"]:not(.image-lightbox__image) {
+      filter: none;
+    }
+.media-frame::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -2598,7 +2620,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-01" data-title="ju&amp;u Cover" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\_cover.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img class="photo-book-cover" src="assets/optimized/images/img-001-cover.webp" alt="ju&amp;u Cover" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-001-cover.webp" data-progressive-medium="assets/progressive/medium/img-001-cover.webp" data-progressive-high="assets/progressive/high/img-001-cover.webp" data-progressive-full="assets/optimized/images/img-001-cover.webp" data-progressive-loaded="low" class="photo-book-cover" src="assets/progressive/low/img-001-cover.webp" alt="ju&amp;u Cover" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Cover</h3>
@@ -2607,7 +2629,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-03" data-title="ju&amp;u Page 01-02" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\01-02.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-002-01-02.webp" alt="ju&amp;u Page 01-02" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-002-01-02.webp" data-progressive-medium="assets/progressive/medium/img-002-01-02.webp" data-progressive-high="assets/progressive/high/img-002-01-02.webp" data-progressive-full="assets/optimized/images/img-002-01-02.webp" data-progressive-loaded="low" src="assets/progressive/low/img-002-01-02.webp" alt="ju&amp;u Page 01-02" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 01-02</h3>
@@ -2616,7 +2638,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-04" data-title="ju&amp;u Page 03-04" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\03-04.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-003-03-04.webp" alt="ju&amp;u Page 03-04" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-003-03-04.webp" data-progressive-medium="assets/progressive/medium/img-003-03-04.webp" data-progressive-high="assets/progressive/high/img-003-03-04.webp" data-progressive-full="assets/optimized/images/img-003-03-04.webp" data-progressive-loaded="low" src="assets/progressive/low/img-003-03-04.webp" alt="ju&amp;u Page 03-04" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 03-04</h3>
@@ -2625,7 +2647,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-05" data-title="ju&amp;u Page 05-06" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\05-06.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-004-05-06.webp" alt="ju&amp;u Page 05-06" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-004-05-06.webp" data-progressive-medium="assets/progressive/medium/img-004-05-06.webp" data-progressive-high="assets/progressive/high/img-004-05-06.webp" data-progressive-full="assets/optimized/images/img-004-05-06.webp" data-progressive-loaded="low" src="assets/progressive/low/img-004-05-06.webp" alt="ju&amp;u Page 05-06" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 05-06</h3>
@@ -2634,7 +2656,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-06" data-title="ju&amp;u Page 07-08" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\07-08.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-005-07-08.webp" alt="ju&amp;u Page 07-08" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-005-07-08.webp" data-progressive-medium="assets/progressive/medium/img-005-07-08.webp" data-progressive-high="assets/progressive/high/img-005-07-08.webp" data-progressive-full="assets/optimized/images/img-005-07-08.webp" data-progressive-loaded="low" src="assets/progressive/low/img-005-07-08.webp" alt="ju&amp;u Page 07-08" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 07-08</h3>
@@ -2643,7 +2665,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-07" data-title="ju&amp;u Page 09-10" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\09-10.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-006-09-10.webp" alt="ju&amp;u Page 09-10" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-006-09-10.webp" data-progressive-medium="assets/progressive/medium/img-006-09-10.webp" data-progressive-high="assets/progressive/high/img-006-09-10.webp" data-progressive-full="assets/optimized/images/img-006-09-10.webp" data-progressive-loaded="low" src="assets/progressive/low/img-006-09-10.webp" alt="ju&amp;u Page 09-10" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 09-10</h3>
@@ -2652,7 +2674,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-08" data-title="ju&amp;u Page 11-12" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\11-12.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-007-11-12.webp" alt="ju&amp;u Page 11-12" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-007-11-12.webp" data-progressive-medium="assets/progressive/medium/img-007-11-12.webp" data-progressive-high="assets/progressive/high/img-007-11-12.webp" data-progressive-full="assets/optimized/images/img-007-11-12.webp" data-progressive-loaded="low" src="assets/progressive/low/img-007-11-12.webp" alt="ju&amp;u Page 11-12" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 11-12</h3>
@@ -2661,7 +2683,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-09" data-title="ju&amp;u Page 13-14" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\13-14.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-008-13-14.webp" alt="ju&amp;u Page 13-14" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-008-13-14.webp" data-progressive-medium="assets/progressive/medium/img-008-13-14.webp" data-progressive-high="assets/progressive/high/img-008-13-14.webp" data-progressive-full="assets/optimized/images/img-008-13-14.webp" data-progressive-loaded="low" src="assets/progressive/low/img-008-13-14.webp" alt="ju&amp;u Page 13-14" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 13-14</h3>
@@ -2670,7 +2692,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-10" data-title="ju&amp;u Page 15-16" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\15-16.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-009-15-16.webp" alt="ju&amp;u Page 15-16" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-009-15-16.webp" data-progressive-medium="assets/progressive/medium/img-009-15-16.webp" data-progressive-high="assets/progressive/high/img-009-15-16.webp" data-progressive-full="assets/optimized/images/img-009-15-16.webp" data-progressive-loaded="low" src="assets/progressive/low/img-009-15-16.webp" alt="ju&amp;u Page 15-16" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 15-16</h3>
@@ -2679,7 +2701,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-11" data-title="ju&amp;u Page 17-18" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\17-18.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-010-17-18.webp" alt="ju&amp;u Page 17-18" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-010-17-18.webp" data-progressive-medium="assets/progressive/medium/img-010-17-18.webp" data-progressive-high="assets/progressive/high/img-010-17-18.webp" data-progressive-full="assets/optimized/images/img-010-17-18.webp" data-progressive-loaded="low" src="assets/progressive/low/img-010-17-18.webp" alt="ju&amp;u Page 17-18" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 17-18</h3>
@@ -2688,7 +2710,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-13" data-title="ju&amp;u Page 21-22" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\21-22.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-012-21-22.webp" alt="ju&amp;u Page 21-22" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-012-21-22.webp" data-progressive-medium="assets/progressive/medium/img-012-21-22.webp" data-progressive-high="assets/progressive/high/img-012-21-22.webp" data-progressive-full="assets/optimized/images/img-012-21-22.webp" data-progressive-loaded="low" src="assets/progressive/low/img-012-21-22.webp" alt="ju&amp;u Page 21-22" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 21-22</h3>
@@ -2697,7 +2719,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-14" data-title="ju&amp;u Page 23-24" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\23-24.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-013-23-24.webp" alt="ju&amp;u Page 23-24" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-013-23-24.webp" data-progressive-medium="assets/progressive/medium/img-013-23-24.webp" data-progressive-high="assets/progressive/high/img-013-23-24.webp" data-progressive-full="assets/optimized/images/img-013-23-24.webp" data-progressive-loaded="low" src="assets/progressive/low/img-013-23-24.webp" alt="ju&amp;u Page 23-24" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 23-24</h3>
@@ -2706,7 +2728,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-15" data-title="ju&amp;u Page 25-26" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\25-26.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-014-25-26.webp" alt="ju&amp;u Page 25-26" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-014-25-26.webp" data-progressive-medium="assets/progressive/medium/img-014-25-26.webp" data-progressive-high="assets/progressive/high/img-014-25-26.webp" data-progressive-full="assets/optimized/images/img-014-25-26.webp" data-progressive-loaded="low" src="assets/progressive/low/img-014-25-26.webp" alt="ju&amp;u Page 25-26" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 25-26</h3>
@@ -2715,7 +2737,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-16" data-title="ju&amp;u Page 27-28" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\27-28.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-015-27-28.webp" alt="ju&amp;u Page 27-28" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-015-27-28.webp" data-progressive-medium="assets/progressive/medium/img-015-27-28.webp" data-progressive-high="assets/progressive/high/img-015-27-28.webp" data-progressive-full="assets/optimized/images/img-015-27-28.webp" data-progressive-loaded="low" src="assets/progressive/low/img-015-27-28.webp" alt="ju&amp;u Page 27-28" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 27-28</h3>
@@ -2724,7 +2746,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-17" data-title="ju&amp;u Page 29-30" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\29-30.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-016-29-30.webp" alt="ju&amp;u Page 29-30" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-016-29-30.webp" data-progressive-medium="assets/progressive/medium/img-016-29-30.webp" data-progressive-high="assets/progressive/high/img-016-29-30.webp" data-progressive-full="assets/optimized/images/img-016-29-30.webp" data-progressive-loaded="low" src="assets/progressive/low/img-016-29-30.webp" alt="ju&amp;u Page 29-30" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 29-30</h3>
@@ -2733,7 +2755,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-18" data-title="ju&amp;u Page 31-32" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\31-32.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-017-31-32.webp" alt="ju&amp;u Page 31-32" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-017-31-32.webp" data-progressive-medium="assets/progressive/medium/img-017-31-32.webp" data-progressive-high="assets/progressive/high/img-017-31-32.webp" data-progressive-full="assets/optimized/images/img-017-31-32.webp" data-progressive-loaded="low" src="assets/progressive/low/img-017-31-32.webp" alt="ju&amp;u Page 31-32" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 31-32</h3>
@@ -2742,7 +2764,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-19" data-title="ju&amp;u Page 33-34" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\33-34.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-018-33-34.webp" alt="ju&amp;u Page 33-34" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-018-33-34.webp" data-progressive-medium="assets/progressive/medium/img-018-33-34.webp" data-progressive-high="assets/progressive/high/img-018-33-34.webp" data-progressive-full="assets/optimized/images/img-018-33-34.webp" data-progressive-loaded="low" src="assets/progressive/low/img-018-33-34.webp" alt="ju&amp;u Page 33-34" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 33-34</h3>
@@ -2751,7 +2773,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-21" data-title="ju&amp;u Page 37-38" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\37-38.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-020-37-38.webp" alt="ju&amp;u Page 37-38" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-020-37-38.webp" data-progressive-medium="assets/progressive/medium/img-020-37-38.webp" data-progressive-high="assets/progressive/high/img-020-37-38.webp" data-progressive-full="assets/optimized/images/img-020-37-38.webp" data-progressive-loaded="low" src="assets/progressive/low/img-020-37-38.webp" alt="ju&amp;u Page 37-38" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 37-38</h3>
@@ -2760,7 +2782,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-22" data-title="ju&amp;u Page 39-40" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\39-40.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-021-39-40.webp" alt="ju&amp;u Page 39-40" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-021-39-40.webp" data-progressive-medium="assets/progressive/medium/img-021-39-40.webp" data-progressive-high="assets/progressive/high/img-021-39-40.webp" data-progressive-full="assets/optimized/images/img-021-39-40.webp" data-progressive-loaded="low" src="assets/progressive/low/img-021-39-40.webp" alt="ju&amp;u Page 39-40" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 39-40</h3>
@@ -2769,7 +2791,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-23" data-title="ju&amp;u Page 41-42" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\41-42.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-022-41-42.webp" alt="ju&amp;u Page 41-42" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-022-41-42.webp" data-progressive-medium="assets/progressive/medium/img-022-41-42.webp" data-progressive-high="assets/progressive/high/img-022-41-42.webp" data-progressive-full="assets/optimized/images/img-022-41-42.webp" data-progressive-loaded="low" src="assets/progressive/low/img-022-41-42.webp" alt="ju&amp;u Page 41-42" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 41-42</h3>
@@ -2778,7 +2800,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-24" data-title="ju&amp;u Page 43-44" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\43-44.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-023-43-44.webp" alt="ju&amp;u Page 43-44" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-023-43-44.webp" data-progressive-medium="assets/progressive/medium/img-023-43-44.webp" data-progressive-high="assets/progressive/high/img-023-43-44.webp" data-progressive-full="assets/optimized/images/img-023-43-44.webp" data-progressive-loaded="low" src="assets/progressive/low/img-023-43-44.webp" alt="ju&amp;u Page 43-44" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 43-44</h3>
@@ -2787,7 +2809,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-25" data-title="ju&amp;u Page 45-46" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\45-46.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-024-45-46.webp" alt="ju&amp;u Page 45-46" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-024-45-46.webp" data-progressive-medium="assets/progressive/medium/img-024-45-46.webp" data-progressive-high="assets/progressive/high/img-024-45-46.webp" data-progressive-full="assets/optimized/images/img-024-45-46.webp" data-progressive-loaded="low" src="assets/progressive/low/img-024-45-46.webp" alt="ju&amp;u Page 45-46" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 45-46</h3>
@@ -2796,7 +2818,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-26" data-title="ju&amp;u Page 47-48" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\47-48.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-025-47-48.webp" alt="ju&amp;u Page 47-48" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-025-47-48.webp" data-progressive-medium="assets/progressive/medium/img-025-47-48.webp" data-progressive-high="assets/progressive/high/img-025-47-48.webp" data-progressive-full="assets/optimized/images/img-025-47-48.webp" data-progressive-loaded="low" src="assets/progressive/low/img-025-47-48.webp" alt="ju&amp;u Page 47-48" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 47-48</h3>
@@ -2805,7 +2827,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-27" data-title="ju&amp;u Page 49-50" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\49-50.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-026-49-50.webp" alt="ju&amp;u Page 49-50" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-026-49-50.webp" data-progressive-medium="assets/progressive/medium/img-026-49-50.webp" data-progressive-high="assets/progressive/high/img-026-49-50.webp" data-progressive-full="assets/optimized/images/img-026-49-50.webp" data-progressive-loaded="low" src="assets/progressive/low/img-026-49-50.webp" alt="ju&amp;u Page 49-50" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 49-50</h3>
@@ -2814,7 +2836,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-28" data-title="ju&amp;u Page 51-52" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\51-52.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-027-51-52.webp" alt="ju&amp;u Page 51-52" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-027-51-52.webp" data-progressive-medium="assets/progressive/medium/img-027-51-52.webp" data-progressive-high="assets/progressive/high/img-027-51-52.webp" data-progressive-full="assets/optimized/images/img-027-51-52.webp" data-progressive-loaded="low" src="assets/progressive/low/img-027-51-52.webp" alt="ju&amp;u Page 51-52" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 51-52</h3>
@@ -2823,7 +2845,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-29" data-title="ju&amp;u Page 53-54" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\53-54.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-028-53-54.webp" alt="ju&amp;u Page 53-54" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-028-53-54.webp" data-progressive-medium="assets/progressive/medium/img-028-53-54.webp" data-progressive-high="assets/progressive/high/img-028-53-54.webp" data-progressive-full="assets/optimized/images/img-028-53-54.webp" data-progressive-loaded="low" src="assets/progressive/low/img-028-53-54.webp" alt="ju&amp;u Page 53-54" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 53-54</h3>
@@ -2832,7 +2854,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-ju-u-photography-book-30" data-title="ju&amp;u Page 55-56" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\JULIA\__Julia\2016-2019\2019.08.19 Julia Photography Book  ju&amp;u\_JPG very small\55-56.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/img-029-55-56.webp" alt="ju&amp;u Page 55-56" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/img-029-55-56.webp" data-progressive-medium="assets/progressive/medium/img-029-55-56.webp" data-progressive-high="assets/progressive/high/img-029-55-56.webp" data-progressive-full="assets/optimized/images/img-029-55-56.webp" data-progressive-loaded="low" src="assets/progressive/low/img-029-55-56.webp" alt="ju&amp;u Page 55-56" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>ju&amp;u Page 55-56</h3>
@@ -2849,7 +2871,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-01" data-title="Project SUI Cover Art 01" data-file-path="asset more\KKFARM\SUI Cover 01.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-01.webp" alt="Project SUI Cover Art 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-01.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-01.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-01.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-01.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-01.webp" alt="Project SUI Cover Art 01" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 01</h3>
@@ -2858,7 +2880,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-02" data-title="Project SUI Cover Art 02" data-file-path="asset more\KKFARM\SUI Cover 02.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-02.webp" alt="Project SUI Cover Art 02" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-02.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-02.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-02.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-02.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-02.webp" alt="Project SUI Cover Art 02" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 02</h3>
@@ -2867,7 +2889,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-03" data-title="Project SUI Cover Art 03" data-file-path="asset more\KKFARM\SUI Cover 03.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-03.webp" alt="Project SUI Cover Art 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-03.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-03.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-03.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-03.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-03.webp" alt="Project SUI Cover Art 03" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 03</h3>
@@ -2876,7 +2898,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-04" data-title="Project SUI Cover Art 04" data-file-path="asset more\KKFARM\SUI Cover 04.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-04.webp" alt="Project SUI Cover Art 04" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-04.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-04.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-04.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-04.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-04.webp" alt="Project SUI Cover Art 04" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 04</h3>
@@ -2885,7 +2907,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-05" data-title="Project SUI Cover Art 05" data-file-path="asset more\KKFARM\SUI Cover 05.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-05.webp" alt="Project SUI Cover Art 05" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-05.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-05.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-05.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-05.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-05.webp" alt="Project SUI Cover Art 05" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 05</h3>
@@ -2894,7 +2916,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-06" data-title="Project SUI Cover Art 06" data-file-path="asset more\KKFARM\SUI Cover 06.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-06.webp" alt="Project SUI Cover Art 06" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-06.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-06.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-06.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-06.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-06.webp" alt="Project SUI Cover Art 06" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 06</h3>
@@ -2903,7 +2925,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-07" data-title="Project SUI Cover Art 07" data-file-path="asset more\KKFARM\SUI Cover 07.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-07.webp" alt="Project SUI Cover Art 07" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-07.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-07.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-07.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-07.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-07.webp" alt="Project SUI Cover Art 07" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 07</h3>
@@ -2912,7 +2934,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-08" data-title="Project SUI Cover Art 08" data-file-path="asset more\KKFARM\SUI Cover 08.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-08.webp" alt="Project SUI Cover Art 08" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-08.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-08.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-08.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-08.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-08.webp" alt="Project SUI Cover Art 08" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 08</h3>
@@ -2921,7 +2943,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-09" data-title="Project SUI Cover Art 09" data-file-path="asset more\KKFARM\SUI Cover 09.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-09.webp" alt="Project SUI Cover Art 09" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-09.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-09.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-09.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-09.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-09.webp" alt="Project SUI Cover Art 09" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 09</h3>
@@ -2930,7 +2952,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kfarm-card" data-card data-id="kkfarm-project-sui-cover-art-10" data-title="Project SUI Cover Art 10" data-file-path="asset more\KKFARM\SUI Cover 10.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkfarm-sui-cover-10.webp" alt="Project SUI Cover Art 10" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkfarm-sui-cover-10.webp" data-progressive-medium="assets/progressive/medium/kkfarm-sui-cover-10.webp" data-progressive-high="assets/progressive/high/kkfarm-sui-cover-10.webp" data-progressive-full="assets/optimized/images/kkfarm-sui-cover-10.webp" data-progressive-loaded="low" src="assets/progressive/low/kkfarm-sui-cover-10.webp" alt="Project SUI Cover Art 10" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>Project SUI Cover Art 10</h3>
@@ -3221,8 +3243,109 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
+      const imageHasDecoded = image.complete && image.naturalWidth > 0;
+      setMediaFrameLoading(frame, !imageHasDecoded || isProgressiveImagePending(image));
     }
+
+    /*
+
+      PROGRESSIVE IMAGE LOADING GROUP:
+
+      Each portfolio image can point to four sources: low, medium, high, and full.
+      The page shows a tiny low-resolution image first, then swaps upward one stage at a time.
+      The existing media-frame spinner remains active until the full-resolution image is visible.
+
+    */
+
+    function isProgressiveImagePending(image) {
+      return image?.dataset.progressiveImage === "true"
+        && image.dataset.progressiveLoaded !== "full"
+        && image.dataset.progressiveError !== "true";
+    }
+
+    function getProgressiveImageStages(image) {
+      return [
+        { name: "low", source: image.dataset.progressiveLow },
+        { name: "medium", source: image.dataset.progressiveMedium },
+        { name: "high", source: image.dataset.progressiveHigh },
+        { name: "full", source: image.dataset.progressiveFull },
+      ].filter((stage) => Boolean(stage.source));
+    }
+
+    function preloadProgressiveImageStage(source) {
+      return new Promise((resolve, reject) => {
+        const loader = new Image();
+        loader.decoding = "async";
+        loader.onload = () => resolve(source);
+        loader.onerror = reject;
+        loader.src = source;
+      });
+    }
+
+    function setProgressiveImageStage(image, stage, source) {
+      if (!image || !source) return;
+      if (image.getAttribute("src") !== source) {
+        image.src = source;
+      }
+      image.dataset.progressiveLoaded = stage;
+      updateImageLoadingIndicator(image);
+    }
+
+    async function loadProgressiveImageStages(image) {
+      if (!image || image.dataset.progressiveStarted === "true") return;
+      image.dataset.progressiveStarted = "true";
+      delete image.dataset.progressiveError;
+      updateImageLoadingIndicator(image);
+
+      const stages = getProgressiveImageStages(image);
+      for (const stage of stages) {
+        try {
+          await preloadProgressiveImageStage(stage.source);
+          setProgressiveImageStage(image, stage.name, stage.source);
+        } catch (error) {
+          if (stage.name === "full") {
+            image.dataset.progressiveError = "true";
+            updateImageLoadingIndicator(image);
+          }
+        }
+      }
+
+      if (image.dataset.progressiveLoaded !== "full") {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      }
+    }
+
+    const progressiveImageObserver = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            loadProgressiveImageStages(entry.target);
+          });
+        }, { rootMargin: "900px 0px", threshold: 0.01 })
+      : null;
+
+    function setupProgressiveImage(image) {
+      if (!image || image.dataset.progressiveImage !== "true") return;
+      if (!image.dataset.progressiveLoaded) {
+        image.dataset.progressiveLoaded = "low";
+      }
+      if (image.dataset.progressiveBound === "true") return;
+      image.dataset.progressiveBound = "true";
+      image.addEventListener("load", () => updateImageLoadingIndicator(image));
+      image.addEventListener("error", () => {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      });
+
+      if (progressiveImageObserver) {
+        progressiveImageObserver.observe(image);
+      } else {
+        loadProgressiveImageStages(image);
+      }
+    }
+
 
     /*
 
@@ -3506,6 +3629,7 @@
       const image = record.element;
       const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
+      setupProgressiveImage(image);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
       image.loading = isPriorityRow ? "eager" : "lazy";
@@ -4392,7 +4516,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.dataset.progressiveFull || image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*

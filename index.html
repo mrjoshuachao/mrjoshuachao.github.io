@@ -996,7 +996,29 @@
       }
     }
 
-    .media-frame::after {
+    
+
+    /* PROGRESSIVE IMAGE LOADING: staged images begin with a tiny preview, then swap to medium, high, and full-resolution sources while keeping the existing spinner visible. */
+    img[data-progressive-image]:not(.image-lightbox__image) {
+      transition: filter 180ms ease, opacity 180ms ease;
+    }
+
+    img[data-progressive-image][data-progressive-loaded="low"]:not(.image-lightbox__image) {
+      filter: blur(8px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="medium"]:not(.image-lightbox__image) {
+      filter: blur(4px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="high"]:not(.image-lightbox__image) {
+      filter: blur(1.5px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="full"]:not(.image-lightbox__image) {
+      filter: none;
+    }
+.media-frame::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -2487,7 +2509,7 @@
           <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight copy-edit-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
           <div class="biography-layout">
           <figure class="biography-photo">
-            <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
+            <img data-progressive-image="true" data-progressive-low="assets/progressive/low/Joshua-Chao-Biography-Photo.webp" data-progressive-medium="assets/progressive/medium/Joshua-Chao-Biography-Photo.webp" data-progressive-high="assets/progressive/high/Joshua-Chao-Biography-Photo.webp" data-progressive-full="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" data-progressive-loaded="low" src="assets/progressive/low/Joshua-Chao-Biography-Photo.webp" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
           </figure>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
@@ -2910,8 +2932,109 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
+      const imageHasDecoded = image.complete && image.naturalWidth > 0;
+      setMediaFrameLoading(frame, !imageHasDecoded || isProgressiveImagePending(image));
     }
+
+    /*
+
+      PROGRESSIVE IMAGE LOADING GROUP:
+
+      Each portfolio image can point to four sources: low, medium, high, and full.
+      The page shows a tiny low-resolution image first, then swaps upward one stage at a time.
+      The existing media-frame spinner remains active until the full-resolution image is visible.
+
+    */
+
+    function isProgressiveImagePending(image) {
+      return image?.dataset.progressiveImage === "true"
+        && image.dataset.progressiveLoaded !== "full"
+        && image.dataset.progressiveError !== "true";
+    }
+
+    function getProgressiveImageStages(image) {
+      return [
+        { name: "low", source: image.dataset.progressiveLow },
+        { name: "medium", source: image.dataset.progressiveMedium },
+        { name: "high", source: image.dataset.progressiveHigh },
+        { name: "full", source: image.dataset.progressiveFull },
+      ].filter((stage) => Boolean(stage.source));
+    }
+
+    function preloadProgressiveImageStage(source) {
+      return new Promise((resolve, reject) => {
+        const loader = new Image();
+        loader.decoding = "async";
+        loader.onload = () => resolve(source);
+        loader.onerror = reject;
+        loader.src = source;
+      });
+    }
+
+    function setProgressiveImageStage(image, stage, source) {
+      if (!image || !source) return;
+      if (image.getAttribute("src") !== source) {
+        image.src = source;
+      }
+      image.dataset.progressiveLoaded = stage;
+      updateImageLoadingIndicator(image);
+    }
+
+    async function loadProgressiveImageStages(image) {
+      if (!image || image.dataset.progressiveStarted === "true") return;
+      image.dataset.progressiveStarted = "true";
+      delete image.dataset.progressiveError;
+      updateImageLoadingIndicator(image);
+
+      const stages = getProgressiveImageStages(image);
+      for (const stage of stages) {
+        try {
+          await preloadProgressiveImageStage(stage.source);
+          setProgressiveImageStage(image, stage.name, stage.source);
+        } catch (error) {
+          if (stage.name === "full") {
+            image.dataset.progressiveError = "true";
+            updateImageLoadingIndicator(image);
+          }
+        }
+      }
+
+      if (image.dataset.progressiveLoaded !== "full") {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      }
+    }
+
+    const progressiveImageObserver = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            loadProgressiveImageStages(entry.target);
+          });
+        }, { rootMargin: "900px 0px", threshold: 0.01 })
+      : null;
+
+    function setupProgressiveImage(image) {
+      if (!image || image.dataset.progressiveImage !== "true") return;
+      if (!image.dataset.progressiveLoaded) {
+        image.dataset.progressiveLoaded = "low";
+      }
+      if (image.dataset.progressiveBound === "true") return;
+      image.dataset.progressiveBound = "true";
+      image.addEventListener("load", () => updateImageLoadingIndicator(image));
+      image.addEventListener("error", () => {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      });
+
+      if (progressiveImageObserver) {
+        progressiveImageObserver.observe(image);
+      } else {
+        loadProgressiveImageStages(image);
+      }
+    }
+
 
     /*
 
@@ -3195,6 +3318,7 @@
       const image = record.element;
       const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
+      setupProgressiveImage(image);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
       image.loading = isPriorityRow ? "eager" : "lazy";
@@ -4081,7 +4205,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.dataset.progressiveFull || image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*

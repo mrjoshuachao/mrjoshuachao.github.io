@@ -942,7 +942,29 @@
       }
     }
 
-    .media-frame::after {
+    
+
+    /* PROGRESSIVE IMAGE LOADING: staged images begin with a tiny preview, then swap to medium, high, and full-resolution sources while keeping the existing spinner visible. */
+    img[data-progressive-image]:not(.image-lightbox__image) {
+      transition: filter 180ms ease, opacity 180ms ease;
+    }
+
+    img[data-progressive-image][data-progressive-loaded="low"]:not(.image-lightbox__image) {
+      filter: blur(8px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="medium"]:not(.image-lightbox__image) {
+      filter: blur(4px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="high"]:not(.image-lightbox__image) {
+      filter: blur(1.5px);
+    }
+
+    img[data-progressive-image][data-progressive-loaded="full"]:not(.image-lightbox__image) {
+      filter: none;
+    }
+.media-frame::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -2454,56 +2476,56 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-01" data-title="2023 Creative Confidence AI Summer Lab" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-01.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-01.webp" alt="2023 Creative Confidence AI Summer Lab" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-01.webp" data-progressive-medium="assets/progressive/medium/ace-01.webp" data-progressive-high="assets/progressive/high/ace-01.webp" data-progressive-full="assets/optimized/images/ace-01.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-01.webp" alt="2023 Creative Confidence AI Summer Lab" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2023 Creative Confidence AI Summer Lab</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-02" data-title="2024 UWC ISAK Japan Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-02.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-02.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-02.webp" data-progressive-medium="assets/progressive/medium/ace-02.webp" data-progressive-high="assets/progressive/high/ace-02.webp" data-progressive-full="assets/optimized/images/ace-02.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-02.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3><span class="copy-edit-highlight">2024 UWC ISAK Japan Teacher Training</span></h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-03" data-title="2025 Junyi School of Innovation Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-03.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-03.webp" alt="2025 Junyi School of Innovation Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-03.webp" data-progressive-medium="assets/progressive/medium/ace-03.webp" data-progressive-high="assets/progressive/high/ace-03.webp" data-progressive-full="assets/optimized/images/ace-03.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-03.webp" alt="2025 Junyi School of Innovation Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2025 Junyi School of Innovation Training</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-04" data-title="2025 Sharestart Education Foundation Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-04.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-04.webp" alt="2025 Sharestart Education Foundation Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-04.webp" data-progressive-medium="assets/progressive/medium/ace-04.webp" data-progressive-high="assets/progressive/high/ace-04.webp" data-progressive-full="assets/optimized/images/ace-04.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-04.webp" alt="2025 Sharestart Education Foundation Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2025 Sharestart Education Foundation Training</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-05" data-title="2024 UWC ISAK Japan Teacher Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-05.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-05.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-05.webp" data-progressive-medium="assets/progressive/medium/ace-05.webp" data-progressive-high="assets/progressive/high/ace-05.webp" data-progressive-full="assets/optimized/images/ace-05.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-05.webp" alt="2024 UWC ISAK Japan Teacher Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3><span class="copy-edit-highlight">2024 UWC ISAK Japan Teacher Training</span></h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-06" data-title="2025 Chunghwa Telecom Institute Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-06.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-06.webp" alt="2025 Chunghwa Telecom Institute Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-06.webp" data-progressive-medium="assets/progressive/medium/ace-06.webp" data-progressive-high="assets/progressive/high/ace-06.webp" data-progressive-full="assets/optimized/images/ace-06.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-06.webp" alt="2025 Chunghwa Telecom Institute Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2025 Chunghwa Telecom Institute Training</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-08" data-title="2026 Gallup CliftonStrengths Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-8.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-8.webp" alt="2026 Gallup CliftonStrengths Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-8.webp" data-progressive-medium="assets/progressive/medium/ace-8.webp" data-progressive-high="assets/progressive/high/ace-8.webp" data-progressive-full="assets/optimized/images/ace-8.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-8.webp" alt="2026 Gallup CliftonStrengths Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2026 Gallup CliftonStrengths Training</h3></div>
             </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="ace-07" data-title="2026 WAVE Brand Leadership Training" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\ACE\ACE-7.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img src="assets/optimized/images/ace-7.webp" alt="2026 WAVE Brand Leadership Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/ace-7.webp" data-progressive-medium="assets/progressive/medium/ace-7.webp" data-progressive-high="assets/progressive/high/ace-7.webp" data-progressive-full="assets/optimized/images/ace-7.webp" data-progressive-loaded="low" src="assets/progressive/low/ace-7.webp" alt="2026 WAVE Brand Leadership Training" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body"><h3>2026 WAVE Brand Leadership Training</h3></div>
             </article>
@@ -2746,8 +2768,109 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
+      const imageHasDecoded = image.complete && image.naturalWidth > 0;
+      setMediaFrameLoading(frame, !imageHasDecoded || isProgressiveImagePending(image));
     }
+
+    /*
+
+      PROGRESSIVE IMAGE LOADING GROUP:
+
+      Each portfolio image can point to four sources: low, medium, high, and full.
+      The page shows a tiny low-resolution image first, then swaps upward one stage at a time.
+      The existing media-frame spinner remains active until the full-resolution image is visible.
+
+    */
+
+    function isProgressiveImagePending(image) {
+      return image?.dataset.progressiveImage === "true"
+        && image.dataset.progressiveLoaded !== "full"
+        && image.dataset.progressiveError !== "true";
+    }
+
+    function getProgressiveImageStages(image) {
+      return [
+        { name: "low", source: image.dataset.progressiveLow },
+        { name: "medium", source: image.dataset.progressiveMedium },
+        { name: "high", source: image.dataset.progressiveHigh },
+        { name: "full", source: image.dataset.progressiveFull },
+      ].filter((stage) => Boolean(stage.source));
+    }
+
+    function preloadProgressiveImageStage(source) {
+      return new Promise((resolve, reject) => {
+        const loader = new Image();
+        loader.decoding = "async";
+        loader.onload = () => resolve(source);
+        loader.onerror = reject;
+        loader.src = source;
+      });
+    }
+
+    function setProgressiveImageStage(image, stage, source) {
+      if (!image || !source) return;
+      if (image.getAttribute("src") !== source) {
+        image.src = source;
+      }
+      image.dataset.progressiveLoaded = stage;
+      updateImageLoadingIndicator(image);
+    }
+
+    async function loadProgressiveImageStages(image) {
+      if (!image || image.dataset.progressiveStarted === "true") return;
+      image.dataset.progressiveStarted = "true";
+      delete image.dataset.progressiveError;
+      updateImageLoadingIndicator(image);
+
+      const stages = getProgressiveImageStages(image);
+      for (const stage of stages) {
+        try {
+          await preloadProgressiveImageStage(stage.source);
+          setProgressiveImageStage(image, stage.name, stage.source);
+        } catch (error) {
+          if (stage.name === "full") {
+            image.dataset.progressiveError = "true";
+            updateImageLoadingIndicator(image);
+          }
+        }
+      }
+
+      if (image.dataset.progressiveLoaded !== "full") {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      }
+    }
+
+    const progressiveImageObserver = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            loadProgressiveImageStages(entry.target);
+          });
+        }, { rootMargin: "900px 0px", threshold: 0.01 })
+      : null;
+
+    function setupProgressiveImage(image) {
+      if (!image || image.dataset.progressiveImage !== "true") return;
+      if (!image.dataset.progressiveLoaded) {
+        image.dataset.progressiveLoaded = "low";
+      }
+      if (image.dataset.progressiveBound === "true") return;
+      image.dataset.progressiveBound = "true";
+      image.addEventListener("load", () => updateImageLoadingIndicator(image));
+      image.addEventListener("error", () => {
+        image.dataset.progressiveError = "true";
+        updateImageLoadingIndicator(image);
+      });
+
+      if (progressiveImageObserver) {
+        progressiveImageObserver.observe(image);
+      } else {
+        loadProgressiveImageStages(image);
+      }
+    }
+
 
     /*
 
@@ -3031,6 +3154,7 @@
       const image = record.element;
       const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
+      setupProgressiveImage(image);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
       image.loading = isPriorityRow ? "eager" : "lazy";
@@ -3917,7 +4041,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.dataset.progressiveFull || image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*
