@@ -599,7 +599,6 @@ width: 100%;
       --next-panel-visual-align-shift: var(--next-panel-start-visual-align-shift);
     }
 
-
     .next-panel-link__button {
       appearance: none;
       position: relative;
@@ -630,7 +629,6 @@ width: 100%;
       outline: 2px solid #000;
       outline-offset: 2px;
     }
-
 
     .next-panel-link__arrow {
       position: absolute;
@@ -968,29 +966,6 @@ width: 100%;
         transform: translate(-50%, -50%) rotate(1turn);
       }
     }
-
-    
-
-    /* PROGRESSIVE IMAGE LOADING: staged images begin with a tiny preview, then swap to medium, high, and full-resolution sources while keeping the existing spinner visible. */
-    img[data-progressive-image]:not(.image-lightbox__image) {
-      transition: filter 180ms ease, opacity 180ms ease;
-    }
-
-    img[data-progressive-image][data-progressive-loaded="low"]:not(.image-lightbox__image) {
-      filter: blur(8px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="medium"]:not(.image-lightbox__image) {
-      filter: blur(4px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="high"]:not(.image-lightbox__image) {
-      filter: blur(1.5px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="full"]:not(.image-lightbox__image) {
-      filter: none;
-    }
 .media-frame::after {
       content: "";
       position: absolute;
@@ -1169,7 +1144,6 @@ width: 100%;
     .incg-page-grid .card-body {
       display: none;
     }
-
 
     .compact-square-grid {
       grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -1606,7 +1580,6 @@ width: 100%;
       outline: 0;
     }
 
-
     .external-arrow-icon {
       position: relative;
       display: inline-grid;
@@ -1848,8 +1821,6 @@ width: 100%;
         padding-left: var(--outer-text-gutter);
         padding-right: var(--outer-text-gutter);
       }
-
-
 
       .side-nav::after {
         content: none;
@@ -2283,7 +2254,6 @@ width: 100%;
       }
     }
 
-
     /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
 
             @media (max-width: 460px) {
@@ -2403,7 +2373,6 @@ width: 100%;
       padding-left: 1.05em;
     }
 
-
     .card .card-body h3,
     .card .card-body h3 *,
     .brand-book-caption h3,
@@ -2411,7 +2380,6 @@ width: 100%;
       color: #808080 !important;
       text-decoration-color: #808080 !important;
     }
-
 
     /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square uses RGB 245 for contrast. */
     .card .card-body h3 .external-arrow-icon,
@@ -2629,7 +2597,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-kkculture" data-title="KKCulture Business Card - KKCulture" data-file-path="asset more\KKCulture\KKCulture Business Card - KKCulture.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-kkculture.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-kkculture.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-kkculture.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-kkculture.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-kkculture.webp" alt="KKCulture Business Card - KKCulture" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kkculture.webp" alt="KKCulture Business Card - KKCulture" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - KKCulture</h3>
@@ -2638,7 +2606,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-kkfarm" data-title="KKCulture Business Card - KKFARM" data-file-path="asset more\KKCulture\KKCulture Business Card - KKFARM.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-kkfarm.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-kkfarm.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-kkfarm.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-kkfarm.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-kkfarm.webp" alt="KKCulture Business Card - KKFARM" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kkfarm.webp" alt="KKCulture Business Card - KKFARM" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - KKFARM</h3>
@@ -2647,7 +2615,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-kktv" data-title="KKCulture Business Card - KKTV" data-file-path="asset more\KKCulture\KKCulture Business Card - KKTV.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-kktv.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-kktv.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-kktv.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-kktv.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-kktv.webp" alt="KKCulture Business Card - KKTV" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kktv.webp" alt="KKCulture Business Card - KKTV" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - KKTV</h3>
@@ -2656,7 +2624,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-kklive" data-title="KKCulture Business Card - KKLIVE" data-file-path="asset more\KKCulture\KKCulture Business Card - KKLIVE.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-kklive.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-kklive.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-kklive.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-kklive.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-kklive.webp" alt="KKCulture Business Card - KKLIVE" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kklive.webp" alt="KKCulture Business Card - KKLIVE" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - KKLIVE</h3>
@@ -2665,7 +2633,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-kktix" data-title="KKCulture Business Card - KKTIX" data-file-path="asset more\KKCulture\KKCulture Business Card - KKTIX.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-kktix.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-kktix.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-kktix.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-kktix.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-kktix.webp" alt="KKCulture Business Card - KKTIX" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-kktix.webp" alt="KKCulture Business Card - KKTIX" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - KKTIX</h3>
@@ -2674,7 +2642,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-business-card-back-side" data-title="KKCulture Business Card - Back Side" data-file-path="asset more\KKCulture\KKCulture Business Card - Back Side.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-business-card-back-side.webp" data-progressive-medium="assets/progressive/medium/kkculture-business-card-back-side.webp" data-progressive-high="assets/progressive/high/kkculture-business-card-back-side.webp" data-progressive-full="assets/optimized/images/kkculture-business-card-back-side.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-business-card-back-side.webp" alt="KKCulture Business Card - Back Side" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-business-card-back-side.webp" alt="KKCulture Business Card - Back Side" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Business Card - Back Side</h3>
@@ -2708,7 +2676,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kkculture-intro-keynote-image" data-title="KKCulture Intro Keynote Image" data-file-path="asset more\KKCulture\KKCulture Intro Keynote.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-intro-keynote.webp" data-progressive-medium="assets/progressive/medium/kkculture-intro-keynote.webp" data-progressive-high="assets/progressive/high/kkculture-intro-keynote.webp" data-progressive-full="assets/optimized/images/kkculture-intro-keynote.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-intro-keynote.webp" alt="KKCulture Intro Keynote" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-intro-keynote.webp" alt="KKCulture Intro Keynote" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture 2023 Intro Deck Keynote</h3>
@@ -2734,7 +2702,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-interface-1" data-title="KKCulture &ldquo;You Create&rdquo; Interface 1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-1.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-you-create-interface-1.webp" data-progressive-medium="assets/progressive/medium/kkculture-you-create-interface-1.webp" data-progressive-high="assets/progressive/high/kkculture-you-create-interface-1.webp" data-progressive-full="assets/optimized/images/kkculture-you-create-interface-1.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-you-create-interface-1.webp" alt="KKCulture &ldquo;You Create&rdquo; Interface 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-you-create-interface-1.webp" alt="KKCulture &ldquo;You Create&rdquo; Interface 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture &ldquo;You Create&rdquo; Interface 1</h3>
@@ -2743,7 +2711,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-interface-2" data-title="KKCulture &ldquo;You Create&rdquo; Interface 2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-2.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-you-create-interface-2.webp" data-progressive-medium="assets/progressive/medium/kkculture-you-create-interface-2.webp" data-progressive-high="assets/progressive/high/kkculture-you-create-interface-2.webp" data-progressive-full="assets/optimized/images/kkculture-you-create-interface-2.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-you-create-interface-2.webp" alt="KKCulture &ldquo;You Create&rdquo; Interface 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-you-create-interface-2.webp" alt="KKCulture &ldquo;You Create&rdquo; Interface 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture &ldquo;You Create&rdquo; Interface 2</h3>
@@ -2752,7 +2720,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-art-2" data-title="KKCulture &ldquo;You Create&rdquo; Artwork 1" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-2.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-you-create-art-2.webp" data-progressive-medium="assets/progressive/medium/kkculture-you-create-art-2.webp" data-progressive-high="assets/progressive/high/kkculture-you-create-art-2.webp" data-progressive-full="assets/optimized/images/kkculture-you-create-art-2.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-you-create-art-2.webp" alt="KKCulture &ldquo;You Create&rdquo; Artwork 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-you-create-art-2.webp" alt="KKCulture &ldquo;You Create&rdquo; Artwork 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Office &ldquo;You Create&rdquo; Artwork 1</h3>
@@ -2761,7 +2729,7 @@ width: 100%;
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card pixel-system-card--wide" data-card data-id="kkculture-you-create-art-1" data-title="KKCulture &ldquo;You Create&rdquo; Artwork 2" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\2 KKCulture - IMPORTANT\KKCulture Design\you-create-art-1.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkculture-you-create-art-1.webp" data-progressive-medium="assets/progressive/medium/kkculture-you-create-art-1.webp" data-progressive-high="assets/progressive/high/kkculture-you-create-art-1.webp" data-progressive-full="assets/optimized/images/kkculture-you-create-art-1.webp" data-progressive-loaded="low" src="assets/progressive/low/kkculture-you-create-art-1.webp" alt="KKCulture &ldquo;You Create&rdquo; Artwork 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkculture-you-create-art-1.webp" alt="KKCulture &ldquo;You Create&rdquo; Artwork 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
                 <h3>KKCulture Office &ldquo;You Create&rdquo; Artwork 2</h3>
@@ -3025,109 +2993,8 @@ width: 100%;
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      const imageHasDecoded = image.complete && image.naturalWidth > 0;
-      setMediaFrameLoading(frame, !imageHasDecoded || isProgressiveImagePending(image));
+      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
     }
-
-    /*
-
-      PROGRESSIVE IMAGE LOADING GROUP:
-
-      Each portfolio image can point to four sources: low, medium, high, and full.
-      The page shows a tiny low-resolution image first, then swaps upward one stage at a time.
-      The existing media-frame spinner remains active until the full-resolution image is visible.
-
-    */
-
-    function isProgressiveImagePending(image) {
-      return image?.dataset.progressiveImage === "true"
-        && image.dataset.progressiveLoaded !== "full"
-        && image.dataset.progressiveError !== "true";
-    }
-
-    function getProgressiveImageStages(image) {
-      return [
-        { name: "low", source: image.dataset.progressiveLow },
-        { name: "medium", source: image.dataset.progressiveMedium },
-        { name: "high", source: image.dataset.progressiveHigh },
-        { name: "full", source: image.dataset.progressiveFull },
-      ].filter((stage) => Boolean(stage.source));
-    }
-
-    function preloadProgressiveImageStage(source) {
-      return new Promise((resolve, reject) => {
-        const loader = new Image();
-        loader.decoding = "async";
-        loader.onload = () => resolve(source);
-        loader.onerror = reject;
-        loader.src = source;
-      });
-    }
-
-    function setProgressiveImageStage(image, stage, source) {
-      if (!image || !source) return;
-      if (image.getAttribute("src") !== source) {
-        image.src = source;
-      }
-      image.dataset.progressiveLoaded = stage;
-      updateImageLoadingIndicator(image);
-    }
-
-    async function loadProgressiveImageStages(image) {
-      if (!image || image.dataset.progressiveStarted === "true") return;
-      image.dataset.progressiveStarted = "true";
-      delete image.dataset.progressiveError;
-      updateImageLoadingIndicator(image);
-
-      const stages = getProgressiveImageStages(image);
-      for (const stage of stages) {
-        try {
-          await preloadProgressiveImageStage(stage.source);
-          setProgressiveImageStage(image, stage.name, stage.source);
-        } catch (error) {
-          if (stage.name === "full") {
-            image.dataset.progressiveError = "true";
-            updateImageLoadingIndicator(image);
-          }
-        }
-      }
-
-      if (image.dataset.progressiveLoaded !== "full") {
-        image.dataset.progressiveError = "true";
-        updateImageLoadingIndicator(image);
-      }
-    }
-
-    const progressiveImageObserver = "IntersectionObserver" in window
-      ? new IntersectionObserver((entries, observer) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            observer.unobserve(entry.target);
-            loadProgressiveImageStages(entry.target);
-          });
-        }, { rootMargin: "900px 0px", threshold: 0.01 })
-      : null;
-
-    function setupProgressiveImage(image) {
-      if (!image || image.dataset.progressiveImage !== "true") return;
-      if (!image.dataset.progressiveLoaded) {
-        image.dataset.progressiveLoaded = "low";
-      }
-      if (image.dataset.progressiveBound === "true") return;
-      image.dataset.progressiveBound = "true";
-      image.addEventListener("load", () => updateImageLoadingIndicator(image));
-      image.addEventListener("error", () => {
-        image.dataset.progressiveError = "true";
-        updateImageLoadingIndicator(image);
-      });
-
-      if (progressiveImageObserver) {
-        progressiveImageObserver.observe(image);
-      } else {
-        loadProgressiveImageStages(image);
-      }
-    }
-
 
     /*
 
@@ -3411,7 +3278,6 @@ width: 100%;
       const image = record.element;
       const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
-      setupProgressiveImage(image);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
       image.loading = isPriorityRow ? "eager" : "lazy";
@@ -4298,7 +4164,7 @@ width: 100%;
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.dataset.progressiveFull || image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*
@@ -4920,19 +4786,4 @@ width: 100%;
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

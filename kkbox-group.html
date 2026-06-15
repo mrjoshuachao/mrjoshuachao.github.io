@@ -606,7 +606,6 @@
       --next-panel-visual-align-shift: var(--next-panel-start-visual-align-shift);
     }
 
-
     .next-panel-link__button {
       appearance: none;
       position: relative;
@@ -637,7 +636,6 @@
       outline: 2px solid #000;
       outline-offset: 2px;
     }
-
 
     .next-panel-link__arrow {
       position: absolute;
@@ -963,29 +961,6 @@
         transform: translate(-50%, -50%) rotate(1turn);
       }
     }
-
-    
-
-    /* PROGRESSIVE IMAGE LOADING: staged images begin with a tiny preview, then swap to medium, high, and full-resolution sources while keeping the existing spinner visible. */
-    img[data-progressive-image]:not(.image-lightbox__image) {
-      transition: filter 180ms ease, opacity 180ms ease;
-    }
-
-    img[data-progressive-image][data-progressive-loaded="low"]:not(.image-lightbox__image) {
-      filter: blur(8px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="medium"]:not(.image-lightbox__image) {
-      filter: blur(4px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="high"]:not(.image-lightbox__image) {
-      filter: blur(1.5px);
-    }
-
-    img[data-progressive-image][data-progressive-loaded="full"]:not(.image-lightbox__image) {
-      filter: none;
-    }
 .media-frame::after {
       content: "";
       position: absolute;
@@ -1159,7 +1134,6 @@
     .incg-page-grid .card-body {
       display: none;
     }
-
 
     .compact-square-grid {
       grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -1823,8 +1797,6 @@
         padding-right: var(--outer-text-gutter);
       }
 
-
-
       .side-nav::after {
         content: none;
       }
@@ -2269,7 +2241,6 @@
       }
     }
 
-
     /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
 
             @media (max-width: 460px) {
@@ -2383,7 +2354,6 @@
       padding-left: 1.05em;
     }
 
-
     .card .card-body h3,
     .card .card-body h3 *,
     .brand-book-caption h3,
@@ -2391,7 +2361,6 @@
       color: #808080 !important;
       text-decoration-color: #808080 !important;
     }
-
 
     /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square uses RGB 245 for contrast. */
     .card .card-body h3 .external-arrow-icon,
@@ -2623,52 +2592,52 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-01" data-title="KKBOX Brand Book 2020 Page 1" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 1.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-01.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-01.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-01.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-01.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-01.webp" alt="KKBOX Brand Book 2020 Page 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-01.webp" alt="KKBOX Brand Book 2020 Page 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-29" data-title="KKBOX Brand Book 2020 Page 29" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 29.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-29.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-29.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-29.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-29.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-29.webp" alt="KKBOX Brand Book 2020 Page 29" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-29.webp" alt="KKBOX Brand Book 2020 Page 29" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-32" data-title="KKBOX Brand Book 2020 Page 32" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 32.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-32.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-32.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-32.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-32.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-32.webp" alt="KKBOX Brand Book 2020 Page 32" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-32.webp" alt="KKBOX Brand Book 2020 Page 32" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-37" data-title="KKBOX Brand Book 2020 Page 37" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 37.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-37.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-37.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-37.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-37.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-37.webp" alt="KKBOX Brand Book 2020 Page 37" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-37.webp" alt="KKBOX Brand Book 2020 Page 37" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-38" data-title="KKBOX Brand Book 2020 Page 38" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 38.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-38.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-38.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-38.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-38.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-38.webp" alt="KKBOX Brand Book 2020 Page 38" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-38.webp" alt="KKBOX Brand Book 2020 Page 38" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-44" data-title="KKBOX Brand Book 2020 Page 44" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 44.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-44.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-44.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-44.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-44.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-44.webp" alt="KKBOX Brand Book 2020 Page 44" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-44.webp" alt="KKBOX Brand Book 2020 Page 44" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-48" data-title="KKBOX Brand Book 2020 Page 48" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 48.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-48.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-48.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-48.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-48.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-48.webp" alt="KKBOX Brand Book 2020 Page 48" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-48.webp" alt="KKBOX Brand Book 2020 Page 48" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-49" data-title="KKBOX Brand Book 2020 Page 49" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 49.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-49.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-49.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-49.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-49.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-49.webp" alt="KKBOX Brand Book 2020 Page 49" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-49.webp" alt="KKBOX Brand Book 2020 Page 49" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-52" data-title="KKBOX Brand Book 2020 Page 52" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 52.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-52.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-52.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-52.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-52.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-52.webp" alt="KKBOX Brand Book 2020 Page 52" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-52.webp" alt="KKBOX Brand Book 2020 Page 52" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-page-card" data-card data-id="kkbox-brand-book-application-page-56" data-title="KKBOX Brand Book 2020 Page 56" data-file-path="asset more\KKBOX Group\KKBOX Brand Book 2020 Page 56.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-brand-book-2020-page-56.webp" data-progressive-medium="assets/progressive/medium/kkbox-brand-book-2020-page-56.webp" data-progressive-high="assets/progressive/high/kkbox-brand-book-2020-page-56.webp" data-progressive-full="assets/optimized/images/kkbox-brand-book-2020-page-56.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-brand-book-2020-page-56.webp" alt="KKBOX Brand Book 2020 Page 56" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-brand-book-2020-page-56.webp" alt="KKBOX Brand Book 2020 Page 56" decoding="async" loading="lazy" fetchpriority="low" /></div>
         </article>
         <div class="brand-book-caption">
           <h3>KKBOX Brand Book</h3>
@@ -2677,7 +2646,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card kkbox-group-card brand-book-application-card" data-card data-id="kkbox-brand-book-application-turn-up-festival-merch" data-title="KKBOX Turn Up Festival Merch" data-file-path="asset more\KKBOX Group\KKBOX Turn Up Festival Merch H.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img data-progressive-image="true" data-progressive-low="assets/progressive/low/kkbox-turn-up-festival-merch-h.webp" data-progressive-medium="assets/progressive/medium/kkbox-turn-up-festival-merch-h.webp" data-progressive-high="assets/progressive/high/kkbox-turn-up-festival-merch-h.webp" data-progressive-full="assets/optimized/images/kkbox-turn-up-festival-merch-h.webp" data-progressive-loaded="low" src="assets/progressive/low/kkbox-turn-up-festival-merch-h.webp" alt="KKBOX Turn Up Festival Merch" decoding="async" loading="lazy" fetchpriority="low" /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kkbox-turn-up-festival-merch-h.webp" alt="KKBOX Turn Up Festival Merch" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
               <h3>KKBOX Turn Up Festival Merch</h3>
@@ -3026,109 +2995,8 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      const imageHasDecoded = image.complete && image.naturalWidth > 0;
-      setMediaFrameLoading(frame, !imageHasDecoded || isProgressiveImagePending(image));
+      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
     }
-
-    /*
-
-      PROGRESSIVE IMAGE LOADING GROUP:
-
-      Each portfolio image can point to four sources: low, medium, high, and full.
-      The page shows a tiny low-resolution image first, then swaps upward one stage at a time.
-      The existing media-frame spinner remains active until the full-resolution image is visible.
-
-    */
-
-    function isProgressiveImagePending(image) {
-      return image?.dataset.progressiveImage === "true"
-        && image.dataset.progressiveLoaded !== "full"
-        && image.dataset.progressiveError !== "true";
-    }
-
-    function getProgressiveImageStages(image) {
-      return [
-        { name: "low", source: image.dataset.progressiveLow },
-        { name: "medium", source: image.dataset.progressiveMedium },
-        { name: "high", source: image.dataset.progressiveHigh },
-        { name: "full", source: image.dataset.progressiveFull },
-      ].filter((stage) => Boolean(stage.source));
-    }
-
-    function preloadProgressiveImageStage(source) {
-      return new Promise((resolve, reject) => {
-        const loader = new Image();
-        loader.decoding = "async";
-        loader.onload = () => resolve(source);
-        loader.onerror = reject;
-        loader.src = source;
-      });
-    }
-
-    function setProgressiveImageStage(image, stage, source) {
-      if (!image || !source) return;
-      if (image.getAttribute("src") !== source) {
-        image.src = source;
-      }
-      image.dataset.progressiveLoaded = stage;
-      updateImageLoadingIndicator(image);
-    }
-
-    async function loadProgressiveImageStages(image) {
-      if (!image || image.dataset.progressiveStarted === "true") return;
-      image.dataset.progressiveStarted = "true";
-      delete image.dataset.progressiveError;
-      updateImageLoadingIndicator(image);
-
-      const stages = getProgressiveImageStages(image);
-      for (const stage of stages) {
-        try {
-          await preloadProgressiveImageStage(stage.source);
-          setProgressiveImageStage(image, stage.name, stage.source);
-        } catch (error) {
-          if (stage.name === "full") {
-            image.dataset.progressiveError = "true";
-            updateImageLoadingIndicator(image);
-          }
-        }
-      }
-
-      if (image.dataset.progressiveLoaded !== "full") {
-        image.dataset.progressiveError = "true";
-        updateImageLoadingIndicator(image);
-      }
-    }
-
-    const progressiveImageObserver = "IntersectionObserver" in window
-      ? new IntersectionObserver((entries, observer) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            observer.unobserve(entry.target);
-            loadProgressiveImageStages(entry.target);
-          });
-        }, { rootMargin: "900px 0px", threshold: 0.01 })
-      : null;
-
-    function setupProgressiveImage(image) {
-      if (!image || image.dataset.progressiveImage !== "true") return;
-      if (!image.dataset.progressiveLoaded) {
-        image.dataset.progressiveLoaded = "low";
-      }
-      if (image.dataset.progressiveBound === "true") return;
-      image.dataset.progressiveBound = "true";
-      image.addEventListener("load", () => updateImageLoadingIndicator(image));
-      image.addEventListener("error", () => {
-        image.dataset.progressiveError = "true";
-        updateImageLoadingIndicator(image);
-      });
-
-      if (progressiveImageObserver) {
-        progressiveImageObserver.observe(image);
-      } else {
-        loadProgressiveImageStages(image);
-      }
-    }
-
 
     /*
 
@@ -3412,7 +3280,6 @@
       const image = record.element;
       const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
-      setupProgressiveImage(image);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
       image.loading = isPriorityRow ? "eager" : "lazy";
@@ -4299,7 +4166,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.dataset.progressiveFull || image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*
@@ -4921,19 +4788,4 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
