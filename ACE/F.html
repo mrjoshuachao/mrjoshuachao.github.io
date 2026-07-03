@@ -80323,6 +80323,8 @@ function addRoom() {
   }));
   table.position.y = -0.16;
   table.receiveShadow = true;
+  table.userData.hitType = "table";
+  pickables.push(table);
   world.add(table);
 }
 
@@ -80622,7 +80624,7 @@ function setTargets() {
       if (i === state.activeIndex) {
         card.target.x = 0;
         card.target.z = 0;
-        card.target.y = mobile ? 0.58 : 0.68;
+        card.target.y = mobile ? 0.95 : 1.08;
         card.target.yaw = pose.yaw;
         card.target.tilt = 0.5;
         card.target.flip = Math.PI;
@@ -80661,6 +80663,13 @@ function setArranged() {
   hud.classList.add("quiet");
 }
 
+function collapseDeck() {
+  state.arranged = false;
+  state.activeIndex = null;
+  hud.classList.remove("quiet");
+  setTargets();
+}
+
 function toggleCard(index) {
   if (!state.arranged) {
     setArranged();
@@ -80690,7 +80699,7 @@ function updateCamera() {
   state.cameraDistance = ease(state.cameraDistance, state.targetCameraDistance, 0.06);
 
   const dist = state.cameraDistance;
-  const focusY = state.activeIndex !== null ? 0.54 : 0.15;
+  const focusY = state.activeIndex !== null ? 0.72 : 0.15;
   const horizontal = Math.cos(state.pitch) * dist;
   const x = Math.sin(state.yaw) * horizontal;
   const y = focusY + Math.sin(state.pitch) * dist;
@@ -80735,7 +80744,11 @@ function pick(event) {
   pointer.set(p.x, p.y);
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObjects(pickables, false);
-  return hits.length ? hits[0].object.userData.cardIndex : null;
+  if (!hits.length) return null;
+  const data = hits[0].object.userData;
+  if (data.hitType === "table") return { type: "table" };
+  if (data.cardIndex !== undefined) return { type: "card", index: data.cardIndex };
+  return null;
 }
 
 canvas.addEventListener("pointerdown", event => {
@@ -80760,8 +80773,16 @@ canvas.addEventListener("pointerup", event => {
   down = null;
   dragging = false;
   if (wasDragging) return;
-  const index = pick(event);
-  if (index !== null && index !== undefined) toggleCard(index);
+  const hit = pick(event);
+  if (!hit) {
+    if (state.arranged) collapseDeck();
+    return;
+  }
+  if (hit.type === "card") {
+    toggleCard(hit.index);
+  } else if (hit.type === "table" && state.arranged) {
+    collapseDeck();
+  }
 });
 
 canvas.addEventListener("pointercancel", () => {
@@ -80815,6 +80836,14 @@ window.__focuspodDebug = {
     if (!cards[index]) return null;
     const v = new Vector3();
     cards[index].root.getWorldPosition(v);
+    v.project(camera);
+    return {
+      x: (v.x * 0.5 + 0.5) * window.innerWidth,
+      y: (-v.y * 0.5 + 0.5) * window.innerHeight
+    };
+  },
+  worldScreen: point => {
+    const v = new Vector3(point.x || 0, point.y || 0, point.z || 0);
     v.project(camera);
     return {
       x: (v.x * 0.5 + 0.5) * window.innerWidth,
