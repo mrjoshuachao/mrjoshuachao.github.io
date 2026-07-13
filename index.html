@@ -10,7 +10,7 @@
   - The page is organized as: head metadata and paint shield, early boot script, full stylesheet, left navigation, main content sections, shared image lightbox, and shared runtime script.
   - Visual layout depends mostly on CSS custom properties in :root. Change spacing, type scale, left-nav width, and responsive behavior there before editing many individual selectors.
   - Portfolio assets are represented by article.card elements with data-card, data-id, data-title, and data-file-path attributes. The runtime uses those attributes for local curation, captions, and image-lightbox ordering.
-  - Final delivery marker classes render in black; archived-project notes and secondary navigation links render in grey.
+  - The red/purple revision text is hidden by default. Triple-click the invisible 200x200px button in the top-right corner within one second to toggle revision colors.
   - The site is designed to work from file:// and from static hosting. Optional helper API calls are silent and non-critical.
 
   Maintenance warnings:
@@ -139,9 +139,9 @@
   </style>
   <!-- SEO AND ASSET HINTS: title/description for sharing plus local font preloads for stable typography. -->
   <title>Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity</title>
-  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, campaign direction, video, digital experiences, event and retail touchpoints, and AI-assisted creative workflows in Taiwan, Japan, China, and East Asian markets." />
+  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, motion, digital campaigns, cultural projects, and AI-driven creative workflows in Taiwan, Japan, and East Asian markets." />
   <meta property="og:title" content="Joshua Chao &mdash; Selected Creative Direction Portfolio" />
-  <meta property="og:description" content="Creative direction across brand systems, technology storytelling, campaign platforms, motion, digital, AI-assisted production, corporate identity, and cultural projects." />
+  <meta property="og:description" content="Brand systems, technology storytelling, campaign direction, motion, digital, and AI-assisted creative work across culture, enterprise technology, entertainment, and education." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
@@ -151,11 +151,49 @@
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
-<!-- EARLY BOOT SCRIPT: keeps the background stable and releases the paint shield after first layout. -->
+<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
+    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
+    const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
+    const setRevisionColorMode = (showColor) => {
+      root.classList.toggle("is-revision-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    try {
+      setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
+    } catch {
+      setRevisionColorMode(false);
+    }
+    let revisionToggleClickCount = 0;
+    let revisionToggleClickTimer;
+    const resetRevisionToggleClickCount = () => {
+      revisionToggleClickCount = 0;
+      if (revisionToggleClickTimer) {
+        window.clearTimeout(revisionToggleClickTimer);
+        revisionToggleClickTimer = undefined;
+      }
+    };
+    revisionColorToggle?.addEventListener("click", () => {
+      revisionToggleClickCount += 1;
+      if (revisionToggleClickCount === 1) {
+        revisionToggleClickTimer = window.setTimeout(() => {
+          revisionToggleClickCount = 0;
+          revisionToggleClickTimer = undefined;
+        }, 1000);
+      }
+      if (revisionToggleClickCount >= 3) {
+        resetRevisionToggleClickCount();
+        setRevisionColorMode(!root.classList.contains("is-revision-color"));
+      }
+    });
     root.style.background = bg;
     root.style.backgroundColor = bg;
     root.style.colorScheme = "only light";
@@ -280,8 +318,6 @@
     /* MAIN SCROLLING CANVAS: the right-side content area. Desktop/tablet pages reserve one fifth of the viewport for the fixed left navigation. */
 
     .page {
-      grid-column: 2;
- grid-column: 2;
       width: fit-content;
       max-width: 100%;
       min-width: 0;
@@ -303,7 +339,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.6";
+      content: "v1.2.5";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -320,9 +356,8 @@
     /* LEFT NAVIGATION RAIL: fixed/viewport-height navigation that holds the title, case-study links, document links, and award logos. */
 
     .side-nav {
-      position: fixed;
-      inset: 0 auto auto 0;
-      z-index: 9000;
+      position: sticky;
+      top: 0;
       align-self: start;
       display: flex;
       flex-direction: column;
@@ -615,9 +650,9 @@
 
     .next-panel-link__button {
       appearance: none;
-      position: relative;
-      display: inline-grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 0 auto;
       width: 0.82em;
       height: 0.82em;
@@ -625,12 +660,11 @@
       padding: 0;
       border: 0;
       background: #000;
-      color: rgb(245, 245, 245);
+      color: #fff;
       font: inherit;
       line-height: 1;
       text-align: center;
       text-decoration: none;
-      overflow: hidden;
       transform: translateY(var(--next-panel-visual-align-shift));
       cursor: pointer;
     }
@@ -638,33 +672,48 @@
     .next-panel-link:hover .next-panel-link__button,
     .next-panel-link:focus-visible .next-panel-link__button {
       background: #000;
-      color: rgb(245, 245, 245);
+      color: #fff;
       text-decoration: none;
       outline: 2px solid #000;
       outline-offset: 2px;
     }
 
     .next-panel-link__arrow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: relative;
       display: block;
-      width: auto;
-      height: auto;
-      color: rgb(245, 245, 245);
-      font-family: Arial, "Segoe UI Symbol", sans-serif;
-      font-size: 0.66em;
-      font-weight: 900;
+      flex: 0 0 auto;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      color: #fff;
+      font-size: inherit;
       line-height: 1;
-      text-align: center;
-      transform: translate(-50%, -50%) scale(0.75);
-      transform-origin: center center;
       user-select: none;
     }
 
     .next-panel-link__arrow::before,
     .next-panel-link__arrow::after {
-      content: none;
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      background: #fff;
+    }
+
+    .next-panel-link__arrow::before {
+      width: 44%;
+      height: 0.075em;
+      transform: translate(-58%, -50%);
+    }
+
+    .next-panel-link__arrow::after {
+      width: 28%;
+      height: 28%;
+      border-top: 0.075em solid #fff;
+      border-right: 0.075em solid #fff;
+      background: transparent;
+      transform: translate(-48%, -50%) rotate(45deg);
     }
 
     .section-note {
@@ -993,7 +1042,8 @@
         transform: translate(-50%, -50%) rotate(1turn);
       }
     }
-.media-frame::after {
+
+    .media-frame::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -1166,6 +1216,7 @@
     .incg-page-grid .card-body {
       display: none;
     }
+
 
     .compact-square-grid {
       grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -1725,7 +1776,7 @@
 
     /* MOBILE PORTRAIT/TALL VIEWPORTS: converts the fixed side navigation into a top hamburger menu and single-column content flow. */
 
-    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+    @media (max-width: 760px) {
       :root {
         --outer-text-gutter: 24px;
         --article-caption-font-size: 15.5px;
@@ -1762,6 +1813,8 @@
         padding-left: var(--outer-text-gutter);
         padding-right: var(--outer-text-gutter);
       }
+
+
 
       .side-nav::after {
         content: none;
@@ -1901,7 +1954,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.6";
+        content: "v1.2.5";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2193,9 +2246,345 @@
       }
     }
 
+
     /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
 
-            @media (max-width: 460px) {
+    @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+      :root {
+        --outer-text-gutter: 18px;
+        --side-nav-width: calc(100vw / 5);
+        --page-title-font-size: clamp(20px, 5.2vh, 30px);
+        --article-caption-font-size: clamp(11px, 0.92vw, 15px);
+        --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
+        --landscape-column-top: 32px;
+        --content-title-top-padding: var(--landscape-column-top);
+        --award-logo-bottom-offset: max(28px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+        --next-panel-bottom-offset: var(--award-logo-bottom-offset);
+        --landscape-scroll-bottom: calc(var(--award-logo-bottom-offset) + var(--award-logo-size) + 24px);
+        --landscape-viewport-height: 100vh;
+        --award-logo-gap: calc(var(--award-logo-size) / 2);
+        --award-logo-min-row-width: 128px;
+        --award-logo-size: clamp(15px, 4vh, 24px);
+      }
+
+      @supports (height: 100svh) {
+        :root {
+          --landscape-viewport-height: 100svh;
+        }
+      }
+
+      html,
+      body,
+      html.is-mobile-menu-open,
+      html.is-mobile-menu-open body {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        height: var(--landscape-viewport-height);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
+        height: var(--landscape-viewport-height);
+        min-height: 0;
+        overflow: hidden;
+        background: var(--site-bg);
+      }
+
+      .page {
+        height: var(--landscape-viewport-height);
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        background: var(--site-bg);
+        padding-left: 4px;
+        padding-right: var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .content-panel > .section:first-child > h2:first-of-type {
+        padding-top: var(--landscape-column-top);
+      }
+
+      .section h2 {
+        line-height: calc(var(--page-title-line-height) + 4px);
+      }
+
+      .overview-title-subtitle {
+        line-height: 1.32;
+      }
+
+      .page::-webkit-scrollbar,
+      .side-nav::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+
+      .side-nav,
+      .side-nav.is-mobile-menu-open,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
+        position: sticky;
+        top: 0;
+        inset: auto;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: var(--side-nav-width);
+        min-height: 0;
+        height: var(--landscape-viewport-height);
+        max-height: var(--landscape-viewport-height);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        border: 0;
+        background: var(--site-bg);
+        box-shadow: 1px 0 0 var(--site-bg), 2px 0 0 var(--site-bg);
+        padding: var(--landscape-column-top) clamp(8px, 1.4vw, 14px) var(--landscape-scroll-bottom) var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .side-nav::before,
+      .side-nav.is-mobile-menu-open::before,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
+        content: none;
+        animation: none;
+      }
+
+      .side-nav::after,
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "v1.2.5";
+        position: fixed;
+        left: 3px;
+        bottom: max(3px, env(safe-area-inset-bottom, 0px));
+        z-index: 9500;
+        display: block;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-menu-title,
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
+      .side-nav.is-mobile-menu-open .mobile-menu-title {
+        display: none;
+      }
+
+      .side-title {
+        display: block;
+        flex: 0 0 auto;
+      }
+
+      .side-nav:not(.is-mobile-menu-open) .side-menu,
+      .side-nav.is-mobile-menu-open .side-menu,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
+        display: flex;
+        position: static;
+        z-index: auto;
+        width: 100%;
+        margin: calc(1.15em + 10px) 0 0;
+        animation: none;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu button,
+      .side-nav.is-mobile-menu-open .side-menu a,
+      .side-menu button,
+      .side-menu a {
+        font-size: clamp(13px, 3.2vh, 17px);
+        line-height: calc(1.15em + 5px);
+      }
+
+      .side-menu--secondary,
+      .side-nav.is-mobile-menu-open .side-menu--secondary {
+        margin-top: calc(1.15em + 16px);
+      }
+
+      .side-menu a.award-logo-row,
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        position: fixed;
+        left: var(--outer-text-gutter);
+        bottom: var(--award-logo-bottom-offset);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: var(--award-logo-gap);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
+        margin: 0;
+        line-height: 1;
+      }
+
+      .award-logo-row img,
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        flex: 0 0 var(--award-logo-size);
+        width: var(--award-logo-size);
+        max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
+      }
+
+      .content-panel[data-panel="biography"],
+      .document-copy,
+      .biography-layout {
+        --biography-photo-width: 0px;
+        --biography-photo-gap: 0px;
+        --biography-text-column-width: calc(100vw - var(--side-nav-width) - var(--outer-text-gutter));
+      }
+
+      .biography-photo {
+        display: none;
+      }
+
+      #biography-panel-title,
+      .content-panel[data-panel="biography"] > .section:not(.document-copy),
+      .content-panel[data-panel="biography"] > .next-panel-link,
+      .biography-layout {
+        width: var(--biography-text-column-width);
+        max-width: var(--biography-text-column-width);
+      }
+    }
+
+    @media (min-width: 600px) and (max-width: 760px) and (orientation: portrait) {
+      :root {
+        --outer-text-gutter: 14px;
+        --side-nav-width: calc(100vw / 5);
+        --side-title-font-size: clamp(16px, 2.7vw, 20px);
+        --side-menu-font-size: clamp(12px, 2vw, 14px);
+        --side-menu-line-extra: 4px;
+        --side-award-logo-size: clamp(14px, 2.4vw, 17px);
+        --side-award-logo-gap: calc(var(--side-award-logo-size) / 2);
+        --award-logo-min-row-width: 84px;
+        --side-nav-top-padding: 24px;
+        --content-title-top-padding: var(--side-nav-top-padding);
+        --award-logo-bottom-offset: max(44px, calc(env(safe-area-inset-bottom, 0px) + 36px));
+      }
+
+      html.is-mobile-menu-open,
+      html.is-mobile-menu-open body {
+        overflow: auto;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
+        min-height: var(--side-nav-viewport-height);
+      }
+
+      .page {
+        padding-left: 0;
+        padding-right: var(--outer-text-gutter);
+      }
+
+      .side-nav,
+      .side-nav.is-mobile-menu-open,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
+        position: sticky;
+        top: 0;
+        inset: auto;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: var(--side-nav-width);
+        min-height: var(--side-nav-viewport-height);
+        height: var(--side-nav-viewport-height);
+        max-height: var(--side-nav-viewport-height);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border: 0;
+        background: var(--site-bg);
+        padding: var(--side-nav-top-padding) clamp(8px, 1.8vw, 14px) var(--award-logo-bottom-offset) var(--outer-text-gutter);
+      }
+
+      .side-nav::before,
+      .side-nav.is-mobile-menu-open::before,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
+        content: none;
+        animation: none;
+      }
+
+      .side-nav::after,
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "v1.2.5";
+        position: absolute;
+        left: 3px;
+        bottom: 3px;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-menu-title,
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
+      .side-nav.is-mobile-menu-open .mobile-menu-title {
+        display: none;
+      }
+
+      .side-title {
+        display: block;
+        flex: 0 0 auto;
+      }
+
+      .side-nav:not(.is-mobile-menu-open) .side-menu,
+      .side-nav.is-mobile-menu-open .side-menu,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
+        display: flex;
+        position: static;
+        z-index: auto;
+        width: 100%;
+        margin: calc(1.15em + var(--side-menu-line-extra)) 0 0;
+        animation: none;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu button,
+      .side-nav.is-mobile-menu-open .side-menu a,
+      .side-menu button,
+      .side-menu a {
+        font-size: var(--side-menu-font-size);
+        line-height: calc(1.15em + var(--side-menu-line-extra));
+      }
+
+      .side-menu--secondary,
+      .side-nav.is-mobile-menu-open .side-menu--secondary {
+        margin-top: calc(1.15em + 10px);
+      }
+
+      .side-menu a.award-logo-row,
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        position: absolute;
+        left: var(--outer-text-gutter);
+        bottom: var(--award-logo-bottom-offset);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: var(--side-award-logo-gap);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
+        margin: 0;
+        line-height: 1;
+      }
+
+      .award-logo-row img,
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        flex: 0 0 var(--side-award-logo-size);
+        width: var(--side-award-logo-size);
+        max-width: calc((100% - (var(--side-award-logo-gap) * 3)) / 4);
+      }
+    }
+
+    @media (max-width: 460px) {
       .process-grid,
       .book-page-grid {
         grid-template-columns: 1fr;
@@ -2205,55 +2594,48 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-    /* Codex portfolio refinement markers: final delivery keeps edited/revised text black and archive notes grey. */
+    /* Codex portfolio refinement markers */
     .revision-highlight,
     .revision-highlight a,
-    .revision-highlight strong,
-    .biography-sync-highlight,
-    .biography-sync-highlight a,
-    .biography-sync-highlight strong,
-    .revision-highlight .biography-sync-highlight,
-    .revision-highlight .biography-sync-highlight a,
-    .revision-highlight .biography-sync-highlight strong,
-    .copy-edit-highlight,
-    .copy-edit-highlight a,
-    .copy-edit-highlight strong,
-    .revision-highlight .copy-edit-highlight,
-    .revision-highlight .copy-edit-highlight a,
-    .revision-highlight .copy-edit-highlight strong,
-    .biography-sync-highlight.copy-edit-highlight,
-    .biography-sync-highlight.copy-edit-highlight a,
-    .biography-sync-highlight.copy-edit-highlight strong {
+    .revision-highlight strong {
       color: #000 !important;
       text-decoration-color: #000 !important;
     }
 
-    .revision-highlight a,
-    .biography-sync-highlight a,
-    .copy-edit-highlight a {
-      text-decoration-color: currentColor !important;
+    .revision-highlight a {
+      text-decoration-color: currentColor;
     }
 
-    .archive-footnote,
-    .archive-footnote *,
-    .archive-footnote.copy-edit-highlight,
-    .archive-footnote.copy-edit-highlight *,
-    .archive-footnote .copy-edit-highlight,
-    .archive-footnote .copy-edit-highlight *,
-    .archive-footnote.revision-highlight,
-    .archive-footnote.revision-highlight *,
-    .archive-footnote .revision-highlight,
-    .archive-footnote .revision-highlight *,
-    .archive-footnote.biography-sync-highlight,
-    .archive-footnote.biography-sync-highlight *,
-    .archive-footnote .biography-sync-highlight,
-    .archive-footnote .biography-sync-highlight *,
-    .archive-footnote.biography-sync-highlight.copy-edit-highlight,
-    .archive-footnote.biography-sync-highlight.copy-edit-highlight *,
-    .archive-footnote .biography-sync-highlight.copy-edit-highlight,
-    .archive-footnote .biography-sync-highlight.copy-edit-highlight * {
-      color: #808080 !important;
-      text-decoration-color: #808080 !important;
+    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
+
+    html.is-revision-color .revision-highlight,
+    html.is-revision-color .revision-highlight a,
+    html.is-revision-color .revision-highlight strong {
+      color: #c01818 !important;
+      text-decoration-color: #c01818 !important;
+    }
+    .revision-color-toggle {
+      appearance: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9500;
+      display: block;
+      width: 10px;
+      height: 10px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: transparent;
+      opacity: 0;
+      cursor: default;
+    }
+
+    .revision-color-toggle:focus,
+    .revision-color-toggle:focus-visible {
+      outline: 0;
     }
 
     /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
@@ -2323,6 +2705,7 @@
       white-space: nowrap;
     }
 
+
     .card .card-body h3,
     .card .card-body h3 *,
     .brand-book-caption h3,
@@ -2331,25 +2714,26 @@
       text-decoration-color: #808080 !important;
     }
 
-    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square uses RGB 245 for contrast. */
+
+    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
     .card .card-body h3 .external-arrow-icon,
     .card .card-body h3 .external-arrow-icon *,
     .brand-book-caption h3 .external-arrow-icon,
     .brand-book-caption h3 .external-arrow-icon * {
-      color: rgb(245, 245, 245) !important;
-      text-decoration-color: rgb(245, 245, 245) !important;
+      color: #fff !important;
+      text-decoration-color: #fff !important;
     }
 
     .card .card-body h3 .external-arrow-icon svg,
     .brand-book-caption h3 .external-arrow-icon svg {
       fill: none !important;
-      stroke: rgb(245, 245, 245) !important;
+      stroke: #fff !important;
     }
 
     .card .card-body h3 .external-arrow-icon path,
     .brand-book-caption h3 .external-arrow-icon path {
       fill: none !important;
-      stroke: rgb(245, 245, 245) !important;
+      stroke: #fff !important;
     }
 
     /* WORKFLOW ARROW: decorative separator inserted between workflow terms without adding extra text semantics for screen readers. */
@@ -2401,7 +2785,7 @@
     .project-overview-card + .essay {
       margin-top: 0;
     }
-    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+    @media (max-width: 760px) {
       /* MOBILE LINED TEXT BLOCKS: all horizontal-rule subtitle cards keep the same two-column rhythm. */
       .portfolio-text-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2475,25 +2859,25 @@
   <main class="page">
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
-          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight copy-edit-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
+          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
           <div class="biography-layout">
           <figure class="biography-photo">
-            <img data-src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
+            <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
           </figure>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="revision-highlight copy-edit-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and AI-powered creativity educator with <strong>more than 10 years of in-house creative leadership</strong> and <strong>8 years of teaching experience</strong>. He leads integrated brand systems, campaign narratives, product and company storytelling, video, web, presentation, event, retail, and AI-assisted creative workflows across technology, entertainment, culture, and education in Taiwan, Japan, and Mandarin-speaking markets.</p>
-              <p class="revision-highlight copy-edit-highlight">His practice connects strategy, art direction, visual systems, motion, digital experiences, and production management. He is strongest when complex business or technology ideas need to become clear creative platforms, consistent visual systems, and delivery-ready assets across multiple channels.</p>
-              <p class="revision-highlight copy-edit-highlight">Since joining <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> in 2016 as <strong>Creative Director</strong>, Joshua has helped shape the creative direction of multiple businesses within the group. His earliest work began with <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, where he led the creative development of a new streaming brand across identity, product demo videos, presentations, launch advertising, campaign assets, website direction, and design guidelines.</p>
-              <p class="revision-highlight copy-edit-highlight">Beginning in 2017, his responsibilities expanded from KKTV to <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, where music, entertainment, and artist management required a more flexible creative system. His work included the debut design system for <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>Julia Wu</strong></a>, visual direction for music releases, albums, concerts, publications, YouTube content, artist websites, and video, print, event, digital, and physical materials.</p>
-              <p class="revision-highlight copy-edit-highlight">As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across KKBOX Group. His projects included corporate image campaigns, MA Program recruiting materials, websites, videos, KKVERSE, VoiceOut, <a class="bio-link" href="kkbox-group.html#kkstream-blendvision-title"><strong>KKStream / BlendVision</strong></a>, the <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany worldview system</strong></a>, and the KKFARM rebranding initiative. This work demonstrates his ability to connect <strong>strategy, design, motion, product storytelling, and business communication</strong> inside a fast-moving in-house environment.</p>
-              <p class="revision-highlight copy-edit-highlight">Joshua also supported <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>OurSong</strong></a>, a blockchain company invested in by the group, during its formative stage. His contributions included early logo direction, homepage direction, intro video, certificate design, Song Share cards, interface direction, business presentation materials, and <strong>international client-facing assets</strong>.</p>
-              <p class="revision-highlight copy-edit-highlight">Following the restructuring of KKBOX Group into KKCompany and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a>, Joshua&rsquo;s work moved into a higher level of corporate integration. His responsibilities expanded into company narrative, corporate identity, leadership communication, website direction, motion assets, workplace touchpoints, merchandise, and brand materials designed for both internal and external use.</p>
-              <p class="revision-highlight copy-edit-highlight">During the KKCulture period, Joshua also became involved in generative AI production and cross-disciplinary technology work. <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>Project NV</strong></a> and <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-kimberley-title"><strong>Kimberley&rsquo;s &ldquo;Street Signs&rdquo;</strong></a> connected AI-generated imagery, music, editing, and presentation-ready storytelling into finished film and media assets.</p>
-              <p class="revision-highlight copy-edit-highlight">Across the &ldquo;KK&rdquo; ecosystem, Joshua has operated as an in-house <strong>Creative Director</strong> from launch-stage consumer brands to reorganized corporate groups. His work moves between high-level brand architecture and detailed asset delivery, covering identity systems, motion, websites, presentations, campaigns, events, signage, merchandise, and daily brand governance.</p>
-              <p class="revision-highlight copy-edit-highlight">In 2023, Joshua co-founded <a class="bio-link" href="ace.html#ace-title"><strong>Applied Creativity Engine</strong></a>, also known as ACE, with Chris Lin, founder and CEO of KKBOX Group. ACE develops AI-powered creativity education, workshops, and training systems for teachers, students, executives, and professionals from UWC ISAK Japan, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and CEOs of small and medium-sized enterprises.</p>
-              <p class="revision-highlight copy-edit-highlight">In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for <strong>8 years</strong> as an adjunct lecturer in the Department of Communications Design at Shih Chien University, where he integrates creativity, design thinking, and AI-assisted workflows into design education. Across industry, education, and emerging technology, his work connects <strong>strategy and execution</strong>, <strong>culture and technology</strong>, and imagination and implementation.</p>
+              <p class="revision-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <a class="bio-link" href="ace.html#ace-title"><strong>AI-Powered Creativity Educator</strong></a> with <strong>over 10 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. He builds integrated brand systems, marketing campaigns, company narratives, and communication design assets across enterprise technology, culture, entertainment, and education in Taiwan, Japan, and China.</p>
+              <p class="revision-highlight">With over 10 years of hands-on creative leadership experience, Joshua works across strategy, creative and art direction, visual systems, video, web, presentations, event touchpoints, and AI production and education. His work connects high-level brand thinking with detailed execution, helping complex ideas become clear, scalable, and emotionally resonant creative systems.</p>
+              <p class="revision-highlight">Since joining <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> in 2016 as <strong>Creative Director</strong>, Joshua has played a key role in shaping the creative direction of multiple businesses within the group. His earliest work began with <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, where he led creative and design development for the launch of a new video streaming brand, including its <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>identity</strong></a>, product demo videos, presentations, advertising, campaigns, website, and <a class="bio-link" href="kktv.html#guidelines-source-title"><strong>design guidelines</strong></a>.</p>
+              <p class="revision-highlight">Beginning in 2017, his responsibilities expanded from <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a> to <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, where he contributed to music, entertainment, and artist management projects. His work included the debut design system for <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>Julia Wu</strong></a>, visual direction for music releases, albums, concerts, <a class="bio-link" href="kkfarm.html#kkfarm-ju-u-photography-book-title"><strong>publications</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-music-videos-jutv-title"><strong>YouTube channels</strong></a>, creative assets for other KKFARM artists, websites, and numerous video, print, event, digital, and physical materials.</p>
+              <p class="revision-highlight">As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. His projects included <a class="bio-link" href="kkbox-group.html#kkbox-group-image-recruitment-title"><strong>KKBOX Group corporate image campaigns</strong></a>, MA Program recruiting materials, websites, videos, KKVERSE, VoiceOut, <a class="bio-link" href="kkbox-group.html#kkstream-blendvision-title"><strong>KKStream BlendVision</strong></a>, the <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany worldview</strong></a>, and the <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM rebranding initiative</strong></a>. This work reflects his ability to operate at the intersection of <strong>strategy, design, motion, product, and business communication</strong>.</p>
+              <p class="revision-highlight">In his role as <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>Creative Director for KKBOX Group</strong></a>, Joshua also supported <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>OurSong</strong></a>, a blockchain company invested in by the group. Joshua contributed during the company&rsquo;s formative stage by helping establish its early logo, homepage, intro video, certificate design, Song Share cards, interface direction, business presentation materials, and <strong>international client-facing assets</strong>.</p>
+              <p class="revision-highlight">Following the restructuring of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a> and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a>, Joshua&rsquo;s creative work moved into a higher level of integration. His responsibilities spanned both organizations and expanded into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>corporate branding</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>company narrative</strong></a>, and organizational communication. For KKCulture, he contributed to Project Messiah, <a class="bio-link" href="kkculture.html#kkculture-motion-title"><strong>visual identity</strong></a>, the website, brand book, office design, and touchpoints that extended the brand into workplace environments, presentations, merchandise, and internal use cases.</p>
+              <p class="revision-highlight">During the <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> period, Joshua became deeply involved in new technologies and cross-disciplinary creative work. <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>NVIDIA x SCCD Project NV</strong></a> and <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-kimberley-title"><strong>Kimberley&rsquo;s &ldquo;Street Signs&rdquo;</strong></a> explored new possibilities in generative AI, music, and video editing.</p>
+              <p class="revision-highlight">Across his long career within the <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>&ldquo;KK&rdquo; ecosystem</strong></a>, Joshua&rsquo;s journey has not been a conventional progression from designer to Creative Director. Rather, he entered the organization from the beginning as a <strong>Creative Director</strong> and became a central creative force as <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a>, and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> continued to evolve. His work spans <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>large-scale brand and product systems</strong></a> as well as highly detailed execution, from business cards and signage to motion systems, websites, presentations, events, and everyday brand touchpoints.</p>
+              <p class="revision-highlight">In 2023, Joshua co-founded <a class="bio-link" href="ace.html#ace-title"><strong>Applied Creativity Engine</strong></a>, also known as <a class="bio-link" href="ace.html#ace-title"><strong>ACE</strong></a>, with Chris Lin, founder and CEO of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. ACE is dedicated to education at the intersection of <a class="bio-link" href="ace.html#ace-title"><strong>human creativity and artificial intelligence</strong></a>. Through ACE, Joshua has trained teachers, students, executives, and professionals from <a class="bio-link" href="ace.html#ace-title"><strong>UWC ISAK Japan</strong></a>, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and CEOs of small and medium-sized enterprises.</p>
+              <p class="revision-highlight">In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for <strong>8 years</strong> as an adjunct lecturer in the <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>Department of Communications Design at Shih Chien University</strong></a>, where he continues to integrate <a class="bio-link" href="ace.html#ace-title"><strong>creativity, design thinking, and AI</strong></a> into his courses. Through his work across industry, education, and emerging technology, he has established himself as a creative leader who bridges <strong>strategy and execution</strong>, <strong>culture and technology</strong>, and imagination and implementation.</p>
             </div>
           </div>
           </div>
@@ -2520,8 +2904,8 @@
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
-              <h3 class="copy-edit-highlight">AI-Integrated Creative Workflow</h3>
-              <p class="copy-edit-highlight">Applying generative AI tools to expand ideation, accelerate visual exploration, support storytelling, and improve production workflows while keeping human judgment, taste, and brand context at the center.</p>
+              <h3>AI-Powered Creativity Work</h3>
+              <p>Using generative AI to accelerate ideation and production across creative workflows. Teaching human-centered and AI-powered creative/design methods and business innovation.</p>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
@@ -2530,8 +2914,8 @@
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card">
-              <h3 class="copy-edit-highlight">East Asian and Mandarin-Market Context</h3>
-              <p class="copy-edit-highlight">Experience across Taiwan, Japan, China, Shanghai, and Beijing, with sensitivity to language, tone, audience behavior, localization, and the way global creative direction needs to adapt across markets.</p>
+              <h3>East Asian / APAC Cultural Context</h3>
+              <p>Experience across Taiwan, Japan, and China, including Shanghai and Beijing, with sensitivity to subtle cultural differences, audience behavior, and local adaptation.</p>
             </article>
           </div>
         </section>
@@ -2596,7 +2980,7 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="copy-edit-highlight">Joshua&rsquo;s creative methodology connects strategic diagnosis, narrative architecture, art direction, system design, production planning, and executional refinement. The process is built to turn complex business, cultural, and technological ideas into clear creative platforms and scalable communication systems.</p>
+              <p>Joshua&rsquo;s creative methodology connects strategic thinking, narrative development, systemic design, and executional precision. His process is designed to turn complex business, cultural, and technological ideas into clear, scalable, and emotionally resonant communication systems.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -2604,11 +2988,11 @@
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p class="copy-edit-highlight">Joshua develops the strategic and communication foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
+        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p class="copy-edit-highlight">Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept through delivery. His role is to align strategy, craft, technology, timeline, and stakeholder feedback so teams can move with clarity and consistent creative standards.</p></article>
+        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
@@ -2621,7 +3005,7 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="portfolio-section-lead copy-edit-highlight">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, stakeholder alignment, and organizational communication.</p>
+              <p class="portfolio-section-lead">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable, and emotionally resonant creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, and organizational communication.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -2638,12 +3022,12 @@
         </section>
 
         <section class="section revision-highlight" aria-labelledby="cross-market-title">
-          <h2 id="cross-market-title" class="copy-edit-highlight">Cross-Market Creative Context</h2>
+          <h2 id="cross-market-title">Multi-national Creative Context</h2>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
             <div class="essay-block" lang="en">
-              <p class="portfolio-section-lead copy-edit-highlight">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan, Japan, and China, with earlier professional experience in Shanghai and Beijing. His projects often sit between brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
-              <p class="portfolio-section-lead copy-edit-highlight">His cross-market experience is cultural and organizational as much as geographic. He brings sensitivity to how ideas need to be framed across markets, how verbal and visual tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
+              <p class="portfolio-section-lead">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan , Japan and China markets, with earlier professional experience in Shanghai and Beijing. His projects often sit at the intersection of brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
+              <p class="portfolio-section-lead">His multi-national experience is not only geographic, but also cultural and organizational. He brings sensitivity to how ideas need to be framed differently across different markets, how visual and verbal tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
@@ -2651,9 +3035,9 @@
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3 class="copy-edit-highlight">Cross-Market Education and Training</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
+        <article class="portfolio-text-card"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3 class="copy-edit-highlight">Mandarin-Market Cultural Adaptation</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
+        <article class="portfolio-text-card"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
         <article class="portfolio-text-card"><h3>Stakeholder Translation</h3><p>Experience aligning executives, product teams, engineers, educators, creators, business stakeholders, and external partners by translating complex strategic, technical, and creative ideas into clear shared direction.</p></article>
           </div>
@@ -2664,17 +3048,17 @@
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Brand Systems &amp; Visual Identity</h3><p class="copy-edit-highlight">Advanced hands-on proficiency in Adobe Illustrator, Photoshop, InDesign, and Figma, with experience building brand guidelines, identity systems, visual standards, and scalable design applications.</p></article>
+        <article class="portfolio-text-card"><h3>Brand Systems &amp; Visual Identity</h3><p>Advanced hands-on fluency across Adobe Illustrator, Photoshop, InDesign, and Figma, with experience building brand guidelines, identity systems, visual rules, and scalable design applications.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Integrated Campaign Assets</h3><p class="copy-edit-highlight">Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and campaign communication systems across consumer, enterprise, and corporate contexts.</p></article>
+        <article class="portfolio-text-card"><h3>Integrated Campaign Assets</h3><p>Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and communication systems across consumer, enterprise, and corporate contexts.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p class="copy-edit-highlight">Experience directing and producing video, motion graphics, and campaign assets using Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment miniseries.</p></article>
+        <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p>Experience directing and producing video, motion, and campaign assets through Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment mini-series.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p class="copy-edit-highlight">Practical experience using ChatGPT, Midjourney, Runway, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, prototype campaign ideas, and improve creative production workflows.</p></article>
+        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p>Practical experience applying ChatGPT, Midjourney, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, and prototype campaign ideas.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation Design</h3><p class="copy-edit-highlight">Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, business, and technical teams.</p></article>
+        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p>Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, and technical teams.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p class="copy-edit-highlight">Experience leading end-to-end creative workflows spanning strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
+        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
           </div>
         </section>
 
@@ -2682,7 +3066,7 @@
       <a class="next-panel-link next-panel-link--start next-panel-link--flat-bottom" href="kktv.html" aria-label="Start with KKTV">
           <span class="next-panel-link__label revision-highlight">Start with KKTV</span>
           <span class="next-panel-link__button" aria-hidden="true">
-            <span class="next-panel-link__arrow" aria-hidden="true">➔</span>
+            <span class="next-panel-link__arrow" aria-hidden="true"></span>
           </span>
         </a>
       </section>
@@ -2871,16 +3255,10 @@
     */
     function ensureVideoSource(video) {
       if (!video.getAttribute("src") && video.dataset.src) {
-        if (video.dataset.sequentialLoading !== "true") {
-          updateVideoLoadingIndicator(video);
-          scheduleSequentialMediaQueue();
-          return false;
-        }
         setMediaFrameLoading(video.closest(".media-frame"), true);
         video.src = video.dataset.src;
         video.load();
       }
-      return true;
     }
 
     /*
@@ -2907,11 +3285,7 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      const hasDeferredSource = Boolean(image.dataset.src);
-      const loadedDeferredSource = !hasDeferredSource
-        || image.dataset.mediaLoaded === "true"
-        || (image.getAttribute("src") === image.dataset.src && image.complete && image.naturalWidth > 0);
-      setMediaFrameLoading(frame, !loadedDeferredSource);
+      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
     }
 
     /*
@@ -2925,10 +3299,8 @@
     function updateVideoLoadingIndicator(video) {
       const frame = video.closest(".media-frame");
       if (!frame) return;
-      const hasDeferredSource = Boolean(video.dataset.src);
-      const hasActiveSource = Boolean(video.currentSrc || video.getAttribute("src"));
-      const loadedEnough = video.dataset.mediaLoaded === "true" || (hasActiveSource && video.readyState >= 2);
-      setMediaFrameLoading(frame, hasDeferredSource ? !loadedEnough && video.dataset.mediaLoadError !== "true" : hasActiveSource && video.readyState < 2);
+      const hasSource = Boolean(video.currentSrc || video.getAttribute("src") || video.dataset.src);
+      setMediaFrameLoading(frame, hasSource && video.readyState < 2);
     }
 
     /*
@@ -2949,16 +3321,8 @@
           updateImageLoadingIndicator(image);
           if (!image.dataset.mediaLoadingBound) {
             image.dataset.mediaLoadingBound = "true";
-            image.addEventListener("load", () => {
-              if (!image.dataset.src || image.getAttribute("src") === image.dataset.src) {
-                image.dataset.mediaLoaded = "true";
-              }
-              updateImageLoadingIndicator(image);
-            });
-            image.addEventListener("error", () => {
-              image.dataset.mediaLoadError = "true";
-              setMediaFrameLoading(frame, false);
-            });
+            image.addEventListener("load", () => updateImageLoadingIndicator(image));
+            image.addEventListener("error", () => setMediaFrameLoading(frame, false));
           }
           return;
         }
@@ -2967,24 +3331,12 @@
           updateVideoLoadingIndicator(video);
           if (!video.dataset.mediaLoadingBound) {
             video.dataset.mediaLoadingBound = "true";
-            video.addEventListener("loadstart", () => updateVideoLoadingIndicator(video));
-            video.addEventListener("loadeddata", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("canplay", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("playing", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("waiting", () => updateVideoLoadingIndicator(video));
-            video.addEventListener("error", () => {
-              video.dataset.mediaLoadError = "true";
-              setMediaFrameLoading(frame, false);
-            });
+            video.addEventListener("loadstart", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("loadeddata", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("canplay", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("playing", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("waiting", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("error", () => setMediaFrameLoading(frame, false));
           }
           return;
         }
@@ -3149,179 +3501,44 @@
     */
 
     function updateLazyPanelVideos() {
-      scheduleSequentialMediaQueue();
-      syncSequentialVideoPlayback();
-    }
-
-    let sequentialMediaIsLoading = false;
-    let sequentialMediaIsScheduled = false;
-    const SEQUENTIAL_MEDIA_TIMEOUT_MS = 30000;
-
-    function isSequentialMediaVisible(media) {
-      const frame = media.closest(".media-frame") || media.closest(".biography-photo");
-      if (!frame) return false;
-      const panel = media.closest("[data-panel]");
-      if (panel && !panel.classList.contains("is-active")) return false;
-      const card = media.closest("[data-card]");
-      if (card && card.hidden) return false;
-      const rect = frame.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0) return false;
-      const frameStyle = window.getComputedStyle(frame);
-      if (frameStyle.display === "none" || frameStyle.visibility === "hidden") return false;
-      return true;
-    }
-
-    function mediaNeedsSequentialLoad(media) {
-      if (!media?.dataset?.src) return false;
-      if (media.dataset.mediaLoaded === "true" || media.dataset.mediaLoadError === "true") return false;
-      if (media.tagName === "IMG") {
-        return !(media.getAttribute("src") === media.dataset.src && media.complete && media.naturalWidth > 0);
-      }
-      if (media.tagName === "VIDEO") {
-        return !(media.getAttribute("src") && media.readyState >= 2);
-      }
-      return false;
-    }
-
-    function getNextSequentialMedia() {
-      const activeScope = getActiveMediaScope();
-      const records = getOrderedMediaRecords(getPortfolioMedia(activeScope).filter(isSequentialMediaVisible));
-      return records.find((record) => mediaNeedsSequentialLoad(record.element))?.element || null;
-    }
-
-    function scheduleSequentialMediaQueue() {
-      if (sequentialMediaIsLoading || sequentialMediaIsScheduled) return;
-      sequentialMediaIsScheduled = true;
-      requestAnimationFrame(() => {
-        sequentialMediaIsScheduled = false;
-        processSequentialMediaQueue();
-      });
-    }
-
-    async function processSequentialMediaQueue() {
-      if (sequentialMediaIsLoading) return;
-      const media = getNextSequentialMedia();
-      if (!media) {
-        syncSequentialVideoPlayback();
-        return;
-      }
-      sequentialMediaIsLoading = true;
-      try {
-        await loadSequentialMedia(media);
-      } finally {
-        sequentialMediaIsLoading = false;
-        syncSequentialVideoPlayback();
-        scheduleSequentialMediaQueue();
-      }
-    }
-
-    function loadSequentialMedia(media) {
-      if (media.tagName === "IMG") return loadSequentialImage(media);
-      if (media.tagName === "VIDEO") return loadSequentialVideo(media);
-      return Promise.resolve();
-    }
-
-    function loadSequentialImage(image) {
-      return new Promise((resolve) => {
-        const source = image.dataset.src;
-        if (!source) {
-          resolve();
-          return;
-        }
-        const frame = image.closest(".media-frame");
-        setMediaFrameLoading(frame, true);
-        let finished = false;
-        const finish = (loaded) => {
-          if (finished) return;
-          finished = true;
-          window.clearTimeout(timeout);
-          image.removeEventListener("load", handleLoad);
-          image.removeEventListener("error", handleError);
-          if (loaded) {
-            image.dataset.mediaLoaded = "true";
-            repaintPortfolioImage(image);
-          } else {
-            image.dataset.mediaLoadError = "true";
-            setMediaFrameLoading(frame, false);
-          }
-          updateImageLoadingIndicator(image);
-          resolve();
-        };
-        const handleLoad = () => finish(true);
-        const handleError = () => finish(false);
-        const timeout = window.setTimeout(() => finish(false), SEQUENTIAL_MEDIA_TIMEOUT_MS);
-        image.addEventListener("load", handleLoad);
-        image.addEventListener("error", handleError);
-        if (image.getAttribute("src") !== source) {
-          image.src = source;
-        } else if (image.complete && image.naturalWidth > 0) {
-          finish(true);
-        }
-      });
-    }
-
-    function loadSequentialVideo(video) {
-      return new Promise((resolve) => {
-        const source = video.dataset.src;
-        if (!source) {
-          resolve();
-          return;
-        }
-        const frame = video.closest(".media-frame");
-        setMediaFrameLoading(frame, true);
-        video.dataset.sequentialLoading = "true";
-        video.preload = "auto";
-        video.setAttribute("preload", "auto");
-        let finished = false;
-        const finish = (loaded) => {
-          if (finished) return;
-          finished = true;
-          window.clearTimeout(timeout);
-          video.removeEventListener("loadeddata", handleLoaded);
-          video.removeEventListener("canplay", handleLoaded);
-          video.removeEventListener("error", handleError);
-          delete video.dataset.sequentialLoading;
-          if (loaded) {
-            video.dataset.mediaLoaded = "true";
-            updateVideoLoadingIndicator(video);
-            if (!isVideoUserPaused(video) && isLazyVideoNearViewport(video)) {
-              playVideoPreservingSound(video);
-            }
-          } else {
-            video.dataset.mediaLoadError = "true";
-            setMediaFrameLoading(frame, false);
-          }
-          resolve();
-        };
-        const handleLoaded = () => finish(true);
-        const handleError = () => finish(false);
-        const timeout = window.setTimeout(() => finish(false), SEQUENTIAL_MEDIA_TIMEOUT_MS);
-        video.addEventListener("loadeddata", handleLoaded);
-        video.addEventListener("canplay", handleLoaded);
-        video.addEventListener("error", handleError);
-        if (!video.getAttribute("src")) {
-          video.src = source;
-          video.load();
-        } else if (video.readyState >= 2) {
-          finish(true);
-        }
-      });
-    }
-
-    function syncSequentialVideoPlayback(scope = getActiveMediaScope()) {
-      getPortfolioMedia(scope)
-        .filter((media) => media.tagName === "VIDEO")
-        .forEach((video) => {
-          if (!video.getAttribute("src") || video.dataset.mediaLoaded !== "true" || video.dataset.mediaLoadError === "true") return;
-          if (isVideoUserPaused(video)) return;
-          if (!isLazyVideoNearViewport(video) && !video.closest(".media-frame")?.classList.contains("is-fullscreen")) {
+      const activePanel = getActiveMediaScope();
+      const mediaRecords = getOrderedMediaRecords(getPortfolioMedia(activePanel));
+      const videoRecords = mediaRecords.filter((record) => record.element.tagName === "VIDEO");
+      const orderedVideos = videoRecords.map((record) => record.element);
+      const audibleVideo = [...activePanel.querySelectorAll("video")].find((video) => !video.muted && !isSilentMedia(video));
+      const loadableRecords = videoRecords.filter((record) => isLazyVideoNearViewport(record.element));
+      const firstLoadableRow = loadableRecords.reduce((minimum, record) => Math.min(minimum, record.rowIndex), Infinity);
+      const priorityVideos = new Set(loadableRecords
+        .filter((record) => record.rowIndex === firstLoadableRow)
+        .map((record) => record.element));
+      videoRecords.forEach((record) => stampMediaLoadPriority(record.element, record));
+      orderedVideos.forEach((video) => {
+        const hasDeferredSource = Boolean(video.dataset.src);
+        if (hasDeferredSource && !isLazyVideoNearViewport(video)) {
+          if (video.getAttribute("src")) {
             video.pause();
             updatePlayButton(video);
-            return;
           }
-          playVideoPreservingSound(video);
+          return;
+        }
+        if (isVideoUserPaused(video)) {
+          if (!video.paused) {
+            video.pause();
+          }
           updatePlayButton(video);
-        });
+          return;
+        }
+        if (audibleVideo && video !== audibleVideo) {
+          video.pause();
+          muteVideo(video);
+          updatePlayButton(video);
+          return;
+        }
+        if (hasDeferredSource && !priorityVideos.has(video) && !video.getAttribute("src")) {
+          return;
+        }
+        playVideoPreservingSound(video);
+      });
     }
 
     /*
@@ -3379,14 +3596,8 @@
     function preparePortfolioVideoRecord(record) {
       const video = record.element;
       stampMediaLoadPriority(video, record);
-      if (!video.getAttribute("src") && video.dataset.src) {
-        video.preload = "none";
-        video.setAttribute("preload", "none");
-      } else {
-        video.preload = "auto";
-        video.setAttribute("preload", "auto");
-      }
-      updateVideoLoadingIndicator(video);
+      video.preload = "auto";
+      video.setAttribute("preload", "auto");
     }
 
     /*
@@ -3483,7 +3694,7 @@
     */
 
     function playVideo(video) {
-      if (!ensureVideoSource(video)) return;
+      ensureVideoSource(video);
       const promise = video.play();
       if (promise && typeof promise.catch === "function") {
         promise.catch(() => {});
@@ -3581,10 +3792,7 @@
     */
 
     function playMutedVideo(video) {
-      if (!ensureVideoSource(video)) {
-        updateVideoLoadingIndicator(video);
-        return;
-      }
+      ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       muteVideo(video);
       playVideo(video);
@@ -3603,10 +3811,7 @@
         playMutedVideo(video);
         return;
       }
-      if (!ensureVideoSource(video)) {
-        updateVideoLoadingIndicator(video);
-        return;
-      }
+      ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       video.defaultMuted = false;
       video.removeAttribute("muted");
@@ -4251,7 +4456,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.dataset.src || image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*
@@ -4857,7 +5062,6 @@
     setupMediaLoadingIndicators();
     applyMediaLoadPriorities();
     repaintActivePanelImages();
-    updateLazyPanelVideos();
     equalizeMobileMenuTitleWidths();
     syncAwardLogoRowWidth();
     syncSideMenuGroupSpacing();
@@ -4872,6 +5076,25 @@
     updateLazyPanelVideos();
     document.documentElement.classList.add("is-site-ready");
   </script>
+  <script src="assets/video-audio-focus.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

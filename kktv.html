@@ -10,7 +10,7 @@
   - The page is organized as: head metadata and paint shield, early boot script, full stylesheet, left navigation, main content sections, shared image lightbox, and shared runtime script.
   - Visual layout depends mostly on CSS custom properties in :root. Change spacing, type scale, left-nav width, and responsive behavior there before editing many individual selectors.
   - Portfolio assets are represented by article.card elements with data-card, data-id, data-title, and data-file-path attributes. The runtime uses those attributes for local curation, captions, and image-lightbox ordering.
-  - Final delivery marker classes render in black; archived-project notes and secondary navigation links render in grey.
+  - The red/purple revision text is hidden by default. Triple-click the invisible 200x200px button in the top-right corner within one second to toggle revision colors.
   - The site is designed to work from file:// and from static hosting. Optional helper API calls are silent and non-critical.
 
   Maintenance warnings:
@@ -140,11 +140,49 @@
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
-<!-- EARLY BOOT SCRIPT: keeps the background stable and releases the paint shield after first layout. -->
+<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
+<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
 <script>
   (() => {
+    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
+    const revisionColorStorageKey = "portfolioRevisionTextColorV2";
+    const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
+    const setRevisionColorMode = (showColor) => {
+      root.classList.toggle("is-revision-color", showColor);
+      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+      try {
+        window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+      } catch {}
+    };
+    try {
+      setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
+    } catch {
+      setRevisionColorMode(false);
+    }
+    let revisionToggleClickCount = 0;
+    let revisionToggleClickTimer;
+    const resetRevisionToggleClickCount = () => {
+      revisionToggleClickCount = 0;
+      if (revisionToggleClickTimer) {
+        window.clearTimeout(revisionToggleClickTimer);
+        revisionToggleClickTimer = undefined;
+      }
+    };
+    revisionColorToggle?.addEventListener("click", () => {
+      revisionToggleClickCount += 1;
+      if (revisionToggleClickCount === 1) {
+        revisionToggleClickTimer = window.setTimeout(() => {
+          revisionToggleClickCount = 0;
+          revisionToggleClickTimer = undefined;
+        }, 1000);
+      }
+      if (revisionToggleClickCount >= 3) {
+        resetRevisionToggleClickCount();
+        setRevisionColorMode(!root.classList.contains("is-revision-color"));
+      }
+    });
     root.style.background = bg;
     root.style.backgroundColor = bg;
     root.style.colorScheme = "only light";
@@ -269,8 +307,6 @@
     /* MAIN SCROLLING CANVAS: the right-side content area. Desktop/tablet pages reserve one fifth of the viewport for the fixed left navigation. */
 
     .page {
-      grid-column: 2;
- grid-column: 2;
       width: fit-content;
       max-width: 100%;
       min-width: 0;
@@ -292,7 +328,7 @@
     }
 
     .side-nav::after {
-      content: "V1.2.6";
+      content: "v1.2.5";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -309,9 +345,8 @@
     /* LEFT NAVIGATION RAIL: fixed/viewport-height navigation that holds the title, case-study links, document links, and award logos. */
 
     .side-nav {
-      position: fixed;
-      inset: 0 auto auto 0;
-      z-index: 9000;
+      position: sticky;
+      top: 0;
       align-self: start;
       display: flex;
       flex-direction: column;
@@ -604,9 +639,9 @@
 
     .next-panel-link__button {
       appearance: none;
-      position: relative;
-      display: inline-grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 0 auto;
       width: 0.82em;
       height: 0.82em;
@@ -614,12 +649,11 @@
       padding: 0;
       border: 0;
       background: #000;
-      color: rgb(245, 245, 245);
+      color: #fff;
       font: inherit;
       line-height: 1;
       text-align: center;
       text-decoration: none;
-      overflow: hidden;
       transform: translateY(var(--next-panel-visual-align-shift));
       cursor: pointer;
     }
@@ -627,33 +661,48 @@
     .next-panel-link:hover .next-panel-link__button,
     .next-panel-link:focus-visible .next-panel-link__button {
       background: #000;
-      color: rgb(245, 245, 245);
+      color: #fff;
       text-decoration: none;
       outline: 2px solid #000;
       outline-offset: 2px;
     }
 
     .next-panel-link__arrow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: relative;
       display: block;
-      width: auto;
-      height: auto;
-      color: rgb(245, 245, 245);
-      font-family: Arial, "Segoe UI Symbol", sans-serif;
-      font-size: 0.66em;
-      font-weight: 900;
+      flex: 0 0 auto;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      color: #fff;
+      font-size: inherit;
       line-height: 1;
-      text-align: center;
-      transform: translate(-50%, -50%) scale(0.75);
-      transform-origin: center center;
       user-select: none;
     }
 
     .next-panel-link__arrow::before,
     .next-panel-link__arrow::after {
-      content: none;
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      background: #fff;
+    }
+
+    .next-panel-link__arrow::before {
+      width: 44%;
+      height: 0.075em;
+      transform: translate(-58%, -50%);
+    }
+
+    .next-panel-link__arrow::after {
+      width: 28%;
+      height: 28%;
+      border-top: 0.075em solid #fff;
+      border-right: 0.075em solid #fff;
+      background: transparent;
+      transform: translate(-48%, -50%) rotate(45deg);
     }
 
     .section-note {
@@ -957,7 +1006,8 @@
         transform: translate(-50%, -50%) rotate(1turn);
       }
     }
-.media-frame::after {
+
+    .media-frame::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -1130,6 +1180,7 @@
     .incg-page-grid .card-body {
       display: none;
     }
+
 
     .compact-square-grid {
       grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -1568,9 +1619,7 @@
       text-underline-offset: 2px;
       outline: 0;
     }
-
     .external-arrow-icon {
-      position: relative;
       display: inline-grid;
       place-items: center;
       width: 14px;
@@ -1586,30 +1635,23 @@
       margin-left: 5px;
       box-sizing: border-box;
       background: #000;
-      color: rgb(245, 245, 245);
-      font-size: 0;
+      color: #fff;
       line-height: 1;
       vertical-align: middle;
-      overflow: hidden;
       transform: translateY(-1px);
       flex: 0 0 14px;
     }
 
-    .external-arrow-symbol {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+    .external-arrow-icon svg {
       display: block;
-      width: auto;
-      height: auto;
-      color: rgb(245, 245, 245);
-      font-family: Arial, "Segoe UI Symbol", sans-serif;
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1;
-      text-align: center;
-      transform: translate(-50%, -50%) rotate(-45deg) scale(0.75);
-      transform-origin: center center;
+      width: 11px;
+      height: 11px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3.6;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      overflow: visible;
     }
     .document-lead,
     .document-copy p,
@@ -1771,7 +1813,7 @@
 
     /* MOBILE PORTRAIT/TALL VIEWPORTS: converts the fixed side navigation into a top hamburger menu and single-column content flow. */
 
-    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+    @media (max-width: 760px) {
       :root {
         --outer-text-gutter: 24px;
         --article-caption-font-size: 15.5px;
@@ -1808,6 +1850,8 @@
         padding-left: var(--outer-text-gutter);
         padding-right: var(--outer-text-gutter);
       }
+
+
 
       .side-nav::after {
         content: none;
@@ -1947,7 +1991,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-        content: "V1.2.6";
+        content: "v1.2.5";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2239,9 +2283,345 @@
       }
     }
 
+
     /* PHONE LANDSCAPE: keeps the left rail usable in very short viewports and prevents the biography portrait from compressing the text. */
 
-            @media (max-width: 460px) {
+    @media (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+      :root {
+        --outer-text-gutter: 18px;
+        --side-nav-width: calc(100vw / 5);
+        --page-title-font-size: clamp(20px, 5.2vh, 30px);
+        --article-caption-font-size: clamp(11px, 0.92vw, 15px);
+        --article-body-font-size: clamp(13.2px, 1.104vw, 18px);
+        --landscape-column-top: 32px;
+        --content-title-top-padding: var(--landscape-column-top);
+        --award-logo-bottom-offset: max(28px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+        --next-panel-bottom-offset: var(--award-logo-bottom-offset);
+        --landscape-scroll-bottom: calc(var(--award-logo-bottom-offset) + var(--award-logo-size) + 24px);
+        --landscape-viewport-height: 100vh;
+        --award-logo-gap: calc(var(--award-logo-size) / 2);
+        --award-logo-min-row-width: 128px;
+        --award-logo-size: clamp(15px, 4vh, 24px);
+      }
+
+      @supports (height: 100svh) {
+        :root {
+          --landscape-viewport-height: 100svh;
+        }
+      }
+
+      html,
+      body,
+      html.is-mobile-menu-open,
+      html.is-mobile-menu-open body {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        height: var(--landscape-viewport-height);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
+        height: var(--landscape-viewport-height);
+        min-height: 0;
+        overflow: hidden;
+        background: var(--site-bg);
+      }
+
+      .page {
+        height: var(--landscape-viewport-height);
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        background: var(--site-bg);
+        padding-left: 4px;
+        padding-right: var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .content-panel > .section:first-child > h2:first-of-type {
+        padding-top: var(--landscape-column-top);
+      }
+
+      .section h2 {
+        line-height: calc(var(--page-title-line-height) + 4px);
+      }
+
+      .overview-title-subtitle {
+        line-height: 1.32;
+      }
+
+      .page::-webkit-scrollbar,
+      .side-nav::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open::-webkit-scrollbar,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
+
+      .side-nav,
+      .side-nav.is-mobile-menu-open,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
+        position: sticky;
+        top: 0;
+        inset: auto;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: var(--side-nav-width);
+        min-height: 0;
+        height: var(--landscape-viewport-height);
+        max-height: var(--landscape-viewport-height);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        scrollbar-width: none;
+        border: 0;
+        background: var(--site-bg);
+        box-shadow: 1px 0 0 var(--site-bg), 2px 0 0 var(--site-bg);
+        padding: var(--landscape-column-top) clamp(8px, 1.4vw, 14px) var(--landscape-scroll-bottom) var(--outer-text-gutter);
+        scroll-padding-bottom: var(--landscape-scroll-bottom);
+      }
+
+      .side-nav::before,
+      .side-nav.is-mobile-menu-open::before,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
+        content: none;
+        animation: none;
+      }
+
+      .side-nav::after,
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "v1.2.5";
+        position: fixed;
+        left: 3px;
+        bottom: max(3px, env(safe-area-inset-bottom, 0px));
+        z-index: 9500;
+        display: block;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-menu-title,
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
+      .side-nav.is-mobile-menu-open .mobile-menu-title {
+        display: none;
+      }
+
+      .side-title {
+        display: block;
+        flex: 0 0 auto;
+      }
+
+      .side-nav:not(.is-mobile-menu-open) .side-menu,
+      .side-nav.is-mobile-menu-open .side-menu,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
+        display: flex;
+        position: static;
+        z-index: auto;
+        width: 100%;
+        margin: calc(1.15em + 10px) 0 0;
+        animation: none;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu button,
+      .side-nav.is-mobile-menu-open .side-menu a,
+      .side-menu button,
+      .side-menu a {
+        font-size: clamp(13px, 3.2vh, 17px);
+        line-height: calc(1.15em + 5px);
+      }
+
+      .side-menu--secondary,
+      .side-nav.is-mobile-menu-open .side-menu--secondary {
+        margin-top: calc(1.15em + 16px);
+      }
+
+      .side-menu a.award-logo-row,
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        position: fixed;
+        left: var(--outer-text-gutter);
+        bottom: var(--award-logo-bottom-offset);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: var(--award-logo-gap);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
+        margin: 0;
+        line-height: 1;
+      }
+
+      .award-logo-row img,
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        flex: 0 0 var(--award-logo-size);
+        width: var(--award-logo-size);
+        max-width: calc((100% - (var(--award-logo-gap) * 3)) / 4);
+      }
+
+      .content-panel[data-panel="biography"],
+      .document-copy,
+      .biography-layout {
+        --biography-photo-width: 0px;
+        --biography-photo-gap: 0px;
+        --biography-text-column-width: calc(100vw - var(--side-nav-width) - var(--outer-text-gutter));
+      }
+
+      .biography-photo {
+        display: none;
+      }
+
+      #biography-panel-title,
+      .content-panel[data-panel="biography"] > .section:not(.document-copy),
+      .content-panel[data-panel="biography"] > .next-panel-link,
+      .biography-layout {
+        width: var(--biography-text-column-width);
+        max-width: var(--biography-text-column-width);
+      }
+    }
+
+    @media (min-width: 600px) and (max-width: 760px) and (orientation: portrait) {
+      :root {
+        --outer-text-gutter: 14px;
+        --side-nav-width: calc(100vw / 5);
+        --side-title-font-size: clamp(16px, 2.7vw, 20px);
+        --side-menu-font-size: clamp(12px, 2vw, 14px);
+        --side-menu-line-extra: 4px;
+        --side-award-logo-size: clamp(14px, 2.4vw, 17px);
+        --side-award-logo-gap: calc(var(--side-award-logo-size) / 2);
+        --award-logo-min-row-width: 84px;
+        --side-nav-top-padding: 24px;
+        --content-title-top-padding: var(--side-nav-top-padding);
+        --award-logo-bottom-offset: max(44px, calc(env(safe-area-inset-bottom, 0px) + 36px));
+      }
+
+      html.is-mobile-menu-open,
+      html.is-mobile-menu-open body {
+        overflow: auto;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: var(--side-nav-width) minmax(0, calc(100vw - var(--side-nav-width)));
+        min-height: var(--side-nav-viewport-height);
+      }
+
+      .page {
+        padding-left: 0;
+        padding-right: var(--outer-text-gutter);
+      }
+
+      .side-nav,
+      .side-nav.is-mobile-menu-open,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing {
+        position: sticky;
+        top: 0;
+        inset: auto;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: var(--side-nav-width);
+        min-height: var(--side-nav-viewport-height);
+        height: var(--side-nav-viewport-height);
+        max-height: var(--side-nav-viewport-height);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border: 0;
+        background: var(--site-bg);
+        padding: var(--side-nav-top-padding) clamp(8px, 1.8vw, 14px) var(--award-logo-bottom-offset) var(--outer-text-gutter);
+      }
+
+      .side-nav::before,
+      .side-nav.is-mobile-menu-open::before,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::before {
+        content: none;
+        animation: none;
+      }
+
+      .side-nav::after,
+      .side-nav.is-mobile-menu-open::after,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
+        content: "v1.2.5";
+        position: absolute;
+        left: 3px;
+        bottom: 3px;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-menu-title,
+      .side-nav.is-mobile-menu-open .mobile-menu-toggle,
+      .side-nav.is-mobile-menu-open .mobile-menu-title {
+        display: none;
+      }
+
+      .side-title {
+        display: block;
+        flex: 0 0 auto;
+      }
+
+      .side-nav:not(.is-mobile-menu-open) .side-menu,
+      .side-nav.is-mobile-menu-open .side-menu,
+      .side-nav.is-mobile-menu-open.is-mobile-menu-closing .side-menu {
+        display: flex;
+        position: static;
+        z-index: auto;
+        width: 100%;
+        margin: calc(1.15em + var(--side-menu-line-extra)) 0 0;
+        animation: none;
+      }
+
+      .side-nav.is-mobile-menu-open .side-menu button,
+      .side-nav.is-mobile-menu-open .side-menu a,
+      .side-menu button,
+      .side-menu a {
+        font-size: var(--side-menu-font-size);
+        line-height: calc(1.15em + var(--side-menu-line-extra));
+      }
+
+      .side-menu--secondary,
+      .side-nav.is-mobile-menu-open .side-menu--secondary {
+        margin-top: calc(1.15em + 10px);
+      }
+
+      .side-menu a.award-logo-row,
+      .side-nav.is-mobile-menu-open .side-menu a.award-logo-row {
+        position: absolute;
+        left: var(--outer-text-gutter);
+        bottom: var(--award-logo-bottom-offset);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: var(--side-award-logo-gap);
+        width: var(--award-logo-row-width, var(--award-logo-min-row-width));
+        margin: 0;
+        line-height: 1;
+      }
+
+      .award-logo-row img,
+      .side-nav.is-mobile-menu-open .award-logo-row img {
+        flex: 0 0 var(--side-award-logo-size);
+        width: var(--side-award-logo-size);
+        max-width: calc((100% - (var(--side-award-logo-gap) * 3)) / 4);
+      }
+    }
+
+    @media (max-width: 460px) {
       .process-grid,
       .book-page-grid {
         grid-template-columns: 1fr;
@@ -2251,7 +2631,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+    @media (max-width: 760px) {
       .kktv-landing-grid,
       .kktv-trailer-grid {
         display: grid;
@@ -2279,55 +2659,68 @@
         grid-template-columns: 1fr;
       }
     }
-    /* Codex portfolio refinement markers: final delivery keeps edited/revised text black and archive notes grey. */
+    /* Codex portfolio refinement markers */
     .revision-highlight,
     .revision-highlight a,
-    .revision-highlight strong,
+    .revision-highlight strong {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    .revision-highlight a {
+      text-decoration-color: currentColor;
+    }
+
+    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
+
+    html.is-revision-color .revision-highlight,
+    html.is-revision-color .revision-highlight a,
+    html.is-revision-color .revision-highlight strong {
+      color: #c01818 !important;
+      text-decoration-color: #c01818 !important;
+    }
+
     .biography-sync-highlight,
     .biography-sync-highlight a,
     .biography-sync-highlight strong,
     .revision-highlight .biography-sync-highlight,
     .revision-highlight .biography-sync-highlight a,
-    .revision-highlight .biography-sync-highlight strong,
-    .copy-edit-highlight,
-    .copy-edit-highlight a,
-    .copy-edit-highlight strong,
-    .revision-highlight .copy-edit-highlight,
-    .revision-highlight .copy-edit-highlight a,
-    .revision-highlight .copy-edit-highlight strong,
-    .biography-sync-highlight.copy-edit-highlight,
-    .biography-sync-highlight.copy-edit-highlight a,
-    .biography-sync-highlight.copy-edit-highlight strong {
+    .revision-highlight .biography-sync-highlight strong {
       color: #000 !important;
       text-decoration-color: #000 !important;
     }
 
-    .revision-highlight a,
-    .biography-sync-highlight a,
-    .copy-edit-highlight a {
-      text-decoration-color: currentColor !important;
+    html.is-revision-color .biography-sync-highlight,
+    html.is-revision-color .biography-sync-highlight a,
+    html.is-revision-color .biography-sync-highlight strong,
+    html.is-revision-color .revision-highlight .biography-sync-highlight,
+    html.is-revision-color .revision-highlight .biography-sync-highlight a,
+    html.is-revision-color .revision-highlight .biography-sync-highlight strong {
+      color: #7a2cff !important;
+      text-decoration-color: #7a2cff !important;
+    }
+    .revision-color-toggle {
+      appearance: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9500;
+      display: block;
+      width: 10px;
+      height: 10px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: transparent;
+      opacity: 0;
+      cursor: default;
     }
 
-    .archive-footnote,
-    .archive-footnote *,
-    .archive-footnote.copy-edit-highlight,
-    .archive-footnote.copy-edit-highlight *,
-    .archive-footnote .copy-edit-highlight,
-    .archive-footnote .copy-edit-highlight *,
-    .archive-footnote.revision-highlight,
-    .archive-footnote.revision-highlight *,
-    .archive-footnote .revision-highlight,
-    .archive-footnote .revision-highlight *,
-    .archive-footnote.biography-sync-highlight,
-    .archive-footnote.biography-sync-highlight *,
-    .archive-footnote .biography-sync-highlight,
-    .archive-footnote .biography-sync-highlight *,
-    .archive-footnote.biography-sync-highlight.copy-edit-highlight,
-    .archive-footnote.biography-sync-highlight.copy-edit-highlight *,
-    .archive-footnote .biography-sync-highlight.copy-edit-highlight,
-    .archive-footnote .biography-sync-highlight.copy-edit-highlight * {
-      color: #808080 !important;
-      text-decoration-color: #808080 !important;
+    .revision-color-toggle:focus,
+    .revision-color-toggle:focus-visible {
+      outline: 0;
     }
 
     /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
@@ -2380,6 +2773,7 @@
       padding-left: 1.05em;
     }
 
+
     .card .card-body h3,
     .card .card-body h3 *,
     .brand-book-caption h3,
@@ -2388,25 +2782,26 @@
       text-decoration-color: #808080 !important;
     }
 
-    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square uses RGB 245 for contrast. */
+
+    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
     .card .card-body h3 .external-arrow-icon,
     .card .card-body h3 .external-arrow-icon *,
     .brand-book-caption h3 .external-arrow-icon,
     .brand-book-caption h3 .external-arrow-icon * {
-      color: rgb(245, 245, 245) !important;
-      text-decoration-color: rgb(245, 245, 245) !important;
+      color: #fff !important;
+      text-decoration-color: #fff !important;
     }
 
     .card .card-body h3 .external-arrow-icon svg,
     .brand-book-caption h3 .external-arrow-icon svg {
       fill: none !important;
-      stroke: rgb(245, 245, 245) !important;
+      stroke: #fff !important;
     }
 
     .card .card-body h3 .external-arrow-icon path,
     .brand-book-caption h3 .external-arrow-icon path {
       fill: none !important;
-      stroke: rgb(245, 245, 245) !important;
+      stroke: #fff !important;
     }
 
     /* WORKFLOW ARROW: decorative separator inserted between workflow terms without adding extra text semantics for screen readers. */
@@ -2462,7 +2857,7 @@
     .post-media-essay-section .essay + .essay {
       margin-top: var(--section-gap);
     }
-    @media (max-width: 760px), (orientation: landscape) and (max-height: 520px) and (max-width: 960px) {
+    @media (max-width: 760px) {
       /* MOBILE LINED TEXT BLOCKS: all horizontal-rule subtitle cards keep the same two-column rhythm. */
       .portfolio-text-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2552,7 +2947,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Key Outputs</dt>
-              <dd class="biography-sync-highlight copy-edit-highlight">Identity, Product Expression, Motion, Design Guidelines, TVCs, Landing Pages, Retail Materials, Screen-Based and Printed Assets</dd>
+              <dd class="biography-sync-highlight">Identity, Product Expression, Motion, Design Guidelines, TVCs, Landing Pages, Retail Materials, Screen-Based And Printed Assets</dd>
             </div>
             <div class="project-overview-item">
               <dt>Channels</dt>
@@ -2560,7 +2955,7 @@
             </div>
             <div class="project-overview-item">
               <dt>Collaborators</dt>
-              <dd class="copy-edit-highlight">Product Teams, Marketers, Designers, Filmmakers, Media and Retail Partners</dd>
+              <dd>Product Teams, Marketers, Designers, Filmmakers, Media And Retail Partners</dd>
             </div>
             <div class="project-overview-item">
               <dt>Workflow</dt>
@@ -2577,16 +2972,16 @@
       <div class="grid">
 
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1: Too Much Love (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-01" data-title="KKTV TVC #1 Too Much Love 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Too Much Love_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-001-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><span class="copy-edit-highlight">KKTV TVC #1: Too Much Love (20 sec)</span></h3>
+            <h3>KKTV TVC #1 Too Much Love 20s</h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #1: Too Much Love (20 sec) from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #1 Too Much Love 20s from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -2597,16 +2992,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2: Pillow Talk (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-02" data-title="KKTV TVC #2 Pillow Talk 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Pillow Talk_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-002-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><span class="copy-edit-highlight">KKTV TVC #2: Pillow Talk (20 sec)</span></h3>
+            <h3>KKTV TVC #2 Pillow Talk 20s</h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #2: Pillow Talk (20 sec) from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #2 Pillow Talk 20s from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -2617,16 +3012,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3: Device Crush (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-03" data-title="KKTV TVC #3 Device Crush 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Device Crush_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-003-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><span class="copy-edit-highlight">KKTV TVC #3: Device Crush (20 sec)</span></h3>
+            <h3>KKTV TVC #3 Device Crush 20s</h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #3: Device Crush (20 sec) from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #3 Device Crush 20s from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -2637,16 +3032,16 @@
           </div>
         </article>
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
-        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4: Fighting for Attention (20 sec)" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
+        <article class="card" data-card data-id="tvc-04" data-title="KKTV TVC #4 Fighting for Attention 20s" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\_video\05 tvc\15 Finalized\0809_KKTV_TVC_Fighting for Attention_20s_synced.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-004-0809-kktv-tvc-20-synced.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><span class="copy-edit-highlight">KKTV TVC #4: Fighting for Attention (20 sec)</span></h3>
+            <h3>KKTV TVC #4 Fighting for Attention 20s</h3>
             <div class="card-tools">
-              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #4: Fighting for Attention (20 sec) from page" title="Remove from page">
+              <button class="trash-button" type="button" data-trash aria-label="Remove KKTV TVC #4 Fighting for Attention 20s from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M9 3h6l1 3h5v2H3V6h5l1-3Z"></path>
                 <path d="M6 10h12l-1 11H7L6 10Z"></path>
@@ -2666,7 +3061,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kktv-landing-page-01" data-title="KKTV Landing Page Hero 1" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 1.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img  data-src="assets/optimized/images/kktv-landing-page-01.webp" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" alt="KKTV Landing Page Hero 1" decoding="async" loading="lazy" fetchpriority="low"  /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-01.webp" alt="KKTV Landing Page Hero 1" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>KKTV Landing Page Hero 1</h3>
@@ -2684,7 +3079,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kktv-landing-page-02" data-title="KKTV Landing Page Hero 2" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 2.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img  data-src="assets/optimized/images/kktv-landing-page-02.webp" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" alt="KKTV Landing Page Hero 2" decoding="async" loading="lazy" fetchpriority="low"  /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-02.webp" alt="KKTV Landing Page Hero 2" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>KKTV Landing Page Hero 2</h3>
@@ -2702,7 +3097,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kktv-landing-page-03" data-title="KKTV Landing Page Hero 3" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Landing Page Hero 3.jpg">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img  data-src="assets/optimized/images/kktv-landing-page-03.webp" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" alt="KKTV Landing Page Hero 3" decoding="async" loading="lazy" fetchpriority="low"  /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-landing-page-03.webp" alt="KKTV Landing Page Hero 3" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>KKTV Landing Page Hero 3</h3>
@@ -2728,7 +3123,7 @@
         <article class="card" data-card data-id="kktv-drama-trailer" data-title="KKTV Drama Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Drama Trailer.mov">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-032-kktv-drama-trailer.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" muted loop playsinline preload="auto" src="assets/optimized/videos/video-032-kktv-drama-trailer.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
@@ -2748,7 +3143,7 @@
         <article class="card" data-card data-id="kktv-original-trailer" data-title="KKTV Original Trailer" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV Original Trailer.mov">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-033-kktv-original-trailer.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-033-kktv-original-trailer.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
@@ -2774,7 +3169,7 @@
         <!-- MEDIA CARD: data-id is the stable key for local removal; data-title feeds captions/lightbox; data-file-path preserves source provenance. -->
         <article class="card" data-card data-id="kktv-prepaid-cards" data-title="KKTV Convenience Store Prepaid Cards" data-file-path="D:\_DATABASE\_JC\__JC&amp;D WEBSITE\3 Portfolio for NVIDIA 20260605\_Website Upload V1.2 More\asset more\KKTV\KKTV-Prepaid-Cards.png">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
-          <div class="media-frame media-frame-image"><img  data-src="assets/optimized/images/kktv-prepaid-cards.webp?v=20260610-200544" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" alt="KKTV Convenience Store Prepaid Cards" decoding="async" loading="lazy" fetchpriority="low"  /></div>
+          <div class="media-frame media-frame-image"><img src="assets/optimized/images/kktv-prepaid-cards.webp?v=20260610-200544" alt="KKTV Convenience Store Prepaid Cards" decoding="async" loading="lazy" fetchpriority="low" /></div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
             <h3>KKTV Convenience Store Prepaid Cards</h3>
@@ -2801,7 +3196,7 @@
         <article class="card" data-card data-id="guidelines-source-08" data-title="KKTV Full HD Trailer Ending Animation" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\1 KKCompany - IMPORTANT\KKTV\2016\03_WORKS\__GUIDELINES\m\video animation trailer\Animation_Trailer_Ending.mov">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-005-animation-trailer-ending.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-005-animation-trailer-ending.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
@@ -2822,11 +3217,11 @@
         <article class="card" data-card data-id="guidelines-screen-record-01" data-title="KKTV Guidelines &amp; Materials Open Database" data-file-path="F:\__BACKUP_DATABASE_ARCHIVED\Screen Record - KKTV Guidelines & Materials Website\screen record.mp4">
           <!-- MEDIA FRAME: visual mask and sizing wrapper around the real image/video/iframe. -->
           <div class="media-frame media-frame-video">
-            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="none"  data-src="assets/optimized/videos/video-006-screen-record.mp4" fetchpriority="low"></video>
+            <video autoplay poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath fill='%23f5f5f5' d='M0 0h2v2H0z'/%3E%3C/svg%3E" data-silent-media="true" muted loop playsinline preload="auto" src="assets/optimized/videos/video-006-screen-record.mp4" fetchpriority="low"></video>
           </div>
           <!-- CARD CAPTION/TOOLS: captions are intentionally small grey text; trash controls are local-only curation aids. -->
           <div class="card-body">
-            <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><span class="external-arrow-symbol">➔</span></span></a></h3>
+            <h3><a class="card-title-link" href="https://mrjoshuachao.github.io/KK/KKTV-guidelines-and-materials/" target="_blank" rel="noopener noreferrer">KKTV Guidelines &amp; Materials Open Database<span class="external-arrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 16 16 8"></path><path d="M10 8h6v6"></path></svg></span></a></h3>
             <div class="card-tools">
               <button class="trash-button" type="button" data-trash aria-label="Remove KKTV Guidelines &amp; Materials Open Database from page" title="Remove from page">
                 <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -2845,23 +3240,23 @@
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
         <div class="essay-block" lang="en">
-          <p class="biography-sync-highlight copy-edit-highlight">KKTV was Joshua&rsquo;s first full-scale in-house Creative Director assignment in the KK ecosystem: a consumer streaming launch that required identity, product expression, advertising, retail, web, motion, and public communication to work as one system.</p>
-              <p class="biography-sync-highlight copy-edit-highlight">The launch connected brand strategy with hands-on art direction and production across app icons, logotype usage, product demos, TVCs, landing pages, retail cards, printed materials, screen-based assets, and internal design guidelines.</p>
-          <p class="copy-edit-highlight">Early development focused on defining a brand behavior that could move from product screens to mass-market advertising. App icons, logotype studies, keynote materials, product screens, motion concepts, and website photography references were tested against a launch requirement: make the service feel accessible, cinematic, and immediately usable.</p>
-          <p class="copy-edit-highlight">Production required parallel execution across product, marketing, retail, and media assets. Guidelines, app store screenshots, demo videos, TVC materials, website visuals, print pieces, bus advertising, and logo animation were developed as one launch toolkit.</p>
-          <p class="copy-edit-highlight">Final refinement centered on channel consistency. Icon usage, screen layouts, film cuts, cover images, print formats, and retail applications were adjusted so the brand could move from keynote presentation to phone screen to street-level advertising without losing recognition.</p>
-          <p class="copy-edit-highlight">The final outcome helped turn KKTV from a product launch into a recognizable entertainment brand. The system gave internal teams a practical design foundation and gave audiences a clear first impression across product, campaign, motion, retail, and print touchpoints.</p>
+          <p class="biography-sync-highlight">KKTV became the first major expression of Joshua&rsquo;s Creative Director role inside the KK ecosystem: an OTT streaming brand launch that needed to connect product experience, identity, advertising, and public communication at launch speed.</p>
+              <p class="biography-sync-highlight">The launch integrated identity, product expression, motion, design guidelines, TVCs, landing pages, retail materials, and screen-based and printed assets into one recognizable brand system.</p>
+          <p>The earliest phase included app icons, logotype studies, website photography references, keynote materials, product screens, and motion concepts. These elements formed the sketch layer before launch, testing how a streaming service could feel approachable, cinematic, and technologically fluid without becoming visually noisy.</p>
+          <p>Production connected nearly every visible surface of the new brand. Guidelines, product demos, app store screenshots, campaign films, TVC materials, website visuals, print assets, bus advertising, and logo animation were all developed as part of one launch language. The project demanded speed, range, and consistency.</p>
+          <p>As launch approached, the work became an exercise in precision. App icon, logotype usage, screen layouts, film cuts, cover images, and print formats were refined so every channel could speak with the same voice. The brand had to translate from a keynote stage to a phone screen, then again to street advertising.</p>
+          <p>The final outcome transformed KKTV from a product into a recognizable entertainment brand. The launch system gave internal teams a practical design foundation and gave audiences a clear first impression. It is a strong example of creative direction moving across identity, product, motion, and campaign at the same time.</p>
         </div>
       </div>
     </section>
         <div class="archive-footnote" role="note" aria-label="Archived project folders not shown above">
-          <p class="copy-edit-highlight"><strong>Archived project contents not shown above:</strong> KKTV Drama Postcard Design, KKTV Press Release Event Print, KKTV Press Release Event Keynote, KKTV Screen-Based Images, KKTV Brand Book, KKTV Bus Ad, KKTV Business Card, KKTV Gift Box, KKTV Huge Flags, KKTV Intro DM, KKTV Logo Wall, KKTV Mister K Cardboard Cut-Out, KKTV Mister K Tiny Cardboard Cut-Out for Experience Area, KKTV Paper Bag, KKTV Serial Number Card for Gift, KKTV Serial Number Card for Retail, KKTV Stage Background, KKTV Tattoo Sticker, KKTV T-Shirt, KKTV 2016 Information Month Conference Handbook, KKTV Business Next Innovation Expo Collaboration NFC Poster, KKTV App Store Screenshots, KKTV Beta Testing Announcement, KKTV Promotion for TV Channel, KKTV Google Play Screenshots, KKTV Headline Image, KKTV App Install Guide, KKTV Online Video Survey, KKTV KOL Cover Image, KKTV OTT Official Content Badge, KKTV Demo Video, KKTV Video Loading Animation, KKTV Coming Soon Page.</p>
+          <p><strong>Archived project contents not shown above:</strong> KKTV Drama Postcard Design, KKTV Press Release Event Print, KKTV Press Release Event Keynote, KKTV Screen-Based Images, KKTV Brand Book, KKTV Bus Ad, KKTV Business Card, KKTV Gift Box, KKTV Huge Flags, KKTV Intro DM, KKTV Logo Wall, KKTV Mister K Cardboard Cut-Out, KKTV Mister K Tiny Cardboard Cut-Out for Experience Area, KKTV Paper Bag, KKTV Serial Number Card For Gift, KKTV Serial Number Card For Retail, KKTV Stage Background, KKTV Tattoo Sticker, KKTV T-Shirt, KKTV 2016 Information Month Conference Handbook, KKTV Business Next Innovation Expo Collaboration NFC Poster, KKTV App Store Screenshots, KKTV Beta Testing Announcement, KKTV Promotion For TV Channel, KKTV Google Play Screenshots, KKTV Headline Image, KKTV App Install Guide, KKTV Online Video Survey, KKTV KOL Cover Image, KKTV OTT Official Content Badge, KKTV Demo Video, KKTV Video Loading Animation, KKTV Coming Soon Page.</p>
         </div>
       <!-- NEXT-PAGE LINK: bottom progression link aligned visually with the left-side award-logo baseline. -->
       <a class="next-panel-link next-panel-link--flat-bottom" href="kkfarm.html" aria-label="Next: KKFARM">
           <span class="next-panel-link__label revision-highlight">Next: KKFARM</span>
           <span class="next-panel-link__button" aria-hidden="true">
-            <span class="next-panel-link__arrow" aria-hidden="true">➔</span>
+            <span class="next-panel-link__arrow" aria-hidden="true"></span>
           </span>
         </a>
       </section>
@@ -3050,16 +3445,10 @@
     */
     function ensureVideoSource(video) {
       if (!video.getAttribute("src") && video.dataset.src) {
-        if (video.dataset.sequentialLoading !== "true") {
-          updateVideoLoadingIndicator(video);
-          scheduleSequentialMediaQueue();
-          return false;
-        }
         setMediaFrameLoading(video.closest(".media-frame"), true);
         video.src = video.dataset.src;
         video.load();
       }
-      return true;
     }
 
     /*
@@ -3086,11 +3475,7 @@
     function updateImageLoadingIndicator(image) {
       const frame = image.closest(".media-frame");
       if (!frame) return;
-      const hasDeferredSource = Boolean(image.dataset.src);
-      const loadedDeferredSource = !hasDeferredSource
-        || image.dataset.mediaLoaded === "true"
-        || (image.getAttribute("src") === image.dataset.src && image.complete && image.naturalWidth > 0);
-      setMediaFrameLoading(frame, !loadedDeferredSource);
+      setMediaFrameLoading(frame, !(image.complete && image.naturalWidth > 0));
     }
 
     /*
@@ -3104,10 +3489,8 @@
     function updateVideoLoadingIndicator(video) {
       const frame = video.closest(".media-frame");
       if (!frame) return;
-      const hasDeferredSource = Boolean(video.dataset.src);
-      const hasActiveSource = Boolean(video.currentSrc || video.getAttribute("src"));
-      const loadedEnough = video.dataset.mediaLoaded === "true" || (hasActiveSource && video.readyState >= 2);
-      setMediaFrameLoading(frame, hasDeferredSource ? !loadedEnough && video.dataset.mediaLoadError !== "true" : hasActiveSource && video.readyState < 2);
+      const hasSource = Boolean(video.currentSrc || video.getAttribute("src") || video.dataset.src);
+      setMediaFrameLoading(frame, hasSource && video.readyState < 2);
     }
 
     /*
@@ -3128,16 +3511,8 @@
           updateImageLoadingIndicator(image);
           if (!image.dataset.mediaLoadingBound) {
             image.dataset.mediaLoadingBound = "true";
-            image.addEventListener("load", () => {
-              if (!image.dataset.src || image.getAttribute("src") === image.dataset.src) {
-                image.dataset.mediaLoaded = "true";
-              }
-              updateImageLoadingIndicator(image);
-            });
-            image.addEventListener("error", () => {
-              image.dataset.mediaLoadError = "true";
-              setMediaFrameLoading(frame, false);
-            });
+            image.addEventListener("load", () => updateImageLoadingIndicator(image));
+            image.addEventListener("error", () => setMediaFrameLoading(frame, false));
           }
           return;
         }
@@ -3146,24 +3521,12 @@
           updateVideoLoadingIndicator(video);
           if (!video.dataset.mediaLoadingBound) {
             video.dataset.mediaLoadingBound = "true";
-            video.addEventListener("loadstart", () => updateVideoLoadingIndicator(video));
-            video.addEventListener("loadeddata", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("canplay", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("playing", () => {
-              video.dataset.mediaLoaded = "true";
-              updateVideoLoadingIndicator(video);
-            });
-            video.addEventListener("waiting", () => updateVideoLoadingIndicator(video));
-            video.addEventListener("error", () => {
-              video.dataset.mediaLoadError = "true";
-              setMediaFrameLoading(frame, false);
-            });
+            video.addEventListener("loadstart", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("loadeddata", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("canplay", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("playing", () => setMediaFrameLoading(frame, false));
+            video.addEventListener("waiting", () => setMediaFrameLoading(frame, true));
+            video.addEventListener("error", () => setMediaFrameLoading(frame, false));
           }
           return;
         }
@@ -3328,179 +3691,44 @@
     */
 
     function updateLazyPanelVideos() {
-      scheduleSequentialMediaQueue();
-      syncSequentialVideoPlayback();
-    }
-
-    let sequentialMediaIsLoading = false;
-    let sequentialMediaIsScheduled = false;
-    const SEQUENTIAL_MEDIA_TIMEOUT_MS = 30000;
-
-    function isSequentialMediaVisible(media) {
-      const frame = media.closest(".media-frame");
-      if (!frame) return false;
-      const panel = media.closest("[data-panel]");
-      if (panel && !panel.classList.contains("is-active")) return false;
-      const card = media.closest("[data-card]");
-      if (card && card.hidden) return false;
-      const rect = frame.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0) return false;
-      const frameStyle = window.getComputedStyle(frame);
-      if (frameStyle.display === "none" || frameStyle.visibility === "hidden") return false;
-      return true;
-    }
-
-    function mediaNeedsSequentialLoad(media) {
-      if (!media?.dataset?.src) return false;
-      if (media.dataset.mediaLoaded === "true" || media.dataset.mediaLoadError === "true") return false;
-      if (media.tagName === "IMG") {
-        return !(media.getAttribute("src") === media.dataset.src && media.complete && media.naturalWidth > 0);
-      }
-      if (media.tagName === "VIDEO") {
-        return !(media.getAttribute("src") && media.readyState >= 2);
-      }
-      return false;
-    }
-
-    function getNextSequentialMedia() {
-      const activeScope = getActiveMediaScope();
-      const records = getOrderedMediaRecords(getPortfolioMedia(activeScope).filter(isSequentialMediaVisible));
-      return records.find((record) => mediaNeedsSequentialLoad(record.element))?.element || null;
-    }
-
-    function scheduleSequentialMediaQueue() {
-      if (sequentialMediaIsLoading || sequentialMediaIsScheduled) return;
-      sequentialMediaIsScheduled = true;
-      requestAnimationFrame(() => {
-        sequentialMediaIsScheduled = false;
-        processSequentialMediaQueue();
-      });
-    }
-
-    async function processSequentialMediaQueue() {
-      if (sequentialMediaIsLoading) return;
-      const media = getNextSequentialMedia();
-      if (!media) {
-        syncSequentialVideoPlayback();
-        return;
-      }
-      sequentialMediaIsLoading = true;
-      try {
-        await loadSequentialMedia(media);
-      } finally {
-        sequentialMediaIsLoading = false;
-        syncSequentialVideoPlayback();
-        scheduleSequentialMediaQueue();
-      }
-    }
-
-    function loadSequentialMedia(media) {
-      if (media.tagName === "IMG") return loadSequentialImage(media);
-      if (media.tagName === "VIDEO") return loadSequentialVideo(media);
-      return Promise.resolve();
-    }
-
-    function loadSequentialImage(image) {
-      return new Promise((resolve) => {
-        const source = image.dataset.src;
-        if (!source) {
-          resolve();
-          return;
-        }
-        const frame = image.closest(".media-frame");
-        setMediaFrameLoading(frame, true);
-        let finished = false;
-        const finish = (loaded) => {
-          if (finished) return;
-          finished = true;
-          window.clearTimeout(timeout);
-          image.removeEventListener("load", handleLoad);
-          image.removeEventListener("error", handleError);
-          if (loaded) {
-            image.dataset.mediaLoaded = "true";
-            repaintPortfolioImage(image);
-          } else {
-            image.dataset.mediaLoadError = "true";
-            setMediaFrameLoading(frame, false);
-          }
-          updateImageLoadingIndicator(image);
-          resolve();
-        };
-        const handleLoad = () => finish(true);
-        const handleError = () => finish(false);
-        const timeout = window.setTimeout(() => finish(false), SEQUENTIAL_MEDIA_TIMEOUT_MS);
-        image.addEventListener("load", handleLoad);
-        image.addEventListener("error", handleError);
-        if (image.getAttribute("src") !== source) {
-          image.src = source;
-        } else if (image.complete && image.naturalWidth > 0) {
-          finish(true);
-        }
-      });
-    }
-
-    function loadSequentialVideo(video) {
-      return new Promise((resolve) => {
-        const source = video.dataset.src;
-        if (!source) {
-          resolve();
-          return;
-        }
-        const frame = video.closest(".media-frame");
-        setMediaFrameLoading(frame, true);
-        video.dataset.sequentialLoading = "true";
-        video.preload = "auto";
-        video.setAttribute("preload", "auto");
-        let finished = false;
-        const finish = (loaded) => {
-          if (finished) return;
-          finished = true;
-          window.clearTimeout(timeout);
-          video.removeEventListener("loadeddata", handleLoaded);
-          video.removeEventListener("canplay", handleLoaded);
-          video.removeEventListener("error", handleError);
-          delete video.dataset.sequentialLoading;
-          if (loaded) {
-            video.dataset.mediaLoaded = "true";
-            updateVideoLoadingIndicator(video);
-            if (!isVideoUserPaused(video) && isLazyVideoNearViewport(video)) {
-              playVideoPreservingSound(video);
-            }
-          } else {
-            video.dataset.mediaLoadError = "true";
-            setMediaFrameLoading(frame, false);
-          }
-          resolve();
-        };
-        const handleLoaded = () => finish(true);
-        const handleError = () => finish(false);
-        const timeout = window.setTimeout(() => finish(false), SEQUENTIAL_MEDIA_TIMEOUT_MS);
-        video.addEventListener("loadeddata", handleLoaded);
-        video.addEventListener("canplay", handleLoaded);
-        video.addEventListener("error", handleError);
-        if (!video.getAttribute("src")) {
-          video.src = source;
-          video.load();
-        } else if (video.readyState >= 2) {
-          finish(true);
-        }
-      });
-    }
-
-    function syncSequentialVideoPlayback(scope = getActiveMediaScope()) {
-      getPortfolioMedia(scope)
-        .filter((media) => media.tagName === "VIDEO")
-        .forEach((video) => {
-          if (!video.getAttribute("src") || video.dataset.mediaLoaded !== "true" || video.dataset.mediaLoadError === "true") return;
-          if (isVideoUserPaused(video)) return;
-          if (!isLazyVideoNearViewport(video) && !video.closest(".media-frame")?.classList.contains("is-fullscreen")) {
+      const activePanel = getActiveMediaScope();
+      const mediaRecords = getOrderedMediaRecords(getPortfolioMedia(activePanel));
+      const videoRecords = mediaRecords.filter((record) => record.element.tagName === "VIDEO");
+      const orderedVideos = videoRecords.map((record) => record.element);
+      const audibleVideo = [...activePanel.querySelectorAll("video")].find((video) => !video.muted && !isSilentMedia(video));
+      const loadableRecords = videoRecords.filter((record) => isLazyVideoNearViewport(record.element));
+      const firstLoadableRow = loadableRecords.reduce((minimum, record) => Math.min(minimum, record.rowIndex), Infinity);
+      const priorityVideos = new Set(loadableRecords
+        .filter((record) => record.rowIndex === firstLoadableRow)
+        .map((record) => record.element));
+      videoRecords.forEach((record) => stampMediaLoadPriority(record.element, record));
+      orderedVideos.forEach((video) => {
+        const hasDeferredSource = Boolean(video.dataset.src);
+        if (hasDeferredSource && !isLazyVideoNearViewport(video)) {
+          if (video.getAttribute("src")) {
             video.pause();
             updatePlayButton(video);
-            return;
           }
-          playVideoPreservingSound(video);
+          return;
+        }
+        if (isVideoUserPaused(video)) {
+          if (!video.paused) {
+            video.pause();
+          }
           updatePlayButton(video);
-        });
+          return;
+        }
+        if (audibleVideo && video !== audibleVideo) {
+          video.pause();
+          muteVideo(video);
+          updatePlayButton(video);
+          return;
+        }
+        if (hasDeferredSource && !priorityVideos.has(video) && !video.getAttribute("src")) {
+          return;
+        }
+        playVideoPreservingSound(video);
+      });
     }
 
     /*
@@ -3558,14 +3786,8 @@
     function preparePortfolioVideoRecord(record) {
       const video = record.element;
       stampMediaLoadPriority(video, record);
-      if (!video.getAttribute("src") && video.dataset.src) {
-        video.preload = "none";
-        video.setAttribute("preload", "none");
-      } else {
-        video.preload = "auto";
-        video.setAttribute("preload", "auto");
-      }
-      updateVideoLoadingIndicator(video);
+      video.preload = "auto";
+      video.setAttribute("preload", "auto");
     }
 
     /*
@@ -3662,7 +3884,7 @@
     */
 
     function playVideo(video) {
-      if (!ensureVideoSource(video)) return;
+      ensureVideoSource(video);
       const promise = video.play();
       if (promise && typeof promise.catch === "function") {
         promise.catch(() => {});
@@ -3760,10 +3982,7 @@
     */
 
     function playMutedVideo(video) {
-      if (!ensureVideoSource(video)) {
-        updateVideoLoadingIndicator(video);
-        return;
-      }
+      ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       muteVideo(video);
       playVideo(video);
@@ -3782,10 +4001,7 @@
         playMutedVideo(video);
         return;
       }
-      if (!ensureVideoSource(video)) {
-        updateVideoLoadingIndicator(video);
-        return;
-      }
+      ensureVideoSource(video);
       updateVideoLoadingIndicator(video);
       video.defaultMuted = false;
       video.removeAttribute("muted");
@@ -4430,7 +4646,7 @@
       Returns the best full-size image source for the lightbox, preferring currentSrc when available.
     */
     function getImageLightboxSource(image) {
-      return image?.dataset.src || image?.currentSrc || image?.getAttribute("src") || "";
+      return image?.currentSrc || image?.getAttribute("src") || "";
     }
 
     /*
@@ -5036,7 +5252,6 @@
     setupMediaLoadingIndicators();
     applyMediaLoadPriorities();
     repaintActivePanelImages();
-    updateLazyPanelVideos();
     equalizeMobileMenuTitleWidths();
     syncAwardLogoRowWidth();
     syncSideMenuGroupSpacing();
@@ -5051,6 +5266,20 @@
     updateLazyPanelVideos();
     document.documentElement.classList.add("is-site-ready");
   </script>
+  <script src="assets/video-audio-focus.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
