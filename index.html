@@ -138,62 +138,140 @@
 
   </style>
   <!-- SEO AND ASSET HINTS: title/description for sharing plus local font preloads for stable typography. -->
-  <title>Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity</title>
-  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, motion, digital campaigns, cultural projects, and AI-driven creative workflows in Taiwan, Japan, and East Asian markets." />
+  <title>Joshua Hua-Chun Chao &mdash; Art Director | Creative Director | APAC Brand &amp; Campaign Lead</title>
+  <meta name="description" content="Portfolio of Joshua Hua-Chun Chao, an Art Director, Creative Director, and APAC Brand & Campaign Lead with 10+ years of experience across integrated campaigns, brand systems, UI/UX, motion, video, 3D, and AI-assisted creative workflows." />
   <meta property="og:title" content="Joshua Chao &mdash; Selected Creative Direction Portfolio" />
   <meta property="og:description" content="Brand systems, technology storytelling, campaign direction, motion, digital, and AI-assisted creative work across culture, enterprise technology, entertainment, and education." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="assets/portfolio-review.css" />
+  <script src="assets/media-skill-tags.js" defer></script>
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Bold.otf" as="font" type="font/otf" crossorigin="anonymous" />
-  </head>
+    <style id="resume-update-highlight">
+    /* Resume-aligned text is monochrome by default. Triple-Q within one second
+       reveals the original blue review color for the current browser tab. */
+    .resume-update,
+    .resume-update * {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-resume-update-blue .resume-update,
+    html.is-resume-update-blue .resume-update * {
+      color: #0057d9 !important;
+      text-decoration-color: #0057d9 !important;
+    }
+
+    /* The Resume navigation item was grey in the original presentation and
+       stays grey in both modes. */
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:visited,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update.is-active,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update[aria-current="page"] {
+      color: #808080 !important;
+      text-decoration-color: #808080 !important;
+    }
+
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:hover,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:focus-visible {
+      color: #6f6f6f !important;
+      text-decoration-color: #6f6f6f !important;
+    }
+  </style>
+  <style id="biography-text-only-layout">
+    /* Biography is intentionally text-only; release the width reserved for the former portrait. */
+    .content-panel[data-panel="biography"],
+    .document-copy,
+    .biography-layout {
+      --biography-photo-width: 0px !important;
+      --biography-photo-gap: 0px !important;
+      --biography-text-column-width: 100% !important;
+    }
+
+    #biography-panel-title,
+    .content-panel[data-panel="biography"] > .section,
+    .content-panel[data-panel="biography"] > .next-panel-link,
+    .biography-layout {
+      width: 100% !important;
+      max-width: none !important;
+    }
+
+    #biography-panel-title + .biography-layout {
+      margin-top: var(--heading-content-gap);
+    }
+
+    #biography-panel-title + .biography-layout > .essay {
+      margin-top: 0;
+    }
+  </style>
+</head>
 <!-- BODY: all visible UI starts here. Inline background repeats the paint-shield color before CSS finishes loading. -->
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
-<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<!-- HIDDEN TEXT-COLOR MODE: press Q three times within one second to toggle the original blue resume-update text. -->
 <script>
   (() => {
-    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
+    // EARLY BOOT SCRIPT: keep the background stable, initialize the tab-scoped
+    // text-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
-    const revisionColorStorageKey = "portfolioRevisionTextColorV2";
-    const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
-    const setRevisionColorMode = (showColor) => {
-      root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+    const resumeColorStorageKey = "portfolioResumeTextColorV3";
+    const setResumeColorMode = (showBlue) => {
+      root.classList.toggle("is-resume-update-blue", showBlue);
       try {
-        window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+        window.sessionStorage?.setItem(
+          resumeColorStorageKey,
+          showBlue ? "blue" : "black",
+        );
       } catch {}
     };
+
     try {
-      setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
+      setResumeColorMode(
+        window.sessionStorage?.getItem(resumeColorStorageKey) === "blue",
+      );
     } catch {
-      setRevisionColorMode(false);
+      setResumeColorMode(false);
     }
-    let revisionToggleClickCount = 0;
-    let revisionToggleClickTimer;
-    const resetRevisionToggleClickCount = () => {
-      revisionToggleClickCount = 0;
-      if (revisionToggleClickTimer) {
-        window.clearTimeout(revisionToggleClickTimer);
-        revisionToggleClickTimer = undefined;
+
+    const qPressTimes = [];
+    window.addEventListener("keydown", (event) => {
+      if (
+        event.repeat ||
+        event.isComposing ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.metaKey ||
+        event.key.toLowerCase() !== "q"
+      ) {
+        return;
       }
-    };
-    revisionColorToggle?.addEventListener("click", () => {
-      revisionToggleClickCount += 1;
-      if (revisionToggleClickCount === 1) {
-        revisionToggleClickTimer = window.setTimeout(() => {
-          revisionToggleClickCount = 0;
-          revisionToggleClickTimer = undefined;
-        }, 1000);
+
+      const eventTarget = event.target;
+      if (
+        eventTarget instanceof HTMLElement &&
+        (eventTarget.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT)$/.test(eventTarget.tagName))
+      ) {
+        return;
       }
-      if (revisionToggleClickCount >= 3) {
-        resetRevisionToggleClickCount();
-        setRevisionColorMode(!root.classList.contains("is-revision-color"));
+
+      const now = window.performance.now();
+      qPressTimes.push(now);
+      while (qPressTimes.length && now - qPressTimes[0] > 1000) {
+        qPressTimes.shift();
+      }
+
+      if (qPressTimes.length >= 3) {
+        qPressTimes.length = 0;
+        setResumeColorMode(
+          !root.classList.contains("is-resume-update-blue"),
+        );
       }
     });
+
     root.style.background = bg;
     root.style.backgroundColor = bg;
     root.style.colorScheme = "only light";
@@ -339,7 +417,7 @@
     }
 
     .side-nav::after {
-      content: "V2.0";
+      content: "V2.1";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -587,6 +665,22 @@
     .content-panel > .section:first-child > h2:first-of-type {
       padding-top: var(--content-title-top-padding);
       font-size: var(--side-title-font-size);
+    }
+
+    /*
+      CROSS-PAGE SKILL ANCHORS: reserve the difference between the left-rail
+      top inset and a standard section heading's 16px top padding. This places
+      the heading text on the same visual top edge as the first side-title line
+      before the small font-metric correction in the alignment script runs.
+    */
+    @media (min-width: 761px), (min-width: 600px) and (max-width: 760px) and (orientation: portrait) {
+      .section h2[id]:target {
+        scroll-margin-top: max(0px, calc(var(--side-nav-top-padding) - 16px));
+      }
+
+      .content-panel > .section:first-child > h2[id]:first-of-type:target {
+        scroll-margin-top: 0;
+      }
     }
 
     .overview-title-line,
@@ -1135,8 +1229,10 @@
       border: 0;
       outline: 0;
       cursor: zoom-in;
-      backface-visibility: hidden;
-      transform: translateZ(0);
+      /* Keep portfolio images in the normal paint flow. Creating one GPU layer
+         per image can leave decoded lazy images blank until another UI action
+         invalidates the compositor. */
+      backface-visibility: visible;
     }
 
     .side-nav .award-logo-row img {
@@ -1144,7 +1240,7 @@
     }
 
     img.is-image-repainting:not(.image-lightbox__image) {
-      opacity: 0.999;
+      opacity: 1;
     }
 
     .concert-grid .media-frame {
@@ -1954,7 +2050,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2369,7 +2465,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2520,7 +2616,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: absolute;
         left: 3px;
         bottom: 3px;
@@ -2606,38 +2702,14 @@
       text-decoration-color: currentColor;
     }
 
-    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
+    /* LEGACY REVIEW CLASSES: retained for content grouping, always monochrome. */
 
     html.is-revision-color .revision-highlight,
     html.is-revision-color .revision-highlight a,
     html.is-revision-color .revision-highlight strong {
-      color: #c01818 !important;
-      text-decoration-color: #c01818 !important;
+      color: #000 !important;
+      text-decoration-color: #000 !important;
     }
-    .revision-color-toggle {
-      appearance: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 9500;
-      display: block;
-      width: 10px;
-      height: 10px;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: transparent;
-      opacity: 0;
-      cursor: default;
-    }
-
-    .revision-color-toggle:focus,
-    .revision-color-toggle:focus-visible {
-      outline: 0;
-    }
-
     /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
 
     .portfolio-text-grid {
@@ -2710,12 +2782,12 @@
     .card .card-body h3 *,
     .brand-book-caption h3,
     .brand-book-caption h3 * {
-      color: #808080 !important;
-      text-decoration-color: #808080 !important;
+      color: #000 !important;
+      text-decoration-color: #000 !important;
     }
 
 
-    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
+    /* CAPTION EXTERNAL LINK ICON: media captions are black, while the arrow inside the black square remains white for contrast. */
     .card .card-body h3 .external-arrow-icon,
     .card .card-body h3 .external-arrow-icon *,
     .brand-book-caption h3 .external-arrow-icon,
@@ -2844,12 +2916,12 @@
     <!-- SECONDARY DOCUMENT LINKS: biography, resume PDF, external archive, and award-logo row. These are intentionally grey in the UI. -->
     <nav class="side-menu side-menu--secondary" aria-label="Portfolio documents">
         <a href="index.html" class="is-active side-menu-muted" aria-current="page">Biography</a>
-        <a class="resume-link side-menu-muted" href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="resume-link side-menu-muted resume-update" href="assets/documents/JOSHUA%20HUA-CHUN%20CHAO%20Resume%20ATS.pdf" target="_blank" rel="noopener">Resume</a>
         <a class="design-archive-link side-menu-muted" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Design Archive</a>
         <a class="award-logo-row" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener" aria-label="Awards">
           <img src="assets/awards-logos/award-good-design-256x256.png" alt="Good Design Award" loading="eager" decoding="async" />
-          <img src="assets/awards-logos/award-if-256x256.png" alt="iF Design Award" loading="eager" decoding="async" />
           <img src="assets/awards-logos/award-red-dot-256x256.png" alt="Red Dot Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-if-256x256.png" alt="iF Design Award" loading="eager" decoding="async" />
           <img src="assets/awards-logos/award-siggraph-256x256.png" alt="SIGGRAPH Award" loading="eager" decoding="async" />
         </a>
 
@@ -2859,25 +2931,17 @@
   <main class="page">
       <section class="content-panel is-active" data-panel="biography">
         <section class="section document-copy" aria-labelledby="biography-panel-title">
-          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span> <span class="overview-title-subtitle revision-highlight">Creative Director for Technology Storytelling, Integrated Brand Systems, and AI-Powered Creativity Education</span></h2>
+          <h2 id="biography-panel-title"><span class="overview-title-line">Joshua Chao Professional Biography</span></h2>
           <div class="biography-layout">
-          <figure class="biography-photo">
-            <img src="assets/optimized/images/Joshua-Chao-Biography-Photo.jpg" alt="Joshua Chao" decoding="async" loading="lazy" fetchpriority="low" />
-          </figure>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
-              <p class="revision-highlight">Joshua Chao is a <strong>Creative Director</strong>, <strong>University Lecturer</strong>, and <a class="bio-link" href="ace.html#ace-title"><strong>AI-Powered Creativity Educator</strong></a> with <strong>over 10 years of creative leadership experience</strong> and <strong>8 years of teaching experience</strong>. He builds integrated brand systems, marketing campaigns, company narratives, and communication design assets across enterprise technology, culture, entertainment, and education in Taiwan, Japan, and China.</p>
-              <p class="revision-highlight">With over 10 years of hands-on creative leadership experience, Joshua works across strategy, creative and art direction, visual systems, video, web, presentations, event touchpoints, and AI production and education. His work connects high-level brand thinking with detailed execution, helping complex ideas become clear, scalable, and emotionally resonant creative systems.</p>
-              <p class="revision-highlight">Since joining <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> in 2016 as <strong>Creative Director</strong>, Joshua has played a key role in shaping the creative direction of multiple businesses within the group. His earliest work began with <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, where he led creative and design development for the launch of a new video streaming brand, including its <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>identity</strong></a>, product demo videos, presentations, advertising, campaigns, website, and <a class="bio-link" href="kktv.html#guidelines-source-title"><strong>design guidelines</strong></a>.</p>
-              <p class="revision-highlight">Beginning in 2017, his responsibilities expanded from <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a> to <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, where he contributed to music, entertainment, and artist management projects. His work included the debut design system for <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>Julia Wu</strong></a>, visual direction for music releases, albums, concerts, <a class="bio-link" href="kkfarm.html#kkfarm-ju-u-photography-book-title"><strong>publications</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-music-videos-jutv-title"><strong>YouTube channels</strong></a>, creative assets for other KKFARM artists, websites, and numerous video, print, event, digital, and physical materials.</p>
-              <p class="revision-highlight">As his role evolved, Joshua took on broader <strong>Creative Director</strong> responsibilities across <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. His projects included <a class="bio-link" href="kkbox-group.html#kkbox-group-image-recruitment-title"><strong>KKBOX Group corporate image campaigns</strong></a>, MA Program recruiting materials, websites, videos, KKVERSE, VoiceOut, <a class="bio-link" href="kkbox-group.html#kkstream-blendvision-title"><strong>KKStream BlendVision</strong></a>, the <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany worldview</strong></a>, and the <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM rebranding initiative</strong></a>. This work reflects his ability to operate at the intersection of <strong>strategy, design, motion, product, and business communication</strong>.</p>
-              <p class="revision-highlight">In his role as <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>Creative Director for KKBOX Group</strong></a>, Joshua also supported <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>OurSong</strong></a>, a blockchain company invested in by the group. Joshua contributed during the company&rsquo;s formative stage by helping establish its early logo, homepage, intro video, certificate design, Song Share cards, interface direction, business presentation materials, and <strong>international client-facing assets</strong>.</p>
-              <p class="revision-highlight">Following the restructuring of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a> into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a> and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a>, Joshua&rsquo;s creative work moved into a higher level of integration. His responsibilities spanned both organizations and expanded into <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>corporate branding</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>company narrative</strong></a>, and organizational communication. For KKCulture, he contributed to Project Messiah, <a class="bio-link" href="kkculture.html#kkculture-motion-title"><strong>visual identity</strong></a>, the website, brand book, office design, and touchpoints that extended the brand into workplace environments, presentations, merchandise, and internal use cases.</p>
-              <p class="revision-highlight">During the <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> period, Joshua became deeply involved in new technologies and cross-disciplinary creative work. <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>NVIDIA x SCCD Project NV</strong></a> and <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-kimberley-title"><strong>Kimberley&rsquo;s &ldquo;Street Signs&rdquo;</strong></a> explored new possibilities in generative AI, music, and video editing.</p>
-              <p class="revision-highlight">Across his long career within the <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>&ldquo;KK&rdquo; ecosystem</strong></a>, Joshua&rsquo;s journey has not been a conventional progression from designer to Creative Director. Rather, he entered the organization from the beginning as a <strong>Creative Director</strong> and became a central creative force as <a class="bio-link" href="kktv.html#kktv-overview-title"><strong>KKTV</strong></a>, <a class="bio-link" href="kkfarm.html#kkfarm-overview-title"><strong>KKFARM</strong></a>, <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>, <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>KKCompany</strong></a>, and <a class="bio-link" href="kkculture.html#kkculture-title"><strong>KKCulture</strong></a> continued to evolve. His work spans <a class="bio-link" href="kkcompany.html#kkcompany-worldview-title"><strong>large-scale brand and product systems</strong></a> as well as highly detailed execution, from business cards and signage to motion systems, websites, presentations, events, and everyday brand touchpoints.</p>
-              <p class="revision-highlight">In 2023, Joshua co-founded <a class="bio-link" href="ace.html#ace-title"><strong>Applied Creativity Engine</strong></a>, also known as <a class="bio-link" href="ace.html#ace-title"><strong>ACE</strong></a>, with Chris Lin, founder and CEO of <a class="bio-link" href="kkbox-group.html#kkbox-group-recruit-title"><strong>KKBOX Group</strong></a>. ACE is dedicated to education at the intersection of <a class="bio-link" href="ace.html#ace-title"><strong>human creativity and artificial intelligence</strong></a>. Through ACE, Joshua has trained teachers, students, executives, and professionals from <a class="bio-link" href="ace.html#ace-title"><strong>UWC ISAK Japan</strong></a>, Junyi School, Sharestart Education Foundation, Chunghwa Telecom Training Institute, Gallup CliftonStrengths communities, WAVE Brand Leadership, and CEOs of small and medium-sized enterprises.</p>
-              <p class="revision-highlight">In parallel with his professional and entrepreneurial work, Joshua has maintained a long-term commitment to <strong>academia</strong>. He has served for <strong>8 years</strong> as an adjunct lecturer in the <a class="bio-link" href="nvidia-sccd.html#nvidia-sccd-title"><strong>Department of Communications Design at Shih Chien University</strong></a>, where he continues to integrate <a class="bio-link" href="ace.html#ace-title"><strong>creativity, design thinking, and AI</strong></a> into his courses. Through his work across industry, education, and emerging technology, he has established himself as a creative leader who bridges <strong>strategy and execution</strong>, <strong>culture and technology</strong>, and imagination and implementation.</p>
+            <div class="essay-block resume-update" lang="en">
+              <p>Joshua Hua-Chun Chao is an <strong>Art Director</strong>, <strong>Creative Director</strong>, and <strong>APAC Brand &amp; Campaign Lead</strong> with 10+ years of experience leading <a class="bio-link skill-link" href="kktv.html#tvc-title" aria-label="View integrated campaign and art direction work">hands-on art direction</a>, <a class="bio-link skill-link" href="kktv.html#tvc-title" aria-label="View integrated campaign work">integrated campaigns</a>, and <a class="bio-link skill-link" href="kkculture.html#kkculture-motion-title" aria-label="View brand identity system work">brand systems</a> across consumer, enterprise, and corporate audiences.</p>
+              <p>From June 2016 to July 2025, he led creative work across KKTV, KKFARM, KKBOX Group, KKCompany, and KKCulture. His scope spans <a class="bio-link skill-link" href="kktv.html#guidelines-source-title" aria-label="View brand identity and guidelines work">brand identity</a>, print, <a class="bio-link skill-link" href="kktv.html#tvc-title" aria-label="View digital campaign work">digital and social campaigns</a>, <a class="bio-link skill-link" href="kkcompany.html#kkcompany-career-website-title" aria-label="View UI and UX work">UI/UX</a>, <a class="bio-link skill-link" href="kkculture.html#kkculture-2024-website-title" aria-label="View website direction work">websites</a>, <a class="bio-link skill-link" href="kktv.html#kktv-prepaid-cards-title" aria-label="View retail design work">retail</a>, events, <a class="bio-link skill-link" href="kkfarm.html#kkfarm-ju-u-photography-book-title" aria-label="View photography direction work">photography</a>, <a class="bio-link skill-link" href="kkbox-group.html#kkstream-blendvision-title" aria-label="View BlendVision 3D animation work">3D</a>, <a class="bio-link skill-link" href="kkculture.html#kkculture-motion-title" aria-label="View motion identity work">motion</a>, <a class="bio-link skill-link" href="kkfarm.html#kkfarm-music-videos-jutv-title" aria-label="View video direction work">video</a>, and <a class="bio-link skill-link" href="nvidia-sccd.html#nvidia-sccd-final-title" aria-label="View generative AI creative workflow work">AI-assisted creative workflows</a>.</p>
+              <p>Joshua managed concurrent creative operations across five business units, led and mentored 5+ direct reports, and coordinated multidisciplinary teams of 30+ professionals. He partnered with CEOs, general managers, business-unit leaders, marketing leads, and product leadership from <a class="bio-link skill-link" href="kkcompany.html#kkcompany-process-title" aria-label="View strategy and concept development work">strategy and concept</a> through approval, production, quality control, and delivery.</p>
+              <p>Since August 2023, he has served as Co-Founder &amp; Coach of Applied Creativity Engine, delivering 6+ <a class="bio-link skill-link" href="ace.html#ace-title" aria-label="View AI creativity education and workshop work">AI and creativity programs</a> for 200+ participants across Taiwan and Japan. Since September 2018, he has also served as Adjunct Instructor, Specialist Rank, in Communications Design at Shih Chien University.</p>
+              <p>Earlier roles include Design Director at JC&amp;D, Multimedia Director at Saosis Communications in Beijing, Game Designer at Fludot Co., and Animation Designer at Modern Media Group in Shanghai. This work included the ICBC H-CLUB digital ecosystem and China-market launch communications for Bloomberg Businessweek.</p>
+              <p>Joshua holds a Bachelor of Fine Arts in Communications Design from Shih Chien University. He is a native Mandarin speaker with excellent English communication skills. His recognition includes the Good Design Award, iF Design Award, Red Dot Design Award, and ACM SIGGRAPH SpaceTime.</p>
             </div>
           </div>
           </div>
@@ -2887,37 +2951,13 @@
           <h2 id="capabilities-title">Key Creative Capabilities</h2>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>Integrated Brand Systems</h3>
-              <p>Brand identity, company narratives, visual guidelines, typography, motion, digital and physical applications, presentation systems, and internal and external use cases.</p>
-            </article>
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>Technology and Enterprise Storytelling</h3>
-              <p>Turning complex products, platforms, infrastructure, and organizational ideas into clear visual narratives for business, leadership, and public-facing communication.</p>
-            </article>
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>Campaign and Content Ecosystems</h3>
-              <p>Creative direction across launch campaigns, recruitment mini-episodes, product videos, social assets, websites, event materials, print materials, and internal communications.</p>
-            </article>
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>AI-Powered Creativity Work</h3>
-              <p>Using generative AI to accelerate ideation and production across creative workflows. Teaching human-centered and AI-powered creative/design methods and business innovation.</p>
-            </article>
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>Cross-Functional Creative Leadership</h3>
-              <p>Working smoothly with executives, product teams, engineers, marketers, artists, educators, external partners, and production teams from concept to delivery.</p>
-            </article>
-        <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
-              <h3>East Asian / APAC Cultural Context</h3>
-              <p>Experience across Taiwan, Japan, and China, including Shanghai and Beijing, with sensitivity to subtle cultural differences, audience behavior, and local adaptation.</p>
-            </article>
-          </div>
+        <article class="portfolio-text-card resume-update"><h3>Art &amp; Creative Direction</h3><p>Hands-on art direction, creative direction, key visual development, photography direction, motion and video direction, and 3D creative direction.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Integrated Brand &amp; Campaign Systems</h3><p>Brand identity systems, integrated campaigns, consumer marketing, enterprise storytelling, corporate communications, and scalable creative guidelines.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Digital, Physical &amp; Spatial Delivery</h3><p>Digital and social campaigns, UI/UX and web direction, event and retail design, print, presentations, and end-to-end production across digital and physical outputs.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>APAC &amp; China-Market Localization</h3><p>Creative work for Taiwan, China, Japan, and international markets, combining global brand direction with locally relevant audience and cultural insight.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Leadership &amp; Creative Operations</h3><p>Executive stakeholder management, cross-functional leadership, five-business-unit operations, 5+ direct reports, and multidisciplinary teams of 30+ professionals.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Generative AI Creative Workflows</h3><p>AI-assisted research, ideation, visual exploration, storyboarding, image generation, video planning, prototyping, presentation development, and creative testing.</p></article>
+      </div>
         </section>
 
         <section class="section revision-highlight" id="work" aria-labelledby="featured-work-title">
@@ -2925,49 +2965,49 @@
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKTV</h3>
               <p>An OTT streaming brand launch that integrated identity, product expression, motion, design guidelines, TVCs, landing pages, retail materials, and screen-based and printed assets into one recognizable brand.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Consumer Brand</span><span class="portfolio-tag-chip">Launch Campaign</span><span class="portfolio-tag-chip">Design Guidelines</span><span class="portfolio-tag-chip">Video</span><span class="portfolio-tag-chip">Retail Materials</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKFARM</h3>
               <p>Artist branding, music video direction and production, live and concert design, screen-based and printed assets, and campaign materials that built continuity across releases and performance contexts.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Artist Branding</span><span class="portfolio-tag-chip">Music Video</span><span class="portfolio-tag-chip">Live and Concert Visuals</span><span class="portfolio-tag-chip">Cultural Campaign</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKBOX Group</h3>
               <p>A holding-company branding and recruitment campaign that translated internal culture into a mini-episode series, a career website, and public-facing talent storytelling.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Group Branding</span><span class="portfolio-tag-chip">Recruitment Campaign</span><span class="portfolio-tag-chip">Corporate Video</span><span class="portfolio-tag-chip">Website</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKStream</h3>
               <p>A B2B technology brand storytelling system for BlendVision that made enterprise streaming infrastructure easier to understand through conceptual metaphors, video, a website, and sales-facing visuals.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Enterprise Streaming</span><span class="portfolio-tag-chip">B2B Technology</span><span class="portfolio-tag-chip">Product Storytelling</span><span class="portfolio-tag-chip">Sales Assets</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKCompany</h3>
               <p>A corporate identity and worldview system for a complex technology organization, integrating company narrative, public and career websites, motion assets, and shareholder-facing materials.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Technology Brand System</span><span class="portfolio-tag-chip">Corporate Narrative</span><span class="portfolio-tag-chip">Motion</span><span class="portfolio-tag-chip">Website</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>KKCulture</h3>
               <p>An animated visual system extended across company identity, motion assets, websites, screen-based and printed assets, office and workplace environments, and leadership communication.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Visual Identity</span><span class="portfolio-tag-chip">Digital and Physical System</span><span class="portfolio-tag-chip">Motion</span><span class="portfolio-tag-chip">Office Touchpoints</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>NVIDIA x SCCD</h3>
               <p>An early-stage generative AI music video and showreel project exploring how AI-generated imagery, music, video editing, and creative direction can form a coherent cinematic language.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Generative AI</span><span class="portfolio-tag-chip">Production Workflow</span><span class="portfolio-tag-chip">Technology Collaboration</span><span class="portfolio-tag-chip">Music Video</span></span>
             </article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card">
+        <article class="portfolio-text-card resume-update">
               <h3>Applied Creativity Engine</h3>
               <p>An AI-powered creativity education, training, and workshop system for teachers, students, executives, entrepreneurs, and future leaders learning to use emerging tools with human-centered judgment.</p>
               <span class="portfolio-tags"><span class="portfolio-tag-chip">Generative AI</span><span class="portfolio-tag-chip">Education</span><span class="portfolio-tag-chip">Workshops</span><span class="portfolio-tag-chip">Creativity Training</span><span class="portfolio-tag-chip">Curriculum Design</span></span>
@@ -2975,90 +3015,96 @@
           </div>
         </section>
 
-        <section class="section revision-highlight" id="workflow" aria-labelledby="workflow-title">
+        <section class="section revision-highlight" id="workflow" aria-labelledby="workflow-title" hidden>
           <h2 id="workflow-title">Creative Methodology</h2>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
+            <div class="essay-block resume-update" lang="en">
               <p>Joshua&rsquo;s creative methodology connects strategic thinking, narrative development, systemic design, and executional precision. His process is designed to turn complex business, cultural, and technological ideas into clear, scalable, and emotionally resonant communication systems.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>1. Strategic Diagnosis</h3><p>Every project begins with a clear understanding of the business challenge, audience behavior, cultural context, stakeholder priorities, and success criteria. This stage defines the real creative opportunity behind the brief and ensures that every decision is grounded in purpose.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>2. Narrative Architecture</h3><p>Joshua develops the strategic and emotional foundation of the work through creative territories, messaging logic, metaphors, references, and communication frameworks. This allows complex ideas to become accessible, memorable, and meaningful across different audiences.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>3. Systemic Design Thinking</h3><p>Concepts are translated into scalable brand and content systems across identity, typography, motion, image style, UI direction, spatial applications, and digital and physical touchpoints. The goal is not only to create individual assets, but to build systems that can grow, adapt, and remain coherent over time.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>4. Cross-Functional Creative Direction</h3><p>Joshua leads designers, editors, filmmakers, technologists, AI-assisted production workflows, and external partners from concept to execution. His role is to align strategy, craft, technology, and production so that teams can move with clarity, consistency, and creative ambition.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>5. Executional Precision</h3><p>Each output is refined through rhythm, hierarchy, consistency, format, versioning, and deployment details. Whether the work appears in a presentation, campaign, video, website, event, office space, or internal communication system, the focus remains on clarity, quality, and contextual performance.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>6. Learning, Adaptation &amp; Scale</h3><p>After delivery, Joshua evaluates how creative work is received, adopted, and reused across audiences, organizations, and channels. Each project becomes a learning system, helping future creative work become sharper, more scalable, and more deeply connected to real-world use.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>6. Learning, Adaptation &amp; Scale</h3><p>After delivery, Joshua evaluates how creative work is received, adopted, and reused across audiences, organizations, and channels. Each project becomes a learning system, helping future creative work become sharper, more scalable, and more deeply connected to real-world use.</p></article>
           </div>
         </section>
 
-        <section class="section revision-highlight" aria-labelledby="leadership-practice-title">
+        <section class="section revision-highlight" aria-labelledby="leadership-practice-title" hidden>
           <h2 id="leadership-practice-title">Creative Leadership in Practice</h2>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
+            <div class="essay-block resume-update" lang="en">
               <p class="portfolio-section-lead">Joshua&rsquo;s creative leadership is defined by his ability to turn complex business, cultural, and technological challenges into clear, scalable, and emotionally resonant creative systems. Across consumer brands, enterprise technology, corporate identity, and AI-powered education, his work connects strategy, storytelling, design, production, and organizational communication.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Brand Launch Leadership</h3><p>Joshua led the creative development of a consumer streaming brand from its launch identity to full market expression. The work integrated brand strategy, visual identity, product storytelling, motion language, campaign materials, landing pages, retail applications, screen-based assets, printed materials, and design guidelines into one recognizable brand system.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Brand Launch Leadership</h3><p>Joshua led the creative development of a consumer streaming brand from its launch identity to full market expression. The work integrated brand strategy, visual identity, product storytelling, motion language, campaign materials, landing pages, retail applications, screen-based assets, printed materials, and design guidelines into one recognizable brand system.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Enterprise Storytelling</h3><p>For enterprise technology, Joshua transformed complex streaming infrastructure into a cinematic B2B product narrative. Through conceptual metaphors, structured messaging, video, website, presentation systems, and sales-facing visuals, he helped make technical platforms more understandable, persuasive, and relevant to business audiences.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Enterprise Storytelling</h3><p>For enterprise technology, Joshua transformed complex streaming infrastructure into a cinematic B2B product narrative. Through conceptual metaphors, structured messaging, video, website, presentation systems, and sales-facing visuals, he helped make technical platforms more understandable, persuasive, and relevant to business audiences.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Corporate Identity Systems</h3><p>Joshua created corporate identity systems for technology and culture organizations navigating growth, restructuring, and transformation. His work connected company narrative, visual identity, motion assets, websites, leadership communication, internal materials, shareholder-facing content, workplace environments, and everyday brand touchpoints into coherent organizational systems.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Corporate Identity Systems</h3><p>Joshua created corporate identity systems for technology and culture organizations navigating growth, restructuring, and transformation. His work connected company narrative, visual identity, motion assets, websites, leadership communication, internal materials, shareholder-facing content, workplace environments, and everyday brand touchpoints into coherent organizational systems.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>AI-Integrated Creative Production</h3><p>Ahead of mainstream creative adoption, Joshua developed AI-assisted workflows across film, music video, visual experimentation, education, and creative training. His work explores how generative AI can accelerate ideation and production while preserving human-centered judgment, narrative clarity, and creative direction.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>AI-Integrated Creative Production</h3><p>Ahead of mainstream creative adoption, Joshua developed AI-assisted workflows across film, music video, visual experimentation, education, and creative training. His work explores how generative AI can accelerate ideation and production while preserving human-centered judgment, narrative clarity, and creative direction.</p></article>
+        <article class="portfolio-text-card portfolio-update resume-update"><h3>Five-Business-Unit Adoption</h3><p>Creative systems and art direction were adopted across KKTV, KKFARM, KKBOX Group, KKCompany, and KKCulture, spanning consumer, enterprise, corporate, entertainment, and cultural contexts.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Internal Training &amp; Mentoring</h3><p>Joshua oversaw concurrent creative operations and delivered internal creative workshops for 30+ colleagues while coordinating project teams of 30+ professionals.</p></article>
           </div>
         </section>
 
-        <section class="section revision-highlight" aria-labelledby="cross-market-title">
+        <section class="section revision-highlight" aria-labelledby="cross-market-title" hidden>
           <h2 id="cross-market-title">Multi-national Creative Context</h2>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
-              <p class="portfolio-section-lead">Joshua&rsquo;s work is shaped by long-term creative leadership across Taiwan , Japan and China markets, with earlier professional experience in Shanghai and Beijing. His projects often sit at the intersection of brand, technology, culture, entertainment, and education, requiring him to translate complex ideas into communication systems that can work across different audiences, organizations, and levels of technical understanding.</p>
+            <div class="essay-block resume-update" lang="en">
+              <p class="portfolio-section-lead resume-update">Joshua&rsquo;s work is shaped by creative leadership across APAC and international markets, including Taiwan, Japan, China, Shanghai, and Beijing. His projects span consumer, enterprise, and corporate audiences and require global-to-local adaptation across brand, technology, culture, entertainment, and education.</p>
               <p class="portfolio-section-lead">His multi-national experience is not only geographic, but also cultural and organizational. He brings sensitivity to how ideas need to be framed differently across different markets, how visual and verbal tone shifts across audiences, and how creative systems can remain coherent while adapting to local context.</p>
             </div>
           </div>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Taiwan-Based Leadership</h3><p>Creative leadership across Taiwan&rsquo;s technology, enterprise, culture, entertainment, and education sectors, connecting brand strategy, identity systems, campaigns, company and product storytelling, corporate narrative, and organizational communication.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Multi-national Education</h3><p>Education and creative training experience connected to Japan, with a focus on helping students, educators, and institutions understand creativity, design thinking, and AI-powered workflows through a human-centered lens.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Mandarin-Speaking Markets Sensitivity</h3><p>Cultural and communication sensitivity across Mandarin-speaking contexts, shaped by long-term work in Taiwan and earlier professional experience in Shanghai and Beijing, with attention to language, tone, audience behavior, and local adaptation.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Stakeholder Translation</h3><p>Experience aligning executives, product teams, engineers, educators, creators, business stakeholders, and external partners by translating complex strategic, technical, and creative ideas into clear shared direction.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Stakeholder Translation</h3><p>Partnered with CEOs, general managers, business-unit leaders, marketing leads, and product leadership to define creative strategy, translate business priorities into actionable briefs, present concepts, align stakeholders, and secure executive approval.</p></article>
+        <article class="portfolio-text-card portfolio-update resume-update"><h3>English-Language Global Collaboration</h3><p>Long-term collaboration with UWC ISAK Japan through English-language meetings, planning, presentations, and workshops with international educators and participants.</p></article>
+        <article class="portfolio-text-card portfolio-update resume-update"><h3>China-Market Experience</h3><p>Shanghai and Beijing assignments combined culturally informed event communication with research-led mobile and web product design for Bloomberg Businessweek and ICBC.</p></article>
           </div>
         </section>
 
-        <section class="section revision-highlight" aria-labelledby="tools-title">
+        <section class="section revision-highlight" aria-labelledby="tools-title" hidden>
           <h2 id="tools-title">Tools &amp; Production Fluency</h2>
       <!-- TEXT GRID: repeated short text cards for capabilities, featured work, methodology, context, and tools. -->
       <div class="portfolio-text-grid">
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Brand Systems &amp; Visual Identity</h3><p>Advanced hands-on fluency across Adobe Illustrator, Photoshop, InDesign, and Figma, with experience building brand guidelines, identity systems, visual rules, and scalable design applications.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Brand Systems &amp; Visual Identity</h3><p>Hands-on fluency across Adobe Illustrator, Photoshop, and Figma, with experience building integrated brand systems, visual rules, and scalable design applications.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Integrated Campaign Assets</h3><p>Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and communication systems across consumer, enterprise, and corporate contexts.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Integrated Campaign Assets</h3><p>Experience creating campaign toolkits, presentation templates, digital assets, print materials, launch visuals, and communication systems across consumer, enterprise, and corporate contexts.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Motion, Video &amp; Content Production</h3><p>Experience directing and producing video, motion, and campaign assets through Adobe After Effects and Premiere Pro, including product narratives, showreels, social content, launch films, and recruitment mini-series.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Motion &amp; Video Direction</h3><p>Creative direction and production through Adobe After Effects and Premiere Pro across product narratives, showreels, social content, launch films, and recruitment campaigns.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>AI Creative Workflow</h3><p>Practical experience applying ChatGPT, Midjourney, Codex, Claude, and other AI tools to accelerate ideation, expand visual exploration, support storytelling, and prototype campaign ideas.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Generative AI Creative Workflows</h3><p>Applied ChatGPT, Codex, Claude, Gemini, Midjourney, and Suno to research, concept exploration, visual prototyping, story development, image generation, presentation production, and creative testing.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Digital, UI/UX &amp; Executive Presentation</h3><p>Experience across web design direction, UI/UX collaboration, executive presentations, Google Workspace, Microsoft Office, Apple productivity apps, and cross-functional communication with marketing, product, design, video, and technical teams.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Figma, UI/UX &amp; Google Workspace</h3><p>Directed Figma-based UI/UX, responsive web design, executive presentations, and cross-functional collaboration through Google Workspace.</p></article>
         <!-- TEXT CARD: compact heading/body unit; same sizing logic is shared with project overview metadata. -->
-        <article class="portfolio-text-card"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Production Direction &amp; Technical Collaboration</h3><p>Comfortable leading end-to-end creative workflows from strategy, concept, art direction, production planning, review, refinement, version control, and final delivery across digital, physical, social, event, and presentation outputs.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>UI/UX &amp; Web Direction</h3><p>Figma-based UI/UX and responsive web direction across KKTV, the KKBOX Group career platform, BlendVision, KKCompany, KKCulture, and ICBC digital products.</p></article>
+        <article class="portfolio-text-card resume-update"><h3>Blender &amp; 3D Creative Art Direction</h3><p>Directed 3D visual development and used Blender for concept visualization and rapid prototyping, collaborating with 3D artists across product storytelling, campaign imagery, motion content, and event applications.</p></article>
           </div>
         </section>
 
@@ -3545,17 +3591,26 @@
 
       FUNCTION: repaintPortfolioImage
 
-      Forces a small repaint cycle on loaded images to prevent edge artifacts after lazy loading or browser compositing.
+      Legacy-compatible image finalizer. It waits for decode and clears the
+      loading state without forcing opacity or GPU-compositor layer changes.
 
     */
 
     function repaintPortfolioImage(image) {
       if (!image || image.closest("[data-image-lightbox]")) return;
-      image.classList.add("is-image-repainting");
-      void image.offsetHeight;
-      requestAnimationFrame(() => {
+      const settleImage = () => {
         image.classList.remove("is-image-repainting");
-      });
+        updateImageLoadingIndicator(image);
+      };
+      if (!(image.complete && image.naturalWidth > 0)) {
+        image.classList.remove("is-image-repainting");
+        return;
+      }
+      if (typeof image.decode === "function") {
+        image.decode().then(settleImage).catch(settleImage);
+      } else {
+        settleImage();
+      }
     }
 
     /*
@@ -3568,11 +3623,14 @@
 
     function preparePortfolioImageRecord(record) {
       const image = record.element;
-      const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
-      image.loading = isPriorityRow ? "eager" : "lazy";
+      /* Every optimized portfolio image receives a real request immediately.
+         Row-based fetchpriority still controls scheduling, while avoiding the
+         native-lazy state where a visible image can retain an empty currentSrc
+         behind competing autoplay video requests. */
+      image.loading = "eager";
       image.setAttribute("loading", image.loading);
       if (!image.dataset.imageRepaintBound) {
         image.dataset.imageRepaintBound = "true";
@@ -5056,6 +5114,10 @@
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     window.addEventListener("scroll", scheduleLazyPanelVideoUpdate, { passive: true });
     window.addEventListener("resize", scheduleMediaPriorityUpdate);
+    window.addEventListener("pageshow", repaintActivePanelImages);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") repaintActivePanelImages();
+    });
 
     /* STARTUP SEQUENCE: apply saved local curation, initialize media/lightbox/menu systems, then mark the site ready for final CSS states. */
     applyRemovedIds();
@@ -5076,24 +5138,83 @@
     updateLazyPanelVideos();
     document.documentElement.classList.add("is-site-ready");
   </script>
+  <script id="hash-heading-alignment">
+    (() => {
+      /*
+        Align a fragment-targeted project heading's first rendered text line
+        with the first rendered text line in the desktop left rail. Range
+        rectangles account for the real loaded font instead of assuming that
+        equal element boxes always produce equal visible glyph edges.
+      */
+      const firstTextTop = (element) => {
+        const walker = document.createTreeWalker(
+          element,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode(node) {
+              return node.nodeValue?.trim()
+                ? NodeFilter.FILTER_ACCEPT
+                : NodeFilter.FILTER_REJECT;
+            },
+          },
+        );
+        const textNode = walker.nextNode();
+        if (!textNode) return null;
+        const range = document.createRange();
+        range.selectNodeContents(textNode);
+        return range.getBoundingClientRect().top;
+      };
+
+      const alignHashHeadingToSideTitle = () => {
+        if (!window.location.hash) return;
+
+        let targetId;
+        try {
+          targetId = decodeURIComponent(window.location.hash.slice(1));
+        } catch {
+          targetId = window.location.hash.slice(1);
+        }
+
+        const heading = document.getElementById(targetId);
+        const sideTitleFirstLine = document.querySelector(".side-title span");
+        if (
+          !(heading instanceof HTMLElement) ||
+          heading.tagName !== "H2" ||
+          !(sideTitleFirstLine instanceof HTMLElement) ||
+          !sideTitleFirstLine.getClientRects().length
+        ) {
+          return;
+        }
+
+        const headingTextTop = firstTextTop(heading);
+        const sideTitleTextTop = firstTextTop(sideTitleFirstLine);
+        if (headingTextTop === null || sideTitleTextTop === null) return;
+
+        const alignmentDelta = headingTextTop - sideTitleTextTop;
+        if (Math.abs(alignmentDelta) > 0.25) {
+          window.scrollBy(0, alignmentDelta);
+        }
+      };
+
+      const scheduleHashHeadingAlignment = () => {
+        const alignAfterLayout = () => {
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(alignHashHeadingToSideTitle);
+          });
+        };
+
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(alignAfterLayout).catch(alignAfterLayout);
+        } else {
+          alignAfterLayout();
+        }
+      };
+
+      window.addEventListener("hashchange", scheduleHashHeadingAlignment);
+      window.addEventListener("pageshow", scheduleHashHeadingAlignment);
+      scheduleHashHeadingAlignment();
+    })();
+  </script>
   <script src="assets/video-audio-focus.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

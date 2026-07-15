@@ -127,62 +127,114 @@
 
   </style>
   <!-- SEO AND ASSET HINTS: title/description for sharing plus local font preloads for stable typography. -->
-  <title>Joshua Chao &mdash; Creative Director for Technology, Brand Systems, and AI Creativity</title>
-  <meta name="description" content="Selected portfolio of Joshua Chao, a Creative Director working across technology storytelling, integrated brand systems, motion, digital campaigns, cultural projects, and AI-driven creative workflows in Taiwan, Japan, and East Asian markets." />
+  <title>Joshua Hua-Chun Chao &mdash; Art Director | Creative Director | APAC Brand &amp; Campaign Lead</title>
+  <meta name="description" content="Portfolio of Joshua Hua-Chun Chao, an Art Director, Creative Director, and APAC Brand & Campaign Lead with 10+ years of experience across integrated campaigns, brand systems, UI/UX, motion, video, 3D, and AI-assisted creative workflows." />
   <meta property="og:title" content="Joshua Chao &mdash; Selected Creative Direction Portfolio" />
   <meta property="og:description" content="Brand systems, technology storytelling, campaign direction, motion, digital, and AI-assisted creative work across culture, enterprise technology, entertainment, and education." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="assets/portfolio-review.css" />
+  <script src="assets/media-skill-tags.js" defer></script>
   <link rel="preload" href="assets/fonts/MyriadPro-Regular.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Semibold.otf" as="font" type="font/otf" crossorigin="anonymous" />
   <link rel="preload" href="assets/fonts/MyriadPro-Bold.otf" as="font" type="font/otf" crossorigin="anonymous" />
-  </head>
+    <style id="resume-update-highlight">
+    /* Resume-aligned text is monochrome by default. Triple-Q within one second
+       reveals the original blue review color for the current browser tab. */
+    .resume-update,
+    .resume-update * {
+      color: #000 !important;
+      text-decoration-color: #000 !important;
+    }
+
+    html.is-resume-update-blue .resume-update,
+    html.is-resume-update-blue .resume-update * {
+      color: #0057d9 !important;
+      text-decoration-color: #0057d9 !important;
+    }
+
+    /* The Resume navigation item was grey in the original presentation and
+       stays grey in both modes. */
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:visited,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update.is-active,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update[aria-current="page"] {
+      color: #808080 !important;
+      text-decoration-color: #808080 !important;
+    }
+
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:hover,
+    html.is-resume-update-blue .side-menu a.side-menu-muted.resume-update:focus-visible {
+      color: #6f6f6f !important;
+      text-decoration-color: #6f6f6f !important;
+    }
+  </style>
+</head>
 <!-- BODY: all visible UI starts here. Inline background repeats the paint-shield color before CSS finishes loading. -->
 <body bgcolor="#f5f5f5" style="margin: 0; background: #f5f5f5; background-color: #f5f5f5; color-scheme: only light;">
 <!-- PAINT SHIELD: temporary full-screen layer removed after two animation frames by the boot script. -->
 <div id="paint-shield" aria-hidden="true"></div>
-<!-- INVISIBLE REVISION TOGGLE: fixed 10x10px top-right button. Triple-click within one second to reveal/hide revision colors. -->
-<button class="revision-color-toggle" type="button" data-revision-color-toggle aria-label="Triple-click within one second to toggle revision text between black and red/purple" aria-pressed="false" tabindex="-1"></button>
+<!-- HIDDEN TEXT-COLOR MODE: press Q three times within one second to toggle the original blue resume-update text. -->
 <script>
   (() => {
-    // EARLY BOOT SCRIPT: keep background stable, initialize revision-color mode, and release the paint shield after first layout.
+    // EARLY BOOT SCRIPT: keep the background stable, initialize the tab-scoped
+    // text-color mode, and release the paint shield after first layout.
     const bg = "#f5f5f5";
     const root = document.documentElement;
-    const revisionColorStorageKey = "portfolioRevisionTextColorV2";
-    const revisionColorToggle = document.querySelector("[data-revision-color-toggle]");
-    const setRevisionColorMode = (showColor) => {
-      root.classList.toggle("is-revision-color", showColor);
-      revisionColorToggle?.setAttribute("aria-pressed", showColor ? "true" : "false");
+    const resumeColorStorageKey = "portfolioResumeTextColorV3";
+    const setResumeColorMode = (showBlue) => {
+      root.classList.toggle("is-resume-update-blue", showBlue);
       try {
-        window.localStorage?.setItem(revisionColorStorageKey, showColor ? "color" : "black");
+        window.sessionStorage?.setItem(
+          resumeColorStorageKey,
+          showBlue ? "blue" : "black",
+        );
       } catch {}
     };
+
     try {
-      setRevisionColorMode(window.localStorage?.getItem(revisionColorStorageKey) === "color");
+      setResumeColorMode(
+        window.sessionStorage?.getItem(resumeColorStorageKey) === "blue",
+      );
     } catch {
-      setRevisionColorMode(false);
+      setResumeColorMode(false);
     }
-    let revisionToggleClickCount = 0;
-    let revisionToggleClickTimer;
-    const resetRevisionToggleClickCount = () => {
-      revisionToggleClickCount = 0;
-      if (revisionToggleClickTimer) {
-        window.clearTimeout(revisionToggleClickTimer);
-        revisionToggleClickTimer = undefined;
+
+    const qPressTimes = [];
+    window.addEventListener("keydown", (event) => {
+      if (
+        event.repeat ||
+        event.isComposing ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.metaKey ||
+        event.key.toLowerCase() !== "q"
+      ) {
+        return;
       }
-    };
-    revisionColorToggle?.addEventListener("click", () => {
-      revisionToggleClickCount += 1;
-      if (revisionToggleClickCount === 1) {
-        revisionToggleClickTimer = window.setTimeout(() => {
-          revisionToggleClickCount = 0;
-          revisionToggleClickTimer = undefined;
-        }, 1000);
+
+      const eventTarget = event.target;
+      if (
+        eventTarget instanceof HTMLElement &&
+        (eventTarget.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT)$/.test(eventTarget.tagName))
+      ) {
+        return;
       }
-      if (revisionToggleClickCount >= 3) {
-        resetRevisionToggleClickCount();
-        setRevisionColorMode(!root.classList.contains("is-revision-color"));
+
+      const now = window.performance.now();
+      qPressTimes.push(now);
+      while (qPressTimes.length && now - qPressTimes[0] > 1000) {
+        qPressTimes.shift();
+      }
+
+      if (qPressTimes.length >= 3) {
+        qPressTimes.length = 0;
+        setResumeColorMode(
+          !root.classList.contains("is-resume-update-blue"),
+        );
       }
     });
+
     root.style.background = bg;
     root.style.backgroundColor = bg;
     root.style.colorScheme = "only light";
@@ -328,7 +380,7 @@
     }
 
     .side-nav::after {
-      content: "V2.0";
+      content: "V2.1";
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -578,13 +630,29 @@
       font-size: var(--side-title-font-size);
     }
 
+    /*
+      CROSS-PAGE SKILL ANCHORS: reserve the difference between the left-rail
+      top inset and a standard section heading's 16px top padding. This places
+      the heading text on the same visual top edge as the first side-title line
+      before the small font-metric correction in the alignment script runs.
+    */
+    @media (min-width: 761px), (min-width: 600px) and (max-width: 760px) and (orientation: portrait) {
+      .section h2[id]:target {
+        scroll-margin-top: max(0px, calc(var(--side-nav-top-padding) - 16px));
+      }
+
+      .content-panel > .section:first-child > h2[id]:first-of-type:target {
+        scroll-margin-top: 0;
+      }
+    }
+
     .overview-title-line,
     .overview-title-subtitle {
       display: block;
     }
 
     .overview-title-subtitle {
-      margin-top: calc(var(--heading-content-gap) + 10.6px);
+      margin-top: calc((var(--heading-content-gap) + 10.6px) / 2);
       font-size: 0.78em;
       line-height: 1.32;
     }
@@ -1090,8 +1158,10 @@
       border: 0;
       outline: 0;
       cursor: zoom-in;
-      backface-visibility: hidden;
-      transform: translateZ(0);
+      /* Keep portfolio images in the normal paint flow. Creating one GPU layer
+         per image can leave decoded lazy images blank until another UI action
+         invalidates the compositor. */
+      backface-visibility: visible;
     }
 
     .side-nav .award-logo-row img {
@@ -1099,7 +1169,7 @@
     }
 
     img.is-image-repainting:not(.image-lightbox__image) {
-      opacity: 0.999;
+      opacity: 1;
     }
 
     .concert-grid .media-frame {
@@ -1909,7 +1979,7 @@
 
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: fixed;
         left: var(--outer-text-gutter);
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2324,7 +2394,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: fixed;
         left: 3px;
         bottom: max(3px, env(safe-area-inset-bottom, 0px));
@@ -2475,7 +2545,7 @@
       .side-nav::after,
       .side-nav.is-mobile-menu-open::after,
       .side-nav.is-mobile-menu-open.is-mobile-menu-closing::after {
-      content: "V2.0";
+      content: "V2.1";
         position: absolute;
         left: 3px;
         bottom: 3px;
@@ -2567,13 +2637,13 @@
       text-decoration-color: currentColor;
     }
 
-    /* REVISION COLOR MODE: by default revised text is black. Triple-clicking the invisible top-right button restores red/purple review colors. */
+    /* LEGACY REVIEW CLASSES: retained for content grouping, always monochrome. */
 
     html.is-revision-color .revision-highlight,
     html.is-revision-color .revision-highlight a,
     html.is-revision-color .revision-highlight strong {
-      color: #c01818 !important;
-      text-decoration-color: #c01818 !important;
+      color: #000 !important;
+      text-decoration-color: #000 !important;
     }
 
     .biography-sync-highlight,
@@ -2592,33 +2662,9 @@
     html.is-revision-color .revision-highlight .biography-sync-highlight,
     html.is-revision-color .revision-highlight .biography-sync-highlight a,
     html.is-revision-color .revision-highlight .biography-sync-highlight strong {
-      color: #7a2cff !important;
-      text-decoration-color: #7a2cff !important;
+      color: #000 !important;
+      text-decoration-color: #000 !important;
     }
-    .revision-color-toggle {
-      appearance: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 9500;
-      display: block;
-      width: 10px;
-      height: 10px;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: transparent;
-      opacity: 0;
-      cursor: default;
-    }
-
-    .revision-color-toggle:focus,
-    .revision-color-toggle:focus-visible {
-      outline: 0;
-    }
-
     /* TEXT CARD GRID: biography capability/workflow/tools sections use the same compact card grammar as project overview metadata. */
 
     .portfolio-text-grid {
@@ -2674,12 +2720,12 @@
     .card .card-body h3 *,
     .brand-book-caption h3,
     .brand-book-caption h3 * {
-      color: #808080 !important;
-      text-decoration-color: #808080 !important;
+      color: #000 !important;
+      text-decoration-color: #000 !important;
     }
 
 
-    /* CAPTION EXTERNAL LINK ICON: media captions stay grey, but the arrow inside the black external-link square must remain white for contrast. */
+    /* CAPTION EXTERNAL LINK ICON: media captions are black, while the arrow inside the black square remains white for contrast. */
     .card .card-body h3 .external-arrow-icon,
     .card .card-body h3 .external-arrow-icon *,
     .brand-book-caption h3 .external-arrow-icon,
@@ -2744,6 +2790,18 @@
       font-size: var(--article-caption-font-size);
       line-height: 1.25;
       letter-spacing: 0;
+    }
+
+    .project-overview-intro {
+      margin: calc(var(--heading-content-gap) / 4) 0 0;
+      color: #000;
+      font-size: var(--article-body-font-size);
+      line-height: 1.42;
+      letter-spacing: 0;
+    }
+
+    .project-overview-intro + .project-overview-card {
+      margin-top: var(--section-gap);
     }
 
     .project-overview-card + .essay {
@@ -2812,12 +2870,12 @@
     <!-- SECONDARY DOCUMENT LINKS: biography, resume PDF, external archive, and award-logo row. These are intentionally grey in the UI. -->
     <nav class="side-menu side-menu--secondary" aria-label="Portfolio documents">
         <a href="index.html" class="side-menu-muted">Biography</a>
-        <a class="resume-link side-menu-muted" href="assets/documents/Joshua_Chao_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="resume-link side-menu-muted resume-update" href="assets/documents/JOSHUA%20HUA-CHUN%20CHAO%20Resume%20ATS.pdf" target="_blank" rel="noopener">Resume</a>
         <a class="design-archive-link side-menu-muted" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener">Design Archive</a>
         <a class="award-logo-row" href="https://mrjoshuachao.github.io/2005-2015/index.html" target="_blank" rel="noopener" aria-label="Awards">
           <img src="assets/awards-logos/award-good-design-256x256.png" alt="Good Design Award" loading="eager" decoding="async" />
-          <img src="assets/awards-logos/award-if-256x256.png" alt="iF Design Award" loading="eager" decoding="async" />
           <img src="assets/awards-logos/award-red-dot-256x256.png" alt="Red Dot Award" loading="eager" decoding="async" />
+          <img src="assets/awards-logos/award-if-256x256.png" alt="iF Design Award" loading="eager" decoding="async" />
           <img src="assets/awards-logos/award-siggraph-256x256.png" alt="SIGGRAPH Award" loading="eager" decoding="async" />
         </a>
 
@@ -2828,7 +2886,8 @@
       <section class="content-panel is-active" data-panel="nvidia-sccd">
     <!-- CONTENT SECTION: one major vertical block with a heading and either project metadata, media, or prose. Keep section spacing consistent through the shared CSS variables. -->
     <section class="section" aria-labelledby="nvidia-sccd-title">
-          <h2 id="nvidia-sccd-title"><span class="overview-title-line revision-highlight biography-sync-highlight">NVIDIA x SCCD Project NV (2023)</span> <span class="overview-title-subtitle revision-highlight biography-sync-highlight">Generative AI Music Video and Showreel as Cinematic Language</span></h2>
+          <h2 id="nvidia-sccd-title"><span class="overview-title-line revision-highlight biography-sync-highlight">NVIDIA x SCCD Project NV (2023)</span> <span class="overview-title-subtitle resume-update">Generative AI Creative Workflow Across Concept Exploration, Visual Prototyping, Story Development, and Presentation</span></h2>
+      <p class="project-overview-intro resume-update">Applied generative AI to concept exploration, visual prototyping, story development, and presentation production, accelerating early-stage creative development while directing motion, video, music alignment, editorial rhythm, and final delivery.</p>
       <!-- PROJECT OVERVIEW CARD: six metadata fields shown near the top of each case-study page. -->
       <div class="project-overview-card revision-highlight" aria-label="Project NV Project Overview">
         <!-- DEFINITION LIST: dt labels are the bold field names; dd values are compact metadata copy. -->
@@ -2918,13 +2977,10 @@
     <section class="section post-media-essay-section" aria-label="Project article">
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">NVIDIA x SCCD Project NV was an early-stage generative AI music video and showreel project exploring how AI-generated imagery, music, video editing, and creative direction could form a coherent cinematic language for technology-facing presentation contexts.</p>
-              <p class="biography-sync-highlight">The collaboration context included OurSong, NVIDIA, and SCCD, but the creative focus was the production system: prompt fragments, generated scenes, Runway experiments, editorial judgment, music structure, and the discipline of turning unstable AI output into intentional cinematic direction.</p>
-              <p>The earliest state of the project was intentionally unstable. It did not begin with polished storyboards, but with fragments of prompts, frame tests, rough notes on editing order, and visual hypotheses. These materials behaved like sketches: unfinished, suggestive, and full of possibility. The goal was to find a language where algorithmic chance could still feel directed, emotional, and artistically intentional.</p>
-              <p>Production became a dialogue between direction and discovery. AI-generated scenes, Runway experiments, musical structure, editing rhythm, and showreel requirements were shaped together. Each output was judged not only by novelty, but by whether it carried narrative tension. The real creative work was turning unpredictable machine images into sequences with pressure, pulse, and visual conviction.</p>
-              <p>As the work neared completion, the focus shifted from experimentation to legibility. The rhythm was tightened, the strongest visual motifs were selected, and the material was organized for keynote, showreel, and presentation contexts. The film had to feel advanced without becoming abstract, spectacular without losing the emotional trace of the song.</p>
-              <p>The final outcome positioned generative AI as a creative instrument rather than a technical gimmick. Across the narrative film, the Computex presentation reel, and related experiments, Project NV showed how music, technology, and visual direction could form a persuasive cultural signal. It made AI feel less like software and more like a new cinematic grammar.</p>
+            <div class="essay-block resume-update" lang="en">
+              <p>Project NV applies Joshua's generative AI creative workflow to concept exploration, visual prototyping, story development, image development, motion, video, music alignment, presentation production, and creative testing.</p>
+              <p>The project combined AI-generated imagery with human creative judgment, using prompt development, scene selection, storyboarding, editorial rhythm, and presentation framing to turn exploratory material into a coherent music-video and showreel language.</p>
+              <p>This work reflects the technical and creative capabilities listed in his resume, including ChatGPT, Codex, Claude, Gemini, Midjourney, Suno, Adobe After Effects, Adobe Premiere Pro, Figma, Blender, and cross-functional production leadership.</p>
             </div>
           </div>
     </section>
@@ -2993,12 +3049,10 @@
           </div>
       <!-- ESSAY CONTAINER: keeps prose width, paragraph rhythm, and article typography consistent. -->
       <div class="essay">
-            <div class="essay-block" lang="en">
-              <p class="biography-sync-highlight">Kimberley&rsquo;s &ldquo;Street Signs&rdquo; extended the same generative AI exploration into a music-video context, testing how synthetic imagery, editing rhythm, artist identity, and media-facing assets could become a finished cultural release rather than only an experiment.</p>
-              <p>The early phase revolved around emotion, fragments, and visual instability. Street signs, urban surfaces, distorted rooms, unstable portraits, and generated characters became the raw vocabulary. The earliest images were not treated as finished work, but as tests of tone: how much imperfection could remain before accidental error became expression.</p>
-              <p>Production required constant translation between AI output and music-video direction. Generated shots were selected, sequenced, compared, repaired, and edited into formats that could support both the full-length film and promotional assets. The work demanded taste judgments under pressure: when to preserve the strange texture of AI, and when to tame it through rhythm, continuity, and editing control.</p>
-              <p>As the project neared completion, the focus shifted toward delivery and impact. Horizontal and vertical teasers, final H.264 exports, volume balancing, and media versions were refined one by one so the work could move across screens. The visual language had to remain experimental, while the release itself had to function like a complete campaign asset.</p>
-              <p>The final outcome was more than a music video. It was an artist statement, a media object, and proof of creative-direction ability within an AI production environment. Through the finished film, teasers, and press exposure, &ldquo;Street Signs&rdquo; showed how synthetic imagery could be transformed into a precise and complete cultural moment.</p>
+            <div class="essay-block resume-update" lang="en">
+              <p>The Kimberley "Street Signs" work extended the same AI-assisted approach into a complete music-video and campaign-production context.</p>
+              <p>Joshua used generative AI for research, concept exploration, visual prototyping, story development, image development, storyboarding, video planning, presentation production, and creative testing while maintaining brand consistency and human creative judgment.</p>
+              <p>The final workflow connected art direction, artist identity, motion and video direction, editing, delivery formats, and media-facing communication, demonstrating how emerging tools can support rather than replace deliberate creative leadership.</p>
             </div>
           </div>
         </section>
@@ -3485,17 +3539,26 @@
 
       FUNCTION: repaintPortfolioImage
 
-      Forces a small repaint cycle on loaded images to prevent edge artifacts after lazy loading or browser compositing.
+      Legacy-compatible image finalizer. It waits for decode and clears the
+      loading state without forcing opacity or GPU-compositor layer changes.
 
     */
 
     function repaintPortfolioImage(image) {
       if (!image || image.closest("[data-image-lightbox]")) return;
-      image.classList.add("is-image-repainting");
-      void image.offsetHeight;
-      requestAnimationFrame(() => {
+      const settleImage = () => {
         image.classList.remove("is-image-repainting");
-      });
+        updateImageLoadingIndicator(image);
+      };
+      if (!(image.complete && image.naturalWidth > 0)) {
+        image.classList.remove("is-image-repainting");
+        return;
+      }
+      if (typeof image.decode === "function") {
+        image.decode().then(settleImage).catch(settleImage);
+      } else {
+        settleImage();
+      }
     }
 
     /*
@@ -3508,11 +3571,14 @@
 
     function preparePortfolioImageRecord(record) {
       const image = record.element;
-      const isPriorityRow = record.rowIndex === 0;
       stampMediaLoadPriority(image, record);
       updateImageLoadingIndicator(image);
       image.decoding = "async";
-      image.loading = isPriorityRow ? "eager" : "lazy";
+      /* Every optimized portfolio image receives a real request immediately.
+         Row-based fetchpriority still controls scheduling, while avoiding the
+         native-lazy state where a visible image can retain an empty currentSrc
+         behind competing autoplay video requests. */
+      image.loading = "eager";
       image.setAttribute("loading", image.loading);
       if (!image.dataset.imageRepaintBound) {
         image.dataset.imageRepaintBound = "true";
@@ -4996,6 +5062,10 @@
     document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     window.addEventListener("scroll", scheduleLazyPanelVideoUpdate, { passive: true });
     window.addEventListener("resize", scheduleMediaPriorityUpdate);
+    window.addEventListener("pageshow", repaintActivePanelImages);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") repaintActivePanelImages();
+    });
 
     /* STARTUP SEQUENCE: apply saved local curation, initialize media/lightbox/menu systems, then mark the site ready for final CSS states. */
     applyRemovedIds();
@@ -5016,23 +5086,83 @@
     updateLazyPanelVideos();
     document.documentElement.classList.add("is-site-ready");
   </script>
+  <script id="hash-heading-alignment">
+    (() => {
+      /*
+        Align a fragment-targeted project heading's first rendered text line
+        with the first rendered text line in the desktop left rail. Range
+        rectangles account for the real loaded font instead of assuming that
+        equal element boxes always produce equal visible glyph edges.
+      */
+      const firstTextTop = (element) => {
+        const walker = document.createTreeWalker(
+          element,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode(node) {
+              return node.nodeValue?.trim()
+                ? NodeFilter.FILTER_ACCEPT
+                : NodeFilter.FILTER_REJECT;
+            },
+          },
+        );
+        const textNode = walker.nextNode();
+        if (!textNode) return null;
+        const range = document.createRange();
+        range.selectNodeContents(textNode);
+        return range.getBoundingClientRect().top;
+      };
+
+      const alignHashHeadingToSideTitle = () => {
+        if (!window.location.hash) return;
+
+        let targetId;
+        try {
+          targetId = decodeURIComponent(window.location.hash.slice(1));
+        } catch {
+          targetId = window.location.hash.slice(1);
+        }
+
+        const heading = document.getElementById(targetId);
+        const sideTitleFirstLine = document.querySelector(".side-title span");
+        if (
+          !(heading instanceof HTMLElement) ||
+          heading.tagName !== "H2" ||
+          !(sideTitleFirstLine instanceof HTMLElement) ||
+          !sideTitleFirstLine.getClientRects().length
+        ) {
+          return;
+        }
+
+        const headingTextTop = firstTextTop(heading);
+        const sideTitleTextTop = firstTextTop(sideTitleFirstLine);
+        if (headingTextTop === null || sideTitleTextTop === null) return;
+
+        const alignmentDelta = headingTextTop - sideTitleTextTop;
+        if (Math.abs(alignmentDelta) > 0.25) {
+          window.scrollBy(0, alignmentDelta);
+        }
+      };
+
+      const scheduleHashHeadingAlignment = () => {
+        const alignAfterLayout = () => {
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(alignHashHeadingToSideTitle);
+          });
+        };
+
+        if (document.fonts?.ready) {
+          document.fonts.ready.then(alignAfterLayout).catch(alignAfterLayout);
+        } else {
+          alignAfterLayout();
+        }
+      };
+
+      window.addEventListener("hashchange", scheduleHashHeadingAlignment);
+      window.addEventListener("pageshow", scheduleHashHeadingAlignment);
+      scheduleHashHeadingAlignment();
+    })();
+  </script>
   <script src="assets/video-audio-focus.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

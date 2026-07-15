@@ -1,0 +1,240 @@
+/* Newly added portfolio copy remains monochrome in the public presentation. */
+.portfolio-update,
+.portfolio-update * {
+  color: #000 !important;
+  text-decoration-color: #000 !important;
+}
+
+/* Resume-aligned copy is black by default; the page-level hidden mode can
+   reveal its original blue review color. */
+.resume-update,
+.resume-update * {
+  color: #000 !important;
+  text-decoration-color: #000 !important;
+}
+
+.portfolio-update-note {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+.section[hidden] {
+  display: none !important;
+}
+
+/* Page navigation reveals the next document immediately, without a fade-in. */
+#paint-shield,
+html.is-paint-ready #paint-shield {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* One full-width project-context field placed directly below each page subtitle. */
+.project-top-context {
+  display: block;
+  margin: calc(var(--heading-content-gap) + 18px) 0 0;
+  padding: 0;
+}
+
+.project-top-context .project-overview-item {
+  width: 100%;
+}
+
+/* Resume skill keywords shown below portfolio media captions. */
+:root {
+  --media-caption-skill-gap: 6px;
+  --media-item-spacing: 32px;
+  --media-project-spacing: 72px;
+  --grouped-gallery-media-gap: 10px;
+}
+
+.media-skill-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  gap: 6px 6px;
+  margin: var(--media-caption-skill-gap) 0 0 !important;
+  padding: 0;
+  color: #808080 !important;
+  font-size: clamp(9px, calc(var(--article-caption-font-size, 15px) - 3px), 12px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.media-skill-keyword {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px 2px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: transparent;
+  color: #808080 !important;
+  font: inherit;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+
+.card-body.has-media-skill-keywords h3 {
+  margin-bottom: 0;
+}
+
+.card-body.has-media-skill-keywords {
+  padding-bottom: 0 !important;
+}
+
+/* Restore or create the standard grey caption when a portfolio item had none. */
+.card-body.has-generated-media-caption {
+  display: block !important;
+}
+
+.card-body.has-generated-media-caption .generated-media-caption {
+  display: block !important;
+  visibility: visible !important;
+  color: #000 !important;
+}
+
+.card-body.has-visible-media-caption h3,
+.card-body.has-visible-media-caption h3 * {
+  color: #000 !important;
+  text-decoration-color: #000 !important;
+}
+
+/* One shared caption and skill row for a sequence of related captionless media. */
+.grouped-media-footer {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: calc(var(--media-item-spacing) * -1);
+  align-self: start;
+}
+
+.grouped-media-caption {
+  display: block !important;
+  padding-bottom: 0 !important;
+}
+
+.grouped-media-caption h3 {
+  margin-bottom: 0;
+  color: #000 !important;
+}
+
+.grouped-media-footer .media-skill-keywords--gallery {
+  width: 100%;
+  margin-top: var(--media-caption-skill-gap) !important;
+}
+
+/* Consistent spacing inside one project and a larger break between projects. */
+.content-panel > .section + .section {
+  margin-top: var(--media-project-spacing) !important;
+}
+
+.section .grid {
+  row-gap: var(--media-item-spacing) !important;
+}
+
+.section .grid + .grid {
+  margin-top: var(--media-item-spacing) !important;
+}
+
+.process-equal-row,
+.brand-book-feature-row {
+  row-gap: var(--media-item-spacing) !important;
+}
+
+/* Dense image-series grids keep the same 10px rhythm horizontally and vertically. */
+.section .photo-book-grid,
+.section .sui-cover-art-grid,
+.section .brand-book-grid,
+.section .process-grid,
+.section .business-card-grid,
+.section .meeting-grid,
+.process-equal-row {
+  column-gap: var(--grouped-gallery-media-gap) !important;
+  row-gap: var(--grouped-gallery-media-gap) !important;
+}
+
+.photo-book-grid.is-layout-grid > .grouped-media-footer,
+.sui-cover-art-grid.is-layout-grid > .grouped-media-footer,
+.brand-book-grid.is-layout-grid > .grouped-media-footer,
+.process-grid.is-layout-grid > .grouped-media-footer,
+.business-card-grid.is-layout-grid > .grouped-media-footer,
+.meeting-grid.is-layout-grid > .grouped-media-footer {
+  margin-top: calc(var(--grouped-gallery-media-gap) * -1);
+}
+
+.brand-book-grid.is-layout-grid > .grouped-media-footer + .brand-book-feature-row {
+  margin-top: calc(var(--media-item-spacing) - var(--grouped-gallery-media-gap)) !important;
+}
+
+.photo-book-grid:not(.is-layout-grid) > .grouped-media-footer,
+.sui-cover-art-grid:not(.is-layout-grid) > .grouped-media-footer,
+.brand-book-grid:not(.is-layout-grid) > .grouped-media-footer,
+.process-grid:not(.is-layout-grid) > .grouped-media-footer,
+.business-card-grid:not(.is-layout-grid) > .grouped-media-footer,
+.meeting-grid:not(.is-layout-grid) > .grouped-media-footer {
+  margin-top: 0;
+}
+
+figure > .media-skill-keywords {
+  margin-top: 6px;
+}
+
+/* Let portfolio cards and generated footers shrink inside narrow grid tracks. */
+.section .grid > *,
+.card,
+.card-body,
+.grouped-media-footer {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 760px) {
+  .media-skill-keywords {
+    gap: 6px;
+    margin-top: var(--media-caption-skill-gap) !important;
+  }
+
+  .grouped-media-footer {
+    margin-top: calc(var(--media-item-spacing) * -1);
+  }
+
+  .grouped-media-footer .media-skill-keywords--gallery {
+    margin-top: var(--media-caption-skill-gap) !important;
+  }
+
+  .grid:not(.is-layout-grid) > .grouped-media-footer {
+    margin-top: 0;
+  }
+
+  .grid:not(.is-layout-grid) > .card.has-individual-media-footer + .card,
+  .grid:not(.is-layout-grid) > .grouped-media-footer + * {
+    margin-top: var(--media-item-spacing) !important;
+  }
+
+  .photo-book-grid:not(.is-layout-grid) > .card + .card,
+  .sui-cover-art-grid:not(.is-layout-grid) > .card + .card,
+  .brand-book-grid:not(.is-layout-grid) > .card + .card,
+  .process-grid:not(.is-layout-grid) > .card + .card,
+  .business-card-grid:not(.is-layout-grid) > .card + .card,
+  .meeting-grid:not(.is-layout-grid) > .card + .card {
+    margin-top: var(--grouped-gallery-media-gap) !important;
+  }
+}
+
+/* Long skill labels must remain inside the content column on compact phones
+   and when the browser's text-size accessibility setting is increased. */
+@media (max-width: 460px) {
+  .media-skill-keyword {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
+  }
+}
