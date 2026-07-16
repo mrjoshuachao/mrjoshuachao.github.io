@@ -782,7 +782,7 @@
       margin: calc(var(--section-gap) * 2) 20px 0 0;
       max-width: 1120px;
       color: #808080;
-      font-size: var(--article-body-font-size);
+      font-size: var(--article-caption-font-size);
       line-height: 1.42;
       letter-spacing: 0;
     }
@@ -5006,8 +5006,15 @@
       const awardRows = document.querySelectorAll(".award-logo-row");
       if (!sideNav || !awardRows.length) return;
       const yearLine = document.querySelector(".side-title span:nth-child(4)");
-      const referenceElement = yearLine || document.querySelector(".mobile-menu-title") || document.body;
-      const titleWidth = measureElementTextWidth(yearLine) || measureTextWidth("2016-2026", referenceElement);
+      const designArchiveLink = sideNav.querySelector(".design-archive-link");
+      const isPhoneMenuOpen = window.matchMedia("(max-width: 760px)").matches
+        && sideNav.classList.contains("is-mobile-menu-open");
+      const referenceElement = (isPhoneMenuOpen ? designArchiveLink : yearLine)
+        || document.querySelector(".mobile-menu-title")
+        || document.body;
+      const titleWidth = (isPhoneMenuOpen ? measureElementTextWidth(designArchiveLink) : 0)
+        || measureElementTextWidth(yearLine)
+        || measureTextWidth("2016-2026", referenceElement);
       if (titleWidth > 0) {
         const logoSize = titleWidth / 5.5;
         const logoGap = logoSize / 2;
