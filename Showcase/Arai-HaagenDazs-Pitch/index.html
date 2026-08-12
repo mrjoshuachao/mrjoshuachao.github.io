@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Arai × Häagen-Dazs 跨界體驗提案</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @font-face { font-family: 'CJK'; src: local('Noto Sans CJK TC'); }
+  :root{
+    --bg:#0b0b0c;
+    --bg2:#151316;
+    --text:#f5f2ee;
+    --muted:#b9b2ac;
+    --accent:#8c1f3b;
+    --accent2:#d9a441;
+    --line:rgba(245,242,238,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    width:100%;height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Noto Sans CJK TC','PingFang TC','Microsoft JhengHei',-apple-system,BlinkMacSystemFont,sans-serif;
+    overflow:hidden;
+  }
+  #deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    opacity:0;
+    transform:translateX(24px);
+    pointer-events:none;
+    transition:opacity .45s ease, transform .45s ease;
+    padding:6vh 7vw;
+  }
+  .slide.active{
+    opacity:1;
+    transform:translateX(0);
+    pointer-events:auto;
+  }
+  .slide.prev{
+    transform:translateX(-24px);
+  }
+  .eyebrow{
+    font-size:1.05vw;
+    letter-spacing:.12em;
+    color:var(--accent2);
+    font-weight:700;
+    margin-bottom:1.4vh;
+    text-transform:uppercase;
+  }
+  h1{
+    font-size:3vw;
+    line-height:1.3;
+    font-weight:900;
+    max-width:56vw;
+    letter-spacing:.01em;
+  }
+  .bullets{
+    margin-top:3.2vh;
+    display:flex;
+    flex-direction:column;
+    gap:1.6vh;
+    max-width:50vw;
+  }
+  .bullets .item{
+    font-size:1.35vw;
+    line-height:1.55;
+    color:var(--text);
+    display:flex;
+    gap:.9vw;
+    align-items:flex-start;
+  }
+  .bullets .item::before{
+    content:"";
+    width:.5vw;
+    height:.5vw;
+    min-width:6px;
+    min-height:6px;
+    border-radius:50%;
+    background:var(--accent);
+    margin-top:.75vw;
+  }
+  .bullets .item b{color:var(--accent2);font-weight:700;}
+  .caption{
+    margin-top:2.4vh;
+    font-size:1.3vw;
+    color:var(--muted);
+    max-width:42vw;
+    line-height:1.6;
+  }
+
+  /* number badge for agenda */
+  .agenda-list{margin-top:4vh;display:flex;flex-direction:column;gap:2.6vh;}
+  .agenda-list .row{display:flex;align-items:baseline;gap:1.6vw;}
+  .agenda-list .num{font-size:2.6vw;font-weight:900;color:var(--accent);opacity:.55;font-variant-numeric:tabular-nums;}
+  .agenda-list .label{font-size:1.9vw;font-weight:700;}
+
+  /* Photo slides (split layout) */
+  .slide.photo{padding:0;flex-direction:row;}
+  .photo-media{
+    position:relative;
+    width:58%;
+    height:100%;
+    overflow:hidden;
+  }
+  .photo-media img{
+    width:100%;height:100%;object-fit:cover;
+    filter:saturate(1.03) contrast(1.02);
+  }
+  .photo-media::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(90deg, rgba(11,11,12,0) 60%, rgba(11,11,12,0.55) 100%);
+  }
+  .photo-text{
+    width:42%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:6vh 4.5vw;
+    background:
+      radial-gradient(120% 140% at 0% 50%, rgba(140,31,59,0.16), transparent 60%),
+      var(--bg);
+  }
+  .step-tag{
+    font-size:1vw;
+    color:var(--accent2);
+    letter-spacing:.12em;
+    font-weight:700;
+    margin-bottom:1.6vh;
+    text-transform:uppercase;
+  }
+  .photo-text h2{
+    font-size:2.5vw;
+    line-height:1.35;
+    font-weight:900;
+  }
+  .photo-text p{
+    margin-top:2.2vh;
+    font-size:1.25vw;
+    color:var(--muted);
+    line-height:1.6;
+    max-width:32vw;
+  }
+
+  /* Full-bleed background-image slides (text-only content, image behind, kept bright) */
+  .slide.bgslide{ position:absolute; justify-content:flex-end; padding-bottom:7vh; }
+  .bg-media{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .bg-media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:saturate(1.05);
+  }
+  .bg-media::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(8,8,9,0.90) 0%, rgba(8,8,9,0.62) 32%, rgba(8,8,9,0.22) 58%, rgba(8,8,9,0) 78%);
+  }
+  .content-front{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+  }
+  .content-front .eyebrow,
+  .content-front h1,
+  .content-front .bullets .item,
+  .content-front .agenda-list .label{
+    text-shadow:0 2px 14px rgba(0,0,0,0.75);
+  }
+
+  /* cover slide (title card, page 2) */
+  .slide.cover{padding:0;}
+  .cover-media{position:absolute;inset:0;}
+  .cover-media img{width:100%;height:100%;object-fit:cover;}
+  .cover-media::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(0deg, rgba(6,6,7,0.92) 8%, rgba(6,6,7,0.35) 45%, rgba(6,6,7,0.15) 70%);
+  }
+  .cover-content{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:8vh 7vw;
+  }
+  .cover-content .brand{
+    font-size:3.6vw;
+    font-weight:900;
+    letter-spacing:.01em;
+    display:flex;
+    align-items:baseline;
+    gap:1vw;
+  }
+  .cover-content .brand .x{color:var(--accent2);font-weight:400;}
+  .cover-content .sub{
+    margin-top:1.6vh;
+    font-size:1.5vw;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .cover-content .tag{
+    margin-top:5vh;
+    font-size:1vw;
+    letter-spacing:.15em;
+    color:var(--accent2);
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  #fsBtn{
+    margin-top:4vh;
+    align-self:flex-start;
+    background:var(--accent);
+    color:var(--text);
+    border:none;
+    padding:1.4vh 2vw;
+    font-size:1.05vw;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    letter-spacing:.04em;
+    transition:transform .2s ease, background .2s ease;
+  }
+  #fsBtn:hover{background:#a8264a;transform:translateY(-2px);}
+
+  /* opening MV slide (page 1) */
+  .slide.mvslide{ padding:0; align-items:center; justify-content:center; background:#000; }
+  .mv-wrap{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+  .mv-wrap video{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#000;
+    display:block;
+  }
+  .mv-playbtn{
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    width:6.5vw;
+    height:6.5vw;
+    min-width:64px;
+    min-height:64px;
+    border-radius:50%;
+    background:rgba(140,31,59,0.88);
+    border:2px solid rgba(245,242,238,0.85);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .2s ease, background .2s ease;
+    z-index:3;
+  }
+  .mv-playbtn:hover{background:var(--accent);transform:translate(-50%,-50%) scale(1.06);}
+  .mv-playbtn svg{width:38%;height:38%;margin-left:4%;}
+  .mv-caption{
+    position:absolute;
+    left:7vw; bottom:9vh;
+    z-index:3;
+    font-size:1vw;
+    letter-spacing:.1em;
+    color:var(--muted);
+    text-transform:uppercase;
+    text-shadow:0 2px 10px rgba(0,0,0,.8);
+  }
+  .mv-brand{
+    position:absolute;
+    left:7vw; top:6vh;
+    z-index:3;
+    font-size:1.6vw;
+    font-weight:900;
+    color:var(--text);
+    text-shadow:0 2px 10px rgba(0,0,0,.8);
+  }
+  .mv-brand .x{color:var(--accent2);font-weight:400;}
+
+  /* chart slide */
+  .slide.chartslide{align-items:center;}
+  .chart-wrap{
+    margin-top:3vh;
+    width:72vw;
+    max-height:70vh;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,0.55);
+    border:1px solid var(--line);
+    background:#fff;
+  }
+  .chart-wrap img{
+    width:100%;
+    display:block;
+  }
+
+  /* footer / nav */
+  .chrome{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:6.5vh;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 3vw;
+    z-index:10;
+  }
+  .progress-track{
+    position:absolute;
+    left:0;top:0;
+    height:3px;
+    width:100%;
+    background:var(--line);
+    z-index:10;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--accent);
+    width:5%;
+    transition:width .35s ease;
+  }
+  .counter{
+    font-size:.95vw;
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.05em;
+  }
+  .hint{
+    font-size:.85vw;
+    color:var(--muted);
+    opacity:.7;
+    letter-spacing:.03em;
+  }
+  .navzone{
+    position:absolute;
+    top:0;bottom:0;
+    width:12%;
+    z-index:5;
+    cursor:pointer;
+  }
+  .navzone.left{left:0;}
+  .navzone.right{right:0;}
+
+  #fsToggleBtn{
+    width:2.6vw;
+    height:2.6vw;
+    min-width:32px;
+    min-height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(245,242,238,0.06);
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:12;
+    transition:background .2s ease, color .2s ease;
+  }
+  #fsToggleBtn:hover{background:var(--accent);color:var(--text);}
+  #fsToggleBtn svg{width:52%;height:52%;}
+
+  #toast{
+    position:fixed;
+    left:50%; bottom:9vh;
+    transform:translateX(-50%) translateY(12px);
+    background:rgba(20,18,19,0.95);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:1.4vh 2vw;
+    border-radius:10px;
+    font-size:1vw;
+    z-index:50;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+    max-width:70vw;
+    text-align:center;
+  }
+  #toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- 1. Opening MV -->
+  <section class="slide mvslide active" data-title="開場影片">
+    <div class="mv-wrap">
+      <div class="mv-brand">Arai <span class="x">×</span> Häagen-Dazs</div>
+      <video id="mvVideo" src="rideice_web.mp4" playsinline></video>
+      <div class="mv-playbtn" id="mvPlayBtn" title="播放">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="mv-caption">點擊播放 ▸ 播放結束後按 → 進入簡報</div>
+    </div>
+  </section>
+
+  <!-- 2. Cover / title card -->
+  <section class="slide cover" data-title="封面">
+    <div class="cover-media"><img src="img_sunset.jpg" alt=""></div>
+    <div class="cover-content">
+      <div class="brand">Arai <span class="x">×</span> Häagen-Dazs</div>
+      <div class="sub">跨界體驗提案：從快閃店到騎士俱樂部</div>
+      <div class="tag">產品 / 行銷提案簡報</div>
+    </div>
+  </section>
+
+  <!-- 3. Agenda -->
+  <section class="slide bgslide" data-title="議程">
+    <div class="bg-media"><img src="img_storefront.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Agenda</div>
+      <h1>今天想跟你聊三件事</h1>
+      <div class="agenda-list">
+        <div class="row"><div class="num">01</div><div class="label">業界的挑戰</div></div>
+        <div class="row"><div class="num">02</div><div class="label">清晰的問題陳述</div></div>
+        <div class="row"><div class="num">03</div><div class="label">產品介紹：從快閃店到俱樂部的旅程</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Challenge - problem -->
+  <section class="slide bgslide" data-title="業界的挑戰">
+    <div class="bg-media"><img src="img_gloves_handoff.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">The Industry Challenge</div>
+      <h1>快閃店的熱度，撐不過離場那一刻</h1>
+      <div class="bullets">
+        <div class="item">消費者拍照、拿贈品、離開 — 熱度<b>通常止於此</b></div>
+        <div class="item">Arai 的專業與騎士文化，在快閃店裡很難被真正感受到</div>
+        <div class="item">大眾曝光 <b>≠</b> 深度認識品牌</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Challenge - opportunity -->
+  <section class="slide bgslide" data-title="商業機會">
+    <div class="bg-media"><img src="img_gloves_promo.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">The Industry Challenge</div>
+      <h1>如果熱度能被延續，商機在哪？</h1>
+      <div class="bullets">
+        <div class="item">兩品牌客群互補：<b>生活風格客群 × 核心騎士社群</b></div>
+        <div class="item">導流到俱樂部 = 拉高到店率與客單價（滿額贈手套機制）</div>
+        <div class="item">跨界話題本身自帶<b>社群分享力</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Target & pain -->
+  <section class="slide bgslide" data-title="目標受眾與痛點">
+    <div class="bg-media"><img src="img_storefront.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">A Clear Problem Statement</div>
+      <h1>這個提案，是為誰設計的？</h1>
+      <div class="bullets">
+        <div class="item"><b>A．</b>快閃店訪客：好奇、愛分享、想要「值得曬」的限定商品</div>
+        <div class="item"><b>B．</b>核心騎士客群：在意聯名是否真材實料，不只是行銷噱頭</div>
+        <div class="item">兩者共同的痛點：體驗都停在<b>「拿了就走」</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Validation -->
+  <section class="slide bgslide" data-title="如何驗證">
+    <div class="bg-media"><img src="img_sunset.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">A Clear Problem Statement</div>
+      <h1>這是假設，我打算這樣驗證</h1>
+      <div class="bullets">
+        <div class="item">目前為<b>概念驗證前的用戶旅程假設</b>，尚未正式執行</div>
+        <div class="item">小規模焦點座談／問卷，直接問快閃店訪客的意願</div>
+        <div class="item">對照同類跨界活動的到店轉換率，作為基準</div>
+        <div class="item">規劃<b>單店 Pilot</b>，先測完成率，再決定是否擴大</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Vision & MVP -->
+  <section class="slide bgslide" data-title="產品願景">
+    <div class="bg-media"><img src="img_gloves_handoff.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Product Introduction</div>
+      <h1>把一次性快閃店，變成一段品牌旅程</h1>
+      <div class="bullets">
+        <div class="item"><b>願景：</b>用一張體驗卡，串連百貨快閃店與 Arai 俱樂部</div>
+        <div class="item"><b>MVP：</b>體驗卡 + 兩階段驚喜（基礎組／滿額進階組）</div>
+        <div class="item">單一據點 + 單一俱樂部，先驗證關鍵假設</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Journey step 1 -->
+  <section class="slide photo" data-title="旅程 1">
+    <div class="photo-media"><img src="img_storefront.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 1</div>
+      <h2>走進，才發現不一樣</h2>
+      <p>從百貨公司移動到 Arai Rider Club，感受截然不同的專業氛圍</p>
+    </div>
+  </section>
+
+  <!-- 10. Journey step 2 -->
+  <section class="slide photo" data-title="旅程 2">
+    <div class="photo-media"><img src="img_card.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 2</div>
+      <h2>體驗卡，換來第一份驚喜</h2>
+      <p>交出聯名體驗卡，正式開啟這趟旅程</p>
+    </div>
+  </section>
+
+  <!-- 11. Journey step 3 -->
+  <section class="slide photo" data-title="旅程 3">
+    <div class="photo-media"><img src="img_icecream.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 3</div>
+      <h2>一口冰淇淋，一份歸屬感</h2>
+      <p>Häagen-Dazs 聯名冰淇淋 + 安全帽造型鑰匙圈</p>
+    </div>
+  </section>
+
+  <!-- 12. Journey step 4 -->
+  <section class="slide photo" data-title="旅程 4">
+    <div class="photo-media"><img src="img_gloves_promo.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 4</div>
+      <h2>驚喜還沒結束</h2>
+      <p>館內消費滿 NT$1,000，解鎖聯名限定手套</p>
+    </div>
+  </section>
+
+  <!-- 13. Journey step 5 -->
+  <section class="slide photo" data-title="旅程 5">
+    <div class="photo-media"><img src="img_gloves_handoff.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 5</div>
+      <h2>拿到真正想收藏的東西</h2>
+      <p>Arai 經典設計 × Häagen-Dazs 酒紅奶油白配色，機能與收藏兼具</p>
+    </div>
+  </section>
+
+  <!-- 14. Journey step 6 -->
+  <section class="slide photo" data-title="旅程 6">
+    <div class="photo-media"><img src="img_helmet_fit.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · Step 6</div>
+      <h2>加碼驚喜：試戴，愛上</h2>
+      <p>親手試戴安全帽，靠近騎士文化的第一步</p>
+    </div>
+  </section>
+
+  <!-- 15. Journey finale -->
+  <section class="slide photo" data-title="旅程尾聲">
+    <div class="photo-media"><img src="img_sunset.jpg" alt=""></div>
+    <div class="photo-text">
+      <div class="step-tag">體驗旅程 · 尾聲</div>
+      <h2>旅程沒有結束，才正要開始</h2>
+      <p>帶著故事上路，這才是聯名活動真正的價值</p>
+    </div>
+  </section>
+
+  <!-- 16. Feature mapping -->
+  <section class="slide bgslide" data-title="功能對應痛點">
+    <div class="bg-media"><img src="img_storefront.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Product Introduction</div>
+      <h1>每個功能，都對應一個痛點</h1>
+      <div class="bullets">
+        <div class="item">體驗卡追蹤機制 → 解決<b>「熱度無法延續」</b></div>
+        <div class="item">分階段驚喜設計 → 解決<b>「缺乏故事感」</b></div>
+        <div class="item">限定聯名手套（真實機能） → 解決<b>「怕聯名只是噱頭」</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. Differentiation -->
+  <section class="slide chartslide" data-title="差異化">
+    <div class="eyebrow" style="align-self:center;">Product Introduction</div>
+    <h1 style="max-width:100%;text-align:center;align-self:center;">跟市場上的聯名活動，差在哪？</h1>
+    <div class="chart-wrap">
+      <img src="img_perceptual_map.jpg" alt="Perception Map">
+    </div>
+    <div class="caption" style="align-self:center;text-align:center;max-width:56vw;">
+      我們的定位：<b style="color:var(--accent2);">高品牌價值 × 高體驗整合度</b>
+    </div>
+  </section>
+
+  <!-- 18. Market testing -->
+  <section class="slide bgslide" data-title="市場測試">
+    <div class="bg-media"><img src="img_card.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Product Introduction</div>
+      <h1>上線後，怎麼知道有沒有效？</h1>
+      <div class="bullets">
+        <div class="item">追蹤完整漏斗：到訪 → 兌換 → 到店 → 滿額購買 → 兌換手套</div>
+        <div class="item">搭配社群標籤聲量 + 到店問卷 NPS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19. Success criteria -->
+  <section class="slide bgslide" data-title="成功指標">
+    <div class="bg-media"><img src="img_helmet_fit.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Product Introduction</div>
+      <h1>MVP 成功的標準，先講清楚</h1>
+      <div class="bullets">
+        <div class="item">快閃店 → 俱樂部轉換率達 <b>X%</b></div>
+        <div class="item">滿額購買比例達 <b>Y%</b></div>
+        <div class="item">社群主動分享（UGC）達 <b>Z 則</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. Closing -->
+  <section class="slide bgslide" data-title="結論">
+    <div class="bg-media"><img src="img_helmet_fit.jpg" alt=""></div>
+    <div class="content-front">
+      <div class="eyebrow">Next Step</div>
+      <h1>接下來，我需要的支持</h1>
+      <div class="bullets">
+        <div class="item">核准<b>單店 Pilot</b> 預算與時程</div>
+        <div class="item">協調 Arai 俱樂部窗口，洽談合作細節</div>
+        <div class="item">兩週內提供驗證結果，再決定是否擴大</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="navzone left" id="zoneLeft"></div>
+  <div class="navzone right" id="zoneRight"></div>
+  <div class="chrome">
+    <div class="hint">← → 切換　／　F 全螢幕</div>
+    <div style="display:flex;align-items:center;gap:1.2vw;">
+      <button id="fsToggleBtn" title="全螢幕">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      </button>
+      <div class="counter" id="counter">1 / 20</div>
+    </div>
+  </div>
+  <div id="toast"></div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let idx = 0;
+
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+
+  function render(prevIdx){
+    slides.forEach((s,i)=>{
+      s.classList.remove('active','prev');
+      if(i===idx) s.classList.add('active');
+      else if(i===prevIdx) s.classList.add('prev');
+    });
+    counter.textContent = (idx+1) + ' / ' + total;
+    progressFill.style.width = ((idx+1)/total*100) + '%';
+
+    // pause the MV when leaving its slide
+    const mv = document.getElementById('mvVideo');
+    if(mv && idx!==0) mv.pause();
+  }
+
+  function go(delta){
+    const prevIdx = idx;
+    idx = Math.min(total-1, Math.max(0, idx+delta));
+    if(idx!==prevIdx) render(prevIdx);
+  }
+
+  function goTo(i){
+    const prevIdx = idx;
+    idx = Math.min(total-1, Math.max(0, i));
+    if(idx!==prevIdx) render(prevIdx);
+  }
+
+  document.addEventListener('keydown', (e)=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
+    else if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
+    else if(e.key==='Home'){ goTo(0); }
+    else if(e.key==='End'){ goTo(total-1); }
+    else if(e.key.toLowerCase()==='f'){ e.preventDefault(); toggleFullscreen(); }
+  });
+
+  document.getElementById('zoneRight').addEventListener('click', (e)=>{
+    // avoid double-trigger when clicking the MV play button area
+    if(e.target.closest('#mvPlayBtn')) return;
+    go(1);
+  });
+  document.getElementById('zoneLeft').addEventListener('click', ()=>go(-1));
+  document.getElementById('fsToggleBtn').addEventListener('click', (e)=>{ e.stopPropagation(); toggleFullscreen(); });
+
+  // --- Fullscreen helpers (with Safari/older-browser prefixed fallback) ---
+  function getFsElement(){
+    return document.fullscreenElement || document.webkitFullscreenElement ||
+           document.mozFullScreenElement || document.msFullscreenElement || null;
+  }
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(()=> t.classList.remove('show'), 3200);
+  }
+
+  function toggleFullscreen(){
+    const el = document.documentElement;
+    if(!getFsElement()){
+      const req = el.requestFullscreen || el.webkitRequestFullscreen ||
+                  el.mozRequestFullScreen || el.msRequestFullscreen;
+      if(!req){
+        showToast('這個瀏覽器不支援全螢幕，請改用瀏覽器選單裡的「進入全螢幕」');
+        return;
+      }
+      const result = req.call(el);
+      if(result && typeof result.catch === 'function'){
+        result.catch(()=>{
+          showToast('全螢幕被瀏覽器擋下了，請直接點畫面右下角的全螢幕按鈕，或改用瀏覽器內建的全螢幕快捷鍵');
+        });
+      }
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen ||
+                   document.mozCancelFullScreen || document.msExitFullscreen;
+      if(exit) exit.call(document);
+    }
+  }
+
+  // MV play button
+  const mvVideo = document.getElementById('mvVideo');
+  const mvPlayBtn = document.getElementById('mvPlayBtn');
+  mvPlayBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(!getFsElement()){ toggleFullscreen(); }
+    mvVideo.play();
+    mvPlayBtn.style.display = 'none';
+  });
+  mvVideo.addEventListener('pause', ()=>{ mvPlayBtn.style.display = 'flex'; });
+  mvVideo.addEventListener('play', ()=>{ mvPlayBtn.style.display = 'none'; });
+  mvVideo.addEventListener('ended', ()=>{ mvPlayBtn.style.display = 'flex'; });
+
+  render(-1);
+</script>
+
+</body>
+</html>
