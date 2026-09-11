@@ -1989,6 +1989,20 @@ html, body { touch-action:pan-x pan-y; }
 .item-heading .name { padding-top:0; padding-bottom:0; margin-top:0; line-height:1.3; }
 .item-heading .item-trash { font-size:17px; height:1.3em; min-height:1.3em; padding:0; margin-top:0; align-self:flex-start; }
 .meta-table tr:not(:last-child) td { border-bottom:1px solid var(--ink); }
+
+/* Neutral names, fixed settlement close control, and baseline separators. */
+.name-picker-chips .picker-name, .item-tag { background:#e5e7eb !important; color:#000 !important; }
+.name-picker-actions .picker-btn { background:var(--twd-red); color:#fff; height:30px; min-height:30px; padding:0 14px; border-radius:999px; font-size:13px; font-weight:600; }
+#receivablesDialog { overflow:hidden; }
+#receivablesDialog[open] { display:flex; flex-direction:column; }
+.receivables-header { flex:0 0 auto; position:relative; padding:0 36px 16px; }
+#receivablesDialog .receivables-header h2 { margin:0; line-height:32px; }
+#receivablesClose { position:absolute; right:0; top:0; display:flex; align-items:center; justify-content:center; width:32px; min-width:32px; height:32px; min-height:32px; padding:0; border:0; border-radius:50%; background:#000; color:#fff; }
+#receivablesClose svg { display:block; }
+.receivables-scroll { min-height:0; overflow-y:auto; overscroll-behavior:contain; }
+#receivablesDialog .debt-group h3 { color:#000; }
+.item .price-sep { align-self:flex-end; margin-bottom:0; }
+.add-menu { background:transparent; box-shadow:none; border:0; border-radius:0; padding:0; }
 </style>
 </head>
 
@@ -2032,7 +2046,7 @@ html, body { touch-action:pan-x pan-y; }
 <dialog id="ledgerDialog" class="ledger-dialog" aria-labelledby="ledgerDialogTitle">
 <h2 id="ledgerDialogTitle"></h2><input id="ledgerDialogInput" type="password" aria-label="管理員密碼" autocomplete="off" hidden>
 <div class="dialog-actions"><button id="ledgerDialogCancel" type="button">取消</button><button id="ledgerDialogOK" type="button">好</button></div></dialog>
-<dialog id="receivablesDialog" aria-labelledby="receivablesTitle"><h2 id="receivablesTitle">應收款項總覽</h2><p>日圓與新台幣依商品金額分別計算，結算至小數點後兩位。多位付款人平均墊付，多位實際購買人平均分攤；自己的份額不列為欠款，尾差分配至前面的姓名。各商品分別結算，不抵銷不同商品間的往來。</p><div id="receivablesContent"></div><div class="dialog-actions"><button id="receivablesClose" type="button">關閉</button></div></dialog>
+<dialog id="receivablesDialog" aria-labelledby="receivablesTitle"><div class="receivables-header"><h2 id="receivablesTitle">應收款項總覽</h2><button id="receivablesClose" type="button" aria-label="關閉應收款項總覽"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></div><div class="receivables-scroll"><p>日圓與新台幣依商品金額分別計算，結算至小數點後兩位。多位付款人平均墊付，多位實際購買人平均分攤；自己的份額不列為欠款，尾差分配至前面的姓名。各商品分別結算，不抵銷不同商品間的往來。</p><div id="receivablesContent"></div></div></dialog>
 <input id="restoreFile" type="file" accept=".json,.xlsx,application/json" hidden />
 <dialog id="geminiSettings" aria-labelledby="geminiSettingsTitle">
   <h2 id="geminiSettingsTitle">請輸入金鑰</h2>
