@@ -2013,6 +2013,12 @@ html, body { touch-action:pan-x pan-y; }
 .menu-list li.deleted .menu-title-row { grid-column:1 / -1; }
 .menu-list li.deleted .restore-hint { grid-column:1; }
 .menu-list li.deleted .trash-btn { grid-column:2; grid-row:2; }
+
+:root { --receipt-separator:1px solid var(--line); }
+.total-row + .total-row { border-top:var(--receipt-separator); }
+.receipt-overview .meta-table { border-collapse:separate; border-spacing:0; }
+.receipt-overview .meta-table td { border-top:0; border-bottom:0; }
+.receipt-overview .meta-table tr + tr td { border-top:var(--receipt-separator); }
 </style>
 </head>
 
