@@ -1724,6 +1724,7 @@
   }
   .live-rate-btn:hover { filter: brightness(0.85); }
   .live-rate-btn:disabled { opacity: 0.6; cursor: default; }
+  .live-rate-btn[hidden] { display:none; }
   /* 匯率列：xxx TWD 都用深紅 */
   .meta-table .rate-num { color: var(--twd-red); }
   .meta-table .cur-twd { color: var(--twd-red); }
@@ -2021,6 +2022,8 @@ html, body { touch-action:pan-x pan-y; }
 .receipt-overview .meta-table { border-collapse:separate; border-spacing:0; }
 .receipt-overview .meta-table td { border-top:0; border-bottom:0; }
 .receipt-overview .meta-table tr + tr td { border-top:var(--receipt-separator); }
+.receipt-overview .meta-table tr[data-row="rate"] td { white-space:normal; overflow:visible; text-overflow:clip; }
+.receipt-overview .meta-table tr[data-row="rate"] .live-rate-btn { margin-top:4px; }
 </style>
 </head>
 
@@ -2282,17 +2285,43 @@ window.detectLedgerPayment = function(parsed) {
   if (/(クレジット|信用卡|クレジットカード)/i.test(t)) return 'credit';
   return 'cash';
 };
+// Receipt dates are calendar dates in the purchase country, not UTC dates.
+window.ledgerTodayForCurrency = function(currency,now=new Date()) {
+  const timeZone=currency==='JPY'?'Asia/Tokyo':currency==='TWD'?'Asia/Taipei':Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const parts=new Intl.DateTimeFormat('en-US',{timeZone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
+  const get=type=>parts.find(p=>p.type===type).value;
+  return get('year')+'-'+get('month')+'-'+get('day');
+};
 window.fetchLedgerHistoricalRate = async function(currency,dateIso) {
   if(!/^[A-Z]{3}$/.test(currency || '') || !/^\d{4}-\d{2}-\d{2}$/.test(dateIso || '') || !Number.isFinite(Date.parse(dateIso)) || new Date(dateIso).toISOString().slice(0,10)!==dateIso)throw new Error('請先填寫有效的發票日期與幣別');
-  if(dateIso>new Date().toISOString().slice(0,10))throw new Error('未來日期尚無歷史匯率');
+  const futureDate=dateIso>ledgerTodayForCurrency(currency);
   if(currency==='TWD')return {rate:1,date:dateIso,requestedDate:dateIso,source:'TWD',mode:'historical'};
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
   try {
-    const response=await fetch('https://api.frankfurter.dev/v2/rate/'+currency+'/TWD?date='+dateIso,{signal:controller.signal});
-    if(!response.ok)throw new Error('歷史匯率查詢失敗（'+response.status+'）');
-    const data=await response.json();
-    if(data.base!==currency || data.quote!=='TWD' || typeof data.rate!=='number' || !Number.isFinite(data.rate) || data.rate<=0 || !/^\d{4}-\d{2}-\d{2}$/.test(data.date || '') || data.date>dateIso || (Date.parse(dateIso)-Date.parse(data.date))/86400000>7)throw new Error('無有效的指定日期匯率');
-    return {rate:data.rate,date:data.date,requestedDate:dateIso,source:'Frankfurter',mode:'historical'};
+    // For a future receipt date, the latest published quote is the nearest available
+    // historical quote. Ask the provider, so an incorrect device clock cannot block it.
+    if(futureDate){
+      const response=await fetch('https://api.frankfurter.dev/v2/rate/'+currency+'/TWD',{signal:controller.signal});
+      if(!response.ok)throw new Error('最近歷史匯率查詢失敗（'+response.status+'）');
+      const data=await response.json();
+      if(data.base!==currency || data.quote!=='TWD' || typeof data.rate!=='number' || !Number.isFinite(data.rate) || data.rate<=0 || !/^\d{4}-\d{2}-\d{2}$/.test(data.date || '') || !Number.isFinite(Date.parse(data.date)) || new Date(data.date).toISOString().slice(0,10)!==data.date || data.date>dateIso)throw new Error('無有效的最近歷史匯率');
+      return {rate:data.rate,date:data.date,requestedDate:dateIso,source:'Frankfurter',mode:'historical',fallbackReason:'future-date'};
+    }
+    // Publication can lag the receipt date, including mornings, weekends and holidays.
+    // Query dated quotes only: never substitute a later/latest quote for an old receipt.
+    for(let days=0;days<=7;days++){
+      const queryDate=new Date(Date.parse(dateIso)-days*86400000).toISOString().slice(0,10);
+      const response=await fetch('https://api.frankfurter.dev/v2/rate/'+currency+'/TWD?date='+queryDate,{signal:controller.signal});
+      if(response.status===404||response.status===422)continue;
+      if(!response.ok)throw new Error('歷史匯率查詢失敗（'+response.status+'）');
+      const data=await response.json();
+      if(data.base!==currency || data.quote!=='TWD' || typeof data.rate!=='number' || !Number.isFinite(data.rate) || data.rate<=0 || !/^\d{4}-\d{2}-\d{2}$/.test(data.date || '') || !Number.isFinite(Date.parse(data.date)) || new Date(data.date).toISOString().slice(0,10)!==data.date || data.date>queryDate || (Date.parse(dateIso)-Date.parse(data.date))/86400000>7)throw new Error('無有效的指定日期匯率');
+      return {rate:data.rate,date:data.date,requestedDate:dateIso,source:'Frankfurter',mode:'historical'};
+    }
+    throw new Error('發票當日及之前七日尚無可用報價，請稍後重試或設定自訂匯率');
+  } catch(error) {
+    if(error.name==='AbortError')throw new Error('歷史匯率查詢逾時，請重試');
+    throw error;
   } finally {clearTimeout(timer);}
 };
 window.LedgerLocal = (() => {
@@ -3143,6 +3172,7 @@ document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preven
     s.paymentMethod = ['cash','credit','transit'].includes(data.paymentMethod) ? data.paymentMethod : detectLedgerPayment(data.parsed);
     s.rate = data.rate;
     s.rateInfo = data.rateInfo || (data.rate ? {mode:'custom'} : null);
+    if(s.rateInfo?.mode==='pending')s.rateInfo=null;
     s.assignments = data.assignments || {};
     s.locked = !!data.locked;
     s.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
@@ -4338,7 +4368,7 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
         parsed._engine = engineUsed;
         renderResult(parsed, rate);
         hideProgress();
-        setStatus(rateError ? rateError+'，請點匯率按鈕設定自訂匯率。' : (parsed._review || '請核對辨識結果。'));
+        setStatus(rateError ? rateError+'。可按「重查匯率」或設定自訂匯率。' : (parsed._review || '請核對辨識結果。'));
         if(rateInfo && rateInfo.date!==rateInfo.requestedDate)showToast('該日無報價，已採用 '+rateInfo.date+' 的歷史匯率');
         centerReceiptElement(refs.resultCard);
       } catch (err) {
@@ -4448,7 +4478,7 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
           '<button type="button" class="live-rate-btn" title="自動帶入當日收盤匯率">套用當日匯率</button>',
           'rate'
         ]);
-      } else if (parsed._manualBlank && cur !== 'TWD') {
+      } else if (cur !== 'TWD') {
         metaRows.push(['匯率',
           SFI_DOLLAR_CCW +
           '1 <span class="cur-fixed">' + escapeHtml(cur || 'JPY') + '</span> <span class="approx">≈</span> ' +
@@ -5023,6 +5053,7 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
         }
         if (state.rate != null && Math.abs(newRate - state.rate) < 1e-9) return;
         state.rate = newRate; state.rateInfo={mode:'custom'};updateRateButton();
+        setStatus('');
 
         const _cur = state.parsed && state.parsed.currency;
         if (_cur && _cur !== 'TWD') setUserDefaultRate(_cur, newRate);
@@ -5152,30 +5183,44 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
 
 
     async function refreshRateForDate(){
+      if(state.rateInfo?.mode==='pending'||state.processing)return;
       const date=state.parsed?.date,currency=state.parsed?.currency,request={mode:'pending'};
       state.rateInfo=request;state.rate=null;updateRateButton();applyTaxMode(state.taxMode||'inc',true);
       try {
         const info=await fetchLedgerHistoricalRate(currency,date);
         if(state.rateInfo!==request||state.parsed?.date!==date||state.parsed?.currency!==currency)return;
         state.rateInfo=info;state.rate=info.rate;
+        setStatus('');
         const field=refs.metaEl.querySelector('.rate-num');if(field)field.textContent=fmtMoney(info.rate,4);
         applyTaxMode(state.taxMode||'inc',true);updateRateButton();
-      }catch(error){if(state.rateInfo===request){state.rateInfo=null;setStatus('歷史匯率查詢失敗，請設定自訂匯率。');updateRateButton();scheduleSave();}}
+      }catch(error){if(state.rateInfo===request){state.rateInfo=null;setStatus((error.message||'歷史匯率查詢失敗')+'。可按「重查匯率」或設定自訂匯率。');updateRateButton();scheduleSave();}}
     }
     function updateRateButton(){
-      const button=refs.metaEl.querySelector('.live-rate-btn');if(!button)return;
+      const button=refs.metaEl.querySelector('.live-rate-btn:not(.rate-retry-btn)');if(!button)return;
       const info=state.rateInfo;
-      button.textContent=state.rate>0 ? (info?.mode==='historical' ? '已套用當日匯率' : '已套用自訂匯率') : '設定匯率';
+      const earlier=info?.mode==='historical'&&info.date!==info.requestedDate;
+      button.textContent=state.rate>0 ? (info?.mode==='historical' ? (earlier?'已套用最近匯率':'已套用當日匯率') : '已套用自訂匯率') : '設定匯率';
       button.title=info?.mode==='historical' ? '歷史報價日期：'+info.date+'；來源：'+info.source+'。按一下輸入自訂匯率' : '按一下輸入自訂匯率';
+      let note=refs.metaEl.querySelector('.rate-source-note');
+      if(!note){note=document.createElement('small');note.className='rate-source-note';note.style.cssText='display:block;font-size:11px;font-weight:400;white-space:normal';button.after(note);}
+      note.textContent=earlier?'報價日期：'+info.date+(info.fallbackReason==='future-date'?'（發票日期判定為未來，採用最近報價）':'（發票當日尚無報價）'):'';
+      note.style.display=earlier?'block':'none';
+      let retry=refs.metaEl.querySelector('.rate-retry-btn');
+      if(!retry){retry=document.createElement('button');retry.type='button';retry.className='live-rate-btn rate-retry-btn';note.after(retry);}
+      retry.hidden=state.rate>0&&!earlier;
+      retry.disabled=info?.mode==='pending';retry.textContent=retry.disabled?'查詢中…':'重查匯率';
+      requestAnimationFrame(()=>syncCarouselHeight());
     }
     refs.metaEl.addEventListener('click', async e => {
       const button=e.target.closest('.live-rate-btn');if(!button)return;
+      if(button.classList.contains('rate-retry-btn')){await refreshRateForDate();return;}
       const cur=state.parsed?.currency || 'JPY';
       const answer=await LedgerDialog.ask('輸入自訂匯率（1 '+cur+' = 幾元新台幣）','decimal',state.rate ? String(state.rate) : '');
       if(answer===null)return;
       const value=Number(answer.trim());
       if(!Number.isFinite(value)||value<=0){showToast('請輸入大於零的有效匯率');return;}
       state.rate=value;state.rateInfo={mode:'custom'};
+      setStatus('');
       const field=refs.metaEl.querySelector('.rate-num');if(field)field.textContent=fmtMoney(value,4);
       applyTaxMode(state.taxMode || 'inc',true);updateRateButton();
     });
@@ -5321,6 +5366,7 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
       state, refs,
       handleFile, reset, run: entryRun,
       render: renderResult,
+      refreshRate: refreshRateForDate,
       assignTag, unassignTag, removeTagFromAllAssignments,
       refreshAllItemTags, refreshAssignableState,
       setNumber, delete: deleteSelf,
@@ -5796,6 +5842,22 @@ const JPY_TWD_DAILY_2000_2025 = "30726,30726,30855,29683,29681,30183,29333,29333
   })();
 
   if (addEntryBtn) addEntryBtn.addEventListener('click', () => addNewEntry(true));
+
+  // Repair saved receipts whose previous lookup failed, without another Gemini call.
+  let recoveringRates=false;
+  async function recoverMissingRates(){
+    if(recoveringRates||!storageLoaded)return;
+    recoveringRates=true;
+    try{
+      for(const entry of [...entries]){
+        if(!storageLoaded)break;
+        const s=entry.state;
+        if(entries.includes(entry)&&s.parsed?.date&&s.parsed?.currency&&!(s.rate>0)&&s.rateInfo?.mode!=='custom'&&!s.processing)await entry.refreshRate();
+      }
+    }finally{recoveringRates=false;}
+  }
+  window.addEventListener('online',recoverMissingRates);
+  recoverMissingRates();
 
 
 
