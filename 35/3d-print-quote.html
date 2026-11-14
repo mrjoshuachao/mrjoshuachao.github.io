@@ -23,7 +23,7 @@
 </style>
 <header><div class="bar"><div class="brand"><span class="logo" aria-hidden="true">▱</span> 列印工作台</div><span class="currency">幣別 NT$</span></div></header>
 <main>
-<section class="intro"><div><h1>3D 列印報價台</h1><p>從切片數據估算整單成本、客戶報價和預估利潤。</p></div><div class="actions"><button type="button" id="example">載入範例</button><button type="button" id="reset">清空表單</button></div></section>
+<section class="intro"><div><h1>3D 列印報價台</h1><p>從切片數據估算整單成本、客戶報價和預估利潤。</p></div><div class="actions"><button type="button" id="example">載入範例</button><button type="button" id="reset">開始新報價</button></div></section>
 <div class="layout">
 <form id="form" aria-label="報價資料" autocomplete="off"></form>
 <aside class="summary" id="results" aria-label="試算結果" tabindex="-1">
@@ -31,28 +31,30 @@
 <section class="panel"><h2>內部成本與利潤</h2><div class="private"><div><small>預估整單利潤</small><strong id="profit">—</strong></div><div><small>預估利潤率</small><strong id="margin">—</strong></div></div><dl id="breakdown"></dl></section>
 </aside>
 </div>
-<details class="panel"><summary>計算方式</summary><p>材料費 = 整單材料用量 × 每公斤材料價格 ÷ 1,000。電費 = 平均功率 ÷ 1,000 × 列印時數 × 每度電費。</p><p>預估重印成本 =（材料費＋電費＋機台費）× 失敗率 ÷（1 − 失敗率）。這個估算假設每次失敗會耗用一次完整列印的成本。</p><p>建議報價 = 整單成本 ÷（1 − 目標利潤率 − 交易費率），再依最低接單價與進位單位調整。預估利潤 = 採用報價 − 交易費 − 整單成本。所有結果皆為未稅估算。</p></details>
-<footer>輸入資料會儲存在目前的瀏覽器中。</footer>
+<details class="panel"><summary>計算方式</summary><p>材料費 =（整單切片用量＋開印次數 × 每次額外開印耗料）× 每公斤材料價格 ÷ 1,000。電費 = 平均功率 ÷ 1,000 × 列印時數 × 每度電費。</p><p>預估重印成本 =（材料費＋電費＋機台費）× 失敗率 ÷（1 − 失敗率）。這個估算假設每次失敗會耗用一次完整列印的成本。</p><p>建議報價 = 整單成本 ÷（1 − 目標利潤率 − 交易費率），再依最低接單價與進位單位調整。預估利潤 = 採用報價 − 交易費 − 整單成本。所有結果皆為未稅估算。</p></details>
+<footer>輸入資料會儲存在目前的瀏覽器中。<br>估算參考 <a href="https://cdn1.bambulab.com/documentation/quick-start-b5f1a684f77/A1%20Combo%20Quick%20Start_V0%28EN%29.pdf">A1 Combo 原廠規格</a> · <a href="https://service.taipower.com.tw/ebpps2/electricityFeeTrial">台電電費試算</a></footer>
 </main>
 <a class="mobile-result" href="#results"><span><small id="mobile-label">建議整單報價</small><strong id="mobile-total">—</strong></span><span>查看結果 ↓</span></a>
 <script>
 const groups = [
-  ['列印資料','依切片軟體填入整單合計。多盤列印時，請加總各盤的用量和時間。',[
+  ['列印資料','請填 Bambu Studio 的整單合計。多盤列印時，加總各盤的用量和時間。',[
     ['name','案名','',null,null,null,'選填，會顯示在客戶報價中。'],
     ['quantity','成品件數','件',1,1,100000],
-    ['grams','材料用量','g',0,0.1,10000000,'含支撐、裙邊和換色排料。'],
-    ['hours','列印時間','小時',0,0.01,100000,'例如 2 小時 30 分鐘填 2.5。'],
+    ['grams','整單材料總用量','g',0,0.1,10000000,'填切片顯示的整單總重，含成品、支撐及已計入的換色排料。'],
+    ['hours','整單列印時間','小時',0,0.01,100000,'例如 2 小時 30 分鐘填 2.5。'],
+    ['starts','開印次數（盤數）','次',0,1,100000,'預填 1 次。同盤印多件仍是 1 次，分 4 盤開印就填 4。已把額外開印耗料加進總用量時可填 0。'],
     ['material','材料單價','NT$/kg',0,0.01,10000000],
   ]],
-  ['機台與人工','機台費可納入設備折舊、耗材零件和維護。',[
-    ['machine','機台費率','NT$/小時',0,0.01,1000000],
-    ['watts','列印平均功率','W',0,0.1,100000],
-    ['electricity','電費單價','NT$/度',0,0.01,10000],
-    ['labor','整單人工時間','小時',0,0.01,100000,'含切片設定、拆支撐、打磨與品檢。'],
+  ['機台與人工','預填以 Bambu Lab A1 Combo、一般 PLA、小量接案及住宅用電為估算情境。',[
+    ['machine','機台費率','NT$/小時',0,0.01,1000000,'預留設備折舊、耗材零件與維護。'],
+    ['watts','列印平均功率','W',0,0.1,100000,'100 W 是列印平均功率的暫估值。'],
+    ['electricity','電費單價','NT$/度',0,0.01,10000,'每度 NT$4 是住宅用電估算值，可依帳單級距調整。'],
+    ['labor','整單人工時間','小時',0,0.01,100000,'預填 30 分鐘，含切片設定、拆支撐與品檢。需打磨或零件多時可加長。'],
     ['wage','人工時薪','NT$/小時',0,0.01,1000000],
+    ['startup','每次額外開印耗料','g/次',0,0.01,1000,'預填 1 g 作為暫估。只填切片總重以外的開印排料、引料線或校正用料。'],
     ['failure','列印失敗率','%',0,0.01,99.99,'依過往經驗填寫，估算重印成本。'],
   ]],
-  ['其他成本與定價','以下金額以整單計。無此項目可留空。',[
+  ['其他成本與定價','金額以整單計。預設為客供可印檔案、面交與直接收款。',[
     ['design','建模與改檔','NT$',0,0.01,10000000],
     ['supplies','後處理耗材與外包','NT$',0,0.01,10000000],
     ['shipping','包裝與運費','NT$',0,0.01,10000000],
@@ -64,11 +66,14 @@ const groups = [
     ['override','實際對客報價','NT$',0,0.01,1000000000000,'選填，用議價後的金額重算利潤。'],
   ]],
 ];
-const sample = {name:'PLA 樣品',quantity:3,grams:180,hours:7,material:650,machine:18,watts:120,electricity:4,labor:0.75,wage:350,failure:10,design:0,supplies:25,shipping:70,other:0,target:30,fee:2,minimum:300,increment:10};
+const sample = {starts:1,startup:1,name:'PLA 樣品',quantity:3,grams:180,hours:7,material:650,machine:18,watts:120,electricity:4,labor:0.75,wage:350,failure:10,design:0,supplies:25,shipping:70,other:0,target:30,fee:2,minimum:300,increment:10};
 const form = document.querySelector('#form');
 const fields = {};
-const defaults = {quantity:1,increment:1,target:30};
-const storageKey = 'print-quote-workbench-v1';
+const defaults = {
+  starts:1, startup:1, machine:15, watts:100, electricity:4, labor:0.5, wage:300, failure:10,
+  design:0, supplies:0, shipping:0, other:0, target:30, fee:0, minimum:250, increment:10,
+};
+const storageKey = 'print-quote-workbench-v2';
 let saved = {};
 try { saved = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch {}
 for (const [title, description, entries] of groups) {
@@ -91,8 +96,8 @@ for (const [title, description, entries] of groups) {
     else {
       input.min = min; input.max = max; input.step = step;
       input.inputMode = step === 1 ? 'numeric' : 'decimal';
-      input.required = key === 'quantity' || key === 'increment';
-      input.placeholder = key === 'override' ? '採用建議報價' : '0';
+      input.required = ['quantity','grams','hours','material','increment'].includes(key);
+      input.placeholder = key === 'override' ? '採用建議報價' : input.required ? '請輸入' : '0';
     }
     if (help) {
       const note = document.createElement('small');
@@ -112,7 +117,9 @@ const amount = new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2});
 const money = n => 'NT$ ' + amount.format(n);
 let customerQuote = '';
 function calculate(v) {
-  const material = v.grams * v.material / 1000;
+  const slicedMaterial = v.grams * v.material / 1000;
+  const startupMaterial = v.starts * v.startup * v.material / 1000;
+  const material = slicedMaterial + startupMaterial;
   const electricity = v.watts * v.hours * v.electricity / 1000;
   const machine = v.machine * v.hours;
   const retry = (material + electricity + machine) * v.failure / (100 - v.failure);
@@ -125,7 +132,7 @@ function calculate(v) {
   const fee = price * v.fee / 100;
   const profit = price - fee - cost;
   return {suggested,price,profit,margin:price > 0 ? 100 * profit / price : null,
-    rows:[['材料費',material],['電費',electricity],['機台費',machine],['預估重印成本',retry],['人工',labor],['其他成本',other],['整單成本',cost],['交易費',fee]]};
+    rows:[['切片材料費',slicedMaterial],['額外開印耗料費',startupMaterial],['電費',electricity],['機台費',machine],['預估重印成本',retry],['人工',labor],['其他成本',other],['整單成本',cost],['交易費',fee]]};
 }
 function update() {
   const values = Object.fromEntries(Object.entries(fields).map(([key,input]) => [key,input.value]));
@@ -139,6 +146,10 @@ function update() {
   $('breakdown').replaceChildren();
   $('copy').disabled = true;
   customerQuote = '';
+  if (['quantity','grams','hours','material'].some(key => fields[key].validity.valueMissing)) {
+    $('unit-price').textContent = '填好件數、材料用量、列印時間和材料單價後，即可試算。';
+    return;
+  }
   const bad = Object.values(fields).find(input => !input.validity.valid);
   if (bad || v.target + v.fee >= 100) {
     $('unit-price').textContent = bad ? '請檢查「' + bad.closest('label').firstChild.textContent + '」的數值。' : '目標利潤率和交易費率合計須低於 100%。';
