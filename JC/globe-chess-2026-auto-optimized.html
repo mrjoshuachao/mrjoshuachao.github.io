@@ -17,52 +17,11 @@
     height:100%;
     color:#fff;
   }
-  #archive {
-    position:fixed; inset:0; z-index:2; display:grid; place-items:center;
-    background:#000; color:#eee; font:14px/1.5 system-ui,sans-serif;
-  }
-  #archive-controls { display:grid; justify-items:center; gap:16px; }
-  #archive-controls label { display:flex; align-items:center; gap:8px; white-space:nowrap; }
-  #game-limit {
-    width:6ch; padding:6px; border:1px solid #888; border-radius:5px;
-    background:#151515; color:#fff; font:inherit;
-    font-variant-numeric:tabular-nums; text-align:center;
-  }
-  #game-limit:focus-visible { outline:2px solid #fff; outline-offset:3px; }
-  #record-folder {
-    padding:12px 24px; border:1px solid #888; border-radius:7px;
-    background:#151515; color:#fff; font:inherit; cursor:pointer;
-  }
-  #record-folder:hover { background:#242424; border-color:#ccc; }
-  #record-folder:focus-visible { outline:2px solid #fff; outline-offset:4px; }
-  #record-status {
-    position:absolute; top:calc(50% + 64px); left:0; right:0;
-    padding:0 16px; text-align:center; color:#ccc;
-  }
-  #archive.running {
-    inset:auto 8px 6px auto; display:flex; align-items:center; gap:8px;
-    padding:6px 9px; border-radius:5px; background:#181818; font-size:12px;
-  }
-  #archive.running #archive-controls { display:contents; }
-  #archive.running #record-status { position:static; padding:0; }
-  #archive.running button { padding:4px 8px; }
-  #archive[hidden], #archive [hidden] { display:none; }
   iframe { display:block; width:100%; height:100%; border:0; min-width:0; min-height:0; }
 </style>
 </head>
 <body>
 <main id="games" aria-label="十八局自動球面西洋棋"></main>
-<aside id="archive" aria-label="棋譜儲存">
-  <span id="record-status" role="status"></span>
-  <form id="archive-controls">
-    <label id="game-limit-label">自動對弈
-      <input id="game-limit" type="text" inputmode="numeric" maxlength="4"
-        pattern="[0-9]{1,4}" placeholder="___" autocomplete="off" required aria-label="自動對弈場數">
-      場棋局
-    </label>
-    <button type="submit" id="record-folder">選擇儲存棋譜的資料夾</button>
-  </form>
-</aside>
 <template id="game-head">
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -95,7 +54,6 @@
 </style>
 </template>
 <template id="game-body">
-<div id="introFade" style="position:fixed;inset:0;background:#000;z-index:9999;pointer-events:none;transition:opacity 2s ease-out;"></div>
 <div hidden inert>
 <div id="turn">White to move</div>
 <a id="seeOrigBtn" href="https://mrjoshuachao.github.io/dot.html" target="_blank" style="display:none">See original</a>
@@ -126,19 +84,6 @@
       <button class="tpb" data-type="N" data-color="black">N</button>
       <button class="tpb" data-type="P" data-color="black">P</button>
     </div>
-  </div>
-</div>
-<!-- Report Modal -->
-<div id="reportModal">
-  <div id="reportBox">
-    <div id="reportHead">
-      <span>Battle report</span>
-      <div class="rh-btns">
-        <button id="copyReportBtn" onclick="copyReport()">Copy all</button>
-        <button onclick="closeReport()">Close</button>
-      </div>
-    </div>
-    <textarea id="reportText" readonly onclick="this.select()"></textarea>
   </div>
 </div>
 <!-- AI opponent toggle (top left) -->
@@ -1926,6 +1871,7 @@ self.onmessage=({data})=>{
 let _pieceLettersVisible=true; // must be before placePiece calls
 const THREE=parent.THREE;
 const wall=parent.globeWall;
+const boardSlot=Number(window.frameElement.dataset.slot);
 const tileView=wall.createView(document);
 const inputCanvas=tileView.canvas;
 document.body.appendChild(inputCanvas);
@@ -2002,7 +1948,6 @@ const R=1;
 const CAP_THETA=Math.PI/18;
 const BAND_THETA=(Math.PI-2*CAP_THETA)/NUM_LAT;
 const globe=new THREE.Group(); scene.add(globe);
-globe.scale.set(0.3,0.3,0.3); // start small for intro animation
 
 // Polar caps
 const capN=new THREE.Mesh(new THREE.SphereGeometry(R,64,24,0,Math.PI*2,0,CAP_THETA),matG); globe.add(capN);
@@ -3653,7 +3598,6 @@ let pDownPos=null;
 const WX=new THREE.Vector3(1,0,0),WY=new THREE.Vector3(0,1,0);
 const _qx=new THREE.Quaternion(),_qy=new THREE.Quaternion();
 
-const introSpinAxis=new THREE.Vector3(1/Math.SQRT2,1/Math.SQRT2,0);
 // Final view: qX(-90°) rotates south pole to face camera;
 // qZ(-90°) rotates ring so K+Q (phi=π) lands at upper center,
 // and Rooks (phi≈0) land at lower screen — "K+Q upper center, Rooks lower"
@@ -3662,13 +3606,8 @@ const introFinalQ=(()=>{
   const qZ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-Math.PI/2);
   return new THREE.Quaternion().multiplyQuaternions(qZ,qX);
 })();
-// introR0 = q(-3π, spinAxis)·introFinalQ so q(3π)·introR0 = identity·introFinalQ ✓
-const introR0=(()=>{
-  const qSpin=new THREE.Quaternion().setFromAxisAngle(introSpinAxis,-3*Math.PI);
-  return new THREE.Quaternion().multiplyQuaternions(qSpin,introFinalQ);
-})();
-const _introQspin=new THREE.Quaternion();
-let introAnim={t:0,done:false};
+globe.quaternion.copy(introFinalQ);
+_ambLight.intensity=_ambTarget;
 
 inputCanvas.addEventListener('touchstart',e=>{
   // Don't hijack touches that started on a UI button/control
@@ -3692,7 +3631,6 @@ let prevMidX=0,prevMidY=0,prevPinchDist=0,prevFingerAngle=null;
 
 inputCanvas.addEventListener('pointerdown',e=>{
   e.preventDefault();
-  if(!introAnim.done){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);_ambLight.intensity=_ambTarget;const _fd=document.getElementById('introFade');if(_fd)_fd.remove();}
   inputCanvas.setPointerCapture(e.pointerId);
   activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   autoRotate=false; vel={x:0,y:0}; dragging=true;
@@ -3862,25 +3800,24 @@ async function _findBestMove(color,timeLimit,onProgress,onDone){
   const release=await wall.acquireSearchSlot();
   if(scheduledSearch!==job){release();return;}
   job.release=release;
-  const searchStarted=performance.now();
   function complete(move,depth,score){
     if(scheduledSearch!==job)return;
     scheduledSearch=null;
     release();
-    onDone(move,depth,Math.round(performance.now()-searchStarted),score);
+    onDone(move,depth,score);
   }
   runBoardSearch(color,timeLimit,onProgress,complete);
 }
 function runBoardSearch(color,timeLimit,onProgress,onDone){
-  const halfMoveClock=autoBattleActive?_autoBattleLog.halfMoveClock:0;
+  const halfMoveClock=autoBattleActive?battle.halfMoveClock:0;
   const started=performance.now();
   const table=findTablebaseMove(color,halfMoveClock,wall.endgameTables,
     started+Math.min(16,timeLimit));
   if(table){onDone(table.move,0,table.score);return;}
   timeLimit=Math.max(1,timeLimit-(performance.now()-started));
-  const ply=autoBattleActive?_autoBattleLog.moves.length+1:0;
+  const ply=autoBattleActive?battle.plies+1:0;
   const seenOpeningMoves=ply>1&&ply<=wall.openingPlies&&!isInCheck(color)
-    ?new Set(allAIMoves(color).filter(move=>wall.hasOpeningPosition(ply,openingLayout(move,color))).map(aiMoveId))
+    ?new Set(allAIMoves(color).filter(move=>wall.hasOpeningPosition(boardSlot,ply,openingLayout(move,color))).map(aiMoveId))
     :null;
   if(workerUnavailable||typeof Worker==='undefined'){
     searchChessPosition(color,timeLimit,onProgress,onDone,halfMoveClock,seenOpeningMoves);
@@ -3908,7 +3845,6 @@ function cancelComputerTurn(){
   globeRotAnim=null;
   aiThinking=false;
 }
-const AI_PVAL={K:20000,Q:950,R:500,B:345,N:330,P:100};
 
 // Globe rotation animation
 let globeRotAnim=null;
@@ -4128,30 +4064,6 @@ function animate(now=performance.now()){
   previousTick=now;
   const animating=moveAnim||bounceAnim||globeRotAnim||captureFlyAnims.length||shakeAnims.length;
 
-  // Intro animation
-  if(!introAnim.done){
-    introAnim.t=Math.min(introAnim.t+dtMs/2000,1);
-    const te=1-Math.pow(1-introAnim.t,5);
-    _introQspin.setFromAxisAngle(introSpinAxis,te*3.0*Math.PI);
-    globe.quaternion.multiplyQuaternions(_introQspin,introR0);
-    // Scale: start small (0.3), grow to full size (1.0)
-    const sc=0.3+0.7*te;
-    globe.scale.set(sc,sc,sc);
-    // Ambient light: dark to normal over 2s
-    _ambLight.intensity=_ambTarget*introAnim.t;
-    // Trigger black fade-out on first frame
-    if(!introAnim._fadeStarted){
-      introAnim._fadeStarted=true;
-      requestAnimationFrame(()=>{
-        const fd=document.getElementById('introFade');
-        if(fd){fd.style.opacity='0';setTimeout(()=>fd.remove(),2100);}
-      });
-    }
-    if(introAnim.t>=1){introAnim.done=true;globe.quaternion.copy(introFinalQ);globe.scale.set(1,1,1);_ambLight.intensity=_ambTarget;autoRotate=false;}
-    tileView.render(scene,camera);
-    return;
-  }
-
   // ── Skip all animations when paused (freeze frame) ──
   if(!autoBattlePaused){
 
@@ -4288,7 +4200,7 @@ const backgroundBattleDriver=setInterval(()=>{
 },1500);
 
 const AUTO_DELAY = 300;        // ms between moves (AI thinking time is the main pacing now)
-const AUTO_MAX_MOVES = 250;    // recording limit, followed only by a proven mate
+const AUTO_MAX_MOVES = 250;    // per-game limit, followed only by a proven mate
 const RESIGN_THRESHOLD = 1800; // eval pts: losing by this much = hopeless → resign (raised to allow more checkmates)
 const RESIGN_STREAK    = 10;   // consecutive half-moves at that level to confirm
 const DRAW_EVAL_RANGE  = 150;  // eval pts: both sides within this = "mutually equal"
@@ -4304,11 +4216,10 @@ function runAutoStep(action){
   if(autoBattlePaused)_pausedAutoAction=action;
   else action();
 }
-let _autoBattleLog = null;
-let _autoGameNum = 0;
+let battle = null;
 let _autoPosHist = {};
 
-// ── Logging helpers ───────────────────────────────────────────────────────────
+// ── Opening helpers ───────────────────────────────────────────────────────────
 const _ACOL=['h','g','f','e','d','c','b','a'];
 function _autoNote(la,lo){return _ACOL[lo]+(8-la);}
 function openingLayout(move,color){
@@ -4318,25 +4229,6 @@ function openingLayout(move,color){
     return _autoBoardHash(color==='white'?'black':'white').slice(1,65);
   }finally{aiUndo(move,piece,saved);}
 }
-function _autoBoardSnap(){
-  let s='  a b c d e f g h\n';
-  for(let la=0;la<8;la++){
-    s+=''+(8-la)+' ';
-    for(let lo=7;lo>=0;lo--){
-      const p=board[la][lo];
-      s+=(p?(p.color==='white'?p.type:p.type.toLowerCase()):'.')+' ';
-    }
-    s+='\n';
-  }
-  return s;
-}
-function _autoLogAnomaly(type,desc,extra={}){
-  const entry={n:_autoBattleLog?.moves.length||0,type,desc,extra,
-    snap:_autoBoardSnap(),turn:turnColor};
-  _autoBattleLog?.anomalies.push(entry);
-  console.warn('[AUTO-BATTLE ANOMALY]',type,desc,extra);
-}
-
 // ── Main drive loop ───────────────────────────────────────────────────────────
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -4350,7 +4242,7 @@ function doAutoMove(){
   if(!autoBattleActive||autoBattlePaused)return;
   if(moveAnim||globeRotAnim){_autoBattleTimer=setTimeout(()=>runAutoStep(doAutoMove),120);return;}
 
-  const log=_autoBattleLog;if(!log)return;
+  const game=battle;if(!game)return;
 
   // Checkmate and stalemate take precedence over all self-play adjudications.
   if(!hasAnyLegalMove(turnColor)){
@@ -4364,60 +4256,56 @@ function doAutoMove(){
   const hash=_autoBoardHash();
   _autoPosHist[hash]=(_autoPosHist[hash]||0)+1;
   if(_autoPosHist[hash]>=3){
-    _autoLogAnomaly('REPETITION','Same position repeated 3 times',{count:_autoPosHist[hash]});
     _endAutoGame('DRAW_REPETITION');return;
   }
 
   // A dead position ends the game regardless of material evaluation.
   if(hasInsufficientMatingMaterial()){
-    _autoLogAnomaly('INSUF_MATERIAL','Both sides have insufficient mating material (K/K+minor vs K/K+minor)');
     _endAutoGame('DRAW_INSUF_MATERIAL');return;
   }
 
   // 50-move rule — 100 half-moves without capture or pawn advance
-  if((log.halfMoveClock||0)>=100){
-    _autoLogAnomaly('FIFTY_MOVE',`50-move rule triggered after ${log.halfMoveClock} half-moves without capture or pawn advance`);
+  if((game.halfMoveClock||0)>=100){
     _endAutoGame('DRAW_FIFTY_MOVE');return;
   }
 
   // A tablebase draw means both AIs have a drawing strategy on this board.
-  // Keep it distinct from both dead positions and the recording limit.
+  // Keep it distinct from both dead positions and the per-game limit.
   if(endgameTableValue(turnColor,wall.endgameTables)===0){
     _endAutoGame('DRAW_TABLEBASE');return;
   }
 
   let extension=null;
-  if(log.moves.length>=AUTO_MAX_MOVES){
-    const remaining=(log.mateExtensionEnd??AUTO_MAX_MOVES+8)-log.moves.length;
-    if(remaining>0)extension=findLimitMate(turnColor,log.halfMoveClock,remaining,performance.now()+45,wall.endgameTables);
+  if(game.plies>=AUTO_MAX_MOVES){
+    const remaining=(game.mateExtensionEnd??AUTO_MAX_MOVES+8)-game.plies;
+    if(remaining>0)extension=findLimitMate(turnColor,game.halfMoveClock,remaining,performance.now()+45,wall.endgameTables);
     if(!extension){
-      _autoLogAnomaly('MOVE_LIMIT',`No forced mate proved at the ${AUTO_MAX_MOVES}-ply recording limit`);
       _endAutoGame('DRAW_MOVE_LIMIT');return;
     }
-    log.mateExtensionEnd=log.moves.length+extension.plies;
+    game.mateExtensionEnd=game.plies+extension.plies;
   }
 
   // Count only quiet positions when accumulating draw offers.
-  const quietForAgreement=log.moves.length>=40&&log.halfMoveClock>=8&&
+  const quietForAgreement=game.plies>=40&&game.halfMoveClock>=8&&
     !isInCheck(turnColor)&&!allAIMoves(turnColor,true).length;
   const positionEval=evaluate();
-  log.wResignStreak=positionEval>=RESIGN_THRESHOLD?log.wResignStreak+1:0;
-  log.bResignStreak=positionEval<=-RESIGN_THRESHOLD?log.bResignStreak+1:0;
+  game.wResignStreak=positionEval>=RESIGN_THRESHOLD?game.wResignStreak+1:0;
+  game.bResignStreak=positionEval<=-RESIGN_THRESHOLD?game.bResignStreak+1:0;
 
   // Show thinking status
   const cLabel=turnColor==='white'?'White':'Black';
   turnEl.textContent=cLabel+' thinking…';
 
-  function playMove(m,completedDepth,thinkMs,score){
+  function playMove(m,completedDepth,score){
     runAutoStep(()=>{
+      if(battle!==game)return;
       if(!m){
-        _autoLogAnomaly('NO_MOVE',`${turnColor} AI returned null despite available legal moves`,
-          {legalCheck:allAIMoves(turnColor).length});
+        console.warn('AI returned no move',turnColor);
         _endAutoGame('ERROR_NO_MOVE');return;
       }
       // Only the side to move can resign. Require its completed search to
       // confirm the sustained static deficit after considering its best reply.
-      const resignStreak=turnColor==='white'?log.wResignStreak:log.bResignStreak;
+      const resignStreak=turnColor==='white'?game.wResignStreak:game.bResignStreak;
       const hasSearchScore=completedDepth>=2&&Number.isFinite(score);
       if(resignStreak>=RESIGN_STREAK&&hasSearchScore&&score<=-RESIGN_THRESHOLD){
         _endAutoGame(turnColor==='white'?'WHITE_RESIGNS':'BLACK_RESIGNS');
@@ -4426,20 +4314,19 @@ function doAutoMove(){
       // Require both sides to confirm the quiet position before accepting a draw.
       const agrees=quietForAgreement&&Math.abs(positionEval)<=DRAW_EVAL_RANGE&&
         hasSearchScore&&Math.abs(score)<=DRAW_EVAL_RANGE;
-      log.drawStreak=agrees?log.drawStreak+1:0;
-      if(log.drawStreak>=DRAW_STREAK){
+      game.drawStreak=agrees?game.drawStreak+1:0;
+      if(game.drawStreak>=DRAW_STREAK){
         _endAutoGame('DRAW_AGREEMENT');return;
       }
       const piece=board[m.fLat][m.fLon];
       if(!piece){
-        _autoLogAnomaly('EMPTY_FROM','AI selected a move originating from an empty square',
-          {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
+        console.warn('AI selected a move from an empty square',m);
         _endAutoGame('ERROR_EMPTY_SQUARE');return;
       }
       const cap=m.isEnPassant?board[m.capturedLat][m.capturedLon]:board[m.tLat][m.tLon];
       const color=turnColor;
-      const ply=log.moves.length+1;
-      if(ply<=wall.openingPlies)wall.rememberOpeningPosition(ply,openingLayout(m,color));
+      const ply=game.plies+1;
+      if(ply<=wall.openingPlies)wall.rememberOpeningPosition(boardSlot,ply,openingLayout(m,color));
       // Chess notation status
       const _an=_moveNotation(piece,m.fLat,m.fLon,m.tLat,m.tLon,!!cap||!!m.isEnPassant,m,false,false);
       turnEl.textContent=(color==='white'?'White':'Black')+': '+_an;
@@ -4448,28 +4335,20 @@ function doAutoMove(){
       rotateGlobeToFace(localDir,460,()=>{
         showMoves(m.fLat,m.fLon,m.tLat,m.tLon);
         _autoBattleTimer=setTimeout(()=>runAutoStep(()=>{
-          if(board[m.fLat][m.fLon]!==piece||turnColor!==color)return;
-          const entry={
-            n:log.moves.length+1,color,piece:piece.type,
-            from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
-            captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
-            special:m.isCastle?'castle':m.isEnPassant?'ep':null,
-            thinkMs,completedDepth,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
-          };
-          log.moves.push(entry);
-          if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
-          log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
+          if(battle!==game||board[m.fLat][m.fLon]!==piece||turnColor!==color)return;
+          game.plies++;
+          game.halfMoveClock=(cap||piece.type==='P')?0:(game.halfMoveClock||0)+1;
           execMove(m.fLat,m.fLon,m.tLat,m.tLon);
         }),370);
       });
     });
   }
 
-  if(extension){playMove(extension.move,extension.plies,0,null);return;}
-  if(log.moves.length===0&&turnColor==='white'){
+  if(extension){playMove(extension.move,extension.plies,null);return;}
+  if(game.plies===0&&turnColor==='white'){
     const firstMove=allAIMoves('white').find(move=>
-      _autoNote(move.fLat,move.fLon)+_autoNote(move.tLat,move.tLon)===log.opening);
-    if(firstMove){playMove(firstMove,0,0,null);return;}
+      _autoNote(move.fLat,move.fLon)+_autoNote(move.tLat,move.tLon)===game.opening);
+    if(firstMove){playMove(firstMove,0,null);return;}
   }
   _findBestMove(turnColor,_AUTO_THINK_MS,null,playMove);
 }
@@ -4480,7 +4359,6 @@ function _endAutoGame(result){
   autoBattleActive=false;autoBattlePaused=false;
   cancelComputerTurn();
   clearVis();
-  if(_autoBattleLog){_autoBattleLog.result=result;_autoBattleLog.endTime=Date.now();}
   const _MSG={
     WHITE_RESIGNS:'White resigns — Black wins',BLACK_RESIGNS:'Black resigns — White wins',
     DRAW_AGREEMENT:'Draw — by agreement',BLACK_WINS_CHECKMATE:'Checkmate — Black wins',
@@ -4489,127 +4367,23 @@ function _endAutoGame(result){
     DRAW_TABLEBASE:'Draw — tablebase',
     DRAW_INSUF_MATERIAL:'Draw — insufficient material',DRAW_MOVE_LIMIT:'Draw — move limit reached',
     ERROR_NO_MOVE:'Error — no move found',ERROR_EMPTY_SQUARE:'Error — empty square',
-    STOPPED_BY_USER:'Stopped',
   };
   turnEl.textContent=_MSG[result]||result;
   if(result==='WHITE_RESIGNS'||result==='BLACK_RESIGNS') playGameOver();
-  const log=_autoBattleLog;
-  const record=_genCompactRecord()+'\n';
-  const slot=Number(window.frameElement.dataset.slot);
-  async function archiveAndRestart(){
-    try{
-      await parent.globeWall.saveRecord(slot,log.gameNum,result,record);
-    }catch(error){
-      // Keep this immutable record and retry without generating another game ID.
-      console.error('Could not archive game',slot,log.gameNum,error);
-      _autoBattleTimer=setTimeout(archiveAndRestart,5000);
-      return;
-    }
-    _autoBattleTimer=setTimeout(startAutoBattle,500);
-  }
-  archiveAndRestart();
+  battle=null;
+  _autoBattleTimer=setTimeout(startAutoBattle,500);
 }
 
 function startAutoBattle(){
   if(autoBattleActive)return;
-  const slot=Number(window.frameElement.dataset.slot);
-  const opening=wall.reserveGame(slot,_autoGameNum+1);
-  if(!opening){
-    closeChessWorker();
-    clearInterval(backgroundBattleDriver);
-    return;
-  }
-  _autoGameNum++;_autoPosHist={};
-  _autoBattleLog={gameNum:_autoGameNum,opening,moves:[],anomalies:[],wCapt:[],bCapt:[],
-    result:null,halfMoveClock:0,wResignStreak:0,bResignStreak:0,drawStreak:0,
-    startTime:Date.now(),endTime:null};
-  autoBattleActive=true;autoBattlePaused=false;
+  battle={opening:wall.pickOpening(boardSlot),plies:0,halfMoveClock:0,
+    wResignStreak:0,bResignStreak:0,drawStreak:0};
+  _autoPosHist={};
+  autoBattleActive=true;
+  autoBattlePaused=false;
   resetGame();
   _autoBattleTimer=setTimeout(()=>runAutoStep(doAutoMove),900);
 }
-
-// ── Record generation ─────────────────────────────────────────────────────────
-function _genCompactRecord(){
-  const log=_autoBattleLog;if(!log)return'';
-  const dur=log.endTime?Math.round((log.endTime-log.startTime)/1000):0;
-  const ds=dur<60?dur+'s':Math.floor(dur/60)+'m'+(dur%60)+'s';
-  const RES={
-    BLACK_WINS_CHECKMATE:'B_MATE',WHITE_WINS_CHECKMATE:'W_MATE',
-    WHITE_RESIGNS:'B_WIN_RES',BLACK_RESIGNS:'W_WIN_RES',
-    DRAW_AGREEMENT:'DRAW_AGR',DRAW_STALEMATE:'DRAW_STALE',
-    DRAW_REPETITION:'DRAW_REP',DRAW_MOVE_LIMIT:'DRAW_LIM',
-    DRAW_FIFTY_MOVE:'DRAW_50',DRAW_INSUF_MATERIAL:'DRAW_INSUF',DRAW_TABLEBASE:'DRAW_TB',
-    ERROR_NO_MOVE:'ERR_NULL',ERROR_EMPTY_SQUARE:'ERR_EMPTY',
-    STOPPED_BY_USER:'STOPPED'
-  };
-  // Compact captures: P5+N2+B2+Q1+R1=3100
-  const capStr=arr=>{
-    if(!arr.length)return'-';
-    const g={};arr.forEach(({t,v})=>{if(!g[t])g[t]=0;g[t]++;});
-    const total=arr.reduce((s,{v})=>s+v,0);
-    return Object.entries(g).map(([t,n])=>t+n).join('+')+`=${total}`;
-  };
-  // Compact move: piece+from+cap?+to+special (e.g. "Nb1-a3" "Paxb5" "Ke1-a1castle")
-  const mvStr=m=>{
-    const c=m.captured?'x':'>';
-    let s=m.piece+m.from+c+m.to;
-    if(m.special)s+='.'+m.special;
-    s+='.'+m.thinkMs;
-    return s;
-  };
-  // Board: 8 ranks separated by /, pieces as FEN (uppercase=white, lowercase=black)
-  const fenRow=lat=>{
-    let r='',empty=0;
-    for(let lo=0;lo<8;lo++){
-      const p=board[lat][lo];
-      if(!p){empty++;continue;}
-      if(empty>0){r+=empty;empty=0;}
-      const ch=p.type==='N'?'N':p.type;
-      r+=p.color==='white'?ch:ch.toLowerCase();
-    }
-    if(empty>0)r+=empty;
-    return r;
-  };
-  const boardStr=[];for(let la=0;la<8;la++)boardStr.push(fenRow(la));
-  // Anomalies compact
-  const anomStr=log.anomalies.length===0?'':'\nA:'+log.anomalies.map(a=>`#${a.n}:${a.type}`).join(',');
-  const lines=[
-    `GLOBE_CHESS ${_VERSION} #${log.gameNum} ${new Date(log.startTime).toISOString()}`,
-    `R:${RES[log.result]||log.result} N:${log.moves.length} D:${ds}`,
-    `WC:${capStr(log.wCapt)} BC:${capStr(log.bCapt)}`,
-    `BD:${boardStr.join('/')}`,
-    `MV:${log.moves.map(mvStr).join(' ')}`,
-    `SD:${log.moves.map(m=>m.completedDepth).join(' ')}`,
-    'AI:globe-unified-v2.7.3'
-  ];
-  if(anomStr)lines.push(anomStr);
-  return lines.join('\n');
-}
-
-function _copyRecord(){
-  const record=_genCompactRecord();
-  if(!record)return;
-  try{navigator.clipboard?.writeText(record);}catch(e){
-    // Fallback
-    const ta=document.createElement('textarea');
-    ta.value=record;document.body.appendChild(ta);
-    ta.select();document.execCommand('copy');
-    document.body.removeChild(ta);
-  }
-  const pauseBtn=document.getElementById('autoPauseBtn');
-  pauseBtn.textContent='Record copied';
-  setTimeout(()=>{pauseBtn.textContent='Record';},2000);
-}
-
-function _showAutoReport(){_copyRecord();}
-
-function closeReport(){
-  document.getElementById('reportModal').classList.remove('visible');
-  if(!autoBattleActive)turnEl.textContent=turnColor==='white'?'White to move':'Black to move';
-}
-
-function copyReport(){_copyRecord();}
-
 
 startAutoBattle();
 animate();
@@ -20540,154 +20314,33 @@ zz4032
 # https://github.com/official-stockfish/fishtest/blob/master/AUTHORS
 </script>
 <script>
-// Serialize commits. The same game retries its original filename if a write fails.
-function createRecordArchive(directory,onWriteStatus){
-  const session=new Date().toISOString().replace(/[:.]/g,'-')+'-'+crypto.randomUUID();
-  let chain=Promise.resolve();
-  return function saveRecord(slot,game,result,text){
-    const name=session+'-board-'+slot+'-game-'+String(game).padStart(5,'0')+'-'+result+'.txt';
-    const next=chain.then(async()=>{
-      try{
-        const file=await directory.getFileHandle(name,{create:true});
-        const stream=await file.createWritable();
-        try{await stream.write(text);await stream.close();}
-        catch(error){try{await stream.abort();}catch{} throw error;}
-      }catch(error){onWriteStatus(error);throw error;}
-      onWriteStatus(null);
-    });
-    chain=next.catch(()=>{});
-    return next;
-  };
-}
-
 // Nineteen legal first moves stayed near the top in six- and seven-ply
 // opening searches. One spare lets a board change its opening on restart.
 const openingMoves=[
   'h2h3','h2h4','g2g3','g2g4','f2f4','e2e3','e2e4','d2d3','d2d4',
   'c2c3','c2c4','b2b3','b2b4','a2a3','a2a4','g1f3','g1h3','b1a3','b1c3'
 ];
-function createBatch(limit,writeRecord,onComplete){
-  const active=new Map(), lastOpening=new Map(), openingUse=new Map();
-  const openingPositions=Array.from({length:8},()=>new Set());
-  let started=0, saved=0;
-  function reserveGame(slot,game){
-    if(started>=limit||active.has(slot))return false;
-    const taken=new Set(Array.from(active.values(),entry=>entry.opening));
-    const available=openingMoves.filter(move=>!taken.has(move)&&lastOpening.get(slot)!==move);
-    if(!available.length)return false;
-    const fewest=Math.min(...available.map(move=>openingUse.get(move)||0));
-    const choices=available.filter(move=>(openingUse.get(move)||0)===fewest);
+// Keep only the current opening and early board positions for each tile.
+function createOpeningRotation(){
+  const openings=new Map(), usage=new Map();
+  const positions=Array.from({length:8},()=>new Map());
+  function pickOpening(slot){
+    const taken=new Set(openings.values());
+    const available=openingMoves.filter(move=>!taken.has(move));
+    const fewest=Math.min(...available.map(move=>usage.get(move)||0));
+    const choices=available.filter(move=>(usage.get(move)||0)===fewest);
     const opening=choices[Math.floor(Math.random()*choices.length)];
-    openingUse.set(opening,fewest+1);
-    lastOpening.set(slot,opening);
-    active.set(slot,{game,opening,save:null});
-    started++;
+    usage.set(opening,fewest+1);
+    openings.set(slot,opening);
+    for(const ply of positions)ply.delete(slot);
     return opening;
   }
-  function saveRecord(slot,game,result,text){
-    const entry=active.get(slot);
-    if(!entry||entry.game!==game)return Promise.reject(Error('This game was not reserved'));
-    if(entry.save)return entry.save;
-    entry.save=writeRecord(slot,game,result,text).then(()=>{
-      active.delete(slot);
-      saved++;
-      if(saved===limit)onComplete(saved);
-    },error=>{
-      entry.save=null;
-      throw error;
-    });
-    return entry.save;
+  function hasOpeningPosition(slot,ply,key){
+    for(const [other,layout] of positions[ply-1])if(other!==slot&&layout===key)return true;
+    return false;
   }
-  return {
-    reserveGame,saveRecord,openingPlies:openingPositions.length,
-    hasOpeningPosition:(ply,key)=>openingPositions[ply-1].has(key),
-    rememberOpeningPosition:(ply,key)=>openingPositions[ply-1].add(key)
-  };
-}
-
-function enableFolderSelection(){
-  const panel=document.getElementById('archive');
-  const form=document.getElementById('archive-controls');
-  const input=document.getElementById('game-limit');
-  const label=document.getElementById('game-limit-label');
-  const button=document.getElementById('record-folder');
-  const status=document.getElementById('record-status');
-  let directory=null, picking=false, completed=false;
-  input.addEventListener('input',()=>{
-    input.value=input.value.replace(/[０-９]/g,digit=>String(digit.charCodeAt(0)-0xff10))
-      .replace(/[^0-9]/g,'').slice(0,4);
-    status.textContent='';
-  });
-
-  function showComplete(count){
-    completed=true;
-    panel.hidden=false;
-    button.hidden=true;
-    status.textContent='已完成並儲存 '+count+' 場棋局。';
-  }
-
-  function showWriteStatus(error){
-    if(completed)return;
-    panel.hidden=!error;
-    if(!error)return;
-    const needsPermission=error.name==='NotAllowedError'||error.name==='SecurityError';
-    button.hidden=!needsPermission;
-    button.textContent='重新授權此資料夾';
-    status.textContent=needsPermission?'儲存棋譜需要寫入權限':'棋譜寫入失敗，將自動重試。';
-  }
-
-  form.addEventListener('submit',async event=>{
-    event.preventDefault();
-    if(picking||completed)return;
-    const limit=Number(input.value);
-    if(!directory&&(!/^[0-9]{1,4}$/.test(input.value)||limit<1)){
-      status.textContent='請輸入 1 到 9999 場。';
-      input.focus();
-      return;
-    }
-    picking=true;
-    button.disabled=true;
-    input.disabled=true;
-    status.textContent='';
-    try{
-      if(directory){
-        if(await directory.requestPermission({mode:'readwrite'})!=='granted'){
-          status.textContent='請允許寫入本次選擇的資料夾。';
-        }else{panel.hidden=true;}
-        return;
-      }
-      if(typeof window.showDirectoryPicker!=='function'){
-        status.textContent='請用桌面版 Chrome 或 Edge 開啟此頁，以選擇棋譜資料夾。';
-        return;
-      }
-      const selected=await window.showDirectoryPicker({mode:'readwrite',startIn:'documents'});
-      for await(const name of selected.keys()){
-        if(!/\.txt$/i.test(name))continue;
-        status.textContent='這個資料夾已有 .txt 檔案。請選擇沒有 .txt 檔案的資料夾。';
-        return;
-      }
-      status.textContent='正在載入棋盤…';
-      const [,endgameTables]=await Promise.all([loadChessRenderer(),loadEndgameTables()]);
-      const writeRecord=createRecordArchive(selected,showWriteStatus);
-      mountGames(createBatch(limit,writeRecord,showComplete),endgameTables);
-      directory=selected;
-      label.hidden=true;
-      panel.classList.add('running');
-      panel.hidden=true;
-      status.textContent='';
-    }catch(error){
-      if(error.name==='AbortError')status.textContent='';
-      else if(error.name==='NotAllowedError'||error.name==='SecurityError')
-        status.textContent='請允許寫入所選資料夾，再開始對戰。';
-      else status.textContent='無法啟動，請確認網路連線與瀏覽器硬體加速後重試。';
-    }finally{
-      picking=false;
-      button.disabled=false;
-      input.disabled=Boolean(directory);
-    }
-  });
-  // Returning through the browser's in-memory page cache is a new visit, too.
-  window.addEventListener('pageshow',event=>{if(event.persisted)window.location.reload();});
+  return {pickOpening,openingPlies:positions.length,hasOpeningPosition,
+    rememberOpeningPosition:(slot,ply,key)=>positions[ply-1].set(slot,key)};
 }
 
 // Decode once in the parent page. All eighteen boards use these typed-array
@@ -20736,7 +20389,7 @@ function createSearchScheduler(limit){
 }
 
 // Each frame owns its game. All boards share one GPU context.
-function mountGames(batch,endgameTables){
+function mountGames(endgameTables){
   const grid=document.getElementById('games');
   const style=getComputedStyle(grid);
   const rows=Number(style.getPropertyValue('--rows'));
@@ -20781,7 +20434,7 @@ function mountGames(batch,endgameTables){
     return {canvas,render};
   }
 
-  window.globeWall={asset,createView,acquireSearchSlot,endgameTables,...batch,environment:create=>asset('environment',()=>create(renderer))};
+  window.globeWall={asset,createView,acquireSearchSlot,endgameTables,...createOpeningRotation(),environment:create=>asset('environment',()=>create(renderer))};
   const head=document.getElementById('game-head').innerHTML;
   const body=document.getElementById('game-body').innerHTML;
   const page='<!doctype html><html lang="zh-TW"><head>'+head+'</head><body>'+body+'</body></html>';
@@ -20793,7 +20446,20 @@ function mountGames(batch,endgameTables){
     grid.appendChild(frame);
   }
 }
-enableFolderSelection();
+async function startGameWall(){
+  try{
+    const [,tables]=await Promise.all([loadChessRenderer(),loadEndgameTables().catch(error=>{
+      console.warn('Using search without the extended endgame tables',error);
+      return null;
+    })]);
+    mountGames(tables);
+  }catch(error){
+    console.error('Could not start Globe Chess',error);
+    document.getElementById('games').textContent='無法載入棋盤';
+  }
+}
+
+startGameWall();
 </script>
 </body>
 </html>
