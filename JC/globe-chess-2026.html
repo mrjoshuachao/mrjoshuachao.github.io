@@ -809,172 +809,231 @@ function poleRef(l,n){
   return{l,n,pole:null};
 }
 
-function getValidMoves(lat,lon){
-  const piece=board[lat][lon];
-  if(!piece)return[];
-  const{type,color}=piece;
+function isBoardCell(lat,lon){
+  return Number.isInteger(lat)&&lat>=0&&lat<NUM_LAT&&
+    Number.isInteger(lon)&&lon>=0&&lon<NUM_LON;
+}
+
+// Board topology is fixed. Each ray lists its cells in travel order so
+// blockers, pole crossings and longitude wrap are identical for moves and attacks.
+function buildGlobeSteps(lat,lon){
+  function ray(dl,dn,diagonal){
+    const cells=[];
+    let l=lat,n=lon,passedPole=false;
+    let latDir=dl,lonDir=dn;
+    for(let step=0;step<(diagonal?14:15);step++){
+      const oldLon=n;
+      l+=latDir;
+      n=wL(n+lonDir);
+      if(l<0||l>=NUM_LAT){
+        if(passedPole&&!diagonal)break;
+        const ref=poleRef(l,oldLon);
+        l=ref.l; n=ref.n;
+        latDir=-latDir;
+        if(diagonal)lonDir=-lonDir;
+        passedPole=true;
+      }
+      if(l===lat&&n===lon)break;
+      cells.push(l*NUM_LON+n);
+    }
+    return {dl,dn,cells};
+  }
+  const straight=[[1,0],[-1,0],[0,1],[0,-1]].map(([dl,dn])=>ray(dl,dn,false));
+  const diagonal=[[1,1],[1,-1],[-1,1],[-1,-1]].map(([dl,dn])=>ray(dl,dn,true));
+  const knight=[];
+  for(const [dl,dn] of [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
+    const ref=poleRef(lat+dl,wL(lon+dn));
+    const longLat=Math.abs(dl)===2;
+    knight.push({square:ref.l*NUM_LON+ref.n,isKnight:true,longLat,
+      elbowLat:longLat?lat+dl:lat,elbowLon:longLat?lon:wL(lon+dn)});
+  }
+  const king=new Set();
+  for(const r of [...straight,...diagonal])king.add(r.cells[0]);
+  return {straight,diagonal,knight,king:[...king]};
+}
+const globeSteps=Array.from({length:NUM_LAT*NUM_LON},(_,i)=>
+  buildGlobeSteps(Math.floor(i/NUM_LON),i%NUM_LON));
+
+// Only the UI needs path metadata. Search keeps one move per resulting position.
+function generateMoves(lat,lon,visual,tacticalOnly=false){
+  const piece=board[lat]?.[lon];
+  if(!piece)return [];
+  const {type,color}=piece;
+  const topology=globeSteps[lat*NUM_LON+lon];
   const moves=[];
-  function ok(l){return l>=0&&l<=7;}
-  function ally(l,n){return ok(l)&&board[l][n]&&board[l][n].color===color;}
-  function enemy(l,n){return ok(l)&&board[l][n]&&board[l][n].color!==color;}
-
-  function straight(dl,dn){
-    const key=`S${dl},${dn}`;
-    let l=lat,n=lon,step=0,curDl=dl,pole=null;
-    for(let i=0;i<15;i++){
-      l+=curDl; n=wL(n+dn); step++;
-      if(dl!==0&&(l<0||l>7)){
-        if(pole)break;
-        const r=poleRef(l,n);l=r.l;n=r.n;curDl=-curDl;pole=r.pole;
-      }else if(dl===0&&!ok(l))break;
-      if(!ok(l))break;
-      if(ally(l,n))break;
-      moves.push({lat:l,lon:n,diagKey:null,diagWP:null,straightKey:key,straightDl:dl,straightDn:dn,step,pole});
-      if(enemy(l,n))break;
+  const seen=visual?null:new Set();
+  function add(l,n,details){
+    if(tacticalOnly&&!board[l][n]&&!details?.isEnPassant&&
+       !(type==='P'&&(l===0||l===7)))return;
+    if(seen){
+      const key=l*NUM_LON+n;
+      if(seen.has(key))return;
+      seen.add(key);
+      moves.push({fLat:lat,fLon:lon,tLat:l,tLon:n,...details});
+    }else moves.push({lat:l,lon:n,...details});
+  }
+  function along(rays,diagonal){
+    for(const {dl,dn,cells} of rays){
+      const waypoints=visual&&diagonal?[]:null;
+      let lastLat=lat,pole=null;
+      for(let i=0;i<cells.length;i++){
+        const l=cells[i]>>3,n=cells[i]&7;
+        const target=board[l][n];
+        if(target?.color===color)break;
+        let details;
+        if(visual){
+          if(diagonal){
+            waypoints.push(cellPos(l,n,R*1.019));
+            details={diagKey:`${dl},${dn}`,diagWP:waypoints.slice(),step:i+1};
+          }else{
+            if(dl&&l===lastLat)pole=l===0?'N':'S';
+            details={straightKey:`S${dl},${dn}`,straightDl:dl,straightDn:dn,step:i+1,pole};
+          }
+        }
+        add(l,n,details);
+        if(target)break;
+        lastLat=l;
+      }
     }
   }
-
-  function diag(initDl,initDn){
-    const key=`${initDl},${initDn}`;
-    let l=lat,n=lon,cDl=initDl,cDn=initDn;
-    const wp=[];
-    for(let i=0;i<14;i++){
-      const nb=n; l+=cDl; n=wL(n+cDn);
-      if(l<0){l=0;n=wL(nb+4);cDl=1;cDn=-cDn;}
-      else if(l>7){l=7;n=wL(nb+4);cDl=-1;cDn=-cDn;}
-      if(ally(l,n))break;
-      wp.push(cellPos(l,n,R*1.019));
-      moves.push({lat:l,lon:n,diagKey:key,diagWP:wp.slice(),straightKey:null,step:i+1});
-      if(enemy(l,n))break;
-    }
-  }
-
-  if(type==='R'||type==='Q'){straight(1,0);straight(-1,0);straight(0,1);straight(0,-1);}
-  if(type==='B'||type==='Q'){diag(1,1);diag(1,-1);diag(-1,1);diag(-1,-1);}
-
+  if(type==='R'||type==='Q')along(topology.straight,false);
+  if(type==='B'||type==='Q')along(topology.diagonal,true);
   if(type==='N'){
-    for(const[dl,dn]of[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
-      let l=lat+dl,n=wL(lon+dn);
-      const longLat=Math.abs(dl)===2;
-      const elbowLat=longLat?lat+dl:lat;
-      const elbowLon=longLat?lon:wL(lon+dn);
-      if(l<0||l>7){const r=poleRef(l,n);l=r.l;n=r.n;}
-      if(ok(l)&&!ally(l,n))moves.push({lat:l,lon:n,diagKey:null,diagWP:null,straightKey:null,isKnight:true,longLat,elbowLat,elbowLon});
+    for(const jump of topology.knight){
+      const l=jump.square>>3,n=jump.square&7;
+      if(board[l][n]?.color!==color)add(l,n,visual?jump:undefined);
     }
   }
-
   if(type==='K'){
+    // Keep the UI's original order when several routes reach the same cell:
+    // the first route is the one selected for the move animation.
     for(let dl=-1;dl<=1;dl++)for(let dn=-1;dn<=1;dn++){
       if(!dl&&!dn)continue;
-      let l=lat+dl, n=wL(lon+dn);
-      if(l<0||l>7){
-        // All 3 "over-pole" directions converge to the same cell (pre-step lon+4).
-        // Add all 3 so visualization draws straight line + figure-8 loxodrome.
-        const refL=l<0?-1-l:15-l;
-        const refN=wL(lon+4); // pre-step lon+4 (same destination for all 3)
-        const pole=l<0?'N':'S';
-        if(ally(refL,refN))continue;
-        if(dn===0){
-          // Straight through pole (added first → used by execMove animation)
-          moves.push({lat:refL,lon:refN,diagKey:null,diagWP:null,
-            straightKey:`S${dl},0`,straightDl:dl,straightDn:0,step:1,pole});
-        } else {
-          // Diagonal through pole: lDiff=4 triggers loxodrome isPole → draws figure-8
-          moves.push({lat:refL,lon:refN,diagKey:`${dl},${dn}`,
-            diagWP:[cellPos(refL,refN,R*1.019)],straightKey:null});
-        }
-        continue;
+      const overPole=lat+dl<0||lat+dl>=NUM_LAT;
+      const ref=poleRef(lat+dl,overPole?lon:wL(lon+dn));
+      if(board[ref.l][ref.n]?.color===color)continue;
+      let details;
+      if(visual){
+        details=dl&&dn
+          ?{diagKey:`${dl},${dn}`,diagWP:[cellPos(ref.l,ref.n,R*1.019)]}
+          :{straightKey:`S${dl},${dn}`,straightDl:dl,straightDn:dn,step:1,pole:ref.pole};
       }
-      if(!ok(l)||ally(l,n))continue;
-      if(dl!==0&&dn!==0){
-        moves.push({lat:l,lon:n,diagKey:`${dl},${dn}`,diagWP:[cellPos(l,n,R*1.019)],straightKey:null});
-      } else {
-        moves.push({lat:l,lon:n,diagKey:null,diagWP:null,
-          straightKey:`S${dl},${dn}`,straightDl:dl,straightDn:dn,step:1,pole:null});
-      }
+      add(ref.l,ref.n,details);
     }
-    // Castling (piece.hasMoved checked; check-safety handled by getLegalMoves)
-    if(!piece.hasMoved){
-      // Queenside: K lon3→lon1, R lon0→lon2; squares 1,2 must be empty
-      const rQ=board[lat][0];
-      if(rQ?.type==='R'&&!rQ.hasMoved&&rQ.color===color&&!board[lat][1]&&!board[lat][2])
-        moves.push({lat,lon:1,diagKey:null,diagWP:null,straightKey:null,isCastle:true,rookFromLon:0,rookToLon:2,passThroughLon:2});
-      // Kingside: K lon3→lon5, R lon7→lon4; squares 4,5,6 must be empty
-      const rK=board[lat][7];
-      if(rK?.type==='R'&&!rK.hasMoved&&rK.color===color&&!board[lat][4]&&!board[lat][5]&&!board[lat][6])
-        moves.push({lat,lon:5,diagKey:null,diagWP:null,straightKey:null,isCastle:true,rookFromLon:7,rookToLon:4,passThroughLon:4});
+    const home=color==='white'?7:0;
+    if(!tacticalOnly&&!piece.hasMoved&&lat===home&&lon===3){
+      const left=board[lat][0],right=board[lat][7];
+      if(left?.type==='R'&&left.color===color&&!left.hasMoved&&!board[lat][1]&&!board[lat][2])
+        add(lat,1,{isCastle:true,rookFromLon:0,rookToLon:2,passThroughLon:2});
+      if(right?.type==='R'&&right.color===color&&!right.hasMoved&&!board[lat][4]&&!board[lat][5]&&!board[lat][6])
+        add(lat,5,{isCastle:true,rookFromLon:7,rookToLon:4,passThroughLon:4});
     }
   }
-
   if(type==='P'){
     const dir=color==='black'?1:-1,start=color==='black'?1:6;
-    const fl=lat+dir;
-    if(ok(fl)&&!board[fl][lon]){
-      moves.push({lat:fl,lon:lon,diagKey:null,diagWP:null,straightKey:null});
-      if(lat===start&&!board[fl+dir]?.[lon])
-        moves.push({lat:fl+dir,lon:lon,diagKey:null,diagWP:null,straightKey:null});
+    const l=lat+dir;
+    if(l<0||l>=NUM_LAT)return moves;
+    if(!board[l][lon]){
+      add(l,lon);
+      if(lat===start&&!board[l+dir][lon])add(l+dir,lon);
     }
-    for(const cn of[wL(lon-1),wL(lon+1)])
-      if(ok(fl)&&board[fl][cn]?.color!==color&&board[fl][cn])
-        moves.push({lat:fl,lon:cn,diagKey:null,diagWP:null,straightKey:null});
-    // En passant
-    if(enPassantTarget&&ok(fl))
-      for(const cn of[wL(lon-1),wL(lon+1)])
-        if(fl===enPassantTarget.lat&&cn===enPassantTarget.lon)
-          moves.push({lat:fl,lon:cn,diagKey:null,diagWP:null,straightKey:null,isEnPassant:true,capturedLat:lat,capturedLon:cn});
+    for(const n of [wL(lon-1),wL(lon+1)]){
+      const target=board[l][n],adjacent=board[lat][n];
+      if(target&&target.color!==color)add(l,n);
+      else if(!target&&enPassantTarget?.lat===l&&enPassantTarget.lon===n&&
+              adjacent?.type==='P'&&adjacent.color!==color)
+        add(l,n,{isEnPassant:true,capturedLat:lat,capturedLon:n});
+    }
   }
   return moves;
 }
 
+function getValidMoves(lat,lon){
+  return generateMoves(lat,lon,true);
+}
+
 // ─── Check Detection ──────────────────────────────────────────────────────────
-function isInCheck(color){
-  let kLat=-1,kLon=-1;
-  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++)
-    if(board[la][lo]?.type==='K'&&board[la][lo]?.color===color){kLat=la;kLon=lo;}
-  if(kLat===-1)return false;
-  const opp=color==='white'?'black':'white';
-  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
-    const p=board[la][lo]; if(!p||p.color!==opp)continue;
-    if(p.type==='P'){
-      // Pawns threaten diagonals regardless of occupancy
-      const dir=p.color==='black'?1:-1;
-      if(la+dir===kLat&&(wL(lo-1)===kLon||wL(lo+1)===kLon))return true;
-    } else {
-      if(aiMoves(la,lo).some(m=>m.tLat===kLat&&m.tLon===kLon))return true;
-    }
+function findKingSquare(color){
+  for(let l=0;l<NUM_LAT;l++)for(let n=0;n<NUM_LON;n++){
+    const p=board[l][n];
+    if(p?.type==='K'&&p.color===color)return l*NUM_LON+n;
   }
-  return false;
+  return -1;
+}
+
+function isSquareAttacked(square,attacker){
+  if(square<0)return false; // test mode can omit a king
+  const topology=globeSteps[square];
+  const l=square>>3,n=square&7;
+  const pawnRow=board[l+(attacker==='black'?-1:1)];
+  if(pawnRow){
+    const left=pawnRow[wL(n-1)],right=pawnRow[wL(n+1)];
+    if((left?.type==='P'&&left.color===attacker)||(right?.type==='P'&&right.color===attacker))return true;
+  }
+  for(const jump of topology.knight){
+    const p=board[jump.square>>3][jump.square&7];
+    if(p?.type==='N'&&p.color===attacker)return true;
+  }
+  for(const cell of topology.king){
+    const p=board[cell>>3][cell&7];
+    if(p?.type==='K'&&p.color===attacker)return true;
+  }
+  // Every straight or diagonal path is reversible, including a pole crossing.
+  function seesSlider(rays,type){
+    for(const ray of rays){
+      for(const cell of ray.cells){
+        const p=board[cell>>3][cell&7];
+        if(!p)continue;
+        if(p.color===attacker&&(p.type===type||p.type==='Q'))return true;
+        break;
+      }
+    }
+    return false;
+  }
+  return seesSlider(topology.straight,'R')||seesSlider(topology.diagonal,'B');
+}
+
+function isInCheck(color){
+  return isSquareAttacked(findKingSquare(color),color==='white'?'black':'white');
+}
+
+function isLegalSearchMove(m,kingSquare){
+  const piece=board[m.fLat][m.fLon];
+  const enemy=piece.color==='white'?'black':'white';
+  if(board[m.tLat][m.tLon]?.type==='K')return false;
+  if(m.isCastle){
+    if(isSquareAttacked(kingSquare,enemy))return false;
+    board[m.fLat][m.fLon]=null;
+    board[m.fLat][m.passThroughLon]=piece;
+    const attacked=isSquareAttacked(m.fLat*NUM_LON+m.passThroughLon,enemy);
+    board[m.fLat][m.passThroughLon]=null;
+    board[m.fLat][m.fLon]=piece;
+    if(attacked)return false;
+  }
+  const afterKing=piece.type==='K'?m.tLat*NUM_LON+m.tLon:kingSquare;
+  const saved=aiApply(m);
+  const safe=!isSquareAttacked(afterKing,enemy);
+  aiUndo(m,piece,saved);
+  return safe;
 }
 
 function getLegalMoves(lat,lon){
-  const piece=board[lat][lon]; if(!piece)return[];
-  const raw=getValidMoves(lat,lon);
-  return raw.filter(m=>{
-    // Castling: king must not currently be in check, nor pass through a checked square
-    if(m.isCastle){
-      if(isInCheck(piece.color))return false;
-      const tmp=board[lat][m.passThroughLon];
-      board[lat][m.passThroughLon]=piece; board[lat][lon]=null;
-      const thru=isInCheck(piece.color);
-      board[lat][lon]=piece; board[lat][m.passThroughLon]=tmp||null;
-      if(thru)return false;
+  const piece=board[lat][lon]; if(!piece)return [];
+  const king=findKingSquare(piece.color),safety=new Map();
+  return getValidMoves(lat,lon).filter(m=>{
+    const key=m.lat*NUM_LON+m.lon;
+    if(!safety.has(key)){
+      safety.set(key,isLegalSearchMove({fLat:lat,fLon:lon,tLat:m.lat,tLon:m.lon,...m},king));
     }
-    // En passant: temporarily remove the captured pawn for check simulation
-    let epSave=null;
-    if(m.isEnPassant){epSave=board[m.capturedLat][m.capturedLon]; board[m.capturedLat][m.capturedLon]=null;}
-    const cap=board[m.lat][m.lon];
-    board[m.lat][m.lon]=piece; board[lat][lon]=null;
-    const safe=!isInCheck(piece.color);
-    board[lat][lon]=piece; board[m.lat][m.lon]=cap||null;
-    if(m.isEnPassant&&epSave)board[m.capturedLat][m.capturedLon]=epSave;
-    return safe;
+    return safety.get(key);
   });
 }
 
 function hasAnyLegalMove(color){
-  for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
-    if(board[la][lo]?.color!==color)continue;
-    if(getLegalMoves(la,lo).length>0)return true;
+  const king=findKingSquare(color);
+  for(let l=0;l<NUM_LAT;l++)for(let n=0;n<NUM_LON;n++){
+    if(board[l][n]?.color!==color)continue;
+    if(generateMoves(l,n,false).some(m=>isLegalSearchMove(m,king)))return true;
   }
   return false;
 }
@@ -985,7 +1044,7 @@ let _checkOuterR=0, _checkCenter=null;
 let _checkmateActive=false; // when true, check threats are never cleared
 function clearCheckRing(){
   if(_checkmateActive)return; // permanent on checkmate
-  checkRingObjs.forEach(o=>globe.remove(o));
+  removeOverlays(checkRingObjs);
   checkRingObjs=[];
 }
 function showCheckRing(lat,lon){
@@ -1014,7 +1073,7 @@ function showCheckRing(lat,lon){
     globe.add(mesh); checkRingObjs.push(mesh);
     // Ghost: 50% through pieces
     const gMat=_ghostMat(0x880000,null,null,3);
-    const gMesh=new THREE.Mesh(geo.clone(),gMat); gMesh.renderOrder=5; gMesh.frustumCulled=false;
+    const gMesh=new THREE.Mesh(geo,gMat); gMesh.renderOrder=5; gMesh.frustumCulled=false;
     globe.add(gMesh); checkRingObjs.push(gMesh);
   }
 }
@@ -1055,7 +1114,7 @@ function showCheckThreats(color){
       const m=new THREE.Mesh(geo,redMat());m.renderOrder=2;m.frustumCulled=false;
       globe.add(m);checkRingObjs.push(m);
       // Ghost
-      const gm=new THREE.Mesh(geo.clone(),_ghostMat(0x880000,-3,-12,3));
+      const gm=new THREE.Mesh(geo,_ghostMat(0x880000,-3,-12,3));
       gm.renderOrder=5;gm.frustumCulled=false;
       globe.add(gm);checkRingObjs.push(gm);
       d+=dLen+gLen;
@@ -1066,7 +1125,7 @@ function showCheckThreats(color){
     const p=board[la][lo]; if(!p||p.color!==opp)continue;
     let attacks=false;
     if(p.type==='P'){const dir=p.color==='black'?1:-1;attacks=(la+dir===kLat&&(wL(lo-1)===kLon||wL(lo+1)===kLon));}
-    else attacks=aiMoves(la,lo).some(m=>m.tLat===kLat&&m.tLon===kLon);
+    else attacks=aiMoves(la,lo).some(m=>!m.isCastle&&m.tLat===kLat&&m.tLon===kLon);
     if(!attacks)continue;
 
     // All valid moves from this piece that land on the king's square
@@ -1123,7 +1182,7 @@ function showCheckThreats(color){
         const tube=new THREE.Mesh(tGeo,redMat());tube.renderOrder=2;tube.frustumCulled=false;
         globe.add(tube);checkRingObjs.push(tube);
         // Ghost
-        const gTube=new THREE.Mesh(tGeo.clone(),_ghostMat(0x880000,-3,-12,3));
+        const gTube=new THREE.Mesh(tGeo,_ghostMat(0x880000,-3,-12,3));
         gTube.renderOrder=5;gTube.frustumCulled=false;
         globe.add(gTube);checkRingObjs.push(gTube);
       }
@@ -1137,7 +1196,7 @@ function showCheckThreats(color){
     dot.renderOrder=2;dot.frustumCulled=false;
     globe.add(dot);checkRingObjs.push(dot);
     // Ghost dot
-    const gDot=new THREE.Mesh(dGeo.clone(),_ghostMat(0x880000,-3,-12,3));
+    const gDot=new THREE.Mesh(dGeo,_ghostMat(0x880000,-3,-12,3));
     gDot.position.copy(aPos);
     gDot.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),aPos.clone().normalize());
     gDot.renderOrder=5;gDot.frustumCulled=false;
@@ -1177,9 +1236,6 @@ function latRingArc(latIdx,lonA,lonB,segs=40,r=R*1.019,dn_sign=0){
 
 // ─── Visualization Materials ──────────────────────────────────────────────────
 const TUBE_F=new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
-const DOT_F =new THREE.MeshBasicMaterial({color:0xff6600,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
-const DASH_F=new THREE.LineDashedMaterial({color:0xff6600,dashSize:0.035,gapSize:0.04,linewidth:2,depthTest:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
-const DASH_B=new THREE.LineDashedMaterial({color:0xd0d0d0,dashSize:0.035,gapSize:0.04,transparent:true,opacity:0.15,depthTest:false,depthWrite:false});
 const DOT_GEO=new THREE.SphereGeometry(0.048,32,32);
 
 let selectedCell=null,currentTargets=[],visObjects=[];
@@ -1253,7 +1309,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       const m=new THREE.Mesh(geo,TUBE_F); m.renderOrder=7; m.frustumCulled=false;
       globe.add(m); visObjects.push(m);
       // Ghost
-      const gm=new THREE.Mesh(geo.clone(),_ghostMat(0xff6600));
+      const gm=new THREE.Mesh(geo,_ghostMat(0xff6600));
       gm.renderOrder=6; gm.frustumCulled=false;
       globe.add(gm); visObjects.push(gm);
       return true;
@@ -1280,7 +1336,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
       geo.computeBoundingSphere();
       const m=new THREE.Mesh(geo,TUBE_F); m.renderOrder=7; m.frustumCulled=false;
       globe.add(m); visObjects.push(m);
-      const gm=new THREE.Mesh(geo.clone(),_ghostMat(0xff6600));
+      const gm=new THREE.Mesh(geo,_ghostMat(0xff6600));
       gm.renderOrder=6; gm.frustumCulled=false;
       globe.add(gm); visObjects.push(gm);
     }
@@ -1305,14 +1361,13 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
         geo.computeBoundingSphere();
         const m=new THREE.Mesh(geo,mat); m.renderOrder=7; m.frustumCulled=false;
         globe.add(m); visObjects.push(m);
-        const gm=new THREE.Mesh(geo.clone(),_ghostMat(col));
+        const gm=new THREE.Mesh(geo,_ghostMat(col));
         gm.renderOrder=6; gm.frustumCulled=false;
         globe.add(gm); visObjects.push(gm);
       }
     }
     return true;
   }
-  function surfPts_count(tp){return tp.length;}
   function addDot(pos,lat,lon){
     const spos=pos.clone().normalize().multiplyScalar(R*1.006);
     const geo=new THREE.CircleGeometry(ringR,40);
@@ -1325,7 +1380,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     globe.add(circle); visObjects.push(circle);
     // Ghost dot: 50% through pieces
     const gMat=_ghostMat(0xff6600);
-    const gCircle=new THREE.Mesh(geo.clone(),gMat);
+    const gCircle=new THREE.Mesh(geo,gMat);
     gCircle.position.copy(spos);
     gCircle.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),spos.clone().normalize());
     gCircle.renderOrder=8; gCircle.frustumCulled=false;
@@ -1410,7 +1465,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
         polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
       const front=new THREE.Mesh(geo,matF); front.renderOrder=7; front.frustumCulled=false;
       globe.add(front); visObjects.push(front);
-      const ghost=new THREE.Mesh(geo.clone(),_ghostMat(col));
+      const ghost=new THREE.Mesh(geo,_ghostMat(col));
       ghost.renderOrder=6; ghost.frustumCulled=false;
       globe.add(ghost); visObjects.push(ghost);
     }
@@ -1465,7 +1520,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     globe.add(mesh); visObjects.push(mesh);
     // Ghost: 50% through pieces
     const gMat=_ghostMat(0xff6600);
-    const gMesh=new THREE.Mesh(geo.clone(),gMat); gMesh.renderOrder=6; gMesh.frustumCulled=false;
+    const gMesh=new THREE.Mesh(geo,gMat); gMesh.renderOrder=6; gMesh.frustumCulled=false;
     globe.add(gMesh); visObjects.push(gMesh);
   }
 
@@ -1711,7 +1766,7 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
           polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-16});
         const front=new THREE.Mesh(geo,matF);front.renderOrder=7;front.frustumCulled=false;
         globe.add(front);visObjects.push(front);
-        const ghost=new THREE.Mesh(geo.clone(),_ghostMat(col));
+        const ghost=new THREE.Mesh(geo,_ghostMat(col));
         ghost.renderOrder=6;ghost.frustumCulled=false;
         globe.add(ghost);visObjects.push(ghost);
       };
@@ -1801,14 +1856,18 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
     globe.add(mesh); visObjects.push(mesh);
     // Ghost: 50% through pieces
     const gMat=_ghostMat(0x880000);
-    const gMesh=new THREE.Mesh(geo.clone(),gMat); gMesh.renderOrder=6; gMesh.frustumCulled=false;
+    const gMesh=new THREE.Mesh(geo,gMat); gMesh.renderOrder=6; gMesh.frustumCulled=false;
     globe.add(gMesh); visObjects.push(gMesh);
   }
 
-  // Dots at destinations — captures get red ring; en passant shows ring on captured pawn
+  // Keep every path but draw each destination marker only once.
+  const marked=new Set();
   moves.forEach(m=>{
     const{lat:tl,lon:tn}=m;
     if(autoOnlyLat!==null&&!(tl===autoOnlyLat&&tn===autoOnlyLon))return;
+    const key=tl*NUM_LON+tn;
+    if(marked.has(key))return;
+    marked.add(key);
     const target=board[tl]?.[tn];
     const isCapture=target&&target.color!==board[lat][lon]?.color;
     if(m.isEnPassant){
@@ -1835,12 +1894,24 @@ function showMoves(lat,lon,autoOnlyLat=null,autoOnlyLon=null){
   });
 }
 
+function removeOverlays(objects){
+  const geometries=new Set();
+  const materials=new Set();
+  for(const mesh of objects){
+    globe.remove(mesh);
+    if(mesh.geometry!==DOT_GEO)geometries.add(mesh.geometry);
+    if(mesh.material!==TUBE_F)materials.add(mesh.material);
+  }
+  for(const geometry of geometries)geometry.dispose();
+  for(const material of materials)material.dispose();
+}
+
 function clearVis(){
   stopBounce();
   // Stop shake animations and restore positions
   shakeAnims.forEach(s=>{s.group.position.copy(s.basePos);if(s.baseQ)s.group.quaternion.copy(s.baseQ);});
   shakeAnims=[];
-  visObjects.forEach(o=>globe.remove(o));
+  removeOverlays(visObjects);
   visObjects=[];currentTargets=[];selectedCell=null;
   if(typeof updateDeleteBtn==='function')updateDeleteBtn();
 }
@@ -1881,16 +1952,8 @@ function calcMoveDur(pathLen){
 }
 
 function startMoveAnim(sprite,blob,animPts,onDone){
-  // In background: skip animation, snap to end position
   if(document.hidden&&(autoBattleActive||aiMode)){
-    const endPt=animPts[animPts.length-1];
-    sprite.position.copy(endPt);
-    orientPiece(sprite,endPt);
-    if(blob){
-      const bp=endPt.clone().normalize().multiplyScalar(R);
-      blob.position.copy(bp);orientPiece(blob,bp);
-    }
-    setTimeout(onDone,10);
+    onDone();
     return;
   }
   let pathLen=0;
@@ -1904,6 +1967,13 @@ function startMoveAnim(sprite,blob,animPts,onDone){
   for(let i=1;i<animPts.length;i++) cum.push(cum[i-1]+animPts[i].distanceTo(animPts[i-1]));
   moveAnim={sprite,blob,pts:animPts,cum,totalLen:pathLen,t:0,dur,onDone,pieceType:null,pieceIsWhite:null};
 }
+function finishMoveAnimation(){
+  if(!moveAnim)return;
+  const done=moveAnim.onDone;
+  moveAnim=null;
+  done();
+}
+
 function setMoveAnimPiece(type,isWhite){
   if(moveAnim){moveAnim.pieceType=type;moveAnim.pieceIsWhite=isWhite;}
 }
@@ -2106,9 +2176,11 @@ function startCaptureFade(cap){
 
 
 function execMove(fromLat,fromLon,toLat,toLon){
+  if(moveAnim||!isBoardCell(fromLat,fromLon)||!isBoardCell(toLat,toLon))return;
   const piece=board[fromLat][fromLon];
-  if(!piece||moveAnim)return;
+  if(!piece||selectedCell?.lat!==fromLat||selectedCell?.lon!==fromLon)return;
   const move=currentTargets.find(m=>m.lat===toLat&&m.lon===toLon);
+  if(!move)return;
   const _origType=piece.type; // save before promotion changes it
   const _wasCapture=!!(board[toLat][toLon])||!!(move?.isEnPassant);
   // Store captured piece — remove blob, defer sprite removal until fade
@@ -2137,7 +2209,6 @@ function execMove(fromLat,fromLon,toLat,toLon){
       globe.remove(epCaptured.blob);
       const ei=allSprites.indexOf(epCaptured.sprite);if(ei>=0)allSprites.splice(ei,1);
       board[move.capturedLat][move.capturedLon]=null;
-      setTimeout(()=>startCaptureFade(epCaptured),300);
     }
   }
   // Always play the moving piece's click sound the moment it starts moving
@@ -2230,10 +2301,10 @@ function execMove(fromLat,fromLon,toLat,toLon){
         const _mover=piece.color==='white'?'White':'Black';
         turnEl.innerHTML=_mover+': '+_note+'<br>'+winner+' wins';
         playGameOver();
-        if(autoBattleActive){const r=turnColor==='white'?'BLACK_WINS_CHECKMATE':'WHITE_WINS_CHECKMATE';setTimeout(()=>_endAutoGame(r),600);}
+        if(autoBattleActive){const r=turnColor==='white'?'BLACK_WINS_CHECKMATE':'WHITE_WINS_CHECKMATE';_autoBattleTimer=setTimeout(()=>_endAutoGame(r),600);}
       } else {
         turnEl.textContent='Stalemate  —  draw';
-        if(autoBattleActive){setTimeout(()=>_endAutoGame('DRAW_STALEMATE'),600);}
+        if(autoBattleActive){_autoBattleTimer=setTimeout(()=>_endAutoGame('DRAW_STALEMATE'),600);}
       }
       return;
     }
@@ -2246,14 +2317,13 @@ function execMove(fromLat,fromLon,toLat,toLon){
       showCheckThreats(turnColor);
       playCheck();
     }
-    if(autoBattleActive&&!autoBattlePaused){
+    if(autoBattleActive){
       clearTimeout(_autoBattleTimer);
-      _autoBattleTimer=setTimeout(doAutoMove,AUTO_DELAY);
+      _autoBattleTimer=setTimeout(()=>runAutoStep(doAutoMove),AUTO_DELAY);
     } else if(aiMode&&turnColor===AI_COLOR){
       const _aiTurnLabel=inCheck?'AI thinking… (check)':'AI thinking…';
       _showNotation(_mover+': '+_note, _aiTurnLabel, 2000);
-      setTimeout(()=>{turnEl.textContent=inCheck?'AI thinking… (check)':'AI thinking…';},2000);
-      setTimeout(doAiMove,2200);
+      aiTimer=setTimeout(doAiMove,2200);
     } else {
       // Human play: show notation + turn on two lines for 5 seconds
       const _turnLabel=(turnColor==='white'?'White':'Black')+' to move'+(inCheck?' — check':'');
@@ -2482,170 +2552,77 @@ window.addEventListener('resize',()=>{
 });
 
 // ══════════════════════════════════════════════════════════════════════════════
-// ─── AI Player (minimax + alpha-beta, depth 3) ────────────────────────────────
+// ─── AI Player (legal moves and position simulation) ────────────────────────────────
 const AI_COLOR='black', HUMAN_COLOR='white';
 let aiMode=false, aiThinking=false;
+let aiTimer=null;
+
+function cancelComputerTurn(){
+  cancelAISearch();
+  clearTimeout(aiTimer);
+  clearTimeout(_notationTimer);
+  clearTimeout(_autoBattleTimer);
+  _pausedAutoAction=null;
+  globeRotAnim=null;
+  aiThinking=false;
+}
 const AI_PVAL={K:20000,Q:950,R:500,B:345,N:330,P:100};
-const AI_POS=[6,10,13,16,16,13,10,6];
 
 function aiMoves(lat,lon){
-  const piece=board[lat][lon]; if(!piece)return[];
-  const{type,color}=piece; const mvs=[];
-  const ok=l=>l>=0&&l<=7;
-  const ally=(l,n)=>ok(l)&&board[l][n]?.color===color;
-  const occ=(l,n)=>ok(l)&&board[l][n];
-  function slide(dl,dn){
-    let l=lat,n=lon,pole=null,cDl=dl;
-    for(let i=0;i<15;i++){
-      l+=cDl;n=wL(n+dn);
-      if(dl!==0&&(l<0||l>7)){if(pole)break;const r=poleRef(l,n);l=r.l;n=r.n;cDl=-cDl;pole=r.pole;}
-      else if(dl===0&&!ok(l))break;
-      if(!ok(l)||ally(l,n))break;
-      mvs.push({tLat:l,tLon:n});
-      if(occ(l,n))break;
-    }
-  }
-  function diagS(dl,dn){
-    let l=lat,n=lon,cDl=dl,cDn=dn;
-    for(let i=0;i<14;i++){
-      const nb=n;l+=cDl;n=wL(n+cDn);
-      if(l<0){l=0;n=wL(nb+4);cDl=1;cDn=-cDn;}
-      else if(l>7){l=7;n=wL(nb+4);cDl=-1;cDn=-cDn;}
-      if(ally(l,n))break;
-      mvs.push({tLat:l,tLon:n});
-      if(occ(l,n))break;
-    }
-  }
-  if(type==='R'||type==='Q'){slide(1,0);slide(-1,0);slide(0,1);slide(0,-1);}
-  if(type==='B'||type==='Q'){diagS(1,1);diagS(1,-1);diagS(-1,1);diagS(-1,-1);}
-  if(type==='N'){
-    for(const[dl,dn]of[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
-      let l=lat+dl,n=wL(lon+dn);
-      if(l<0||l>7){const r=poleRef(l,n);l=r.l;n=r.n;}
-      if(ok(l)&&!ally(l,n))mvs.push({tLat:l,tLon:n});
-    }
-  }
-  if(type==='K'){
-    for(let dl=-1;dl<=1;dl++)for(let dn=-1;dn<=1;dn++){
-      if(!dl&&!dn)continue;
-      let l=lat+dl, n=wL(lon+dn);
-      if(l<0||l>7){
-        if(dn!==0)continue;      // all pole crossings converge — add once only
-        l=l<0?-1-l:15-l;        // reflected lat
-        n=wL(lon+4);              // pre-step lon + 4
-      }
-      if(ok(l)&&!ally(l,n))mvs.push({tLat:l,tLon:n});
-    }
-    if(!piece.hasMoved){
-      const rQ=board[lat][0];
-      if(rQ?.type==='R'&&!rQ.hasMoved&&rQ.color===color&&!board[lat][1]&&!board[lat][2])
-        mvs.push({tLat:lat,tLon:1,isCastle:true,rookFromLon:0,rookToLon:2});
-      const rK=board[lat][7];
-      if(rK?.type==='R'&&!rK.hasMoved&&rK.color===color&&!board[lat][4]&&!board[lat][5]&&!board[lat][6])
-        mvs.push({tLat:lat,tLon:5,isCastle:true,rookFromLon:7,rookToLon:4});
-    }
-  }
-  if(type==='P'){
-    const dir=color==='black'?1:-1,start=color==='black'?1:6;
-    const fl=lat+dir;
-    if(ok(fl)&&!board[fl][lon]){
-      mvs.push({tLat:fl,tLon:lon});
-      if(lat===start&&!board[fl+dir]?.[lon])mvs.push({tLat:fl+dir,tLon:lon});
-    }
-    for(const cn of[wL(lon-1),wL(lon+1)])
-      if(ok(fl)&&board[fl][cn]?.color!==color&&board[fl][cn])mvs.push({tLat:fl,tLon:cn});
-    if(enPassantTarget&&ok(fl))
-      for(const cn of[wL(lon-1),wL(lon+1)])
-        if(fl===enPassantTarget.lat&&cn===enPassantTarget.lon)
-          mvs.push({tLat:fl,tLon:cn,isEnPassant:true,capturedLat:lat,capturedLon:cn});
-  }
-  return mvs;
+  return generateMoves(lat,lon,false);
 }
-function allAIMoves(color){
-  const out=[];
-  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-    if(board[la][lo]?.color!==color)continue;
-    aiMoves(la,lo).forEach(m=>out.push({fLat:la,fLon:lo,...m}));
+function allAIMoves(color,tacticalOnly=false){
+  const legal=[],king=findKingSquare(color);
+  for(let l=0;l<NUM_LAT;l++)for(let n=0;n<NUM_LON;n++){
+    if(board[l][n]?.color!==color)continue;
+    for(const move of generateMoves(l,n,false,tacticalOnly)){
+      if(isLegalSearchMove(move,king))legal.push(move);
+    }
   }
-  return out;
-}
-function aiEval(){
-  let s=0;
-  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-    const p=board[la][lo]; if(!p)continue;
-    const v=AI_PVAL[p.type]+AI_POS[la];
-    const adv=p.type==='P'?(p.color==='black'?la*5:(7-la)*5):0;
-    s+=p.color==='black'?v+adv:-(v+adv);
-  }
-  return s;
+  return legal;
 }
 function aiApply(m){
-  const c=board[m.tLat][m.tLon];
   const piece=board[m.fLat][m.fLon];
-  const prevEP=enPassantTarget;
-  enPassantTarget=(piece&&piece.type==='P'&&Math.abs(m.tLat-m.fLat)===2)
-    ?{lat:Math.round((m.fLat+m.tLat)/2),lon:m.tLon}:null;
-  board[m.tLat][m.tLon]=piece; board[m.fLat][m.fLon]=null;
-  let wasType=null;
-  if(piece&&piece.type==='P'){
-    const promLat=piece.color==='black'?7:0;
-    if(m.tLat===promLat){wasType='P';piece.type='Q';}
+  const saved={
+    c:board[m.tLat][m.tLon],prevEP:enPassantTarget,wasType:piece.type,
+    hasMoved:piece.hasMoved,wasCastled:piece._castled,epCap:null
+  };
+  enPassantTarget=piece.type==='P'&&Math.abs(m.tLat-m.fLat)===2
+    ?{lat:(m.tLat+m.fLat)/2,lon:m.tLon}:null;
+  board[m.fLat][m.fLon]=null;
+  board[m.tLat][m.tLon]=piece;
+  piece.hasMoved=true;
+  if(piece.type==='P'&&(m.tLat===0||m.tLat===7))piece.type='Q';
+  if(m.isCastle){
+    const rook=board[m.tLat][m.rookFromLon];
+    saved.rookHasMoved=rook.hasMoved;
+    board[m.tLat][m.rookFromLon]=null;
+    board[m.tLat][m.rookToLon]=rook;
+    rook.hasMoved=true;
+    piece._castled=true;
   }
-  const wasCastled=piece?piece._castled:undefined;
-  if(m.isCastle){board[m.tLat][m.rookToLon]=board[m.tLat][m.rookFromLon];board[m.tLat][m.rookFromLon]=null;if(piece)piece._castled=true;}
-  let epCap=null;
-  if(m.isEnPassant){epCap=board[m.capturedLat][m.capturedLon];board[m.capturedLat][m.capturedLon]=null;}
-  return{c,epCap,wasType,prevEP,wasCastled};
-}
-function aiUndo(m,piece,sv){
-  if(sv.wasType)piece.type=sv.wasType;
-  board[m.fLat][m.fLon]=piece; board[m.tLat][m.tLon]=sv.c||null;
-  enPassantTarget=sv.prevEP;
-  if(piece&&sv.wasCastled!==undefined)piece._castled=sv.wasCastled;
-  if(m.isCastle){board[m.tLat][m.rookFromLon]=board[m.tLat][m.rookToLon];board[m.tLat][m.rookToLon]=null;}
-  if(m.isEnPassant&&sv.epCap)board[m.capturedLat][m.capturedLon]=sv.epCap;
-}
-function minimax(depth,alpha,beta,maxing){
-  if(depth===0)return aiEval();
-  const color=maxing?'black':'white';
-  const moves=allAIMoves(color);
-  if(!moves.length)return maxing?-18000:18000;
-  moves.sort((a,b)=>{
-    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
-    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
-    return vb-va;
-  });
-  let best=maxing?-Infinity:Infinity;
-  for(const m of moves){
-    const piece=board[m.fLat][m.fLon];
-    const sv=aiApply(m);
-    const score=minimax(depth-1,alpha,beta,!maxing);
-    aiUndo(m,piece,sv);
-    if(maxing){if(score>best)best=score;if(score>alpha)alpha=score;}
-    else{if(score<best)best=score;if(score<beta)beta=score;}
-    if(beta<=alpha)break;
+  if(m.isEnPassant){
+    saved.epCap=board[m.capturedLat][m.capturedLon];
+    board[m.capturedLat][m.capturedLon]=null;
   }
-  return best;
+  return saved;
 }
-function getBestAIMove(){
-  const moves=allAIMoves(AI_COLOR); if(!moves.length)return null;
-  for(let i=moves.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[moves[i],moves[j]]=[moves[j],moves[i]];}
-  moves.sort((a,b)=>{
-    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
-    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
-    return vb-va;
-  });
-  let best=null,bestScore=-Infinity;
-  for(const m of moves){
-    const piece=board[m.fLat][m.fLon];
-    const sv=aiApply(m);
-    const score=minimax(2,-Infinity,Infinity,false);
-    aiUndo(m,piece,sv);
-    if(score>bestScore){bestScore=score;best=m;}
+function aiUndo(m,piece,saved){
+  piece.type=saved.wasType;
+  piece.hasMoved=saved.hasMoved;
+  board[m.fLat][m.fLon]=piece;
+  board[m.tLat][m.tLon]=saved.c;
+  enPassantTarget=saved.prevEP;
+  if(m.isCastle){
+    const rook=board[m.tLat][m.rookToLon];
+    board[m.tLat][m.rookToLon]=null;
+    board[m.tLat][m.rookFromLon]=rook;
+    rook.hasMoved=saved.rookHasMoved;
+    if(saved.wasCastled===undefined)delete piece._castled;
+    else piece._castled=saved.wasCastled;
   }
-  return best;
+  if(m.isEnPassant)board[m.capturedLat][m.capturedLon]=saved.epCap;
 }
-
 // Globe rotation animation
 let globeRotAnim=null;
 function rotateGlobeToFace(localDir,dur,onDone){
@@ -2673,13 +2650,14 @@ function doAiMove(){
         window._alignDisksForMove(m.fLat,m.fLon,m.tLat,m.tLon,650);
       rotateGlobeToFace(localDir,650,()=>{
         showMoves(m.fLat,m.fLon);
-        setTimeout(()=>{aiThinking=false;execMove(m.fLat,m.fLon,m.tLat,m.tLon);},480);
+        aiTimer=setTimeout(()=>{aiThinking=false;execMove(m.fLat,m.fLon,m.tLat,m.tLon);},480);
       });
     }
   );
 }
 
 function resetGame(){
+  cancelComputerTurn();
   if(testModeActive){
     // clean up test pieces before full reset
     for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
@@ -2740,6 +2718,8 @@ const _testInitPos={
 
 function toggleTestMode(){
   if(testModeActive){ exitTestMode(); return; }
+  finishMoveAnimation();
+  cancelComputerTurn();
   clearVis(); _checkmateActive=false; clearCheckRing(); if(moveAnim)moveAnim=null; aiThinking=false;
   testModeActive=true;
   _testActive.clear();
@@ -2805,6 +2785,7 @@ document.querySelectorAll('.tpb').forEach(btn=>{
 
 function exitTestMode(){
   if(!testModeActive)return;
+  cancelComputerTurn();
   clearVis(); _checkmateActive=false; clearCheckRing(); if(moveAnim)moveAnim=null;
   testModeActive=false; _testActive.clear();
   for(let la=0;la<8;la++) for(let lo=0;lo<8;lo++){
@@ -2837,6 +2818,7 @@ function exitTestMode(){
   } else {
     turnEl.textContent=turnColor==='black'?'Black to move':'White to move';
   }
+  if(aiMode&&turnColor===AI_COLOR&&hasAnyLegalMove(turnColor))aiTimer=setTimeout(doAiMove,0);
 }
 
 function updateDeleteBtn(){}
@@ -2969,7 +2951,7 @@ function animate(){
       moveAnim.blob.position.copy(blobPos);
       orientPiece(moveAnim.blob,blobPos);
     }
-    if(moveAnim.t>=1){const cb=moveAnim.onDone;moveAnim=null;cb();}
+    if(moveAnim.t>=1)finishMoveAnimation();
   }
 
   // Inertia
@@ -2990,7 +2972,7 @@ function animate(){
 // requestAnimationFrame stops when tab is hidden, blocking moveAnim/globeRotAnim
 // completion. This interval-based driver flushes stuck animations in background.
 setInterval(()=>{
-  if(!document.hidden)return;
+  if(!document.hidden||autoBattlePaused)return;
   if(!(autoBattleActive||aiMode))return;
   // Complete globeRotAnim instantly
   if(globeRotAnim){
@@ -2999,20 +2981,7 @@ setInterval(()=>{
     globeRotAnim=null;
     if(cb)cb();
   }
-  // Complete moveAnim instantly
-  if(moveAnim){
-    const endPt=moveAnim.pts[moveAnim.pts.length-1];
-    moveAnim.sprite.position.copy(endPt);
-    orientPiece(moveAnim.sprite,endPt);
-    if(moveAnim.blob){
-      const bp=endPt.clone().normalize().multiplyScalar(R);
-      moveAnim.blob.position.copy(bp);
-      orientPiece(moveAnim.blob,bp);
-    }
-    const cb=moveAnim.onDone;
-    moveAnim=null;
-    if(cb)cb();
-  }
+  finishMoveAnimation();
   // Complete capture fade instantly
   captureFlyAnims.forEach(a=>{
     a.sprite.traverse(c=>{
@@ -3032,138 +3001,53 @@ const DRAW_STREAK      = 20;   // consecutive half-moves both agree it's equal �
 let autoBattleActive = false;
 let autoBattlePaused = false;
 let _autoBattleTimer = null;
+let _pausedAutoAction=null;
+
+// Keep exactly one pending battle step, including while a rotation or a search finishes.
+function runAutoStep(action){
+  if(!autoBattleActive)return;
+  if(autoBattlePaused)_pausedAutoAction=action;
+  else action();
+}
 let _autoBattleLog = null;
 let _autoGameNum = 0;
 let _autoPosHist = {};
 
-// ── Globe-tactics-aware evaluation ──────────────────────────────────────────
-// Primary driver: piece material.
-// Secondary driver: pole proximity — pieces near polar caps attack in BOTH directions
-//   (normal + through the pole), doubling their tactical reach.
-// Tertiary: direct antipodal threat for Q/R exactly at the edge.
-function captureEval(){
-  const CV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
-  // Polar bonus per piece type (small enough not to override captures)
-  const POLAR={Q:30,R:27,B:24,N:20,P:0,K:0};
-  let s=0;
-  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-    const p=board[la][lo];if(!p)continue;
-    let v=CV[p.type];
-    // Tiered polar bonus: ×2 at the edge (lat 0 or 7), ×1 just inside (lat 1 or 6)
-    const pd=Math.min(la,7-la); // 0=pole edge, 3=equator
-    if(pd<=1) v+=(2-pd)*(POLAR[p.type]||0);
-    // Antipodal threat: Q or R on the pole edge, enemy at wL(lo+4) same lat
-    // → can reach enemy in ONE straight move through the polar cap
-    if(pd===0&&(p.type==='Q'||p.type==='R')){
-      const opp=board[la][wL(lo+4)];
-      if(opp&&opp.color!==p.color) v+=Math.round(CV[opp.type]*0.09);
-    }
-    s+=p.color==='black'?v:-v;
-  }
-  return s;
-}
-
-// ── Quiescence search (captures only, up to qleft extra plies) ────────────
-// Prevents the "horizon effect": never stop in the middle of a capture sequence.
-// This is what lets the AI see through 3-ply pole-crossing exchange sequences.
-function _quiesce(alpha,beta,maxing,qleft){
-  const stand=captureEval();
-  if(qleft===0) return stand;
-  // Stand-pat: if the quiet position is already good enough, don't search further
-  if(maxing){if(stand>=beta)return beta;if(stand>alpha)alpha=stand;}
-  else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
-  const color=maxing?'black':'white';
-  // Only look at captures (and en passant)
-  const caps=allAIMoves(color).filter(m=>board[m.tLat][m.tLon]||m.isEnPassant);
-  caps.sort((a,b)=>{
-    const va=board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0;
-    const vb=board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0;
-    return vb-va;
-  });
-  for(const m of caps){
-    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-    const score=_quiesce(alpha,beta,!maxing,qleft-1);
-    aiUndo(m,pc,sv);
-    if(maxing){if(score>alpha){alpha=score;if(alpha>=beta)return beta;}}
-    else{if(score<beta){beta=score;if(beta<=alpha)return alpha;}}
-  }
-  return maxing?alpha:beta;
-}
-
-function captureMinim(depth,alpha,beta,maxing){
-  // At depth=0, run quiescence instead of returning raw eval —
-  // this ensures capture sequences (including pole-crossing ones) are fully resolved.
-  if(depth===0) return _quiesce(alpha,beta,maxing,3);
-  const color=maxing?'black':'white';
-  const mvs=allAIMoves(color);
-  if(!mvs.length) return captureEval();
-  // Captures first in search ordering
-  mvs.sort((a,b)=>{
-    const va=board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0;
-    const vb=board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0;
-    return vb-va;
-  });
-  let best=maxing?-Infinity:Infinity;
-  for(const m of mvs){
-    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-    const sc=captureMinim(depth-1,alpha,beta,!maxing);
-    aiUndo(m,pc,sv);
-    if(maxing){if(sc>best)best=sc;if(sc>alpha)alpha=sc;}
-    else{if(sc<best)best=sc;if(sc<beta)beta=sc;}
-    if(beta<=alpha)break;
-  }
-  return best;
-}
-
-// ── Get best legal move for either color ─────────────────────────────────────
-// Strategy: greedy capture ordering + captureMinim(depth=2) for tie-breaking.
-// Each AI evaluates independently — neither knows the other's chosen move.
-function getAutoAIMove(color){
-  const legal=[];
-  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-    if(board[la][lo]?.color!==color)continue;
-    getLegalMoves(la,lo).forEach(mv=>legal.push({fLat:la,fLon:lo,tLat:mv.lat,tLon:mv.lon,...mv}));
-  }
-  if(!legal.length)return null;
-  // Shuffle first (variety within equal groups)
-  for(let i=legal.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];
-  }
-  // Primary sort: highest-value capture first
-  legal.sort((a,b)=>{
-    const va=(board[a.tLat][a.tLon]?AI_PVAL[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?AI_PVAL['P']:0);
-    const vb=(board[b.tLat][b.tLon]?AI_PVAL[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?AI_PVAL['P']:0);
-    return vb-va;
-  });
-  const isBlack=color==='black';
-  const nextMax=!isBlack; // after black moves → white's turn (not maxing); after white → black (maxing)
-  let best=null,bestSc=isBlack?-Infinity:Infinity;
-  const top=Math.min(legal.length,30); // evaluate top 30 candidate moves
-  // Anti-oscillation: penalise moves that send a piece straight back where it came from
-  const recentOwn=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-3);
-  const OSC_PEN=1200;
-  const isReversal=m=>recentOwn.some(prev=>
-    prev.coords[2]===m.fLat&&prev.coords[3]===m.fLon&&
-    prev.coords[0]===m.tLat&&prev.coords[1]===m.tLon);
-
-  for(let i=0;i<top;i++){
-    const m=legal[i];
-    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-    let sc=captureMinim(2,-Infinity,Infinity,nextMax);
-    aiUndo(m,pc,sv);
-    if(isReversal(m))sc=isBlack?sc-OSC_PEN:sc+OSC_PEN;
-    if(isBlack?sc>bestSc:sc<bestSc){bestSc=sc;best=m;}
-  }
-  return best;
-}
-
 // ── Logging helpers ───────────────────────────────────────────────────────────
-function _autoBoardHash(){
-  let h='';
-  for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-    const p=board[la][lo];h+=p?p.color[0]+p.type:'.';
+function _autoBoardHash(color=turnColor){
+  let key=color==='white'?'w':'b';
+  for(const row of board){
+    for(const p of row){
+      key+=p?(p.color==='white'?p.type:p.type.toLowerCase()):'.';
+    }
   }
-  return h+turnColor[0];
+  for(const [rank,side] of [[0,'black'],[7,'white']]){
+    const king=board[rank][3];
+    const eligible=king?.type==='K'&&king.color===side&&!king.hasMoved;
+    for(const lon of [0,7]){
+      const rook=board[rank][lon];
+      key+=eligible&&rook?.type==='R'&&rook.color===side&&!rook.hasMoved?'1':'0';
+    }
+  }
+  // En passant distinguishes positions only when a legal capture is available.
+  if(enPassantTarget){
+    const {lat,lon}=enPassantTarget;
+    const fromLat=lat+(color==='white'?1:-1);
+    const victim=board[fromLat]?.[lon];
+    if(victim?.type==='P'&&victim.color!==color){
+      for(const fromLon of [wL(lon-1),wL(lon+1)]){
+        const pawn=board[fromLat][fromLon];
+        if(pawn?.type!=='P'||pawn.color!==color)continue;
+        const move={fLat:fromLat,fLon:fromLon,tLat:lat,tLon:lon,isEnPassant:true,
+          capturedLat:fromLat,capturedLon:lon};
+        const saved=aiApply(move);
+        const legal=!isInCheck(color);
+        aiUndo(move,pawn,saved);
+        if(legal)return key+'e'+lat+lon;
+      }
+    }
+  }
+  return key;
 }
 const _ACOL=['h','g','f','e','d','c','b','a'];
 function _autoNote(la,lo){return _ACOL[lo]+(8-la);}
@@ -3204,662 +3088,317 @@ function _autoInsufMaterial(){
 const _AI_THINK_MS  = 8000;   // AI opponent: 8 s per move
 const _AUTO_THINK_MS= 1500;   // Auto-battle: 1.5 s per move (deeper search)
 
-// Piece-square tables (index = latForPST: 0=own back rank, 7=opponent back rank)
-const _PST={
-  P:[0,5,15,30,45,65,90,0],         // stronger center push incentive
-  N:[-30,-5,15,25,25,15,-5,-30],     // much stronger center preference
-  B:[-10,5,12,18,18,12,5,-10],       // encourage development
-  R:[5,0,0,8,8,0,0,5],
-  Q:[-15,-5,0,5,5,0,-5,-15],
-  Km:[30,15,-15,-30,-30,-15,15,30],  // king middlegame: STAY BACK strongly
-  Ke:[-20,-5,15,25,25,15,-5,-20]      // king endgame: centralize MORE aggressively
-};
+// Search and the game report use positive scores for Black.
 const _EV={K:50000,Q:1800,R:1000,B:650,N:620,P:180};
-const _POL={Q:30,R:27,B:24,N:20,P:0,K:0};
+const phaseWeight={K:0,Q:4,R:2,B:1,N:1,P:0}; // initial material totals 24
+const rankBonus={
+  P:[0,0,6,14,26,44,72,0],
+  N:[-14,-4,8,12,12,8,0,-8],
+  B:[-8,2,8,12,12,8,2,-4],
+  R:[0,0,2,4,6,10,18,12],
+  Q:[0,0,2,4,4,2,0,0],
+  K:[0,0,0,0,0,0,0,0]
+};
+const passerBonus=[0,155,94,58,36,24,16,0];
+
+// Distance in king moves on the empty globe. A polar step stays on the
+// outermost rank and exits four files away. Other rank steps may be diagonal.
+function globeKingDistance(lat,lon,targetLat,targetLon){
+  const delta=Math.abs(lon-targetLon);
+  const files=Math.min(delta,8-delta);
+  const direct=Math.max(Math.abs(lat-targetLat),files);
+  const ranksViaPole=Math.min(lat+targetLat,14-lat-targetLat);
+  return Math.min(direct,1+Math.max(ranksViaPole,4-files));
+}
+
+// Scratch masks for this synchronous evaluator. One bit per occupied rank.
+const evalPawns=new Uint8Array(16);
+const evalFiles=new Uint8Array(8);
+const evalKings=new Int8Array(2);
+const evalBishops=new Uint8Array(2);
+const evalArmy=new Uint8Array(2);
+const evalPhase=new Uint8Array(2);
 
 function evaluate(){
-  let s=0,nonPK=0;
-  const pLon=[new Uint8Array(8),new Uint8Array(8)]; // [black,white] pawn lon counts
-  let wBishops=0,bBishops=0,wKingLat=-1,wKingLon=-1,bKingLat=-1,bKingLon=-1;
-  let wCastled=false,bCastled=false;
-  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-    const p=board[a][o];if(!p)continue;
-    if(p.type==='K'){
-      if(p.color==='white'){wKingLat=a;wKingLon=o;wCastled=!!p._castled;}
-      else{bKingLat=a;bKingLon=o;bCastled=!!p._castled;}
-    }
-    if(p.type!=='K'&&p.type!=='P')nonPK+=_EV[p.type];
-    if(p.type==='B'){if(p.color==='white')wBishops++;else bBishops++;}
+  evalPawns.fill(0);
+  evalFiles.fill(0);
+  evalKings.fill(-1);
+  evalBishops.fill(0);
+  evalArmy.fill(0);
+  evalPhase.fill(0);
+  for(let lat=0;lat<8;lat++)for(let lon=0;lon<8;lon++){
+    const piece=board[lat][lon];
+    if(!piece)continue;
+    const side=piece.color==='black'?0:1;
+    const bit=1<<lat;
+    evalFiles[lon]|=bit;
+    if(piece.type==='K')evalKings[side]=lat*8+lon;
+    else evalArmy[side]++;
+    if(piece.type==='P')evalPawns[side*8+lon]|=bit;
+    if(piece.type==='B')evalBishops[side]++;
+    evalPhase[side]+=phaseWeight[piece.type];
   }
-  const eg=nonPK<2600;
-  const moveNum=(_autoBattleLog?.moves.length||0)/2;
-  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-    const p=board[a][o];if(!p)continue;
-    const bk=p.color==='black';
-    const lp=bk?a:(7-a);
-    let v=_EV[p.type];
-    // PST
-    v+=(p.type==='K'?(eg?_PST.Ke:_PST.Km):_PST[p.type]||[])[lp]||0;
-    const pd=Math.min(a,7-a); // 0=pole edge, 3=equator
-    // Knight on own back rank (lp=0) is extra bad
-    if(p.type==='N'&&lp===0)v-=20;
-    // Opening: knight on pole edge (pd=0, lat 0 or 7) is genuinely bad — no escape routes
-    if(p.type==='N'&&moveNum<10&&pd===0)v-=50;
-    // Polar bonus
-    if(pd<=1)v+=(2-pd)*(_POL[p.type]||0);
-    if(pd===0&&(p.type==='Q'||p.type==='R')){
-      const op=board[a][wL(o+4)];
-      if(op&&op.color!==p.color)v+=Math.round(_EV[op.type]*0.09);
-    }
-    // Development: minor pieces still on starting square
-    if(!p.hasMoved&&(p.type==='N'||p.type==='B')){
-      v-=25;
-      if(moveNum<10)v-=20; // extra penalty in opening: get pieces out!
-    }
-    if(p.hasMoved&&(p.type==='N'||p.type==='B')&&moveNum<10)v+=10; // reward developed pieces
-    if(p.type==='R'&&p.hasMoved)v+=8;
-    // Pawn tracking
-    if(p.type==='P'){
-      pLon[bk?0:1][o]++;
-      // Late endgame: pawns become critical (only path to promotion/winning)
-      if(eg){
-        // Count own non-pawn, non-king pieces
-        let ownPieces=0;
-        for(let la2=0;la2<8;la2++)for(let lo2=0;lo2<8;lo2++){
-          const p2=board[la2][lo2];
-          if(p2&&p2.color===p.color&&p2.type!=='K'&&p2.type!=='P')ownPieces++;
+  const midgame=Math.min(24,evalPhase[0]+evalPhase[1])/24;
+  const endgame=1-midgame;
+  let score=0;
+  for(let lat=0;lat<8;lat++)for(let lon=0;lon<8;lon++){
+    const piece=board[lat][lon];
+    if(!piece)continue;
+    const black=piece.color==='black';
+    const side=black?0:1, opponent=1-side;
+    const own=side*8, enemy=opponent*8;
+    const progress=black?lat:7-lat;
+    const left=(lon+7)%8,right=(lon+1)%8;
+    let value=_EV[piece.type]+rankBonus[piece.type][progress];
+    if(piece.type==='P'){
+      const ahead=black?(255<<(lat+1))&255:(1<<lat)-1;
+      const ownAhead=evalPawns[own+lon]&ahead;
+      const neighbors=evalPawns[own+left]|evalPawns[own+right];
+      if(ownAhead)value-=22;
+      if(!neighbors)value-=14;
+      const supportRank=lat+(black?-1:1);
+      if(supportRank>=0&&supportRank<8&&(neighbors&(1<<supportRank)))value+=12;
+      const enemyFiles=evalPawns[enemy+left]|evalPawns[enemy+lon]|evalPawns[enemy+right];
+      if(!ownAhead&&!(enemyFiles&ahead)){
+        const steps=7-progress;
+        const clear=!(evalFiles[lon]&ahead);
+        value+=passerBonus[steps]*(clear?1:0.55);
+        const enemyKing=evalKings[opponent],ownKing=evalKings[side];
+        if(endgame>0&&enemyKing>=0&&ownKing>=0){
+          const promoLat=black?7:0;
+          const escort=globeKingDistance(lat,lon,ownKing>>3,ownKing%8);
+          const intercept=globeKingDistance(promoLat,lon,enemyKing>>3,enemyKing%8);
+          value+=endgame*(intercept-escort)*6;
+          if(clear&&evalPhase[opponent]===0&&intercept>steps+1)value+=endgame*55;
         }
-        if(ownPieces===0)v+=120; // no pieces left → pawns are worth double
-        else if(ownPieces===1)v+=50; // only one piece → pawns are precious
       }
-    }
-    s+=bk?v:-v;
-  }
-  // Pawn structure penalties
-  for(let side=0;side<2;side++){
-    const sgn=side===0?1:-1;
-    let pen=0;
-    for(let o=0;o<8;o++){
-      const c=pLon[side][o];
-      if(c>1)pen+=(c-1)*18;    // doubled pawns (increased)
-      if(c>0&&!pLon[side][wL(o-1)]&&!pLon[side][wL(o+1)])pen+=15; // isolated (increased)
-    }
-    s-=pen*sgn;
-  }
-  // Passed pawn detection + bonus
-  const passedPawns=[];
-  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-    const p=board[a][o];if(!p||p.type!=='P')continue;
-    const bk=p.color==='black';
-    const promoLat=bk?7:0;
-    let passed=true;
-    // Check opponent pawns on same or adjacent lons ahead of this pawn
-    for(let dlo=-1;dlo<=1;dlo++){
-      const lo=wL(o+dlo);
-      if(bk){for(let la=a+1;la<=7;la++){const bp=board[la][lo];if(bp&&bp.type==='P'&&bp.color==='white'){passed=false;break;}}}
-      else{for(let la=a-1;la>=0;la--){const bp=board[la][lo];if(bp&&bp.type==='P'&&bp.color==='black'){passed=false;break;}}}
-      if(!passed)break;
-    }
-    if(passed){
-      const dist=Math.abs(promoLat-a);
-      passedPawns.push({lat:a,lon:o,color:p.color,dist});
-      // Exponential bonus: closer to promotion = much more valuable
-      let bonus=dist<=1?250:dist<=2?140:dist<=3?85:dist<=4?55:dist<=5?35:20;
-      // Unblocked passer: no piece of ANY color in the way → even more dangerous
-      let clearPath=true;
-      const dir2=bk?1:-1;
-      for(let la=a+dir2;bk?(la<=7):(la>=0);la+=dir2){
-        if(board[la][o]){clearPath=false;break;}
+    }else if(piece.type==='N'){
+      // Use actual globe jumps, including jumps reflected across a pole.
+      // Count squares the knight can use without stepping into a pawn attack.
+      let mobility=0;
+      for(const jump of globeSteps[lat*8+lon].knight){
+        const rank=jump.square>>3,file=jump.square%8;
+        if(board[rank][file]?.color===piece.color)continue;
+        const pawnRank=rank+(black?1:-1);
+        const pawnFiles=evalPawns[enemy+(file+7)%8]|evalPawns[enemy+(file+1)%8];
+        if(pawnRank<0||pawnRank>7||!(pawnFiles&(1<<pawnRank)))mobility++;
       }
-      if(clearPath&&dist<=2)bonus+=dist<=1?500:200; // nearly unstoppable
-      s+=bk?bonus:-bonus;
-    }
-  }
-  // Endgame: king proximity to passed pawns
-  if(eg&&passedPawns.length>0){
-    const lonDist=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
-    for(const pp of passedPawns){
-      const bk=pp.color==='black';
-      const promoLat=bk?7:0;
-      const ownKLat=bk?bKingLat:wKingLat, ownKLon=bk?bKingLon:wKingLon;
-      const oppKLat=bk?wKingLat:bKingLat, oppKLon=bk?wKingLon:bKingLon;
-      if(ownKLat<0||oppKLat<0)continue;
-      const ownDist=Math.max(Math.abs(ownKLat-pp.lat),lonDist(ownKLon,pp.lon));
-      const oppDist=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
-      // Own king close to support passer; opponent king far = good
-      s+=(bk?1:-1)*((7-ownDist)*6-(7-oppDist)*8);
-      // King escort: own king close to AND ahead of passer gets big bonus
-      // "ahead" = between pawn and promo square
-      const ownKingAhead=bk?(ownKLat>pp.lat):(ownKLat<pp.lat);
-      if(ownDist<=2&&ownKingAhead){
-        s+=(bk?1:-1)*(pp.dist<=2?100:pp.dist<=4?50:25); // huge bonus for escorting near-promo pawn
-      }
-      // K+P endgame: if own side has no non-pawn pieces, king MUST escort pawn
-      let ownPiecesCount=0;
-      for(let la2=0;la2<8;la2++)for(let lo2=0;lo2<8;lo2++){
-        const p2=board[la2][lo2];
-        if(p2&&p2.color===pp.color&&p2.type!=='K'&&p2.type!=='P')ownPiecesCount++;
-      }
-      if(ownPiecesCount===0&&ownDist>2){
-        s+=(bk?-1:1)*(ownDist-2)*18; // strong penalty: king far from pawn with no pieces to help
-      }
-      // Urgent interception: opponent king distance to PROMO SQUARE matters most for dangerous passers
-      if(pp.dist<=3){
-        const oppToPromo=Math.max(Math.abs(oppKLat-promoLat),lonDist(oppKLon,pp.lon));
-        // If opponent king can't reach promo square in time, passer is unstoppable
-        if(oppToPromo>pp.dist){
-          const unstopBonus=pp.dist<=1?400:pp.dist<=2?200:80;
-          s+=(bk?1:-1)*unstopBonus;
+      value+=mobility*4;
+    }else if(piece.type==='B'){
+      // Score the first two usable squares on each diagonal to reward
+      // development and penalize bishops shut in by their own pawns.
+      for(const ray of globeSteps[lat*8+lon].diagonal){
+        for(let step=0;step<Math.min(2,ray.cells.length);step++){
+          const square=ray.cells[step];
+          const blocker=board[square>>3][square%8];
+          if(blocker?.color===piece.color)break;
+          value+=3;
+          if(blocker)break;
         }
-        // Reward opponent king being close to the pawn (for interception)
-        // This encourages the DEFENDING side to move king toward the passer
-        const oppToPawn=Math.max(Math.abs(oppKLat-pp.lat),lonDist(oppKLon,pp.lon));
-        s+=(bk?-1:1)*(7-oppToPawn)*12; // defending king close to pawn = good for defender
       }
-    }
-  }
-  // Bishop pair bonus (having both bishops is worth extra)
-  if(wBishops>=2)s-=35;
-  if(bBishops>=2)s+=35;
-  // King safety (middlegame only)
-  if(!eg){
-    // Castling bonus
-    if(wCastled)s-=40; // white castled → good for white → s goes down
-    if(bCastled)s+=40;
-    // Penalty for uncastled king after early game
-    if(moveNum>8){
-      if(!wCastled&&wKingLat>=0){
-        const wkd=Math.min(wKingLat,7-wKingLat);
-        if(wkd>1)s+=25; // white king exposed in center → bad for white
-      }
-      if(!bCastled&&bKingLat>=0){
-        const bkd=Math.min(bKingLat,7-bKingLat);
-        if(bkd>1)s-=25;
-      }
-    }
-    // Pawn shield: count pawns adjacent to king
-    for(let side=0;side<2;side++){
-      const kLat=side===0?bKingLat:wKingLat;
-      const kLon=side===0?bKingLon:wKingLon;
-      if(kLat<0)continue;
-      const sgn=side===0?1:-1;
+    }else if(piece.type==='R'){
+      if(!evalPawns[own+lon])value+=evalPawns[enemy+lon]?12:24;
+    }else if(piece.type==='K'){
+      const shieldRank=lat+(black?1:-1);
       let shield=0;
-      const fwd=side===0?1:-1; // forward direction for each side
-      for(let dlo=-1;dlo<=1;dlo++){
-        const sLat=kLat+fwd, sLon=wL(kLon+dlo);
-        if(sLat>=0&&sLat<=7){
-          const sp=board[sLat][sLon];
-          if(sp&&sp.type==='P'&&sp.color===(side===0?'black':'white'))shield++;
-        }
+      if(shieldRank>=0&&shieldRank<8){
+        const bit=1<<shieldRank;
+        if(evalPawns[own+left]&bit)shield++;
+        if(evalPawns[own+lon]&bit)shield++;
+        if(evalPawns[own+right]&bit)shield++;
       }
-      s+=sgn*(shield*12); // each shield pawn worth 12
+      value+=midgame*(shield*14-6*Math.min(progress,4));
+      if(evalArmy[opponent]===0&&evalArmy[side]>0&&evalKings[opponent]>=0){
+        const enemyKing=evalKings[opponent];
+        const distance=globeKingDistance(lat,lon,enemyKing>>3,enemyKing%8);
+        value+=endgame*(7-distance)*16;
+      }
     }
+    score+=black?value:-value;
   }
-  // Endgame bonuses
-  if(eg){
-    const _ld=(a,b)=>Math.min(Math.abs(a-b),8-Math.abs(a-b));
-    // Push enemy king to polar edge (lat 0 or 7 = fewer escape squares on sphere)
-    if(wKingLat>=0){
-      const wkCenter=Math.min(wKingLat,7-wKingLat); // 0=pole edge, 3=equator
-      s+=(3-wkCenter)*10; // white king near edge → bad for white → s↑
-    }
-    if(bKingLat>=0){
-      const bkCenter=Math.min(bKingLat,7-bKingLat);
-      s-=(3-bkCenter)*10; // black king near edge → bad for black → s↓
-    }
-    // Piece hunting enemy king (queen, rook, or any major piece)
-    let wHasQ=false,bHasQ=false,wQLat=-1,wQLon=-1,bQLat=-1,bQLon=-1;
-    let wMajors=0,bMajors=0;
-    const wRooks=[],bRooks=[];
-    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-      const p=board[a][o];if(!p)continue;
-      if(p.type==='Q'){
-        if(p.color==='white'){wHasQ=true;wQLat=a;wQLon=o;wMajors++;}
-        else{bHasQ=true;bQLat=a;bQLon=o;bMajors++;}
-      }
-      if(p.type==='R'){
-        if(p.color==='white'){wMajors++;wRooks.push({a,o});}
-        else{bMajors++;bRooks.push({a,o});}
-      }
-    }
-    // Queen hunting enemy king (aggressive)
-    if(wHasQ&&!bHasQ&&bKingLat>=0){
-      const qd=Math.max(Math.abs(wQLat-bKingLat),_ld(wQLon,bKingLon));
-      s-=(7-qd)*25; // stronger pull toward enemy king
-      // King should also approach to help queen deliver mate
-      const kkd=Math.max(Math.abs(wKingLat-bKingLat),_ld(wKingLon,bKingLon));
-      s-=(7-kkd)*10;
-    }
-    if(bHasQ&&!wHasQ&&wKingLat>=0){
-      const qd=Math.max(Math.abs(bQLat-wKingLat),_ld(bQLon,wKingLon));
-      s+=(7-qd)*25;
-      const kkd=Math.max(Math.abs(bKingLat-wKingLat),_ld(bKingLon,wKingLon));
-      s+=(7-kkd)*10;
-    }
-    // Rook hunting enemy king: reward rook proximity when opponent has no rook
-    if(wRooks.length>0&&bRooks.length===0&&!bHasQ&&bKingLat>=0){
-      for(const r of wRooks){
-        const rd=Math.max(Math.abs(r.a-bKingLat),_ld(r.o,bKingLon));
-        s-=(7-rd)*12;
-      }
-    }
-    if(bRooks.length>0&&wRooks.length===0&&!wHasQ&&wKingLat>=0){
-      for(const r of bRooks){
-        const rd=Math.max(Math.abs(r.a-wKingLat),_ld(r.o,wKingLon));
-        s+=(7-rd)*12;
-      }
-    }
-    // R+K vs K mating pattern: specialized evaluation for rook + king vs lone king
-    // On the sphere, the "box method" = rook restricts enemy king's latitude band, own king closes in
-    for(let side=0;side<2;side++){
-      const atkCol=side===0?'white':'black';
-      const defCol=side===0?'black':'white';
-      const sgn=side===0?-1:1; // negative = good for white
-      const atkK=side===0?{la:wKingLat,lo:wKingLon}:{la:bKingLat,lo:bKingLon};
-      const defK=side===0?{la:bKingLat,lo:bKingLon}:{la:wKingLat,lo:wKingLon};
-      const rooks=side===0?wRooks:bRooks;
-      const oppRooks=side===0?bRooks:wRooks;
-      const oppQ=side===0?bHasQ:wHasQ;
-      if(rooks.length===0||oppRooks.length>0||oppQ)continue;
-      if(atkK.la<0||defK.la<0)continue;
-      // Count defender's non-king pieces
-      let defPieces=0;
-      for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-        const p=board[a][o];if(p&&p.color===defCol&&p.type!=='K')defPieces++;
-      }
-      if(defPieces>0)continue; // only activate for R+K vs lone K
-      // Mating bonuses (much stronger than general hunting)
-      const r=rooks[0]; // use first rook
-      // 1. Enemy king pushed to edge: much stronger bonus
-      const defCenter=Math.min(defK.la,7-defK.la);
-      s+=sgn*(3-defCenter)*30; // 0=pole edge: +90, 3=center: 0
-      // 2. Rook on same lat as enemy king (cutting off escape) or adjacent lat
-      const rLatDist=Math.abs(r.a-defK.la);
-      if(rLatDist<=1&&_ld(r.o,defK.lo)>=2) s+=sgn*60; // rook cutting off enemy king
-      // 3. Own king close to enemy king (for coordinated mate)
-      const kkDist=Math.max(Math.abs(atkK.la-defK.la),_ld(atkK.lo,defK.lo));
-      s+=sgn*(7-kkDist)*20; // much stronger: up to +140
-      // 4. Own king on same lat as enemy king (opposition)
-      if(Math.abs(atkK.la-defK.la)<=1) s+=sgn*40;
-      // 5. Rook and king on same side of enemy king (coordinated)
-      const rkSameSide=(r.a<defK.la&&atkK.la<defK.la)||(r.a>defK.la&&atkK.la>defK.la);
-      if(!rkSameSide) s+=sgn*25; // bonus for flanking from opposite sides
-    }
-    // Major pieces (R/Q) should approach enemy king in endgame
-    if(wMajors>0&&!bHasQ&&bKingLat>=0){
-      // Reward own king proximity to enemy king (for coordinated mating attack)
-      const kkDist=Math.max(Math.abs(wKingLat-bKingLat),_ld(wKingLon,bKingLon));
-      s-=(7-kkDist)*8; // white king close to black king → good for white
-    }
-    if(bMajors>0&&!wHasQ&&wKingLat>=0){
-      const kkDist=Math.max(Math.abs(bKingLat-wKingLat),_ld(bKingLon,wKingLon));
-      s+=(7-kkDist)*8;
-    }
-    // Passed pawn blocker
-    for(const pp of passedPawns){
-      const bk=pp.color==='black';
-      const dir=bk?1:-1;
-      let blockerCount=0;
-      for(let la=pp.lat+dir;bk?(la<=7):(la>=0);la+=dir){
-        const bp=board[la][pp.lon];
-        if(bp&&bp.color!==(bk?'black':'white')){blockerCount++;break;}
-      }
-      if(blockerCount===1&&pp.dist<=3){
-        const pen=pp.dist<=1?80:pp.dist<=2?50:30;
-        s+=(bk?1:-1)*pen;
-      }
-    }
-    // Endgame piece coordination: minor pieces should stay near own king
-    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-      const p=board[a][o];if(!p||p.type==='K'||p.type==='P')continue;
-      const bk=p.color==='black';
-      const kLat=bk?bKingLat:wKingLat, kLon=bk?bKingLon:wKingLon;
-      if(kLat<0)continue;
-      const dist=Math.max(Math.abs(a-kLat),_ld(o,kLon));
-      // Knight/bishop far from own king in endgame is bad (can't coordinate for mate)
-      if(p.type==='N'||p.type==='B'){
-        if(dist>3) s+=(bk?-1:1)*(dist-3)*12; // penalty for being far from own king
-      }
-      // Rook can operate from distance, but should still be somewhat coordinated
-      if(p.type==='R'&&dist>5) s+=(bk?-1:1)*(dist-5)*6;
-    }
-    // King should move toward own remaining pieces, not flee randomly
-    for(let side=0;side<2;side++){
-      const kLat=side===0?bKingLat:wKingLat;
-      const kLon=side===0?bKingLon:wKingLon;
-      if(kLat<0)continue;
-      const sgn=side===0?1:-1;
-      const col=side===0?'black':'white';
-      let totalDist=0,pieceCount=0;
-      for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-        const p=board[a][o];if(!p||p.color!==col||p.type==='K')continue;
-        totalDist+=Math.max(Math.abs(a-kLat),_ld(o,kLon));
-        pieceCount++;
-      }
-      if(pieceCount>0){
-        const avgDist=totalDist/pieceCount;
-        // Penalize king being far from its own army
-        if(avgDist>3) s-=sgn*Math.round((avgDist-3)*8);
-      }
-    }
-  }
-  // Middlegame: queen should stay near own king for defense when king is exposed
-  if(!eg){
-    for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-      const p=board[a][o];if(!p||p.type!=='Q')continue;
-      const bk=p.color==='black';
-      const kLat=bk?bKingLat:wKingLat, kLon=bk?bKingLon:wKingLon;
-      if(kLat<0)continue;
-      const kCastled=bk?bCastled:wCastled;
-      if(!kCastled){
-        const _ld2=(x,y)=>Math.min(Math.abs(x-y),8-Math.abs(x-y));
-        const qkDist=Math.max(Math.abs(a-kLat),_ld2(o,kLon));
-        if(qkDist>4) s+=(bk?-1:1)*(qkDist-4)*12; // queen too far from uncastled king
-      }
-    }
-  }
-  // Tempo bonus: white has first-move advantage
-  s-=8; // s negative = good for white
-  return s;
+  if(evalBishops[0]>=2)score+=30;
+  if(evalBishops[1]>=2)score-=30;
+  return Math.trunc(score);
 }
 
-// α-β with time deadline
-function _abSearch(depth,alpha,beta,maxing,deadline){
-  if(Date.now()>=deadline)return evaluate();
-  if(depth<=0)return _abQuiesce(alpha,beta,maxing,4,deadline);
-  const color=maxing?'black':'white';
-  const mvs=allAIMoves(color);
-  if(!mvs.length){
-    // No moves: checkmate or stalemate
-    if(isInCheck(color))return maxing?(-90000+depth*100):(90000-depth*100);
-    // Stalemate: penalize the winning side (drawing when ahead is terrible)
-    const stalEval=evaluate();
-    // If black is ahead (stalEval>0) and it's white's turn with no moves → white is stalemated
-    // Black caused the stalemate and should be penalized for drawing
-    if(Math.abs(stalEval)>200){
-      // Return a value bad for the side that was winning
-      return stalEval>0?-3000:3000; // heavy penalty for stalemating when winning
-    }
-    return 0; // truly equal position → stalemate is fine
-  }
-  mvs.sort((a,b)=>{
-    const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
-    const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
-    return vb-va;
-  });
-  let best=maxing?-Infinity:Infinity;
-  for(const m of mvs){
-    if(Date.now()>=deadline)break;
-    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-    const sc=_abSearch(depth-1,alpha,beta,!maxing,deadline);
-    aiUndo(m,pc,sv);
-    if(maxing){if(sc>best)best=sc;if(sc>alpha)alpha=sc;}
-    else{if(sc<best)best=sc;if(sc<beta)beta=sc;}
-    if(beta<=alpha)break;
-  }
-  return best===(-Infinity)||best===Infinity?evaluate():best;
+// Scores in negamax are always from the side-to-move's perspective.
+const AI_MATE=1000000;
+const AI_TIMEOUT=Symbol('AI deadline');
+let aiSearchGeneration=0;
+function cancelAISearch(){ aiSearchGeneration++; }
+
+function aiMoveId(m){
+  return ((m.fLat*8+m.fLon)*8+m.tLat)*8+m.tLon;
 }
-function _abQuiesce(alpha,beta,maxing,qleft,deadline){
-  if(Date.now()>=deadline)return evaluate();
-  const stand=evaluate();
-  if(qleft<=0)return stand;
-  if(maxing){if(stand>=beta)return beta;if(stand>alpha)alpha=stand;}
-  else{if(stand<=alpha)return alpha;if(stand<beta)beta=stand;}
-  const color=maxing?'black':'white';
-  const caps=allAIMoves(color).filter(m=>board[m.tLat][m.tLon]||m.isEnPassant);
-  caps.sort((a,b)=>{
-    const va=board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0;
-    const vb=board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0;
-    return vb-va;
-  });
-  for(const m of caps){
-    if(Date.now()>=deadline)break;
-    const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-    const sc=_abQuiesce(alpha,beta,!maxing,qleft-1,deadline);
-    aiUndo(m,pc,sv);
-    if(maxing){if(sc>alpha){alpha=sc;if(alpha>=beta)return beta;}}
-    else{if(sc<beta){beta=sc;if(beta<=alpha)return alpha;}}
+function orderSearchMoves(moves,preferred){
+  for(const m of moves){
+    const piece=board[m.fLat][m.fLon];
+    const victim=board[m.tLat][m.tLon];
+    const capture=victim?_EV[victim.type]:(m.isEnPassant?_EV.P:0);
+    const promotion=piece.type==='P'&&(m.tLat===0||m.tLat===7);
+    // Try the previous principal move, promotions, then valuable captures
+    // by cheaper attackers. These priorities only change search order.
+    m.order=aiMoveId(m)===preferred?1000000:0;
+    if(promotion)m.order+=16*(_EV.Q-_EV.P);
+    if(capture)m.order+=16*capture-_EV[piece.type]/100;
+    if(m.isCastle)m.order+=1;
   }
-  return maxing?alpha:beta;
+  return moves.sort((a,b)=>b.order-a.order);
 }
 
-// Iterative deepening with time control + progress UI
-function _findBestMove(color,timeLimitMs,onProgress,onDone,opts){
-  const captureBonus=(opts?.captureBonus)||0;
-  const globeBonus=(opts?.globeBonus)||0;  // scale factor for globe-wrapping spectacle bonus
-  const t0=Date.now(),deadline=t0+timeLimitMs;
-  // Pre-compute phase deadlines as absolute timestamps
-  const dlEarly=t0+timeLimitMs*0.55;  // stop starting new depths after 55% of time
-  const dlMid  =t0+timeLimitMs*0.80;  // abort if no time for a full depth
-  const dlLate =t0+timeLimitMs*0.95;  // stop mid-depth if nearly out of time
-  const legal=[];
-  for(let a=0;a<8;a++)for(let o=0;o<8;o++){
-    if(board[a][o]?.color!==color)continue;
-    getLegalMoves(a,o).forEach(mv=>legal.push({fLat:a,fLon:o,tLat:mv.lat,tLon:mv.lon,...mv}));
-  }
-  if(!legal.length){onDone(null,0);return;}
-  // Shuffle for variety among equal-scoring moves
-  for(let i=legal.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[legal[i],legal[j]]=[legal[j],legal[i]];}
-  // Initial ordering: captures first (stable: equal-value captures keep shuffled order)
-  // Assign shuffle index to preserve randomness within same-value groups
-  legal.forEach((m,i)=>m._si=i);
-  legal.sort((a,b)=>{
-    // Near-promotion pawns first (distance ≤2 to promo rank)
-    const pa=board[a.fLat]?.[a.fLon], pb=board[b.fLat]?.[b.fLon];
-    const promA=pa?.type==='P'?Math.abs((pa.color==='black'?7:0)-a.tLat):99;
-    const promB=pb?.type==='P'?Math.abs((pb.color==='black'?7:0)-b.tLat):99;
-    if(promA<=2&&promB>2)return -1;
-    if(promB<=2&&promA>2)return 1;
-    // Then captures by value
-    const va=(board[a.tLat][a.tLon]?_EV[board[a.tLat][a.tLon].type]:0)+(a.isEnPassant?_EV.P:0);
-    const vb=(board[b.tLat][b.tLon]?_EV[board[b.tLat][b.tLon].type]:0)+(b.isEnPassant?_EV.P:0);
-    return vb-va||(a._si-b._si);
-  });
-  let bestMove=legal[0],finalDepth=0;
-  // Random noise for tie-breaking (±8 pts — varies openings without affecting real decisions)
-  const _noise=()=>(Math.random()-0.5)*16;
-  // Anti-oscillation (auto-battle only) — check last 6 moves for reversals
-  const recent=autoBattleActive?(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-6):[];
-  const isRev=m=>recent.some(p=>p.coords[2]===m.fLat&&p.coords[3]===m.fLon&&p.coords[0]===m.tLat&&p.coords[1]===m.tLon);
-  // Broader repetition: penalize moves that recreate ANY position we've seen before
-  const posHist=autoBattleActive?_autoPosHist:{};
-  // Same-piece wandering detection: chain-based identity tracking
-  // Trace piece identity by linking move destinations to origins (handles pole crossings)
-  const _pieceWanderCount={};
-  const _pieceTypeCount={};
-  if(autoBattleActive){
-    const allRecent=(_autoBattleLog?.moves||[]).filter(m=>m.color===color).slice(-10);
-    // Build identity chains: a piece that moved FROM (fLat,fLon) TO (tLat,tLon)
-    // is the same piece that later moves FROM (tLat,tLon). Chain consecutive non-capture moves.
-    // Count consecutive non-capture moves per chain (reset on capture of significant piece ≥300).
-    const chains={}; // key = current position → {count, type}
-    for(let i=0;i<allRecent.length;i++){
-      const m=allRecent[i];
-      const fromKey=`${m.coords[0]},${m.coords[1]}`;
-      const toKey=`${m.coords[2]},${m.coords[3]}`;
-      const sigCapture=m.captured&&m.captureVal>=300;
-      // Find chain at fromKey (this piece was previously tracked here)
-      const prev=chains[fromKey];
-      const cnt=(!sigCapture&&prev)?prev.count+1:1;
-      delete chains[fromKey]; // piece left this square
-      chains[toKey]={count:cnt,type:m.piece};
-      // Type counting (non-capture moves only)
-      if(!m.captured){
-        _pieceTypeCount[m.piece]=(_pieceTypeCount[m.piece]||0)+1;
-      }
-    }
-    // Map current positions to wander counts
-    Object.entries(chains).forEach(([key,{count,type}])=>{
-      _pieceWanderCount[key]=count;
-    });
-    _pieceWanderCount._types=_pieceTypeCount;
-  }
-  let searchDepth=0;
+function searchExpired(search){
+  if(performance.now()>=search.deadline)throw AI_TIMEOUT;
+}
 
-  function nextDepth(){
-    searchDepth++;
-    if(searchDepth>8||Date.now()>=dlEarly){onDone(bestMove,finalDepth);return;}
-    if(onProgress)onProgress(searchDepth,Date.now()-t0);
-    setTimeout(()=>{
-      if(Date.now()>=dlMid){onDone(bestMove,finalDepth);return;}
-      const isBlack=color==='black';
-      let dBest=null,dBestSc=isBlack?-Infinity:Infinity;
-      let completed=true;
-      for(const m of legal){
-        if(Date.now()>=dlLate){completed=false;break;}
-        const pc=board[m.fLat][m.fLon];const sv=aiApply(m);
-        const opp=color==='black'?'white':'black';
-        const givesCheck=isInCheck(opp);
-        // Stalemate avoidance: if this move leaves opponent with no legal moves and not in check
-        // it's stalemate (draw). If we're winning, heavily penalize drawing.
-        const oppHasMoves=hasAnyLegalMove(opp);
-        let sc=_abSearch(searchDepth-1,-Infinity,Infinity,!isBlack,deadline);
-        aiUndo(m,pc,sv);
-        if(!oppHasMoves&&!givesCheck){
-          // Stalemate! If we have material advantage, this is terrible
-          const eval0=evaluate();
-          const ourAdvantage=isBlack?eval0:-eval0; // positive = we're winning
-          if(ourAdvantage>200) sc+=(isBlack?-1:1)*5000; // massive penalty for stalemate when winning
-        }
-        // Repetition penalty
-        if(autoBattleActive){
-          const sv2=aiApply(m);
-          const h=_autoBoardHash();
-          aiUndo(m,pc,sv2);
-          const cnt=posHist[h]||0;
-          if(cnt>=1)sc+=(isBlack?-1:1)*(cnt>=2?3000:600);
-        }
-        // Check bonus: giving check is aggressive and constrains opponent
-        if(givesCheck)sc+=(isBlack?1:-1)*120;
-        // Capture incentive with exchange strategy
-        if(sv.c||sv.epCap){
-          const capT=sv.c?sv.c.type:(sv.epCap?'P':null);
-          const capVal=capT?_EV[capT]:0;
-          const ownVal=pc?_EV[pc.type]:0;
-          const materialGain=capVal-ownVal;
-          const curEval=evaluate();
-          const ourLead=isBlack?curEval:-curEval;
-          // Asymmetric bonus: reward winning exchanges
-          if(materialGain>0){
-            sc+=(isBlack?1:-1)*Math.min(Math.round(materialGain*0.3),300);
-          }
-          // Safety check: high-value piece capturing low-value target
-          // If Q/R captures a pawn/minor and target square is attacked, penalize
-          if(ownVal>=600&&capVal<ownVal-150){
-            // Quick check: is target square attacked by opponent after our capture?
-            const opp2=color==='black'?'white':'black';
-            let sqAttacked=false;
-            const sv3=aiApply(m);
-            outer:for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-              const p2=board[la][lo];if(!p2||p2.color!==opp2)continue;
-              const mvs2=getValidMoves(la,lo);
-              for(const mv2 of mvs2){
-                if(mv2.lat===m.tLat&&mv2.lon===m.tLon){sqAttacked=true;break outer;}
-              }
-            }
-            aiUndo(m,pc,sv3);
-            if(sqAttacked){
-              // Piece is likely to be recaptured — penalize based on value at risk
-              sc+=(isBlack?-1:1)*Math.round((ownVal-capVal)*0.4);
-            }
-          }
-          // Exchange strategy: when leading, avoid equal trades; when trailing, seek them
-          if(Math.abs(materialGain)<100){
-            if(ourLead>150) sc+=(isBlack?-1:1)*(ourLead>400?80:60);
-            else if(ourLead<-150) sc+=(isBlack?1:-1)*(ourLead<-400?80:60);
-            else sc+=(isBlack?-1:1)*25;
-          }
-          // Base capture bonus (still want aggressive play)
-          if(captureBonus>0&&capT){
-            sc+=(isBlack?1:-1)*Math.min(Math.round(capVal*captureBonus),200);
-          }
-        }
-        // Safety check: non-capture moves — penalize moving Q/R/N/B to an attacked square
-        if(!sv.c&&!sv.epCap&&pc&&pc.type!=='K'&&pc.type!=='P'){
-          const pieceVal=_EV[pc.type];
-          if(pieceVal>=600){
-            const opp3=color==='black'?'white':'black';
-            let cheapestAttacker=99999;
-            const sv4=aiApply(m);
-            for(let la=0;la<8;la++)for(let lo=0;lo<8;lo++){
-              const p3=board[la][lo];if(!p3||p3.color!==opp3)continue;
-              const mvs3=getValidMoves(la,lo);
-              for(const mv3 of mvs3){
-                if(mv3.lat===m.tLat&&mv3.lon===m.tLon){
-                  const av=_EV[p3.type];
-                  if(av<cheapestAttacker)cheapestAttacker=av;
-                  break;
-                }
-              }
-            }
-            aiUndo(m,pc,sv4);
-            if(cheapestAttacker<99999){
-              // Square is attacked. Penalize based on how much we'd lose.
-              if(cheapestAttacker<pieceVal){
-                // Opponent can profit by capturing: heavy penalty
-                sc+=(isBlack?-1:1)*Math.round((pieceVal-cheapestAttacker)*0.5);
-              } else {
-                // Equal or losing trade for opponent, but still risky
-                sc+=(isBlack?-1:1)*40;
-              }
-            }
-          }
-        }
-        // Forward aggression: reward pieces moving toward opponent's territory
-        if(pc){
-          const fromRank=isBlack?m.fLat:(7-m.fLat);
-          const toRank=isBlack?m.tLat:(7-m.tLat);
-          if(toRank>fromRank&&pc.type!=='K')sc+=(isBlack?1:-1)*((toRank-fromRank)*8);
-          // Retreat penalty: non-king pieces moving backward without capturing
-          if(toRank<fromRank&&pc.type!=='K'&&!sv.c&&!sv.epCap){
-            const retreatPen=(fromRank-toRank)*15;
-            // Extra penalty for retreating to back rank (lp=0)
-            const backPen=(toRank===0)?30:0;
-            sc+=(isBlack?-1:1)*(retreatPen+backPen);
-          }
-        }
-        // Wandering piece penalty: piece moved repeatedly without significant progress
-        // Only skip penalty for captures of pieces worth ≥300 (not pawn captures)
-        const _sigCapture=sv.c&&_EV[sv.c.type]>=300;
-        if(autoBattleActive&&!_sigCapture&&pc){
-          const pieceKey=`${m.fLat},${m.fLon}`;
-          const pmCount=_pieceWanderCount[pieceKey]||0;
-          if(pmCount>=2)sc+=(isBlack?-1:1)*(pmCount-1)*100;
-          const typeCount=(_pieceWanderCount._types||{})[pc.type]||0;
-          if(typeCount>=3&&pc.type!=='K'&&pc.type!=='P')sc+=(isBlack?-1:1)*(typeCount-2)*70;
-        }
-        // Globe spectacle bonus
-        if(globeBonus>0){
-          let gb=0;
-          const steps=m.step||0;
-          if(steps>3) gb+=(steps-3)*12;
-          if(m.pole) gb+=50;
-          if(m.straightDn&&steps>4) gb+=35;
-          if(m.diagKey&&steps>3) gb+=(steps-3)*10+30;
-          sc+=(isBlack?1:-1)*Math.round(gb*globeBonus);
-        }
-        if(isRev(m))sc=isBlack?sc-1500:sc+1500;
-        // Random noise to break ties → different games each time
-        sc+=(isBlack?1:-1)*_noise();
-        if(isBlack?sc>dBestSc:sc<dBestSc){dBestSc=sc;dBest=m;}
-      }
-      // Only update bestMove if this depth completed fully (partial results unreliable)
-      if(completed&&dBest){
-        bestMove=dBest;finalDepth=searchDepth;
-        const idx=legal.indexOf(dBest);
-        if(idx>0){legal.splice(idx,1);legal.unshift(dBest);}
-      }
-      nextDepth();
-    },4);
+// Mate scores are relative to the root in the tree, but relative to the
+// position in the transposition table (a position may recur at another ply).
+function adjustMateScore(score,ply){
+  if(score>AI_MATE/2)return score+ply;
+  if(score<-AI_MATE/2)return score-ply;
+  return score;
+}
+
+function searchPosition(color,depth,alpha,beta,ply,search){
+  searchExpired(search);
+  if(depth===0)return searchCaptures(color,alpha,beta,ply,4,search);
+  const key=_autoBoardHash(color);
+  const cached=search.table.get(key);
+  if(cached&&cached.depth>=depth){
+    const value=adjustMateScore(cached.score,-ply);
+    if(cached.bound==='exact'||(cached.bound==='lower'&&value>=beta)||
+       (cached.bound==='upper'&&value<=alpha))return value;
   }
-  nextDepth();
+
+  const moves=allAIMoves(color);
+  if(!moves.length)return isInCheck(color)?ply-AI_MATE:0;
+  const other=color==='black'?'white':'black';
+  const originalAlpha=alpha;
+  let best=-Infinity, bestId;
+  for(const m of orderSearchMoves(moves,cached?.moveId)){
+    const piece=board[m.fLat][m.fLon], saved=aiApply(m);
+    let score;
+    try { score=-searchPosition(other,depth-1,-beta,-alpha,ply+1,search); }
+    finally { aiUndo(m,piece,saved); }
+    if(score>best){best=score;bestId=aiMoveId(m);}
+    alpha=Math.max(alpha,score);
+    if(alpha>=beta)break;
+  }
+  const bound=best<=originalAlpha?'upper':best>=beta?'lower':'exact';
+  if((!cached||cached.depth<=depth)&&(cached||search.table.size<50000)){
+    search.table.set(key,{depth,bound,score:adjustMateScore(best,ply),moveId:bestId});
+  }
+  return best;
+}
+
+function searchCaptures(color,alpha,beta,ply,remaining,search){
+  searchExpired(search);
+  const checked=isInCheck(color);
+  let moves, best=-Infinity;
+  if(checked){
+    // Standing still is illegal in check. Search every evasion, including
+    // quiet interpositions and king moves even past the capture horizon.
+    moves=allAIMoves(color);
+    if(!moves.length)return ply-AI_MATE;
+  }else{
+    if(!hasAnyLegalMove(color))return 0;
+    best=(color==='black'?1:-1)*evaluate();
+    if(remaining<=0||best>=beta)return best;
+    alpha=Math.max(alpha,best);
+    moves=allAIMoves(color,true); // captures, en passant and quiet promotions
+  }
+  const other=color==='black'?'white':'black';
+  // A sequence of counterchecks can outlive the capture horizon. Count
+  // positions on this forcing line so perpetual counterchecks terminate.
+  const key=checked&&remaining<=0?_autoBoardHash(color):null;
+  const visits=key?(search.checkLine.get(key)||0):0;
+  if(visits>=2)return 0;
+  if(key)search.checkLine.set(key,visits+1);
+  try {
+    for(const m of orderSearchMoves(moves)){
+      const piece=board[m.fLat][m.fLon], saved=aiApply(m);
+      let score;
+      try { score=-searchCaptures(other,-beta,-alpha,ply+1,remaining-1,search); }
+      finally { aiUndo(m,piece,saved); }
+      best=Math.max(best,score);
+      alpha=Math.max(alpha,score);
+      if(alpha>=beta)break;
+    }
+  } finally {
+    if(key){
+      if(visits)search.checkLine.set(key,visits);
+      else search.checkLine.delete(key);
+    }
+  }
+  return best;
+}
+
+// Only yield between root moves, when the live board is fully restored.
+function _findBestMove(color,timeLimitMs,onProgress,onDone){
+  const generation=++aiSearchGeneration;
+  const start=performance.now();
+  const search={deadline:start+timeLimitMs,table:new Map(),checkLine:new Map()};
+  const other=color==='black'?'white':'black';
+  const legal=allAIMoves(color);
+  if(legal.length<=1){onDone(legal[0]||null,0);return;}
+  // Preserve variety between equally good options without adding noise to scores.
+  for(let i=legal.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [legal[i],legal[j]]=[legal[j],legal[i]];
+  }
+  orderSearchMoves(legal);
+  let bestMove=legal[0], completedDepth=0;
+  let depth=1, index=0, roundScore=-Infinity, roundBest=null;
+  function finish(){
+    // On devices that cannot finish even depth one, use the best fully
+    // evaluated root move we did finish, or the first legal move.
+    onDone(completedDepth?bestMove:(roundBest||bestMove),completedDepth);
+  }
+  function advance(){
+    if(generation!==aiSearchGeneration)return;
+    const sliceStart=performance.now();
+    if(onProgress&&index===0)onProgress(depth,sliceStart-start);
+    try {
+      while(index<legal.length){
+        searchExpired(search);
+        const m=legal[index++];
+        const piece=board[m.fLat][m.fLon], saved=aiApply(m);
+        let score;
+        try {
+          // Auto-battle adjudicates the third occurrence as a draw.
+          if(depth===1)m.repeats=autoBattleActive&&(_autoPosHist[_autoBoardHash(other)]||0)>=2;
+          score=m.repeats?0:-searchPosition(other,depth-1,-Infinity,-roundScore,1,search);
+        } finally { aiUndo(m,piece,saved); }
+        if(score>roundScore){roundScore=score;roundBest=m;}
+        if(score===AI_MATE-1){onDone(m,depth);return;}
+        if(index<legal.length&&performance.now()-sliceStart>=24){
+          setTimeout(advance,0);
+          return;
+        }
+      }
+    } catch(error){
+      if(error!==AI_TIMEOUT)throw error;
+      finish();
+      return;
+    }
+    bestMove=roundBest;
+    completedDepth=depth;
+    if(Math.abs(roundScore)>AI_MATE/2||depth>=8||performance.now()>=search.deadline){
+      finish();
+      return;
+    }
+    legal.splice(legal.indexOf(bestMove),1);
+    legal.unshift(bestMove);
+    depth++; index=0; roundBest=null; roundScore=-Infinity;
+    setTimeout(advance,0);
+  }
+  setTimeout(advance,0);
 }
 
 // ── Main drive loop ───────────────────────────────────────────────────────────
 
 function doAutoMove(){
   if(!autoBattleActive||autoBattlePaused)return;
-  if(moveAnim||globeRotAnim||dragging){_autoBattleTimer=setTimeout(doAutoMove,120);return;}
+  if(moveAnim||globeRotAnim||dragging){_autoBattleTimer=setTimeout(()=>runAutoStep(doAutoMove),120);return;}
 
   const log=_autoBattleLog;if(!log)return;
 
@@ -3941,14 +3480,13 @@ function doAutoMove(){
   const cLabel=turnColor==='white'?'White':'Black';
   turnEl.textContent=cLabel+' thinking…';
 
-  // Async AI search — aggressive + spectacular play
+  // Use the same search as the interactive opponent.
   const t0=Date.now();
   _findBestMove(turnColor,_AUTO_THINK_MS,
     (depth,elapsed)=>{
       turnEl.textContent=cLabel+' thinking…';
     },
-    (m,fd)=>{
-      if(!autoBattleActive)return;
+    (m)=>runAutoStep(()=>{
       const thinkMs=Date.now()-t0;
       if(!m){
         _autoLogAnomaly('NO_MOVE',`${turnColor} AI returned null despite available legal moves`,
@@ -3961,24 +3499,8 @@ function doAutoMove(){
           {from:`${m.fLat},${m.fLon}`,to:`${m.tLat},${m.tLon}`});
         _endAutoGame('ERROR_EMPTY_SQUARE');return;
       }
-      // Record move (guard against double-recording)
-      const cap=board[m.tLat][m.tLon];
+      const cap=m.isEnPassant?board[m.capturedLat][m.capturedLon]:board[m.tLat][m.tLon];
       const color=turnColor;
-      const _lastMove=log.moves.length>0?log.moves[log.moves.length-1]:null;
-      if(_lastMove&&_lastMove.color===color&&_lastMove.coords[0]===m.fLat&&_lastMove.coords[1]===m.fLon
-        &&_lastMove.coords[2]===m.tLat&&_lastMove.coords[3]===m.tLon){
-        return; // exact same move already recorded — skip duplicate
-      }
-      const entry={
-        n:log.moves.length+1,color,piece:piece.type,
-        from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
-        captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
-        special:m.isCastle?'castle':m.isEnPassant?'ep':null,
-        thinkMs,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
-      };
-      log.moves.push(entry);
-      if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
-      log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
       // Chess notation status
       const _an=_moveNotation(piece,m.fLat,m.fLon,m.tLat,m.tLon,!!cap||!!m.isEnPassant,m,false,false);
       turnEl.textContent=(color==='white'?'White':'Black')+': '+_an;
@@ -3990,10 +3512,22 @@ function doAutoMove(){
         window._alignDisksForMove(m.fLat,m.fLon,m.tLat,m.tLon,460);
       rotateGlobeToFace(localDir,460,()=>{
         showMoves(m.fLat,m.fLon,m.tLat,m.tLon);
-        setTimeout(()=>execMove(m.fLat,m.fLon,m.tLat,m.tLon),370);
+        _autoBattleTimer=setTimeout(()=>runAutoStep(()=>{
+          if(board[m.fLat][m.fLon]!==piece||turnColor!==color)return;
+          const entry={
+            n:log.moves.length+1,color,piece:piece.type,
+            from:_autoNote(m.fLat,m.fLon),to:_autoNote(m.tLat,m.tLon),
+            captured:cap?cap.type:null,captureVal:cap?AI_PVAL[cap.type]:0,
+            special:m.isCastle?'castle':m.isEnPassant?'ep':null,
+            thinkMs,coords:[m.fLat,m.fLon,m.tLat,m.tLon]
+          };
+          log.moves.push(entry);
+          if(cap)(color==='white'?log.wCapt:log.bCapt).push({t:cap.type,v:AI_PVAL[cap.type]});
+          log.halfMoveClock=(cap||piece.type==='P')?0:(log.halfMoveClock||0)+1;
+          execMove(m.fLat,m.fLon,m.tLat,m.tLon);
+        }),370);
       });
-    },
-    {captureBonus:0.25, globeBonus:1}  // aggressive captures + globe spectacle
+    })
   );
 }
 
@@ -4001,7 +3535,7 @@ function doAutoMove(){
 function _endAutoGame(result){
   if(!autoBattleActive)return;
   autoBattleActive=false;autoBattlePaused=false;
-  clearTimeout(_autoBattleTimer);
+  cancelComputerTurn();
   clearVis();
   if(_autoBattleLog){_autoBattleLog.result=result;_autoBattleLog.endTime=Date.now();}
   const _MSG={
@@ -4050,14 +3584,18 @@ function startAutoBattle(){
   document.getElementById('autoBattleControls').style.display='flex';
   const _pb=document.getElementById('autoPauseBtn');
   _pb.textContent='Pause'; _pb.onclick=toggleAutoPause;
-  _autoBattleTimer=setTimeout(doAutoMove,900);
+  _autoBattleTimer=setTimeout(()=>runAutoStep(doAutoMove),900);
 }
 
 function toggleAutoPause(){
   if(!autoBattleActive)return;
   autoBattlePaused=!autoBattlePaused;
   document.getElementById('autoPauseBtn').textContent=autoBattlePaused?'Resume':'Pause';
-  if(!autoBattlePaused){clearTimeout(_autoBattleTimer);doAutoMove();}
+  if(!autoBattlePaused&&_pausedAutoAction){
+    const action=_pausedAutoAction;
+    _pausedAutoAction=null;
+    action();
+  }
 }
 
 function newAutoBattle(){
@@ -4069,7 +3607,7 @@ function newAutoBattle(){
 }
 
 function stopAutoBattle(){
-  clearTimeout(_autoBattleTimer);
+  cancelComputerTurn();
   clearVis();
   if(autoBattleActive&&_autoBattleLog&&_autoBattleLog.moves.length>0){
     _autoBattleLog.result='STOPPED_BY_USER';_autoBattleLog.endTime=Date.now();
@@ -4335,15 +3873,18 @@ function copyReport(){_copyRecord();}
   }
   function _tickClocks(){
     const now=performance.now();
-    if(_clkPrev!==null && _shouldTickClock()){
+    const act=_shouldTickClock();
+    if(_clkPrev!==null&&act){
       const dt=now-_clkPrev;
-      if(turnColor==='white') _whiteMs+=dt; else _blackMs+=dt;
+      if(turnColor==='white'){
+        _whiteMs+=dt;
+        _renderClock(clkW,_whiteMs);
+      }else{
+        _blackMs+=dt;
+        _renderClock(clkB,_blackMs);
+      }
     }
     _clkPrev=now;
-    _renderClock(clkW,_whiteMs);
-    _renderClock(clkB,_blackMs);
-    // Dim the clock that isn't currently counting
-    const act=_shouldTickClock();
     clkW.classList.toggle('idle',!(act&&turnColor==='white'));
     clkB.classList.toggle('idle',!(act&&turnColor==='black'));
   }
@@ -5109,16 +4650,9 @@ function copyReport(){_copyRecord();}
     });
   }
   function _diskShowMovesFor(originLat, originLon, autoOnlyLat, autoOnlyLon){
-    _diskClearMoves();
-    if(originLat==null || originLon==null) return;
-    if(!board[originLat] || !board[originLat][originLon]) return;
-    let moves;
-    try {
-      moves=(typeof testModeActive!=='undefined'&&testModeActive)
-        ?(typeof getValidMoves==='function'?getValidMoves(originLat,originLon):[])
-        :getLegalMoves(originLat,originLon);
-    } catch(e){ return; }
-    if(!moves||!moves.length) return;
+    // showMoves already validated the position and cleared the disk overlays.
+    const moves=currentTargets;
+    if(!moves.length)return;
     _diskMarker(originLat,originLon,'origin');
     const sp=board[originLat][originLon];
     const isCap=(lat,lon)=>{
@@ -5161,9 +4695,13 @@ function copyReport(){_copyRecord();}
         { center:originPos, radius:ORIGIN_TRIM },
         { center:targetPos, radius: cap ? CAPTURE_TRIM : DOT_TRIM });
     }
-    // Destination markers — drawn for every reachable cell.
+    // Multiple paths can share a destination.
+    const marked=new Set();
     for(const m of moves){
-      if(!passAuto(m)) continue;
+      if(!passAuto(m))continue;
+      const key=m.lat*NUM_LON+m.lon;
+      if(marked.has(key))continue;
+      marked.add(key);
       if(m.isEnPassant){
         _diskMarker(m.lat,m.lon,'dot');
         _diskMarker(m.capturedLat,m.capturedLon,'capture');
@@ -5326,10 +4864,7 @@ function copyReport(){_copyRecord();}
     const letter=_ensureFlyingLetter(proj.isN, _diskMoveAnim.type, _diskMoveAnim.color);
     letter.setAttribute('x', proj.x.toFixed(2));
     letter.setAttribute('y', proj.y.toFixed(2));
-    // The per-frame _updateDisks() picks the flying letter up via the
-    // `text.disk-letter` selector and applies the same counter-rotation
-    // (and mirror, on south) used for the static cell labels, so the
-    // flying letter stays upright the whole way.
+    // _updateDisks counter-rotates the flying letter at its new position.
   }
 
   // ── Board-state reflection ───────────────────────────────────────────────
@@ -5368,7 +4903,7 @@ function copyReport(){_copyRecord();}
   // its drag handler below) never rotates the globe. Only the chess board
   // state (lat/lon of pieces) is shared between the two views; their
   // visual orientations are now independent.
-  let _diskYaw=0;
+  let _diskYaw=0, _lastDiskYaw;
   function _updateDisks(){
     const deg=_diskYaw*180/Math.PI;
     // The two disks rotate in OPPOSITE directions with disk yaw. Baselines
@@ -5383,23 +4918,24 @@ function copyReport(){_copyRecord();}
     // that midpoint to land at SVG 90° on north, baseline = 22.5°. For the
     // same midpoint to land at SVG −90° on south (after scale-x mirror
     // sends group SVG 67.5° → 112.5°), baseline = 157.5°.
-    diskN._rotGroup.setAttribute('transform',`rotate(${(-deg+22.5).toFixed(3)})`);
-    diskS._rotGroup.setAttribute('transform',`rotate(${(deg+157.5).toFixed(3)}) scale(-1,1)`);
-    // Counter-rotate letters so glyphs stay upright on each disk. On south,
-    // additionally flip the glyph horizontally around its own position so
-    // it reads forwards after the disk's scale(-1, 1).
-    const negN=(-(-deg+22.5)).toFixed(3);  // = (deg − 22.5)
-    const negS=(-(deg+157.5)).toFixed(3);
-    diskN._rotGroup.querySelectorAll('text.disk-letter').forEach(t=>{
-      t.setAttribute('transform',`rotate(${negN} ${t.getAttribute('x')} ${t.getAttribute('y')})`);
-    });
-    diskS._rotGroup.querySelectorAll('text.disk-letter').forEach(t=>{
-      const x=parseFloat(t.getAttribute('x'))||0;
-      const y=parseFloat(t.getAttribute('y'))||0;
-      t.setAttribute('transform',
-        `translate(${(2*x).toFixed(3)},0) scale(-1,1) `+
-        `rotate(${negS} ${x.toFixed(3)} ${y.toFixed(3)})`);
-    });
+    const angleN=-deg+22.5, angleS=deg+157.5;
+    if(_diskYaw!==_lastDiskYaw){
+      _lastDiskYaw=_diskYaw;
+      diskN._rotGroup.setAttribute('transform',`rotate(${angleN.toFixed(3)})`);
+      diskS._rotGroup.setAttribute('transform',`rotate(${angleS.toFixed(3)}) scale(-1,1)`);
+      diskN._rotGroup.querySelectorAll('text.disk-letter[data-lat]').forEach(t=>upright(t,angleN,false));
+      diskS._rotGroup.querySelectorAll('text.disk-letter[data-lat]').forEach(t=>upright(t,angleS,true));
+    }
+    // Flying letters also need a fresh pivot when their position changes.
+    if(_flyingLetterN)upright(_flyingLetterN,angleN,false);
+    if(_flyingLetterS)upright(_flyingLetterS,angleS,true);
+  }
+
+  function upright(letter,angle,mirror){
+    const x=Number(letter.getAttribute('x'));
+    const y=Number(letter.getAttribute('y'));
+    const rotation=`rotate(${(-angle).toFixed(3)} ${x} ${y})`;
+    letter.setAttribute('transform',mirror?`translate(${2*x},0) scale(-1,1) ${rotation}`:rotation);
   }
 
   // ── Disk drag interaction (rotates only the disks, NOT the globe) ────────
@@ -5440,7 +4976,7 @@ function copyReport(){_copyRecord();}
       // displacement), treat as a click and try to select a piece on the disk.
       const dx=e.clientX-downX, dy=e.clientY-downY;
       const pixDist=Math.hypot(dx,dy);
-      if(totalRot<0.04 && pixDist<6){
+      if(e.type==='pointerup'&&totalRot<0.04&&pixDist<6){
         _handleDiskClick(svg, isNorth, e);
       }
     }
@@ -5579,7 +5115,7 @@ function copyReport(){_copyRecord();}
         const dir=p.color==='black'?1:-1;
         attacks=(la+dir===kLat && (wL(lo-1)===kLon || wL(lo+1)===kLon));
       } else {
-        attacks=aiMoves(la,lo).some(m=>m.tLat===kLat && m.tLon===kLon);
+        attacks=aiMoves(la,lo).some(m=>!m.isCastle&&m.tLat===kLat&&m.tLon===kLon);
       }
       if(!attacks) continue;
       const allMvs=getValidMoves(la,lo).filter(m=>m.lat===kLat && m.lon===kLon);
@@ -5740,13 +5276,15 @@ function copyReport(){_copyRecord();}
     // Refresh letters only when the board actually changed AND no move
     // animation is in flight — during a move we keep the pre-move letter
     // state and let _updateFlyingLetter render the moving piece.
-    const sig=_boardSig();
-    if(sig!==_lastBoardSig && !moveAnim){
-      _lastBoardSig=sig;
-      _refreshDiskLetters();
+    _updateFlyingLetter();
+    if(!moveAnim){
+      const sig=_boardSig();
+      if(sig!==_lastBoardSig){
+        _lastBoardSig=sig;
+        _refreshDiskLetters();
+      }
     }
     _tickClocks();
-    _updateFlyingLetter();
     _stepDiskYawAnim();
     _updateDisks();
     requestAnimationFrame(_sideUIFrame);
