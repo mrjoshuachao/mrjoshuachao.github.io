@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="依切片用量、工時和目標利潤，即時估算 3D 列印接案的成本與報價。">
+<title>3D 列印報價台</title>
+<style>
+:root{color-scheme:light;--ink:#172c2d;--muted:#53696a;--line:#d8e2df;--accent:#0b645b;--cream:#f3f6f2}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);font:15px/1.55 "PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #42a695;outline-offset:3px}header{background:#fff;border-bottom:1px solid var(--line)}.bar,main{max-width:1180px;margin:auto;padding-inline:30px}.bar{height:68px;display:flex;align-items:center;justify-content:space-between;font-weight:700}.brand{display:flex;align-items:center;gap:10px}.logo{display:grid;place-items:center;background:#15564e;color:#dcf4e2;border-radius:9px;width:32px;height:32px;font-size:19px}.currency{font-size:13px;color:var(--muted)}.intro{margin:45px 0 28px;display:flex;align-items:end;justify-content:space-between;gap:16px}h1{font-size:clamp(30px,5vw,47px);line-height:1.15;letter-spacing:-.045em;margin:0 0 12px}p{margin:0;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}button{border:1px solid #c4d4cf;border-radius:8px;padding:8px 13px;background:white;color:var(--ink);white-space:nowrap}button:hover{background:#e6f0eb}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:22px;align-items:start}form{display:grid;gap:16px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:22px}.panel h2{font-size:19px;margin:0 0 3px}.hint{font-size:13px;margin:0 0 17px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{display:block;font-weight:650;font-size:14px}.control{display:flex;align-items:center;background:#f8faf9;border:1px solid #cbd9d6;border-radius:8px;margin-top:6px}.control:focus-within{border-color:var(--accent)}input{min-width:0;width:100%;border:0;background:none;padding:10px;color:var(--ink);border-radius:8px;font-variant-numeric:tabular-nums}.unit{white-space:nowrap;padding-right:9px;color:var(--muted);font-size:12px;font-weight:500}.help{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:4px}.summary{position:sticky;top:18px;display:grid;gap:14px}.quote{border-radius:14px;padding:24px;background:#123d37;color:white}.quote h2{font-size:16px;font-weight:600;margin:0;color:#cae6d9}.big{font-size:clamp(32px,5vw,52px);font-weight:750;letter-spacing:-.035em;line-height:1.2;margin:8px 0 2px;overflow-wrap:anywhere}.quote p{color:#d1e3da;margin-bottom:16px}.quote button{width:100%;background:#ddf3df;border:0;color:#153b32;font-weight:700;padding:10px}.quote button:hover{background:white}.quote button:disabled{opacity:.5;cursor:default}.private{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:13px 0}.private div{background:#edf5f0;padding:12px;border-radius:9px}.private small{display:block;color:var(--muted)}.private strong{font-size:22px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.negative{color:#a52435}dl{margin:12px 0 0}.row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e9efed;padding:6px 0}.row:last-child{border:0;font-weight:700}dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}details{margin:20px 0 40px}details summary{cursor:pointer;font-weight:700}details p{margin-top:9px}.feedback{color:#d1e3da;font-size:13px}.feedback:empty{display:none}footer{color:var(--muted);font-size:12px;margin:0 0 26px}
+.mobile-result{display:none}
+@media(max-width:790px){
+  .layout{grid-template-columns:1fr}.summary{position:static;scroll-margin-top:16px}.intro{margin-top:30px}
+  main{padding-bottom:calc(95px + env(safe-area-inset-bottom))}
+  .mobile-result{position:fixed;inset:auto 0 0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#123d37;color:white;padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));box-shadow:0 -4px 22px #123d3726;text-decoration:none}
+  .mobile-result small{display:block;color:#cae6d9}.mobile-result strong{display:block;font-size:20px;line-height:1.3;overflow-wrap:anywhere}.mobile-result span:last-child{flex:none;background:#ddf3df;color:#153b32;border-radius:8px;padding:11px 14px;font-weight:700}
+  .mobile-result:focus-visible{outline:3px solid #42a695;outline-offset:-3px}
+  body:has(input:focus) .mobile-result{display:none}
+  button,input{min-height:44px}input{font-size:16px;scroll-margin-block:20px 100px}
+}
+@media(max-width:500px){
+  .bar,main{padding-inline:15px}.bar{height:54px}.intro{display:block;margin-bottom:20px}.actions{margin-top:14px}.panel,.quote{padding:16px}.fields{grid-template-columns:1fr;gap:14px}.field{font-size:14px}.unit{font-size:12px}
+}
+.quote button+button{margin-top:8px}.quote .export{background:white}.client-fields input,.client-fields textarea{width:100%;padding:10px;background:#f8faf9;border:1px solid #cbd9d6;border-radius:8px;margin-top:6px;color:var(--ink);font:inherit}.client-fields textarea{resize:vertical;min-height:88px}.client-fields .wide{grid-column:1/-1}.pdf-error{margin-top:8px;color:#a52435}.pdf-error:empty{display:none}
+@media(max-width:790px){.client-fields input,.client-fields textarea{font-size:16px;min-height:44px}body:has(textarea:focus) .mobile-result{display:none}}
+</style>
+<header><div class="bar"><div class="brand"><span class="logo" aria-hidden="true">▱</span> 列印工作台</div><span class="currency">幣別 NT$</span></div></header>
+<main>
+<section class="intro"><div><h1>3D 列印報價台</h1><p>從切片數據估算整單成本、客戶報價和預估利潤。</p></div><div class="actions"><button type="button" id="example">載入範例</button><button type="button" id="reset">開始新報價</button></div></section>
+<div class="layout">
+<form id="form" aria-label="報價資料" autocomplete="off">
+<section class="panel client-fields">
+<h2>客戶報價單</h2><p class="hint">報價單會帶入此區資料、案名、成品件數與採用報價。案名即為報價單的列印品項名稱。</p>
+<div class="fields">
+<label class="field">報價日期<input type="date" id="quote-date" required></label>
+<label class="field">客戶名稱<input id="client" maxlength="60" required autocomplete="off"></label>
+<label class="field">報價方名稱<input id="seller" maxlength="60" placeholder="姓名或工作室名稱"></label>
+<label class="field">報價方聯絡方式<input id="contact" maxlength="80" placeholder="電話、電子郵件或 LINE"></label>
+<label class="field">材質<input id="quote-material" maxlength="45" placeholder="例如 PLA"></label>
+<label class="field">顏色<input id="color" maxlength="45" placeholder="例如霧黑"></label>
+<label class="field">尺寸<input id="size" maxlength="65" placeholder="例如 80 × 40 × 20 mm"></label>
+<label class="field">報價有效期限<input type="date" id="expiry"></label>
+<label class="field wide">特別備註<textarea id="notes" maxlength="360" placeholder="例如交期、交付方式、付款條件或表面處理"></textarea></label>
+</div><p class="pdf-error" id="pdf-error" role="alert"></p>
+</section>
+</form>
+<aside class="summary" id="results" aria-label="試算結果" tabindex="-1">
+<section class="quote"><h2>建議對客報價</h2><div class="big" id="total" aria-live="polite">—</div><p id="unit-price">填入成本後顯示</p><button id="copy" type="button" disabled>複製客戶報價</button><button class="export" id="export" type="button" disabled>匯出報價單 PDF</button><div class="feedback" id="feedback" role="status"></div></section>
+<section class="panel"><h2>內部成本與利潤</h2><div class="private"><div><small>預估整單利潤</small><strong id="profit">—</strong></div><div><small>預估利潤率</small><strong id="margin">—</strong></div></div><dl id="breakdown"></dl></section>
+</aside>
+</div>
+<details class="panel"><summary>計算方式</summary><p>材料費 =（整單切片用量＋開印次數 × 每次額外開印耗料）× 每公斤材料價格 ÷ 1,000。電費 = 平均功率 ÷ 1,000 × 列印時數 × 每度電費。</p><p>預估重印成本 =（材料費＋電費＋機台費）× 失敗率 ÷（1 − 失敗率）。這個估算假設每次失敗會耗用一次完整列印的成本。</p><p>建議報價 = 整單成本 ÷（1 − 目標利潤率 − 交易費率），再依最低接單價與進位單位調整。預估利潤 = 採用報價 − 交易費 − 整單成本。所有結果皆為未稅估算。</p></details>
+<footer>輸入資料會儲存在目前的瀏覽器中。<br>估算參考 <a href="https://cdn1.bambulab.com/documentation/quick-start-b5f1a684f77/A1%20Combo%20Quick%20Start_V0%28EN%29.pdf">A1 Combo 原廠規格</a> · <a href="https://service.taipower.com.tw/ebpps2/electricityFeeTrial">台電電費試算</a></footer>
+</main>
+<a class="mobile-result" href="#results"><span><small id="mobile-label">建議整單報價</small><strong id="mobile-total">—</strong></span><span>查看結果 ↓</span></a>
+<script>
+const groups = [
+  ['列印資料','請填 Bambu Studio 的整單合計。多盤列印時，加總各盤的用量和時間。',[
+    ['name','案名','',null,null,null,'匯出 PDF 時必填，作為列印品項名稱。'],
+    ['quantity','成品件數','件',1,1,100000],
+    ['grams','整單材料總用量','g',0,0.1,10000000,'填切片顯示的整單總重，含成品、支撐及已計入的換色排料。'],
+    ['hours','整單列印時間','小時',0,0.01,100000,'例如 2 小時 30 分鐘填 2.5。'],
+    ['starts','開印次數（盤數）','次',0,1,100000,'預填 1 次。同盤印多件仍是 1 次，分 4 盤開印就填 4。已把額外開印耗料加進總用量時可填 0。'],
+    ['material','材料單價','NT$/kg',0,0.01,10000000],
+  ]],
+  ['機台與人工','預填以 Bambu Lab A1 Combo、一般 PLA、小量接案及住宅用電為估算情境。',[
+    ['machine','機台費率','NT$/小時',0,0.01,1000000,'預留設備折舊、耗材零件與維護。'],
+    ['watts','列印平均功率','W',0,0.1,100000,'100 W 是列印平均功率的暫估值。'],
+    ['electricity','電費單價','NT$/度',0,0.01,10000,'每度 NT$4 是住宅用電估算值，可依帳單級距調整。'],
+    ['labor','整單人工時間','小時',0,0.01,100000,'預填 30 分鐘，含切片設定、拆支撐與品檢。需打磨或零件多時可加長。'],
+    ['wage','人工時薪','NT$/小時',0,0.01,1000000],
+    ['startup','每次額外開印耗料','g/次',0,0.01,1000,'預填 1 g 作為暫估。只填切片總重以外的開印排料、引料線或校正用料。'],
+    ['failure','列印失敗率','%',0,0.01,99.99,'依過往經驗填寫，估算重印成本。'],
+  ]],
+  ['其他成本與定價','金額以整單計。預設為客供可印檔案、面交與直接收款。',[
+    ['design','建模與改檔','NT$',0,0.01,10000000],
+    ['supplies','後處理耗材與外包','NT$',0,0.01,10000000],
+    ['shipping','包裝與運費','NT$',0,0.01,10000000],
+    ['other','其他成本','NT$',0,0.01,10000000],
+    ['target','目標利潤率','%',0,0.01,99.99,'利潤佔未稅售價的比例。'],
+    ['fee','交易費率（平台／金流）','%',0,0.01,99.99,'例如平台抽成 3% 就填 3。現金或免手續費轉帳填 0。'],
+    ['minimum','最低接單價','NT$',0,0.01,10000000],
+    ['increment','報價進位單位','NT$',1,1,1000000,'例如填 10，NT$ 214 會進位至 NT$ 220。'],
+    ['override','實際對客報價','NT$',0,0.01,1000000000000,'選填，用議價後的金額重算利潤。'],
+  ]],
+];
+const sample = {starts:1,startup:1,name:'PLA 樣品',quantity:3,grams:180,hours:7,material:650,machine:18,watts:120,electricity:4,labor:0.75,wage:350,failure:10,design:0,supplies:25,shipping:70,other:0,target:30,fee:2,minimum:300,increment:10};
+const form = document.querySelector('#form');
+const fields = {};
+const defaults = {
+  starts:1, startup:1, machine:15, watts:100, electricity:4, labor:0.5, wage:300, failure:10,
+  design:0, supplies:0, shipping:0, other:0, target:30, fee:0, minimum:250, increment:10,
+};
+const storageKey = 'print-quote-workbench-v2';
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch {}
+for (const [title, description, entries] of groups) {
+  const section = document.createElement('section');
+  section.className = 'panel';
+  section.innerHTML = '<h2></h2><p class="hint"></p><div class="fields"></div>';
+  section.querySelector('h2').textContent = title;
+  section.querySelector('p').textContent = description;
+  for (const [key,label,unit,min,step,max,help] of entries) {
+    const field = document.createElement('label');
+    field.className = 'field';
+    field.innerHTML = '<span></span><span class="control"><input><span class="unit"></span></span>';
+    field.firstChild.textContent = label;
+    field.querySelector('.unit').textContent = unit;
+    const input = field.querySelector('input');
+    input.name = key;
+    input.type = key === 'name' ? 'text' : 'number';
+    input.value = saved[key] ?? defaults[key] ?? '';
+    if (key === 'name') { input.maxLength = 100; input.placeholder = '例如 PLA 樣品'; }
+    else {
+      input.min = min; input.max = max; input.step = step;
+      input.inputMode = step === 1 ? 'numeric' : 'decimal';
+      input.required = ['quantity','grams','hours','material','increment'].includes(key);
+      input.placeholder = key === 'override' ? '採用建議報價' : input.required ? '請輸入' : '0';
+    }
+    if (help) {
+      const note = document.createElement('small');
+      note.className = 'help';
+      note.id = key + '-help';
+      note.textContent = help;
+      input.setAttribute('aria-describedby',note.id);
+      field.append(note);
+    }
+    fields[key] = input;
+    section.lastChild.append(field);
+  }
+  form.insertBefore(section,form.querySelector('.client-fields'));
+}
+const $ = id => document.getElementById(id);
+const amount = new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2});
+const money = n => 'NT$ ' + amount.format(n);
+let customerQuote = '';
+let activeQuote = null;
+function calculate(v) {
+  const slicedMaterial = v.grams * v.material / 1000;
+  const startupMaterial = v.starts * v.startup * v.material / 1000;
+  const material = slicedMaterial + startupMaterial;
+  const electricity = v.watts * v.hours * v.electricity / 1000;
+  const machine = v.machine * v.hours;
+  const retry = (material + electricity + machine) * v.failure / (100 - v.failure);
+  const labor = v.labor * v.wage;
+  const other = v.design + v.supplies + v.shipping + v.other;
+  const cost = material + electricity + machine + retry + labor + other;
+  const raw = Math.max(v.minimum, cost / (1 - (v.target + v.fee) / 100));
+  const suggested = Math.ceil((raw - Math.abs(raw) * Number.EPSILON * 4) / v.increment) * v.increment;
+  const price = v.override ?? suggested;
+  const fee = price * v.fee / 100;
+  const profit = price - fee - cost;
+  return {suggested,price,profit,margin:price > 0 ? 100 * profit / price : null,
+    rows:[['切片材料費',slicedMaterial],['額外開印耗料費',startupMaterial],['電費',electricity],['機台費',machine],['預估重印成本',retry],['人工',labor],['其他成本',other],['整單成本',cost],['交易費',fee]]};
+}
+function update() {
+  const values = Object.fromEntries(Object.entries(fields).map(([key,input]) => [key,input.value]));
+  try { localStorage.setItem(storageKey,JSON.stringify(values)); } catch {}
+  const v = Object.fromEntries(Object.entries(values).map(([key,value]) => [key,Number(value)]));
+  v.override = values.override === '' ? null : Number(values.override);
+  $('feedback').textContent = '';
+  $('total').textContent = $('mobile-total').textContent = $('profit').textContent = $('margin').textContent = '—';
+  $('mobile-label').textContent = '建議整單報價';
+  $('profit').classList.remove('negative');
+  $('breakdown').replaceChildren();
+  $('copy').disabled = $('export').disabled = true;
+  activeQuote = null;
+  customerQuote = '';
+  if (['quantity','grams','hours','material'].some(key => fields[key].validity.valueMissing)) {
+    $('unit-price').textContent = '填好件數、材料用量、列印時間和材料單價後，即可試算。';
+    return;
+  }
+  const bad = Object.values(fields).find(input => !input.validity.valid);
+  if (bad || v.target + v.fee >= 100) {
+    $('unit-price').textContent = bad ? '請檢查「' + bad.closest('label').firstChild.textContent + '」的數值。' : '目標利潤率和交易費率合計須低於 100%。';
+    return;
+  }
+  const result = calculate(v);
+  const manual = v.override !== null;
+  $('total').textContent = money(result.suggested);
+  $('mobile-total').textContent = money(result.price);
+  $('mobile-label').textContent = manual ? '採用整單報價' : '建議整單報價';
+  $('unit-price').textContent = manual
+    ? '採用 ' + money(result.price) + ' · 每件約 ' + money(result.price / v.quantity) + ' · 未稅'
+    : v.quantity + ' 件 · 每件約 ' + money(result.price / v.quantity) + ' · 未稅';
+  $('profit').textContent = money(result.profit);
+  $('profit').classList.toggle('negative',result.profit < -0.005);
+  $('margin').textContent = result.margin === null ? '—' : amount.format(result.margin) + '%';
+  for (const [label,value] of result.rows) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const term = document.createElement('dt');
+    const detail = document.createElement('dd');
+    term.textContent = label;
+    detail.textContent = money(value);
+    row.append(term,detail);
+    $('breakdown').append(row);
+  }
+  const title = values.name.trim();
+  customerQuote = (title ? title + '\n' : '') + '3D 列印報價｜' + v.quantity + ' 件\n整單總額 ' + money(result.price) + '（未稅）';
+  $('copy').disabled = result.suggested === 0 && !manual;
+  $('export').disabled = $('copy').disabled;
+  activeQuote = {item:title, quantity:v.quantity, total:result.price};
+}
+function load(values) {
+  for (const [key,input] of Object.entries(fields)) input.value = values[key] ?? '';
+  update();
+}
+form.addEventListener('input',update);
+form.addEventListener('submit',event => event.preventDefault());
+$('example').addEventListener('click',() => load(sample));
+$('reset').addEventListener('click',() => {
+  for (const input of quoteFields) {
+    if (!['seller','contact'].includes(input.id)) input.value = input.id === 'quote-date' ? today() : '';
+  }
+  saveQuoteFields();
+  $('pdf-error').textContent = '';
+  load(defaults);
+});
+$('copy').addEventListener('click',async () => {
+  try { await navigator.clipboard.writeText(customerQuote); }
+  catch {
+    const area = document.createElement('textarea');
+    area.value = customerQuote;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.append(area);
+    area.select();
+    const copied = document.execCommand('copy');
+    area.remove();
+    $('copy').focus();
+    if (!copied) {
+      $('feedback').textContent = '請手動選取並複製：' + customerQuote;
+      return;
+    }
+  }
+  $('feedback').textContent = '已複製客戶報價。';
+});
+const quoteFields = [...document.querySelectorAll('.client-fields input, .client-fields textarea')];
+const quoteStorage = 'print-quote-customer-v1';
+const today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Taipei'}).format(new Date());
+let quoteSaved = {};
+try { quoteSaved = JSON.parse(localStorage.getItem(quoteStorage)) || {}; } catch {}
+for (const input of quoteFields) input.value = quoteSaved[input.id] ?? (input.id === 'quote-date' ? today() : '');
+function saveQuoteFields() {
+  try {
+    localStorage.setItem(quoteStorage,JSON.stringify(Object.fromEntries(quoteFields.map(input => [input.id,input.value]))));
+  } catch {}
+}
+form.addEventListener('input',event => {
+  $('pdf-error').textContent = '';
+  if (quoteFields.includes(event.target)) saveQuoteFields();
+});
+
+function drawQuotation(data) {
+  const canvas = document.createElement('canvas');
+  const width = 794, height = 1123, left = 50, right = 744;
+  canvas.width = width * 3;
+  canvas.height = height * 3;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(3,3);
+  const ink = '#173330', muted = '#4e6661', accent = '#126359', line = '#d9e4e0';
+  function box(x,y,w,h,color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x,y,w,h);
+  }
+  function write(value,x,y,{size=16,bold=false,color=ink,align='left'}={}) {
+    ctx.font = (bold ? '700' : '400') + ' ' + size + 'px "PingFang TC","Microsoft JhengHei","Noto Sans CJK TC",sans-serif';
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.fillText(value,x,y);
+  }
+  function wrapped(value,x,y,maxWidth,{size=16,leading=24,bold=false,color=ink}={}) {
+    write('',x,y,{size,bold,color});
+    for (const paragraph of value.split('\n')) {
+      let row = '';
+      for (const char of paragraph) {
+        if (row && ctx.measureText(row + char).width > maxWidth) {
+          write(row,x,y,{size,bold,color});
+          row = '';
+          y += leading;
+        }
+        row += char;
+      }
+      write(row,x,y,{size,bold,color});
+      y += leading;
+    }
+    return y;
+  }
+  box(0,0,width,height,'#ffffff');
+  box(left,43,right-left,5,accent);
+  write('3D 列印報價單',left,106,{size:42,bold:true});
+  write('QUOTATION',left,134,{size:13,bold:true,color:accent});
+  write('報價日期  ' + data.date,right,100,{align:'right'});
+  if (data.expiry) write('有效期限  ' + data.expiry,right,127,{align:'right',color:muted});
+  box(left,155,right-left,1,line);
+  write('客戶',left,184,{size:14,bold:true,color:accent});
+  let clientBottom = wrapped(data.client,left,212,315,{bold:true,leading:21});
+  let sellerBottom = 212;
+  if (data.seller || data.contact) {
+    write('報價方',418,184,{size:14,bold:true,color:accent});
+    if (data.seller) sellerBottom = wrapped(data.seller,418,sellerBottom,326,{bold:true,leading:21});
+    if (data.contact) sellerBottom = wrapped(data.contact,418,sellerBottom,326,{size:14,leading:19,color:muted});
+  }
+  const table = Math.max(clientBottom,sellerBottom) + 15;
+  box(left,table,right-left,42,ink);
+  write('列印品項與規格',left+15,table+27,{color:'#ffffff',bold:true});
+  write('數量',580,table+27,{color:'#ffffff',bold:true,align:'right'});
+  write('金額（未稅）',right-15,table+27,{color:'#ffffff',bold:true,align:'right'});
+  let y = table+72;
+  write(String(data.quantity) + ' 件',580,y,{align:'right'});
+  write(money(data.total),right-15,y,{align:'right',bold:true});
+  y = wrapped(data.item,left+15,y,450,{size:17,bold:true});
+  for (const [label,value] of [['材質',data.material],['顏色',data.color],['尺寸',data.size]]) {
+    if (value) y = wrapped(label + '　' + value,left+15,y,450,{size:14,leading:21,color:muted});
+  }
+  box(left,y+2,right-left,1,line);
+  box(437,y+19,right-437,52,'#eaf4ef');
+  write('未稅總額',452,y+51,{bold:true});
+  write(money(data.total),right-15,y+51,{size:21,bold:true,color:accent,align:'right'});
+  if (data.notes) {
+    write('特別備註',left,y+102,{size:15,bold:true,color:accent});
+    const remaining = 1009 - (y+128);
+    const normalized = data.notes.replace(/\n{3,}/g,'\n\n');
+    const paragraphs = normalized.split('\n');
+    // Very short user-entered lines can be folded together to fit one A4 page.
+    const note = paragraphs.length > Math.floor(remaining / 21) - 9
+      ? paragraphs.map(part => part.trim()).filter(Boolean).join('　')
+      : normalized;
+    wrapped(note,left,y+128,right-left,{size:15,leading:21});
+  }
+  box(left,1048,right-left,1,line);
+  write('幣別  新台幣（NTD）',left,1076,{size:13,color:muted});
+  write('1 / 1',right,1076,{size:13,color:muted,align:'right'});
+  return canvas;
+}
+
+function createA4Pdf(jpeg, pixelsWide, pixelsHigh) {
+  const encoder = new TextEncoder();
+  const parts = [];
+  const offsets = [0];
+  let length = 0;
+  function add(value) {
+    const bytes = typeof value === 'string' ? encoder.encode(value) : value;
+    parts.push(bytes);
+    length += bytes.length;
+  }
+  function object(id,body,stream) {
+    offsets[id] = length;
+    add(id + ' 0 obj\n' + body);
+    if (stream) { add('\nstream\n'); add(stream); add('\nendstream'); }
+    add('\nendobj\n');
+  }
+  add('%PDF-1.4\n');
+  object(1,'<< /Type /Catalog /Pages 2 0 R >>');
+  object(2,'<< /Type /Pages /Count 1 /Kids [3 0 R] >>');
+  object(3,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.276 841.89] /Resources << /XObject << /Quote 4 0 R >> >> /Contents 5 0 R >>');
+  object(4,'<< /Type /XObject /Subtype /Image /Width '+pixelsWide+' /Height '+pixelsHigh+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpeg.length+' >>',jpeg);
+  const commands = encoder.encode('q 595.276 0 0 841.89 0 0 cm /Quote Do Q');
+  object(5,'<< /Length '+commands.length+' >>',commands);
+  const crossReference = length;
+  add('xref\n0 6\n0000000000 65535 f \n');
+  for (const offset of offsets.slice(1)) add(String(offset).padStart(10,'0') + ' 00000 n \n');
+  add('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+crossReference+'\n%%EOF\n');
+  return new Blob(parts,{type:'application/pdf'});
+}
+
+$('export').addEventListener('click',() => {
+  if (!activeQuote) return;
+  const value = id => $(id).value.trim();
+  const required = [[fields.name,'案名（列印品項名稱）'],[$('client'),'客戶名稱'],[$('quote-date'),'報價日期']];
+  const missing = required.find(([input]) => !input.value.trim() || !input.validity.valid);
+  if (missing) {
+    $('pdf-error').textContent = '請填寫' + missing[1] + '。';
+    $('feedback').textContent = $('pdf-error').textContent;
+    missing[0].focus();
+    return;
+  }
+  if (value('expiry') && value('expiry') < value('quote-date')) {
+    $('pdf-error').textContent = '有效期限須等於或晚於報價日期。';
+    $('expiry').focus();
+    return;
+  }
+  $('pdf-error').textContent = '';
+  try {
+    const data = {...activeQuote,date:value('quote-date'),client:value('client'),seller:value('seller'),
+      contact:value('contact'),material:value('quote-material'),color:value('color'),size:value('size'),
+      expiry:value('expiry'),notes:value('notes')};
+    const canvas = drawQuotation(data);
+    const base64 = canvas.toDataURL('image/jpeg',0.95).split(',')[1];
+    const bytes = Uint8Array.from(atob(base64),char => char.charCodeAt(0));
+    const url = URL.createObjectURL(createA4Pdf(bytes,canvas.width,canvas.height));
+    const file = document.createElement('a');
+    file.href = url;
+    file.download = '3D列印報價單-' + data.date + '.pdf';
+    document.body.append(file);
+    file.click();
+    file.remove();
+    setTimeout(() => URL.revokeObjectURL(url),60000);
+    $('feedback').textContent = '已產生 PDF 報價單。';
+  } catch {
+    $('feedback').textContent = 'PDF 產生失敗，請重試。';
+  }
+});
+
+update();
+</script>
+</html>
